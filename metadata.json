@@ -1,0 +1,8 @@
+{
+  "name": "PYNN PRIDI 37",
+  "description": "PYNN PRIDI 37",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
