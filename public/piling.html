@@ -162,46 +162,66 @@
       }
     }
 
-    /* Dynamic Landscape Layout for Report Sheet (แนวนอน ไร้ขอบว่าง) */
+    /* Dynamic 2:1 Natural Aspect-Ratio Plan Layout (เรียบร้อย ไร้ขอบว่างทั้งแนวตั้งและแนวนอน) */
+    #planSnapshotCanvasWrapper {
+      padding: 0.75rem !important;
+      flex: none !important;
+    }
+    #planSnapshotCanvasWrapper > div,
+    #planCanvasContainer {
+      width: 100% !important;
+      aspect-ratio: 2 / 1 !important;
+      max-height: 440px !important;
+      height: auto !important;
+      min-height: unset !important;
+    }
+
+    /* Landscape Mode: Wide 2-Column Dashboard */
     #report-page-card.is-landscape {
-      max-width: 1420px !important;
+      max-width: 1480px !important;
       width: 96vw !important;
     }
     #report-page-card.is-landscape #report-main-grid {
       display: grid !important;
-      grid-template-columns: 1.18fr 0.82fr !important;
+      grid-template-columns: 1.4fr 0.9fr !important;
       gap: 1.25rem !important;
-      align-items: stretch !important;
+      align-items: start !important;
     }
     #report-page-card.is-landscape #report-col-plan {
-      height: 100% !important;
+      width: 100% !important;
+      height: auto !important;
     }
     #report-page-card.is-landscape #report-sec-plan {
-      height: 100% !important;
+      width: 100% !important;
+      height: auto !important;
       display: flex !important;
       flex-direction: column !important;
     }
     #report-page-card.is-landscape #planSnapshotCanvasWrapper {
-      flex: 1 !important;
-      min-height: 520px !important;
-      height: 540px !important;
+      padding: 0.75rem !important;
+      flex: none !important;
+      height: auto !important;
+      min-height: unset !important;
     }
-    #report-page-card.is-landscape #planSnapshotCanvasWrapper > div {
-      height: 100% !important;
-      min-height: 490px !important;
+    #report-page-card.is-landscape #planCanvasContainer {
+      width: 100% !important;
+      aspect-ratio: 2 / 1 !important;
+      max-height: 430px !important;
+      height: auto !important;
+      min-height: unset !important;
     }
     #report-page-card.is-landscape #report-col-side {
       display: flex !important;
       flex-direction: column !important;
-      gap: 1.25rem !important;
-      height: 100% !important;
-      justify-content: space-between !important;
+      gap: 1rem !important;
+      width: 100% !important;
+      height: auto !important;
     }
     #report-page-card.is-landscape #report-sec-scurve .chart-wrapper {
-      height: 220px !important;
+      height: 190px !important;
     }
     #report-page-card.is-landscape #report-sec-table .table-wrapper {
-      max-height: 240px !important;
+      max-height: 200px !important;
     }
   </style>
 
@@ -284,10 +304,6 @@
 
       <!-- Right: Action Buttons (Grouped & Compact) -->
       <div class="flex items-center gap-1.5">
-        <a href="index.html" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#475569]" style="background:#e0f2fe;" title="กลับสู่หน้าหลักโครงการ PYNN PRIDI 37">
-          <i data-lucide="home" class="w-3.5 h-3.5 text-[#0369a1]"></i>
-          <span class="font-bold text-[#0369a1]">หน้าหลัก</span>
-        </a>
         <button id="btn-quick-select" class="pop-btn-green px-2.5 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#064e3b]" title="ระบุต้นที่ตอกด่วน">
           <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
           <span class="hidden md:inline font-bold">ระบุต้นที่ตอก</span>
@@ -303,9 +319,9 @@
           <span class="hidden sm:inline font-bold">ส่งออกภาพ</span>
         </button>
 
-        <button id="btn-open-cotable" class="pop-btn px-2 py-1 text-xs flex items-center gap-1" style="background:#dff1f5;" title="ตารางระดับตัดหัวเข็ม CO">
+        <button id="btn-open-cotable" class="pop-btn px-2 py-1 text-xs flex items-center gap-1" style="background:#dff1f5;" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO (SketchUp Table)">
           <i data-lucide="table" class="w-3.5 h-3.5 text-[#34383b]"></i>
-          <span class="hidden lg:inline font-bold">ตาราง CO</span>
+          <span class="hidden lg:inline font-bold">ตารางพิกัด PCO</span>
         </button>
 
         <button id="btn-reset-view" title="รีเซ็ตมุมมอง Top View" class="pop-btn p-1">
@@ -513,8 +529,20 @@
     <!-- Quick Info -->
     <div class="space-y-1 text-xs mb-3">
       <div class="flex justify-between py-0.5 border-b border-[#e5f1ed]">
-        <span class="text-[#667277]">ระดับตัดหัวเข็ม (CO):</span>
+        <span class="text-[#667277]">ฐานราก (Footing):</span>
+        <span id="card-pile-footing" class="font-bold text-[#34383b]">F1</span>
+      </div>
+      <div class="flex justify-between py-0.5 border-b border-[#e5f1ed]">
+        <span class="text-[#667277]">ระดับตัดหัวเข็มตามแบบ (PCO):</span>
         <span id="card-pile-co" class="font-black text-[#ed6845]">-1.226 ม.</span>
+      </div>
+      <div class="flex justify-between py-0.5 border-b border-[#e5f1ed]">
+        <span class="text-[#667277]">พิกัดสำรวจ N:</span>
+        <span id="card-pile-northing" class="font-mono text-[11px] font-bold text-[#34383b]">-</span>
+      </div>
+      <div class="flex justify-between py-0.5 border-b border-[#e5f1ed]">
+        <span class="text-[#667277]">พิกัดสำรวจ E:</span>
+        <span id="card-pile-easting" class="font-mono text-[11px] font-bold text-[#34383b]">-</span>
       </div>
       <div class="flex justify-between py-0.5 border-b border-[#e5f1ed]">
         <span class="text-[#667277]">ขนาด / ความยาว:</span>
@@ -734,9 +762,9 @@
               </div>
             </div>
 
-            <div id="planSnapshotCanvasWrapper" class="p-3 flex-1 flex flex-col">
-              <!-- High-Resolution Large Canvas -->
-              <div class="w-full h-[460px] md:h-[500px] flex-1 bg-white border-2 border-[#475569] rounded-lg overflow-hidden flex items-center justify-center relative shadow-inner">
+            <div id="planSnapshotCanvasWrapper" class="p-3">
+              <!-- High-Resolution Large Canvas with 2:1 Aspect Ratio (สัดส่วนเป๊ะ 46.4x23.2m ไร้ขอบว่างบนล่าง) -->
+              <div id="planCanvasContainer" class="w-full bg-white border-2 border-[#475569] rounded-lg overflow-hidden flex items-center justify-center relative shadow-inner" style="aspect-ratio: 2 / 1; max-height: 440px;">
                 <canvas id="planSnapshotCanvas" class="w-full h-full block cursor-pointer" title="คลิกที่ต้นเข็มเพื่อดูหรือเปลี่ยนสถานะ"></canvas>
                 <div class="absolute bottom-2 right-2 bg-white/95 border-2 border-[#475569] px-2.5 py-1 rounded-md text-[10.5px] font-black text-[#475569] shadow-[1px_1px_0_#475569] pointer-events-none">
                   💡 ทิศเหนือชี้ขึ้นบน | แนวเขตที่ดิน (เส้นประแดง) | กริด 1-10 ด้านบน | กริด A-E ด้านซ้าย
@@ -785,13 +813,16 @@
               <table class="w-full text-xs text-left border-collapse">
                 <thead class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
                   <tr>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">No.</th>
-                    <th class="p-2.5 border-r-2 border-[#475569]/30">รหัสเข็ม (ID)</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
-                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 text-[#a84631]">ระดับตัดหัวเข็ม CO (m)</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ขนาด / ชนิดเข็ม</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">วันที่ตอก</th>
-                    <th class="p-2.5 text-center">สถานะ</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">No.</th>
+                    <th class="p-2 border-r-2 border-[#475569]/30">รหัสเข็ม (ID)</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ฐานราก</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono">Northing (N)</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono">Easting (E)</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#a84631]">ระดับตามแบบ PCO (m)</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">วันที่ตอก</th>
+                    <th class="p-2 text-center">สถานะ</th>
                   </tr>
                 </thead>
                 <tbody id="rep-today-table-body" class="divide-y divide-[#e5f1ed]">
@@ -912,22 +943,31 @@
     </div>
   </div>
 
-  <!-- Modal: หน้าตารางค่า CO (Coordinate & Cut-Off Table) -->
-  <div id="modal-cotable" class="fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-4 hidden">
-    <div class="pop-card w-full max-w-4xl p-4 bg-[#fffdf8] max-h-[90vh] flex flex-col">
-      <div class="flex items-center justify-between border-b-2 border-[#475569]/30 pb-2 mb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-[#dff1f5] border-2 border-[#475569] flex items-center justify-center text-[#34383b]">
-            <i data-lucide="table" class="w-5 h-5"></i>
+  <!-- Modal: หน้าตารางค่าพิกัดและระดับตัดหัวเข็มตามแบบ PCO (Pile Coordinates & PCO Summary Table) -->
+  <div id="modal-cotable" class="fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-3 md:p-6 hidden">
+    <div class="pop-card w-full max-w-6xl p-4 md:p-5 bg-[#fffdf8] max-h-[92vh] flex flex-col">
+      <div class="flex items-center justify-between border-b-2 border-[#475569]/30 pb-2.5 mb-3 gap-2 flex-wrap">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-[#1e40af] border-2 border-[#475569] flex items-center justify-center text-white shadow-[1.5px_1.5px_0_#475569]">
+            <i data-lucide="table-2" class="w-4.5 h-4.5"></i>
           </div>
           <div>
-            <h3 class="text-sm font-black text-[#34383b]">ตารางพิกัดและระดับตัดหัวเข็ม (CO & Coordinate Table)</h3>
-            <p class="text-[11px] text-[#667277] font-semibold">ฐานข้อมูลเสาเข็มไอ 0.40 ม. ทั้งหมด 93 ต้น</p>
+            <h3 class="text-sm md:text-base font-black text-[#1e293b]">ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ (PILE COORDINATES & PCO SUMMARY TABLE)</h3>
+            <p class="text-[11px] text-[#64748b] font-semibold">โครงการ: PYNN PRIDI 37 (เสาเข็มไอ 0.40 ม. ทั้งหมด 93 ต้น) | อ้างอิงตามแบบ SketchUp Image 4</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <input id="table-search" type="text" placeholder="ค้นหาเบอร์เข็ม / กริด..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none">
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- View Switcher -->
+          <div class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1px_1px_0_#475569]">
+            <button id="btn-cotable-tab-sketchup" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#1e40af] text-white flex items-center gap-1 shadow-xs">
+              <i data-lucide="columns-3" class="w-3.5 h-3.5"></i> ตาราง 3 คอลัมน์ (ตามแบบ SketchUp)
+            </button>
+            <button id="btn-cotable-tab-list" class="px-2.5 py-1 rounded-md text-xs font-bold text-[#64748b] hover:text-[#1e293b] transition-all flex items-center gap-1">
+              <i data-lucide="list-filter" class="w-3.5 h-3.5"></i> ค้นหา & จัดการสถานะ
+            </button>
+          </div>
+
           <button id="btn-export-csv" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1" style="background:#e5f4e9;">
             <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
           </button>
@@ -937,25 +977,113 @@
         </div>
       </div>
 
-      <div class="flex-1 overflow-auto border-2 border-[#475569] rounded-xl bg-white shadow-[2px_2px_0_#c9dfd9]">
-        <table class="w-full text-xs text-left border-collapse">
-          <thead class="bg-[#ffc45b] text-[#34383b] sticky top-0 z-10 border-b-2 border-[#475569]">
-            <tr>
-              <th class="p-2.5 border-r border-[#475569]/30 font-black text-center">No.</th>
-              <th class="p-2.5 border-r border-[#475569]/30 font-black">รหัสเข็ม</th>
-              <th class="p-2.5 border-r border-[#475569]/30 font-black text-center">กริด</th>
-              <th class="p-2.5 border-r border-[#475569]/30 font-black text-right text-[#a84631]">ระดับ CO (m)</th>
-              <th class="p-2.5 border-r border-[#475569]/30 font-black text-center">สถานะ</th>
-              <th class="p-2.5 border-r border-[#475569]/30 font-black text-center">วันที่ตอก</th>
-              <th class="p-2.5 font-black text-center">สลับสถานะ</th>
-            </tr>
-          </thead>
-          <tbody id="cotable-body" class="divide-y divide-[#e5f1ed]"></tbody>
-        </table>
+      <!-- VIEW 1: Authentic 3-Column SketchUp Coordinates Table (ตาม Image 4) -->
+      <div id="cotable-view-sketchup" class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navy Banner -->
+        <div class="bg-[#1e3a8a] text-white py-2 px-4 rounded-t-xl border-2 border-[#1e3a8a] text-center shadow-md">
+          <h2 class="font-black text-sm md:text-base tracking-wider uppercase font-montserrat">PILE COORDINATES SUMMARY TABLE</h2>
+          <p class="text-[11px] font-bold text-[#facc15] font-montserrat">PROJECT: PRIDI 37 (PILE I-0.40 m - TOTAL 93 NOS)</p>
+        </div>
+
+        <!-- 3 Side-by-Side Tables -->
+        <div class="flex-1 overflow-y-auto bg-slate-100 p-2.5 border-2 border-t-0 border-[#1e3a8a] rounded-b-xl grid grid-cols-1 md:grid-cols-3 gap-3">
+          <!-- Column 1: Piles 01 - 31 -->
+          <div class="bg-white border border-[#94a3b8] rounded-lg overflow-hidden shadow-xs flex flex-col">
+            <div class="bg-[#1e40af] text-white text-center font-black text-xs py-1.5 border-b border-[#94a3b8]">
+              COORDINATE TABLE (PILE 01 - 31)
+            </div>
+            <div class="overflow-x-auto flex-1">
+              <table class="w-full text-[11px] text-left border-collapse">
+                <thead class="bg-[#2563eb] text-white font-bold text-[10px] sticky top-0">
+                  <tr>
+                    <th class="p-1 text-center border-r border-blue-400">NO.</th>
+                    <th class="p-1 text-center border-r border-blue-400">TYPE</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono">NORTHING (N)</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono">EASTING (E)</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono text-[#fef08a]">PCO</th>
+                    <th class="p-1 text-center">REMARKS</th>
+                  </tr>
+                </thead>
+                <tbody id="cotable-col1-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Column 2: Piles 32 - 62 -->
+          <div class="bg-white border border-[#94a3b8] rounded-lg overflow-hidden shadow-xs flex flex-col">
+            <div class="bg-[#1e40af] text-white text-center font-black text-xs py-1.5 border-b border-[#94a3b8]">
+              COORDINATE TABLE (PILE 32 - 62)
+            </div>
+            <div class="overflow-x-auto flex-1">
+              <table class="w-full text-[11px] text-left border-collapse">
+                <thead class="bg-[#2563eb] text-white font-bold text-[10px] sticky top-0">
+                  <tr>
+                    <th class="p-1 text-center border-r border-blue-400">NO.</th>
+                    <th class="p-1 text-center border-r border-blue-400">TYPE</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono">NORTHING (N)</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono">EASTING (E)</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono text-[#fef08a]">PCO</th>
+                    <th class="p-1 text-center">REMARKS</th>
+                  </tr>
+                </thead>
+                <tbody id="cotable-col2-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Column 3: Piles 63 - 93 -->
+          <div class="bg-white border border-[#94a3b8] rounded-lg overflow-hidden shadow-xs flex flex-col">
+            <div class="bg-[#1e40af] text-white text-center font-black text-xs py-1.5 border-b border-[#94a3b8]">
+              COORDINATE TABLE (PILE 63 - 93)
+            </div>
+            <div class="overflow-x-auto flex-1">
+              <table class="w-full text-[11px] text-left border-collapse">
+                <thead class="bg-[#2563eb] text-white font-bold text-[10px] sticky top-0">
+                  <tr>
+                    <th class="p-1 text-center border-r border-blue-400">NO.</th>
+                    <th class="p-1 text-center border-r border-blue-400">TYPE</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono">NORTHING (N)</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono">EASTING (E)</th>
+                    <th class="p-1 text-right border-r border-blue-400 font-mono text-[#fef08a]">PCO</th>
+                    <th class="p-1 text-center">REMARKS</th>
+                  </tr>
+                </thead>
+                <tbody id="cotable-col3-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: Searchable & Interactive Filter Table -->
+      <div id="cotable-view-list" class="flex-1 flex flex-col overflow-hidden hidden">
+        <div class="flex items-center justify-between pb-2">
+          <input id="table-search" type="text" placeholder="ค้นหาเบอร์เข็ม / กริด / ฐานราก (F1, F2...)..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none w-72">
+          <span class="text-[11px] text-[#64748b]">คลิกที่ปุ่มสลับสถานะเพื่อบันทึกการตอก</span>
+        </div>
+        <div class="flex-1 overflow-auto border-2 border-[#475569] rounded-xl bg-white shadow-[2px_2px_0_#c9dfd9]">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead class="bg-[#ffc45b] text-[#34383b] sticky top-0 z-10 border-b-2 border-[#475569]">
+              <tr>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-center">No.</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black">รหัสเข็ม</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-center">ฐานราก</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-center">กริด</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-right font-mono">Northing (N)</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-right font-mono">Easting (E)</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-right text-[#a84631]">ระดับตามแบบ PCO (m)</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-center">สถานะ</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-center">วันที่ตอก</th>
+                <th class="p-2 font-black text-center">สลับสถานะ</th>
+              </tr>
+            </thead>
+            <tbody id="cotable-body" class="divide-y divide-[#e5f1ed]"></tbody>
+          </table>
+        </div>
       </div>
 
       <div class="mt-2.5 flex justify-between items-center text-[11px] text-[#667277] font-semibold">
-        <span>แสดงทั้งหมด 93 ต้น | คลิกปุ่มสลับสถานะเพื่อบันทึกทันที</span>
+        <span>เสาเข็มไอ 0.40 ม. ความยาว 21.00 ม. ทั้งหมด 93 ต้น | แถวสีเขียวอ่อน = ตอกแล้ว</span>
         <span id="cotable-summary-stat" class="font-black text-[#34383b]">ตอกแล้ว 0 / 93 ต้น</span>
       </div>
     </div>
@@ -974,7 +1102,11 @@
     "y": 12.755,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518672.6976,
+    "easting": 672390.8063,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 2,
@@ -985,7 +1117,11 @@
     "y": 12.755,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518671.4977,
+    "easting": 672390.7912,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 3,
@@ -996,7 +1132,11 @@
     "y": 11.715,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518672.1107,
+    "easting": 672389.7589,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 4,
@@ -1007,7 +1147,11 @@
     "y": 13.604,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518667.4874,
+    "easting": 672391.591,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 5,
@@ -1018,7 +1162,11 @@
     "y": 13.603,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518666.2875,
+    "easting": 672391.5759,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 6,
@@ -1029,7 +1177,11 @@
     "y": 12.404,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518667.5024,
+    "easting": 672390.3911,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 7,
@@ -1040,7 +1192,11 @@
     "y": 12.403,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518666.3025,
+    "easting": 672390.376,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 8,
@@ -1051,7 +1207,11 @@
     "y": 11.204,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518667.5175,
+    "easting": 672389.1912,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 9,
@@ -1062,7 +1222,11 @@
     "y": 11.203,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518666.3176,
+    "easting": 672389.1761,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 10,
@@ -1073,7 +1237,11 @@
     "y": 13.252,
     "co_level": -1.726,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518661.2422,
+    "easting": 672391.1626,
+    "footing": "F5",
+    "pco_level": -1.726
   },
   {
     "no": 11,
@@ -1084,7 +1252,11 @@
     "y": 13.251,
     "co_level": -1.726,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518659.5424,
+    "easting": 672391.1413,
+    "footing": "F5",
+    "pco_level": -1.726
   },
   {
     "no": 12,
@@ -1095,7 +1267,11 @@
     "y": 12.401,
     "co_level": -1.726,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518660.403,
+    "easting": 672390.302,
+    "footing": "F5",
+    "pco_level": -1.726
   },
   {
     "no": 13,
@@ -1106,7 +1282,11 @@
     "y": 11.552,
     "co_level": -1.726,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518661.2636,
+    "easting": 672389.4628,
+    "footing": "F5",
+    "pco_level": -1.726
   },
   {
     "no": 14,
@@ -1117,7 +1297,11 @@
     "y": 11.551,
     "co_level": -1.726,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518659.5637,
+    "easting": 672389.4414,
+    "footing": "F5",
+    "pco_level": -1.726
   },
   {
     "no": 15,
@@ -1128,7 +1312,11 @@
     "y": 13.599,
     "co_level": -1.676,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518653.1885,
+    "easting": 672391.4116,
+    "footing": "F6",
+    "pco_level": -1.676
   },
   {
     "no": 16,
@@ -1139,7 +1327,11 @@
     "y": 13.599,
     "co_level": -1.676,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518651.9886,
+    "easting": 672391.3966,
+    "footing": "F6",
+    "pco_level": -1.676
   },
   {
     "no": 17,
@@ -1150,7 +1342,11 @@
     "y": 12.399,
     "co_level": -1.676,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518653.2035,
+    "easting": 672390.2117,
+    "footing": "F6",
+    "pco_level": -1.676
   },
   {
     "no": 18,
@@ -1161,7 +1357,11 @@
     "y": 12.399,
     "co_level": -1.676,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518652.0036,
+    "easting": 672390.1967,
+    "footing": "F6",
+    "pco_level": -1.676
   },
   {
     "no": 19,
@@ -1172,7 +1372,11 @@
     "y": 11.199,
     "co_level": -1.676,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518653.2186,
+    "easting": 672389.0118,
+    "footing": "F6",
+    "pco_level": -1.676
   },
   {
     "no": 20,
@@ -1183,7 +1387,11 @@
     "y": 11.199,
     "co_level": -1.676,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518652.0187,
+    "easting": 672388.9968,
+    "footing": "F6",
+    "pco_level": -1.676
   },
   {
     "no": 21,
@@ -1194,7 +1402,11 @@
     "y": 13.597,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518645.6891,
+    "easting": 672391.3176,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 22,
@@ -1205,7 +1417,11 @@
     "y": 13.596,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518644.4892,
+    "easting": 672391.3025,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 23,
@@ -1216,7 +1432,11 @@
     "y": 12.397,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518645.7041,
+    "easting": 672390.1177,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 24,
@@ -1227,7 +1447,11 @@
     "y": 12.396,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518644.5042,
+    "easting": 672390.1026,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 25,
@@ -1238,7 +1462,11 @@
     "y": 11.197,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518645.7192,
+    "easting": 672388.9177,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 26,
@@ -1249,7 +1477,11 @@
     "y": 11.196,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518644.5193,
+    "easting": 672388.9027,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 27,
@@ -1260,7 +1492,11 @@
     "y": 12.745,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518640.5001,
+    "easting": 672390.4024,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 28,
@@ -1271,7 +1507,11 @@
     "y": 12.745,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518639.3002,
+    "easting": 672390.3874,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 29,
@@ -1282,7 +1522,11 @@
     "y": 11.705,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518639.9132,
+    "easting": 672389.355,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 30,
@@ -1293,7 +1537,11 @@
     "y": 5.156,
     "co_level": -1.826,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518673.2929,
+    "easting": 672383.2132,
+    "footing": "F8",
+    "pco_level": -1.826
   },
   {
     "no": 31,
@@ -1302,9 +1550,13 @@
     "grid": "2-B",
     "x": 0.6,
     "y": 5.155,
-    "co_level": -1.826,
+    "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518672.093,
+    "easting": 672383.1981,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 32,
@@ -1313,9 +1565,13 @@
     "grid": "1-C",
     "x": -0.601,
     "y": 3.956,
-    "co_level": -1.826,
+    "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518673.308,
+    "easting": 672382.0132,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 33,
@@ -1324,9 +1580,13 @@
     "grid": "2-C",
     "x": 0.599,
     "y": 3.955,
-    "co_level": -1.826,
+    "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518672.1081,
+    "easting": 672381.9982,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 34,
@@ -1335,9 +1595,13 @@
     "grid": "1-C",
     "x": -0.601,
     "y": 2.756,
-    "co_level": -1.826,
+    "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518673.323,
+    "easting": 672380.8133,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 35,
@@ -1346,9 +1610,13 @@
     "grid": "2-C",
     "x": 0.599,
     "y": 2.755,
-    "co_level": -1.826,
+    "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518672.1231,
+    "easting": 672380.7983,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 36,
@@ -1357,9 +1625,13 @@
     "grid": "1-D",
     "x": -0.602,
     "y": 1.306,
-    "co_level": -1.426,
+    "co_level": -1.826,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518673.3412,
+    "easting": 672379.3635,
+    "footing": "F2",
+    "pco_level": -1.826
   },
   {
     "no": 37,
@@ -1368,9 +1640,13 @@
     "grid": "2-D",
     "x": 0.599,
     "y": 1.305,
-    "co_level": -1.426,
+    "co_level": -1.826,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518672.1413,
+    "easting": 672379.3484,
+    "footing": "F2",
+    "pco_level": -1.826
   },
   {
     "no": 38,
@@ -1379,9 +1655,13 @@
     "grid": "3-B",
     "x": 5.7,
     "y": 5.204,
-    "co_level": -0.651,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518666.9928,
+    "easting": 672383.1841,
+    "footing": "F1",
+    "pco_level": -1.426
   },
   {
     "no": 39,
@@ -1390,9 +1670,13 @@
     "grid": "3-D",
     "x": 5.699,
     "y": 1.304,
-    "co_level": -0.651,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518667.0417,
+    "easting": 672379.2844,
+    "footing": "F1",
+    "pco_level": -1.426
   },
   {
     "no": 40,
@@ -1403,7 +1687,11 @@
     "y": 6.102,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518662.7218,
+    "easting": 672384.0306,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 41,
@@ -1414,7 +1702,11 @@
     "y": 6.102,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518661.3219,
+    "easting": 672384.0131,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 42,
@@ -1425,7 +1717,11 @@
     "y": 6.101,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518659.822,
+    "easting": 672383.9942,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 43,
@@ -1436,7 +1732,11 @@
     "y": 6.101,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518658.3221,
+    "easting": 672383.9754,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 44,
@@ -1447,7 +1747,11 @@
     "y": 4.902,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518662.7368,
+    "easting": 672382.8307,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 45,
@@ -1458,7 +1762,11 @@
     "y": 4.902,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518661.3369,
+    "easting": 672382.8132,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 46,
@@ -1469,7 +1777,11 @@
     "y": 4.901,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518659.837,
+    "easting": 672382.7943,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 47,
@@ -1480,7 +1792,11 @@
     "y": 4.901,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518658.3372,
+    "easting": 672382.7755,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 48,
@@ -1491,7 +1807,11 @@
     "y": 3.702,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518662.7519,
+    "easting": 672381.6308,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 49,
@@ -1502,7 +1822,11 @@
     "y": 3.702,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518661.352,
+    "easting": 672381.6133,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 50,
@@ -1513,7 +1837,11 @@
     "y": 3.701,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518659.8521,
+    "easting": 672381.5944,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 51,
@@ -1524,7 +1852,11 @@
     "y": 3.701,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518658.3522,
+    "easting": 672381.5756,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 52,
@@ -1535,7 +1867,11 @@
     "y": 1.852,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518662.7751,
+    "easting": 672379.781,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 53,
@@ -1546,7 +1882,11 @@
     "y": 1.852,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518661.3752,
+    "easting": 672379.7634,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 54,
@@ -1557,7 +1897,11 @@
     "y": 1.851,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518659.8753,
+    "easting": 672379.7446,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 55,
@@ -1568,7 +1912,11 @@
     "y": 1.851,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518658.3754,
+    "easting": 672379.7258,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 56,
@@ -1579,7 +1927,11 @@
     "y": 0.002,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518662.7983,
+    "easting": 672377.9311,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 57,
@@ -1590,7 +1942,11 @@
     "y": 0.002,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518661.3984,
+    "easting": 672377.9135,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 58,
@@ -1601,7 +1957,11 @@
     "y": 0.001,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518659.8985,
+    "easting": 672377.8947,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 59,
@@ -1612,7 +1972,11 @@
     "y": 0.001,
     "co_level": -2.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518658.3986,
+    "easting": 672377.8759,
+    "footing": "F20A",
+    "pco_level": -2.626
   },
   {
     "no": 60,
@@ -1621,9 +1985,13 @@
     "grid": "6-B",
     "x": 16.865,
     "y": 5.975,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518655.8189,
+    "easting": 672383.819,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 61,
@@ -1632,9 +2000,13 @@
     "grid": "6-B",
     "x": 19.465,
     "y": 5.974,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518653.2191,
+    "easting": 672383.7864,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 62,
@@ -1643,9 +2015,13 @@
     "grid": "6-B",
     "x": 21.465,
     "y": 5.973,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518651.2193,
+    "easting": 672383.7613,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 63,
@@ -1654,9 +2030,13 @@
     "grid": "6-B",
     "x": 18.165,
     "y": 4.975,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518654.5315,
+    "easting": 672382.8028,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 64,
@@ -1665,9 +2045,13 @@
     "grid": "6-B",
     "x": 20.465,
     "y": 4.974,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518652.2317,
+    "easting": 672382.774,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 65,
@@ -1676,9 +2060,13 @@
     "grid": "6-C",
     "x": 16.864,
     "y": 3.975,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518655.844,
+    "easting": 672381.8192,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 66,
@@ -1687,9 +2075,13 @@
     "grid": "6-C",
     "x": 19.464,
     "y": 3.974,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518653.2442,
+    "easting": 672381.7866,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 67,
@@ -1698,9 +2090,13 @@
     "grid": "6-C",
     "x": 21.465,
     "y": 3.973,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518651.2443,
+    "easting": 672381.7615,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 68,
@@ -1709,9 +2105,13 @@
     "grid": "6-C",
     "x": 18.164,
     "y": 2.975,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518654.5566,
+    "easting": 672380.803,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 69,
@@ -1720,9 +2120,13 @@
     "grid": "6-C",
     "x": 20.464,
     "y": 2.974,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518652.2568,
+    "easting": 672380.7741,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 70,
@@ -1731,9 +2135,13 @@
     "grid": "6-D",
     "x": 16.864,
     "y": 1.975,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518655.8691,
+    "easting": 672379.8194,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 71,
@@ -1742,9 +2150,13 @@
     "grid": "6-D",
     "x": 19.464,
     "y": 1.974,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518653.2693,
+    "easting": 672379.7867,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 72,
@@ -1753,9 +2165,13 @@
     "grid": "6-D",
     "x": 21.464,
     "y": 1.973,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518651.2694,
+    "easting": 672379.7617,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 73,
@@ -1764,9 +2180,13 @@
     "grid": "6-D",
     "x": 18.164,
     "y": 0.975,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518654.5817,
+    "easting": 672378.8031,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 74,
@@ -1775,9 +2195,13 @@
     "grid": "6-D",
     "x": 20.463,
     "y": 0.974,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518652.2819,
+    "easting": 672378.7743,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 75,
@@ -1786,9 +2210,13 @@
     "grid": "6-E",
     "x": 16.863,
     "y": -0.025,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518655.8942,
+    "easting": 672377.8195,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 76,
@@ -1797,9 +2225,13 @@
     "grid": "6-E",
     "x": 19.463,
     "y": -0.026,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518653.2944,
+    "easting": 672377.7869,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 77,
@@ -1808,9 +2240,13 @@
     "grid": "6-E",
     "x": 21.463,
     "y": -0.027,
-    "co_level": -4.326,
+    "co_level": -1.426,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518651.2945,
+    "easting": 672377.7618,
+    "footing": "F18",
+    "pco_level": -1.426
   },
   {
     "no": 78,
@@ -1819,9 +2255,13 @@
     "grid": "7-B",
     "x": 25.75,
     "y": 5.432,
-    "co_level": -3.251,
+    "co_level": -0.651,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518646.9416,
+    "easting": 672383.1676,
+    "footing": "F1",
+    "pco_level": -0.651
   },
   {
     "no": 79,
@@ -1830,9 +2270,13 @@
     "grid": "7-C",
     "x": 25.749,
     "y": 2.71,
-    "co_level": -3.251,
+    "co_level": -0.651,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518646.9757,
+    "easting": 672380.4453,
+    "footing": "F1",
+    "pco_level": -0.651
   },
   {
     "no": 80,
@@ -1841,9 +2285,13 @@
     "grid": "7-E",
     "x": 25.748,
     "y": -0.013,
-    "co_level": -3.251,
+    "co_level": -0.651,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518647.0099,
+    "easting": 672377.7231,
+    "footing": "F1",
+    "pco_level": -0.651
   },
   {
     "no": 81,
@@ -1854,7 +2302,11 @@
     "y": 5.171,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518643.8449,
+    "easting": 672382.8688,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 82,
@@ -1865,7 +2317,11 @@
     "y": 5.171,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518642.645,
+    "easting": 672382.8537,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 83,
@@ -1876,7 +2332,11 @@
     "y": 3.971,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518643.86,
+    "easting": 672381.6689,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 84,
@@ -1887,7 +2347,11 @@
     "y": 3.971,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518642.6601,
+    "easting": 672381.6538,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 85,
@@ -1898,7 +2362,11 @@
     "y": 2.771,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518643.875,
+    "easting": 672380.469,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 86,
@@ -1909,7 +2377,11 @@
     "y": 2.771,
     "co_level": -1.526,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518642.6751,
+    "easting": 672380.4539,
+    "footing": "F6",
+    "pco_level": -1.526
   },
   {
     "no": 87,
@@ -1920,7 +2392,11 @@
     "y": 3.845,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518640.4129,
+    "easting": 672381.5006,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 88,
@@ -1931,7 +2407,11 @@
     "y": 3.845,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518639.213,
+    "easting": 672381.4855,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 89,
@@ -1942,7 +2422,11 @@
     "y": 2.805,
     "co_level": -1.226,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518639.826,
+    "easting": 672380.4532,
+    "footing": "F3",
+    "pco_level": -1.226
   },
   {
     "no": 90,
@@ -1953,7 +2437,11 @@
     "y": -0.004,
     "co_level": -1.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518643.6598,
+    "easting": 672377.691,
+    "footing": "F2",
+    "pco_level": -1.626
   },
   {
     "no": 91,
@@ -1964,7 +2452,11 @@
     "y": -0.005,
     "co_level": -1.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518642.4599,
+    "easting": 672377.676,
+    "footing": "F2",
+    "pco_level": -1.626
   },
   {
     "no": 92,
@@ -1975,7 +2467,11 @@
     "y": -0.005,
     "co_level": -1.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518640.4601,
+    "easting": 672377.6509,
+    "footing": "F2",
+    "pco_level": -1.626
   },
   {
     "no": 93,
@@ -1986,7 +2482,11 @@
     "y": -0.006,
     "co_level": -1.626,
     "type": "I-0.40m",
-    "length_m": 21.0
+    "length_m": 21.0,
+    "northing": 1518639.2602,
+    "easting": 672377.6358,
+    "footing": "F2",
+    "pco_level": -1.626
   }
 ];
   </script>
@@ -2521,7 +3021,11 @@
       const isDriven = rec && rec.status === 'driven';
 
       document.getElementById('card-pile-tag').textContent = `${pileData.tag} (กริด ${pileData.grid})`;
-      document.getElementById('card-pile-co').textContent = `${pileData.co_level.toFixed(3)} ม.`;
+      const pcoVal = pileData.pco_level !== undefined ? pileData.pco_level : pileData.co_level;
+      document.getElementById('card-pile-co').textContent = `${pcoVal.toFixed(3)} ม.`;
+      document.getElementById('card-pile-footing').textContent = pileData.footing || '-';
+      document.getElementById('card-pile-northing').textContent = pileData.northing !== undefined ? pileData.northing.toFixed(4) : '-';
+      document.getElementById('card-pile-easting').textContent = pileData.easting !== undefined ? pileData.easting.toFixed(4) : '-';
       document.getElementById('card-pile-type').textContent = `${pileData.type} (L=${pileData.length_m}m)`;
 
       const statusText = document.getElementById('card-pile-status-text');
@@ -2863,15 +3367,17 @@
     function renderPlanSnapshotCanvas() {
       const canvas = document.getElementById('planSnapshotCanvas');
       if (!canvas) return;
-      const ctx = canvas.getContext('2d');
+      const parent = canvas.parentElement;
       const rect = canvas.getBoundingClientRect();
-      const w = rect.width || canvas.parentElement.clientWidth || 800;
-      const h = rect.height || canvas.parentElement.clientHeight || 480;
+      const w = parent ? parent.clientWidth : (rect.width || 800);
+      const h = parent ? parent.clientHeight : (rect.height || 400);
+      if (w <= 0 || h <= 0) return;
 
+      const ctx = canvas.getContext('2d');
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // Clean White Paper Background
       ctx.fillStyle = '#ffffff';
@@ -3122,12 +3628,13 @@
     // Allow clicking piles directly on the 2D Plan Canvas in Report!
     const planCanvas = document.getElementById('planSnapshotCanvas');
     planCanvas.addEventListener('click', (e) => {
+      const parent = planCanvas.parentElement;
       const rect = planCanvas.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
 
-      const w = rect.width;
-      const h = rect.height;
+      const w = parent ? parent.clientWidth : rect.width;
+      const h = parent ? parent.clientHeight : rect.height;
       const minX = -6.2, maxX = 40.2;
       const minY = -4.2, maxY = 19.0;
       const spanX = maxX - minX;
@@ -3195,12 +3702,27 @@
         if (bLand) bLand.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1';
       }
 
-      setTimeout(() => {
+      // Smooth multi-frame re-render ensuring CSS layout has completed
+      requestAnimationFrame(() => {
         renderPlanSnapshotCanvas();
         if (reportScurveChartInstance) {
           reportScurveChartInstance.resize();
         }
-      }, 40);
+      });
+      setTimeout(() => {
+        renderPlanSnapshotCanvas();
+      }, 100);
+    }
+
+    // Attach ResizeObserver to plan container for ultra-reliable responsive drawing
+    const planCanvasContainer = document.getElementById('planCanvasContainer');
+    if (planCanvasContainer && window.ResizeObserver) {
+      const ro = new ResizeObserver(() => {
+        if (!document.getElementById('report-page').classList.contains('hidden')) {
+          renderPlanSnapshotCanvas();
+        }
+      });
+      ro.observe(planCanvasContainer);
     }
 
     document.getElementById('btn-layout-portrait')?.addEventListener('click', () => setReportLayout('portrait'));
@@ -3325,15 +3847,21 @@
         todayPilesList.forEach(({ pile: p, rec }) => {
           const tr = document.createElement('tr');
           tr.className = 'hover:bg-[#f0f9ff] transition-colors border-b border-[#e5f1ed]';
+          const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+          const nStr = p.northing !== undefined ? p.northing.toFixed(4) : '-';
+          const eStr = p.easting !== undefined ? p.easting.toFixed(4) : '-';
           tr.innerHTML = `
-            <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed]">${p.no}</td>
-            <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
-            <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
-            <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${p.co_level.toFixed(3)}</td>
-            <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type} (21m)</td>
-            <td class="p-2.5 text-center font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${rec.date || curDate}</td>
-            <td class="p-2.5 text-center">
-              <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-black bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7] shadow-[1px_1px_0_#475569]">
+            <td class="p-2 text-center font-bold text-[#667277] border-r border-[#e5f1ed]">${p.no}</td>
+            <td class="p-2 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
+            <td class="p-2 text-center font-black text-[#1e40af] border-r border-[#e5f1ed]">${p.footing || '-'}</td>
+            <td class="p-2 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
+            <td class="p-2 text-right font-mono text-[11px] text-[#475569] border-r border-[#e5f1ed]">${nStr}</td>
+            <td class="p-2 text-right font-mono text-[11px] text-[#475569] border-r border-[#e5f1ed]">${eStr}</td>
+            <td class="p-2 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
+            <td class="p-2 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type}</td>
+            <td class="p-2 text-center font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${rec.date || curDate}</td>
+            <td class="p-2 text-center">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7] shadow-[1px_1px_0_#475569]">
                 ★ กดวันนี้
               </span>
             </td>
@@ -3669,66 +4197,138 @@
       }, 'image/png');
     });
 
-    // 12. CO Table Modal
+    // 12. PCO & Coordinate Table Modal (อ้างอิงตารางใน SketchUp Image 4)
+    let cotableActiveTab = 'sketchup'; // 'sketchup' or 'list'
+
+    function setCoTableTab(tab) {
+      cotableActiveTab = tab;
+      const vSketchup = document.getElementById('cotable-view-sketchup');
+      const vList = document.getElementById('cotable-view-list');
+      const bSketchup = document.getElementById('btn-cotable-tab-sketchup');
+      const bList = document.getElementById('btn-cotable-tab-list');
+
+      if (tab === 'sketchup') {
+        vSketchup?.classList.remove('hidden');
+        vList?.classList.add('hidden');
+        if (bSketchup) bSketchup.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#1e40af] text-white flex items-center gap-1 shadow-xs';
+        if (bList) bList.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#64748b] hover:text-[#1e293b] transition-all flex items-center gap-1';
+      } else {
+        vSketchup?.classList.add('hidden');
+        vList?.classList.remove('hidden');
+        if (bList) bList.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#1e40af] text-white flex items-center gap-1 shadow-xs';
+        if (bSketchup) bSketchup.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#64748b] hover:text-[#1e293b] transition-all flex items-center gap-1';
+      }
+      renderCoTable();
+    }
+
+    document.getElementById('btn-cotable-tab-sketchup')?.addEventListener('click', () => setCoTableTab('sketchup'));
+    document.getElementById('btn-cotable-tab-list')?.addEventListener('click', () => setCoTableTab('list'));
+
     function renderCoTable() {
-      const tbody = document.getElementById('cotable-body');
-      if (!tbody) return;
+      // 1. Render 3-Column SketchUp Table View (Image 4 format)
+      const bCol1 = document.getElementById('cotable-col1-body');
+      const bCol2 = document.getElementById('cotable-col2-body');
+      const bCol3 = document.getElementById('cotable-col3-body');
 
-      const query = (document.getElementById('table-search')?.value || '').toLowerCase().trim();
-      tbody.innerHTML = '';
+      const renderColumnRows = (container, startNo, endNo) => {
+        if (!container) return;
+        container.innerHTML = '';
+        for (let no = startNo; no <= endNo; no++) {
+          const p = PILES_DATABASE.find(x => x.no === no);
+          if (!p) continue;
+          const rec = progressRecords[p.no];
+          const isDriven = rec && rec.status === 'driven';
+          const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+          const nStr = p.northing !== undefined ? p.northing.toFixed(4) : '-';
+          const eStr = p.easting !== undefined ? p.easting.toFixed(4) : '-';
 
-      PILES_DATABASE.forEach(p => {
-        if (query) {
-          const matchNo = p.no.toString().includes(query);
-          const matchTag = p.tag.toLowerCase().includes(query);
-          const matchGrid = p.grid.toLowerCase().includes(query);
-          if (!matchNo && !matchTag && !matchGrid) return;
+          const tr = document.createElement('tr');
+          tr.className = isDriven ? 'bg-[#ecfdf5] hover:bg-[#d1fae5] transition-colors font-semibold' : (no % 2 === 0 ? 'bg-slate-50/70 hover:bg-slate-100' : 'bg-white hover:bg-slate-50');
+          tr.innerHTML = `
+            <td class="p-1 border-r border-slate-200 text-center font-bold text-slate-700">${p.no}</td>
+            <td class="p-1 border-r border-slate-200 text-center font-semibold text-slate-600">I 0.40</td>
+            <td class="p-1 border-r border-slate-200 text-right font-mono text-slate-800">${nStr}</td>
+            <td class="p-1 border-r border-slate-200 text-right font-mono text-slate-800">${eStr}</td>
+            <td class="p-1 border-r border-slate-200 text-right font-mono font-bold text-[#b91c1c]">${pco.toFixed(3)}</td>
+            <td class="p-1 text-center font-black text-[#1e40af]">
+              ${p.footing || '-'}
+              ${isDriven ? '<span class="inline-block w-2 h-2 rounded-full bg-[#10b981] ml-1" title="ตอกแล้ว"></span>' : ''}
+            </td>
+          `;
+          container.appendChild(tr);
         }
+      };
 
-        const rec = progressRecords[p.no] || { status: 'pending', date: '-' };
-        const isDriven = rec.status === 'driven';
+      renderColumnRows(bCol1, 1, 31);
+      renderColumnRows(bCol2, 32, 62);
+      renderColumnRows(bCol3, 63, 93);
 
-        const tr = document.createElement('tr');
-        tr.className = isDriven ? 'bg-[#f4fbf8] hover:bg-[#e6f7ef]' : 'hover:bg-[#fbfbfb]';
+      // 2. Render Interactive Filter Table View
+      const tbody = document.getElementById('cotable-body');
+      if (tbody) {
+        const query = (document.getElementById('table-search')?.value || '').toLowerCase().trim();
+        tbody.innerHTML = '';
 
-        tr.innerHTML = `
-          <td class="p-2.5 border-r border-[#475569]/20 text-center font-bold text-[#667277]">${p.no}</td>
-          <td class="p-2.5 border-r border-[#475569]/20 font-black text-[#34383b]">${p.tag}</td>
-          <td class="p-2.5 border-r border-[#475569]/20 text-center font-bold text-[#34383b]">${p.grid}</td>
-          <td class="p-2.5 border-r border-[#475569]/20 text-right font-black text-[#a84631] font-mono">${p.co_level.toFixed(3)}</td>
-          <td class="p-2.5 border-r border-[#475569]/20 text-center">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-black border ${isDriven ? 'bg-[#98cfad] text-[#1e3a29] border-[#475569]' : 'bg-slate-100 text-[#667277] border-slate-300'}">
-              ${isDriven ? '✓ ตอกแล้ว' : 'รอการตอก'}
-            </span>
-          </td>
-          <td class="p-2.5 border-r border-[#475569]/20 text-center font-mono text-[11px] text-[#667277]">
-            ${isDriven ? (rec.date || '-') : '-'}
-          </td>
-          <td class="p-2.5 text-center">
-            <button class="px-2.5 py-0.5 rounded text-[10.5px] font-black border border-[#475569] shadow-[1px_1px_0_#475569] ${isDriven ? 'bg-[#f4ece7] hover:bg-[#fff0c8]' : 'bg-[#98cfad] text-[#1e3a29] hover:bg-[#10b981]'}" data-toggle-no="${p.no}">
-              ${isDriven ? 'ยกเลิก' : 'ตอกแล้ว'}
-            </button>
-          </td>
-        `;
-
-        tbody.appendChild(tr);
-      });
-
-      tbody.querySelectorAll('button[data-toggle-no]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const no = parseInt(btn.getAttribute('data-toggle-no'), 10);
-          const cur = progressRecords[no];
-          if (cur && cur.status === 'driven') {
-            delete progressRecords[no];
-          } else {
-            progressRecords[no] = {
-              status: 'driven',
-              date: datePicker.value || todayStr
-            };
+        PILES_DATABASE.forEach(p => {
+          if (query) {
+            const matchNo = p.no.toString().includes(query);
+            const matchTag = p.tag.toLowerCase().includes(query);
+            const matchGrid = p.grid.toLowerCase().includes(query);
+            const matchFooting = (p.footing || '').toLowerCase().includes(query);
+            if (!matchNo && !matchTag && !matchGrid && !matchFooting) return;
           }
-          saveProgress();
+
+          const rec = progressRecords[p.no] || { status: 'pending', date: '-' };
+          const isDriven = rec.status === 'driven';
+          const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+          const nStr = p.northing !== undefined ? p.northing.toFixed(4) : '-';
+          const eStr = p.easting !== undefined ? p.easting.toFixed(4) : '-';
+
+          const tr = document.createElement('tr');
+          tr.className = isDriven ? 'bg-[#f4fbf8] hover:bg-[#e6f7ef]' : 'hover:bg-[#fbfbfb]';
+
+          tr.innerHTML = `
+            <td class="p-2 border-r border-[#475569]/20 text-center font-bold text-[#667277]">${p.no}</td>
+            <td class="p-2 border-r border-[#475569]/20 font-black text-[#34383b]">${p.tag}</td>
+            <td class="p-2 border-r border-[#475569]/20 text-center font-black text-[#1e40af]">${p.footing || '-'}</td>
+            <td class="p-2 border-r border-[#475569]/20 text-center font-bold text-[#34383b]">${p.grid}</td>
+            <td class="p-2 border-r border-[#475569]/20 text-right font-mono text-[11px] text-[#475569]">${nStr}</td>
+            <td class="p-2 border-r border-[#475569]/20 text-right font-mono text-[11px] text-[#475569]">${eStr}</td>
+            <td class="p-2 border-r border-[#475569]/20 text-right font-black text-[#a84631] font-mono">${pco.toFixed(3)}</td>
+            <td class="p-2 border-r border-[#475569]/20 text-center">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black border ${isDriven ? 'bg-[#98cfad] text-[#1e3a29] border-[#475569]' : 'bg-slate-100 text-[#667277] border-slate-300'}">
+                ${isDriven ? '✓ ตอกแล้ว' : 'รอการตอก'}
+              </span>
+            </td>
+            <td class="p-2 border-r border-[#475569]/20 text-center font-mono text-[11px] text-[#667277]">
+              ${isDriven ? (rec.date || '-') : '-'}
+            </td>
+            <td class="p-2 text-center">
+              <button class="px-2.5 py-0.5 rounded text-[10.5px] font-black border border-[#475569] shadow-[1px_1px_0_#475569] ${isDriven ? 'bg-[#f4ece7] hover:bg-[#fff0c8]' : 'bg-[#98cfad] text-[#1e3a29] hover:bg-[#10b981]'}" data-toggle-no="${p.no}">
+                ${isDriven ? 'ยกเลิก' : 'ตอกแล้ว'}
+              </button>
+            </td>
+          `;
+
+          tbody.appendChild(tr);
         });
-      });
+
+        tbody.querySelectorAll('button[data-toggle-no]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const no = parseInt(btn.getAttribute('data-toggle-no'), 10);
+            const cur = progressRecords[no];
+            if (cur && cur.status === 'driven') {
+              delete progressRecords[no];
+            } else {
+              progressRecords[no] = {
+                status: 'driven',
+                date: datePicker.value || todayStr
+              };
+            }
+            saveProgress();
+          });
+        });
+      }
     }
 
     document.getElementById('table-search')?.addEventListener('input', renderCoTable);
@@ -3742,15 +4342,16 @@
     });
 
     document.getElementById('btn-export-csv').addEventListener('click', () => {
-      let csv = "\uFEFFNo,Pile_ID,Grid,CutOff_Level_m,Type,Length_m,Status,Drive_Date\n";
+      let csv = "\uFEFFNo,Pile_ID,Footing,Grid,Northing_N,Easting_E,PCO_Level_m,Type,Length_m,Status,Drive_Date\n";
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no] || { status: 'pending', date: '' };
-        csv += `${p.no},${p.tag},${p.grid},${p.co_level},${p.type},${p.length_m},${rec.status},${rec.date || ''}\n`;
+        const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+        csv += `${p.no},${p.tag},${p.footing || ''},${p.grid},${p.northing || ''},${p.easting || ''},${pco},${p.type},${p.length_m},${rec.status},${rec.date || ''}\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `PYNN_PRIDI_37_Piling_CO_Report_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = `PYNN_PRIDI_37_Piling_PCO_Survey_Report_${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
     });
 
