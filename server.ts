@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
@@ -293,6 +294,19 @@ app.post('/api/supabase/sync', async (req, res) => {
     console.error('API Error:', err);
     res.status(500).json({ error: err.message || 'Server error' });
   }
+});
+
+// Explicit Route for Piling CAD & 3D
+app.get('/piling', (req, res) => {
+  res.redirect('/piling.html#3d');
+});
+
+app.get('/piling.html', (req, res) => {
+  const distPiling = path.join(__dirname, 'dist', 'piling.html');
+  if (fs.existsSync(distPiling)) {
+    return res.sendFile(distPiling);
+  }
+  res.sendFile(path.join(__dirname, 'piling.html'));
 });
 
 // Mount Vite middleware in development

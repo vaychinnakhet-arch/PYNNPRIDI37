@@ -12,6 +12,13 @@ export default defineConfig(({ mode }) => {
       plugins: [
         tailwindcss(),
       ],
+      build: {
+        rollupOptions: {
+          input: {
+            main: path.resolve(__dirname, 'index.html'),
+          },
+        },
+      },
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),

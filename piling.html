@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PYNN PRIDI 37 - Piling Progress Tracker & Report (Soft Ink Flat-Pop)</title>
+  <title>Pynn pridi 37 - ติดตามงานเสาเข็ม 93 ต้น & รายงาน (3D WebGL & Plan)</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -277,7 +277,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="text-xs font-black font-montserrat tracking-tight text-[#34383b]">
-              PYNN PRIDI 37
+              Pynn pridi 37
             </h1>
             <span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-white border border-[#475569] text-[#ed6845]">
               93 ต้น
@@ -360,10 +360,10 @@
     <!-- Views Card -->
     <div class="pop-card p-2 flex flex-col gap-1">
       <span class="text-[9.5px] text-[#667277] font-black px-1 uppercase tracking-wider">มุมมอง (Views)</span>
-      <button id="view-top-ortho" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center gap-2">
+      <button id="view-top-ortho" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-2">
         <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#1e3a29]"></i> แปลน Top View (2D)
       </button>
-      <button id="view-iso3d" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-2">
+      <button id="view-iso3d" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center gap-2">
         <i data-lucide="box" class="w-3.5 h-3.5"></i> 3D สามมิติ (Iso)
       </button>
       <!-- Sub-controls for 3D View Angles -->
@@ -542,7 +542,7 @@
   </div>
 
   <!-- Pile Mini Quick Card (Direct 1-Click Action & Date Adjuster) -->
-  <div id="pile-card" class="fixed bottom-5 right-5 z-[60] w-80 max-w-[92vw] pop-card p-3.5 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto shadow-2xl hidden">
+  <div id="pile-card" class="fixed bottom-5 right-5 z-[70] w-80 max-w-[92vw] pop-card p-3.5 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto shadow-2xl hidden ring-4 ring-amber-400/50">
     <div class="flex items-start justify-between border-b-[1.5px] border-[#475569]/30 pb-1.5 mb-2">
       <div class="flex items-center gap-2">
         <div class="w-7 h-7 rounded-lg bg-[#98cfad] border border-[#475569] flex items-center justify-center text-[#1e3a29]">
@@ -635,7 +635,7 @@
             <div>
               <div class="flex items-center gap-2 flex-wrap">
                 <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569]">
-                  โครงการ PYNN PRIDI 37
+                  โครงการ Pynn pridi 37
                 </span>
                 <span id="rep-header-subtag" class="text-xs text-[#667277] font-bold">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
               </div>
@@ -695,8 +695,9 @@
                 <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                 <span>พิมพ์ / PDF</span>
               </button>
-              <button id="btn-close-report" class="pop-btn p-1.5 text-xs flex items-center justify-center shadow-[1.5px_1.5px_0_#475569]" title="ปิดหน้ารายงานกลับสู่ 3D">
-                <i data-lucide="x" class="w-4 h-4"></i>
+              <button id="btn-close-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[1.5px_1.5px_0_#475569] bg-white hover:bg-slate-100 text-slate-800 font-black cursor-pointer" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span>กลับสู่โมเดล 3D ✕</span>
               </button>
             </div>
           </div>
@@ -951,6 +952,17 @@
 
       </div>
 
+      <!-- Bottom Footer Return Bar -->
+      <div class="mt-4 pt-3 border-t-2 border-[#475569]/30 flex flex-wrap items-center justify-between gap-2 no-print no-export">
+        <span class="text-xs font-bold text-[#667277]">
+          💡 สามารถกดที่ต้นเข็มหรือวันที่ในตารางด้านบนเพื่อแก้ไขข้อมูลได้ตลอดเวลา
+        </span>
+        <button type="button" onclick="document.getElementById('btn-close-report').click()" class="pop-btn-primary px-4 py-2 text-xs font-black flex items-center gap-2 shadow-[2px_2px_0_#253047] cursor-pointer">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>กลับสู่หน้าโมเดล 3D & แปลน CAD</span>
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -1068,7 +1080,7 @@
           </div>
           <div>
             <h3 class="text-sm md:text-base font-black text-[#1e293b]">ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ (PILE COORDINATES & PCO SUMMARY TABLE)</h3>
-            <p class="text-[11px] text-[#64748b] font-semibold">โครงการ: PYNN PRIDI 37 (เสาเข็มไอ 0.40 ม. ทั้งหมด 93 ต้น) | อ้างอิงตามแบบ SketchUp Image 4</p>
+            <p class="text-[11px] text-[#64748b] font-semibold">โครงการ: Pynn pridi 37 (เสาเข็มไอ 0.40 ม. ทั้งหมด 93 ต้น) | อ้างอิงตามแบบ SketchUp Image 4</p>
           </div>
         </div>
 
@@ -3097,7 +3109,7 @@
           }
         });
 
-        resetTopView();
+        resetIsoView(); // 3D Isometric View as default
         updatePileMeshVisuals();
         renderQuickChips();
 
@@ -4009,9 +4021,13 @@
       const legendOrig = document.getElementById('rep-legend-original');
       const legendExcel = document.getElementById('rep-legend-excel');
 
+      const isHidden = reportPage ? reportPage.classList.contains('hidden') : true;
+
       if (theme === 'excel') {
         // EXCEL SIMPLE SPREADSHEET THEME
-        if (reportPage) reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-slate-100 p-3 md:p-6';
+        if (reportPage) {
+          reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-slate-100 p-3 md:p-6' + (isHidden ? ' hidden' : '');
+        }
         if (reportCard) {
           reportCard.className = 'max-w-5xl mx-auto bg-white border border-slate-300 rounded-xl shadow-lg p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
@@ -4068,7 +4084,9 @@
 
       } else {
         // ORIGINAL THEME (SOFT INK FLAT-POP) - DEFAULT
-        if (reportPage) reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-3 md:p-6';
+        if (reportPage) {
+          reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-3 md:p-6' + (isHidden ? ' hidden' : '');
+        }
         if (reportCard) {
           reportCard.className = 'max-w-5xl mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
@@ -4604,6 +4622,8 @@
     });
     document.getElementById('btn-close-report').addEventListener('click', () => {
       document.getElementById('report-page').classList.add('hidden');
+      window.location.hash = '3d';
+      resetIsoView();
     });
 
     document.getElementById('btn-rep-filter-today')?.addEventListener('click', () => {
@@ -5144,16 +5164,7 @@
         applyReportThemeUI(currentReportTheme);
       }
 
-      if (view === '3d' || hash === '3d' || view === 'iso') {
-        // STRICTLY CLOSE REPORT MODAL AND SWITCH TO 3D ISOMETRIC VIEW
-        document.getElementById('report-page')?.classList.add('hidden');
-        document.getElementById('modal-export-image')?.classList.add('hidden');
-        document.getElementById('modal-cotable')?.classList.add('hidden');
-        document.getElementById('quick-select-drawer')?.classList.add('hidden');
-        setTimeout(() => {
-          resetIsoView();
-        }, 120);
-      } else if (view === 'report' || view === 'excel' || view === 'report-original') {
+      if (view === 'report' || view === 'excel' || view === 'report-original') {
         setTimeout(() => {
           document.getElementById('btn-open-report')?.click();
         }, 300);
@@ -5165,9 +5176,18 @@
         setTimeout(() => {
           document.getElementById('btn-quick-select')?.click();
         }, 300);
+      } else {
+        // DEFAULT: ALWAYS OPEN 3D ISOMETRIC VIEW AND KEEP REPORT HIDDEN!
+        document.getElementById('report-page')?.classList.add('hidden');
+        document.getElementById('modal-export-image')?.classList.add('hidden');
+        document.getElementById('modal-cotable')?.classList.add('hidden');
+        document.getElementById('quick-select-drawer')?.classList.add('hidden');
+        resetIsoView();
       }
     }
 
+    // Run navigation immediately and on events
+    handleHashAndUrlNavigation();
     window.addEventListener('DOMContentLoaded', handleHashAndUrlNavigation);
     window.addEventListener('hashchange', handleHashAndUrlNavigation);
 
