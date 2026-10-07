@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && cp -f piling.html dist/piling.html",
+    "build": "vite build && node -e \"const fs=require('fs');fs.copyFileSync('piling.html','dist/piling.html');if(fs.existsSync('html-to-image.min.js'))fs.copyFileSync('html-to-image.min.js','dist/html-to-image.min.js');\"",
     "start": "node --import tsx server.ts",
     "preview": "vite preview",
     "lint": "tsc --noEmit"

@@ -1978,29 +1978,30 @@ html = <<~'HTML_PAGE'
       // Top Bubbles (Group very close grids cleanly: 1 & 2, 4 & 5, 9 & 10)
       const topBubbles = [
         { name: '1', x: 0.00, dy: 0 },
-        { name: '2', x: 0.50, dy: 0 },
+        { name: '2', x: 0.50, dy: -8 },
         { name: '3', x: 5.70, dy: 0 },
         { name: '4', x: 10.85, dy: 0 },
         { name: '5', x: 12.20, dy: 0 },
         { name: '6', x: 20.00, dy: 0 },
         { name: '7', x: 27.50, dy: 0 },
         { name: '8', x: 29.45, dy: 0 },
-        { name: '10', x: 32.80, dy: 0 }
+        { name: '9', x: 32.70, dy: 0 },
+        { name: '10', x: 32.90, dy: -8 }
       ];
 
       topBubbles.forEach(b => {
         const bx = mapX(b.x);
-        const by = yTopGrid - bubbleRadius - 4 + b.dy;
+        const by = yTopGrid - bubbleRadius - 4 + (b.dy || 0);
 
         ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#64748b';
-        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(bx, by, bubbleRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#1e293b';
+        ctx.fillStyle = '#0f172a';
         ctx.font = `bold ${bubbleFontSize}px Montserrat, Sarabun, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -2026,14 +2027,14 @@ html = <<~'HTML_PAGE'
         // Left Bubble
         const bx = xLeftGrid - bubbleRadius - 4;
         ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#64748b';
-        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(bx, gy, bubbleRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#1e293b';
+        ctx.fillStyle = '#0f172a';
         ctx.font = `bold ${bubbleFontSize}px Montserrat, Sarabun, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
