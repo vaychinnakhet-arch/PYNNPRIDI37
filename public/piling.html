@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>PYNN PRIDI 37 - Piling Progress Tracker & Report (Soft Ink Flat-Pop)</title>
+  <title>Pynn pridi 37 - ติดตามงานเสาเข็ม 93 ต้น & รายงาน (3D WebGL & Plan)</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -177,18 +177,47 @@
       flex: none !important;
     }
     #planSnapshotCanvasWrapper > div,
+    #report-page {
+      padding: 0.6rem !important;
+    }
+    @media (min-width: 640px) {
+      #report-page {
+        padding: 1rem !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      #report-page {
+        padding: 1.25rem 1.75rem !important;
+      }
+    }
+
+    #report-page-card {
+      width: 100% !important;
+      max-width: 98vw !important;
+    }
+    @media (min-width: 1600px) {
+      #report-page-card {
+        max-width: 1840px !important;
+      }
+    }
+
     #planCanvasContainer {
       width: 100% !important;
       aspect-ratio: 2 / 1 !important;
-      max-height: 440px !important;
+      max-height: 520px !important;
       height: auto !important;
       min-height: unset !important;
     }
 
     /* Landscape Mode: Wide 2-Column Dashboard */
     #report-page-card.is-landscape {
-      max-width: 1480px !important;
-      width: 96vw !important;
+      max-width: 98vw !important;
+      width: 98vw !important;
+    }
+    @media (min-width: 1600px) {
+      #report-page-card.is-landscape {
+        max-width: 1880px !important;
+      }
     }
     #report-page-card.is-landscape #report-main-grid {
       display: grid !important;
@@ -215,7 +244,7 @@
     #report-page-card.is-landscape #planCanvasContainer {
       width: 100% !important;
       aspect-ratio: 2 / 1 !important;
-      max-height: 440px !important;
+      max-height: 480px !important;
       height: auto !important;
       min-height: unset !important;
     }
@@ -227,10 +256,10 @@
       height: auto !important;
     }
     #report-page-card.is-landscape #report-sec-scurve .chart-wrapper {
-      height: 200px !important;
+      height: 210px !important;
     }
     #report-page-card.is-landscape #report-sec-table .table-wrapper {
-      max-height: 210px !important;
+      max-height: 220px !important;
     }
   </style>
 
@@ -277,7 +306,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="text-xs font-black font-montserrat tracking-tight text-[#34383b]">
-              PYNN PRIDI 37
+              Pynn pridi 37
             </h1>
             <span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-white border border-[#475569] text-[#ed6845]">
               93 ต้น
@@ -360,10 +389,10 @@
     <!-- Views Card -->
     <div class="pop-card p-2 flex flex-col gap-1">
       <span class="text-[9.5px] text-[#667277] font-black px-1 uppercase tracking-wider">มุมมอง (Views)</span>
-      <button id="view-top-ortho" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center gap-2">
+      <button id="view-top-ortho" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-2">
         <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#1e3a29]"></i> แปลน Top View (2D)
       </button>
-      <button id="view-iso3d" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-2">
+      <button id="view-iso3d" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center gap-2">
         <i data-lucide="box" class="w-3.5 h-3.5"></i> 3D สามมิติ (Iso)
       </button>
       <!-- Sub-controls for 3D View Angles -->
@@ -481,6 +510,20 @@
         </button>
       </div>
 
+      <!-- Date Picker Bar for Quick Selector (เลือกวันที่เพื่อปรับแก้ข้อมูลเก่า หรือบันทึกใหม่) -->
+      <div class="p-2.5 rounded-xl bg-amber-50 border-2 border-[#475569] flex flex-wrap items-center justify-between gap-2 mb-2 shadow-xs">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-4 h-4 text-[#ed6845]"></i> วันที่บันทึก / ปรับแก้:
+          </span>
+          <input id="quick-date-picker" type="date" class="text-xs bg-white border-2 border-[#475569] rounded-lg px-2.5 py-1 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0284c7] shadow-inner">
+          <button id="btn-quick-date-today" type="button" class="pop-btn px-2.5 py-1 text-xs font-black" style="background:#fff0c8;">วันนี้</button>
+        </div>
+        <div class="text-[11px] text-[#475569] font-bold">
+          💡 เลือกวันที่แล้วกดเบอร์เข็มด้านล่างเพื่อ <span class="text-[#0284c7] font-black">ปรับแก้วันที่เก่า</span> หรือ <span class="text-[#10b981] font-black">บันทึกตอก</span> ได้ทันที
+        </div>
+      </div>
+
       <!-- Quick Batch Actions Strip -->
       <div class="p-2.5 rounded-xl bg-[#fff0c8] border-[1.5px] border-[#475569] flex flex-wrap items-center justify-between gap-2 mb-3">
         <div class="flex items-center gap-2">
@@ -527,8 +570,8 @@
     </div>
   </div>
 
-  <!-- Pile Mini Quick Card (Direct 1-Click Action on CAD Plan) -->
-  <div id="pile-card" class="absolute bottom-5 right-5 z-30 w-72 pop-card p-3 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden">
+  <!-- Pile Mini Quick Card (Direct 1-Click Action & Date Adjuster) -->
+  <div id="pile-card" class="fixed bottom-5 right-5 z-[70] w-80 max-w-[92vw] pop-card p-3.5 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto shadow-2xl hidden ring-4 ring-amber-400/50">
     <div class="flex items-start justify-between border-b-[1.5px] border-[#475569]/30 pb-1.5 mb-2">
       <div class="flex items-center gap-2">
         <div class="w-7 h-7 rounded-lg bg-[#98cfad] border border-[#475569] flex items-center justify-center text-[#1e3a29]">
@@ -545,7 +588,7 @@
     </div>
 
     <!-- Quick Info -->
-    <div class="space-y-1 text-xs mb-3">
+    <div class="space-y-1 text-xs mb-2">
       <div class="flex justify-between py-0.5 border-b border-[#e5f1ed]">
         <span class="text-[#667277]">ฐานราก (Footing):</span>
         <span id="card-pile-footing" class="font-bold text-[#34383b]">F1</span>
@@ -572,12 +615,49 @@
       </div>
     </div>
 
-    <!-- 1-Click Toggle Action Buttons -->
+    <!-- Actual Top Elevation Input (กรอกระดับ TOP เข็มที่กดได้จริง) -->
+    <div class="p-2.5 rounded-xl bg-blue-50/90 border-2 border-blue-200 space-y-1 mb-2 shadow-xs">
+      <div class="flex items-center justify-between text-[11px]">
+        <span class="font-black text-[#0369a1] flex items-center gap-1">
+          <i data-lucide="ruler" class="w-3.5 h-3.5 text-[#0284c7]"></i> ระดับ TOP เข็มจริง (ม.):
+        </span>
+        <span id="card-pile-diff-badge" class="font-mono font-bold text-[10px]"></span>
+      </div>
+      <div class="flex items-center gap-1.5 pt-0.5">
+        <input type="number" step="0.001" id="card-pile-actual-top" placeholder="เช่น -1.250" class="flex-1 px-2.5 py-1 text-xs font-mono font-bold border-2 border-[#475569] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7]" title="กรอกระดับ TOP เข็มที่กดได้จริง (ม.)">
+        <button id="btn-card-copy-pco" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-sky-100 shadow-xs shrink-0 text-slate-700" title="ใส่ค่าตามระดับ PCO ในแบบ">ตามแบบ PCO</button>
+      </div>
+      <div class="text-[9.5px] text-[#0369a1] font-medium pt-0.5 flex items-center justify-between">
+        <span>แบบ PCO: <b id="card-pile-pco-hint" class="font-mono text-[#a84631]">-</b></span>
+        <span id="card-pile-diff-text" class="font-mono font-bold"></span>
+      </div>
+    </div>
+
+    <!-- Date Picker for Adjusting Past/Current Date -->
+    <div class="p-2 rounded-xl bg-amber-50/80 border border-amber-300 space-y-1 mb-2.5 shadow-inner">
+      <div class="flex items-center justify-between text-[11px]">
+        <span class="font-black text-[#b45309] flex items-center gap-1">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i> วันที่ตอกเสร็จ:
+        </span>
+        <span id="card-pile-date-badge" class="font-mono font-bold text-slate-700 text-[10.5px]"></span>
+      </div>
+      <div class="flex items-center gap-1.5 pt-0.5">
+        <input type="date" id="card-pile-date-input" class="flex-1 px-2 py-1 text-xs font-mono font-bold border-2 border-[#475569] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7]" title="ระบุหรือปรับแก้วันที่ตอกย้อนหลังได้อิสระ">
+        <button id="btn-card-date-yesterday" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นเมื่อวาน">เมื่อวาน</button>
+        <button id="btn-card-date-today" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นวันนี้">วันนี้</button>
+      </div>
+      <div class="text-[9.5px] text-[#b45309] font-medium pt-0.5">
+        💡 บันทึกวันที่ตอก และระดับ TOP เข็มที่กดได้จริงได้อิสระ
+      </div>
+    </div>
+
+    <!-- 1-Click Action Buttons -->
     <div class="space-y-1.5">
-      <button id="btn-card-toggle-driven" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5">
-        <i data-lucide="check" class="w-3.5 h-3.5"></i> กดว่าตอกแล้ววันนี้
+      <button id="btn-card-save-date" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5 font-black shadow-[1.5px_1.5px_0_#064e3b]">
+        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+        <span id="btn-card-save-date-lbl">💾 บันทึกข้อมูล (วันตอก + ระดับ TOP)</span>
       </button>
-      <button id="btn-card-toggle-cancel" class="pop-btn w-full py-1 text-xs text-[#667277] flex items-center justify-center gap-1">
+      <button id="btn-card-toggle-cancel" class="pop-btn w-full py-1 text-xs text-[#b91c1c] hover:bg-rose-50 flex items-center justify-center gap-1 font-bold">
         <i data-lucide="rotate-ccw" class="w-3 h-3"></i> ยกเลิก (ตั้งเป็นยังไม่ตอก)
       </button>
     </div>
@@ -587,8 +667,8 @@
   <!-- ========================================================================= -->
   <!-- DEDICATED EXECUTIVE REPORT SHEET (ธีมเดิม FLAT-POP พร้อมเลือกสไตล์ EXCEL ได้) -->
   <!-- ========================================================================= -->
-  <div id="report-page" class="fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-3 md:p-6 hidden">
-    <div id="report-page-card" class="max-w-5xl mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-4 md:p-6 transition-all">
+  <div id="report-page" class="fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-2 sm:p-4 md:p-5 hidden">
+    <div id="report-page-card" class="w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-3 sm:p-4 md:p-6 transition-all">
       
       <!-- Report Header & Controls Bar (Transforms between Original Flat-Pop & Excel) -->
       <div id="report-header-bar" class="bg-gradient-to-r from-[#fff0c8] via-[#fffdf8] to-[#e5f4e9] border-2 border-[#475569] rounded-2xl p-4 md:p-5 shadow-[4px_4px_0_#475569] mb-4 transition-all">
@@ -602,7 +682,7 @@
             <div>
               <div class="flex items-center gap-2 flex-wrap">
                 <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569]">
-                  โครงการ PYNN PRIDI 37
+                  โครงการ Pynn pridi 37
                 </span>
                 <span id="rep-header-subtag" class="text-xs text-[#667277] font-bold">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
               </div>
@@ -646,6 +726,10 @@
 
             <!-- Buttons -->
             <div class="flex items-center gap-1.5 no-print no-export">
+              <button id="btn-back-to-3d" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#475569] font-black border-2 border-[#475569]" style="background:#ffc45b; color:#34383b;" title="กลับสู่โมเดล 3D & แปลน (ปิดหน้ารายงาน)">
+                <i data-lucide="box" class="w-3.5 h-3.5"></i>
+                <span>🏗️ กลับสู่โมเดล 3D</span>
+              </button>
               <button id="btn-report-supabase-sync" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#1e3a8a] text-white font-black" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase">
                 <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
                 <span id="lbl-report-supabase">บันทึก Supabase</span>
@@ -658,8 +742,9 @@
                 <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                 <span>พิมพ์ / PDF</span>
               </button>
-              <button id="btn-close-report" class="pop-btn p-1.5 text-xs flex items-center justify-center shadow-[1.5px_1.5px_0_#475569]" title="ปิดหน้ารายงาน">
-                <i data-lucide="x" class="w-4 h-4"></i>
+              <button id="btn-close-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[1.5px_1.5px_0_#475569] bg-white hover:bg-slate-100 text-slate-800 font-black cursor-pointer" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span>กลับสู่โมเดล 3D ✕</span>
               </button>
             </div>
           </div>
@@ -833,11 +918,8 @@
             </div>
 
             <div id="planSnapshotCanvasWrapper" class="p-3">
-              <div id="planCanvasContainer" class="w-full bg-white border-2 border-[#475569] rounded overflow-hidden flex items-center justify-center relative" style="aspect-ratio: 2 / 1; max-height: 440px;">
-                <canvas id="planSnapshotCanvas" class="w-full h-full block cursor-pointer" title="คลิกที่ต้นเข็มเพื่อดูหรือเปลี่ยนสถานะ"></canvas>
-                <div class="absolute bottom-2 right-2 bg-white/95 border-2 border-[#475569] px-2.5 py-1 rounded-md text-[10.5px] font-black text-[#475569] shadow-[1px_1px_0_#475569] pointer-events-none">
-                  💡 ทิศเหนือชี้ขึ้นบน | แนวเขตที่ดิน (เส้นประแดง) | กริด 1-10 ด้านบน | กริด A-E ด้านซ้าย
-                </div>
+              <div id="planCanvasContainer" class="w-full bg-white border-2 border-[#475569] rounded overflow-hidden flex items-center justify-center relative" style="aspect-ratio: 2 / 1; max-height: 520px;">
+                <canvas id="planSnapshotCanvas" class="w-full h-full block cursor-pointer" title="คลิกที่ต้นเข็มเพื่อดูหรือเปลี่ยนสถานะ / กรอกระดับ TOP เข็มจริง"></canvas>
               </div>
             </div>
           </div>
@@ -867,16 +949,26 @@
 
           <!-- SECTION 3: TODAY'S DRIVEN PILES LOG TABLE -->
           <div id="report-sec-table" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white">
-            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between">
+            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
                   <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#34383b]"></i>
                 </span>
-                รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log)
+                <span id="rep-sec-table-title">รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log)</span>
               </span>
-              <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569]">
-                0 ต้น
-              </span>
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-[#475569]/40 text-[10.5px]">
+                  <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]">
+                    เฉพาะวันที่นี้
+                  </button>
+                  <button id="btn-rep-filter-all" type="button" class="px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]">
+                    ทั้งหมด (ประวัติเข็ม)
+                  </button>
+                </div>
+                <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569]">
+                  0 ต้น
+                </span>
+              </div>
             </div>
             <div class="table-wrapper overflow-x-auto max-h-56 overflow-y-auto">
               <table class="w-full text-xs text-left border-collapse">
@@ -888,7 +980,9 @@
                     <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
                     <th class="p-2.5 text-right border-r-2 border-[#475569]/30 font-mono">Northing (N)</th>
                     <th class="p-2.5 text-right border-r-2 border-[#475569]/30 font-mono">Easting (E)</th>
-                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 text-[#a84631] font-mono">ระดับ PCO (m)</th>
+                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
+                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
+                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30 font-mono" title="ผลต่างระดับจริงเทียบกับแบบ">ผลต่าง (Diff)</th>
                     <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
                     <th class="p-2.5 text-center border-r-2 border-[#475569]/30">วันที่ตอก</th>
                     <th class="p-2.5 text-center">สถานะ</th>
@@ -902,6 +996,17 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- Bottom Footer Return Bar -->
+      <div class="mt-4 pt-3 border-t-2 border-[#475569]/30 flex flex-wrap items-center justify-between gap-2 no-print no-export">
+        <span class="text-xs font-bold text-[#667277]">
+          💡 สามารถกดที่ต้นเข็มหรือวันที่ในตารางด้านบนเพื่อแก้ไขข้อมูลได้ตลอดเวลา
+        </span>
+        <button type="button" onclick="document.getElementById('btn-close-report').click()" class="pop-btn-primary px-4 py-2 text-xs font-black flex items-center gap-2 shadow-[2px_2px_0_#253047] cursor-pointer">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>กลับสู่หน้าโมเดล 3D & แปลน CAD</span>
+        </button>
       </div>
 
     </div>
@@ -1021,7 +1126,7 @@
           </div>
           <div>
             <h3 class="text-sm md:text-base font-black text-[#1e293b]">ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ (PILE COORDINATES & PCO SUMMARY TABLE)</h3>
-            <p class="text-[11px] text-[#64748b] font-semibold">โครงการ: PYNN PRIDI 37 (เสาเข็มไอ 0.40 ม. ทั้งหมด 93 ต้น) | อ้างอิงตามแบบ SketchUp Image 4</p>
+            <p class="text-[11px] text-[#64748b] font-semibold">โครงการ: Pynn pridi 37 (เสาเข็มไอ 0.40 ม. ทั้งหมด 93 ต้น) | อ้างอิงตามแบบ SketchUp Image 4</p>
           </div>
         </div>
 
@@ -3050,7 +3155,7 @@
           }
         });
 
-        resetTopView();
+        resetIsoView(); // 3D Isometric View as default
         updatePileMeshVisuals();
         renderQuickChips();
 
@@ -3202,6 +3307,33 @@
       }
     });
 
+    function updatePileCardDiff(pcoVal, actualVal) {
+      const badge = document.getElementById('card-pile-diff-badge');
+      const diffText = document.getElementById('card-pile-diff-text');
+      if (actualVal === null || actualVal === '' || actualVal === undefined || isNaN(actualVal)) {
+        if (badge) {
+          badge.textContent = 'ยังไม่ระบุ';
+          badge.className = 'font-mono text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded';
+        }
+        if (diffText) diffText.textContent = '';
+        return;
+      }
+      const act = parseFloat(actualVal);
+      const diffM = act - pcoVal;
+      const diffMm = Math.round(diffM * 1000);
+      const diffSign = diffMm > 0 ? '+' : '';
+      const isWithinTol = Math.abs(diffMm) <= 50;
+      const color = isWithinTol ? 'text-emerald-700 bg-emerald-100 border-emerald-300' : 'text-amber-800 bg-amber-100 border-amber-300';
+      if (badge) {
+        badge.textContent = `Δ ${diffSign}${diffMm} mm`;
+        badge.className = `font-mono font-bold text-[10px] px-1.5 py-0.5 rounded border ${color}`;
+      }
+      if (diffText) {
+        diffText.textContent = `ผลต่าง: ${diffSign}${diffMm} mm (${diffSign}${diffM.toFixed(3)} ม.)`;
+        diffText.className = isWithinTol ? 'font-mono font-bold text-emerald-700' : 'font-mono font-bold text-amber-700';
+      }
+    }
+
     function openPileCard(pileNo) {
       selectedCardPileNo = pileNo;
       const pileData = PILES_DATABASE.find(p => p.no === pileNo);
@@ -3209,6 +3341,8 @@
 
       const rec = progressRecords[pileNo];
       const isDriven = rec && rec.status === 'driven';
+      const curSelectedDate = datePicker.value || todayStr;
+      const pileDate = (isDriven && rec.date) ? rec.date : curSelectedDate;
 
       document.getElementById('card-pile-tag').textContent = `${pileData.tag} (กริด ${pileData.grid})`;
       const pcoVal = pileData.pco_level !== undefined ? pileData.pco_level : pileData.co_level;
@@ -3218,44 +3352,126 @@
       document.getElementById('card-pile-easting').textContent = pileData.easting !== undefined ? pileData.easting.toFixed(4) : '-';
       document.getElementById('card-pile-type').textContent = `${pileData.type} (L=${pileData.length_m}m)`;
 
+      // Set actual top elevation value
+      const actualTopInp = document.getElementById('card-pile-actual-top');
+      if (actualTopInp) {
+        actualTopInp.value = (rec && rec.actual_top !== undefined) ? rec.actual_top : '';
+      }
+      const pcoHint = document.getElementById('card-pile-pco-hint');
+      if (pcoHint) pcoHint.textContent = `${pcoVal.toFixed(3)} ม.`;
+      updatePileCardDiff(pcoVal, (rec && rec.actual_top !== undefined) ? rec.actual_top : null);
+
+      // Set date picker value in card
+      const dateInp = document.getElementById('card-pile-date-input');
+      if (dateInp) dateInp.value = pileDate;
+
+      const dateBadge = document.getElementById('card-pile-date-badge');
       const statusText = document.getElementById('card-pile-status-text');
+      const saveBtnLbl = document.getElementById('btn-card-save-date-lbl');
+
       if (isDriven) {
-        statusText.textContent = `✓ ตอกแล้ว (${rec.date || 'วันนี้'})`;
+        statusText.textContent = `✓ ตอกแล้ว (บันทึกวันที่: ${rec.date || curSelectedDate})`;
         statusText.className = 'font-black text-[#10b981]';
+        if (dateBadge) {
+          dateBadge.textContent = rec.date ? `ข้อมูลเดิม: ${rec.date}` : 'วันนี้';
+          dateBadge.className = 'font-mono font-black text-emerald-700 text-[10.5px] bg-emerald-100 px-1.5 py-0.5 rounded';
+        }
+        if (saveBtnLbl) saveBtnLbl.textContent = '💾 ปรับแก้ข้อมูล (วันตอก / ระดับ TOP)';
       } else {
         statusText.textContent = 'ยังไม่ได้ตอก';
         statusText.className = 'font-bold text-[#667277]';
+        if (dateBadge) {
+          dateBadge.textContent = 'ยังไม่ระบุ';
+          dateBadge.className = 'font-mono font-bold text-slate-500 text-[10.5px]';
+        }
+        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกว่าตอกแล้วในวันที่นี้';
       }
 
       const card = document.getElementById('pile-card');
       card.classList.remove('hidden');
       setTimeout(() => card.classList.remove('translate-y-4', 'opacity-0'), 10);
+      if (window.lucide) lucide.createIcons();
     }
 
-    document.getElementById('btn-close-card').addEventListener('click', () => {
+    // Listener: copy PCO level to actual top
+    document.getElementById('btn-card-copy-pco')?.addEventListener('click', () => {
+      if (!selectedCardPileNo) return;
+      const p = PILES_DATABASE.find(x => x.no === selectedCardPileNo);
+      if (!p) return;
+      const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+      const inp = document.getElementById('card-pile-actual-top');
+      if (inp) {
+        inp.value = pco.toFixed(3);
+        updatePileCardDiff(pco, pco);
+      }
+    });
+
+    // Listener: dynamic diff update when typing actual top
+    document.getElementById('card-pile-actual-top')?.addEventListener('input', (e) => {
+      if (!selectedCardPileNo) return;
+      const p = PILES_DATABASE.find(x => x.no === selectedCardPileNo);
+      if (!p) return;
+      const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+      const v = e.target.value.trim();
+      updatePileCardDiff(pco, v === '' ? null : parseFloat(v));
+    });
+
+    document.getElementById('btn-close-card')?.addEventListener('click', () => {
       const card = document.getElementById('pile-card');
       card.classList.add('translate-y-4', 'opacity-0');
       setTimeout(() => card.classList.add('hidden'), 200);
       selectedCardPileNo = null;
     });
 
-    // 1-Click Button: Mark as driven today
-    document.getElementById('btn-card-toggle-driven').addEventListener('click', () => {
-      if (!selectedCardPileNo) return;
-      progressRecords[selectedCardPileNo] = {
-        status: 'driven',
-        date: datePicker.value || todayStr
-      };
-      saveProgress();
-      document.getElementById('btn-close-card').click();
+    // Quick Date: Today
+    document.getElementById('btn-card-date-today')?.addEventListener('click', () => {
+      const inp = document.getElementById('card-pile-date-input');
+      if (inp) inp.value = todayStr;
     });
 
-    // 1-Click Button: Mark as pending
-    document.getElementById('btn-card-toggle-cancel').addEventListener('click', () => {
+    // Quick Date: Yesterday
+    document.getElementById('btn-card-date-yesterday')?.addEventListener('click', () => {
+      const inp = document.getElementById('card-pile-date-input');
+      const d = new Date();
+      d.setDate(d.getDate() - 1);
+      const yStr = d.toISOString().split('T')[0];
+      if (inp) inp.value = yStr;
+    });
+
+    // Save or Adjust Date and Actual Top for Pile (บันทึก / ปรับแก้วันที่เก่า + ระดับ TOP จริง)
+    document.getElementById('btn-card-save-date')?.addEventListener('click', () => {
+      if (!selectedCardPileNo) return;
+      const dateInp = document.getElementById('card-pile-date-input');
+      const chosenDate = (dateInp && dateInp.value) ? dateInp.value : (datePicker.value || todayStr);
+      
+      const actualTopInp = document.getElementById('card-pile-actual-top');
+      const rawTop = actualTopInp ? actualTopInp.value.trim() : '';
+      
+      const record = {
+        status: 'driven',
+        date: chosenDate
+      };
+      if (rawTop !== '' && !isNaN(parseFloat(rawTop))) {
+        record.actual_top = parseFloat(rawTop);
+      }
+      
+      progressRecords[selectedCardPileNo] = record;
+      saveProgress();
+      if (typeof syncPilingToSupabase === 'function') {
+        syncPilingToSupabase(false);
+      }
+      document.getElementById('btn-close-card')?.click();
+    });
+
+    // 1-Click Button: Mark as pending / cancel
+    document.getElementById('btn-card-toggle-cancel')?.addEventListener('click', () => {
       if (!selectedCardPileNo) return;
       delete progressRecords[selectedCardPileNo];
       saveProgress();
-      document.getElementById('btn-close-card').click();
+      if (typeof syncPilingToSupabase === 'function') {
+        syncPilingToSupabase(false);
+      }
+      document.getElementById('btn-close-card')?.click();
     });
 
     // 5. Views Switcher (Top Ortho & 3D Isometric)
@@ -3367,31 +3583,40 @@
         const btn = document.createElement('button');
         let colorClass = 'bg-[#f8fafc] text-[#34383b] border-[#475569] hover:bg-[#fff0c8] shadow-[1px_1px_0_#475569]';
         let badgeText = 'ยังไม่ตอก';
+        let dateSubText = '';
         if (isToday) {
           colorClass = 'bg-[#0284c7] text-white border-[#0369a1] shadow-[2px_2px_0_#0369a1] ring-2 ring-[#38bdf8]';
           badgeText = '★ กดวันนี้';
+          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || curDate} ✏️</div>`;
         } else if (isDriven) {
           colorClass = 'bg-[#10b981] text-white border-[#064e3b] shadow-[1.5px_1.5px_0_#064e3b]';
           badgeText = '✓ กดวันก่อน';
+          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || ''} ✏️</div>`;
         }
 
-        btn.className = `p-2 rounded-lg border-2 font-bold text-center transition-all ${colorClass}`;
+        btn.className = `p-2 rounded-lg border-2 font-bold text-center transition-all ${colorClass} cursor-pointer group`;
+        btn.title = isDriven ? `ต้น ${p.tag} ตอกเมื่อ ${rec.date || ''} - คลิกเพื่อปรับแก้วันที่หรือข้อมูล` : `คลิกเพื่อบันทึกว่าตอกแล้วในวันที่ ${curDate}`;
         btn.innerHTML = `
           <div class="text-xs font-black">${p.tag}</div>
           <div class="text-[9.5px] opacity-90">${p.grid}</div>
           <div class="text-[9px] mt-0.5 font-extrabold">${badgeText}</div>
+          ${dateSubText}
         `;
 
         btn.addEventListener('click', () => {
           if (isDriven) {
-            delete progressRecords[p.no];
+            // Open pile card to allow adjusting old date, status, or notes!
+            openPileCard(p.no);
           } else {
             progressRecords[p.no] = {
               status: 'driven',
               date: datePicker.value || todayStr
             };
+            saveProgress();
+            if (typeof syncPilingToSupabase === 'function') {
+              syncPilingToSupabase(false);
+            }
           }
-          saveProgress();
         });
 
         container.appendChild(btn);
@@ -3573,17 +3798,75 @@
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, w, h);
 
-      // Physical coordinate bounds:
-      // Pins: X [-4.06, 37.85], Y [-2.50, 17.22]
-      // Grids: X [0.00, 32.90], Y [0.00, 12.40]
-      // Natural aspect ratio is 2:1 (width 46.4m, height 23.2m)
+      // 1. PRIMARY: RENDER REAL 3D MODEL FROM TOP VIEW (2D) DIRECTLY!
+      // This produces the EXACT SAME view as the 3D first page (แปลน Top View 2D),
+      // with real architectural grid lines, dimensions, external bubbles, and I-beam piles!
+      if (currentModel && renderer) {
+        try {
+          const prevSize = new THREE.Vector2();
+          renderer.getSize(prevSize);
+          const prevRatio = renderer.getPixelRatio();
+          const prevCam = activeCamera;
+
+          const renderW = Math.round(w * dpr);
+          const renderH = Math.round(h * dpr);
+          renderer.setSize(renderW, renderH, false);
+          renderer.setPixelRatio(1);
+
+          // Center of the site in Three.js coordinates
+          const centerX = 16.8;
+          const centerY = 7.4;
+          const spanX = 46.6;
+          const spanY = 24.0;
+          const canvasAspect = renderW / renderH;
+          let camW, camH;
+          if (canvasAspect > spanX / spanY) {
+            camH = spanY;
+            camW = spanY * canvasAspect;
+          } else {
+            camW = spanX;
+            camH = spanX / canvasAspect;
+          }
+
+          orthoCamera.left = -camW / 2;
+          orthoCamera.right = camW / 2;
+          orthoCamera.top = camH / 2;
+          orthoCamera.bottom = -camH / 2;
+          orthoCamera.updateProjectionMatrix();
+          orthoCamera.position.set(centerX, centerY, 80);
+          orthoCamera.up.set(0, 1, 0);
+          orthoCamera.lookAt(centerX, centerY, 0);
+
+          updatePileMeshVisuals();
+          renderer.render(scene, orthoCamera);
+
+          ctx.clearRect(0, 0, w, h);
+          ctx.drawImage(renderer.domElement, 0, 0, w, h);
+
+          renderer.setSize(prevSize.x, prevSize.y, false);
+          renderer.setPixelRatio(prevRatio);
+          activeCamera = prevCam;
+
+          window.__PLAN_SNAPSHOT_TRANSFORM__ = {
+            centerX,
+            centerY,
+            camW,
+            camH,
+            w,
+            h
+          };
+          return;
+        } catch (err) {
+          console.warn('3D snapshot render error, falling back to 2D vector:', err);
+        }
+      }
+
+      // 2. FALLBACK 2D VECTOR RENDERING (If 3D model is still loading)
       const minX = -6.2, maxX = 40.2; // spanX = 46.4m
       const minY = -4.2, maxY = 19.0; // spanY = 23.2m
       const spanX = maxX - minX;
       const spanY = maxY - minY;
 
-      // UNIFORM ASPECT RATIO SCALING (Strictly 1m X = 1m Y):
-      // Guaranteed exact 2:1 proportions with zero distortion in both Portrait and Landscape!
       const padX = 32;
       const padY = 26;
       const availW = Math.max(80, w - padX * 2);
@@ -3598,7 +3881,7 @@
       const mapX = (x) => offsetX + (x - minX) * scale;
       const mapY = (y) => h - (offsetY + (y - minY) * scale); // North UP!
 
-      // 1. Draw Property Boundary Line (เส้นประสีแดงเข้ม ชัดเจนตาม Image 2)
+      // 1. Draw Property Boundary Line
       const boundaryPolygon = [
         [-2.596, 17.223],
         [36.546, 16.713],
@@ -3621,7 +3904,7 @@
       ctx.stroke();
       ctx.restore();
 
-      // Boundary Pins Circles & Labels (n114250, n117402, n115372, n115816, ปร)
+      // Boundary Pins Circles & Labels
       const pins = [
         { label: 'n114250', x: -2.596, y: 17.223, dx: -8, dy: -6, align: 'right' },
         { label: 'n117402', x: 36.546, y: 16.713, dx: 8, dy: -6, align: 'left' },
@@ -3647,7 +3930,7 @@
         ctx.fillText(pin.label, px + pin.dx, py + pin.dy);
       });
 
-      // 2. Draw Grid Lines & Bubbles (Vertical 1..10, Horizontal A..E)
+      // 2. Draw Grid Lines & Distinct CAD Bubbles
       const gridX = [
         { name: '1', x: 0.00 }, { name: '2', x: 0.50 }, { name: '3', x: 5.70 },
         { name: '4', x: 10.85 }, { name: '5', x: 12.20 }, { name: '6', x: 20.00 },
@@ -3660,17 +3943,13 @@
         { name: 'D', y: 1.30 }, { name: 'E', y: 0.00 }
       ];
 
-      const bubbleRadius = Math.max(7.2, Math.min(9.5, scale * 0.38));
-      const bubbleFontSize = Math.max(7.5, Math.min(9.5, bubbleRadius * 0.95));
-
-      // Vertical Grids
-      const yTopGrid = mapY(15.2);
-      const yBotGrid = mapY(-0.8);
+      // Vertical Grids - placed high so it never looks like piles
+      const yTopGrid = mapY(18.2);
+      const yBotGrid = mapY(-1.2);
 
       gridX.forEach(g => {
         const gx = mapX(g.x);
-
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#94a3b8';
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -3680,46 +3959,40 @@
         ctx.setLineDash([]);
       });
 
-      // Top Bubbles (Group very close grids cleanly: 1 & 2, 4 & 5, 9 & 10)
+      // Top Bubbles (CAD architectural style with dark badge)
       const topBubbles = [
-        { name: '1', x: 0.00, dy: 0 },
-        { name: '2', x: 0.50, dy: 0 },
-        { name: '3', x: 5.70, dy: 0 },
-        { name: '4', x: 10.85, dy: 0 },
-        { name: '5', x: 12.20, dy: 0 },
-        { name: '6', x: 20.00, dy: 0 },
-        { name: '7', x: 27.50, dy: 0 },
-        { name: '8', x: 29.45, dy: 0 },
-        { name: '10', x: 32.80, dy: 0 }
+        { name: '1', x: 0.00 }, { name: '2', x: 0.50 }, { name: '3', x: 5.70 },
+        { name: '4', x: 10.85 }, { name: '5', x: 12.20 }, { name: '6', x: 20.00 },
+        { name: '7', x: 27.50 }, { name: '8', x: 29.45 }, { name: '10', x: 32.80 }
       ];
 
+      const bubbleRadius = Math.max(8.5, Math.min(11.5, scale * 0.44));
       topBubbles.forEach(b => {
         const bx = mapX(b.x);
-        const by = yTopGrid - bubbleRadius - 4 + b.dy;
+        const by = yTopGrid - bubbleRadius - 2;
 
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#64748b';
-        ctx.lineWidth = 1.2;
+        ctx.fillStyle = '#334155';
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(bx, by, bubbleRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#1e293b';
-        ctx.font = `bold ${bubbleFontSize}px Montserrat, Sarabun, sans-serif`;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${Math.max(8, bubbleRadius * 0.9)}px Montserrat, Sarabun, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(b.name, bx, by);
       });
 
       // Horizontal Grids & Left Bubbles
-      const xLeftGrid = mapX(-1.8);
-      const xRightGrid = mapX(34.2);
+      const xLeftGrid = mapX(-2.5);
+      const xRightGrid = mapX(35.0);
 
       gridY.forEach(g => {
         const gy = mapY(g.y);
-
-        ctx.strokeStyle = '#cbd5e1';
+        ctx.strokeStyle = '#94a3b8';
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -3728,24 +4001,23 @@
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Left Bubble
-        const bx = xLeftGrid - bubbleRadius - 4;
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#64748b';
-        ctx.lineWidth = 1.2;
+        const bx = xLeftGrid - bubbleRadius - 2;
+        ctx.fillStyle = '#334155';
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(bx, gy, bubbleRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#1e293b';
-        ctx.font = `bold ${bubbleFontSize}px Montserrat, Sarabun, sans-serif`;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${Math.max(8, bubbleRadius * 0.9)}px Montserrat, Sarabun, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(g.name, bx, gy);
       });
 
-      // 3. Draw All 93 Piles (Image 2 style with glowing today pile)
+      // 3. Draw All 93 Piles with I-beam shape
       const curDate = datePicker.value || todayStr;
       const radius = Math.max(7.8, Math.min(10.8, scale * 0.42));
       const fontSize = Math.max(7.5, Math.min(10.0, radius * 0.95));
@@ -3757,7 +4029,6 @@
         const isDriven = rec && rec.status === 'driven';
         const isToday = isDriven && rec.date === curDate;
 
-        // 1. If driven today: Glowing Neon Halo & Ring (เรืองแสงสีฟ้าสดใสชัดเจน)
         if (isToday) {
           ctx.save();
           const glowGrad = ctx.createRadialGradient(cx, cy, radius * 0.3, cx, cy, radius + 13);
@@ -3779,7 +4050,6 @@
           ctx.restore();
         }
 
-        // 2. Pile Body (ฟ้า = วันนี้ | เขียว = วันก่อน | เทา = ยังไม่ตอก)
         let fillColor = '#f8fafc';
         let strokeColor = '#94a3b8';
         let strokeWidth = 1.2;
@@ -3806,7 +4076,6 @@
         ctx.fill();
         ctx.stroke();
 
-        // 3. Pile Number Text (Bold & Centered)
         ctx.fillStyle = textColor;
         ctx.font = `bold ${fontSize}px Montserrat, Sarabun, sans-serif`;
         ctx.textAlign = 'center';
@@ -3825,27 +4094,31 @@
 
       const w = parent ? parent.clientWidth : rect.width;
       const h = parent ? parent.clientHeight : rect.height;
-      const minX = -6.2, maxX = 40.2;
-      const minY = -4.2, maxY = 19.0;
-      const spanX = maxX - minX;
-      const spanY = maxY - minY;
 
-      const padX = 32;
-      const padY = 26;
-      const availW = Math.max(80, w - padX * 2);
-      const availH = Math.max(80, h - padY * 2);
-      const scale = Math.min(availW / spanX, availH / spanY);
-
-      const drawW = spanX * scale;
-      const drawH = spanY * scale;
-      const offsetX = padX + (availW - drawW) / 2;
-      const offsetY = padY + (availH - drawH) / 2;
-
-      const mapX = (x) => offsetX + (x - minX) * scale;
-      const mapY = (y) => h - (offsetY + (y - minY) * scale);
+      let mapX, mapY;
+      const tf = window.__PLAN_SNAPSHOT_TRANSFORM__;
+      if (tf && tf.w && tf.h) {
+        mapX = (x) => ((x - (tf.centerX - tf.camW / 2)) / tf.camW) * tf.w;
+        mapY = (y) => (1 - (y - (tf.centerY - tf.camH / 2)) / tf.camH) * tf.h;
+      } else {
+        const minX = -6.2, maxX = 40.2;
+        const minY = -4.2, maxY = 19.0;
+        const spanX = maxX - minX;
+        const spanY = maxY - minY;
+        const padX = 32, padY = 26;
+        const availW = Math.max(80, w - padX * 2);
+        const availH = Math.max(80, h - padY * 2);
+        const scale = Math.min(availW / spanX, availH / spanY);
+        const drawW = spanX * scale;
+        const drawH = spanY * scale;
+        const offsetX = padX + (availW - drawW) / 2;
+        const offsetY = padY + (availH - drawH) / 2;
+        mapX = (x) => offsetX + (x - minX) * scale;
+        mapY = (y) => h - (offsetY + (y - minY) * scale);
+      }
 
       let closest = null;
-      let minDist = Math.max(13, scale * 0.65);
+      let minDist = 22; // Click tolerance in px
 
       PILES_DATABASE.forEach(p => {
         const px = mapX(p.x);
@@ -3858,16 +4131,7 @@
       });
 
       if (closest) {
-        const cur = progressRecords[closest.no];
-        if (cur && cur.status === 'driven') {
-          delete progressRecords[closest.no];
-        } else {
-          progressRecords[closest.no] = {
-            status: 'driven',
-            date: datePicker.value || todayStr
-          };
-        }
-        saveProgress();
+        openPileCard(closest.no);
       }
     });
 
@@ -3919,11 +4183,15 @@
       const legendOrig = document.getElementById('rep-legend-original');
       const legendExcel = document.getElementById('rep-legend-excel');
 
+      const isHidden = reportPage ? reportPage.classList.contains('hidden') : true;
+
       if (theme === 'excel') {
         // EXCEL SIMPLE SPREADSHEET THEME
-        if (reportPage) reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-slate-100 p-3 md:p-6';
+        if (reportPage) {
+          reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-slate-100 p-2 sm:p-4 md:p-5' + (isHidden ? ' hidden' : '');
+        }
         if (reportCard) {
-          reportCard.className = 'max-w-5xl mx-auto bg-white border border-slate-300 rounded-xl shadow-lg p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
+          reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border border-slate-300 rounded-xl shadow-lg p-3 sm:p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
         if (header) header.className = 'bg-[#107c41] text-white rounded-lg p-3.5 md:p-4 mb-4 shadow-sm border border-[#0d6535] transition-all';
         if (logoBox) {
@@ -3978,9 +4246,11 @@
 
       } else {
         // ORIGINAL THEME (SOFT INK FLAT-POP) - DEFAULT
-        if (reportPage) reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-3 md:p-6';
+        if (reportPage) {
+          reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-2 sm:p-4 md:p-5' + (isHidden ? ' hidden' : '');
+        }
         if (reportCard) {
-          reportCard.className = 'max-w-5xl mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
+          reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-3 sm:p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
         if (header) header.className = 'bg-gradient-to-r from-[#fff0c8] via-[#fffdf8] to-[#e5f4e9] border-2 border-[#475569] rounded-2xl p-4 md:p-5 shadow-[4px_4px_0_#475569] mb-4 transition-all';
         if (logoBox) {
@@ -4106,16 +4376,26 @@
       let drivenCount = 0;
       let todayCount = 0;
       const todayPilesList = [];
+      const allDrivenPilesList = [];
 
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no];
         if (rec && rec.status === 'driven') {
           drivenCount++;
+          allDrivenPilesList.push({ pile: p, rec: rec });
           if (rec.date === curDate) {
             todayCount++;
             todayPilesList.push({ pile: p, rec: rec });
           }
         }
+      });
+
+      // Sort all driven piles by date descending then pile no
+      allDrivenPilesList.sort((a, b) => {
+        const da = a.rec.date || '';
+        const db = b.rec.date || '';
+        if (db !== da) return db.localeCompare(da);
+        return a.pile.no - b.pile.no;
       });
 
       // 1. Calculate Elapsed Working Days & Cumulative Plan
@@ -4228,20 +4508,74 @@
       // Render Today's Driven Piles Table
       const tbody = document.getElementById('rep-today-table-body');
       tbody.innerHTML = '';
-      const repBadgeEl = document.getElementById('rep-today-table-badge');
-      if (repBadgeEl) repBadgeEl.textContent = `${todayCount} ต้น`;
+      const isFilterAll = window.reportTableFilterMode === 'all';
+      const displayPilesList = isFilterAll ? allDrivenPilesList : todayPilesList;
 
-      if (todayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-[#667277] font-semibold">ยังไม่มีการบันทึกเสาเข็มที่ตอกในวันที่ ${curDate} (สามารถคลิกที่ต้นเข็มบนแปลน หรือกดปุ่ม "ระบุต้นที่ตอกด่วน" เพื่อลงข้อมูลได้)</td></tr>`;
+      const titleEl = document.getElementById('rep-sec-table-title');
+      if (titleEl) {
+        titleEl.textContent = isFilterAll
+          ? `ประวัติการตอกเสาเข็มทั้งหมด (All Driven Piles History: ${drivenCount}/93 ต้น)`
+          : `รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log: ${todayCount} ต้น)`;
+      }
+
+      const repBadgeEl = document.getElementById('rep-today-table-badge');
+      if (repBadgeEl) {
+        repBadgeEl.textContent = isFilterAll ? `${drivenCount} ต้น (ทั้งหมด)` : `${todayCount} ต้น (วันนี้)`;
+      }
+
+      // Update Filter Button States
+      const btnFilterToday = document.getElementById('btn-rep-filter-today');
+      const btnFilterAll = document.getElementById('btn-rep-filter-all');
+      if (btnFilterToday && btnFilterAll) {
+        if (isFilterAll) {
+          btnFilterAll.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]';
+          btnFilterToday.className = 'px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]';
+        } else {
+          btnFilterToday.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]';
+          btnFilterAll.className = 'px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]';
+        }
+      }
+
+      if (displayPilesList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="12" class="p-4 text-center text-[#667277] font-semibold">
+          ${isFilterAll ? 'ยังไม่มีเสาเข็มที่ตอกในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่ตอกในวันที่ ${curDate} (คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)`}
+        </td></tr>`;
       } else {
-        todayPilesList.forEach(({ pile: p, rec }, index) => {
+        displayPilesList.forEach(({ pile: p, rec }, index) => {
           const tr = document.createElement('tr');
           const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
           const nStr = p.northing !== undefined ? p.northing.toFixed(4) : '-';
           const eStr = p.easting !== undefined ? p.easting.toFixed(4) : '-';
+          const isPileToday = rec.date === curDate;
+
+          const hasActual = rec && rec.actual_top !== undefined;
+          let actualTopExcel = `<span class="text-slate-400 font-normal">-</span> <span class="text-blue-500 text-[10px]">✏️</span>`;
+          let diffExcel = `<span class="text-slate-400">-</span>`;
+          let actualTopOrig = `<span class="text-slate-400 font-normal">-</span> <span class="text-blue-500 text-[10px]">✏️</span>`;
+          let diffOrig = `<span class="text-slate-400">-</span>`;
+
+          if (hasActual) {
+            const act = parseFloat(rec.actual_top);
+            const diffM = act - pco;
+            const diffMm = Math.round(diffM * 1000);
+            const sign = diffMm > 0 ? '+' : '';
+            const isTol = Math.abs(diffMm) <= 50;
+
+            actualTopExcel = `<span class="font-bold text-sky-800 font-mono">${act.toFixed(3)}</span> <span class="text-[10px] text-blue-500">✏️</span>`;
+            diffExcel = `<span class="inline-block px-1.5 py-0.5 rounded font-mono font-bold text-[10.5px] ${isTol ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}">${sign}${diffMm} mm</span>`;
+
+            actualTopOrig = `<span class="font-black text-[#0284c7] font-mono">${act.toFixed(3)}</span> <span class="text-[10px] text-blue-500">✏️</span>`;
+            diffOrig = `<span class="inline-block px-1.5 py-0.5 rounded font-mono font-bold text-[10.5px] ${isTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300'}">${sign}${diffMm} mm</span>`;
+          }
+
+          tr.style.cursor = 'pointer';
+          tr.title = `คลิกต้น ${p.tag} เพื่อดูข้อมูล/ปรับแก้วันที่ และกรอกระดับ TOP เข็มจริง`;
+          tr.addEventListener('click', () => {
+            openPileCard(p.no);
+          });
 
           if (currentReportTheme === 'excel') {
-            tr.className = 'hover:bg-[#f0fdf4] transition-colors border-b border-slate-200 ' + (index % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white');
+            tr.className = 'hover:bg-[#ecfdf5] transition-colors border-b border-slate-200 cursor-pointer ' + (index % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white');
             tr.innerHTML = `
               <td class="p-2 text-center font-bold text-slate-500 border border-slate-200">${p.no}</td>
               <td class="p-2 font-bold text-slate-800 border border-slate-200">${p.tag}</td>
@@ -4250,16 +4584,22 @@
               <td class="p-2 text-right font-mono text-[11px] text-slate-600 border border-slate-200">${nStr}</td>
               <td class="p-2 text-right font-mono text-[11px] text-slate-600 border border-slate-200">${eStr}</td>
               <td class="p-2 text-right font-bold text-slate-800 font-mono border border-slate-200">${pco.toFixed(3)}</td>
+              <td class="p-2 text-right font-mono border border-slate-200">${actualTopExcel}</td>
+              <td class="p-2 text-center font-mono border border-slate-200">${diffExcel}</td>
               <td class="p-2 text-center font-medium text-slate-700 border border-slate-200">${p.type}</td>
-              <td class="p-2 text-center font-mono text-[11px] text-slate-500 border border-slate-200">${rec.date || curDate}</td>
               <td class="p-2 text-center border border-slate-200">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#c6efce] text-[#006100] border border-[#a3e4ab]">
-                  ★ กดวันนี้
+                <span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded" title="คลิกเพื่อปรับแก้">
+                  📅 ${rec.date || curDate} ✏️
+                </span>
+              </td>
+              <td class="p-2 text-center border border-slate-200">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isPileToday ? 'bg-[#c6efce] text-[#006100] border border-[#a3e4ab]' : 'bg-slate-100 text-slate-700 border border-slate-300'}">
+                  ${isPileToday ? '★ กดวันนี้' : '✓ ตอกแล้ว'}
                 </span>
               </td>
             `;
           } else {
-            tr.className = 'hover:bg-[#f0f9ff] transition-colors border-b border-[#e5f1ed] ' + (index % 2 === 1 ? 'bg-[#fdfbf7]' : 'bg-white');
+            tr.className = 'hover:bg-[#f0fdf4] transition-colors border-b border-[#e5f1ed] cursor-pointer ' + (index % 2 === 1 ? 'bg-[#fdfbf7]' : 'bg-white');
             tr.innerHTML = `
               <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed]">${p.no}</td>
               <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
@@ -4268,11 +4608,17 @@
               <td class="p-2.5 text-right font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${nStr}</td>
               <td class="p-2.5 text-right font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${eStr}</td>
               <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
+              <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed]">${actualTopOrig}</td>
+              <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed]">${diffOrig}</td>
               <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type} (21m)</td>
-              <td class="p-2.5 text-center font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${rec.date || curDate}</td>
+              <td class="p-2.5 text-center border-r border-[#e5f1ed]">
+                <span class="inline-flex items-center gap-1 font-mono text-[11px] font-black text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded shadow-xs" title="คลิกเพื่อปรับแก้">
+                  📅 ${rec.date || curDate} ✏️
+                </span>
+              </td>
               <td class="p-2.5 text-center">
-                <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-black bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7] shadow-[1px_1px_0_#475569]">
-                  ★ กดวันนี้
+                <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-black ${isPileToday ? 'bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7] shadow-[1px_1px_0_#475569]' : 'bg-emerald-50 text-emerald-800 border border-emerald-300'}">
+                  ${isPileToday ? '★ กดวันนี้' : '✓ ตอกแล้ว'}
                 </span>
               </td>
             `;
@@ -4462,6 +4808,17 @@
     });
     document.getElementById('btn-close-report').addEventListener('click', () => {
       document.getElementById('report-page').classList.add('hidden');
+      window.location.hash = '3d';
+      resetIsoView();
+    });
+
+    document.getElementById('btn-rep-filter-today')?.addEventListener('click', () => {
+      window.reportTableFilterMode = 'today';
+      renderReportSheet();
+    });
+    document.getElementById('btn-rep-filter-all')?.addEventListener('click', () => {
+      window.reportTableFilterMode = 'all';
+      renderReportSheet();
     });
 
     document.getElementById('btn-print-report').addEventListener('click', () => {
@@ -4916,11 +5273,13 @@
     });
 
     document.getElementById('btn-export-csv').addEventListener('click', () => {
-      let csv = "\uFEFFNo,Pile_ID,Footing,Grid,Northing_N,Easting_E,PCO_Level_m,Type,Length_m,Status,Drive_Date\n";
+      let csv = "\uFEFFNo,Pile_ID,Footing,Grid,Northing_N,Easting_E,PCO_Level_m,Actual_Top_m,Diff_mm,Type,Length_m,Status,Drive_Date\n";
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no] || { status: 'pending', date: '' };
         const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
-        csv += `${p.no},${p.tag},${p.footing || ''},${p.grid},${p.northing || ''},${p.easting || ''},${pco},${p.type},${p.length_m},${rec.status},${rec.date || ''}\n`;
+        const actTop = rec.actual_top !== undefined ? rec.actual_top : '';
+        const diffMm = (rec.actual_top !== undefined) ? Math.round((rec.actual_top - pco) * 1000) : '';
+        csv += `${p.no},${p.tag},${p.footing || ''},${p.grid},${p.northing || ''},${p.easting || ''},${pco},${actTop},${diffMm},${p.type},${p.length_m},${rec.status},${rec.date || ''}\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
@@ -4978,8 +5337,8 @@
       renderer.render(scene, activeCamera);
       updateCompass();
     }
-    // Auto-open modals based on URL hash or param (?view=report / #report, #excel)
-    window.addEventListener('DOMContentLoaded', () => {
+    // Auto-open modals or switch views based on URL hash or param (?view=report / #report, #3d, #excel)
+    function handleHashAndUrlNavigation() {
       const hash = window.location.hash ? window.location.hash.replace('#', '') : '';
       const params = new URLSearchParams(window.location.search);
       const view = params.get('view') || hash;
@@ -4996,17 +5355,37 @@
       if (view === 'report' || view === 'excel' || view === 'report-original') {
         setTimeout(() => {
           document.getElementById('btn-open-report')?.click();
-        }, 350);
+        }, 300);
       } else if (view === 'cotable') {
         setTimeout(() => {
           document.getElementById('btn-open-cotable')?.click();
-        }, 350);
+        }, 300);
       } else if (view === 'quick') {
         setTimeout(() => {
           document.getElementById('btn-quick-select')?.click();
-        }, 350);
+        }, 300);
+      } else if (view === 'top' || hash === 'top' || view === '2d' || hash === '2d') {
+        document.getElementById('report-page')?.classList.add('hidden');
+        document.getElementById('modal-export-image')?.classList.add('hidden');
+        document.getElementById('modal-cotable')?.classList.add('hidden');
+        document.getElementById('quick-select-drawer')?.classList.add('hidden');
+        setTimeout(() => {
+          resetTopView();
+        }, 200);
+      } else {
+        // DEFAULT: ALWAYS OPEN 3D ISOMETRIC VIEW AND KEEP REPORT HIDDEN!
+        document.getElementById('report-page')?.classList.add('hidden');
+        document.getElementById('modal-export-image')?.classList.add('hidden');
+        document.getElementById('modal-cotable')?.classList.add('hidden');
+        document.getElementById('quick-select-drawer')?.classList.add('hidden');
+        resetIsoView();
       }
-    });
+    }
+
+    // Run navigation immediately and on events
+    handleHashAndUrlNavigation();
+    window.addEventListener('DOMContentLoaded', handleHashAndUrlNavigation);
+    window.addEventListener('hashchange', handleHashAndUrlNavigation);
 
     animate();
     updateUI();
