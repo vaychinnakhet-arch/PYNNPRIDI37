@@ -280,6 +280,9 @@
   <!-- 3D WebGL Canvas Container -->
   <div id="viewport"></div>
 
+  <!-- Floating Online Sync Toast Container -->
+  <div id="piling-toast-container" class="fixed top-14 left-1/2 -translate-x-1/2 z-[100] pointer-events-none flex flex-col items-center gap-2 transition-all"></div>
+
   <!-- Loading Screen -->
   <div id="loading-overlay" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#eef7f4]/95 backdrop-blur-sm transition-opacity duration-400">
     <div class="w-14 h-14 border-4 border-[#cfe5df] border-t-[#ed6845] rounded-full animate-spin mb-3"></div>
@@ -547,13 +550,19 @@
       </div>
 
       <!-- Filter / Search Row -->
-      <div class="flex items-center justify-between mb-2">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div class="flex items-center gap-2">
           <span class="text-xs font-extrabold text-[#34383b]">ค้นหา / กรองกริด:</span>
-          <input id="quick-search" type="text" placeholder="พิมพ์เบอร์เข็ม หรือกริด เช่น 7-A..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none w-48">
+          <input id="quick-search" type="text" placeholder="พิมพ์เบอร์เข็ม หรือกริด เช่น 7-A..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none w-44">
         </div>
-        <div class="text-xs font-black text-[#34383b]">
-          ตอกแล้ว <span id="quick-driven-stat" class="text-[#10b981]">0</span> / 93 ต้น
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-1.5 cursor-pointer text-[11px] font-black text-slate-700 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-300 shadow-xs transition-colors">
+            <input type="checkbox" id="chk-quick-toggle-mode" class="rounded accent-emerald-600 cursor-pointer">
+            <span>⚡ สลับสถานะใน 1 คลิก</span>
+          </label>
+          <div class="text-xs font-black text-[#34383b]">
+            ตอกแล้ว <span id="quick-driven-stat" class="text-[#10b981]">0</span> / 93 ต้น
+          </div>
         </div>
       </div>
 
@@ -688,6 +697,10 @@
 
     <!-- 1-Click Action Buttons -->
     <div class="space-y-1.5">
+      <button id="btn-card-quick-drive" type="button" class="w-full py-2 text-xs flex items-center justify-center gap-1.5 font-black rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_2px_0_#064e3b] transition-all hover:translate-y-0.5 cursor-pointer">
+        <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
+        <span>⚡ กดตอกต้นนี้ทันที (บันทึกออนไลน์ Supabase)</span>
+      </button>
       <button id="btn-card-save-date" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5 font-black shadow-[1.5px_1.5px_0_#064e3b]">
         <i data-lucide="check" class="w-3.5 h-3.5"></i>
         <span id="btn-card-save-date-lbl">💾 บันทึกข้อมูล (วันตอก + ระดับ TOP)</span>
@@ -2711,129 +2724,228 @@
     lucide.createIcons();
 
     const PILES_DATABASE = window.__PILES_DB__ || [];
-    const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_LIVE_v3';
+    const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v3';
 
-    // Supabase Configuration
+    // Supabase Configuration & Client Loader
     const SUPABASE_URL = "https://gyzrsrxzzturoqwhuiul.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5enJzcnh6enR1cm9xd2h1aXVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODYxNDcsImV4cCI6MjA5MTA2MjE0N30.CJAFW3acVnOwb5hvSDO6H0TGPTK__MOTBdgUxUWpM70";
-    let supabaseClient = null;
-    if (window.supabase) {
-      try {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      } catch (err) {
-        console.warn('Supabase client error:', err);
+    
+    function getSupabaseClient() {
+      if (window.__supabaseClientInstance) return window.__supabaseClientInstance;
+      const sbObj = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+      if (sbObj && typeof sbObj.createClient === 'function') {
+        try {
+          window.__supabaseClientInstance = sbObj.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          return window.__supabaseClientInstance;
+        } catch (err) {
+          console.warn('Supabase client initialization warning:', err);
+        }
+      }
+      return null;
+    }
+
+    // Floating Non-blocking Toast Notification
+    function showSyncToast(message, type = 'success') {
+      const container = document.getElementById('piling-toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-emerald-600 text-white border-emerald-700 shadow-emerald-900/20' :
+                 type === 'error' ? 'bg-rose-600 text-white border-rose-700 shadow-rose-900/20' :
+                 'bg-slate-800 text-white border-slate-900 shadow-slate-900/20';
+      toast.className = `${bg} px-4 py-2 rounded-xl text-xs font-bold border-2 shadow-lg flex items-center gap-2 pointer-events-auto transform transition-all duration-200 translate-y-0 opacity-100 z-[100]`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('-translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 250);
+      }, 2400);
+    }
+
+    function updateSyncButtonUI(state, timeStr = '') {
+      const topBtnLbl = document.getElementById('lbl-supabase-top-btn');
+      const repBtnLbl = document.getElementById('lbl-report-supabase');
+      const topBtn = document.getElementById('btn-supabase-sync');
+      const repBtn = document.getElementById('btn-report-supabase-sync');
+
+      if (state === 'saving') {
+        if (topBtnLbl) topBtnLbl.textContent = 'กำลังบันทึก...';
+        if (repBtnLbl) repBtnLbl.textContent = 'กำลังบันทึก...';
+        if (topBtn) topBtn.style.background = '#d97706';
+        if (repBtn) repBtn.style.background = '#d97706';
+      } else if (state === 'success') {
+        const text = timeStr ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase แล้ว';
+        if (topBtnLbl) topBtnLbl.textContent = text;
+        if (repBtnLbl) repBtnLbl.textContent = text;
+        if (topBtn) topBtn.style.background = '#10b981';
+        if (repBtn) repBtn.style.background = '#10b981';
+      } else if (state === 'error') {
+        if (topBtnLbl) topBtnLbl.textContent = '⚠️ ลองใหม่อัตโนมัติ';
+        if (repBtnLbl) repBtnLbl.textContent = '⚠️ ลองใหม่อัตโนมัติ';
+        if (topBtn) topBtn.style.background = '#e11d48';
+        if (repBtn) repBtn.style.background = '#e11d48';
       }
     }
 
+    let isSyncInProgress = false;
+    let queuedSyncRequest = false;
+    let syncRetryTimer = null;
     let supabaseSyncTimeout = null;
 
     async function syncPilingToSupabase(silent = false) {
-      const topBtnLbl = document.getElementById('lbl-supabase-top-btn');
-      const repBtnLbl = document.getElementById('lbl-report-supabase');
-      if (!silent) {
-        if (topBtnLbl) topBtnLbl.textContent = 'กำลังบันทึก...';
-        if (repBtnLbl) repBtnLbl.textContent = 'กำลังบันทึก...';
+      if (isSyncInProgress) {
+        queuedSyncRequest = true;
+        return;
       }
+      isSyncInProgress = true;
+      updateSyncButtonUI('saving');
 
       let success = false;
+      let lastErr = null;
 
-      // 1. Direct Supabase update if client available
-      if (supabaseClient) {
-        try {
-          const { data: row } = await supabaseClient
-            .from('project_data')
-            .select('data')
-            .eq('id', 1)
-            .maybeSingle();
-
-          if (row && row.data) {
-            row.data.pilingProgress = progressRecords;
-            row.data.pilingProgressLastUpdated = new Date().toISOString();
-            const { error: updErr } = await supabaseClient
-              .from('project_data')
-              .update({ data: row.data })
-              .eq('id', 1);
-            if (!updErr) success = true;
-          }
-        } catch (e) {
-          console.warn('Direct Supabase sync warning:', e);
-        }
-      }
-
-      // 2. Server proxy sync endpoint
+      // 1. First priority: Server proxy sync endpoint (handles server-side Supabase write)
       try {
         const res = await fetch('/api/supabase/sync', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ records: progressRecords })
         });
-        if (res.ok) success = true;
-      } catch (_) {}
-
-      const now = new Date();
-      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      if (topBtnLbl) {
-        topBtnLbl.textContent = success ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase';
-      }
-      if (repBtnLbl) {
-        repBtnLbl.textContent = success ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase';
+        if (res.ok) {
+          const j = await res.json();
+          if (j && j.success) success = true;
+        } else {
+          lastErr = new Error(`Server returned status ${res.status}`);
+        }
+      } catch (e) {
+        lastErr = e;
       }
 
-      if (!silent) {
-        alert('✅ บันทึกข้อมูลสถานะเสาเข็ม 93 ต้นเข้าสู่ Supabase ของโครงการเรียบร้อยแล้ว!');
+      // 2. Direct client fallback / reinforcement if available
+      if (!success) {
+        const sb = getSupabaseClient();
+        if (sb) {
+          try {
+            const { data: row, error: fetchErr } = await sb
+              .from('project_data')
+              .select('data')
+              .eq('id', 1)
+              .maybeSingle();
+
+            if (row && row.data) {
+              row.data.pilingProgress = progressRecords;
+              row.data.pilingProgressLastUpdated = new Date().toISOString();
+              const { error: updErr } = await sb
+                .from('project_data')
+                .update({ data: row.data })
+                .eq('id', 1);
+              if (!updErr) success = true;
+              else lastErr = updErr;
+            } else if (!fetchErr) {
+              // Create row
+              const { error: insErr } = await sb
+                .from('project_data')
+                .insert({ id: 1, data: { pilingProgress: progressRecords, pilingProgressLastUpdated: new Date().toISOString() } });
+              if (!insErr) success = true;
+              else lastErr = insErr;
+            }
+          } catch (e) {
+            lastErr = e;
+          }
+        }
+      }
+
+      isSyncInProgress = false;
+
+      if (success) {
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        updateSyncButtonUI('success', timeStr);
+        if (!silent) {
+          const drivenCount = Object.values(progressRecords).filter(r => r && r.status === 'driven').length;
+          showSyncToast(`☁️ บันทึกข้อมูลเสาเข็มออนไลน์ลง Supabase เรียบร้อยแล้ว (${drivenCount}/93 ต้น)`, 'success');
+        }
+        // Save to all storage keys for seamless compatibility
+        const jsonStr = JSON.stringify(progressRecords);
+        localStorage.setItem(STORAGE_KEY, jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
+      } else {
+        console.warn('Sync to Supabase warning:', lastErr);
+        updateSyncButtonUI('error');
+        if (!silent) {
+          showSyncToast('⚠️ บันทึกออนไลน์ขัดข้อง ระบบจะพยายามใหม่อัตโนมัติ', 'error');
+        }
+        if (syncRetryTimer) clearTimeout(syncRetryTimer);
+        syncRetryTimer = setTimeout(() => syncPilingToSupabase(true), 3500);
+      }
+
+      if (queuedSyncRequest) {
+        queuedSyncRequest = false;
+        setTimeout(() => syncPilingToSupabase(true), 150);
       }
     }
 
     async function pullPilingFromSupabase(silent = false) {
       let fetched = null;
-      if (supabaseClient) {
-        try {
-          const { data: row } = await supabaseClient
-            .from('project_data')
-            .select('data')
-            .eq('id', 1)
-            .maybeSingle();
-          if (row?.data?.pilingProgress && Object.keys(row.data.pilingProgress).length > 0) {
-            fetched = row.data.pilingProgress;
+      // 1. Try server endpoint
+      try {
+        const res = await fetch('/api/supabase/piles');
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.data && typeof json.data === 'object' && Object.keys(json.data).length > 0) {
+            fetched = json.data;
           }
-        } catch (_) {}
-      }
+        }
+      } catch (_) {}
 
+      // 2. Direct client fallback
       if (!fetched) {
-        try {
-          const res = await fetch('/api/supabase/piles');
-          if (res.ok) {
-            const json = await res.json();
-            if (json.data && Object.keys(json.data).length > 0) fetched = json.data;
-          }
-        } catch (_) {}
+        const sb = getSupabaseClient();
+        if (sb) {
+          try {
+            const { data: row } = await sb
+              .from('project_data')
+              .select('data')
+              .eq('id', 1)
+              .maybeSingle();
+            if (row?.data?.pilingProgress && Object.keys(row.data.pilingProgress).length > 0) {
+              fetched = row.data.pilingProgress;
+            }
+          } catch (_) {}
+        }
       }
 
       if (fetched && Object.keys(fetched).length > 0) {
         progressRecords = fetched;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(progressRecords));
+        const jsonStr = JSON.stringify(progressRecords);
+        localStorage.setItem(STORAGE_KEY, jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
         updateUI();
         updatePileMeshVisuals();
         renderQuickChips();
         renderCoTable();
         renderReportSheet();
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        updateSyncButtonUI('success', timeStr);
         if (!silent) {
-          alert('📥 ดึงข้อมูลสถานะเสาเข็มล่าสุดจาก Supabase สำเร็จแล้ว!');
+          const drivenCount = Object.values(progressRecords).filter(r => r && r.status === 'driven').length;
+          showSyncToast(`📥 ดึงข้อมูลสถานะเสาเข็มล่าสุดจาก Supabase สำเร็จแล้ว (${drivenCount}/93 ต้น)`, 'success');
         }
       }
     }
 
-    // 1. Progress State Manager (Live Sync from Supabase - ไม่โหลดข้อมูลเทส)
+    // Progress State Manager (Live Sync from Supabase)
     let progressRecords = {};
 
     async function loadProgress() {
-      // 1. Load from localStorage cache if valid (pure live data, no fake mock)
+      // 1. Load from localStorage cache
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) ||
+                    localStorage.getItem('PYNN37_PILING_PROGRESS_LIVE_v3') ||
+                    localStorage.getItem('PYNN37_PILING_PROGRESS_v2');
         if (raw) {
           const parsed = JSON.parse(raw);
-          // Guard: if it had the old 24 mock piles, discard it
           const keys = Object.keys(parsed);
           const isOldMock = keys.length === 24 && parsed[1] && parsed[24] && !parsed[44] && !parsed[54];
           if (!isOldMock) {
@@ -2848,7 +2960,7 @@
         progressRecords = {};
       }
 
-      // Render initial state cleanly without test mock piles
+      // Render initial state
       updateUI();
       updatePileMeshVisuals();
       renderQuickChips();
@@ -2860,7 +2972,10 @@
     }
 
     function saveProgress() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(progressRecords));
+      const jsonStr = JSON.stringify(progressRecords);
+      localStorage.setItem(STORAGE_KEY, jsonStr);
+      localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+      localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
       updateUI();
       updatePileMeshVisuals();
       renderQuickChips();
@@ -2871,15 +2986,54 @@
       if (supabaseSyncTimeout) clearTimeout(supabaseSyncTimeout);
       supabaseSyncTimeout = setTimeout(() => {
         syncPilingToSupabase(true);
-      }, 600);
+      }, 500);
     }
 
     function initDemoProgress() {
-      // No demo/test mock data - always start clean
+      // Clean slate
       progressRecords = {};
     }
 
     loadProgress();
+    setTimeout(setupPilingRealtime, 1000);
+
+    function setupPilingRealtime() {
+      const sb = getSupabaseClient();
+      if (!sb) return;
+      try {
+        sb.channel('piling-realtime-room')
+          .on('postgres_changes', {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'project_data',
+            filter: 'id=eq.1'
+          }, (payload) => {
+            const remotePiles = payload?.new?.data?.pilingProgress;
+            if (remotePiles && !isSyncInProgress) {
+              const localStr = JSON.stringify(progressRecords);
+              const remoteStr = JSON.stringify(remotePiles);
+              if (localStr !== remoteStr) {
+                progressRecords = remotePiles;
+                const jsonStr = JSON.stringify(progressRecords);
+                localStorage.setItem(STORAGE_KEY, jsonStr);
+                localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+                localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
+                updateUI();
+                updatePileMeshVisuals();
+                renderQuickChips();
+                renderCoTable();
+                renderReportSheet();
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                updateSyncButtonUI('success', timeStr);
+              }
+            }
+          })
+          .subscribe();
+      } catch (err) {
+        console.warn('Realtime listener error:', err);
+      }
+    }
 
     const todayStr = new Date().toISOString().slice(0, 10);
     const datePicker = document.getElementById('inp-report-date');
@@ -3611,6 +3765,9 @@
       const statusText = document.getElementById('card-pile-status-text');
       const saveBtnLbl = document.getElementById('btn-card-save-date-lbl');
 
+      const quickDriveBtn = document.getElementById('btn-card-quick-drive');
+      const cancelBtn = document.getElementById('btn-card-toggle-cancel');
+
       if (isDriven) {
         statusText.textContent = `✓ ตอกแล้ว (บันทึกวันที่: ${rec.date || curSelectedDate})`;
         statusText.className = 'font-black text-[#10b981]';
@@ -3618,7 +3775,9 @@
           dateBadge.textContent = rec.date ? `ข้อมูลเดิม: ${rec.date}` : 'วันนี้';
           dateBadge.className = 'font-mono font-black text-emerald-700 text-[10.5px] bg-emerald-100 px-1.5 py-0.5 rounded';
         }
-        if (saveBtnLbl) saveBtnLbl.textContent = '💾 ปรับแก้ข้อมูล (วันตอก / ระดับ TOP)';
+        if (saveBtnLbl) saveBtnLbl.textContent = '💾 ปรับแก้วันตอก / ระดับ TOP (บันทึกออนไลน์)';
+        if (quickDriveBtn) quickDriveBtn.classList.add('hidden');
+        if (cancelBtn) cancelBtn.classList.remove('hidden');
       } else {
         statusText.textContent = 'ยังไม่ได้ตอก';
         statusText.className = 'font-bold text-[#667277]';
@@ -3626,7 +3785,9 @@
           dateBadge.textContent = 'ยังไม่ระบุ';
           dateBadge.className = 'font-mono font-bold text-slate-500 text-[10.5px]';
         }
-        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกว่าตอกแล้วในวันที่นี้';
+        if (saveBtnLbl) saveBtnLbl.textContent = '💾 บันทึกระบุรายละเอียดเพิ่มเติม';
+        if (quickDriveBtn) quickDriveBtn.classList.remove('hidden');
+        if (cancelBtn) cancelBtn.classList.add('hidden');
       }
 
       const card = document.getElementById('pile-card');
@@ -3708,6 +3869,20 @@
       d.setDate(d.getDate() - 1);
       const yStr = d.toISOString().split('T')[0];
       if (inp) inp.value = yStr;
+    });
+
+    // Quick 1-Click Drive inside pile card
+    document.getElementById('btn-card-quick-drive')?.addEventListener('click', () => {
+      if (!selectedCardPileNo) return;
+      const dateInp = document.getElementById('card-pile-date-input');
+      const chosenDate = (dateInp && dateInp.value) ? dateInp.value : (datePicker.value || todayStr);
+      progressRecords[selectedCardPileNo] = {
+        status: 'driven',
+        date: chosenDate
+      };
+      saveProgress();
+      syncPilingToSupabase(false);
+      document.getElementById('btn-close-card')?.click();
     });
 
     // Save or Adjust Date and Actual Top for Pile (บันทึก / ปรับแก้วันที่เก่า + ระดับ TOP จริง)
@@ -3888,16 +4063,30 @@
         `;
 
         btn.addEventListener('click', () => {
-          if (isDriven) {
-            // Open pile card to allow adjusting old date, status, or notes!
-            openPileCard(p.no);
-          } else {
-            progressRecords[p.no] = {
-              status: 'driven',
-              date: datePicker.value || todayStr
-            };
+          const isToggleMode = document.getElementById('chk-quick-toggle-mode')?.checked;
+          if (isToggleMode) {
+            if (isDriven) {
+              delete progressRecords[p.no];
+              showSyncToast(`🔄 ยกเลิกสถานะตอกเสาเข็ม ${p.tag} (ออนไลน์)`, 'info');
+            } else {
+              progressRecords[p.no] = {
+                status: 'driven',
+                date: datePicker.value || todayStr
+              };
+              showSyncToast(`✓ ตอกเสาเข็ม ${p.tag} แล้ว (ออนไลน์)`, 'success');
+            }
             saveProgress();
-            if (typeof syncPilingToSupabase === 'function') {
+            syncPilingToSupabase(false);
+          } else {
+            if (isDriven) {
+              // Open pile card to allow adjusting old date, status, or notes!
+              openPileCard(p.no);
+            } else {
+              progressRecords[p.no] = {
+                status: 'driven',
+                date: datePicker.value || todayStr
+              };
+              saveProgress();
               syncPilingToSupabase(false);
             }
           }
@@ -3922,6 +4111,7 @@
         }
       }
       saveProgress();
+      syncPilingToSupabase(false);
     });
 
     // Quick Batch Button: Apply range e.g. 1-24
@@ -3946,6 +4136,7 @@
         });
       }
       saveProgress();
+      syncPilingToSupabase(false);
       document.getElementById('inp-batch-range').value = '';
     });
 
@@ -5775,6 +5966,7 @@
               };
             }
             saveProgress();
+            syncPilingToSupabase(false);
           });
         });
       }

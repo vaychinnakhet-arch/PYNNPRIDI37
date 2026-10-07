@@ -122,7 +122,7 @@ app.get('/api/supabase/piles', async (req, res) => {
       .eq('id', 1)
       .maybeSingle();
 
-    if (projRow?.data?.pilingProgress) {
+    if (projRow?.data && projRow.data.pilingProgress !== undefined) {
       return res.json({
         data: projRow.data.pilingProgress,
         source: 'project_data',
@@ -242,11 +242,15 @@ app.post('/api/supabase/sync', async (req, res) => {
     const now = new Date().toISOString();
 
     // 1. Save directly into project_data.data.pilingProgress (User's live table!)
-    const { data: projRow } = await client
+    const { data: projRow, error: fetchErr } = await client
       .from('project_data')
       .select('data')
       .eq('id', 1)
       .maybeSingle();
+
+    if (fetchErr) {
+      console.error('Error fetching project_data from Supabase:', fetchErr);
+    }
 
     if (projRow && projRow.data) {
       projRow.data.pilingProgress = progressMap;
@@ -259,8 +263,25 @@ app.post('/api/supabase/sync', async (req, res) => {
 
       if (updateErr) {
         console.error('Error updating project_data in Supabase:', updateErr);
+        return res.status(500).json({ error: updateErr.message, success: false });
       } else {
         console.log('✅ Piling progress saved to project_data in Supabase!');
+      }
+    } else {
+      // Row id: 1 does not exist yet, insert initial document
+      const initialData: Record<string, any> = {
+        pilingProgress: progressMap,
+        pilingProgressLastUpdated: now
+      };
+      const { error: insertErr } = await client
+        .from('project_data')
+        .insert({ id: 1, data: initialData });
+
+      if (insertErr) {
+        console.error('Error inserting project_data in Supabase:', insertErr);
+        return res.status(500).json({ error: insertErr.message, success: false });
+      } else {
+        console.log('✅ Created initial project_data row with piling progress in Supabase!');
       }
     }
 

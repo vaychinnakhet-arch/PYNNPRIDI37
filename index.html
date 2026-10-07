@@ -5221,6 +5221,13 @@
             if (!projectData.commonDefects) {
               projectData.commonDefects = getInitialCommonDefects();
             }
+            if (projectData.pilingProgress) {
+              const jsonStr = JSON.stringify(projectData.pilingProgress);
+              localStorage.setItem('PYNN37_PILING_PROGRESS_v3', jsonStr);
+              localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+              localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
+            }
+            updateSplashAlerts();
           } else {
             console.log(
               "No data or empty data in Supabase, creating/updating initial document...",
@@ -5329,6 +5336,13 @@
                   renderQuickUpdateTaskList(); // Also update quick update mode if it's active
                 }
                 renderSplashScreen();
+                if (projectData.pilingProgress) {
+                  const jsonStr = JSON.stringify(projectData.pilingProgress);
+                  localStorage.setItem('PYNN37_PILING_PROGRESS_v3', jsonStr);
+                  localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+                  localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
+                }
+                updateSplashAlerts();
                 const updateNow = new Date();
                 const updateDateStr = updateNow.toLocaleDateString("th-TH", {
                   year: "numeric",
@@ -6621,25 +6635,30 @@
           const alertContainer = document.getElementById("splash-alert-banner");
           if (!alertContainer) return;
 
-          // Load live piling progress from localStorage
-          const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v2';
+          // 1. Prioritize live piling progress from projectData directly fetched from Supabase!
           let records = {};
-          try {
-            const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('PYNN54_PILING_PROGRESS_v2');
-            if (raw) {
-              records = JSON.parse(raw);
-            }
-          } catch (e) {}
+          if (projectData && projectData.pilingProgress && typeof projectData.pilingProgress === 'object' && Object.keys(projectData.pilingProgress).length > 0) {
+            records = projectData.pilingProgress;
+          } else {
+            // 2. Fallback to localStorage cache
+            try {
+              const raw = localStorage.getItem('PYNN37_PILING_PROGRESS_v3') ||
+                          localStorage.getItem('PYNN37_PILING_PROGRESS_LIVE_v3') ||
+                          localStorage.getItem('PYNN37_PILING_PROGRESS_v2');
+              if (raw) {
+                records = JSON.parse(raw);
+              }
+            } catch (e) {}
+          }
 
-          // Default initial progress if empty (matches demo baseline: 24 piles driven before today + 3 today = 27)
+          // Compute actual progress from live records
           const today = new Date();
           const curDate = today.toISOString().split('T')[0];
           
           let totalDriven = 0;
           let todayDriven = 0;
-          const hasRecords = Object.keys(records).length > 0;
 
-          if (hasRecords) {
+          if (records && typeof records === 'object') {
             Object.values(records).forEach(rec => {
               if (rec && rec.status === 'driven') {
                 totalDriven++;
@@ -6648,10 +6667,6 @@
                 }
               }
             });
-          } else {
-            // Default demo baseline if first time opening
-            totalDriven = 24;
-            todayDriven = 3;
           }
 
           const TOTAL_PILES = 93;
@@ -7273,12 +7288,17 @@
             btn.disabled = true;
             btn.innerHTML = '<span>⏳ กำลังบันทึก...</span>';
           }
-          const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v2';
           let records = {};
-          try {
-            const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('PYNN54_PILING_PROGRESS_v2');
-            if (raw) records = JSON.parse(raw);
-          } catch (_) {}
+          if (projectData && projectData.pilingProgress && typeof projectData.pilingProgress === 'object') {
+            records = projectData.pilingProgress;
+          } else {
+            try {
+              const raw = localStorage.getItem('PYNN37_PILING_PROGRESS_v3') ||
+                          localStorage.getItem('PYNN37_PILING_PROGRESS_LIVE_v3') ||
+                          localStorage.getItem('PYNN37_PILING_PROGRESS_v2');
+              if (raw) records = JSON.parse(raw);
+            } catch (_) {}
+          }
 
           let savedOk = false;
 
@@ -7307,6 +7327,12 @@
             if (res.ok) savedOk = true;
           } catch (_) {}
 
+          // Cache to local storage
+          const jsonStr = JSON.stringify(records);
+          localStorage.setItem('PYNN37_PILING_PROGRESS_v3', jsonStr);
+          localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+          localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
+
           const statusBadge = document.getElementById('splash-supabase-status');
           if (statusBadge) {
             const now = new Date();
@@ -7324,9 +7350,10 @@
           }
 
           if (typeof showNotificationModal === 'function') {
+            const count = Object.keys(records).length;
             showNotificationModal(
               'บันทึกเข้า Supabase สำเร็จ',
-              'ระบบได้บันทึกความคืบหน้างานเสาเข็ม 93 ต้นเข้าสู่ Supabase ของโครงการเรียบร้อยแล้ว!'
+              `ระบบได้บันทึกความคืบหน้างานเสาเข็ม (${count} ต้น) เข้าสู่ Supabase ของโครงการเรียบร้อยแล้ว!`
             );
           }
         };
@@ -7339,20 +7366,24 @@
             btn.innerHTML = '<span>⏳ กำลังดึง...</span>';
           }
           let fetched = null;
-          if (projectData && projectData.pilingProgress) {
+          try {
+            const res = await fetch('/api/supabase/piles');
+            if (res.ok) {
+              const json = await res.json();
+              if (json.data) fetched = json.data;
+            }
+          } catch (_) {}
+
+          if (!fetched && projectData && projectData.pilingProgress) {
             fetched = projectData.pilingProgress;
           }
-          if (!fetched) {
-            try {
-              const res = await fetch('/api/supabase/piles');
-              if (res.ok) {
-                const json = await res.json();
-                if (json.data) fetched = json.data;
-              }
-            } catch (_) {}
-          }
+
           if (fetched && Object.keys(fetched).length > 0) {
-            localStorage.setItem('PYNN37_PILING_PROGRESS_v2', JSON.stringify(fetched));
+            if (projectData) projectData.pilingProgress = fetched;
+            const jsonStr = JSON.stringify(fetched);
+            localStorage.setItem('PYNN37_PILING_PROGRESS_v3', jsonStr);
+            localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+            localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
             updateSplashAlerts();
             if (typeof showNotificationModal === 'function') {
               showNotificationModal(
@@ -17030,7 +17061,7 @@
             const dataBlob = new Blob([dataStr], { type: "application/json" });
             const url = URL.createObjectURL(dataBlob);
             const link = document.createElement("a");
-            link.download = `pynn-ngamwongwan-54-data-${Date.now()}.json`;
+            link.download = `pynn-pridi-37-data-${Date.now()}.json`;
             link.href = url;
             link.click();
             URL.revokeObjectURL(url);
@@ -17123,7 +17154,7 @@
                   break;
               default: name = currentView;
             }
-            return `PYNN NGAMWONGWAN 54 ${name} ${getThaiDateForFilename()}`;
+            return `Pynn pridi 37 ${name} ${getThaiDateForFilename()}`;
         }
 
         function isAppleMobileDevice() {
@@ -17630,7 +17661,7 @@
                 });
               }
             }
-            const pdfFilename = `PYNN NGAMWONGWAN 54 DEFECT รายงาน A4 (${getThaiDateForFilename()}).pdf`;
+            const pdfFilename = `Pynn pridi 37 DEFECT รายงาน A4 (${getThaiDateForFilename()}).pdf`;
             pdf.save(pdfFilename);
             showToast("ดาวน์โหลดรายงาน PDF ขนาด A4 สำเร็จแล้ว!", 3500);
           } catch (err) {
@@ -19222,7 +19253,7 @@
 
                 <!-- Footer Ribbon -->
                 <div style="background: #ffffff; border: 2px solid #0f172a; box-shadow: 0 3px 0 #0f172a; border-radius: 12px; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 800; color: #475569;">
-                  <div style="white-space: nowrap; flex-shrink: 0;">PYNN 54 • QUALITY ASSURANCE &amp; CONTROL MANAGEMENT SYSTEM</div>
+                  <div style="white-space: nowrap; flex-shrink: 0;">Pynn pridi 37 • QUALITY ASSURANCE &amp; CONTROL MANAGEMENT SYSTEM</div>
                   <div style="background: #f1f5f9; border: 1.5px solid #0f172a; border-radius: 9999px; padding: 3px 14px; color: #0f172a; font-weight: 900; font-size: 11.5px; white-space: nowrap; flex-shrink: 0; box-shadow: 1px 1px 0 #0f172a;">
                     🍄&nbsp;PAPER MARIO NINTENDO PRESENTATION CARDS (TALL &amp; VIBRANT)
                   </div>
@@ -19573,7 +19604,7 @@
                 scrollY: 0,
               })
                 .then((canvas) => {
-                  const filename = `PYNN NGAMWONGWAN 54 DEFECT ${title} ${getThaiDateForFilename()}.jpg`;
+                  const filename = `Pynn pridi 37 DEFECT ${title} ${getThaiDateForFilename()}.jpg`;
                   showCanvasPreview(canvas, filename, "image/jpeg", 0.9);
                   cleanUpAndRestore();
                 })
@@ -19589,7 +19620,7 @@
                       skipFonts: true,
                     })
                       .then((dataUrl) => {
-                        const filename = `PYNN NGAMWONGWAN 54 DEFECT ${title} ${getThaiDateForFilename()}.jpg`;
+                        const filename = `Pynn pridi 37 DEFECT ${title} ${getThaiDateForFilename()}.jpg`;
                         showImagePreview(dataUrl, filename);
                         cleanUpAndRestore();
                       })
@@ -22206,7 +22237,7 @@
                 <!-- Left: Project Identity & Monogram -->
                 <div class="col-span-3 border-r border-slate-800 p-2.5 flex flex-col items-center justify-center bg-slate-50 text-center">
                   <div class="text-xl font-bold tracking-widest text-slate-950 font-mono">PYNN</div>
-                  <div class="text-[11px] font-bold text-slate-800 tracking-wider mt-0.5">NGAMWONGWAN 54</div>
+                  <div class="text-[11px] font-bold text-slate-800 tracking-wider mt-0.5">PRIDI 37</div>
                   <div class="text-[9px] text-slate-500 uppercase tracking-tight mt-0.5">CONSTRUCTION MANAGEMENT</div>
                 </div>
 
@@ -23206,7 +23237,7 @@
           if (aiContainer) aiContainer.innerHTML = "";
 
           const promptText = `
-            คุณคือผู้อำนวยการฝ่ายบริหารโครงการก่อสร้างระดับสูง (Project Director) ของโครงการ PYNN NGAMWONGWAN 54
+            คุณคือผู้อำนวยการฝ่ายบริหารโครงการก่อสร้างระดับสูง (Project Director) ของโครงการ Pynn pridi 37
             โปรดวิเคราะห์ข้อมูลรายงานความคืบหน้านี้อย่างเป็นมืออาชีพ:
             ---
             ${textOutput.value}
@@ -23718,7 +23749,7 @@
               {
                 parts: [
                   {
-                    text: `จากข้อมูลรายงานความคืบหน้าโครงการ PYNN NGAMWONGWAN 54:\n---\n${rawReportText}\n---`,
+                    text: `จากข้อมูลรายงานความคืบหน้าโครงการ Pynn pridi 37:\n---\n${rawReportText}\n---`,
                   },
                 ],
               },
@@ -23865,7 +23896,7 @@
 
           const today = new Date();
           const dateString = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear() + 543}`;
-          let report = `📋 รายงานความก้าวหน้าโครงการ PYNN NGAMWONGWAN 54\n`;
+          let report = `📋 รายงานความก้าวหน้าโครงการ Pynn pridi 37\n`;
           report += `🗓️ ประจำวันที่ ${dateString}\n`;
 
           const stripHTML = (html) => html.replace(/<[^>]*>?/gm, "");
@@ -24175,7 +24206,7 @@
               {
                 parts: [
                   {
-                    text: `วิเคราะห์และสรุปข้อมูลความคืบหน้าของงานพื้นที่ส่วนกลางโครงการ PYNN NGAMWONGWAN 54:\n---\n${rawText}\n---`,
+                    text: `วิเคราะห์และสรุปข้อมูลความคืบหน้าของงานพื้นที่ส่วนกลางโครงการ Pynn pridi 37:\n---\n${rawText}\n---`,
                   },
                 ],
               },
