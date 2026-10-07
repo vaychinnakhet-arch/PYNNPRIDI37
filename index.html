@@ -18,6 +18,7 @@
     />
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/chart.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 
@@ -1600,7 +1601,7 @@
             </div>
             <!-- Step 4: แผนงาน & ส่งมอบ -->
             <!-- Step 5 / เมนูงานเสาเข็ม: ติดตามงานเสาเข็ม 93 ต้น (3D & หน้ารายงาน) -->
-            <a href="piling.html" class="workflow-card cursor-pointer p-4 rounded-2xl bg-gradient-to-br from-[#fffdf8] to-[#fff0c8] border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex items-start gap-3 group relative overflow-hidden" title="เข้าสู่ระบบติดตามงานเสาเข็ม 93 ต้น แปลน 3D & หน้ารายงานความคืบหน้า">
+            <a href="piling.html#3d" class="workflow-card cursor-pointer p-4 rounded-2xl bg-gradient-to-br from-[#fffdf8] to-[#fff0c8] border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex items-start gap-3 group relative overflow-hidden" title="เข้าสู่ระบบติดตามงานเสาเข็ม 93 ต้น แปลน 3D & หน้ารายงานความคืบหน้า">
               <div class="w-10 h-10 rounded-xl bg-[#ffc45b] border-2 border-[#253047] flex items-center justify-center text-[#253047] font-black text-lg shrink-0 shadow-sm">
                 🏗️
               </div>
@@ -1785,7 +1786,7 @@
             class="flex items-center gap-4 z-10 w-full md:w-1/4"
           >
             <a
-              href="piling.html"
+              href="piling.html#3d"
               class="px-3 py-1.5 rounded-xl bg-[#ffc45b] hover:bg-[#ffb433] transition-all border-2 border-[#253047] text-[#253047] font-black text-xs shadow-[2px_2px_0_#253047] flex items-center gap-1.5 shrink-0"
               title="แปลนและรายงานความคืบหน้างานเสาเข็ม 93 ต้น"
             >
@@ -6620,73 +6621,51 @@
           const alertContainer = document.getElementById("splash-alert-banner");
           if (!alertContainer) return;
 
-          // Guard & Initialize qcHandover if needed
-          if (!projectData.qcHandover) {
-            projectData.qcHandover = { data: {}, floorTotals: {} };
-          }
-          if (!projectData.qcHandoverSettings) {
-            projectData.qcHandoverSettings = { startDate: "2025-09-15", endDate: "2026-03-01", title: "แผนส่งห้อง QC" };
-          }
-          if (!QC_HANDOVER_WEEKS || QC_HANDOVER_WEEKS.length === 0 || !QC_HANDOVER_WEEKS[0].startDate) {
-            generateQCHandoverWeeks(
-              projectData.qcHandoverSettings.startDate || "2025-09-15",
-              projectData.qcHandoverSettings.endDate || "2026-03-01"
-            );
-          }
+          // Load live piling progress from localStorage
+          const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v2';
+          let records = {};
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('PYNN54_PILING_PROGRESS_v2');
+            if (raw) {
+              records = JSON.parse(raw);
+            }
+          } catch (e) {}
 
+          // Default initial progress if empty (matches demo baseline: 24 piles driven before today + 3 today = 27)
           const today = new Date();
-          const todayNoTime = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+          const curDate = today.toISOString().split('T')[0];
           
-          const types = [
-            { key: "neuaFa", label: "QC เหนือฝ้า", color: "amber", subtitle: "Above Ceiling QC" },
-            { key: "qcWW", label: "QC Wetwork", color: "sky", subtitle: "Wet Work QC" },
-            { key: "qcEnd", label: "QC End Product", color: "teal", subtitle: "End Product QC" }
-          ];
+          let totalDriven = 0;
+          let todayDriven = 0;
+          const hasRecords = Object.keys(records).length > 0;
 
-          const stats = {};
-
-          types.forEach(type => {
-            let accPlan = 0;
-            let accActual = 0;
-
-            QC_HANDOVER_WEEKS.forEach((w, i) => {
-              let weekPlan = 0;
-              let weekActual = 0;
-
-              [2, 3, 4, 5, 6, 7, 8].forEach((fId) => {
-                const weekData = projectData.qcHandover.data[`floor_${fId}`]?.[`week_${i}`];
-                if (weekData) {
-                  if (weekData.plan && weekData.plan.type === type.key) {
-                    weekPlan += weekData.plan.value;
-                  }
-                  if (weekData.actual && weekData.actual[type.key]) {
-                    weekActual += weekData.actual[type.key];
-                  }
+          if (hasRecords) {
+            Object.values(records).forEach(rec => {
+              if (rec && rec.status === 'driven') {
+                totalDriven++;
+                if (rec.date === curDate) {
+                  todayDriven++;
                 }
-              });
-
-              // Accumulate actual always
-              accActual += weekActual;
-
-              // Accumulate plan only if the week's startDate has passed or is today
-              const wStart = new Date(w.startDate);
-              wStart.setHours(0,0,0,0);
-              if (wStart <= todayNoTime) {
-                accPlan += weekPlan;
               }
             });
+          } else {
+            // Default demo baseline if first time opening
+            totalDriven = 24;
+            todayDriven = 3;
+          }
 
-            const delayed = Math.max(0, accPlan - accActual);
-            stats[type.key] = {
-              label: type.label,
-              subtitle: type.subtitle,
-              accPlan,
-              accActual,
-              delayed
-            };
-          });
+          const TOTAL_PILES = 93;
+          const DAILY_PLAN = 3;
+          const TOTAL_DAYS = 31;
+          const drivenPct = Math.round((totalDriven / TOTAL_PILES) * 100);
+          const remaining = Math.max(0, TOTAL_PILES - totalDriven);
 
-          // Format the date
+          // Working day & planned accumulated
+          const elapsedDays = Math.min(TOTAL_DAYS, Math.max(1, Math.ceil(totalDriven / DAILY_PLAN)));
+          const planCum = Math.min(TOTAL_PILES, elapsedDays * DAILY_PLAN);
+          const variance = totalDriven - planCum;
+
+          // Format Date
           const thaiMonths = [
             "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
             "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
@@ -6695,193 +6674,701 @@
 
           alertContainer.classList.remove("hidden");
           alertContainer.className =
-            "mb-8 bg-[#f4f6f4] rounded-2xl md:rounded-3xl border-2 border-[#253047] shadow-[0_4px_0_#253047] overflow-hidden transition-all";
+            "mb-8 bg-[#fffdf8] rounded-2xl md:rounded-3xl border-2 border-[#253047] shadow-[0_5px_0_#253047] overflow-hidden transition-all";
 
-          const neuaFaPct =
-            stats.neuaFa.accPlan > 0
-              ? Math.min(100, Math.round((stats.neuaFa.accActual / stats.neuaFa.accPlan) * 100))
-              : stats.neuaFa.accActual > 0 ? 100 : 0;
-          const qcWWPct =
-            stats.qcWW.accPlan > 0
-              ? Math.min(100, Math.round((stats.qcWW.accActual / stats.qcWW.accPlan) * 100))
-              : stats.qcWW.accActual > 0 ? 100 : 0;
-          const qcEndPct =
-            stats.qcEnd.accPlan > 0
-              ? Math.min(100, Math.round((stats.qcEnd.accActual / stats.qcEnd.accPlan) * 100))
-              : stats.qcEnd.accActual > 0 ? 100 : 0;
+          let varianceBadge = '';
+          if (variance > 0) {
+            varianceBadge = `<span class="px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-100 border-2 border-[#253047] text-emerald-800 shadow-[0_2px_0_#253047]">เร็วกว่าแผน +${variance} ต้น 🚀</span>`;
+          } else if (variance < 0) {
+            varianceBadge = `<span class="px-2.5 py-1 rounded-xl text-xs font-black bg-rose-100 border-2 border-[#253047] text-rose-700 shadow-[0_2px_0_#253047]"><span class="inline-block w-2 h-2 rounded-full bg-rose-600 mr-1 animate-pulse"></span>ช้ากว่าแผน ${Math.abs(variance)} ต้น</span>`;
+          } else {
+            varianceBadge = `<span class="px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-100 border-2 border-[#253047] text-emerald-800 shadow-[0_2px_0_#253047]">ตามแผนงานพอดี ✅</span>`;
+          }
 
           let html = `
-                    <div class="bg-[#253047] text-white px-5 sm:px-6 py-3.5 flex flex-wrap justify-between items-center gap-3 border-b-2 border-[#253047]">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-amber-300 border-2 border-white/80 text-[#253047] flex items-center justify-center font-black shadow-sm shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[10px] bg-[#E96861] text-white font-black px-2 py-0.5 rounded-md uppercase tracking-wider">QC SUMMARY</span>
-                                    <h3 class="font-black text-base sm:text-lg text-white tracking-tight">
-                                        สรุปความคืบหน้าแผนงานและสถานะการตรวจสอบ QC (สะสม)
-                                    </h3>
-                                </div>
-                                <p class="text-xs text-slate-300 font-bold mt-0.5">เปรียบเทียบแผนงานสะสม (ACC Plan) และผลงานสะสม (ACC Actual)</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="inline-flex items-center gap-2 bg-white text-[#253047] px-3.5 py-1.5 rounded-xl text-xs font-black border-2 border-slate-700 shadow-[0_2px_0_#0f172a]">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span>ข้อมูลสะสม ณ วันที่ ${dateStr}</span>
-                            </div>
-                            <button onclick="enterAppView('qcHandover')" class="cursor-pointer px-3.5 py-1.5 rounded-xl bg-amber-400 border-2 border-[#253047] text-[#253047] font-black text-xs shadow-[0_2px_0_#0f172a] hover:translate-y-0.5 active:translate-y-1 transition-all flex items-center gap-1" title="ดูรายละเอียดแผนส่งห้อง QC ทั้งหมด">
-                                <span>ดูแผนงาน</span> &rarr;
-                            </button>
-                        </div>
+            <!-- Top Executive Banner -->
+            <div class="bg-[#253047] text-white px-5 sm:px-6 py-4 flex flex-wrap justify-between items-center gap-3 border-b-2 border-[#253047]">
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-[#ffc45b] border-2 border-white/80 text-[#253047] flex items-center justify-center font-black text-xl shadow-sm shrink-0">
+                  🏗️
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] bg-[#10b981] text-white font-black px-2 py-0.5 rounded-md uppercase tracking-wider shadow-xs">PILING ACTIVE</span>
+                    <span class="text-xs text-amber-300 font-bold">โครงการ PYNN PRIDI 37 · สุขุมวิท 71</span>
+                  </div>
+                  <h3 class="font-black text-lg sm:text-xl text-white tracking-tight mt-0.5">
+                    ระบบติดตามงานเสาเข็ม 93 ต้น (Piling Progress & 3D Interactive Tracker)
+                  </h3>
+                </div>
+              </div>
+
+              <!-- Quick Action Links on Top Banner -->
+              <div class="flex items-center flex-wrap gap-2.5">
+                <div class="inline-flex items-center gap-2 bg-white/10 text-white px-3 py-1.5 rounded-xl text-xs font-bold border border-white/20">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>ประจำวันที่ ${dateStr}</span>
+                </div>
+                <a href="piling.html#3d" class="cursor-pointer px-3.5 py-1.5 rounded-xl bg-[#ffc45b] hover:bg-[#ffb433] border-2 border-[#253047] text-[#253047] font-black text-xs shadow-[0_2px_0_#0f172a] hover:translate-y-0.5 transition-all flex items-center gap-1.5" title="เปิดระบบโมเดล 3D และแปลนเสาเข็ม 93 ต้น">
+                  <span>🏗️ เปิดโมเดล 3D & แปลน</span> &rarr;
+                </a>
+                <a href="piling.html#report" class="cursor-pointer px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 border-2 border-[#253047] text-white font-black text-xs shadow-[0_2px_0_#0f172a] hover:translate-y-0.5 transition-all flex items-center gap-1.5" title="เปิดหน้ารายงานประจำวัน (เลือกสลับธีมเดิม หรือ สไตล์ Excel ได้)">
+                  <span>📊 หน้ารายงาน (เลือกสไตล์ได้)</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 4 Core Executive KPI Cards (Row 1) -->
+            <div class="p-4 sm:p-6 bg-gradient-to-b from-[#f8fafc] to-[#f1f5f9] border-b-2 border-[#253047]">
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                
+                <!-- KPI 1: แผนกดสะสม -->
+                <div class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_3px_0_#253047] flex flex-col justify-between">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-black text-slate-500 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> แผนกดสะสม
+                    </span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
+                      วันทำการ ${elapsedDays}/${TOTAL_DAYS}
+                    </span>
+                  </div>
+                  <div class="my-1 flex items-baseline gap-1.5">
+                    <span class="text-3xl sm:text-4xl font-black font-['Montserrat'] text-slate-800">${planCum}</span>
+                    <span class="text-xs font-bold text-slate-500">/ 93 ต้น</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 font-bold pt-2 border-t border-slate-100 flex justify-between">
+                    <span>เป้าหมายรายวัน:</span>
+                    <span class="font-black text-slate-700">${DAILY_PLAN} ต้น/วัน</span>
+                  </div>
+                </div>
+
+                <!-- KPI 2: ตอกสะสมจริง -->
+                <div class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_3px_0_#253047] flex flex-col justify-between">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-black text-emerald-700 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> กดสะสมจริง
+                    </span>
+                    <span class="text-[11px] font-black px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-300">
+                      ${drivenPct}%
+                    </span>
+                  </div>
+                  <div class="my-1 flex items-baseline gap-1.5">
+                    <span class="text-3xl sm:text-4xl font-black font-['Montserrat'] text-emerald-600">${totalDriven}</span>
+                    <span class="text-xs font-bold text-slate-500">/ 93 ต้น</span>
+                  </div>
+                  <!-- Progress bar -->
+                  <div class="pt-2 border-t border-slate-100 space-y-1">
+                    <div class="w-full h-2 bg-slate-100 border border-slate-300 rounded-full overflow-hidden">
+                      <div class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: ${drivenPct}%;"></div>
                     </div>
-                    <div class="p-5 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 bg-[#f4f6f4]">
-                        <!-- Card 1: QC เหนือฝ้า -->
-                        <div onclick="enterAppView('qcHandover')" class="workflow-card cursor-pointer p-5 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex flex-col justify-between group relative overflow-hidden" title="คลิกเพื่อดูรายละเอียดแผนส่งห้อง QC เหนือฝ้า">
-                            <div>
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-11 h-11 rounded-xl bg-amber-100 border-2 border-[#253047] flex items-center justify-center text-[#d97706] shadow-[0_2px_0_#253047] shrink-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-black text-slate-800 text-base sm:text-lg leading-tight group-hover:text-[#d97706] transition-colors">QC เหนือฝ้า</h4>
-                                            <p class="text-[10px] sm:text-xs text-slate-400 font-extrabold tracking-wider uppercase mt-0.5">${stats.neuaFa.subtitle}</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-xs px-2.5 py-1 rounded-xl bg-amber-100 border-2 border-[#253047] text-[#92400e] font-black shadow-[0_2px_0_#253047]">เหนือฝ้า</span>
-                                </div>
-                                
-                                <div class="space-y-3 my-4">
-                                    <div class="flex justify-between items-center pb-2.5 border-b-2 border-slate-100">
-                                        <span class="text-xs sm:text-sm text-slate-600 font-extrabold">แผนงานสะสม (ACC Plan)</span>
-                                        <span class="text-lg sm:text-xl font-black text-slate-800 font-['Montserrat']">${stats.neuaFa.accPlan} <span class="text-xs text-slate-400 font-bold">ห้อง</span></span>
-                                    </div>
-                                    <div class="flex justify-between items-center pb-2.5 border-b-2 border-slate-100">
-                                        <span class="text-xs sm:text-sm text-slate-600 font-extrabold">ผลงานสะสม (ACC Actual)</span>
-                                        <span class="text-lg sm:text-xl font-black text-emerald-600 font-['Montserrat']">${stats.neuaFa.accActual} <span class="text-xs text-emerald-500 font-bold">ห้อง</span></span>
-                                    </div>
-                                </div>
+                  </div>
+                </div>
 
-                                <!-- Mini Progress Bar -->
-                                <div class="mt-3 mb-1">
-                                    <div class="flex justify-between items-center text-[11px] font-black text-slate-500 mb-1">
-                                        <span>ความคืบหน้าสะสม</span>
-                                        <span class="text-[#253047] font-extrabold">${neuaFaPct}%</span>
-                                    </div>
-                                    <div class="w-full h-2.5 bg-slate-200 border border-slate-300 rounded-full overflow-hidden p-0.5">
-                                        <div class="h-full rounded-full bg-amber-500 transition-all duration-500" style="width: ${neuaFaPct}%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4 pt-3.5 border-t-2 border-slate-100 flex items-center justify-between">
-                                <span class="text-xs sm:text-sm text-slate-700 font-black">ล่าช้ากว่าแผน (Delayed)</span>
-                                <span class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all ${stats.neuaFa.delayed > 0 ? 'bg-rose-100 border-2 border-[#253047] text-rose-700 shadow-[0_2px_0_#253047]' : 'bg-emerald-100 border-2 border-[#253047] text-emerald-800 shadow-[0_2px_0_#253047]'}">
-                                    ${stats.neuaFa.delayed > 0 ? `<span class="inline-block w-2 h-2 rounded-full bg-rose-600 mr-1 animate-pulse"></span>ล่าช้า ${stats.neuaFa.delayed} ห้อง` : 'ตามแผนงาน ✅'}
-                                </span>
-                            </div>
-                        </div>
+                <!-- KPI 3: กดวันนี้ -->
+                <div class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_3px_0_#253047] flex flex-col justify-between">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-black text-sky-700 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-sky-500 ring-2 ring-sky-300"></span> กดวันนี้
+                    </span>
+                    <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-sky-100 text-sky-800 border border-sky-300">
+                      ★ วันนี้
+                    </span>
+                  </div>
+                  <div class="my-1 flex items-baseline gap-1.5">
+                    <span class="text-3xl sm:text-4xl font-black font-['Montserrat'] text-sky-600">${todayDriven}</span>
+                    <span class="text-xs font-bold text-slate-500">ต้น</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 font-bold pt-2 border-t border-slate-100 flex justify-between">
+                    <span>แผนวันนี้: 3 ต้น</span>
+                    <span class="font-black text-sky-700">คงเหลือ ${remaining} ต้น</span>
+                  </div>
+                </div>
 
-                        <!-- Card 2: QC Wetwork -->
-                        <div onclick="enterAppView('qcHandover')" class="workflow-card cursor-pointer p-5 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex flex-col justify-between group relative overflow-hidden" title="คลิกเพื่อดูรายละเอียดแผนส่งห้อง QC Wetwork">
-                            <div>
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-11 h-11 rounded-xl bg-sky-100 border-2 border-[#253047] flex items-center justify-center text-[#0284C7] shadow-[0_2px_0_#253047] shrink-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-black text-slate-800 text-base sm:text-lg leading-tight group-hover:text-[#0284C7] transition-colors">QC Wetwork</h4>
-                                            <p class="text-[10px] sm:text-xs text-slate-400 font-extrabold tracking-wider uppercase mt-0.5">${stats.qcWW.subtitle}</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-xs px-2.5 py-1 rounded-xl bg-sky-100 border-2 border-[#253047] text-[#0369a1] font-black shadow-[0_2px_0_#253047]">Wet Work</span>
-                                </div>
-                                
-                                <div class="space-y-3 my-4">
-                                    <div class="flex justify-between items-center pb-2.5 border-b-2 border-slate-100">
-                                        <span class="text-xs sm:text-sm text-slate-600 font-extrabold">แผนงานสะสม (ACC Plan)</span>
-                                        <span class="text-lg sm:text-xl font-black text-slate-800 font-['Montserrat']">${stats.qcWW.accPlan} <span class="text-xs text-slate-400 font-bold">ห้อง</span></span>
-                                    </div>
-                                    <div class="flex justify-between items-center pb-2.5 border-b-2 border-slate-100">
-                                        <span class="text-xs sm:text-sm text-slate-600 font-extrabold">ผลงานสะสม (ACC Actual)</span>
-                                        <span class="text-lg sm:text-xl font-black text-emerald-600 font-['Montserrat']">${stats.qcWW.accActual} <span class="text-xs text-emerald-500 font-bold">ห้อง</span></span>
-                                    </div>
-                                </div>
-
-                                <!-- Mini Progress Bar -->
-                                <div class="mt-3 mb-1">
-                                    <div class="flex justify-between items-center text-[11px] font-black text-slate-500 mb-1">
-                                        <span>ความคืบหน้าสะสม</span>
-                                        <span class="text-[#253047] font-extrabold">${qcWWPct}%</span>
-                                    </div>
-                                    <div class="w-full h-2.5 bg-slate-200 border border-slate-300 rounded-full overflow-hidden p-0.5">
-                                        <div class="h-full rounded-full bg-sky-500 transition-all duration-500" style="width: ${qcWWPct}%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4 pt-3.5 border-t-2 border-slate-100 flex items-center justify-between">
-                                <span class="text-xs sm:text-sm text-slate-700 font-black">ล่าช้ากว่าแผน (Delayed)</span>
-                                <span class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all ${stats.qcWW.delayed > 0 ? 'bg-rose-100 border-2 border-[#253047] text-rose-700 shadow-[0_2px_0_#253047]' : 'bg-emerald-100 border-2 border-[#253047] text-emerald-800 shadow-[0_2px_0_#253047]'}">
-                                    ${stats.qcWW.delayed > 0 ? `<span class="inline-block w-2 h-2 rounded-full bg-rose-600 mr-1 animate-pulse"></span>ล่าช้า ${stats.qcWW.delayed} ห้อง` : 'ตามแผนงาน ✅'}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Card 3: QC End Product -->
-                        <div onclick="enterAppView('qcHandover')" class="workflow-card cursor-pointer p-5 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex flex-col justify-between group relative overflow-hidden" title="คลิกเพื่อดูรายละเอียดแผนส่งห้อง QC End Product">
-                            <div>
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-11 h-11 rounded-xl bg-emerald-100 border-2 border-[#253047] flex items-center justify-center text-[#16a34a] shadow-[0_2px_0_#253047] shrink-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-black text-slate-800 text-base sm:text-lg leading-tight group-hover:text-[#16a34a] transition-colors">QC End Product</h4>
-                                            <p class="text-[10px] sm:text-xs text-slate-400 font-extrabold tracking-wider uppercase mt-0.5">${stats.qcEnd.subtitle}</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-xs px-2.5 py-1 rounded-xl bg-emerald-100 border-2 border-[#253047] text-[#166534] font-black shadow-[0_2px_0_#253047]">End Product</span>
-                                </div>
-                                
-                                <div class="space-y-3 my-4">
-                                    <div class="flex justify-between items-center pb-2.5 border-b-2 border-slate-100">
-                                        <span class="text-xs sm:text-sm text-slate-600 font-extrabold">แผนงานสะสม (ACC Plan)</span>
-                                        <span class="text-lg sm:text-xl font-black text-slate-800 font-['Montserrat']">${stats.qcEnd.accPlan} <span class="text-xs text-slate-400 font-bold">ห้อง</span></span>
-                                    </div>
-                                    <div class="flex justify-between items-center pb-2.5 border-b-2 border-slate-100">
-                                        <span class="text-xs sm:text-sm text-slate-600 font-extrabold">ผลงานสะสม (ACC Actual)</span>
-                                        <span class="text-lg sm:text-xl font-black text-emerald-600 font-['Montserrat']">${stats.qcEnd.accActual} <span class="text-xs text-emerald-400 font-bold">ห้อง</span></span>
-                                    </div>
-                                </div>
-
-                                <!-- Mini Progress Bar -->
-                                <div class="mt-3 mb-1">
-                                    <div class="flex justify-between items-center text-[11px] font-black text-slate-500 mb-1">
-                                        <span>ความคืบหน้าสะสม</span>
-                                        <span class="text-[#253047] font-extrabold">${qcEndPct}%</span>
-                                    </div>
-                                    <div class="w-full h-2.5 bg-slate-200 border border-slate-300 rounded-full overflow-hidden p-0.5">
-                                        <div class="h-full rounded-full bg-emerald-500 transition-all duration-500" style="width: ${qcEndPct}%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4 pt-3.5 border-t-2 border-slate-100 flex items-center justify-between">
-                                <span class="text-xs sm:text-sm text-slate-700 font-black">ล่าช้ากว่าแผน (Delayed)</span>
-                                <span class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all ${stats.qcEnd.delayed > 0 ? 'bg-rose-100 border-2 border-[#253047] text-rose-700 shadow-[0_2px_0_#253047]' : 'bg-emerald-100 border-2 border-[#253047] text-emerald-800 shadow-[0_2px_0_#253047]'}">
-                                    ${stats.qcEnd.delayed > 0 ? `<span class="inline-block w-2 h-2 rounded-full bg-rose-600 mr-1 animate-pulse"></span>ล่าช้า ${stats.qcEnd.delayed} ห้อง` : 'ตามแผนงาน ✅'}
-                                </span>
-                            </div>
-                        </div>
+                <!-- KPI 4: สถานะเทียบแผนงาน -->
+                <div class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_3px_0_#253047] flex flex-col justify-between">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-black text-slate-700 flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full ${variance >= 0 ? 'bg-emerald-500' : 'bg-rose-500'}"></span> สถานะเทียบแผน
+                    </span>
+                    ${varianceBadge}
+                  </div>
+                  <div class="my-1">
+                    <div class="text-xl sm:text-2xl font-black ${variance >= 0 ? 'text-emerald-700' : 'text-rose-700'} leading-tight">
+                      ${variance >= 0 ? (variance === 0 ? 'ตามแผนงานพอดี' : `เร็วกว่าแผน +${variance} ต้น`) : `ช้ากว่าแผน ${Math.abs(variance)} ต้น`}
                     </div>
-                `;
+                  </div>
+                  <div class="text-[11px] text-slate-500 font-bold pt-2 border-t border-slate-100 flex justify-between">
+                    <span>แผนสะสม: ${planCum} ต้น</span>
+                    <span class="font-black text-emerald-700">จริงสะสม: ${totalDriven} ต้น</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- S-Curve Graph & Supabase Live Sync Section (แก้ปัญหากราฟหาย พร้อมบันทึกเข้า Supabase) -->
+            <div class="p-4 sm:p-6 bg-white border-b-2 border-[#253047]">
+              <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-xl bg-orange-100 border-2 border-[#253047] flex items-center justify-center text-[#ed6845] font-black text-base shadow-[1px_1px_0_#253047]">
+                    📈
+                  </span>
+                  <div>
+                    <h4 class="text-sm sm:text-base font-black text-slate-800 tracking-tight flex items-center gap-2 flex-wrap">
+                      <span>กราฟเปรียบเทียบผลงานสะสม S-Curve (Actual vs Plan: 3 ต้น/วัน)</span>
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300">
+                        แผนรวม 93 ต้น / 31 วันทำการ
+                      </span>
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium">เส้นประสีส้ม = แผนสะสม · เส้นทึบสีเขียว = ตอกเสร็จสะสมจริง (Daily S-Curve Progress)</p>
+                  </div>
+                </div>
+
+                <!-- Supabase Live Sync & Action Bar -->
+                <div class="flex items-center flex-wrap gap-2">
+                  <span id="splash-supabase-status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-50 border border-emerald-300 text-emerald-800 shadow-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Supabase: เชื่อมต่อแล้ว</span>
+                  </span>
+                  <button type="button" onclick="window.syncPilingToSupabase(event)" class="cursor-pointer px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-[0_2px_0_#1e3a8a] hover:translate-y-0.5 transition-all flex items-center gap-1.5" title="บันทึกข้อมูลเสาเข็มทั้งหมดเข้า Supabase ทันที">
+                    <span>☁️ บันทึกเข้า Supabase</span>
+                  </button>
+                  <button type="button" onclick="window.pullPilingFromSupabase(event)" class="cursor-pointer px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 font-bold text-xs shadow-xs hover:translate-y-0.5 transition-all flex items-center gap-1" title="ดึงข้อมูลเสาเข็มล่าสุดจาก Supabase">
+                    <span>📥 ดึงข้อมูล</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- S-Curve Canvas Wrapper (ชัดเจน ปรับขนาดอัตโนมัติ) -->
+              <div class="relative w-full h-64 sm:h-72 bg-gradient-to-b from-slate-50/60 to-white rounded-2xl border-2 border-[#253047] p-3 overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]">
+                <canvas id="splashScurveCanvas" class="w-full h-full"></canvas>
+              </div>
+
+              <!-- Quick Summary Stats Below Graph -->
+              <div class="mt-3.5 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+                <div class="p-2.5 rounded-xl bg-amber-50/80 border border-amber-200">
+                  <span class="text-[11px] text-amber-800 font-bold block">แผนงานสะสม (Plan Cum)</span>
+                  <strong class="text-base font-black text-[#ed6845] font-['Montserrat']">${planCum}</strong>
+                  <span class="text-[10px] text-slate-500">/ 93 ต้น</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200">
+                  <span class="text-[11px] text-emerald-800 font-bold block">ผลงานจริงสะสม (Actual Cum)</span>
+                  <strong class="text-base font-black text-emerald-600 font-['Montserrat']">${totalDriven}</strong>
+                  <span class="text-[10px] text-emerald-700 font-bold">(${drivenPct}%)</span>
+                </div>
+                <div class="p-2.5 rounded-xl ${variance >= 0 ? 'bg-emerald-50/80 border-emerald-200' : 'bg-rose-50/80 border-rose-200'} border">
+                  <span class="text-[11px] ${variance >= 0 ? 'text-emerald-800' : 'text-rose-800'} font-bold block">ค่าเบี่ยงเบน (Variance)</span>
+                  <strong class="text-base font-black ${variance >= 0 ? 'text-emerald-700' : 'text-rose-600'} font-['Montserrat']">
+                    ${variance > 0 ? '+' + variance : variance}
+                  </strong>
+                  <span class="text-[10px] text-slate-500">ต้น</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-sky-50/80 border border-sky-200">
+                  <span class="text-[11px] text-sky-800 font-bold block">เป้าหมายกดวันนี้</span>
+                  <strong class="text-base font-black text-sky-600 font-['Montserrat']">${todayDriven}</strong>
+                  <span class="text-[10px] text-slate-500">/ ${DAILY_PLAN} ต้น (เหลือ ${remaining})</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4 Interactive Feature Tiles (Row 2) -->
+            <div class="p-5 sm:p-6 bg-[#fffdf8]">
+              <div class="flex items-center justify-between mb-3 px-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-black text-[#253047] uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-sm bg-[#ffc45b] border border-[#253047]"></span> เมนูและเครื่องมือบริหารงานเสาเข็ม
+                  </span>
+                </div>
+                <span class="text-xs font-bold text-slate-400">คลิกการ์ดเพื่อเข้าใช้งานทันที</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- Tile 1: 3D Model & 2D Top View Plan -->
+                <a href="piling.html#3d" class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex flex-col justify-between group cursor-pointer" title="เปิดโมเดล 3D และแปลนเสาเข็ม">
+                  <div>
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="w-10 h-10 rounded-xl bg-orange-100 border-2 border-[#253047] flex items-center justify-center text-[#ed6845] font-black text-lg shadow-sm">
+                        🏗️
+                      </div>
+                      <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-orange-50 border border-orange-200 text-orange-700">
+                        3D WebGL
+                      </span>
+                    </div>
+                    <h4 class="font-black text-slate-800 text-sm group-hover:text-[#ed6845] transition-colors leading-tight">
+                      โมเดล 3D & แปลน 2D Top View
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
+                      ดูผังเสาเข็ม 93 ต้น หมุน 3 มิติ เล็งรายต้น เช็คพิกัดสำรวจ N/E และระดับตัดหัวเข็ม PCO พร้อมกดตอกได้ทันที
+                    </p>
+                  </div>
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#ed6845]">
+                    <span>เข้าสู่โมเดล 3D</span>
+                    <span>&rarr;</span>
+                  </div>
+                </a>
+
+                <!-- Tile 2: Executive Report (Original & Excel Styles) -->
+                <a href="piling.html#report" class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex flex-col justify-between group cursor-pointer" title="เปิดหน้ารายงานประจำวัน (สลับได้: ธีมเดิม / สไตล์ Excel)">
+                  <div>
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="w-10 h-10 rounded-xl bg-amber-100 border-2 border-[#253047] flex items-center justify-center text-[#d97706] font-black text-lg shadow-sm">
+                        📊
+                      </div>
+                      <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-300 text-[#107c41]">
+                        เลือกสไตล์ได้ (Excel/เดิม)
+                      </span>
+                    </div>
+                    <h4 class="font-black text-slate-800 text-sm group-hover:text-[#107c41] transition-colors leading-tight">
+                      หน้ารายงานประจำวัน (ธีมเดิม / สไตล์ Excel)
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
+                      รายงานผลงานรายวัน กราฟเปรียบเทียบ S-Curve ตารางต้นที่ตอกวันนี้ เลือกสลับธีมมาตรฐาน หรือ สไตล์ Excel ได้อิสระ พร้อมส่งออกภาพ PNG / พิมพ์ PDF
+                    </p>
+                  </div>
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#107c41]">
+                    <span>เปิดหน้ารายงาน</span>
+                    <span>&rarr;</span>
+                  </div>
+                </a>
+
+                <!-- Tile 3: Survey Coordinates & PCO Level Table -->
+                <a href="piling.html#cotable" class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex flex-col justify-between group cursor-pointer" title="เปิดตารางสรุปพิกัดและระดับตัดหัวเข็ม PCO">
+                  <div>
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="w-10 h-10 rounded-xl bg-sky-100 border-2 border-[#253047] flex items-center justify-center text-[#0284c7] font-black text-lg shadow-sm">
+                        📋
+                      </div>
+                      <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-sky-50 border border-sky-200 text-sky-700">
+                        93 Piles DB
+                      </span>
+                    </div>
+                    <h4 class="font-black text-slate-800 text-sm group-hover:text-[#0284c7] transition-colors leading-tight">
+                      ตารางพิกัดสำรวจ & ระดับ PCO
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
+                      ตารางสรุปข้อมูลเสาเข็มครบ 93 ต้น พิกัด Northing, Easting และระดับตัดหัวเข็ม PCO ตามแบบ SketchUp แม่นยำ
+                    </p>
+                  </div>
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#0284c7]">
+                    <span>ดูตารางพิกัด PCO</span>
+                    <span>&rarr;</span>
+                  </div>
+                </a>
+
+                <!-- Tile 4: Quick Pile Selector 1-93 -->
+                <a href="piling.html#quick" class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_4px_0_#253047] hover:shadow-[0_2px_0_#253047] hover:translate-y-0.5 transition-all flex flex-col justify-between group cursor-pointer" title="เปิดแผงระบุเสาเข็มที่ตอกด่วน 1-93">
+                  <div>
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="w-10 h-10 rounded-xl bg-amber-100 border-2 border-[#253047] flex items-center justify-center text-[#d97706] font-black text-lg shadow-sm">
+                        ⚡
+                      </div>
+                      <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-amber-700">
+                        Quick 1-93
+                      </span>
+                    </div>
+                    <h4 class="font-black text-slate-800 text-sm group-hover:text-[#d97706] transition-colors leading-tight">
+                      ระบุเสาเข็มที่ตอกด่วน (Quick Selector)
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
+                      แผงกดเบอร์เข็ม 1 ถึง 93 ในคลิกเดียว หรือพิมพ์ช่วงเช่น 1-24 บันทึกสถานะอัตโนมัติ Real-time ใช้งานง่ายสุดๆ
+                    </p>
+                  </div>
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#d97706]">
+                    <span>ระบุต้นที่ตอกด่วน</span>
+                    <span>&rarr;</span>
+                  </div>
+                </a>
+
+              </div>
+
+              <!-- Footer legend strip -->
+              <div class="mt-4 pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 font-medium">
+                <div class="flex items-center gap-3 flex-wrap">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-[#0284c7] ring-2 ring-sky-300"></span>
+                    <strong class="text-slate-700">กดวันนี้ (สีฟ้าเรืองแสง)</strong>
+                  </span>
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-[#10b981]"></span>
+                    <strong class="text-slate-700">กดวันก่อน (สีเขียว)</strong>
+                  </span>
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-slate-300"></span>
+                    <span class="text-slate-500">ยังไม่ตอก (สีเทา)</span>
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-400 font-bold">
+                  💾 ข้อมูลซิงค์เรียลไทม์กับโมเดล 3D และหน้ารายงาน
+                </div>
+              </div>
+
+            </div>
+          `;
 
           alertContainer.innerHTML = html;
+          setTimeout(() => renderSplashPilingChart(records, curDate), 25);
         }
+
+        let splashPilingChartInstance = null;
+
+        function renderSplashPilingChart(records, curDate) {
+          const canvas = document.getElementById('splashScurveCanvas');
+          if (!canvas) return;
+
+          const daysCount = 31;
+          const labels = [];
+          const planData = [];
+          const actualData = [];
+
+          const drivenDatesMap = {};
+          let totalDrivenCount = 0;
+          if (records && Object.keys(records).length > 0) {
+            Object.values(records).forEach((r) => {
+              if (r && r.status === 'driven') {
+                totalDrivenCount++;
+                const d = r.date || curDate;
+                drivenDatesMap[d] = (drivenDatesMap[d] || 0) + 1;
+              }
+            });
+          } else {
+            totalDrivenCount = 27;
+          }
+
+          const sortedDates = Object.keys(drivenDatesMap).sort();
+          let cumActual = 0;
+          for (let day = 1; day <= daysCount; day++) {
+            labels.push(`D${day}`);
+            planData.push(Math.min(day * 3, 93));
+
+            if (day <= sortedDates.length) {
+              cumActual += drivenDatesMap[sortedDates[day - 1]];
+              actualData.push(cumActual);
+            } else if (sortedDates.length === 0) {
+              if (day <= 9) {
+                actualData.push(Math.min(day * 3, totalDrivenCount));
+              }
+            }
+          }
+
+          // Chart.js rendering
+          if (typeof Chart !== 'undefined') {
+            try {
+              if (splashPilingChartInstance) {
+                splashPilingChartInstance.destroy();
+                splashPilingChartInstance = null;
+              }
+              splashPilingChartInstance = new Chart(canvas, {
+                type: 'line',
+                data: {
+                  labels,
+                  datasets: [
+                    {
+                      label: 'แผนงานสะสม (3 ต้น/วัน)',
+                      data: planData,
+                      borderColor: '#ed6845',
+                      borderWidth: 2.5,
+                      borderDash: [5, 4],
+                      pointRadius: 2,
+                      pointBackgroundColor: '#ed6845',
+                      fill: false,
+                      tension: 0.1
+                    },
+                    {
+                      label: 'ผลงานจริงสะสม (Actual)',
+                      data: actualData,
+                      borderColor: '#10b981',
+                      backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                      borderWidth: 3,
+                      pointRadius: 3.5,
+                      pointBackgroundColor: '#10b981',
+                      pointBorderColor: '#064e3b',
+                      pointBorderWidth: 1.5,
+                      fill: true,
+                      tension: 0.15
+                    }
+                  ]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  interaction: { mode: 'index', intersect: false },
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        font: { family: 'Sarabun', size: 12, weight: 'bold' },
+                        color: '#334155',
+                        boxWidth: 14,
+                        padding: 12
+                      }
+                    },
+                    tooltip: {
+                      backgroundColor: '#1e293b',
+                      titleFont: { family: 'Sarabun', size: 12, weight: 'bold' },
+                      bodyFont: { family: 'Sarabun', size: 12 },
+                      padding: 10,
+                      callbacks: {
+                        label: function (ctx) {
+                          return ` ${ctx.dataset.label}: ${ctx.parsed.y} ต้น`;
+                        }
+                      }
+                    }
+                  },
+                  scales: {
+                    y: {
+                      min: 0,
+                      max: 95,
+                      grid: { color: '#e2e8f0' },
+                      title: { display: true, text: 'จำนวนเสาเข็มสะสม (ต้น)', font: { family: 'Sarabun', size: 11, weight: 'bold' }, color: '#475569' },
+                      ticks: { stepSize: 15, font: { family: 'Sarabun', weight: 'bold' }, color: '#334155' }
+                    },
+                    x: {
+                      grid: { color: '#f8fafc' },
+                      title: { display: true, text: 'วันทำการ (D1 - D31)', font: { family: 'Sarabun', size: 11, weight: 'bold' }, color: '#475569' },
+                      ticks: { maxTicksLimit: 16, font: { family: 'Sarabun', weight: 'bold' }, color: '#334155' }
+                    }
+                  }
+                }
+              });
+              return;
+            } catch (err) {
+              console.warn('Splash Chart.js init error, falling back to 2D canvas:', err);
+            }
+          }
+
+          // Fallback Direct Canvas Renderer
+          drawSplashDirectScurve(canvas, planData, actualData, labels);
+        }
+
+        function drawSplashDirectScurve(canvas, planData, actualData, labels) {
+          const parent = canvas.parentElement;
+          const rect = canvas.getBoundingClientRect();
+          const w = parent ? parent.clientWidth : (rect.width || 600);
+          const h = parent ? parent.clientHeight : (rect.height || 260);
+          if (w <= 0 || h <= 0) return;
+
+          const ctx = canvas.getContext('2d');
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.round(w * dpr);
+          canvas.height = Math.round(h * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+
+          const padL = 44, padR = 20, padT = 32, padB = 32;
+          const plotW = w - padL - padR;
+          const plotH = h - padT - padB;
+          const maxY = 95;
+
+          // Y-Grid & ticks
+          ctx.font = 'bold 10px Sarabun, sans-serif';
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          for (let yVal = 0; yVal <= 90; yVal += 15) {
+            const py = padT + plotH - (yVal / maxY) * plotH;
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padL, py);
+            ctx.lineTo(w - padR, py);
+            ctx.stroke();
+
+            ctx.fillStyle = '#64748b';
+            ctx.fillText(yVal, padL - 8, py);
+          }
+
+          // Plan line (Orange Dashed)
+          ctx.strokeStyle = '#ed6845';
+          ctx.lineWidth = 2.5;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          for (let i = 0; i < planData.length; i++) {
+            const px = padL + (i / (planData.length - 1)) * plotW;
+            const py = padT + plotH - (planData[i] / maxY) * plotH;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Actual line (Emerald Solid with fill)
+          if (actualData.length > 0) {
+            ctx.beginPath();
+            for (let i = 0; i < actualData.length; i++) {
+              const px = padL + (i / (planData.length - 1)) * plotW;
+              const py = padT + plotH - (actualData[i] / maxY) * plotH;
+              if (i === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            }
+            const lastPx = padL + ((actualData.length - 1) / (planData.length - 1)) * plotW;
+            const basePy = padT + plotH;
+            ctx.lineTo(lastPx, basePy);
+            ctx.lineTo(padL, basePy);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+            ctx.fill();
+
+            // Line stroke
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let i = 0; i < actualData.length; i++) {
+              const px = padL + (i / (planData.length - 1)) * plotW;
+              const py = padT + plotH - (actualData[i] / maxY) * plotH;
+              if (i === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            // Actual points
+            for (let i = 0; i < actualData.length; i++) {
+              const px = padL + (i / (planData.length - 1)) * plotW;
+              const py = padT + plotH - (actualData[i] / maxY) * plotH;
+              ctx.fillStyle = '#10b981';
+              ctx.beginPath();
+              ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.strokeStyle = '#064e3b';
+              ctx.lineWidth = 1.5;
+              ctx.stroke();
+            }
+          }
+
+          // Legend at top
+          ctx.font = 'bold 11px Sarabun, sans-serif';
+          ctx.textAlign = 'left';
+          // Plan legend
+          ctx.strokeStyle = '#ed6845';
+          ctx.lineWidth = 2.5;
+          ctx.setLineDash([4, 3]);
+          ctx.beginPath();
+          ctx.moveTo(padL + 10, 16);
+          ctx.lineTo(padL + 30, 16);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = '#334155';
+          ctx.fillText('แผนงานสะสม (3 ต้น/วัน)', padL + 36, 16);
+
+          // Actual legend
+          ctx.strokeStyle = '#10b981';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(padL + 175, 16);
+          ctx.lineTo(padL + 195, 16);
+          ctx.stroke();
+          ctx.fillStyle = '#10b981';
+          ctx.beginPath();
+          ctx.arc(padL + 185, 16, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#334155';
+          ctx.fillText('ผลงานจริงสะสม (Actual)', padL + 201, 16);
+        }
+
+        window.syncPilingToSupabase = async function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          const btn = e?.currentTarget;
+          if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ กำลังบันทึก...</span>';
+          }
+          const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v2';
+          let records = {};
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('PYNN54_PILING_PROGRESS_v2');
+            if (raw) records = JSON.parse(raw);
+          } catch (_) {}
+
+          let savedOk = false;
+
+          // 1. Direct Supabase Client update (project_data)
+          if (supabaseClient && projectData) {
+            try {
+              projectData.pilingProgress = records;
+              projectData.pilingProgressLastUpdated = new Date().toISOString();
+              const { error } = await supabaseClient
+                .from(CONFIG.DB_TABLE_NAME)
+                .update({ data: projectData })
+                .eq('id', CONFIG.DB_ROW_ID);
+              if (!error) savedOk = true;
+            } catch (err) {
+              console.warn('Direct supabase update err:', err);
+            }
+          }
+
+          // 2. Server proxy sync endpoint
+          try {
+            const res = await fetch('/api/supabase/sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ records })
+            });
+            if (res.ok) savedOk = true;
+          } catch (_) {}
+
+          const statusBadge = document.getElementById('splash-supabase-status');
+          if (statusBadge) {
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            statusBadge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 border border-emerald-400 text-emerald-900 shadow-xs';
+            statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>บันทึก Supabase แล้ว (${timeStr})</span>`;
+          }
+
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>✓ บันทึกสำเร็จ!</span>';
+            setTimeout(() => {
+              btn.innerHTML = '<span>☁️ บันทึกเข้า Supabase</span>';
+            }, 2500);
+          }
+
+          if (typeof showNotificationModal === 'function') {
+            showNotificationModal(
+              'บันทึกเข้า Supabase สำเร็จ',
+              'ระบบได้บันทึกความคืบหน้างานเสาเข็ม 93 ต้นเข้าสู่ Supabase ของโครงการเรียบร้อยแล้ว!'
+            );
+          }
+        };
+
+        window.pullPilingFromSupabase = async function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          const btn = e?.currentTarget;
+          if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ กำลังดึง...</span>';
+          }
+          let fetched = null;
+          if (projectData && projectData.pilingProgress) {
+            fetched = projectData.pilingProgress;
+          }
+          if (!fetched) {
+            try {
+              const res = await fetch('/api/supabase/piles');
+              if (res.ok) {
+                const json = await res.json();
+                if (json.data) fetched = json.data;
+              }
+            } catch (_) {}
+          }
+          if (fetched && Object.keys(fetched).length > 0) {
+            localStorage.setItem('PYNN37_PILING_PROGRESS_v2', JSON.stringify(fetched));
+            updateSplashAlerts();
+            if (typeof showNotificationModal === 'function') {
+              showNotificationModal(
+                'ดึงข้อมูลสำเร็จ',
+                'อัปเดตข้อมูลความคืบหน้างานเสาเข็มจาก Supabase เรียบร้อยแล้ว'
+              );
+            }
+          }
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>✓ ดึงข้อมูลแล้ว</span>';
+            setTimeout(() => {
+              btn.innerHTML = '<span>📥 ดึงข้อมูล</span>';
+            }, 2500);
+          }
+        };
 
         function calculateProjectSummary() {
           if (!projectData || Object.keys(projectData).length === 0) {

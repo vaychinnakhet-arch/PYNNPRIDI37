@@ -4,16 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsx server.ts",
     "build": "vite build",
+    "start": "node --import tsx server.ts",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@google/genai": "^1.46.0",
+    "@supabase/supabase-js": "^2.117.2",
     "@tailwindcss/vite": "^4.2.0",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.6",
+    "express": "^5.2.1",
     "framer-motion": "^12.34.2",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
@@ -25,10 +30,13 @@
     "tailwindcss": "^4.2.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/node": "^22.14.0",
     "eslint-plugin-html": "^8.1.4",
     "globals": "^17.7.0",
     "jsdom": "^29.1.1",
+    "tsx": "^4.23.15",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

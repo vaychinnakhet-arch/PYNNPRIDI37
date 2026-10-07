@@ -12,7 +12,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/chart.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
@@ -162,9 +164,16 @@
       }
     }
 
-    /* Dynamic 2:1 Natural Aspect-Ratio Plan Layout (เรียบร้อย ไร้ขอบว่างทั้งแนวตั้งและแนวนอน) */
+    /* =========================================================================
+       EXECUTIVE PILING REPORT: SELECTABLE THEMES (ORIGINAL FLAT-POP & EXCEL)
+       ========================================================================= */
+    #report-page {
+      font-family: 'Montserrat', 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Calibri, Arial, sans-serif;
+    }
+
+    /* Dynamic 2:1 Natural Aspect-Ratio Plan Layout */
     #planSnapshotCanvasWrapper {
-      padding: 0.75rem !important;
+      padding: 0.5rem !important;
       flex: none !important;
     }
     #planSnapshotCanvasWrapper > div,
@@ -183,7 +192,7 @@
     }
     #report-page-card.is-landscape #report-main-grid {
       display: grid !important;
-      grid-template-columns: 1.4fr 0.9fr !important;
+      grid-template-columns: 1.35fr 0.95fr !important;
       gap: 1.25rem !important;
       align-items: start !important;
     }
@@ -198,7 +207,7 @@
       flex-direction: column !important;
     }
     #report-page-card.is-landscape #planSnapshotCanvasWrapper {
-      padding: 0.75rem !important;
+      padding: 0.5rem !important;
       flex: none !important;
       height: auto !important;
       min-height: unset !important;
@@ -206,7 +215,7 @@
     #report-page-card.is-landscape #planCanvasContainer {
       width: 100% !important;
       aspect-ratio: 2 / 1 !important;
-      max-height: 430px !important;
+      max-height: 440px !important;
       height: auto !important;
       min-height: unset !important;
     }
@@ -218,10 +227,10 @@
       height: auto !important;
     }
     #report-page-card.is-landscape #report-sec-scurve .chart-wrapper {
-      height: 190px !important;
+      height: 200px !important;
     }
     #report-page-card.is-landscape #report-sec-table .table-wrapper {
-      max-height: 200px !important;
+      max-height: 210px !important;
     }
   </style>
 
@@ -258,7 +267,11 @@
       
       <!-- Left: Brand & Project Info -->
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-[#ed6845] text-white border-2 border-[#475569] flex items-center justify-center font-montserrat font-black text-xs shadow-[1px_1px_0_#475569]">
+        <a href="index.html" class="px-2 py-1 rounded-md bg-white hover:bg-slate-100 border border-[#475569] text-[#34383b] font-black text-[11px] flex items-center gap-1 shadow-xs transition-colors" title="กลับหน้าแรก (Home)">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">หน้าแรก</span>
+        </a>
+        <div class="w-7 h-7 rounded-lg bg-[#107c41] text-white border-2 border-[#475569] flex items-center justify-center font-montserrat font-black text-xs shadow-[1px_1px_0_#475569]">
           P37
         </div>
         <div>
@@ -307,6 +320,11 @@
         <button id="btn-quick-select" class="pop-btn-green px-2.5 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#064e3b]" title="ระบุต้นที่ตอกด่วน">
           <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
           <span class="hidden md:inline font-bold">ระบุต้นที่ตอก</span>
+        </button>
+
+        <button id="btn-supabase-sync" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-[1.5px_1.5px_0_#1e3a8a] text-white" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
+          <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
+          <span class="font-bold hidden sm:inline" id="lbl-supabase-top-btn">บันทึก Supabase</span>
         </button>
 
         <button id="btn-open-report" class="pop-btn-primary px-2.5 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#9c3b23]" title="หน้ารายงานความคืบหน้า">
@@ -463,6 +481,20 @@
         </button>
       </div>
 
+      <!-- Date Picker Bar for Quick Selector (เลือกวันที่เพื่อปรับแก้ข้อมูลเก่า หรือบันทึกใหม่) -->
+      <div class="p-2.5 rounded-xl bg-amber-50 border-2 border-[#475569] flex flex-wrap items-center justify-between gap-2 mb-2 shadow-xs">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-4 h-4 text-[#ed6845]"></i> วันที่บันทึก / ปรับแก้:
+          </span>
+          <input id="quick-date-picker" type="date" class="text-xs bg-white border-2 border-[#475569] rounded-lg px-2.5 py-1 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0284c7] shadow-inner">
+          <button id="btn-quick-date-today" type="button" class="pop-btn px-2.5 py-1 text-xs font-black" style="background:#fff0c8;">วันนี้</button>
+        </div>
+        <div class="text-[11px] text-[#475569] font-bold">
+          💡 เลือกวันที่แล้วกดเบอร์เข็มด้านล่างเพื่อ <span class="text-[#0284c7] font-black">ปรับแก้วันที่เก่า</span> หรือ <span class="text-[#10b981] font-black">บันทึกตอก</span> ได้ทันที
+        </div>
+      </div>
+
       <!-- Quick Batch Actions Strip -->
       <div class="p-2.5 rounded-xl bg-[#fff0c8] border-[1.5px] border-[#475569] flex flex-wrap items-center justify-between gap-2 mb-3">
         <div class="flex items-center gap-2">
@@ -509,8 +541,8 @@
     </div>
   </div>
 
-  <!-- Pile Mini Quick Card (Direct 1-Click Action on CAD Plan) -->
-  <div id="pile-card" class="absolute bottom-5 right-5 z-30 w-72 pop-card p-3 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden">
+  <!-- Pile Mini Quick Card (Direct 1-Click Action & Date Adjuster) -->
+  <div id="pile-card" class="fixed bottom-5 right-5 z-[60] w-80 max-w-[92vw] pop-card p-3.5 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto shadow-2xl hidden">
     <div class="flex items-start justify-between border-b-[1.5px] border-[#475569]/30 pb-1.5 mb-2">
       <div class="flex items-center gap-2">
         <div class="w-7 h-7 rounded-lg bg-[#98cfad] border border-[#475569] flex items-center justify-center text-[#1e3a29]">
@@ -527,7 +559,7 @@
     </div>
 
     <!-- Quick Info -->
-    <div class="space-y-1 text-xs mb-3">
+    <div class="space-y-1 text-xs mb-2">
       <div class="flex justify-between py-0.5 border-b border-[#e5f1ed]">
         <span class="text-[#667277]">ฐานราก (Footing):</span>
         <span id="card-pile-footing" class="font-bold text-[#34383b]">F1</span>
@@ -554,190 +586,249 @@
       </div>
     </div>
 
-    <!-- 1-Click Toggle Action Buttons -->
+    <!-- Date Picker for Adjusting Past/Current Date -->
+    <div class="p-2 rounded-xl bg-amber-50/80 border border-amber-300 space-y-1 mb-2.5 shadow-inner">
+      <div class="flex items-center justify-between text-[11px]">
+        <span class="font-black text-[#b45309] flex items-center gap-1">
+          <i data-lucide="calendar" class="w-3.5 h-3.5"></i> วันที่ตอกเสร็จ:
+        </span>
+        <span id="card-pile-date-badge" class="font-mono font-bold text-slate-700 text-[10.5px]"></span>
+      </div>
+      <div class="flex items-center gap-1.5 pt-0.5">
+        <input type="date" id="card-pile-date-input" class="flex-1 px-2 py-1 text-xs font-mono font-bold border-2 border-[#475569] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7]" title="ระบุหรือปรับแก้วันที่ตอกย้อนหลังได้อิสระ">
+        <button id="btn-card-date-yesterday" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นเมื่อวาน">เมื่อวาน</button>
+        <button id="btn-card-date-today" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นวันนี้">วันนี้</button>
+      </div>
+      <div class="text-[9.5px] text-[#b45309] font-medium pt-0.5">
+        💡 สามารถคลิกเลือกวันที่ในปฏิทิน เพื่อปรับแก้วันที่ตอกย้อนหลังได้อิสระ
+      </div>
+    </div>
+
+    <!-- 1-Click Action Buttons -->
     <div class="space-y-1.5">
-      <button id="btn-card-toggle-driven" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5">
-        <i data-lucide="check" class="w-3.5 h-3.5"></i> กดว่าตอกแล้ววันนี้
+      <button id="btn-card-save-date" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5 font-black shadow-[1.5px_1.5px_0_#064e3b]">
+        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+        <span id="btn-card-save-date-lbl">💾 บันทึก / ปรับแก้วันที่</span>
       </button>
-      <button id="btn-card-toggle-cancel" class="pop-btn w-full py-1 text-xs text-[#667277] flex items-center justify-center gap-1">
+      <button id="btn-card-toggle-cancel" class="pop-btn w-full py-1 text-xs text-[#b91c1c] hover:bg-rose-50 flex items-center justify-center gap-1 font-bold">
         <i data-lucide="rotate-ccw" class="w-3 h-3"></i> ยกเลิก (ตั้งเป็นยังไม่ตอก)
       </button>
     </div>
   </div>
 
   <!-- ========================================================================= -->
-  <!-- DEDICATED EXECUTIVE REPORT SHEET (หน้าออกรายงานความคืบหน้า) -->
+  <!-- ========================================================================= -->
+  <!-- DEDICATED EXECUTIVE REPORT SHEET (ธีมเดิม FLAT-POP พร้อมเลือกสไตล์ EXCEL ได้) -->
   <!-- ========================================================================= -->
   <div id="report-page" class="fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-3 md:p-6 hidden">
-    <div id="report-page-card" class="max-w-5xl mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-5 md:p-7">
+    <div id="report-page-card" class="max-w-5xl mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-4 md:p-6 transition-all">
       
-      <!-- Report Header & Controls Bar (Authentic Soft Ink Flat-Pop Style) -->
-      <div class="bg-gradient-to-r from-[#fff0c8] via-[#fffdf8] to-[#e5f4e9] border-2 border-[#475569] rounded-2xl p-4 md:p-5 shadow-[4px_4px_0_#475569] mb-5">
-        <!-- Top Row: Project Branding, Title & Controls -->
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between pb-3.5 border-b-2 border-[#475569] gap-3">
+      <!-- Report Header & Controls Bar (Transforms between Original Flat-Pop & Excel) -->
+      <div id="report-header-bar" class="bg-gradient-to-r from-[#fff0c8] via-[#fffdf8] to-[#e5f4e9] border-2 border-[#475569] rounded-2xl p-4 md:p-5 shadow-[4px_4px_0_#475569] mb-4 transition-all">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+          <!-- Title & Project Info -->
           <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-[#475569] flex flex-col items-center justify-center font-montserrat font-black text-[#34383b] shadow-[2px_2px_0_#475569] leading-tight">
+            <div id="rep-header-logo" class="w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-[#475569] flex flex-col items-center justify-center font-montserrat font-black text-[#34383b] shadow-[2px_2px_0_#475569] leading-tight shrink-0">
               <span class="text-[9px] font-black uppercase text-[#a84631]">PYNN</span>
               <span class="text-base font-black">37</span>
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569]">
+                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569]">
                   โครงการ PYNN PRIDI 37
                 </span>
-                <span class="text-xs font-bold text-[#667277]">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
+                <span id="rep-header-subtag" class="text-xs text-[#667277] font-bold">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
               </div>
-              <h2 class="text-xl md:text-2xl font-black text-[#34383b] mt-1">
+              <h2 id="rep-header-title" class="text-xl md:text-2xl font-black text-[#34383b] mt-1">
                 รายงานความคืบหน้างานเสาเข็ม <span class="text-xs md:text-sm font-bold text-[#667277] hidden sm:inline">(Piling Progress Report)</span>
               </h2>
             </div>
           </div>
 
-          <!-- Action Controls & Date Badge -->
-          <div class="flex items-center flex-wrap gap-2.5 self-end md:self-auto">
-            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1.5px_1.5px_0_#475569]">
+          <!-- Controls: Theme Selector, Date, Layout Switch, Export, Print, Close -->
+          <div class="flex items-center flex-wrap gap-2 self-end md:self-auto">
+            
+            <!-- Report Format Selector (เลือกรูปแบบรายงาน: ธีมดั้งเดิม / สไตล์ Excel) -->
+            <div id="report-theme-selector" class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export" title="เลือกรูปแบบหน้ารายงาน">
+              <button id="btn-theme-original" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1" title="ธีมดั้งเดิม (Soft Ink Flat-Pop)">
+                <span>🎨 ธีมดั้งเดิม</span>
+              </button>
+              <button id="btn-theme-excel" class="px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1" title="สไตล์เรียบง่ายแบบ Excel (Spreadsheet)">
+                <span>📊 สไตล์ Excel</span>
+              </button>
+            </div>
+
+            <!-- Date Badge -->
+            <div id="rep-date-badge-wrapper" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1.5px_1.5px_0_#475569]">
               <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ed6845]"></i>
-              <span>ประจำวันที่:</span>
+              <span class="hidden sm:inline">ประจำวันที่:</span>
               <span id="rep-header-date" class="text-[#ed6845] font-mono font-black">-</span>
             </div>
 
-            <!-- Layout Orientation Switch (แนวตั้ง / แนวนอน) -->
-            <div class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export">
-              <button id="btn-layout-portrait" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1" title="จัดหน้าแนวตั้ง (Portrait A4)">
-                <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+            <!-- Orientation Switch -->
+            <div id="rep-layout-switch-wrapper" class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export">
+              <button id="btn-layout-portrait" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1" title="จัดหน้าแนวตั้ง (Portrait)">
+                <i data-lucide="smartphone" class="w-3 h-3"></i>
                 <span>แนวตั้ง</span>
               </button>
-              <button id="btn-layout-landscape" class="px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1" title="จัดหน้ารายงานแนวนอน (Side-by-Side 16:9 ไร้ขอบข้าง)">
-                <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+              <button id="btn-layout-landscape" class="px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1" title="จัดหน้ารายงานแนวนอน (Landscape)">
+                <i data-lucide="monitor" class="w-3 h-3"></i>
                 <span>แนวนอน</span>
               </button>
             </div>
 
-            <!-- Action buttons (Hidden during PNG Export & Print) -->
-            <div class="flex items-center gap-2 no-print no-export">
-              <button id="btn-export-png" class="pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#064e3b]" title="ส่งออกภาพรายงาน PNG หลากหลายอัตราส่วน">
+            <!-- Buttons -->
+            <div class="flex items-center gap-1.5 no-print no-export">
+              <button id="btn-back-to-3d" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#475569] font-black border-2 border-[#475569]" style="background:#ffc45b; color:#34383b;" title="กลับสู่โมเดล 3D & แปลน (ปิดหน้ารายงาน)">
+                <i data-lucide="box" class="w-3.5 h-3.5"></i>
+                <span>🏗️ กลับสู่โมเดล 3D</span>
+              </button>
+              <button id="btn-report-supabase-sync" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#1e3a8a] text-white font-black" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase">
+                <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
+                <span id="lbl-report-supabase">บันทึก Supabase</span>
+              </button>
+              <button id="btn-export-png" class="pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#064e3b] font-black" title="ส่งออกภาพรายงาน PNG">
                 <i data-lucide="camera" class="w-3.5 h-3.5"></i>
                 <span>ส่งออกภาพ PNG</span>
               </button>
-              <button id="btn-print-report" class="pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#9c3b23]">
+              <button id="btn-print-report" class="pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#9c3b23] font-black" title="พิมพ์รายงาน / บันทึก PDF">
                 <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                 <span>พิมพ์ / PDF</span>
               </button>
-              <button id="btn-close-report" class="pop-btn p-1.5 text-xs flex items-center justify-center shadow-[1.5px_1.5px_0_#475569]" title="ปิดหน้ารายงาน">
+              <button id="btn-close-report" class="pop-btn p-1.5 text-xs flex items-center justify-center shadow-[1.5px_1.5px_0_#475569]" title="ปิดหน้ารายงานกลับสู่ 3D">
                 <i data-lucide="x" class="w-4 h-4"></i>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Bottom Row: 4 Exact Requested KPI Metric Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-3.5">
-          <!-- Card 1: แผนวันนี้ 3 ต้น / กดแล้ว X ต้น -->
-          <div class="bg-[#f0f9ff] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
-            <div class="flex items-center justify-between">
-              <span class="flex items-center gap-1.5 text-xs font-black text-[#0369a1]">
-                <span class="w-5 h-5 rounded bg-[#0284c7] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
-                  <i data-lucide="hammer" class="w-3 h-3"></i>
-                </span>
-                แผนวันนี้ 3 ต้น
+        <!-- Excel Formula Bar Style Strip (Shown only in Excel Theme) -->
+        <div id="rep-excel-formula-bar" class="mt-2.5 pt-2 border-t border-white/20 flex items-center gap-2 text-[11px] text-white/90 hidden">
+          <span class="font-mono bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold border border-white/30">fx</span>
+          <span class="font-mono text-[11px] text-white/90 truncate">=PYNN_PILING_PROGRESS(เสาเข็ม_93_ต้น, แผน_3_ต้นต่อวัน, 31_วันทำการ)</span>
+          <span class="hidden md:inline ml-auto text-[10.5px] text-white/80 bg-white/10 px-2 py-0.5 rounded border border-white/20">ตารางอ้างอิง: แบบ PCO SketchUp</span>
+        </div>
+      </div>
+
+      <!-- Excel Sheet Tabs Row (Shown only in Excel Theme) -->
+      <div id="rep-excel-sheet-tabs" class="flex items-center gap-1 border-b border-slate-200 mb-4 px-1 text-xs no-print no-export hidden">
+        <div class="bg-white text-[#107c41] font-bold px-3 py-1.5 border-t-2 border-l border-r border-[#107c41] rounded-t flex items-center gap-1.5 shadow-xs">
+          <span>📑 Sheet 1: สรุปผลงาน & แผนผัง</span>
+        </div>
+        <div class="bg-slate-50 text-slate-600 hover:text-slate-900 font-medium px-3 py-1.5 border-t border-l border-r border-slate-200 rounded-t flex items-center gap-1.5">
+          <span>📈 Sheet 2: S-Curve</span>
+        </div>
+        <div class="bg-slate-50 text-slate-600 hover:text-slate-900 font-medium px-3 py-1.5 border-t border-l border-r border-slate-200 rounded-t flex items-center gap-1.5">
+          <span>📋 Sheet 3: รายการเสาเข็ม</span>
+        </div>
+        <span class="text-slate-400 text-xs px-2">+</span>
+      </div>
+
+      <!-- 4 KPI Summary Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+        <!-- Card 1: แผนวันนี้ 3 ต้น / กดแล้ว X ต้น -->
+        <div id="rep-kpi-1" class="bg-[#f0f9ff] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1.5 text-xs font-black text-[#0369a1]">
+              <span class="w-5 h-5 rounded bg-[#0284c7] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
+                <i data-lucide="hammer" class="w-3 h-3"></i>
               </span>
-              <span class="px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#0369a1] shadow-[1px_1px_0_#475569]">
-                เป้า 3 ต้น/วัน
+              แผนวันนี้ 3 ต้น
+            </span>
+            <span class="px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#0369a1] shadow-[1px_1px_0_#475569]">
+              เป้า 3 ต้น/วัน
+            </span>
+          </div>
+          <div class="my-2 flex items-baseline gap-1.5">
+            <span class="text-xs font-bold text-[#64748b]">กดแล้ว</span>
+            <span id="rep-today-count" class="text-3xl sm:text-4xl font-black font-montserrat text-[#0284c7] leading-none">0</span>
+            <span class="text-xs sm:text-sm font-black text-[#34383b]">ต้น</span>
+          </div>
+          <div class="flex items-center justify-between text-[11px] font-bold text-[#667277] pt-1.5 border-t border-[#475569]/20">
+            <span>แผนวันนี้: 3 ต้น</span>
+            <span class="text-[#0284c7] font-black">กดแล้ว <span id="rep-today-sub">0</span> ต้น</span>
+          </div>
+        </div>
+
+        <!-- Card 2: แผนกดสะสม .... ต้น -->
+        <div id="rep-kpi-2" class="bg-[#fff7ed] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1.5 text-xs font-black text-[#c2410c]">
+              <span class="w-5 h-5 rounded bg-[#ea580c] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
+                <i data-lucide="calendar" class="w-3 h-3"></i>
               </span>
-            </div>
-            <div class="my-2 flex items-baseline gap-1.5">
-              <span class="text-xs font-bold text-[#64748b]">กดแล้ว</span>
-              <span id="rep-today-count" class="text-4xl md:text-5xl font-black font-montserrat text-[#0284c7] leading-none">0</span>
-              <span class="text-sm font-black text-[#34383b]">ต้น</span>
-            </div>
-            <div class="flex items-center justify-between text-[11px] font-bold text-[#667277] pt-1.5 border-t border-[#475569]/20">
-              <span>แผนวันนี้: 3 ต้น</span>
-              <span class="text-[#0284c7] font-black">กดแล้ว <span id="rep-today-sub">0</span> ต้น</span>
+              แผนกดสะสม
+            </span>
+            <span class="px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#ea580c] shadow-[1px_1px_0_#475569]">
+              วันทำการที่ <span id="rep-elapsed-days">0</span>/31
+            </span>
+          </div>
+          <div class="my-2 flex items-baseline gap-1.5">
+            <span id="rep-plan-cum-count" class="text-3xl sm:text-4xl font-black font-montserrat text-[#ea580c] leading-none">0</span>
+            <span class="text-xs sm:text-sm font-black text-[#34383b]">ต้น</span>
+          </div>
+          <div class="flex items-center justify-between text-[11px] font-bold text-[#667277] pt-1.5 border-t border-[#475569]/20">
+            <span>เป้าหมายสะสม</span>
+            <span class="text-[#ea580c] font-black">(3 ต้น/วัน)</span>
+          </div>
+        </div>
+
+        <!-- Card 3: กดสะสมจริง .... ต้น -->
+        <div id="rep-kpi-3" class="bg-[#e5f4e9] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1.5 text-xs font-black text-[#1e3a29]">
+              <span class="w-5 h-5 rounded bg-[#10b981] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
+                <i data-lucide="check-circle-2" class="w-3 h-3"></i>
+              </span>
+              กดสะสมจริง
+            </span>
+            <span id="rep-cum-pct" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-white border-2 border-[#475569] text-[#10b981] shadow-[1px_1px_0_#475569]">
+              0%
+            </span>
+          </div>
+          <div class="my-2 flex items-baseline gap-1.5">
+            <span id="rep-cum-count" class="text-3xl sm:text-4xl font-black font-montserrat text-[#10b981] leading-none">0</span>
+            <span class="text-xs sm:text-sm font-black text-[#667277]">/ 93 ต้น</span>
+          </div>
+          <div class="space-y-1 pt-1.5 border-t border-[#475569]/20">
+            <div class="w-full h-2.5 bg-white border border-[#475569] rounded-full overflow-hidden p-0.5">
+              <div id="rep-cum-bar" class="h-full bg-[#10b981] rounded-full transition-all duration-300" style="width: 0%;"></div>
             </div>
           </div>
+        </div>
 
-          <!-- Card 2: แผนกดสะสม .... ต้น -->
-          <div class="bg-[#fff7ed] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
-            <div class="flex items-center justify-between">
-              <span class="flex items-center gap-1.5 text-xs font-black text-[#c2410c]">
-                <span class="w-5 h-5 rounded bg-[#ea580c] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
-                  <i data-lucide="calendar" class="w-3 h-3"></i>
-                </span>
-                แผนกดสะสม
+        <!-- Card 4: สถานะเทียบแผนงาน -->
+        <div id="rep-variance-card" class="bg-[#fff1f2] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1.5 text-xs font-black text-[#881337]">
+              <span class="w-5 h-5 rounded bg-[#e11d48] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
+                <i data-lucide="activity" class="w-3 h-3"></i>
               </span>
-              <span class="px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#ea580c] shadow-[1px_1px_0_#475569]">
-                วันทำการที่ <span id="rep-elapsed-days">0</span>/31
-              </span>
-            </div>
-            <div class="my-2 flex items-baseline gap-1.5">
-              <span id="rep-plan-cum-count" class="text-4xl md:text-5xl font-black font-montserrat text-[#ea580c] leading-none">0</span>
-              <span class="text-sm font-black text-[#34383b]">ต้น</span>
-            </div>
-            <div class="flex items-center justify-between text-[11px] font-bold text-[#667277] pt-1.5 border-t border-[#475569]/20">
-              <span>เป้าหมายสะสม</span>
-              <span class="text-[#ea580c] font-black">(3 ต้น/วัน)</span>
+              สถานะเทียบแผนงาน
+            </span>
+            <span id="rep-variance-badge" class="px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#e11d48] shadow-[1px_1px_0_#475569]">
+              ตามแผน
+            </span>
+          </div>
+          <div class="my-1.5">
+            <div id="rep-variance-display" class="font-black text-xl md:text-2xl text-[#e11d48] leading-tight">
+              ช้ากว่าแผน 0 ต้น
             </div>
           </div>
-
-          <!-- Card 3: กดสะสม .... ต้น -->
-          <div class="bg-[#e5f4e9] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
-            <div class="flex items-center justify-between">
-              <span class="flex items-center gap-1.5 text-xs font-black text-[#1e3a29]">
-                <span class="w-5 h-5 rounded bg-[#10b981] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
-                  <i data-lucide="check-circle-2" class="w-3 h-3"></i>
-                </span>
-                กดสะสมจริง
-              </span>
-              <span id="rep-cum-pct" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-white border-2 border-[#475569] text-[#10b981] shadow-[1px_1px_0_#475569]">
-                0%
-              </span>
-            </div>
-            <div class="my-2 flex items-baseline gap-1.5">
-              <span id="rep-cum-count" class="text-4xl md:text-5xl font-black font-montserrat text-[#10b981] leading-none">0</span>
-              <span class="text-sm font-black text-[#667277]">/ 93 ต้น</span>
-            </div>
-            <div class="space-y-1 pt-1.5 border-t border-[#475569]/20">
-              <div class="w-full h-2.5 bg-white border border-[#475569] rounded-full overflow-hidden p-0.5">
-                <div id="rep-cum-bar" class="h-full bg-[#10b981] rounded-full transition-all duration-300" style="width: 0%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 4: ช้ากว่าแผน .... ต้น / ตามแผน / เร็วกว่าแผน -->
-          <div id="rep-variance-card" class="bg-[#fff1f2] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between">
-            <div class="flex items-center justify-between">
-              <span class="flex items-center gap-1.5 text-xs font-black text-[#881337]">
-                <span class="w-5 h-5 rounded bg-[#e11d48] text-white flex items-center justify-center border border-[#475569] shadow-[0.5px_0.5px_0_#475569]">
-                  <i data-lucide="activity" class="w-3 h-3"></i>
-                </span>
-                สถานะเทียบแผนงาน
-              </span>
-              <span id="rep-variance-badge" class="px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#e11d48] shadow-[1px_1px_0_#475569]">
-                ตามแผน
-              </span>
-            </div>
-            <div class="my-1.5">
-              <div id="rep-variance-display" class="font-black text-xl md:text-2xl text-[#e11d48] leading-tight">
-                ช้ากว่าแผน 0 ต้น
-              </div>
-            </div>
-            <div class="flex items-center justify-between text-[11px] font-bold text-[#667277] pt-1.5 border-t border-[#475569]/20">
-              <span>แผน <span id="rep-plan-sub" class="font-mono font-bold text-[#ea580c]">0</span> ต้น</span>
-              <span>จริง <span id="rep-cum-sub" class="font-mono font-bold text-[#10b981]">0</span> ต้น</span>
-            </div>
+          <div class="flex items-center justify-between text-[11px] font-bold text-[#667277] pt-1.5 border-t border-[#475569]/20">
+            <span>แผน <span id="rep-plan-sub" class="font-mono font-bold text-[#ea580c]">0</span> ต้น</span>
+            <span>จริง <span id="rep-cum-sub" class="font-mono font-bold text-[#10b981]">0</span> ต้น</span>
           </div>
         </div>
       </div>
 
-      <!-- ===================================================================== -->
-      <!-- MAIN REPORT BODY GRID (รองรับทั้งแนวตั้ง Portrait และแนวนอน Landscape 16:9) -->
-      <!-- ===================================================================== -->
+      <!-- MAIN REPORT BODY GRID -->
       <div id="report-main-grid" class="flex flex-col gap-5">
         
-        <!-- COLUMN 1: LARGE PILING PROGRESS PLAN (สไตล์ Flat-Pop) -->
+        <!-- COLUMN 1: LARGE PILING PROGRESS PLAN -->
         <div id="report-col-plan" class="w-full">
           <div id="report-sec-plan" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white h-full flex flex-col">
-            <div class="bg-[#fff0c8] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2">
+            <div id="report-sec-plan-head" class="bg-[#fff0c8] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
                   <i data-lucide="map" class="w-3.5 h-3.5 text-[#10b981]"></i>
@@ -745,8 +836,8 @@
                 แผนผังความคืบหน้างานเสาเข็ม (Piling Progress Plan)
               </span>
               
-              <!-- Clear Legend with Flat-Pop Badges (ฟ้าเรืองแสง = วันนี้ | เขียว = วันก่อน | เทา = รอการตอก) -->
-              <div class="flex items-center gap-2 text-xs font-black flex-wrap">
+              <!-- Legend Badges (Original Theme) -->
+              <div id="rep-legend-original" class="flex items-center gap-2 text-xs font-black flex-wrap">
                 <span class="flex items-center gap-1.5 bg-white px-2 py-0.5 rounded-md border-2 border-[#475569] shadow-[1px_1px_0_#475569]">
                   <span class="w-3 h-3 rounded-full bg-[#0284c7] border-2 border-[#00f0ff] ring-2 ring-[#38bdf8] shadow-[0_0_6px_#00f0ff]"></span> 
                   <span class="text-[#0284c7]">★ กดวันนี้ (สีฟ้าเรืองแสง)</span>
@@ -760,11 +851,26 @@
                   <span class="text-[#64748b]">รอการตอก (สีเทา)</span>
                 </span>
               </div>
+
+              <!-- Legend Badges (Excel Theme) -->
+              <div id="rep-legend-excel" class="flex items-center gap-2 text-xs font-medium flex-wrap hidden">
+                <span class="flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-slate-200">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#0284c7] ring-2 ring-sky-300"></span> 
+                  <span class="text-sky-700 font-bold">★ กดวันนี้</span>
+                </span>
+                <span class="flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-slate-200">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> 
+                  <span class="text-emerald-700 font-bold">กดวันก่อน</span>
+                </span>
+                <span class="flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-slate-200">
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-200 border border-slate-400"></span> 
+                  <span class="text-slate-500">รอการตอก</span>
+                </span>
+              </div>
             </div>
 
             <div id="planSnapshotCanvasWrapper" class="p-3">
-              <!-- High-Resolution Large Canvas with 2:1 Aspect Ratio (สัดส่วนเป๊ะ 46.4x23.2m ไร้ขอบว่างบนล่าง) -->
-              <div id="planCanvasContainer" class="w-full bg-white border-2 border-[#475569] rounded-lg overflow-hidden flex items-center justify-center relative shadow-inner" style="aspect-ratio: 2 / 1; max-height: 440px;">
+              <div id="planCanvasContainer" class="w-full bg-white border-2 border-[#475569] rounded overflow-hidden flex items-center justify-center relative" style="aspect-ratio: 2 / 1; max-height: 440px;">
                 <canvas id="planSnapshotCanvas" class="w-full h-full block cursor-pointer" title="คลิกที่ต้นเข็มเพื่อดูหรือเปลี่ยนสถานะ"></canvas>
                 <div class="absolute bottom-2 right-2 bg-white/95 border-2 border-[#475569] px-2.5 py-1 rounded-md text-[10.5px] font-black text-[#475569] shadow-[1px_1px_0_#475569] pointer-events-none">
                   💡 ทิศเหนือชี้ขึ้นบน | แนวเขตที่ดิน (เส้นประแดง) | กริด 1-10 ด้านบน | กริด A-E ด้านซ้าย
@@ -778,14 +884,14 @@
         <div id="report-col-side" class="w-full flex flex-col gap-5">
           <!-- SECTION 2: S-CURVE PROGRESS GRAPH -->
           <div id="report-sec-scurve" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white">
-            <div class="bg-[#dff1f5] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between">
+            <div id="report-sec-scurve-head" class="bg-[#dff1f5] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
                   <i data-lucide="trending-up" class="w-3.5 h-3.5 text-[#ed6845]"></i>
                 </span>
                 กราฟเปรียบเทียบผลงานสะสม S-Curve (Actual vs Plan: 3 ต้น/วัน)
               </span>
-              <span class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] text-[#34383b]">
+              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] text-[#34383b]">
                 แผนงานรวม 93 ต้น / 31 วันทำการ
               </span>
             </div>
@@ -798,31 +904,41 @@
 
           <!-- SECTION 3: TODAY'S DRIVEN PILES LOG TABLE -->
           <div id="report-sec-table" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white">
-            <div class="bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between">
+            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
                   <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#34383b]"></i>
                 </span>
-                รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log)
+                <span id="rep-sec-table-title">รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log)</span>
               </span>
-              <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569]">
-                0 ต้น
-              </span>
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-[#475569]/40 text-[10.5px]">
+                  <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]">
+                    เฉพาะวันที่นี้
+                  </button>
+                  <button id="btn-rep-filter-all" type="button" class="px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]">
+                    ทั้งหมด (ประวัติเข็ม)
+                  </button>
+                </div>
+                <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569]">
+                  0 ต้น
+                </span>
+              </div>
             </div>
             <div class="table-wrapper overflow-x-auto max-h-56 overflow-y-auto">
               <table class="w-full text-xs text-left border-collapse">
-                <thead class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
+                <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
                   <tr>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">No.</th>
-                    <th class="p-2 border-r-2 border-[#475569]/30">รหัสเข็ม (ID)</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ฐานราก</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono">Northing (N)</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono">Easting (E)</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#a84631]">ระดับตามแบบ PCO (m)</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">วันที่ตอก</th>
-                    <th class="p-2 text-center">สถานะ</th>
+                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">No.</th>
+                    <th class="p-2.5 border-r-2 border-[#475569]/30">รหัสเข็ม (ID)</th>
+                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ฐานราก</th>
+                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
+                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 font-mono">Northing (N)</th>
+                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 font-mono">Easting (E)</th>
+                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 text-[#a84631] font-mono">ระดับ PCO (m)</th>
+                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
+                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">วันที่ตอก</th>
+                    <th class="p-2.5 text-center">สถานะ</th>
                   </tr>
                 </thead>
                 <tbody id="rep-today-table-body" class="divide-y divide-[#e5f1ed]">
@@ -838,7 +954,6 @@
     </div>
   </div>
 
-  <!-- ========================================================================= -->
   <!-- MODAL: EXPORT PROGRESS REPORT IMAGE (ส่งออกภาพรายงาน PNG ตามสัดส่วน) -->
   <!-- ========================================================================= -->
   <div id="modal-export-image" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-3 md:p-6 hidden">
@@ -2502,6 +2617,117 @@
     const PILES_DATABASE = window.__PILES_DB__ || [];
     const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v2';
 
+    // Supabase Configuration
+    const SUPABASE_URL = "https://gyzrsrxzzturoqwhuiul.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5enJzcnh6enR1cm9xd2h1aXVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODYxNDcsImV4cCI6MjA5MTA2MjE0N30.CJAFW3acVnOwb5hvSDO6H0TGPTK__MOTBdgUxUWpM70";
+    let supabaseClient = null;
+    if (window.supabase) {
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      } catch (err) {
+        console.warn('Supabase client error:', err);
+      }
+    }
+
+    let supabaseSyncTimeout = null;
+
+    async function syncPilingToSupabase(silent = false) {
+      const topBtnLbl = document.getElementById('lbl-supabase-top-btn');
+      const repBtnLbl = document.getElementById('lbl-report-supabase');
+      if (!silent) {
+        if (topBtnLbl) topBtnLbl.textContent = 'กำลังบันทึก...';
+        if (repBtnLbl) repBtnLbl.textContent = 'กำลังบันทึก...';
+      }
+
+      let success = false;
+
+      // 1. Direct Supabase update if client available
+      if (supabaseClient) {
+        try {
+          const { data: row } = await supabaseClient
+            .from('project_data')
+            .select('data')
+            .eq('id', 1)
+            .maybeSingle();
+
+          if (row && row.data) {
+            row.data.pilingProgress = progressRecords;
+            row.data.pilingProgressLastUpdated = new Date().toISOString();
+            const { error: updErr } = await supabaseClient
+              .from('project_data')
+              .update({ data: row.data })
+              .eq('id', 1);
+            if (!updErr) success = true;
+          }
+        } catch (e) {
+          console.warn('Direct Supabase sync warning:', e);
+        }
+      }
+
+      // 2. Server proxy sync endpoint
+      try {
+        const res = await fetch('/api/supabase/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ records: progressRecords })
+        });
+        if (res.ok) success = true;
+      } catch (_) {}
+
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      if (topBtnLbl) {
+        topBtnLbl.textContent = success ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase';
+      }
+      if (repBtnLbl) {
+        repBtnLbl.textContent = success ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase';
+      }
+
+      if (!silent) {
+        alert('✅ บันทึกข้อมูลสถานะเสาเข็ม 93 ต้นเข้าสู่ Supabase ของโครงการเรียบร้อยแล้ว!');
+      }
+    }
+
+    async function pullPilingFromSupabase(silent = false) {
+      let fetched = null;
+      if (supabaseClient) {
+        try {
+          const { data: row } = await supabaseClient
+            .from('project_data')
+            .select('data')
+            .eq('id', 1)
+            .maybeSingle();
+          if (row?.data?.pilingProgress && Object.keys(row.data.pilingProgress).length > 0) {
+            fetched = row.data.pilingProgress;
+          }
+        } catch (_) {}
+      }
+
+      if (!fetched) {
+        try {
+          const res = await fetch('/api/supabase/piles');
+          if (res.ok) {
+            const json = await res.json();
+            if (json.data && Object.keys(json.data).length > 0) fetched = json.data;
+          }
+        } catch (_) {}
+      }
+
+      if (fetched && Object.keys(fetched).length > 0) {
+        progressRecords = fetched;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progressRecords));
+        updateUI();
+        updatePileMeshVisuals();
+        renderQuickChips();
+        renderCoTable();
+        renderReportSheet();
+        if (!silent) {
+          alert('📥 ดึงข้อมูลสถานะเสาเข็มล่าสุดจาก Supabase สำเร็จแล้ว!');
+        }
+      }
+    }
+
     // 1. Progress State Manager
     let progressRecords = {};
 
@@ -2516,6 +2742,11 @@
       } catch (e) {
         initDemoProgress();
       }
+
+      // Check Supabase in background to ensure up-to-date
+      setTimeout(() => {
+        pullPilingFromSupabase(true);
+      }, 400);
     }
 
     function saveProgress() {
@@ -2525,6 +2756,12 @@
       renderQuickChips();
       renderCoTable();
       renderReportSheet();
+
+      // Debounced silent auto-sync to Supabase
+      if (supabaseSyncTimeout) clearTimeout(supabaseSyncTimeout);
+      supabaseSyncTimeout = setTimeout(() => {
+        syncPilingToSupabase(true);
+      }, 600);
     }
 
     function initDemoProgress() {
@@ -3019,6 +3256,8 @@
 
       const rec = progressRecords[pileNo];
       const isDriven = rec && rec.status === 'driven';
+      const curSelectedDate = datePicker.value || todayStr;
+      const pileDate = (isDriven && rec.date) ? rec.date : curSelectedDate;
 
       document.getElementById('card-pile-tag').textContent = `${pileData.tag} (กริด ${pileData.grid})`;
       const pcoVal = pileData.pco_level !== undefined ? pileData.pco_level : pileData.co_level;
@@ -3028,44 +3267,85 @@
       document.getElementById('card-pile-easting').textContent = pileData.easting !== undefined ? pileData.easting.toFixed(4) : '-';
       document.getElementById('card-pile-type').textContent = `${pileData.type} (L=${pileData.length_m}m)`;
 
+      // Set date picker value in card
+      const dateInp = document.getElementById('card-pile-date-input');
+      if (dateInp) dateInp.value = pileDate;
+
+      const dateBadge = document.getElementById('card-pile-date-badge');
       const statusText = document.getElementById('card-pile-status-text');
+      const saveBtnLbl = document.getElementById('btn-card-save-date-lbl');
+
       if (isDriven) {
-        statusText.textContent = `✓ ตอกแล้ว (${rec.date || 'วันนี้'})`;
+        statusText.textContent = `✓ ตอกแล้ว (บันทึกวันที่: ${rec.date || curSelectedDate})`;
         statusText.className = 'font-black text-[#10b981]';
+        if (dateBadge) {
+          dateBadge.textContent = rec.date ? `ข้อมูลเดิม: ${rec.date}` : 'วันนี้';
+          dateBadge.className = 'font-mono font-black text-emerald-700 text-[10.5px] bg-emerald-100 px-1.5 py-0.5 rounded';
+        }
+        if (saveBtnLbl) saveBtnLbl.textContent = '💾 ปรับแก้วันที่ตอก';
       } else {
         statusText.textContent = 'ยังไม่ได้ตอก';
         statusText.className = 'font-bold text-[#667277]';
+        if (dateBadge) {
+          dateBadge.textContent = 'ยังไม่ระบุ';
+          dateBadge.className = 'font-mono font-bold text-slate-500 text-[10.5px]';
+        }
+        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกว่าตอกแล้วในวันที่นี้';
       }
 
       const card = document.getElementById('pile-card');
       card.classList.remove('hidden');
       setTimeout(() => card.classList.remove('translate-y-4', 'opacity-0'), 10);
+      if (window.lucide) lucide.createIcons();
     }
 
-    document.getElementById('btn-close-card').addEventListener('click', () => {
+    document.getElementById('btn-close-card')?.addEventListener('click', () => {
       const card = document.getElementById('pile-card');
       card.classList.add('translate-y-4', 'opacity-0');
       setTimeout(() => card.classList.add('hidden'), 200);
       selectedCardPileNo = null;
     });
 
-    // 1-Click Button: Mark as driven today
-    document.getElementById('btn-card-toggle-driven').addEventListener('click', () => {
-      if (!selectedCardPileNo) return;
-      progressRecords[selectedCardPileNo] = {
-        status: 'driven',
-        date: datePicker.value || todayStr
-      };
-      saveProgress();
-      document.getElementById('btn-close-card').click();
+    // Quick Date: Today
+    document.getElementById('btn-card-date-today')?.addEventListener('click', () => {
+      const inp = document.getElementById('card-pile-date-input');
+      if (inp) inp.value = todayStr;
     });
 
-    // 1-Click Button: Mark as pending
-    document.getElementById('btn-card-toggle-cancel').addEventListener('click', () => {
+    // Quick Date: Yesterday
+    document.getElementById('btn-card-date-yesterday')?.addEventListener('click', () => {
+      const inp = document.getElementById('card-pile-date-input');
+      const d = new Date();
+      d.setDate(d.getDate() - 1);
+      const yStr = d.toISOString().split('T')[0];
+      if (inp) inp.value = yStr;
+    });
+
+    // Save or Adjust Date for Pile (บันทึก / ปรับแก้วันที่เก่า)
+    document.getElementById('btn-card-save-date')?.addEventListener('click', () => {
+      if (!selectedCardPileNo) return;
+      const dateInp = document.getElementById('card-pile-date-input');
+      const chosenDate = (dateInp && dateInp.value) ? dateInp.value : (datePicker.value || todayStr);
+      progressRecords[selectedCardPileNo] = {
+        status: 'driven',
+        date: chosenDate
+      };
+      saveProgress();
+      if (typeof syncPilingToSupabase === 'function') {
+        syncPilingToSupabase(false);
+      }
+      document.getElementById('btn-close-card')?.click();
+    });
+
+    // 1-Click Button: Mark as pending / cancel
+    document.getElementById('btn-card-toggle-cancel')?.addEventListener('click', () => {
       if (!selectedCardPileNo) return;
       delete progressRecords[selectedCardPileNo];
       saveProgress();
-      document.getElementById('btn-close-card').click();
+      if (typeof syncPilingToSupabase === 'function') {
+        syncPilingToSupabase(false);
+      }
+      document.getElementById('btn-close-card')?.click();
     });
 
     // 5. Views Switcher (Top Ortho & 3D Isometric)
@@ -3177,31 +3457,40 @@
         const btn = document.createElement('button');
         let colorClass = 'bg-[#f8fafc] text-[#34383b] border-[#475569] hover:bg-[#fff0c8] shadow-[1px_1px_0_#475569]';
         let badgeText = 'ยังไม่ตอก';
+        let dateSubText = '';
         if (isToday) {
           colorClass = 'bg-[#0284c7] text-white border-[#0369a1] shadow-[2px_2px_0_#0369a1] ring-2 ring-[#38bdf8]';
           badgeText = '★ กดวันนี้';
+          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || curDate} ✏️</div>`;
         } else if (isDriven) {
           colorClass = 'bg-[#10b981] text-white border-[#064e3b] shadow-[1.5px_1.5px_0_#064e3b]';
           badgeText = '✓ กดวันก่อน';
+          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || ''} ✏️</div>`;
         }
 
-        btn.className = `p-2 rounded-lg border-2 font-bold text-center transition-all ${colorClass}`;
+        btn.className = `p-2 rounded-lg border-2 font-bold text-center transition-all ${colorClass} cursor-pointer group`;
+        btn.title = isDriven ? `ต้น ${p.tag} ตอกเมื่อ ${rec.date || ''} - คลิกเพื่อปรับแก้วันที่หรือข้อมูล` : `คลิกเพื่อบันทึกว่าตอกแล้วในวันที่ ${curDate}`;
         btn.innerHTML = `
           <div class="text-xs font-black">${p.tag}</div>
           <div class="text-[9.5px] opacity-90">${p.grid}</div>
           <div class="text-[9px] mt-0.5 font-extrabold">${badgeText}</div>
+          ${dateSubText}
         `;
 
         btn.addEventListener('click', () => {
           if (isDriven) {
-            delete progressRecords[p.no];
+            // Open pile card to allow adjusting old date, status, or notes!
+            openPileCard(p.no);
           } else {
             progressRecords[p.no] = {
               status: 'driven',
               date: datePicker.value || todayStr
             };
+            saveProgress();
+            if (typeof syncPilingToSupabase === 'function') {
+              syncPilingToSupabase(false);
+            }
           }
-          saveProgress();
         });
 
         container.appendChild(btn);
@@ -3668,49 +3957,218 @@
       });
 
       if (closest) {
-        const cur = progressRecords[closest.no];
-        if (cur && cur.status === 'driven') {
-          delete progressRecords[closest.no];
-        } else {
-          progressRecords[closest.no] = {
-            status: 'driven',
-            date: datePicker.value || todayStr
-          };
-        }
-        saveProgress();
+        openPileCard(closest.no);
       }
     });
 
     // =========================================================================
-    // 11. EXECUTIVE REPORT SHEET LOGIC
+    // 11. EXECUTIVE REPORT SHEET LOGIC & SELECTABLE THEME (ธีมเดิม / สไตล์ Excel)
     // =========================================================================
     let currentReportLayout = 'portrait'; // 'portrait' or 'landscape'
+    let currentReportTheme = localStorage.getItem('PYNN37_REPORT_THEME') || 'original'; // 'original' (default) or 'excel'
+
+    function setReportTheme(theme) {
+      currentReportTheme = theme;
+      localStorage.setItem('PYNN37_REPORT_THEME', theme);
+      applyReportThemeUI(theme);
+      renderReportSheet();
+      setTimeout(scheduleReportScurveRender, 50);
+    }
+
+    function applyReportThemeUI(theme) {
+      const reportPage = document.getElementById('report-page');
+      const reportCard = document.getElementById('report-page-card');
+      const header = document.getElementById('report-header-bar');
+      const themeSel = document.getElementById('report-theme-selector');
+      const btnOrig = document.getElementById('btn-theme-original');
+      const btnExcel = document.getElementById('btn-theme-excel');
+      const dateBadge = document.getElementById('rep-date-badge-wrapper');
+      const layoutSwitch = document.getElementById('rep-layout-switch-wrapper');
+      const btnExport = document.getElementById('btn-export-png');
+      const btnPrint = document.getElementById('btn-print-report');
+      const btnClose = document.getElementById('btn-close-report');
+      const formulaBar = document.getElementById('rep-excel-formula-bar');
+      const sheetTabs = document.getElementById('rep-excel-sheet-tabs');
+      const logoBox = document.getElementById('rep-header-logo');
+      const tagPill = document.getElementById('rep-header-tag');
+      const subtag = document.getElementById('rep-header-subtag');
+      const titleText = document.getElementById('rep-header-title');
+
+      const kpi1 = document.getElementById('rep-kpi-1');
+      const kpi2 = document.getElementById('rep-kpi-2');
+      const kpi3 = document.getElementById('rep-kpi-3');
+      const secPlan = document.getElementById('report-sec-plan');
+      const secPlanHead = document.getElementById('report-sec-plan-head');
+      const planCanvasBox = document.getElementById('planCanvasContainer');
+      const secScurve = document.getElementById('report-sec-scurve');
+      const secScurveHead = document.getElementById('report-sec-scurve-head');
+      const scurveBadge = document.getElementById('rep-sec-scurve-badge');
+      const secTable = document.getElementById('report-sec-table');
+      const secTableHead = document.getElementById('report-sec-table-head');
+      const theadTable = document.getElementById('rep-today-table-head');
+      const legendOrig = document.getElementById('rep-legend-original');
+      const legendExcel = document.getElementById('rep-legend-excel');
+
+      if (theme === 'excel') {
+        // EXCEL SIMPLE SPREADSHEET THEME
+        if (reportPage) reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-slate-100 p-3 md:p-6';
+        if (reportCard) {
+          reportCard.className = 'max-w-5xl mx-auto bg-white border border-slate-300 rounded-xl shadow-lg p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
+        }
+        if (header) header.className = 'bg-[#107c41] text-white rounded-lg p-3.5 md:p-4 mb-4 shadow-sm border border-[#0d6535] transition-all';
+        if (logoBox) {
+          logoBox.className = 'w-10 h-10 rounded bg-white text-[#107c41] font-black text-sm flex items-center justify-center shadow-xs border border-white/60 shrink-0';
+          logoBox.innerHTML = 'XLS';
+        }
+        if (tagPill) {
+          tagPill.className = 'px-2 py-0.5 rounded text-[10.5px] font-bold bg-white/20 text-white tracking-wider uppercase border border-white/30';
+          tagPill.textContent = 'EXCEL REPORT';
+        }
+        if (subtag) subtag.className = 'text-xs text-white/90 font-medium';
+        if (titleText) {
+          titleText.className = 'text-lg md:text-xl font-bold text-white mt-0.5 tracking-tight';
+          titleText.innerHTML = 'รายงานความคืบหน้างานเสาเข็ม 93 ต้น <span class="text-xs font-normal text-white/80 hidden sm:inline">(Piling Daily Progress Report)</span>';
+        }
+
+        if (themeSel) themeSel.className = 'flex items-center bg-[#0d6535] rounded p-0.5 border border-white/20 no-print no-export';
+        if (btnOrig) btnOrig.className = 'px-2 py-1 rounded text-xs font-medium text-white/80 hover:text-white transition-all flex items-center gap-1';
+        if (btnExcel) btnExcel.className = 'px-2 py-1 rounded text-xs font-bold transition-all bg-white text-[#107c41] shadow-xs flex items-center gap-1';
+
+        if (dateBadge) {
+          dateBadge.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/15 border border-white/30 text-xs text-white';
+          const dIcon = dateBadge.querySelector('i');
+          if (dIcon) dIcon.className = 'w-3.5 h-3.5 text-white/90';
+          const dText = document.getElementById('rep-header-date');
+          if (dText) dText.className = 'font-mono font-bold text-white';
+        }
+        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-[#0d6535] rounded p-0.5 border border-white/20 no-print no-export';
+        if (btnExport) btnExport.className = 'px-3 py-1 rounded text-xs font-bold bg-white text-[#107c41] hover:bg-slate-100 transition-all border border-slate-200 shadow-xs flex items-center gap-1';
+        if (btnPrint) btnPrint.className = 'px-2.5 py-1 rounded text-xs font-bold bg-[#0d6535] hover:bg-[#094725] text-white transition-all border border-white/30 flex items-center gap-1';
+        if (btnClose) btnClose.className = 'p-1 rounded text-xs bg-white/20 hover:bg-white/30 text-white transition-all flex items-center justify-center';
+
+        if (formulaBar) formulaBar.classList.remove('hidden');
+        if (sheetTabs) sheetTabs.classList.remove('hidden');
+
+        if (kpi1) kpi1.className = 'bg-[#f0f7ff] border border-blue-200 rounded-lg p-3 flex flex-col justify-between';
+        if (kpi2) kpi2.className = 'bg-[#fefce8] border border-amber-200 rounded-lg p-3 flex flex-col justify-between';
+        if (kpi3) kpi3.className = 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 flex flex-col justify-between';
+
+        if (secPlan) secPlan.className = 'border border-slate-300 rounded-lg overflow-hidden bg-white h-full flex flex-col shadow-xs';
+        if (secPlanHead) secPlanHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2';
+        if (planCanvasBox) planCanvasBox.className = 'w-full bg-white border border-slate-300 rounded overflow-hidden flex items-center justify-center relative';
+        if (secScurve) secScurve.className = 'border border-slate-300 rounded-lg overflow-hidden bg-white shadow-xs';
+        if (secScurveHead) secScurveHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex items-center justify-between';
+        if (scurveBadge) scurveBadge.className = 'text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200';
+        if (secTable) secTable.className = 'border border-slate-300 rounded-lg overflow-hidden bg-white shadow-xs';
+        if (secTableHead) secTableHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex items-center justify-between';
+        if (theadTable) theadTable.className = 'bg-[#107c41] text-white font-bold text-xs border-b border-[#0d6535]';
+
+        if (legendOrig) legendOrig.classList.add('hidden');
+        if (legendExcel) legendExcel.classList.remove('hidden');
+
+      } else {
+        // ORIGINAL THEME (SOFT INK FLAT-POP) - DEFAULT
+        if (reportPage) reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-3 md:p-6';
+        if (reportCard) {
+          reportCard.className = 'max-w-5xl mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
+        }
+        if (header) header.className = 'bg-gradient-to-r from-[#fff0c8] via-[#fffdf8] to-[#e5f4e9] border-2 border-[#475569] rounded-2xl p-4 md:p-5 shadow-[4px_4px_0_#475569] mb-4 transition-all';
+        if (logoBox) {
+          logoBox.className = 'w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-[#475569] flex flex-col items-center justify-center font-montserrat font-black text-[#34383b] shadow-[2px_2px_0_#475569] leading-tight shrink-0';
+          logoBox.innerHTML = '<span class="text-[9px] font-black uppercase text-[#a84631]">PYNN</span><span class="text-base font-black">37</span>';
+        }
+        if (tagPill) {
+          tagPill.className = 'px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569]';
+          tagPill.textContent = 'โครงการ PYNN PRIDI 37';
+        }
+        if (subtag) subtag.className = 'text-xs text-[#667277] font-bold';
+        if (titleText) {
+          titleText.className = 'text-xl md:text-2xl font-black text-[#34383b] mt-1';
+          titleText.innerHTML = 'รายงานความคืบหน้างานเสาเข็ม <span class="text-xs md:text-sm font-bold text-[#667277] hidden sm:inline">(Piling Progress Report)</span>';
+        }
+
+        if (themeSel) themeSel.className = 'flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export';
+        if (btnOrig) btnOrig.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1';
+        if (btnExcel) btnExcel.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1';
+
+        if (dateBadge) {
+          dateBadge.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1.5px_1.5px_0_#475569]';
+          const dIcon = dateBadge.querySelector('i');
+          if (dIcon) dIcon.className = 'w-3.5 h-3.5 text-[#ed6845]';
+          const dText = document.getElementById('rep-header-date');
+          if (dText) dText.className = 'text-[#ed6845] font-mono font-black';
+        }
+        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export';
+        if (btnExport) btnExport.className = 'pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#064e3b] font-black';
+        if (btnPrint) btnPrint.className = 'pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#9c3b23] font-black';
+        if (btnClose) btnClose.className = 'pop-btn p-1.5 text-xs flex items-center justify-center shadow-[1.5px_1.5px_0_#475569]';
+
+        if (formulaBar) formulaBar.classList.add('hidden');
+        if (sheetTabs) sheetTabs.classList.add('hidden');
+
+        if (kpi1) kpi1.className = 'bg-[#f0f9ff] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
+        if (kpi2) kpi2.className = 'bg-[#fff7ed] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
+        if (kpi3) kpi3.className = 'bg-[#e5f4e9] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
+
+        if (secPlan) secPlan.className = 'border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white h-full flex flex-col';
+        if (secPlanHead) secPlanHead.className = 'bg-[#fff0c8] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2';
+        if (planCanvasBox) planCanvasBox.className = 'w-full bg-white border-2 border-[#475569] rounded overflow-hidden flex items-center justify-center relative';
+        if (secScurve) secScurve.className = 'border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white';
+        if (secScurveHead) secScurveHead.className = 'bg-[#dff1f5] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between';
+        if (scurveBadge) scurveBadge.className = 'text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] text-[#34383b]';
+        if (secTable) secTable.className = 'border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white';
+        if (secTableHead) secTableHead.className = 'bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between';
+        if (theadTable) theadTable.className = 'bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs';
+
+        if (legendOrig) legendOrig.classList.remove('hidden');
+        if (legendExcel) legendExcel.classList.add('hidden');
+      }
+
+      updateLayoutSwitchUI(currentReportLayout, theme);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function updateLayoutSwitchUI(layout, theme) {
+      const bPort = document.getElementById('btn-layout-portrait');
+      const bLand = document.getElementById('btn-layout-landscape');
+      if (!bPort || !bLand) return;
+
+      if (theme === 'excel') {
+        if (layout === 'landscape') {
+          bLand.className = 'px-2 py-1 rounded text-xs font-bold transition-all bg-white text-[#107c41] shadow-xs flex items-center gap-1';
+          bPort.className = 'px-2 py-1 rounded text-xs font-medium text-white/80 hover:text-white transition-all flex items-center gap-1';
+        } else {
+          bPort.className = 'px-2 py-1 rounded text-xs font-bold transition-all bg-white text-[#107c41] shadow-xs flex items-center gap-1';
+          bLand.className = 'px-2 py-1 rounded text-xs font-medium text-white/80 hover:text-white transition-all flex items-center gap-1';
+        }
+      } else {
+        if (layout === 'landscape') {
+          bLand.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1';
+          bPort.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1';
+        } else {
+          bPort.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1';
+          bLand.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1';
+        }
+      }
+    }
 
     function setReportLayout(layout) {
       currentReportLayout = layout;
       const card = document.getElementById('report-page-card');
-      const bPort = document.getElementById('btn-layout-portrait');
-      const bLand = document.getElementById('btn-layout-landscape');
-
       if (layout === 'landscape') {
         card?.classList.add('is-landscape');
-        if (bLand) bLand.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1';
-        if (bPort) bPort.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1';
       } else {
         card?.classList.remove('is-landscape');
-        if (bPort) bPort.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1';
-        if (bLand) bLand.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1';
       }
-
-      // Smooth multi-frame re-render ensuring CSS layout has completed
+      updateLayoutSwitchUI(layout, currentReportTheme);
       requestAnimationFrame(() => {
         renderPlanSnapshotCanvas();
-        if (reportScurveChartInstance) {
-          reportScurveChartInstance.resize();
-        }
+        if (reportScurveChartInstance) reportScurveChartInstance.resize();
+        else scheduleReportScurveRender();
       });
       setTimeout(() => {
         renderPlanSnapshotCanvas();
+        scheduleReportScurveRender();
       }, 100);
     }
 
@@ -3727,24 +4185,37 @@
 
     document.getElementById('btn-layout-portrait')?.addEventListener('click', () => setReportLayout('portrait'));
     document.getElementById('btn-layout-landscape')?.addEventListener('click', () => setReportLayout('landscape'));
+    document.getElementById('btn-theme-original')?.addEventListener('click', () => setReportTheme('original'));
+    document.getElementById('btn-theme-excel')?.addEventListener('click', () => setReportTheme('excel'));
 
     function renderReportSheet() {
       const curDate = datePicker.value || todayStr;
-      document.getElementById('rep-header-date').textContent = curDate;
+      const repHeaderDateEl = document.getElementById('rep-header-date');
+      if (repHeaderDateEl) repHeaderDateEl.textContent = curDate;
 
       let drivenCount = 0;
       let todayCount = 0;
       const todayPilesList = [];
+      const allDrivenPilesList = [];
 
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no];
         if (rec && rec.status === 'driven') {
           drivenCount++;
+          allDrivenPilesList.push({ pile: p, rec: rec });
           if (rec.date === curDate) {
             todayCount++;
             todayPilesList.push({ pile: p, rec: rec });
           }
         }
+      });
+
+      // Sort all driven piles by date descending then pile no
+      allDrivenPilesList.sort((a, b) => {
+        const da = a.rec.date || '';
+        const db = b.rec.date || '';
+        if (db !== da) return db.localeCompare(da);
+        return a.pile.no - b.pile.no;
       });
 
       // 1. Calculate Elapsed Working Days & Cumulative Plan
@@ -3801,71 +4272,153 @@
         const delayedCount = Math.abs(variance);
         if (varDisplay) {
           varDisplay.textContent = `ช้ากว่าแผน ${delayedCount} ต้น`;
-          varDisplay.className = 'font-black text-xl md:text-2xl text-[#e11d48] leading-tight';
+          varDisplay.className = currentReportTheme === 'excel'
+            ? 'font-bold text-xl sm:text-2xl text-rose-700 leading-tight font-mono'
+            : 'font-black text-xl md:text-2xl text-[#e11d48] leading-tight';
         }
         if (varBadge) {
           varBadge.textContent = 'ช้ากว่าแผน';
-          varBadge.className = 'px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#e11d48] shadow-[1px_1px_0_#475569]';
+          varBadge.className = currentReportTheme === 'excel'
+            ? 'px-2 py-0.5 rounded text-[10.5px] font-bold bg-[#ffc7ce] text-[#9c0006] border border-[#ffafb8]'
+            : 'px-2.5 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#e11d48] shadow-[1px_1px_0_#475569]';
         }
         if (varCard) {
-          varCard.className = 'bg-[#fff1f2] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
+          varCard.className = currentReportTheme === 'excel'
+            ? 'bg-[#fef2f2] border border-rose-200 rounded-lg p-3 flex flex-col justify-between'
+            : 'bg-[#fff1f2] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
         }
       } else if (variance > 0) {
         if (varDisplay) {
           varDisplay.textContent = `เร็วกว่าแผน +${variance} ต้น`;
-          varDisplay.className = 'font-black text-xl md:text-2xl text-[#15803d] leading-tight';
+          varDisplay.className = currentReportTheme === 'excel'
+            ? 'font-bold text-xl sm:text-2xl text-emerald-700 leading-tight font-mono'
+            : 'font-black text-xl md:text-2xl text-[#10b981] leading-tight';
         }
         if (varBadge) {
           varBadge.textContent = 'เร็วกว่าแผน';
-          varBadge.className = 'px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#15803d] shadow-[1px_1px_0_#475569]';
+          varBadge.className = currentReportTheme === 'excel'
+            ? 'px-2 py-0.5 rounded text-[10.5px] font-bold bg-[#c6efce] text-[#006100] border border-[#a3e4ab]'
+            : 'px-2.5 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#10b981] shadow-[1px_1px_0_#475569]';
         }
         if (varCard) {
-          varCard.className = 'bg-[#ecfdf5] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
+          varCard.className = currentReportTheme === 'excel'
+            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 flex flex-col justify-between'
+            : 'bg-[#e5f4e9] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
         }
       } else {
         if (varDisplay) {
-          varDisplay.textContent = 'ตามแผนงานพอดี (0 ต้น)';
-          varDisplay.className = 'font-black text-xl md:text-2xl text-[#15803d] leading-tight';
+          varDisplay.textContent = currentReportTheme === 'excel' ? 'ตามแผนงานพอดี (0 ต้น)' : 'ตามแผนงานพอดี';
+          varDisplay.className = currentReportTheme === 'excel'
+            ? 'font-bold text-xl sm:text-2xl text-emerald-700 leading-tight font-mono'
+            : 'font-black text-xl md:text-2xl text-[#15803d] leading-tight';
         }
         if (varBadge) {
           varBadge.textContent = 'ตามแผน';
-          varBadge.className = 'px-2 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#15803d] shadow-[1px_1px_0_#475569]';
+          varBadge.className = currentReportTheme === 'excel'
+            ? 'px-2 py-0.5 rounded text-[10.5px] font-bold bg-[#c6efce] text-[#006100] border border-[#a3e4ab]'
+            : 'px-2.5 py-0.5 rounded-md text-[10.5px] font-black bg-white border-2 border-[#475569] text-[#15803d] shadow-[1px_1px_0_#475569]';
         }
         if (varCard) {
-          varCard.className = 'bg-[#f0fdf4] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
+          varCard.className = currentReportTheme === 'excel'
+            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 flex flex-col justify-between'
+            : 'bg-[#f0fdf4] border-2 border-[#475569] rounded-xl p-3.5 shadow-[3px_3px_0_#475569] flex flex-col justify-between';
         }
       }
 
       // Render Today's Driven Piles Table
       const tbody = document.getElementById('rep-today-table-body');
       tbody.innerHTML = '';
-      document.getElementById('rep-today-table-badge').textContent = `${todayCount} ต้น`;
+      const isFilterAll = window.reportTableFilterMode === 'all';
+      const displayPilesList = isFilterAll ? allDrivenPilesList : todayPilesList;
 
-      if (todayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-[#667277] font-semibold">ยังไม่มีการบันทึกเสาเข็มที่ตอกในวันที่ ${curDate} (สามารถคลิกที่ต้นเข็มบนแปลน หรือกดปุ่ม "ระบุต้นที่ตอกด่วน" เพื่อลงข้อมูลได้)</td></tr>`;
+      const titleEl = document.getElementById('rep-sec-table-title');
+      if (titleEl) {
+        titleEl.textContent = isFilterAll
+          ? `ประวัติการตอกเสาเข็มทั้งหมด (All Driven Piles History: ${drivenCount}/93 ต้น)`
+          : `รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log: ${todayCount} ต้น)`;
+      }
+
+      const repBadgeEl = document.getElementById('rep-today-table-badge');
+      if (repBadgeEl) {
+        repBadgeEl.textContent = isFilterAll ? `${drivenCount} ต้น (ทั้งหมด)` : `${todayCount} ต้น (วันนี้)`;
+      }
+
+      // Update Filter Button States
+      const btnFilterToday = document.getElementById('btn-rep-filter-today');
+      const btnFilterAll = document.getElementById('btn-rep-filter-all');
+      if (btnFilterToday && btnFilterAll) {
+        if (isFilterAll) {
+          btnFilterAll.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]';
+          btnFilterToday.className = 'px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]';
+        } else {
+          btnFilterToday.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]';
+          btnFilterAll.className = 'px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]';
+        }
+      }
+
+      if (displayPilesList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-[#667277] font-semibold">
+          ${isFilterAll ? 'ยังไม่มีเสาเข็มที่ตอกในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่ตอกในวันที่ ${curDate} (คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)`}
+        </td></tr>`;
       } else {
-        todayPilesList.forEach(({ pile: p, rec }) => {
+        displayPilesList.forEach(({ pile: p, rec }, index) => {
           const tr = document.createElement('tr');
-          tr.className = 'hover:bg-[#f0f9ff] transition-colors border-b border-[#e5f1ed]';
           const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
           const nStr = p.northing !== undefined ? p.northing.toFixed(4) : '-';
           const eStr = p.easting !== undefined ? p.easting.toFixed(4) : '-';
-          tr.innerHTML = `
-            <td class="p-2 text-center font-bold text-[#667277] border-r border-[#e5f1ed]">${p.no}</td>
-            <td class="p-2 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
-            <td class="p-2 text-center font-black text-[#1e40af] border-r border-[#e5f1ed]">${p.footing || '-'}</td>
-            <td class="p-2 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
-            <td class="p-2 text-right font-mono text-[11px] text-[#475569] border-r border-[#e5f1ed]">${nStr}</td>
-            <td class="p-2 text-right font-mono text-[11px] text-[#475569] border-r border-[#e5f1ed]">${eStr}</td>
-            <td class="p-2 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
-            <td class="p-2 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type}</td>
-            <td class="p-2 text-center font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${rec.date || curDate}</td>
-            <td class="p-2 text-center">
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7] shadow-[1px_1px_0_#475569]">
-                ★ กดวันนี้
-              </span>
-            </td>
-          `;
+          const isPileToday = rec.date === curDate;
+
+          tr.style.cursor = 'pointer';
+          tr.title = `คลิกต้น ${p.tag} เพื่อดูข้อมูลและปรับแก้วันที่ตอก`;
+          tr.addEventListener('click', () => {
+            openPileCard(p.no);
+          });
+
+          if (currentReportTheme === 'excel') {
+            tr.className = 'hover:bg-[#ecfdf5] transition-colors border-b border-slate-200 cursor-pointer ' + (index % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white');
+            tr.innerHTML = `
+              <td class="p-2 text-center font-bold text-slate-500 border border-slate-200">${p.no}</td>
+              <td class="p-2 font-bold text-slate-800 border border-slate-200">${p.tag}</td>
+              <td class="p-2 text-center font-bold text-blue-700 border border-slate-200">${p.footing || '-'}</td>
+              <td class="p-2 text-center font-bold text-slate-700 border border-slate-200">${p.grid}</td>
+              <td class="p-2 text-right font-mono text-[11px] text-slate-600 border border-slate-200">${nStr}</td>
+              <td class="p-2 text-right font-mono text-[11px] text-slate-600 border border-slate-200">${eStr}</td>
+              <td class="p-2 text-right font-bold text-slate-800 font-mono border border-slate-200">${pco.toFixed(3)}</td>
+              <td class="p-2 text-center font-medium text-slate-700 border border-slate-200">${p.type}</td>
+              <td class="p-2 text-center border border-slate-200">
+                <span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded" title="คลิกเพื่อปรับแก้วันที่">
+                  📅 ${rec.date || curDate} ✏️
+                </span>
+              </td>
+              <td class="p-2 text-center border border-slate-200">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isPileToday ? 'bg-[#c6efce] text-[#006100] border border-[#a3e4ab]' : 'bg-slate-100 text-slate-700 border border-slate-300'}">
+                  ${isPileToday ? '★ กดวันนี้' : '✓ ตอกแล้ว'}
+                </span>
+              </td>
+            `;
+          } else {
+            tr.className = 'hover:bg-[#f0fdf4] transition-colors border-b border-[#e5f1ed] cursor-pointer ' + (index % 2 === 1 ? 'bg-[#fdfbf7]' : 'bg-white');
+            tr.innerHTML = `
+              <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed]">${p.no}</td>
+              <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
+              <td class="p-2.5 text-center font-black text-[#0284c7] border-r border-[#e5f1ed]">${p.footing || '-'}</td>
+              <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
+              <td class="p-2.5 text-right font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${nStr}</td>
+              <td class="p-2.5 text-right font-mono text-[11px] text-[#667277] border-r border-[#e5f1ed]">${eStr}</td>
+              <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
+              <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type} (21m)</td>
+              <td class="p-2.5 text-center border-r border-[#e5f1ed]">
+                <span class="inline-flex items-center gap-1 font-mono text-[11px] font-black text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded shadow-xs" title="คลิกเพื่อปรับแก้วันที่">
+                  📅 ${rec.date || curDate} ✏️
+                </span>
+              </td>
+              <td class="p-2.5 text-center">
+                <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-black ${isPileToday ? 'bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7] shadow-[1px_1px_0_#475569]' : 'bg-emerald-50 text-emerald-800 border border-emerald-300'}">
+                  ${isPileToday ? '★ กดวันนี้' : '✓ ตอกแล้ว'}
+                </span>
+              </td>
+            `;
+          }
           tbody.appendChild(tr);
         });
       }
@@ -3873,21 +4426,193 @@
       // Render Large Piling Plan Canvas
       setTimeout(renderPlanSnapshotCanvas, 20);
 
-      // Render Crisp S-Curve in Report
-      const repChartEl = document.getElementById('reportScurveCanvas');
-      if (repChartEl) {
-        if (reportScurveChartInstance) reportScurveChartInstance.destroy();
-        reportScurveChartInstance = new Chart(repChartEl, buildChartConfig());
-      }
+      // Render Crisp S-Curve in Report (Safe scheduling)
+      scheduleReportScurveRender();
     }
+
+    function scheduleReportScurveRender() {
+      const repPage = document.getElementById('report-page');
+      if (repPage && repPage.classList.contains('hidden')) {
+        return; // Don't render on hidden container!
+      }
+      setTimeout(renderReportScurveChart, 35);
+    }
+
+    function renderReportScurveChart() {
+      const repPage = document.getElementById('report-page');
+      if (repPage && repPage.classList.contains('hidden')) return;
+
+      const repChartEl = document.getElementById('reportScurveCanvas');
+      if (!repChartEl) return;
+
+      const parent = repChartEl.parentElement;
+      if (parent && (parent.clientWidth <= 0 || parent.clientHeight <= 0)) {
+        setTimeout(renderReportScurveChart, 60);
+        return;
+      }
+
+      if (typeof Chart !== 'undefined') {
+        try {
+          if (reportScurveChartInstance) {
+            reportScurveChartInstance.destroy();
+            reportScurveChartInstance = null;
+          }
+          reportScurveChartInstance = new Chart(repChartEl, buildChartConfig());
+          return;
+        } catch (err) {
+          console.warn('Report Chart.js error, falling back to 2D canvas:', err);
+        }
+      }
+
+      // 2D Direct Canvas Fallback so graph is NEVER missing!
+      drawReportDirectScurve(repChartEl);
+    }
+
+    function drawReportDirectScurve(canvas) {
+      const parent = canvas.parentElement;
+      const rect = canvas.getBoundingClientRect();
+      const w = parent ? parent.clientWidth : (rect.width || 600);
+      const h = parent ? parent.clientHeight : (rect.height || 260);
+      if (w <= 0 || h <= 0) return;
+
+      const ctx = canvas.getContext('2d');
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+
+      const padL = 40, padR = 16, padT = 30, padB = 28;
+      const plotW = w - padL - padR;
+      const plotH = h - padT - padB;
+      const maxY = 95;
+
+      const cfg = buildChartConfig();
+      const planData = cfg.data.datasets[0].data;
+      const actualData = cfg.data.datasets[1].data;
+
+      // Y-Grid
+      ctx.font = 'bold 10px Sarabun, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let yVal = 0; yVal <= 90; yVal += 15) {
+        const py = padT + plotH - (yVal / maxY) * plotH;
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padL, py);
+        ctx.lineTo(w - padR, py);
+        ctx.stroke();
+        ctx.fillStyle = '#64748b';
+        ctx.fillText(yVal, padL - 6, py);
+      }
+
+      // Plan line
+      ctx.strokeStyle = '#ed6845';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      for (let i = 0; i < planData.length; i++) {
+        const px = padL + (i / (planData.length - 1)) * plotW;
+        const py = padT + plotH - (planData[i] / maxY) * plotH;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Actual line with fill
+      if (actualData.length > 0) {
+        ctx.beginPath();
+        for (let i = 0; i < actualData.length; i++) {
+          const px = padL + (i / (planData.length - 1)) * plotW;
+          const py = padT + plotH - (actualData[i] / maxY) * plotH;
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        const lastPx = padL + ((actualData.length - 1) / (planData.length - 1)) * plotW;
+        ctx.lineTo(lastPx, padT + plotH);
+        ctx.lineTo(padL, padT + plotH);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.18)';
+        ctx.fill();
+
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        for (let i = 0; i < actualData.length; i++) {
+          const px = padL + (i / (planData.length - 1)) * plotW;
+          const py = padT + plotH - (actualData[i] / maxY) * plotH;
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+
+        for (let i = 0; i < actualData.length; i++) {
+          const px = padL + (i / (planData.length - 1)) * plotW;
+          const py = padT + plotH - (actualData[i] / maxY) * plotH;
+          ctx.fillStyle = '#10b981';
+          ctx.beginPath();
+          ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#064e3b';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+      }
+
+      // Legend
+      ctx.font = 'bold 11px Sarabun, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.strokeStyle = '#ed6845';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(padL + 10, 14);
+      ctx.lineTo(padL + 28, 14);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#334155';
+      ctx.fillText('แผนสะสม (3 ต้น/วัน)', padL + 34, 14);
+
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(padL + 165, 14);
+      ctx.lineTo(padL + 185, 14);
+      ctx.stroke();
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath();
+      ctx.arc(padL + 175, 14, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#334155';
+      ctx.fillText('ผลงานจริงสะสม (Actual)', padL + 191, 14);
+    }
+
+    // Supabase Sync Buttons Listener
+    document.getElementById('btn-supabase-sync')?.addEventListener('click', () => syncPilingToSupabase(false));
+    document.getElementById('btn-report-supabase-sync')?.addEventListener('click', () => syncPilingToSupabase(false));
 
     // Report Sheet Modal Toggles
     document.getElementById('btn-open-report').addEventListener('click', () => {
       document.getElementById('report-page').classList.remove('hidden');
+      applyReportThemeUI(currentReportTheme);
       renderReportSheet();
+      setTimeout(scheduleReportScurveRender, 50);
     });
     document.getElementById('btn-close-report').addEventListener('click', () => {
       document.getElementById('report-page').classList.add('hidden');
+    });
+
+    document.getElementById('btn-rep-filter-today')?.addEventListener('click', () => {
+      window.reportTableFilterMode = 'today';
+      renderReportSheet();
+    });
+    document.getElementById('btn-rep-filter-all')?.addEventListener('click', () => {
+      window.reportTableFilterMode = 'all';
+      renderReportSheet();
     });
 
     document.getElementById('btn-print-report').addEventListener('click', () => {
@@ -4404,6 +5129,48 @@
       renderer.render(scene, activeCamera);
       updateCompass();
     }
+    // Auto-open modals or switch views based on URL hash or param (?view=report / #report, #3d, #excel)
+    function handleHashAndUrlNavigation() {
+      const hash = window.location.hash ? window.location.hash.replace('#', '') : '';
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get('view') || hash;
+      const themeParam = params.get('theme');
+
+      if (themeParam === 'excel' || hash === 'excel') {
+        setReportTheme('excel');
+      } else if (themeParam === 'original' || hash === 'report-original') {
+        setReportTheme('original');
+      } else {
+        applyReportThemeUI(currentReportTheme);
+      }
+
+      if (view === '3d' || hash === '3d' || view === 'iso') {
+        // STRICTLY CLOSE REPORT MODAL AND SWITCH TO 3D ISOMETRIC VIEW
+        document.getElementById('report-page')?.classList.add('hidden');
+        document.getElementById('modal-export-image')?.classList.add('hidden');
+        document.getElementById('modal-cotable')?.classList.add('hidden');
+        document.getElementById('quick-select-drawer')?.classList.add('hidden');
+        setTimeout(() => {
+          resetIsoView();
+        }, 120);
+      } else if (view === 'report' || view === 'excel' || view === 'report-original') {
+        setTimeout(() => {
+          document.getElementById('btn-open-report')?.click();
+        }, 300);
+      } else if (view === 'cotable') {
+        setTimeout(() => {
+          document.getElementById('btn-open-cotable')?.click();
+        }, 300);
+      } else if (view === 'quick') {
+        setTimeout(() => {
+          document.getElementById('btn-quick-select')?.click();
+        }, 300);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', handleHashAndUrlNavigation);
+    window.addEventListener('hashchange', handleHashAndUrlNavigation);
+
     animate();
     updateUI();
   </script>
