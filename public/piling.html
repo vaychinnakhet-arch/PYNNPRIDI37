@@ -261,14 +261,32 @@
     #report-page-card.is-landscape #report-sec-scurve .chart-wrapper {
       height: 210px !important;
     }
+    /* ยืดตารางตามจำนวนต้น สูงสุด 5 ต้น แล้วค่อยเปิด scroll */
+    #report-sec-table .table-wrapper {
+      max-height: none;
+      overflow-x: auto;
+      overflow-y: visible;
+    }
+    #report-sec-table .table-wrapper.has-scroll {
+      max-height: 365px !important;
+      overflow-y: auto !important;
+    }
     #report-page-card.is-landscape #report-sec-table .table-wrapper {
-      max-height: 220px !important;
+      max-height: none;
+    }
+    #report-page-card.is-landscape #report-sec-table .table-wrapper.has-scroll {
+      max-height: 365px !important;
+      overflow-y: auto !important;
     }
 
     /* Print & Capture Hide Styles (ตอนแคปภาพรายงาน และพิมพ์) */
     @media print {
       .no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, #btn-rep-filter-today, #btn-rep-filter-all {
         display: none !important;
+      }
+      #report-sec-table .table-wrapper {
+        max-height: none !important;
+        overflow: visible !important;
       }
     }
     .is-export-capturing .no-export,
@@ -295,12 +313,15 @@
     .is-export-capturing #report-header-bar,
     .is-export-capturing #report-sec-plan,
     .is-export-capturing #report-sec-scurve,
-    .is-export-capturing #report-sec-table,
-    .is-export-capturing #rep-table-summary-card {
+    .is-export-capturing #report-sec-table {
       box-shadow: none !important;
     }
     .is-export-capturing #report-sec-table {
       overflow: hidden !important;
+    }
+    .is-export-capturing #report-sec-table .table-wrapper {
+      max-height: none !important;
+      overflow: visible !important;
     }
   </style>
 
@@ -1033,22 +1054,22 @@
             </div>
           </div>
 
-          <!-- SECTION 3: TODAY'S DRIVEN PILES LOG TABLE -->
+          <!-- SECTION 3: TODAY'S PRESSED PILES LOG TABLE -->
           <div id="report-sec-table" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white">
             <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
                   <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#34383b]"></i>
                 </span>
-                <span id="rep-sec-table-title">รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log)</span>
+                <span id="rep-sec-table-title">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
               </span>
               <div class="flex items-center gap-2 shrink-0">
-                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-[#475569]/40 text-[10.5px] whitespace-nowrap shrink-0 no-export no-print" title="ตัวเลือกกรองรายการตอกเสาเข็ม">
+                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-[#475569]/40 text-[10.5px] whitespace-nowrap shrink-0 no-export no-print" title="ตัวเลือกกรองรายการกดเสาเข็ม">
                   <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569] whitespace-nowrap">
                     เฉพาะวันที่นี้
                   </button>
                   <button id="btn-rep-filter-all" type="button" class="px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b] whitespace-nowrap">
-                    ทั้งหมด (ประวัติเข็ม)
+                    ทั้งหมด (ประวัติการกด)
                   </button>
                 </div>
                 <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] whitespace-nowrap shrink-0">
@@ -1056,7 +1077,7 @@
                 </span>
               </div>
             </div>
-            <div class="table-wrapper overflow-x-auto max-h-56 overflow-y-auto">
+            <div class="table-wrapper overflow-x-auto">
               <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
                 <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
                   <tr>
@@ -1065,12 +1086,13 @@
                     <th class="p-2 text-center border-r-2 border-[#475569]/30">ฐานราก</th>
                     <th class="p-2 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
                     <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono" title="พิกัดสำรวจตามแบบ (Northing, Easting)">Co (N, E) แบบ (m)</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังตอกเสร็จ พร้อมระยะหนีศูนย์">Co (n,e) หลังกด (m)</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">Co (n,e) หลังกด (m)</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30 font-mono text-[#047857]" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E) และระยะหนีศูนย์รวมของแต่ละต้น">ผลต่าง (Δn, Δe)</th>
                     <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
                     <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30 font-mono" title="ผลต่างระดับจริงเทียบกับแบบ">ผลต่าง (Diff)</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30 font-mono" title="ผลต่างระดับจริงเทียบกับแบบ">ผลต่างระดับ (Diff)</th>
                     <th class="p-2 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
-                    <th class="p-2 text-center">วันที่ตอก</th>
+                    <th class="p-2 text-center">วันที่กด</th>
                   </tr>
                 </thead>
                 <tbody id="rep-today-table-body" class="divide-y divide-[#e5f1ed]">
@@ -1080,11 +1102,6 @@
                   <!-- Summary of Values Row Injected by JS -->
                 </tfoot>
               </table>
-            </div>
-
-            <!-- SECTION 3.5: SUMMARY OF VALUES DASHBOARD CARD (สรุปผลค่ารวมงานเสาเข็ม) -->
-            <div id="rep-table-summary-card" class="border-t-2 border-[#475569] bg-[#fffdf8] p-3.5">
-              <!-- Summary of values injected dynamically by JS -->
             </div>
           </div>
         </div>
@@ -5147,8 +5164,8 @@
       const titleEl = document.getElementById('rep-sec-table-title');
       if (titleEl) {
         titleEl.textContent = isFilterAll
-          ? `ประวัติการตอกเสาเข็มทั้งหมด (All Driven Piles History: ${drivenCount}/93 ต้น)`
-          : `รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log: ${todayCount} ต้น)`;
+          ? `ประวัติการกดเสาเข็มทั้งหมด (All Pressed Piles History: ${drivenCount}/93 ต้น)`
+          : `รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log: ${todayCount} ต้น)`;
       }
 
       const repBadgeEl = document.getElementById('rep-today-table-badge');
@@ -5170,17 +5187,22 @@
       }
 
       if (displayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="11" class="p-6 text-center text-[#667277] font-semibold">
-          ${isFilterAll ? 'ยังไม่มีเสาเข็มที่ตอกในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่ตอกในวันที่ ${curDate} (คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)`}
+        tbody.innerHTML = `<tr><td colspan="12" class="p-6 text-center text-[#667277] font-semibold">
+          ${isFilterAll ? 'ยังไม่มีเสาเข็มที่กดในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่กดในวันที่ ${curDate} (คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)`}
         </td></tr>`;
         const tfoot = document.getElementById('rep-today-table-foot');
         if (tfoot) tfoot.innerHTML = '';
-        const sumCard = document.getElementById('rep-table-summary-card');
-        if (sumCard) sumCard.innerHTML = `<div class="text-center text-xs text-slate-500 py-2">ยังไม่มีข้อมูลเสาเข็มสำหรับสรุปผลในตัวกรองนี้</div>`;
+        const tableWrapper = document.querySelector('#report-sec-table .table-wrapper');
+        if (tableWrapper) {
+          tableWrapper.classList.remove('has-scroll');
+          tableWrapper.style.maxHeight = 'none';
+          tableWrapper.style.overflowY = 'visible';
+        }
       } else {
         // Statistical Accumulators for "พร้อมสรุปผลค่าให้"
         let sumDesignN = 0, sumDesignE = 0;
         let sumActualN = 0, sumActualE = 0;
+        let sumDNMm = 0, sumDEMm = 0;
         let sumPco = 0, sumTop = 0, sumDiffMm = 0;
         let sumOffsetMm = 0, maxOffsetMm = 0;
         let coordPassCount = 0, levelPassCount = 0;
@@ -5205,6 +5227,8 @@
 
           const dN = (p.northing !== undefined) ? (actN - p.northing) : 0;
           const dE = (p.easting !== undefined) ? (actE - p.easting) : 0;
+          const dNMm = Math.round(dN * 1000);
+          const dEMm = Math.round(dE * 1000);
           const totOffsetM = Math.sqrt(dN * dN + dE * dE);
           const totOffsetMm = Math.round(totOffsetM * 1000);
           const isCoordTol = totOffsetMm <= 50; // เกณฑ์หนีศูนย์มาตรฐานไม่เกิน 50 mm (5 ซม.)
@@ -5214,6 +5238,8 @@
           if (p.easting !== undefined) sumDesignE += p.easting;
           sumActualN += actN;
           sumActualE += actE;
+          sumDNMm += dNMm;
+          sumDEMm += dEMm;
           sumOffsetMm += totOffsetMm;
           if (totOffsetMm > maxOffsetMm) maxOffsetMm = totOffsetMm;
           if (isCoordTol) coordPassCount++;
@@ -5246,18 +5272,26 @@
             </div>
           `;
 
-          // Co (n,e) หลังกด (As-built coordinates N, E and deviation badge)
+          // Co (n,e) หลังกด
           const afterPressCoordsHtml = isDriven ? `
+            <div class="font-mono text-[11px] leading-tight text-emerald-800">
+              <div class="font-bold">n: ${actN.toFixed(4)}</div>
+              <div class="font-bold">e: ${actE.toFixed(4)}</div>
+            </div>
+          ` : `<span class="text-slate-400 font-mono text-[10.5px]">- (รอกด)</span>`;
+
+          // ผลต่าง (Δn, Δe) แต่ละต้น
+          const coordDiffHtml = isDriven ? `
             <div class="font-mono text-[11px] leading-tight">
-              <div class="text-[#047857] font-bold">N: ${actN.toFixed(4)}</div>
-              <div class="text-[#047857] font-bold">E: ${actE.toFixed(4)}</div>
+              <div class="font-bold ${Math.abs(dNMm) <= 50 ? 'text-emerald-700' : 'text-rose-600'}">Δn: ${dNMm >= 0 ? '+' : ''}${dNMm} mm</div>
+              <div class="font-bold ${Math.abs(dEMm) <= 50 ? 'text-emerald-700' : 'text-rose-600'}">Δe: ${dEMm >= 0 ? '+' : ''}${dEMm} mm</div>
               <div class="mt-0.5">
-                <span class="inline-block px-1.5 py-0.2 rounded font-mono font-bold text-[9px] ${isCoordTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}" title="ระยะหนีศูนย์รวม">
-                  ${totOffsetMm === 0 ? '✓ ตรงหมุด (0mm)' : `Δ ${totOffsetMm}mm (${isCoordTol ? 'ปกติ' : 'เกินเกณฑ์'})`}
+                <span class="inline-block px-1.5 py-0.2 rounded font-bold text-[9px] ${isCoordTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}" title="ระยะหนีศูนย์รวม">
+                  หนีศูนย์ ${totOffsetMm}mm (${isCoordTol ? 'ผ่าน' : 'เกิน'})
                 </span>
               </div>
             </div>
-          ` : `<span class="text-slate-400 font-mono text-[10.5px]">- (รอตอก)</span>`;
+          ` : `<span class="text-slate-400 font-mono text-[10.5px]">-</span>`;
 
           // TOP and Diff display (clean, NO edit pencil clutter, wrapped with pencil-edit-icon)
           const actualTopDisplay = hasActualTop
@@ -5282,7 +5316,8 @@
               <td class="p-2 text-center font-bold text-blue-700 border border-slate-200">${p.footing || '-'}</td>
               <td class="p-2 text-center font-bold text-slate-700 border border-slate-200">${p.grid}</td>
               <td class="p-2 text-right border border-slate-200">${designCoordsHtml}</td>
-              <td class="p-2 text-right border border-slate-200 bg-emerald-50/30">${afterPressCoordsHtml}</td>
+              <td class="p-2 text-right border border-slate-200 bg-emerald-50/20">${afterPressCoordsHtml}</td>
+              <td class="p-2 text-center border border-slate-200 bg-emerald-50/40">${coordDiffHtml}</td>
               <td class="p-2 text-right font-bold text-slate-800 font-mono border border-slate-200">${pco.toFixed(3)}</td>
               <td class="p-2 text-right font-mono border border-slate-200">${actualTopDisplay}</td>
               <td class="p-2 text-center font-mono border border-slate-200">${diffBadge}</td>
@@ -5301,7 +5336,8 @@
               <td class="p-2.5 text-center font-black text-[#0284c7] border-r border-[#e5f1ed]">${p.footing || '-'}</td>
               <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
               <td class="p-2.5 text-right border-r border-[#e5f1ed]">${designCoordsHtml}</td>
-              <td class="p-2.5 text-right border-r border-[#e5f1ed] bg-emerald-50/40">${afterPressCoordsHtml}</td>
+              <td class="p-2.5 text-right border-r border-[#e5f1ed] bg-emerald-50/20">${afterPressCoordsHtml}</td>
+              <td class="p-2.5 text-center border-r border-[#e5f1ed] bg-emerald-50/40">${coordDiffHtml}</td>
               <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
               <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed]">${actualTopDisplay}</td>
               <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed]">${diffBadge}</td>
@@ -5316,16 +5352,34 @@
           tbody.appendChild(tr);
         });
 
-        // Compute averages and summaries for tfoot & summary dashboard card
+        // Compute averages and summaries for tfoot
         const count = displayPilesList.length;
         const avgDesignN = count > 0 ? (sumDesignN / count) : 0;
         const avgDesignE = count > 0 ? (sumDesignE / count) : 0;
+        const avgActualN = count > 0 ? (sumActualN / count) : 0;
+        const avgActualE = count > 0 ? (sumActualE / count) : 0;
+        const avgDNmm = count > 0 ? Math.round(sumDNMm / count) : 0;
+        const avgDEmm = count > 0 ? Math.round(sumDEMm / count) : 0;
         const avgOffsetMm = count > 0 ? Math.round(sumOffsetMm / count) : 0;
         const coordPassPct = count > 0 ? ((coordPassCount / count) * 100).toFixed(1) : '100.0';
         const avgPco = count > 0 ? (sumPco / count) : 0;
         const avgTop = count > 0 ? (sumTop / count) : 0;
         const avgDiffMm = count > 0 ? Math.round(sumDiffMm / count) : 0;
         const levelPassPct = count > 0 ? ((levelPassCount / count) * 100).toFixed(1) : '100.0';
+
+        // Dynamic Table Wrapper Height (ยืดตารางตามจำนวนต้น สูงสุด 5 ต้น แล้วค่อยเปิด scroll)
+        const tableWrapper = document.querySelector('#report-sec-table .table-wrapper');
+        if (tableWrapper) {
+          if (count <= 5) {
+            tableWrapper.classList.remove('has-scroll');
+            tableWrapper.style.maxHeight = 'none';
+            tableWrapper.style.overflowY = 'visible';
+          } else {
+            tableWrapper.classList.add('has-scroll');
+            tableWrapper.style.maxHeight = '365px';
+            tableWrapper.style.overflowY = 'auto';
+          }
+        }
 
         // 1. Injected Table Footer Row (tfoot)
         const tfoot = document.getElementById('rep-today-table-foot');
@@ -5341,8 +5395,13 @@
                 <div>E: ${avgDesignE.toFixed(4)}</div>
               </td>
               <td class="p-2.5 text-right font-mono ${isExcel ? 'border border-slate-300 bg-[#d5e8d4]' : 'border-r-2 border-[#475569]/30 bg-[#ecfdf5]'} text-[10.5px]">
-                <div class="text-[#047857] font-bold">หนีศูนย์เฉลี่ย: ${avgOffsetMm} mm</div>
-                <div class="text-[9.5px] text-emerald-800">สูงสุด: ${maxOffsetMm} mm (ผ่าน ${coordPassPct}%)</div>
+                <div class="text-[#047857] font-bold">n: ${avgActualN.toFixed(4)}</div>
+                <div class="text-[#047857] font-bold">e: ${avgActualE.toFixed(4)}</div>
+              </td>
+              <td class="p-2.5 text-center font-mono ${isExcel ? 'border border-slate-300 bg-[#d5e8d4]' : 'border-r-2 border-[#475569]/30 bg-[#ecfdf5]'} text-[10.5px]">
+                <div class="text-[#047857] font-bold">Δn: ${avgDNmm >= 0 ? '+' : ''}${avgDNmm} mm</div>
+                <div class="text-[#047857] font-bold">Δe: ${avgDEmm >= 0 ? '+' : ''}${avgDEmm} mm</div>
+                <div class="text-[9.5px] text-emerald-800 font-bold">หนีศูนย์เฉลี่ย: ${avgOffsetMm} mm (${coordPassPct}% ผ่าน)</div>
               </td>
               <td class="p-2.5 text-right font-mono ${isExcel ? 'border border-slate-300' : 'border-r-2 border-[#475569]/30 text-[#a84631]'} text-[10.5px]">
                 ${avgPco.toFixed(3)}
@@ -5364,85 +5423,6 @@
                 </span>
               </td>
             </tr>
-          `;
-        }
-
-        // 2. Injected Summary of Values Dashboard Card (#rep-table-summary-card)
-        const sumCard = document.getElementById('rep-table-summary-card');
-        if (sumCard) {
-          sumCard.innerHTML = `
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-              <!-- Card 1: จำนวนต้น -->
-              <div class="p-3 rounded-xl bg-white border-2 border-[#475569]/40 shadow-xs flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 font-bold text-slate-700 text-[11px]">
-                  <span class="text-base">📊</span> <span>สรุปจำนวนเสาเข็มที่รายงาน</span>
-                </div>
-                <div class="my-1.5 flex items-baseline gap-1.5">
-                  <span class="text-3xl font-black font-montserrat text-[#0284c7] leading-none">${count}</span>
-                  <span class="text-xs text-slate-500 font-bold">/ 93 ต้น (${((count / 93) * 100).toFixed(1)}%)</span>
-                </div>
-                <div class="text-[10.5px] text-slate-500 font-medium pt-1 border-t border-slate-100">
-                  ${isFilterAll ? 'เสาเข็มที่ตอกสะสมทั้งหมดในโครงการ' : `รายการเสาเข็มตอกเฉพาะวันที่ ${curDate}`}
-                </div>
-              </div>
-
-              <!-- Card 2: สรุป Co (n,e) หลังกด -->
-              <div class="p-3 rounded-xl bg-[#ecfdf5] border-2 border-emerald-400 shadow-xs flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 font-bold text-emerald-900 text-[11px]">
-                  <span class="text-base">🎯</span> <span>สรุปพิกัด Co (n,e) หลังกด</span>
-                </div>
-                <div class="my-1 text-xs font-mono font-bold space-y-0.5">
-                  <div class="flex justify-between">
-                    <span class="text-slate-600">หนีศูนย์เฉลี่ย:</span>
-                    <span class="text-emerald-800 font-black">${avgOffsetMm} mm (${(avgOffsetMm/10).toFixed(1)} ซม.)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-600">หนีศูนย์สูงสุด:</span>
-                    <span class="text-emerald-800 font-black">${maxOffsetMm} mm (${(maxOffsetMm/10).toFixed(1)} ซม.)</span>
-                  </div>
-                </div>
-                <div class="text-[10px] text-emerald-800 font-black flex items-center justify-between pt-1 border-t border-emerald-200">
-                  <span>เกณฑ์มาตรฐาน (≤50mm):</span>
-                  <span class="bg-white px-1.5 py-0.5 rounded border border-emerald-300 text-emerald-700 font-bold">${coordPassPct}% (${coordPassCount}/${count} ต้น)</span>
-                </div>
-              </div>
-
-              <!-- Card 3: สรุปค่าระดับหัวเข็ม -->
-              <div class="p-3 rounded-xl bg-[#f0f9ff] border-2 border-sky-400 shadow-xs flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 font-bold text-sky-900 text-[11px]">
-                  <span class="text-base">📏</span> <span>สรุปค่าระดับหัวเข็ม (Cut-off)</span>
-                </div>
-                <div class="my-1 text-xs font-mono font-bold space-y-0.5">
-                  <div class="flex justify-between">
-                    <span class="text-slate-600">ระดับ TOP เฉลี่ย:</span>
-                    <span class="text-sky-800 font-black">${avgTop.toFixed(3)} ม.</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-600">ผลต่างเฉลี่ย:</span>
-                    <span class="text-sky-800 font-black">${avgDiffMm >= 0 ? '+' : ''}${avgDiffMm} mm</span>
-                  </div>
-                </div>
-                <div class="text-[10px] text-sky-800 font-black flex items-center justify-between pt-1 border-t border-sky-200">
-                  <span>เกณฑ์ระดับ (≤50mm):</span>
-                  <span class="bg-white px-1.5 py-0.5 rounded border border-sky-300 text-sky-700 font-bold">${levelPassPct}% (${levelPassCount}/${count} ต้น)</span>
-                </div>
-              </div>
-
-              <!-- Card 4: ผลการประเมินวิศวกรรม -->
-              <div class="p-3 rounded-xl bg-[#fff7ed] border-2 border-amber-400 shadow-xs flex flex-col justify-between">
-                <div class="flex items-center gap-1.5 font-bold text-amber-900 text-[11px]">
-                  <span class="text-base">🎖️</span> <span>ผลการประเมินวิศวกรรม</span>
-                </div>
-                <div class="my-1">
-                  <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-black text-xs shadow-xs">
-                    <span>✓</span> <span>ผ่านเกณฑ์มาตรฐาน 100%</span>
-                  </div>
-                </div>
-                <div class="text-[9.5px] text-slate-600 font-medium pt-1 border-t border-amber-200">
-                  มาตรฐาน มยผ. / วสท. พิกัดจริงและระดับตัดหัวเข็มอยู่ในเกณฑ์มาตรฐานที่ยอมรับได้
-                </div>
-              </div>
-            </div>
           `;
         }
       }
