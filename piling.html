@@ -326,18 +326,20 @@
       position: fixed !important;
       left: 0 !important;
       top: 0 !important;
-      width: 1420px !important;
-      min-width: 1420px !important;
-      max-width: none !important;
-      overflow: visible !important;
-      padding: 16px !important;
+      width: 1380px !important;
+      min-width: 1380px !important;
+      max-width: 1380px !important;
+      overflow: hidden !important;
+      padding: 0 !important;
+      margin: 0 !important;
       z-index: 30 !important;
       pointer-events: none !important;
       opacity: 0.001 !important;
     }
     #report-page.is-export-capturing.export-portrait {
-      width: 1240px !important;
-      min-width: 1240px !important;
+      width: 1200px !important;
+      min-width: 1200px !important;
+      max-width: 1200px !important;
     }
     /* ป้องกันสีเลอะขอบตอนแคปเจอร์ และล็อกขนาดตายตัว (Prevent color overflowing curved borders during export) */
     #report-page-card.is-export-capturing,
@@ -350,13 +352,16 @@
       width: 1380px !important;
       min-width: 1380px !important;
       max-width: 1380px !important;
-      margin: 0 auto !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
     }
     #report-page-card.is-export-capturing.export-portrait,
     .is-export-capturing.export-portrait #report-page-card {
       width: 1200px !important;
       min-width: 1200px !important;
       max-width: 1200px !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
     }
     .is-export-capturing [class*="shadow-"] {
       box-shadow: none !important;
@@ -4875,9 +4880,25 @@
             legend: {
               position: 'top',
               labels: {
+                usePointStyle: true,
+                pointStyle: 'line',
+                boxWidth: 38,
+                pointStyleWidth: 38,
                 font: { family: 'Sarabun', size: 12, weight: 'bold' },
                 color: '#34383b',
-                padding: 12
+                padding: 14,
+                generateLabels: function(chart) {
+                  return chart.data.datasets.map((dataset, i) => ({
+                    text: dataset.label,
+                    fillStyle: dataset.borderColor,
+                    strokeStyle: dataset.borderColor,
+                    lineWidth: dataset.borderWidth || 3,
+                    lineDash: dataset.borderDash || [],
+                    pointStyle: 'line',
+                    hidden: !chart.isDatasetVisible(i),
+                    datasetIndex: i
+                  }));
+                }
               }
             },
             tooltip: {
@@ -6050,7 +6071,7 @@
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle = '#334155';
-      ctx.fillText('แผนสะสม (3 ต้น/วัน)', padL + 34, 14);
+      ctx.fillText('แผนงานสะสม (3 ต้น/วัน)', padL + 34, 14);
 
       ctx.strokeStyle = '#10b981';
       ctx.lineWidth = 3;
@@ -6269,14 +6290,23 @@
             const origCardOverflow = reportCard.style.overflow;
             const origCardBg = reportCard.style.backgroundColor;
 
+            reportCard.style.setProperty('box-sizing', 'border-box', 'important');
             reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
             reportCard.style.setProperty('max-width', `${exportTargetW}px`, 'important');
             reportCard.style.setProperty('min-width', `${exportTargetW}px`, 'important');
-            reportCard.style.margin = '0 auto';
+            reportCard.style.setProperty('margin', '0', 'important');
+            reportCard.style.setProperty('margin-left', '0', 'important');
+            reportCard.style.setProperty('margin-right', '0', 'important');
+            reportCard.style.setProperty('border', '2px solid #475569', 'important');
             reportCard.style.boxShadow = 'none';
             reportCard.style.borderRadius = '12px';
             reportCard.style.overflow = 'hidden';
             reportCard.style.backgroundColor = '#ffffff';
+
+            const origPagePad = reportPage.style.padding;
+            const origPageMargin = reportPage.style.margin;
+            reportPage.style.setProperty('padding', '0', 'important');
+            reportPage.style.setProperty('margin', '0', 'important');
 
             // Re-render internal canvases at the crisp width
             renderPlanSnapshotCanvas();
@@ -6350,17 +6380,39 @@
                   backgroundColor: '#ffffff',
                   width: scrollW,
                   height: scrollH,
-                  windowWidth: scrollW + 60,
-                  windowHeight: scrollH + 60,
+                  windowWidth: scrollW,
+                  windowHeight: scrollH,
                   scrollX: 0,
                   scrollY: 0,
+                  x: 0,
+                  y: 0,
                   onclone: (clonedDoc) => {
+                    clonedDoc.body.style.margin = '0';
+                    clonedDoc.body.style.padding = '0';
+                    clonedDoc.body.style.width = `${scrollW}px`;
+                    clonedDoc.body.style.overflow = 'hidden';
+
+                    const clonedPage = clonedDoc.getElementById('report-page');
+                    if (clonedPage) {
+                      clonedPage.style.margin = '0';
+                      clonedPage.style.padding = '0';
+                      clonedPage.style.width = `${scrollW}px`;
+                      clonedPage.style.maxWidth = `${scrollW}px`;
+                      clonedPage.style.overflow = 'hidden';
+                      clonedPage.style.left = '0';
+                      clonedPage.style.top = '0';
+                    }
+
                     const clonedCard = clonedDoc.getElementById('report-page-card');
                     if (clonedCard) {
+                      clonedCard.style.setProperty('box-sizing', 'border-box', 'important');
                       clonedCard.style.setProperty('width', `${scrollW}px`, 'important');
                       clonedCard.style.setProperty('max-width', `${scrollW}px`, 'important');
                       clonedCard.style.setProperty('min-width', `${scrollW}px`, 'important');
-                      clonedCard.style.margin = '0 auto';
+                      clonedCard.style.setProperty('margin', '0', 'important');
+                      clonedCard.style.setProperty('margin-left', '0', 'important');
+                      clonedCard.style.setProperty('margin-right', '0', 'important');
+                      clonedCard.style.setProperty('border', '2px solid #475569', 'important');
                       clonedCard.style.overflow = 'hidden';
                       clonedCard.style.boxShadow = 'none';
                       clonedCard.style.borderRadius = '12px';
@@ -6399,6 +6451,8 @@
               reportCard.style.borderRadius = origCardBorderRadius;
               reportCard.style.overflow = origCardOverflow;
               reportCard.style.backgroundColor = origCardBg;
+              if (typeof origPagePad !== 'undefined') reportPage.style.padding = origPagePad;
+              if (typeof origPageMargin !== 'undefined') reportPage.style.margin = origPageMargin;
               reportCard.classList.remove('is-export-capturing', 'export-portrait');
               reportPage.classList.remove('is-export-capturing', 'export-portrait');
               renderPlanSnapshotCanvas();
