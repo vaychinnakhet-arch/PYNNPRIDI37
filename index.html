@@ -12758,8 +12758,23 @@ if (typeof window !== "undefined") {
           const drivenPct = Math.round((totalDriven / TOTAL_PILES) * 100);
           const remaining = Math.max(0, TOTAL_PILES - totalDriven);
 
-          // Working day & planned accumulated
-          const elapsedDays = Math.min(TOTAL_DAYS, Math.max(1, Math.ceil(totalDriven / DAILY_PLAN)));
+          // Working day & planned accumulated (คำนวณตามวันเริ่มงานจริงจนถึงปัจจุบัน ให้ตรงกับหน้ารายงาน)
+          const drivenRecords = (records && typeof records === 'object')
+            ? Object.values(records).filter(r => r && r.status === 'driven' && r.date && r.date <= curDate)
+            : [];
+          const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
+          
+          let elapsedDays = 1;
+          if (uniqueDates.length > 0) {
+            const startDate = uniqueDates[0];
+            if (curDate >= startDate) {
+              const d1 = new Date(startDate + 'T00:00:00');
+              const d2 = new Date(curDate + 'T00:00:00');
+              const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+              elapsedDays = Math.min(TOTAL_DAYS, Math.max(uniqueDates.filter(d => d <= curDate).length, diffDays));
+            }
+          }
+          elapsedDays = Math.min(Math.max(elapsedDays, 1), TOTAL_DAYS);
           const planCum = Math.min(TOTAL_PILES, elapsedDays * DAILY_PLAN);
           const variance = totalDriven - planCum;
 
@@ -12840,7 +12855,7 @@ if (typeof window !== "undefined") {
                   </div>
                 </div>
 
-                <!-- KPI 2: ตอกสะสมจริง -->
+                <!-- KPI 2: กดสะสมจริง -->
                 <div class="p-4 rounded-2xl bg-white border-2 border-[#253047] shadow-[0_3px_0_#253047] flex flex-col justify-between">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-black text-emerald-700 flex items-center gap-1.5">
@@ -12918,7 +12933,7 @@ if (typeof window !== "undefined") {
                         แผนรวม 93 ต้น / 31 วันทำการ
                       </span>
                     </h4>
-                    <p class="text-xs text-slate-500 font-medium">เส้นประสีส้ม = แผนสะสม · เส้นทึบสีเขียว = ตอกเสร็จสะสมจริง (Daily S-Curve Progress)</p>
+                    <p class="text-xs text-slate-500 font-medium">เส้นประสีส้ม = แผนสะสม · เส้นทึบสีเขียว = กดเสร็จสะสมจริง (Daily S-Curve Progress)</p>
                   </div>
                 </div>
 
@@ -12997,7 +13012,7 @@ if (typeof window !== "undefined") {
                       โมเดล 3D & แปลน 2D Top View
                     </h4>
                     <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
-                      ดูผังเสาเข็ม 93 ต้น หมุน 3 มิติ เล็งรายต้น เช็คพิกัดสำรวจ N/E และระดับตัดหัวเข็ม PCO พร้อมกดตอกได้ทันที
+                      ดูผังเสาเข็ม 93 ต้น หมุน 3 มิติ เล็งรายต้น เช็คพิกัดสำรวจ N/E และระดับตัดหัวเข็ม PCO พร้อมบันทึกกดได้ทันที
                     </p>
                   </div>
                   <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#ed6845]">
@@ -13021,7 +13036,7 @@ if (typeof window !== "undefined") {
                       หน้ารายงานประจำวัน (ธีมเดิม / สไตล์ Excel)
                     </h4>
                     <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
-                      รายงานผลงานรายวัน กราฟเปรียบเทียบ S-Curve ตารางต้นที่ตอกวันนี้ เลือกสลับธีมมาตรฐาน หรือ สไตล์ Excel ได้อิสระ พร้อมส่งออกภาพ PNG / พิมพ์ PDF
+                      รายงานผลงานรายวัน กราฟเปรียบเทียบ S-Curve ตารางต้นที่กดวันนี้ เลือกสลับธีมมาตรฐาน หรือ สไตล์ Excel ได้อิสระ พร้อมส่งออกภาพ PNG / พิมพ์ PDF
                     </p>
                   </div>
                   <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#107c41]">
