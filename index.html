@@ -6697,7 +6697,7 @@
           } else if (variance < 0) {
             varianceBadge = `<span class="px-2.5 py-1 rounded-xl text-xs font-black bg-rose-100 border-2 border-[#253047] text-rose-700 shadow-[0_2px_0_#253047]"><span class="inline-block w-2 h-2 rounded-full bg-rose-600 mr-1 animate-pulse"></span>ช้ากว่าแผน ${Math.abs(variance)} ต้น</span>`;
           } else {
-            varianceBadge = `<span class="px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-100 border-2 border-[#253047] text-emerald-800 shadow-[0_2px_0_#253047]">ตามแผนงานพอดี ✅</span>`;
+            varianceBadge = `<span class="px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-100 border-2 border-[#253047] text-emerald-800 shadow-[0_2px_0_#253047]">ตามแผนงาน ✅</span>`;
           }
 
           let html = `
@@ -6809,7 +6809,7 @@
                   </div>
                   <div class="my-1">
                     <div class="text-xl sm:text-2xl font-black ${variance >= 0 ? 'text-emerald-700' : 'text-rose-700'} leading-tight">
-                      ${variance >= 0 ? (variance === 0 ? 'ตามแผนงานพอดี' : `เร็วกว่าแผน +${variance} ต้น`) : `ช้ากว่าแผน ${Math.abs(variance)} ต้น`}
+                      ${variance >= 0 ? (variance === 0 ? 'ตามแผนงาน' : `เร็วกว่าแผน +${variance} ต้น`) : `ช้ากว่าแผน ${Math.abs(variance)} ต้น`}
                     </div>
                   </div>
                   <div class="text-[11px] text-slate-500 font-bold pt-2 border-t border-slate-100 flex justify-between">

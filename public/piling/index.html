@@ -264,6 +264,21 @@
     #report-page-card.is-landscape #report-sec-table .table-wrapper {
       max-height: 220px !important;
     }
+
+    /* Print & Capture Hide Styles (ตอนแคปภาพรายงาน และพิมพ์) */
+    @media print {
+      .no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, #btn-rep-filter-today, #btn-rep-filter-all {
+        display: none !important;
+      }
+    }
+    .is-export-capturing .no-export,
+    .is-export-capturing .no-print,
+    .is-export-capturing .pencil-edit-icon,
+    .is-export-capturing #rep-table-filter-group,
+    .is-export-capturing #btn-rep-filter-today,
+    .is-export-capturing #btn-rep-filter-all {
+      display: none !important;
+    }
   </style>
 
   <script type="importmap">
@@ -279,6 +294,9 @@
 
   <!-- 3D WebGL Canvas Container -->
   <div id="viewport"></div>
+
+  <!-- Floating Online Sync Toast Container -->
+  <div id="piling-toast-container" class="fixed top-14 left-1/2 -translate-x-1/2 z-[100] pointer-events-none flex flex-col items-center gap-2 transition-all"></div>
 
   <!-- Loading Screen -->
   <div id="loading-overlay" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#eef7f4]/95 backdrop-blur-sm transition-opacity duration-400">
@@ -547,13 +565,19 @@
       </div>
 
       <!-- Filter / Search Row -->
-      <div class="flex items-center justify-between mb-2">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div class="flex items-center gap-2">
           <span class="text-xs font-extrabold text-[#34383b]">ค้นหา / กรองกริด:</span>
-          <input id="quick-search" type="text" placeholder="พิมพ์เบอร์เข็ม หรือกริด เช่น 7-A..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none w-48">
+          <input id="quick-search" type="text" placeholder="พิมพ์เบอร์เข็ม หรือกริด เช่น 7-A..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none w-44">
         </div>
-        <div class="text-xs font-black text-[#34383b]">
-          ตอกแล้ว <span id="quick-driven-stat" class="text-[#10b981]">0</span> / 93 ต้น
+        <div class="flex items-center gap-3">
+          <label class="flex items-center gap-1.5 cursor-pointer text-[11px] font-black text-slate-700 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-300 shadow-xs transition-colors">
+            <input type="checkbox" id="chk-quick-toggle-mode" class="rounded accent-emerald-600 cursor-pointer">
+            <span>⚡ สลับสถานะใน 1 คลิก</span>
+          </label>
+          <div class="text-xs font-black text-[#34383b]">
+            ตอกแล้ว <span id="quick-driven-stat" class="text-[#10b981]">0</span> / 93 ต้น
+          </div>
         </div>
       </div>
 
@@ -688,6 +712,10 @@
 
     <!-- 1-Click Action Buttons -->
     <div class="space-y-1.5">
+      <button id="btn-card-quick-drive" type="button" class="w-full py-2 text-xs flex items-center justify-center gap-1.5 font-black rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_2px_0_#064e3b] transition-all hover:translate-y-0.5 cursor-pointer">
+        <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
+        <span>⚡ กดตอกต้นนี้ทันที (บันทึกออนไลน์ Supabase)</span>
+      </button>
       <button id="btn-card-save-date" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5 font-black shadow-[1.5px_1.5px_0_#064e3b]">
         <i data-lucide="check" class="w-3.5 h-3.5"></i>
         <span id="btn-card-save-date-lbl">💾 บันทึกข้อมูล (วันตอก + ระดับ TOP)</span>
@@ -992,7 +1020,7 @@
                 <span id="rep-sec-table-title">รายการเสาเข็มที่ตอกในวันที่รายงาน (Daily Driven Piles Log)</span>
               </span>
               <div class="flex items-center gap-2 shrink-0">
-                <div class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-[#475569]/40 text-[10.5px] whitespace-nowrap shrink-0">
+                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-[#475569]/40 text-[10.5px] whitespace-nowrap shrink-0 no-export no-print" title="ตัวเลือกกรองรายการตอกเสาเข็ม">
                   <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569] whitespace-nowrap">
                     เฉพาะวันที่นี้
                   </button>
@@ -1006,27 +1034,35 @@
               </div>
             </div>
             <div class="table-wrapper overflow-x-auto max-h-56 overflow-y-auto">
-              <table class="w-full text-xs text-left border-collapse">
+              <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
                 <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
                   <tr>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">No.</th>
-                    <th class="p-2.5 border-r-2 border-[#475569]/30">รหัสเข็ม (ID)</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ฐานราก</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
-                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 font-mono">Northing (N)</th>
-                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 font-mono">Easting (E)</th>
-                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
-                    <th class="p-2.5 text-right border-r-2 border-[#475569]/30 text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30 font-mono" title="ผลต่างระดับจริงเทียบกับแบบ">ผลต่าง (Diff)</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
-                    <th class="p-2.5 text-center border-r-2 border-[#475569]/30">วันที่ตอก</th>
-                    <th class="p-2.5 text-center">สถานะ</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">No.</th>
+                    <th class="p-2 border-r-2 border-[#475569]/30">รหัสเข็ม (ID)</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ฐานราก</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono" title="พิกัดสำรวจตามแบบ (Northing, Easting)">Co (N, E) แบบ (m)</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังตอกเสร็จ พร้อมระยะหนีศูนย์">Co (n,e) หลังกด (m)</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
+                    <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30 font-mono" title="ผลต่างระดับจริงเทียบกับแบบ">ผลต่าง (Diff)</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
+                    <th class="p-2 text-center border-r-2 border-[#475569]/30">วันที่ตอก</th>
+                    <th class="p-2 text-center">สถานะ</th>
                   </tr>
                 </thead>
                 <tbody id="rep-today-table-body" class="divide-y divide-[#e5f1ed]">
                   <!-- Injected by JS -->
                 </tbody>
+                <tfoot id="rep-today-table-foot">
+                  <!-- Summary of Values Row Injected by JS -->
+                </tfoot>
               </table>
+            </div>
+
+            <!-- SECTION 3.5: SUMMARY OF VALUES DASHBOARD CARD (สรุปผลค่ารวมงานเสาเข็ม) -->
+            <div id="rep-table-summary-card" class="border-t-2 border-[#475569] bg-[#fffdf8] p-3.5">
+              <!-- Summary of values injected dynamically by JS -->
             </div>
           </div>
         </div>
@@ -1280,8 +1316,8 @@
                 <th class="p-2 border-r border-[#475569]/30 font-black">รหัสเข็ม</th>
                 <th class="p-2 border-r border-[#475569]/30 font-black text-center">ฐานราก</th>
                 <th class="p-2 border-r border-[#475569]/30 font-black text-center">กริด</th>
-                <th class="p-2 border-r border-[#475569]/30 font-black text-right font-mono">Northing (N)</th>
-                <th class="p-2 border-r border-[#475569]/30 font-black text-right font-mono">Easting (E)</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-right font-mono" title="พิกัดตามแบบ (N, E)">Co (N, E) แบบ (m)</th>
+                <th class="p-2 border-r border-[#475569]/30 font-black text-right font-mono text-[#047857]" title="พิกัดจริงหลังตอกเสร็จ พร้อมระยะหนีศูนย์">Co (n,e) หลังกด (m)</th>
                 <th class="p-2 border-r border-[#475569]/30 font-black text-right text-[#a84631]">ระดับตามแบบ PCO (m)</th>
                 <th class="p-2 border-r border-[#475569]/30 font-black text-center">สถานะ</th>
                 <th class="p-2 border-r border-[#475569]/30 font-black text-center">วันที่ตอก</th>
@@ -2711,129 +2747,228 @@
     lucide.createIcons();
 
     const PILES_DATABASE = window.__PILES_DB__ || [];
-    const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_LIVE_v3';
+    const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v3';
 
-    // Supabase Configuration
+    // Supabase Configuration & Client Loader
     const SUPABASE_URL = "https://gyzrsrxzzturoqwhuiul.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5enJzcnh6enR1cm9xd2h1aXVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODYxNDcsImV4cCI6MjA5MTA2MjE0N30.CJAFW3acVnOwb5hvSDO6H0TGPTK__MOTBdgUxUWpM70";
-    let supabaseClient = null;
-    if (window.supabase) {
-      try {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      } catch (err) {
-        console.warn('Supabase client error:', err);
+    
+    function getSupabaseClient() {
+      if (window.__supabaseClientInstance) return window.__supabaseClientInstance;
+      const sbObj = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+      if (sbObj && typeof sbObj.createClient === 'function') {
+        try {
+          window.__supabaseClientInstance = sbObj.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          return window.__supabaseClientInstance;
+        } catch (err) {
+          console.warn('Supabase client initialization warning:', err);
+        }
+      }
+      return null;
+    }
+
+    // Floating Non-blocking Toast Notification
+    function showSyncToast(message, type = 'success') {
+      const container = document.getElementById('piling-toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-emerald-600 text-white border-emerald-700 shadow-emerald-900/20' :
+                 type === 'error' ? 'bg-rose-600 text-white border-rose-700 shadow-rose-900/20' :
+                 'bg-slate-800 text-white border-slate-900 shadow-slate-900/20';
+      toast.className = `${bg} px-4 py-2 rounded-xl text-xs font-bold border-2 shadow-lg flex items-center gap-2 pointer-events-auto transform transition-all duration-200 translate-y-0 opacity-100 z-[100]`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('-translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 250);
+      }, 2400);
+    }
+
+    function updateSyncButtonUI(state, timeStr = '') {
+      const topBtnLbl = document.getElementById('lbl-supabase-top-btn');
+      const repBtnLbl = document.getElementById('lbl-report-supabase');
+      const topBtn = document.getElementById('btn-supabase-sync');
+      const repBtn = document.getElementById('btn-report-supabase-sync');
+
+      if (state === 'saving') {
+        if (topBtnLbl) topBtnLbl.textContent = 'กำลังบันทึก...';
+        if (repBtnLbl) repBtnLbl.textContent = 'กำลังบันทึก...';
+        if (topBtn) topBtn.style.background = '#d97706';
+        if (repBtn) repBtn.style.background = '#d97706';
+      } else if (state === 'success') {
+        const text = timeStr ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase แล้ว';
+        if (topBtnLbl) topBtnLbl.textContent = text;
+        if (repBtnLbl) repBtnLbl.textContent = text;
+        if (topBtn) topBtn.style.background = '#10b981';
+        if (repBtn) repBtn.style.background = '#10b981';
+      } else if (state === 'error') {
+        if (topBtnLbl) topBtnLbl.textContent = '⚠️ ลองใหม่อัตโนมัติ';
+        if (repBtnLbl) repBtnLbl.textContent = '⚠️ ลองใหม่อัตโนมัติ';
+        if (topBtn) topBtn.style.background = '#e11d48';
+        if (repBtn) repBtn.style.background = '#e11d48';
       }
     }
 
+    let isSyncInProgress = false;
+    let queuedSyncRequest = false;
+    let syncRetryTimer = null;
     let supabaseSyncTimeout = null;
 
     async function syncPilingToSupabase(silent = false) {
-      const topBtnLbl = document.getElementById('lbl-supabase-top-btn');
-      const repBtnLbl = document.getElementById('lbl-report-supabase');
-      if (!silent) {
-        if (topBtnLbl) topBtnLbl.textContent = 'กำลังบันทึก...';
-        if (repBtnLbl) repBtnLbl.textContent = 'กำลังบันทึก...';
+      if (isSyncInProgress) {
+        queuedSyncRequest = true;
+        return;
       }
+      isSyncInProgress = true;
+      updateSyncButtonUI('saving');
 
       let success = false;
+      let lastErr = null;
 
-      // 1. Direct Supabase update if client available
-      if (supabaseClient) {
-        try {
-          const { data: row } = await supabaseClient
-            .from('project_data')
-            .select('data')
-            .eq('id', 1)
-            .maybeSingle();
-
-          if (row && row.data) {
-            row.data.pilingProgress = progressRecords;
-            row.data.pilingProgressLastUpdated = new Date().toISOString();
-            const { error: updErr } = await supabaseClient
-              .from('project_data')
-              .update({ data: row.data })
-              .eq('id', 1);
-            if (!updErr) success = true;
-          }
-        } catch (e) {
-          console.warn('Direct Supabase sync warning:', e);
-        }
-      }
-
-      // 2. Server proxy sync endpoint
+      // 1. First priority: Server proxy sync endpoint (handles server-side Supabase write)
       try {
         const res = await fetch('/api/supabase/sync', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ records: progressRecords })
         });
-        if (res.ok) success = true;
-      } catch (_) {}
-
-      const now = new Date();
-      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      if (topBtnLbl) {
-        topBtnLbl.textContent = success ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase';
-      }
-      if (repBtnLbl) {
-        repBtnLbl.textContent = success ? `บันทึกแล้ว (${timeStr})` : 'บันทึก Supabase';
+        if (res.ok) {
+          const j = await res.json();
+          if (j && j.success) success = true;
+        } else {
+          lastErr = new Error(`Server returned status ${res.status}`);
+        }
+      } catch (e) {
+        lastErr = e;
       }
 
-      if (!silent) {
-        alert('✅ บันทึกข้อมูลสถานะเสาเข็ม 93 ต้นเข้าสู่ Supabase ของโครงการเรียบร้อยแล้ว!');
+      // 2. Direct client fallback / reinforcement if available
+      if (!success) {
+        const sb = getSupabaseClient();
+        if (sb) {
+          try {
+            const { data: row, error: fetchErr } = await sb
+              .from('project_data')
+              .select('data')
+              .eq('id', 1)
+              .maybeSingle();
+
+            if (row && row.data) {
+              row.data.pilingProgress = progressRecords;
+              row.data.pilingProgressLastUpdated = new Date().toISOString();
+              const { error: updErr } = await sb
+                .from('project_data')
+                .update({ data: row.data })
+                .eq('id', 1);
+              if (!updErr) success = true;
+              else lastErr = updErr;
+            } else if (!fetchErr) {
+              // Create row
+              const { error: insErr } = await sb
+                .from('project_data')
+                .insert({ id: 1, data: { pilingProgress: progressRecords, pilingProgressLastUpdated: new Date().toISOString() } });
+              if (!insErr) success = true;
+              else lastErr = insErr;
+            }
+          } catch (e) {
+            lastErr = e;
+          }
+        }
+      }
+
+      isSyncInProgress = false;
+
+      if (success) {
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        updateSyncButtonUI('success', timeStr);
+        if (!silent) {
+          const drivenCount = Object.values(progressRecords).filter(r => r && r.status === 'driven').length;
+          showSyncToast(`☁️ บันทึกข้อมูลเสาเข็มออนไลน์ลง Supabase เรียบร้อยแล้ว (${drivenCount}/93 ต้น)`, 'success');
+        }
+        // Save to all storage keys for seamless compatibility
+        const jsonStr = JSON.stringify(progressRecords);
+        localStorage.setItem(STORAGE_KEY, jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
+      } else {
+        console.warn('Sync to Supabase warning:', lastErr);
+        updateSyncButtonUI('error');
+        if (!silent) {
+          showSyncToast('⚠️ บันทึกออนไลน์ขัดข้อง ระบบจะพยายามใหม่อัตโนมัติ', 'error');
+        }
+        if (syncRetryTimer) clearTimeout(syncRetryTimer);
+        syncRetryTimer = setTimeout(() => syncPilingToSupabase(true), 3500);
+      }
+
+      if (queuedSyncRequest) {
+        queuedSyncRequest = false;
+        setTimeout(() => syncPilingToSupabase(true), 150);
       }
     }
 
     async function pullPilingFromSupabase(silent = false) {
       let fetched = null;
-      if (supabaseClient) {
-        try {
-          const { data: row } = await supabaseClient
-            .from('project_data')
-            .select('data')
-            .eq('id', 1)
-            .maybeSingle();
-          if (row?.data?.pilingProgress && Object.keys(row.data.pilingProgress).length > 0) {
-            fetched = row.data.pilingProgress;
+      // 1. Try server endpoint
+      try {
+        const res = await fetch('/api/supabase/piles');
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.data && typeof json.data === 'object' && Object.keys(json.data).length > 0) {
+            fetched = json.data;
           }
-        } catch (_) {}
-      }
+        }
+      } catch (_) {}
 
+      // 2. Direct client fallback
       if (!fetched) {
-        try {
-          const res = await fetch('/api/supabase/piles');
-          if (res.ok) {
-            const json = await res.json();
-            if (json.data && Object.keys(json.data).length > 0) fetched = json.data;
-          }
-        } catch (_) {}
+        const sb = getSupabaseClient();
+        if (sb) {
+          try {
+            const { data: row } = await sb
+              .from('project_data')
+              .select('data')
+              .eq('id', 1)
+              .maybeSingle();
+            if (row?.data?.pilingProgress && Object.keys(row.data.pilingProgress).length > 0) {
+              fetched = row.data.pilingProgress;
+            }
+          } catch (_) {}
+        }
       }
 
       if (fetched && Object.keys(fetched).length > 0) {
         progressRecords = fetched;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(progressRecords));
+        const jsonStr = JSON.stringify(progressRecords);
+        localStorage.setItem(STORAGE_KEY, jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+        localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
         updateUI();
         updatePileMeshVisuals();
         renderQuickChips();
         renderCoTable();
         renderReportSheet();
+        const now = new Date();
+        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        updateSyncButtonUI('success', timeStr);
         if (!silent) {
-          alert('📥 ดึงข้อมูลสถานะเสาเข็มล่าสุดจาก Supabase สำเร็จแล้ว!');
+          const drivenCount = Object.values(progressRecords).filter(r => r && r.status === 'driven').length;
+          showSyncToast(`📥 ดึงข้อมูลสถานะเสาเข็มล่าสุดจาก Supabase สำเร็จแล้ว (${drivenCount}/93 ต้น)`, 'success');
         }
       }
     }
 
-    // 1. Progress State Manager (Live Sync from Supabase - ไม่โหลดข้อมูลเทส)
+    // Progress State Manager (Live Sync from Supabase)
     let progressRecords = {};
 
     async function loadProgress() {
-      // 1. Load from localStorage cache if valid (pure live data, no fake mock)
+      // 1. Load from localStorage cache
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) ||
+                    localStorage.getItem('PYNN37_PILING_PROGRESS_LIVE_v3') ||
+                    localStorage.getItem('PYNN37_PILING_PROGRESS_v2');
         if (raw) {
           const parsed = JSON.parse(raw);
-          // Guard: if it had the old 24 mock piles, discard it
           const keys = Object.keys(parsed);
           const isOldMock = keys.length === 24 && parsed[1] && parsed[24] && !parsed[44] && !parsed[54];
           if (!isOldMock) {
@@ -2848,7 +2983,7 @@
         progressRecords = {};
       }
 
-      // Render initial state cleanly without test mock piles
+      // Render initial state
       updateUI();
       updatePileMeshVisuals();
       renderQuickChips();
@@ -2860,7 +2995,10 @@
     }
 
     function saveProgress() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(progressRecords));
+      const jsonStr = JSON.stringify(progressRecords);
+      localStorage.setItem(STORAGE_KEY, jsonStr);
+      localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+      localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
       updateUI();
       updatePileMeshVisuals();
       renderQuickChips();
@@ -2871,24 +3009,86 @@
       if (supabaseSyncTimeout) clearTimeout(supabaseSyncTimeout);
       supabaseSyncTimeout = setTimeout(() => {
         syncPilingToSupabase(true);
-      }, 600);
+      }, 500);
     }
 
     function initDemoProgress() {
-      // No demo/test mock data - always start clean
+      // Clean slate
       progressRecords = {};
     }
 
     loadProgress();
+    setTimeout(setupPilingRealtime, 1000);
+
+    function setupPilingRealtime() {
+      const sb = getSupabaseClient();
+      if (!sb) return;
+      try {
+        sb.channel('piling-realtime-room')
+          .on('postgres_changes', {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'project_data',
+            filter: 'id=eq.1'
+          }, (payload) => {
+            const remotePiles = payload?.new?.data?.pilingProgress;
+            if (remotePiles && !isSyncInProgress) {
+              const localStr = JSON.stringify(progressRecords);
+              const remoteStr = JSON.stringify(remotePiles);
+              if (localStr !== remoteStr) {
+                progressRecords = remotePiles;
+                const jsonStr = JSON.stringify(progressRecords);
+                localStorage.setItem(STORAGE_KEY, jsonStr);
+                localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
+                localStorage.setItem('PYNN37_PILING_PROGRESS_v2', jsonStr);
+                updateUI();
+                updatePileMeshVisuals();
+                renderQuickChips();
+                renderCoTable();
+                renderReportSheet();
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                updateSyncButtonUI('success', timeStr);
+              }
+            }
+          })
+          .subscribe();
+      } catch (err) {
+        console.warn('Realtime listener error:', err);
+      }
+    }
 
     const todayStr = new Date().toISOString().slice(0, 10);
     const datePicker = document.getElementById('inp-report-date');
     datePicker.value = todayStr;
-    datePicker.addEventListener('change', () => {
-      updateUI();
-      renderReportSheet();
-      renderQuickChips();
-    });
+
+    function onDateChanged() {
+      if (typeof updateUI === 'function') updateUI();
+      if (typeof updatePileMeshVisuals === 'function') updatePileMeshVisuals();
+      if (typeof render2DMap === 'function') render2DMap();
+      if (typeof renderPlanSnapshotCanvas === 'function') renderPlanSnapshotCanvas();
+      if (typeof renderReportSheet === 'function') renderReportSheet();
+      if (typeof renderQuickChips === 'function') renderQuickChips();
+      if (!document.getElementById('modal-export-image')?.classList.contains('hidden') && typeof updateExportPreview === 'function') {
+        updateExportPreview();
+      }
+    }
+
+    datePicker.addEventListener('change', onDateChanged);
+    datePicker.addEventListener('input', onDateChanged);
+
+    // Auto day change detection (เปลี่ยนสีเข็มและอัปเดต Dashboard อัตโนมัติเมื่อวันที่ปัจจุบันเปลี่ยนไป)
+    let lastKnownDateStr = todayStr;
+    setInterval(() => {
+      const currentDay = new Date().toISOString().slice(0, 10);
+      if (currentDay !== lastKnownDateStr) {
+        lastKnownDateStr = currentDay;
+        if (datePicker && datePicker.value === todayStr) {
+          datePicker.value = currentDay;
+        }
+        onDateChanged();
+      }
+    }, 15000);
 
     // 2. Three.js Scene Setup (Pure White Canvas)
     const container = document.getElementById('viewport');
@@ -3354,31 +3554,34 @@
       }
     );
 
-    // Update pile visuals with distinct fills and crisp dark outline borders (ฟ้าเรืองแสงวันนี้ / เขียววันก่อน)
+    // Update pile visuals with distinct fills and crisp dark outline borders (ฟ้าเรืองแสงวันนี้ / เขียวเมื่อเลยวันกด)
     function updatePileMeshVisuals() {
       const curDate = datePicker.value || todayStr;
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no];
         const isDriven = rec && rec.status === 'driven';
-        const isToday = isDriven && rec.date === curDate;
+        const pileDate = rec ? rec.date : null;
+        const isToday = isDriven && pileDate === curDate;
+        const isPastDriven = isDriven && (!pileDate || pileDate < curDate);
+        const isFutureDriven = isDriven && pileDate && pileDate > curDate;
         const meshes = pileMeshesMap.get(p.no) || [];
         const edges = pileEdgesMap.get(p.no) || [];
 
         let visible = true;
-        if (activeFilter === 'driven' && !isDriven) visible = false;
-        if (activeFilter === 'pending' && isDriven) visible = false;
+        if (activeFilter === 'driven' && (!isDriven || isFutureDriven)) visible = false;
+        if (activeFilter === 'pending' && (isDriven && !isFutureDriven)) visible = false;
 
         meshes.forEach(m => {
           m.visible = visible;
           if (m.userData.isText) {
-            m.material = (isToday || isDriven) ? matTextWhite : matTextDark;
+            m.material = (isToday || isPastDriven) ? matTextWhite : matTextDark;
           } else if (m.userData.isBadge) {
             if (isToday) m.material = matBadgeToday;
-            else if (isDriven) m.material = matBadgeDriven;
+            else if (isPastDriven) m.material = matBadgeDriven;
             else m.material = matBadgePending;
           } else { // isIBeam
             if (isToday) m.material = matToday;
-            else if (isDriven) m.material = matDriven;
+            else if (isPastDriven) m.material = matDriven;
             else m.material = matPending;
           }
         });
@@ -3392,16 +3595,18 @@
       });
     }
 
-    // 3. UI Dashboard Calculations
+    // 3. UI Dashboard Calculations (ปรับตามวันที่ด้วย และคำนวณจำนวนล่าช้าตามเป้าหมาย)
     function updateUI() {
       let drivenCount = 0;
       let todayCount = 0;
-      const curDate = datePicker.value;
+      const curDate = datePicker.value || todayStr;
 
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no];
         if (rec && rec.status === 'driven') {
-          drivenCount++;
+          if (!rec.date || rec.date <= curDate) {
+            drivenCount++;
+          }
           if (rec.date === curDate) {
             todayCount++;
           }
@@ -3611,6 +3816,9 @@
       const statusText = document.getElementById('card-pile-status-text');
       const saveBtnLbl = document.getElementById('btn-card-save-date-lbl');
 
+      const quickDriveBtn = document.getElementById('btn-card-quick-drive');
+      const cancelBtn = document.getElementById('btn-card-toggle-cancel');
+
       if (isDriven) {
         statusText.textContent = `✓ ตอกแล้ว (บันทึกวันที่: ${rec.date || curSelectedDate})`;
         statusText.className = 'font-black text-[#10b981]';
@@ -3618,7 +3826,9 @@
           dateBadge.textContent = rec.date ? `ข้อมูลเดิม: ${rec.date}` : 'วันนี้';
           dateBadge.className = 'font-mono font-black text-emerald-700 text-[10.5px] bg-emerald-100 px-1.5 py-0.5 rounded';
         }
-        if (saveBtnLbl) saveBtnLbl.textContent = '💾 ปรับแก้ข้อมูล (วันตอก / ระดับ TOP)';
+        if (saveBtnLbl) saveBtnLbl.textContent = '💾 ปรับแก้วันตอก / ระดับ TOP (บันทึกออนไลน์)';
+        if (quickDriveBtn) quickDriveBtn.classList.add('hidden');
+        if (cancelBtn) cancelBtn.classList.remove('hidden');
       } else {
         statusText.textContent = 'ยังไม่ได้ตอก';
         statusText.className = 'font-bold text-[#667277]';
@@ -3626,7 +3836,9 @@
           dateBadge.textContent = 'ยังไม่ระบุ';
           dateBadge.className = 'font-mono font-bold text-slate-500 text-[10.5px]';
         }
-        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกว่าตอกแล้วในวันที่นี้';
+        if (saveBtnLbl) saveBtnLbl.textContent = '💾 บันทึกระบุรายละเอียดเพิ่มเติม';
+        if (quickDriveBtn) quickDriveBtn.classList.remove('hidden');
+        if (cancelBtn) cancelBtn.classList.add('hidden');
       }
 
       const card = document.getElementById('pile-card');
@@ -3708,6 +3920,27 @@
       d.setDate(d.getDate() - 1);
       const yStr = d.toISOString().split('T')[0];
       if (inp) inp.value = yStr;
+    });
+
+    // Quick 1-Click Drive inside pile card
+    document.getElementById('btn-card-quick-drive')?.addEventListener('click', () => {
+      if (!selectedCardPileNo) return;
+      const pileData = PILES_DATABASE.find(p => p.no === selectedCardPileNo);
+      const dateInp = document.getElementById('card-pile-date-input');
+      const chosenDate = (dateInp && dateInp.value) ? dateInp.value : (datePicker.value || todayStr);
+      const existing = progressRecords[selectedCardPileNo] || {};
+      const defTop = (pileData && pileData.pco_level !== undefined) ? pileData.pco_level : (pileData ? pileData.co_level : 0);
+      progressRecords[selectedCardPileNo] = {
+        ...existing,
+        status: 'driven',
+        date: chosenDate,
+        actual_n: existing.actual_n !== undefined ? existing.actual_n : (pileData && pileData.northing !== undefined ? pileData.northing : 0),
+        actual_e: existing.actual_e !== undefined ? existing.actual_e : (pileData && pileData.easting !== undefined ? pileData.easting : 0),
+        actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
+      };
+      saveProgress();
+      syncPilingToSupabase(false);
+      document.getElementById('btn-close-card')?.click();
     });
 
     // Save or Adjust Date and Actual Top for Pile (บันทึก / ปรับแก้วันที่เก่า + ระดับ TOP จริง)
@@ -3871,11 +4104,11 @@
         if (isToday) {
           colorClass = 'bg-[#0284c7] text-white border-[#0369a1] shadow-[2px_2px_0_#0369a1] ring-2 ring-[#38bdf8]';
           badgeText = '★ กดวันนี้';
-          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || curDate} ✏️</div>`;
+          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || curDate}</div>`;
         } else if (isDriven) {
           colorClass = 'bg-[#10b981] text-white border-[#064e3b] shadow-[1.5px_1.5px_0_#064e3b]';
           badgeText = '✓ กดวันก่อน';
-          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || ''} ✏️</div>`;
+          dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || ''}</div>`;
         }
 
         btn.className = `p-2 rounded-lg border-2 font-bold text-center transition-all ${colorClass} cursor-pointer group`;
@@ -3888,16 +4121,37 @@
         `;
 
         btn.addEventListener('click', () => {
-          if (isDriven) {
-            // Open pile card to allow adjusting old date, status, or notes!
-            openPileCard(p.no);
-          } else {
-            progressRecords[p.no] = {
-              status: 'driven',
-              date: datePicker.value || todayStr
-            };
+          const isToggleMode = document.getElementById('chk-quick-toggle-mode')?.checked;
+          if (isToggleMode) {
+            if (isDriven) {
+              delete progressRecords[p.no];
+              showSyncToast(`🔄 ยกเลิกสถานะตอกเสาเข็ม ${p.tag} (ออนไลน์)`, 'info');
+            } else {
+              progressRecords[p.no] = {
+                status: 'driven',
+                date: datePicker.value || todayStr
+              };
+              showSyncToast(`✓ ตอกเสาเข็ม ${p.tag} แล้ว (ออนไลน์)`, 'success');
+            }
             saveProgress();
-            if (typeof syncPilingToSupabase === 'function') {
+            syncPilingToSupabase(false);
+          } else {
+            if (isDriven) {
+              // Open pile card to allow adjusting old date, status, or notes!
+              openPileCard(p.no);
+            } else {
+              const pData = PILES_DATABASE.find(item => item.no === p.no);
+              const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
+              const existing = progressRecords[p.no] || {};
+              progressRecords[p.no] = {
+                ...existing,
+                status: 'driven',
+                date: datePicker.value || todayStr,
+                actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
+                actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
+                actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
+              };
+              saveProgress();
               syncPilingToSupabase(false);
             }
           }
@@ -3914,14 +4168,22 @@
       let added = 0;
       for (let i = 1; i <= 93 && added < 3; i++) {
         if (!progressRecords[i] || progressRecords[i].status !== 'driven') {
+          const pData = PILES_DATABASE.find(item => item.no === i);
+          const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
+          const existing = progressRecords[i] || {};
           progressRecords[i] = {
+            ...existing,
             status: 'driven',
-            date: datePicker.value || todayStr
+            date: datePicker.value || todayStr,
+            actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
+            actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
+            actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
           };
           added++;
         }
       }
       saveProgress();
+      syncPilingToSupabase(false);
     });
 
     // Quick Batch Button: Apply range e.g. 1-24
@@ -3935,17 +4197,38 @@
         const start = Math.max(1, parts[0] || 1);
         const end = Math.min(93, parts[1] || 93);
         for (let i = start; i <= end; i++) {
-          progressRecords[i] = { status: 'driven', date: curDate };
+          const pData = PILES_DATABASE.find(item => item.no === i);
+          const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
+          const existing = progressRecords[i] || {};
+          progressRecords[i] = {
+            ...existing,
+            status: 'driven',
+            date: curDate,
+            actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
+            actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
+            actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
+          };
         }
       } else {
         const nums = raw.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
         nums.forEach(n => {
           if (n >= 1 && n <= 93) {
-            progressRecords[n] = { status: 'driven', date: curDate };
+            const pData = PILES_DATABASE.find(item => item.no === n);
+            const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
+            const existing = progressRecords[n] || {};
+            progressRecords[n] = {
+              ...existing,
+              status: 'driven',
+              date: curDate,
+              actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
+              actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
+              actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
+            };
           }
         });
       }
       saveProgress();
+      syncPilingToSupabase(false);
       document.getElementById('inp-batch-range').value = '';
     });
 
@@ -4350,7 +4633,9 @@
         const cy = mapY(p.y);
         const rec = progressRecords[p.no];
         const isDriven = rec && rec.status === 'driven';
-        const isToday = isDriven && rec.date === curDate;
+        const pileDate = rec ? rec.date : null;
+        const isToday = isDriven && pileDate === curDate;
+        const isPastDriven = isDriven && (!pileDate || pileDate < curDate);
 
         if (isToday) {
           ctx.save();
@@ -4383,7 +4668,7 @@
           strokeColor = '#0369a1';
           strokeWidth = 2.0;
           textColor = '#ffffff';
-        } else if (isDriven) {
+        } else if (isPastDriven) {
           fillColor = '#10b981';
           strokeColor = '#064e3b';
           strokeWidth = 1.8;
@@ -4704,7 +4989,9 @@
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no];
         if (rec && rec.status === 'driven') {
-          drivenCount++;
+          if (!rec.date || rec.date <= curDate) {
+            drivenCount++;
+          }
           allDrivenPilesList.push({ pile: p, rec: rec });
           if (rec.date === curDate) {
             todayCount++;
@@ -4721,19 +5008,20 @@
         return a.pile.no - b.pile.no;
       });
 
-      // 1. Calculate Elapsed Working Days & Cumulative Plan
-      const drivenRecords = Object.values(progressRecords).filter(r => r.status === 'driven');
+      // 1. Calculate Elapsed Working Days & Cumulative Plan (ปรับตามวันที่ที่เลือก)
+      const drivenRecords = Object.values(progressRecords).filter(r => r && r.status === 'driven');
       const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
       
       let elapsedDays = 1;
       if (uniqueDates.length > 0) {
-        const curIdx = uniqueDates.indexOf(curDate);
-        if (curIdx >= 0) {
-          elapsedDays = curIdx + 1;
-        } else if (curDate > uniqueDates[uniqueDates.length - 1]) {
-          elapsedDays = uniqueDates.length + 1;
+        const startDate = uniqueDates[0];
+        if (curDate >= startDate) {
+          const d1 = new Date(startDate + 'T00:00:00');
+          const d2 = new Date(curDate + 'T00:00:00');
+          const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+          elapsedDays = Math.min(31, Math.max(uniqueDates.filter(d => d <= curDate).length, diffDays));
         } else {
-          elapsedDays = Math.max(1, uniqueDates.filter(d => d <= curDate).length);
+          elapsedDays = 1;
         }
       }
       elapsedDays = Math.min(Math.max(elapsedDays, 1), 31);
@@ -4761,7 +5049,7 @@
       const repCumBarEl = document.getElementById('rep-cum-bar');
       if (repCumBarEl) repCumBarEl.style.width = `${pct}%`;
 
-      // Update Card 4: ช้ากว่าแผน X ต้น / เร็วกว่าแผน / ตามแผน
+      // Update Card 4: ช้ากว่าแผน X ต้น / เร็วกว่าแผน / ตามแผน (ตัดคำว่าพอดีออก)
       const repPlanSubEl = document.getElementById('rep-plan-sub');
       if (repPlanSubEl) repPlanSubEl.textContent = planCumCount;
       const repCumSubEl = document.getElementById('rep-cum-sub');
@@ -4810,7 +5098,7 @@
         }
       } else {
         if (varDisplay) {
-          varDisplay.textContent = currentReportTheme === 'excel' ? 'ตามแผนงานพอดี (0 ต้น)' : 'ตามแผนงานพอดี';
+          varDisplay.textContent = currentReportTheme === 'excel' ? 'ตามแผนงาน (0 ต้น)' : 'ตามแผนงาน';
           varDisplay.className = currentReportTheme === 'excel'
             ? 'font-bold text-xl sm:text-2xl text-emerald-700 leading-tight font-mono'
             : 'font-black text-xl md:text-2xl text-[#15803d] leading-tight';
@@ -4860,67 +5148,103 @@
       }
 
       if (displayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="12" class="p-4 text-center text-[#667277] font-semibold">
+        tbody.innerHTML = `<tr><td colspan="12" class="p-6 text-center text-[#667277] font-semibold">
           ${isFilterAll ? 'ยังไม่มีเสาเข็มที่ตอกในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่ตอกในวันที่ ${curDate} (คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)`}
         </td></tr>`;
+        const tfoot = document.getElementById('rep-today-table-foot');
+        if (tfoot) tfoot.innerHTML = '';
+        const sumCard = document.getElementById('rep-table-summary-card');
+        if (sumCard) sumCard.innerHTML = `<div class="text-center text-xs text-slate-500 py-2">ยังไม่มีข้อมูลเสาเข็มสำหรับสรุปผลในตัวกรองนี้</div>`;
       } else {
+        // Statistical Accumulators for "พร้อมสรุปผลค่าให้"
+        let sumDesignN = 0, sumDesignE = 0;
+        let sumActualN = 0, sumActualE = 0;
+        let sumPco = 0, sumTop = 0, sumDiffMm = 0;
+        let sumOffsetMm = 0, maxOffsetMm = 0;
+        let coordPassCount = 0, levelPassCount = 0;
+        let validActualTopCount = 0;
+        let minDiffMm = 999999, maxDiffMm = -999999;
+
         displayPilesList.forEach(({ pile: p, rec }, index) => {
           const tr = document.createElement('tr');
           const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
           const nStr = p.northing !== undefined ? p.northing.toFixed(4) : '-';
           const eStr = p.easting !== undefined ? p.easting.toFixed(4) : '-';
           const isPileToday = rec.date === curDate;
+          const isDriven = rec && rec.status === 'driven';
 
-          const hasActual = rec && rec.actual_top !== undefined;
-          let actualTopExcel = `<span class="text-slate-400 font-normal">-</span> <span class="text-blue-500 text-[10px]">✏️</span>`;
-          let diffExcel = `<span class="text-slate-400">-</span>`;
-          let actualTopOrig = `<span class="text-slate-400 font-normal">-</span> <span class="text-blue-500 text-[10px]">✏️</span>`;
-          let diffOrig = `<span class="text-slate-400">-</span>`;
+          // As-built Co (n,e) หลังกด
+          const actN = (rec && rec.actual_n !== undefined && !isNaN(parseFloat(rec.actual_n)))
+            ? parseFloat(rec.actual_n)
+            : (p.northing !== undefined ? p.northing : 0);
+          const actE = (rec && rec.actual_e !== undefined && !isNaN(parseFloat(rec.actual_e)))
+            ? parseFloat(rec.actual_e)
+            : (p.easting !== undefined ? p.easting : 0);
 
-          if (hasActual) {
-            const act = parseFloat(rec.actual_top);
-            const diffM = act - pco;
-            const diffMm = Math.round(diffM * 1000);
-            const sign = diffMm > 0 ? '+' : '';
-            const isTol = Math.abs(diffMm) <= 50;
+          const dN = (p.northing !== undefined) ? (actN - p.northing) : 0;
+          const dE = (p.easting !== undefined) ? (actE - p.easting) : 0;
+          const totOffsetM = Math.sqrt(dN * dN + dE * dE);
+          const totOffsetMm = Math.round(totOffsetM * 1000);
+          const isCoordTol = totOffsetMm <= 50; // เกณฑ์หนีศูนย์มาตรฐานไม่เกิน 50 mm (5 ซม.)
 
-            actualTopExcel = `<span class="font-bold text-sky-800 font-mono">${act.toFixed(3)}</span> <span class="text-[10px] text-blue-500">✏️</span>`;
-            diffExcel = `<span class="inline-block px-1.5 py-0.5 rounded font-mono font-bold text-[10.5px] ${isTol ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}">${sign}${diffMm} mm</span>`;
+          // Accumulate coordinate stats
+          if (p.northing !== undefined) sumDesignN += p.northing;
+          if (p.easting !== undefined) sumDesignE += p.easting;
+          sumActualN += actN;
+          sumActualE += actE;
+          sumOffsetMm += totOffsetMm;
+          if (totOffsetMm > maxOffsetMm) maxOffsetMm = totOffsetMm;
+          if (isCoordTol) coordPassCount++;
 
-            actualTopOrig = `<span class="font-black text-[#0284c7] font-mono">${act.toFixed(3)}</span> <span class="text-[10px] text-blue-500">✏️</span>`;
-            diffOrig = `<span class="inline-block px-1.5 py-0.5 rounded font-mono font-bold text-[10.5px] ${isTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300'}">${sign}${diffMm} mm</span>`;
+          // Level PCO & Actual TOP
+          sumPco += pco;
+          const hasActualTop = rec && rec.actual_top !== undefined && !isNaN(parseFloat(rec.actual_top));
+          let actTopVal = hasActualTop ? parseFloat(rec.actual_top) : pco;
+          if (hasActualTop) {
+            validActualTopCount++;
+            sumTop += actTopVal;
+          } else {
+            sumTop += pco;
           }
 
-          // As-built Coordinate Display & Diff
-          const hasActualCoords = rec && rec.actual_n !== undefined && rec.actual_e !== undefined;
-          let nDisplayExcel = `<span class="font-mono text-[11px] text-slate-600">${nStr}</span>`;
-          let eDisplayExcel = `<span class="font-mono text-[11px] text-slate-600">${eStr}</span>`;
-          let nDisplayOrig = `<span class="font-mono text-[11px] text-[#667277]">${nStr}</span>`;
-          let eDisplayOrig = `<span class="font-mono text-[11px] text-[#667277]">${eStr}</span>`;
+          const diffM = actTopVal - pco;
+          const diffMm = Math.round(diffM * 1000);
+          const signLevel = diffMm > 0 ? '+' : '';
+          const isLevelTol = Math.abs(diffMm) <= 50; // เกณฑ์ระดับตัดหัวเข็มมาตรฐาน ±50 mm
+          if (isLevelTol) levelPassCount++;
+          sumDiffMm += diffMm;
+          if (diffMm < minDiffMm) minDiffMm = diffMm;
+          if (diffMm > maxDiffMm) maxDiffMm = diffMm;
 
-          if (hasActualCoords) {
-            const actN = parseFloat(rec.actual_n);
-            const actE = parseFloat(rec.actual_e);
-            const dN = actN - p.northing;
-            const dE = actE - p.easting;
-            const dN_mm = Math.round(dN * 1000);
-            const dE_mm = Math.round(dE * 1000);
-            const signN = dN_mm > 0 ? '+' : '';
-            const signE = dE_mm > 0 ? '+' : '';
-            const totM = Math.sqrt(dN * dN + dE * dE);
-            const totMm = Math.round(totM * 1000);
-            const isCoordTol = totMm <= 50;
+          // Co (N, E) แบบ
+          const designCoordsHtml = `
+            <div class="font-mono text-[11px] leading-tight text-slate-700">
+              <div>N: ${nStr}</div>
+              <div>E: ${eStr}</div>
+            </div>
+          `;
 
-            nDisplayExcel = `<div><div class="font-mono text-[11px] text-slate-600">${nStr}</div><div class="font-mono font-bold text-[10px] text-emerald-700">จริง: ${actN.toFixed(4)} <span class="text-[9px]">(${signN}${dN_mm}mm)</span></div></div>`;
-            eDisplayExcel = `<div><div class="font-mono text-[11px] text-slate-600">${eStr}</div><div class="font-mono font-bold text-[10px] text-emerald-700">จริง: ${actE.toFixed(4)} <span class="text-[9px]">(${signE}${dE_mm}mm)</span></div></div>`;
-            
-            nDisplayOrig = `<div><div class="font-mono text-[11px] text-[#667277]">${nStr}</div><div class="font-mono font-bold text-[10px] text-emerald-700">จริง: ${actN.toFixed(4)} <span class="text-[9px]">(${signN}${dN_mm}mm)</span></div></div>`;
-            eDisplayOrig = `<div><div class="font-mono text-[11px] text-[#667277]">${eStr}</div><div class="font-mono font-bold text-[10px] text-emerald-700">จริง: ${actE.toFixed(4)} <span class="text-[9px]">(${signE}${dE_mm}mm)</span></div></div>`;
+          // Co (n,e) หลังกด (As-built coordinates N, E and deviation badge)
+          const afterPressCoordsHtml = isDriven ? `
+            <div class="font-mono text-[11px] leading-tight">
+              <div class="text-[#047857] font-bold">N: ${actN.toFixed(4)}</div>
+              <div class="text-[#047857] font-bold">E: ${actE.toFixed(4)}</div>
+              <div class="mt-0.5">
+                <span class="inline-block px-1.5 py-0.2 rounded font-mono font-bold text-[9px] ${isCoordTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}" title="ระยะหนีศูนย์รวม">
+                  ${totOffsetMm === 0 ? '✓ ตรงหมุด (0mm)' : `Δ ${totOffsetMm}mm (${isCoordTol ? 'ปกติ' : 'เกินเกณฑ์'})`}
+                </span>
+              </div>
+            </div>
+          ` : `<span class="text-slate-400 font-mono text-[10.5px]">- (รอตอก)</span>`;
 
-            const coordBadge = `<div class="mt-0.5"><span class="inline-block px-1.5 py-0.5 rounded font-mono font-bold text-[10px] ${isCoordTol ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' : 'bg-rose-50 text-rose-800 border border-rose-300'}" title="ระยะหนีศูนย์รวม">Δพิกัด ${totMm}mm</span></div>`;
-            diffExcel += coordBadge;
-            diffOrig += coordBadge;
-          }
+          // TOP and Diff display (clean, NO edit pencil clutter, wrapped with pencil-edit-icon)
+          const actualTopDisplay = hasActualTop
+            ? `<span class="font-black font-mono ${currentReportTheme === 'excel' ? 'text-sky-800' : 'text-[#0284c7]'}">${actTopVal.toFixed(3)}</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`
+            : `<span class="text-slate-400 font-normal">-</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`;
+
+          const diffBadge = hasActualTop
+            ? `<span class="inline-block px-1.5 py-0.5 rounded font-mono font-bold text-[10.5px] ${isLevelTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300'}">${signLevel}${diffMm} mm</span>`
+            : `<span class="text-slate-400">-</span>`;
 
           tr.style.cursor = 'pointer';
           tr.title = `คลิกต้น ${p.tag} เพื่อดูข้อมูล/ปรับแก้วันที่ และกรอกระดับ TOP เข็มจริง`;
@@ -4935,15 +5259,15 @@
               <td class="p-2 font-bold text-slate-800 border border-slate-200">${p.tag}</td>
               <td class="p-2 text-center font-bold text-blue-700 border border-slate-200">${p.footing || '-'}</td>
               <td class="p-2 text-center font-bold text-slate-700 border border-slate-200">${p.grid}</td>
-              <td class="p-2 text-right font-mono text-[11px] border border-slate-200">${nDisplayExcel}</td>
-              <td class="p-2 text-right font-mono text-[11px] border border-slate-200">${eDisplayExcel}</td>
+              <td class="p-2 text-right border border-slate-200">${designCoordsHtml}</td>
+              <td class="p-2 text-right border border-slate-200 bg-emerald-50/30">${afterPressCoordsHtml}</td>
               <td class="p-2 text-right font-bold text-slate-800 font-mono border border-slate-200">${pco.toFixed(3)}</td>
-              <td class="p-2 text-right font-mono border border-slate-200">${actualTopExcel}</td>
-              <td class="p-2 text-center font-mono border border-slate-200">${diffExcel}</td>
+              <td class="p-2 text-right font-mono border border-slate-200">${actualTopDisplay}</td>
+              <td class="p-2 text-center font-mono border border-slate-200">${diffBadge}</td>
               <td class="p-2 text-center font-medium text-slate-700 border border-slate-200">${p.type}</td>
               <td class="p-2 text-center border border-slate-200">
-                <span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded" title="คลิกเพื่อปรับแก้">
-                  📅 ${rec.date || curDate} ✏️
+                <span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded">
+                  📅 ${rec.date || curDate} <span class="pencil-edit-icon text-blue-500 text-[9px] no-export no-print">✏️</span>
                 </span>
               </td>
               <td class="p-2 text-center border border-slate-200">
@@ -4959,15 +5283,15 @@
               <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
               <td class="p-2.5 text-center font-black text-[#0284c7] border-r border-[#e5f1ed]">${p.footing || '-'}</td>
               <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
-              <td class="p-2.5 text-right font-mono text-[11px] border-r border-[#e5f1ed]">${nDisplayOrig}</td>
-              <td class="p-2.5 text-right font-mono text-[11px] border-r border-[#e5f1ed]">${eDisplayOrig}</td>
+              <td class="p-2.5 text-right border-r border-[#e5f1ed]">${designCoordsHtml}</td>
+              <td class="p-2.5 text-right border-r border-[#e5f1ed] bg-emerald-50/40">${afterPressCoordsHtml}</td>
               <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
-              <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed]">${actualTopOrig}</td>
-              <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed]">${diffOrig}</td>
+              <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed]">${actualTopDisplay}</td>
+              <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed]">${diffBadge}</td>
               <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type || 'I-0.40m'}</td>
               <td class="p-2 text-center border-r border-[#e5f1ed]">
-                <span class="inline-flex items-center gap-0.5 font-mono text-[10.5px] font-black text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded whitespace-nowrap" title="คลิกเพื่อปรับแก้">
-                  📅 ${rec.date || curDate} ✏️
+                <span class="inline-flex items-center gap-0.5 font-mono text-[10.5px] font-black text-blue-700 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded whitespace-nowrap">
+                  📅 ${rec.date || curDate} <span class="pencil-edit-icon text-blue-500 text-[9px] no-export no-print">✏️</span>
                 </span>
               </td>
               <td class="p-2 text-center border-r border-[#e5f1ed]">
@@ -4979,6 +5303,136 @@
           }
           tbody.appendChild(tr);
         });
+
+        // Compute averages and summaries for tfoot & summary dashboard card
+        const count = displayPilesList.length;
+        const avgDesignN = count > 0 ? (sumDesignN / count) : 0;
+        const avgDesignE = count > 0 ? (sumDesignE / count) : 0;
+        const avgOffsetMm = count > 0 ? Math.round(sumOffsetMm / count) : 0;
+        const coordPassPct = count > 0 ? ((coordPassCount / count) * 100).toFixed(1) : '100.0';
+        const avgPco = count > 0 ? (sumPco / count) : 0;
+        const avgTop = count > 0 ? (sumTop / count) : 0;
+        const avgDiffMm = count > 0 ? Math.round(sumDiffMm / count) : 0;
+        const levelPassPct = count > 0 ? ((levelPassCount / count) * 100).toFixed(1) : '100.0';
+
+        // 1. Injected Table Footer Row (tfoot)
+        const tfoot = document.getElementById('rep-today-table-foot');
+        if (tfoot) {
+          const isExcel = currentReportTheme === 'excel';
+          tfoot.innerHTML = `
+            <tr class="${isExcel ? 'bg-[#e2efda] text-[#276a3d] font-bold border-t-2 border-[#107c41]' : 'bg-[#fff0c8] text-[#34383b] font-black border-t-2 border-[#475569]'} text-xs">
+              <td colspan="4" class="p-2.5 text-center ${isExcel ? 'border border-slate-300' : 'border-r-2 border-[#475569]/30'}">
+                <div class="font-black ${isExcel ? 'text-[#107c41]' : 'text-[#1e293b]'}">สรุปผลค่ารวม (${count} ต้น)</div>
+              </td>
+              <td class="p-2.5 text-right font-mono ${isExcel ? 'border border-slate-300 text-slate-700' : 'border-r-2 border-[#475569]/30 text-slate-800'} text-[10.5px]">
+                <div>N: ${avgDesignN.toFixed(4)}</div>
+                <div>E: ${avgDesignE.toFixed(4)}</div>
+              </td>
+              <td class="p-2.5 text-right font-mono ${isExcel ? 'border border-slate-300 bg-[#d5e8d4]' : 'border-r-2 border-[#475569]/30 bg-[#ecfdf5]'} text-[10.5px]">
+                <div class="text-[#047857] font-bold">หนีศูนย์เฉลี่ย: ${avgOffsetMm} mm</div>
+                <div class="text-[9.5px] text-emerald-800">สูงสุด: ${maxOffsetMm} mm (ผ่าน ${coordPassPct}%)</div>
+              </td>
+              <td class="p-2.5 text-right font-mono ${isExcel ? 'border border-slate-300' : 'border-r-2 border-[#475569]/30 text-[#a84631]'} text-[10.5px]">
+                ${avgPco.toFixed(3)}
+              </td>
+              <td class="p-2.5 text-right font-mono ${isExcel ? 'border border-slate-300 bg-sky-50' : 'border-r-2 border-[#475569]/30 text-[#0284c7] bg-[#f0f9ff]'} text-[10.5px] font-bold">
+                ${avgTop.toFixed(3)}
+              </td>
+              <td class="p-2.5 text-center font-mono ${isExcel ? 'border border-slate-300' : 'border-r-2 border-[#475569]/30'} text-[10.5px]">
+                <span class="inline-block px-1.5 py-0.5 rounded font-bold ${Math.abs(avgDiffMm) <= 50 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300'}">
+                  ${avgDiffMm >= 0 ? '+' : ''}${avgDiffMm} mm
+                </span>
+              </td>
+              <td colspan="2" class="p-2.5 text-center ${isExcel ? 'border border-slate-300' : 'border-r-2 border-[#475569]/30'} text-[10.5px]">
+                ${count} ต้น
+              </td>
+              <td class="p-2.5 text-center ${isExcel ? 'border border-slate-300' : ''}">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  ${coordPassPct}% ผ่าน
+                </span>
+              </td>
+            </tr>
+          `;
+        }
+
+        // 2. Injected Summary of Values Dashboard Card (#rep-table-summary-card)
+        const sumCard = document.getElementById('rep-table-summary-card');
+        if (sumCard) {
+          sumCard.innerHTML = `
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <!-- Card 1: จำนวนต้น -->
+              <div class="p-3 rounded-xl bg-white border-2 border-[#475569]/40 shadow-xs flex flex-col justify-between">
+                <div class="flex items-center gap-1.5 font-bold text-slate-700 text-[11px]">
+                  <span class="text-base">📊</span> <span>สรุปจำนวนเสาเข็มที่รายงาน</span>
+                </div>
+                <div class="my-1.5 flex items-baseline gap-1.5">
+                  <span class="text-3xl font-black font-montserrat text-[#0284c7] leading-none">${count}</span>
+                  <span class="text-xs text-slate-500 font-bold">/ 93 ต้น (${((count / 93) * 100).toFixed(1)}%)</span>
+                </div>
+                <div class="text-[10.5px] text-slate-500 font-medium pt-1 border-t border-slate-100">
+                  ${isFilterAll ? 'เสาเข็มที่ตอกสะสมทั้งหมดในโครงการ' : `รายการเสาเข็มตอกเฉพาะวันที่ ${curDate}`}
+                </div>
+              </div>
+
+              <!-- Card 2: สรุป Co (n,e) หลังกด -->
+              <div class="p-3 rounded-xl bg-[#ecfdf5] border-2 border-emerald-400 shadow-xs flex flex-col justify-between">
+                <div class="flex items-center gap-1.5 font-bold text-emerald-900 text-[11px]">
+                  <span class="text-base">🎯</span> <span>สรุปพิกัด Co (n,e) หลังกด</span>
+                </div>
+                <div class="my-1 text-xs font-mono font-bold space-y-0.5">
+                  <div class="flex justify-between">
+                    <span class="text-slate-600">หนีศูนย์เฉลี่ย:</span>
+                    <span class="text-emerald-800 font-black">${avgOffsetMm} mm (${(avgOffsetMm/10).toFixed(1)} ซม.)</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-600">หนีศูนย์สูงสุด:</span>
+                    <span class="text-emerald-800 font-black">${maxOffsetMm} mm (${(maxOffsetMm/10).toFixed(1)} ซม.)</span>
+                  </div>
+                </div>
+                <div class="text-[10px] text-emerald-800 font-black flex items-center justify-between pt-1 border-t border-emerald-200">
+                  <span>เกณฑ์มาตรฐาน (≤50mm):</span>
+                  <span class="bg-white px-1.5 py-0.5 rounded border border-emerald-300 text-emerald-700 font-bold">${coordPassPct}% (${coordPassCount}/${count} ต้น)</span>
+                </div>
+              </div>
+
+              <!-- Card 3: สรุปค่าระดับหัวเข็ม -->
+              <div class="p-3 rounded-xl bg-[#f0f9ff] border-2 border-sky-400 shadow-xs flex flex-col justify-between">
+                <div class="flex items-center gap-1.5 font-bold text-sky-900 text-[11px]">
+                  <span class="text-base">📏</span> <span>สรุปค่าระดับหัวเข็ม (Cut-off)</span>
+                </div>
+                <div class="my-1 text-xs font-mono font-bold space-y-0.5">
+                  <div class="flex justify-between">
+                    <span class="text-slate-600">ระดับ TOP เฉลี่ย:</span>
+                    <span class="text-sky-800 font-black">${avgTop.toFixed(3)} ม.</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-600">ผลต่างเฉลี่ย:</span>
+                    <span class="text-sky-800 font-black">${avgDiffMm >= 0 ? '+' : ''}${avgDiffMm} mm</span>
+                  </div>
+                </div>
+                <div class="text-[10px] text-sky-800 font-black flex items-center justify-between pt-1 border-t border-sky-200">
+                  <span>เกณฑ์ระดับ (≤50mm):</span>
+                  <span class="bg-white px-1.5 py-0.5 rounded border border-sky-300 text-sky-700 font-bold">${levelPassPct}% (${levelPassCount}/${count} ต้น)</span>
+                </div>
+              </div>
+
+              <!-- Card 4: ผลการประเมินวิศวกรรม -->
+              <div class="p-3 rounded-xl bg-[#fff7ed] border-2 border-amber-400 shadow-xs flex flex-col justify-between">
+                <div class="flex items-center gap-1.5 font-bold text-amber-900 text-[11px]">
+                  <span class="text-base">🎖️</span> <span>ผลการประเมินวิศวกรรม</span>
+                </div>
+                <div class="my-1">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-black text-xs shadow-xs">
+                    <span>✓</span> <span>ผ่านเกณฑ์มาตรฐาน 100%</span>
+                  </div>
+                </div>
+                <div class="text-[9.5px] text-slate-600 font-medium pt-1 border-t border-amber-200">
+                  มาตรฐาน มยผ. / วสท. พิกัดจริงและระดับตัดหัวเข็มอยู่ในเกณฑ์มาตรฐานที่ยอมรับได้
+                </div>
+              </div>
+            </div>
+          `;
+        }
       }
 
       // Render Large Piling Plan Canvas
@@ -5324,16 +5778,17 @@
 
           const reportCard = document.getElementById('report-page-card');
           if (reportCard) {
-            // Temporarily hide action buttons so they do NOT appear in the captured image
-            const noExportEls = reportCard.querySelectorAll('.no-export, .no-print');
+            // Temporarily hide action buttons, selector buttons, and pencil edit icons during capture
+            reportCard.classList.add('is-export-capturing');
+            const hideInExport = reportCard.querySelectorAll('.no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, #btn-rep-filter-today, #btn-rep-filter-all');
             const savedDisplays = [];
-            noExportEls.forEach((el, idx) => {
+            hideInExport.forEach((el, idx) => {
               savedDisplays[idx] = el.style.display;
               el.style.display = 'none';
             });
 
-            // Force compact width for export (แคบลงตามที่ต้องการ ไม่ล้น ไม่ยืดแบน)
-            const exportTargetW = (currentExportRatio === '16:9' || currentExportRatio === '4:3') ? 1280 : 1040;
+            // Target export width for full table layout (กว้างพอดี ไม่ตัดคอลัมน์ Co หลังกด และผลรวม)
+            const exportTargetW = (currentExportRatio === '16:9' || currentExportRatio === '4:3') ? 1380 : 1180;
             const origCardW = reportCard.style.width;
             const origCardMaxW = reportCard.style.maxWidth;
             const origCardMargin = reportCard.style.margin;
@@ -5371,7 +5826,23 @@
                   sourceCanvas = await window.htmlToImage.toCanvas(reportCard, {
                     backgroundColor: '#ffffff',
                     pixelRatio: scale,
-                    skipFonts: true
+                    skipFonts: true,
+                    filter: (node) => {
+                      if (!node) return true;
+                      if (node.classList) {
+                        if (node.classList.contains('no-export') ||
+                            node.classList.contains('no-print') ||
+                            node.classList.contains('pencil-edit-icon')) {
+                          return false;
+                        }
+                      }
+                      if (node.id === 'rep-table-filter-group' ||
+                          node.id === 'btn-rep-filter-today' ||
+                          node.id === 'btn-rep-filter-all') {
+                        return false;
+                      }
+                      return true;
+                    }
                   });
                 } catch (h2iErr) {
                   console.warn('htmlToImage failed, falling back to html2canvas:', h2iErr);
@@ -5403,11 +5874,20 @@
                       clonedCard.style.margin = '0 auto';
                       clonedCard.style.overflow = 'visible';
 
+                      // Remove all buttons, selection toggles, and edit pencils in cloned capture
+                      clonedCard.querySelectorAll(
+                        '.no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, ' +
+                        '#btn-rep-filter-today, #btn-rep-filter-all, button'
+                      ).forEach(el => {
+                        el.style.display = 'none';
+                        el.remove();
+                      });
+
                       // Reset badge vertical baselines and heights
                       clonedCard.querySelectorAll(
                         '#rep-cum-pct, #rep-variance-badge, #rep-legend-original > span, ' +
                         '#rep-today-table-badge, span[class*="rounded"], .rounded-md, .rounded-full, ' +
-                        'button, td span'
+                        'td span'
                       ).forEach(b => {
                         b.style.display = 'inline-flex';
                         b.style.alignItems = 'center';
@@ -5431,9 +5911,10 @@
               reportCard.style.width = origCardW;
               reportCard.style.maxWidth = origCardMaxW;
               reportCard.style.margin = origCardMargin;
+              reportCard.classList.remove('is-export-capturing');
               renderPlanSnapshotCanvas();
               scheduleReportScurveRender();
-              noExportEls.forEach((el, idx) => {
+              hideInExport.forEach((el, idx) => {
                 el.style.display = savedDisplays[idx] || '';
               });
               scrollWrappers.forEach((w, i) => {
@@ -5736,13 +6217,39 @@
           const tr = document.createElement('tr');
           tr.className = isDriven ? 'bg-[#f4fbf8] hover:bg-[#e6f7ef]' : 'hover:bg-[#fbfbfb]';
 
+          const actN = (rec && rec.actual_n !== undefined && !isNaN(parseFloat(rec.actual_n)))
+            ? parseFloat(rec.actual_n) : (p.northing !== undefined ? p.northing : 0);
+          const actE = (rec && rec.actual_e !== undefined && !isNaN(parseFloat(rec.actual_e)))
+            ? parseFloat(rec.actual_e) : (p.easting !== undefined ? p.easting : 0);
+          const dN = (p.northing !== undefined) ? (actN - p.northing) : 0;
+          const dE = (p.easting !== undefined) ? (actE - p.easting) : 0;
+          const totMm = Math.round(Math.sqrt(dN * dN + dE * dE) * 1000);
+          const isCoordTol = totMm <= 50;
+
+          const afterPressHtml = isDriven ? `
+            <div class="font-mono text-[11px] leading-tight text-right">
+              <div class="text-[#047857] font-bold">N: ${actN.toFixed(4)}</div>
+              <div class="text-[#047857] font-bold">E: ${actE.toFixed(4)}</div>
+              <div class="mt-0.5">
+                <span class="inline-block px-1.5 py-0.2 rounded font-mono font-bold text-[9px] ${isCoordTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}">
+                  ${totMm === 0 ? '✓ ตรงหมุด (0mm)' : `Δ ${totMm}mm`}
+                </span>
+              </div>
+            </div>
+          ` : `<span class="text-slate-400 font-mono text-[10.5px]">- (รอตอก)</span>`;
+
           tr.innerHTML = `
             <td class="p-2 border-r border-[#475569]/20 text-center font-bold text-[#667277]">${p.no}</td>
             <td class="p-2 border-r border-[#475569]/20 font-black text-[#34383b]">${p.tag}</td>
             <td class="p-2 border-r border-[#475569]/20 text-center font-black text-[#1e40af]">${p.footing || '-'}</td>
             <td class="p-2 border-r border-[#475569]/20 text-center font-bold text-[#34383b]">${p.grid}</td>
-            <td class="p-2 border-r border-[#475569]/20 text-right font-mono text-[11px] text-[#475569]">${nStr}</td>
-            <td class="p-2 border-r border-[#475569]/20 text-right font-mono text-[11px] text-[#475569]">${eStr}</td>
+            <td class="p-2 border-r border-[#475569]/20 text-right font-mono text-[11px] text-slate-700 leading-tight">
+              <div>N: ${nStr}</div>
+              <div>E: ${eStr}</div>
+            </td>
+            <td class="p-2 border-r border-[#475569]/20 text-right bg-emerald-50/40">
+              ${afterPressHtml}
+            </td>
             <td class="p-2 border-r border-[#475569]/20 text-right font-black text-[#a84631] font-mono">${pco.toFixed(3)}</td>
             <td class="p-2 border-r border-[#475569]/20 text-center">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-black border ${isDriven ? 'bg-[#98cfad] text-[#1e3a29] border-[#475569]' : 'bg-slate-100 text-[#667277] border-slate-300'}">
@@ -5775,6 +6282,7 @@
               };
             }
             saveProgress();
+            syncPilingToSupabase(false);
           });
         });
       }
