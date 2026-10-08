@@ -4041,11 +4041,12 @@
       if (pcoHint) pcoHint.textContent = `${pcoVal.toFixed(3)} ม.`;
       updatePileCardDiff(pcoVal, (rec && rec.actual_top !== undefined) ? rec.actual_top : null);
 
-      // Set actual coordinates N & E values and design hints
+      // Set actual coordinates N & E values and design hints (ถ้ายังไม่กรอกให้ว่างเปล่า)
       const actualNInp = document.getElementById('card-pile-actual-n');
       const actualEInp = document.getElementById('card-pile-actual-e');
-      if (actualNInp) actualNInp.value = (rec && rec.actual_n !== undefined) ? rec.actual_n : '';
-      if (actualEInp) actualEInp.value = (rec && rec.actual_e !== undefined) ? rec.actual_e : '';
+      const hasSavedCoords = rec && (rec.coords_entered === true || (rec.actual_n !== undefined && pileData.northing !== undefined && (parseFloat(rec.actual_n) !== pileData.northing || parseFloat(rec.actual_e) !== pileData.easting)));
+      if (actualNInp) actualNInp.value = (hasSavedCoords && rec && rec.actual_n !== undefined) ? rec.actual_n : '';
+      if (actualEInp) actualEInp.value = (hasSavedCoords && rec && rec.actual_e !== undefined) ? rec.actual_e : '';
 
       const designNHint = document.getElementById('card-pile-design-n-hint');
       const designEHint = document.getElementById('card-pile-design-e-hint');
@@ -4055,8 +4056,8 @@
       updatePileCardCoordDiff(
         pileData.northing,
         pileData.easting,
-        (rec && rec.actual_n !== undefined) ? rec.actual_n : null,
-        (rec && rec.actual_e !== undefined) ? rec.actual_e : null
+        (hasSavedCoords && rec && rec.actual_n !== undefined) ? rec.actual_n : null,
+        (hasSavedCoords && rec && rec.actual_e !== undefined) ? rec.actual_e : null
       );
 
       // Set date picker value in card
@@ -4181,14 +4182,23 @@
       const chosenDate = (dateInp && dateInp.value) ? dateInp.value : (datePicker.value || todayStr);
       const existing = progressRecords[selectedCardPileNo] || {};
       const defTop = (pileData && pileData.pco_level !== undefined) ? pileData.pco_level : (pileData ? pileData.co_level : 0);
-      progressRecords[selectedCardPileNo] = {
+      const recToSave = {
         ...existing,
         status: 'driven',
         date: chosenDate,
-        actual_n: existing.actual_n !== undefined ? existing.actual_n : (pileData && pileData.northing !== undefined ? pileData.northing : 0),
-        actual_e: existing.actual_e !== undefined ? existing.actual_e : (pileData && pileData.easting !== undefined ? pileData.easting : 0),
         actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
       };
+      // ถ้ายังไม่กรอกพิกัด ไม่ใส่ค่า n e
+      if (existing.coords_entered) {
+        recToSave.actual_n = existing.actual_n;
+        recToSave.actual_e = existing.actual_e;
+        recToSave.coords_entered = true;
+      } else {
+        delete recToSave.actual_n;
+        delete recToSave.actual_e;
+        delete recToSave.coords_entered;
+      }
+      progressRecords[selectedCardPileNo] = recToSave;
       saveProgress();
       syncPilingToSupabase(false);
       document.getElementById('btn-close-card')?.click();
@@ -4218,9 +4228,11 @@
       }
       if (rawN !== '' && !isNaN(parseFloat(rawN))) {
         record.actual_n = parseFloat(rawN);
+        record.coords_entered = true;
       }
       if (rawE !== '' && !isNaN(parseFloat(rawE))) {
         record.actual_e = parseFloat(rawE);
+        record.coords_entered = true;
       }
       
       progressRecords[selectedCardPileNo] = record;
@@ -4670,14 +4682,22 @@
               const pData = PILES_DATABASE.find(item => item.no === p.no);
               const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
               const existing = progressRecords[p.no] || {};
-              progressRecords[p.no] = {
+              const recToSave = {
                 ...existing,
                 status: 'driven',
                 date: datePicker.value || todayStr,
-                actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
-                actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
                 actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
               };
+              if (existing.coords_entered) {
+                recToSave.actual_n = existing.actual_n;
+                recToSave.actual_e = existing.actual_e;
+                recToSave.coords_entered = true;
+              } else {
+                delete recToSave.actual_n;
+                delete recToSave.actual_e;
+                delete recToSave.coords_entered;
+              }
+              progressRecords[p.no] = recToSave;
               saveProgress();
               syncPilingToSupabase(false);
             }
@@ -4698,14 +4718,22 @@
           const pData = PILES_DATABASE.find(item => item.no === i);
           const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
           const existing = progressRecords[i] || {};
-          progressRecords[i] = {
+          const recToSave = {
             ...existing,
             status: 'driven',
             date: datePicker.value || todayStr,
-            actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
-            actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
             actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
           };
+          if (existing.coords_entered) {
+            recToSave.actual_n = existing.actual_n;
+            recToSave.actual_e = existing.actual_e;
+            recToSave.coords_entered = true;
+          } else {
+            delete recToSave.actual_n;
+            delete recToSave.actual_e;
+            delete recToSave.coords_entered;
+          }
+          progressRecords[i] = recToSave;
           added++;
         }
       }
@@ -4727,14 +4755,22 @@
           const pData = PILES_DATABASE.find(item => item.no === i);
           const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
           const existing = progressRecords[i] || {};
-          progressRecords[i] = {
+          const recToSave = {
             ...existing,
             status: 'driven',
             date: curDate,
-            actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
-            actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
             actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
           };
+          if (existing.coords_entered) {
+            recToSave.actual_n = existing.actual_n;
+            recToSave.actual_e = existing.actual_e;
+            recToSave.coords_entered = true;
+          } else {
+            delete recToSave.actual_n;
+            delete recToSave.actual_e;
+            delete recToSave.coords_entered;
+          }
+          progressRecords[i] = recToSave;
         }
       } else {
         const nums = raw.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
@@ -4743,14 +4779,22 @@
             const pData = PILES_DATABASE.find(item => item.no === n);
             const defTop = (pData && pData.pco_level !== undefined) ? pData.pco_level : (pData ? pData.co_level : 0);
             const existing = progressRecords[n] || {};
-            progressRecords[n] = {
+            const recToSave = {
               ...existing,
               status: 'driven',
               date: curDate,
-              actual_n: existing.actual_n !== undefined ? existing.actual_n : (pData && pData.northing !== undefined ? pData.northing : 0),
-              actual_e: existing.actual_e !== undefined ? existing.actual_e : (pData && pData.easting !== undefined ? pData.easting : 0),
               actual_top: existing.actual_top !== undefined ? existing.actual_top : defTop
             };
+            if (existing.coords_entered) {
+              recToSave.actual_n = existing.actual_n;
+              recToSave.actual_e = existing.actual_e;
+              recToSave.coords_entered = true;
+            } else {
+              delete recToSave.actual_n;
+              delete recToSave.actual_e;
+              delete recToSave.coords_entered;
+            }
+            progressRecords[n] = recToSave;
           }
         });
       }
@@ -5705,9 +5749,10 @@
           const isPileToday = rec.date === curDate;
           const isDriven = rec && rec.status === 'driven';
 
-          // As-built Co (n,e) หลังกด: ถ้ายังไม่กรอกให้ว่างเปล่าไปก่อน
-          const hasActualN = rec && rec.actual_n !== undefined && rec.actual_n !== null && String(rec.actual_n).trim() !== '' && !isNaN(parseFloat(rec.actual_n));
-          const hasActualE = rec && rec.actual_e !== undefined && rec.actual_e !== null && String(rec.actual_e).trim() !== '' && !isNaN(parseFloat(rec.actual_e));
+          // As-built Co (n,e) หลังกด: ถ้ายังไม่กรอกให้ว่างเปล่า
+          const hasCustomCoords = rec && (rec.coords_entered === true || (rec.actual_n !== undefined && rec.actual_n !== null && String(rec.actual_n).trim() !== '' && p.northing !== undefined && (parseFloat(rec.actual_n) !== p.northing || parseFloat(rec.actual_e) !== p.easting)));
+          const hasActualN = rec && rec.actual_n !== undefined && rec.actual_n !== null && String(rec.actual_n).trim() !== '' && !isNaN(parseFloat(rec.actual_n)) && hasCustomCoords;
+          const hasActualE = rec && rec.actual_e !== undefined && rec.actual_e !== null && String(rec.actual_e).trim() !== '' && !isNaN(parseFloat(rec.actual_e)) && hasCustomCoords;
           const hasActualCoords = hasActualN && hasActualE;
 
           const actN = hasActualN ? parseFloat(rec.actual_n) : null;
@@ -5764,21 +5809,21 @@
             </div>
           `;
 
-          // Co (n,e) หลังกด: ถ้ายังไม่กรอกให้ว่างเปล่าไปก่อน
+          // Co (n,e) หลังกด: ถ้ายังไม่กรอกให้ว่างเปล่า
           const afterPressCoordsHtml = hasActualCoords ? `
             <div class="font-mono text-[11px] leading-tight text-emerald-800">
               <div class="font-bold">n: ${actN.toFixed(4)}</div>
               <div class="font-bold">e: ${actE.toFixed(4)}</div>
             </div>
-          ` : `<span class="text-slate-400 font-mono text-[11px]">-</span>`;
+          ` : ``;
 
-          // ผลต่าง (Δn, Δe) แต่ละต้น: ถ้ายังไม่ได้กรอกพิกัดหลังกด ให้ว่างเปล่าไปก่อน
+          // ผลต่าง (Δn, Δe) แต่ละต้น: ถ้ายังไม่ได้กรอกพิกัดหลังกด ให้ว่างเปล่า
           const coordDiffHtml = hasActualCoords ? `
             <div class="font-mono text-[11px] leading-tight text-center">
               <div class="font-bold ${Math.abs(dNMm) <= 50 ? 'text-emerald-700' : 'text-rose-600'}">Δn: ${dNMm >= 0 ? '+' : ''}${dNMm} mm</div>
               <div class="font-bold ${Math.abs(dEMm) <= 50 ? 'text-emerald-700' : 'text-rose-600'}">Δe: ${dEMm >= 0 ? '+' : ''}${dEMm} mm</div>
             </div>
-          ` : `<span class="text-slate-400 font-mono text-[11px]">-</span>`;
+          ` : ``;
 
           // TOP display (clean, NO edit pencil clutter, always show pile top level)
           const actualTopDisplay = hasActualTop
@@ -6741,7 +6786,8 @@
           const totMm = Math.round(Math.sqrt(dN * dN + dE * dE) * 1000);
           const isCoordTol = totMm <= 50;
 
-          const afterPressHtml = isDriven ? `
+          const hasCustomCoords = rec && (rec.coords_entered === true || (rec.actual_n !== undefined && rec.actual_n !== null && String(rec.actual_n).trim() !== '' && p.northing !== undefined && (parseFloat(rec.actual_n) !== p.northing || parseFloat(rec.actual_e) !== p.easting)));
+          const afterPressHtml = (isDriven && hasCustomCoords) ? `
             <div class="font-mono text-[11px] leading-tight text-right">
               <div class="text-[#047857] font-bold">N: ${actN.toFixed(4)}</div>
               <div class="text-[#047857] font-bold">E: ${actE.toFixed(4)}</div>
@@ -6751,7 +6797,7 @@
                 </span>
               </div>
             </div>
-          ` : `<span class="text-slate-400 font-mono text-[10.5px]">- (รอตอก)</span>`;
+          ` : (isDriven ? `<span class="text-slate-400 font-mono text-[10.5px]">-</span>` : `<span class="text-slate-400 font-mono text-[10.5px]">- (รอตอก)</span>`);
 
           tr.innerHTML = `
             <td class="p-2 border-r border-[#475569]/20 text-center font-bold text-[#667277]">${p.no}</td>
@@ -6820,8 +6866,9 @@
         const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
         const actTop = rec.actual_top !== undefined ? rec.actual_top : (rec.status === 'driven' ? pco : '');
         const diffMm = (rec.actual_top !== undefined) ? Math.round((rec.actual_top - pco) * 1000) : (rec.status === 'driven' ? 0 : '');
-        const actN = rec.actual_n !== undefined ? rec.actual_n : '';
-        const actE = rec.actual_e !== undefined ? rec.actual_e : '';
+        const hasCustomCoords = rec && (rec.coords_entered === true || (rec.actual_n !== undefined && rec.actual_n !== null && String(rec.actual_n).trim() !== '' && p.northing !== undefined && (parseFloat(rec.actual_n) !== p.northing || parseFloat(rec.actual_e) !== p.easting)));
+        const actN = (hasCustomCoords && rec.actual_n !== undefined) ? rec.actual_n : '';
+        const actE = (hasCustomCoords && rec.actual_e !== undefined) ? rec.actual_e : '';
         const diffN_mm = (actN !== '' && p.northing !== undefined) ? Math.round((actN - p.northing) * 1000) : '';
         const diffE_mm = (actE !== '' && p.easting !== undefined) ? Math.round((actE - p.easting) * 1000) : '';
         const totOffset_mm = (diffN_mm !== '' && diffE_mm !== '') ? Math.round(Math.sqrt((actN - p.northing)**2 + (actE - p.easting)**2) * 1000) : '';
