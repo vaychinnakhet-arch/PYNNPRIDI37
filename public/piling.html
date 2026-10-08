@@ -321,14 +321,41 @@
       display: none !important;
     }
 
-    /* ป้องกันสีเลอะขอบตอนแคปเจอร์ (Prevent edge smearing and shadow clipping during export) */
+    /* ป้องกันสีเลอะขอบตอนแคปเจอร์ และล็อกขนาดตายตัว (Prevent edge smearing and force proper dimensions during export) */
+    #report-page.is-export-capturing {
+      position: fixed !important;
+      left: 0 !important;
+      top: 0 !important;
+      width: 1420px !important;
+      min-width: 1420px !important;
+      max-width: none !important;
+      overflow: visible !important;
+      padding: 16px !important;
+      z-index: 30 !important;
+      pointer-events: none !important;
+      opacity: 0.001 !important;
+    }
+    #report-page.is-export-capturing.export-portrait {
+      width: 1240px !important;
+      min-width: 1240px !important;
+    }
     #report-page-card.is-export-capturing,
     .is-export-capturing #report-page-card {
       box-shadow: none !important;
       border: 2px solid #475569 !important;
       border-radius: 12px !important;
       background: #ffffff !important;
-      overflow: hidden !important;
+      overflow: visible !important;
+      width: 1380px !important;
+      min-width: 1380px !important;
+      max-width: 1380px !important;
+      margin: 0 auto !important;
+    }
+    #report-page-card.is-export-capturing.export-portrait,
+    .is-export-capturing.export-portrait #report-page-card {
+      width: 1200px !important;
+      min-width: 1200px !important;
+      max-width: 1200px !important;
     }
     .is-export-capturing [class*="shadow-"] {
       box-shadow: none !important;
@@ -340,11 +367,32 @@
       box-shadow: none !important;
     }
     .is-export-capturing #report-sec-table {
-      overflow: hidden !important;
-    }
-    .is-export-capturing #report-sec-table .table-wrapper {
-      max-height: none !important;
       overflow: visible !important;
+    }
+    .is-export-capturing #report-sec-table .table-wrapper,
+    .is-export-capturing #report-sec-table .table-wrapper.has-scroll,
+    .is-export-capturing #report-page-card.is-landscape #report-sec-table .table-wrapper,
+    .is-export-capturing #report-page-card.is-landscape #report-sec-table .table-wrapper.has-scroll {
+      max-height: none !important;
+      height: auto !important;
+      overflow: visible !important;
+      overflow-x: visible !important;
+      overflow-y: visible !important;
+    }
+    .is-export-capturing #report-page-card.is-landscape #report-main-grid {
+      display: grid !important;
+      grid-template-columns: 1.35fr 0.95fr !important;
+      gap: 1.25rem !important;
+    }
+    .is-export-capturing #rep-today-table {
+      width: 100% !important;
+      min-width: 100% !important;
+      table-layout: auto !important;
+    }
+    .is-export-capturing #rep-today-table th,
+    .is-export-capturing #rep-today-table td {
+      padding: 6px 4px !important;
+      vertical-align: middle !important;
     }
   </style>
 
@@ -5732,15 +5780,15 @@
             </div>
           ` : `<span class="text-slate-400 font-mono text-[11px]">-</span>`;
 
-          // TOP display (clean, NO edit pencil clutter, wrapped with pencil-edit-icon)
+          // TOP display (clean, NO edit pencil clutter, always show pile top level)
           const actualTopDisplay = hasActualTop
-            ? `<span class="font-black font-mono ${currentReportTheme === 'excel' ? 'text-sky-800' : 'text-[#0284c7]'}>${actTopVal.toFixed(3)}</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`
-            : `<span class="text-slate-400 font-normal">-</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`;
+            ? `<span class="font-black font-mono ${currentReportTheme === 'excel' ? 'text-sky-800' : 'text-[#0284c7]'}">${actTopVal.toFixed(3)}</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`
+            : `<span class="font-bold font-mono text-slate-800">${actTopVal.toFixed(3)}</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`;
 
           // ผลต่าง diff pco เอาเป็น เมตร ไม่ต้องมีกรอบสี (plain font-mono text in meters without colored border/badge)
           const diffDisplay = hasActualTop
             ? `<span class="font-mono font-bold text-[11px] ${isLevelTol ? 'text-slate-800' : 'text-amber-700'}">${diffM >= 0 ? '+' : ''}${diffM.toFixed(3)} ม.</span>`
-            : `<span class="text-slate-400 font-mono text-[11px]">-</span>`;
+            : `<span class="font-mono font-bold text-[11px] text-slate-800">0.000 ม.</span>`;
 
           tr.style.cursor = 'pointer';
           tr.title = `คลิกต้น ${p.tag} เพื่อดูข้อมูล/ปรับแก้วันที่ และกรอกระดับ TOP เข็มจริง`;
@@ -6125,7 +6173,8 @@
         if (currentExportMode === 'report') {
           // Auto-adjust report layout to match chosen aspect ratio
           const previousLayout = currentReportLayout;
-          if (currentExportRatio === '16:9' || currentExportRatio === '4:3') {
+          const isLandscapeRatio = (currentExportRatio === '16:9' || currentExportRatio === '4:3');
+          if (isLandscapeRatio) {
             setReportLayout('landscape');
           } else if (currentExportRatio === 'a4' || currentExportRatio === '1:1') {
             setReportLayout('portrait');
@@ -6137,13 +6186,14 @@
           const reportPage = document.getElementById('report-page');
           const wasHidden = reportPage.classList.contains('hidden');
           if (wasHidden) {
-            // Temporarily reveal off-screen so export engine can measure & render elements
+            // Position fixed at (0, 0) underneath modal (z-30) so htmlToImage / html2canvas measure & render perfectly
             reportPage.style.display = 'block';
             reportPage.style.visibility = 'visible';
             reportPage.style.position = 'fixed';
-            reportPage.style.left = '-99999px';
+            reportPage.style.left = '0';
             reportPage.style.top = '0';
-            reportPage.style.opacity = '0';
+            reportPage.style.zIndex = '30';
+            reportPage.style.opacity = '0.001';
             reportPage.style.pointerEvents = 'none';
             reportPage.classList.remove('hidden');
             renderPlanSnapshotCanvas();
@@ -6153,12 +6203,18 @@
           if (document.fonts) {
             try { await document.fonts.ready; } catch(e) {}
           }
-          await new Promise(r => setTimeout(r, 150));
+          await new Promise(r => setTimeout(r, 120));
 
           const reportCard = document.getElementById('report-page-card');
           if (reportCard) {
-            // Temporarily hide action buttons, selector buttons, and pencil edit icons during capture
+            const isPortraitLayout = currentReportLayout === 'portrait';
             reportCard.classList.add('is-export-capturing');
+            reportPage.classList.add('is-export-capturing');
+            if (isPortraitLayout) {
+              reportCard.classList.add('export-portrait');
+              reportPage.classList.add('export-portrait');
+            }
+
             const hideInExport = reportCard.querySelectorAll('.no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, #btn-rep-filter-today, #btn-rep-filter-all');
             const savedDisplays = [];
             hideInExport.forEach((el, idx) => {
@@ -6166,37 +6222,43 @@
               el.style.display = 'none';
             });
 
-            // Target export width for full table layout (กว้างพอดี ไม่ตัดคอลัมน์ Co หลังกด และผลรวม)
-            const exportTargetW = (currentExportRatio === '16:9' || currentExportRatio === '4:3') ? 1380 : 1180;
+            // Target export width for full table layout
+            const exportTargetW = isPortraitLayout ? 1200 : 1380;
             const origCardW = reportCard.style.width;
             const origCardMaxW = reportCard.style.maxWidth;
+            const origCardMinW = reportCard.style.minWidth;
             const origCardMargin = reportCard.style.margin;
             const origCardBoxShadow = reportCard.style.boxShadow;
             const origCardBorderRadius = reportCard.style.borderRadius;
             const origCardOverflow = reportCard.style.overflow;
             const origCardBg = reportCard.style.backgroundColor;
 
-            reportCard.style.width = `${exportTargetW}px`;
-            reportCard.style.maxWidth = `${exportTargetW}px`;
+            reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
+            reportCard.style.setProperty('max-width', `${exportTargetW}px`, 'important');
+            reportCard.style.setProperty('min-width', `${exportTargetW}px`, 'important');
             reportCard.style.margin = '0 auto';
             reportCard.style.boxShadow = 'none';
             reportCard.style.borderRadius = '12px';
-            reportCard.style.overflow = 'hidden';
+            reportCard.style.overflow = 'visible';
             reportCard.style.backgroundColor = '#ffffff';
 
-            // Re-render internal canvases at the compact width
+            // Re-render internal canvases at the crisp width
             renderPlanSnapshotCanvas();
             scheduleReportScurveRender();
-            await new Promise(r => setTimeout(r, 120));
+            await new Promise(r => setTimeout(r, 100));
 
-            // Expand table wrapper so table is never clipped or scrollable
+            // Expand table wrapper so table is NEVER clipped or scrollable during export
             const scrollWrappers = reportCard.querySelectorAll('.table-wrapper, .overflow-x-auto, .overflow-y-auto');
             const savedOverflows = [];
             scrollWrappers.forEach((w, i) => {
-              savedOverflows[i] = { overflow: w.style.overflow, maxHeight: w.style.maxHeight, height: w.style.height };
-              w.style.overflow = 'visible';
-              w.style.maxHeight = 'none';
-              w.style.height = 'auto';
+              savedOverflows[i] = {
+                overflow: w.style.overflow,
+                maxHeight: w.style.maxHeight,
+                height: w.style.height
+              };
+              w.style.setProperty('overflow', 'visible', 'important');
+              w.style.setProperty('max-height', 'none', 'important');
+              w.style.setProperty('height', 'auto', 'important');
             });
 
             // Compact padding on table cells so all 12 columns fit cleanly without horizontal scrolling
@@ -6204,16 +6266,21 @@
             const savedPaddings = [];
             cells.forEach((cell, i) => {
               savedPaddings[i] = cell.style.padding;
-              cell.style.padding = '5px 3px';
+              cell.style.setProperty('padding', '6px 4px', 'important');
             });
 
             try {
+              const scrollW = exportTargetW;
+              const scrollH = Math.ceil(reportCard.scrollHeight);
+
               // Priority 1: Use htmlToImage for 100% native browser text rendering & vertical centering
               if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
                 try {
                   sourceCanvas = await window.htmlToImage.toCanvas(reportCard, {
                     backgroundColor: '#ffffff',
                     pixelRatio: scale,
+                    width: scrollW,
+                    height: scrollH,
                     skipFonts: true,
                     filter: (node) => {
                       if (!node) return true;
@@ -6239,9 +6306,6 @@
 
               // Priority 2: Fallback to html2canvas if htmlToImage is not available or threw an error
               if (!sourceCanvas && window.html2canvas) {
-                const scrollW = exportTargetW;
-                const scrollH = Math.ceil(reportCard.scrollHeight);
-
                 sourceCanvas = await html2canvas(reportCard, {
                   scale: scale,
                   useCORS: true,
@@ -6250,54 +6314,41 @@
                   backgroundColor: '#ffffff',
                   width: scrollW,
                   height: scrollH,
-                  windowWidth: scrollW + 40,
-                  windowHeight: scrollH + 40,
+                  windowWidth: scrollW + 60,
+                  windowHeight: scrollH + 60,
                   scrollX: 0,
                   scrollY: 0,
                   onclone: (clonedDoc) => {
                     const clonedCard = clonedDoc.getElementById('report-page-card');
                     if (clonedCard) {
-                      clonedCard.style.width = `${exportTargetW}px`;
-                      clonedCard.style.maxWidth = `${exportTargetW}px`;
+                      clonedCard.style.setProperty('width', `${scrollW}px`, 'important');
+                      clonedCard.style.setProperty('max-width', `${scrollW}px`, 'important');
+                      clonedCard.style.setProperty('min-width', `${scrollW}px`, 'important');
                       clonedCard.style.margin = '0 auto';
-                      clonedCard.style.overflow = 'hidden';
+                      clonedCard.style.overflow = 'visible';
                       clonedCard.style.boxShadow = 'none';
                       clonedCard.style.borderRadius = '12px';
                       clonedCard.style.backgroundColor = '#ffffff';
 
-                      // Remove all buttons, selection toggles, and edit pencils in cloned capture
                       clonedCard.querySelectorAll(
                         '.no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, ' +
                         '#btn-rep-filter-today, #btn-rep-filter-all, button'
-                      ).forEach(el => {
-                        el.style.display = 'none';
-                        el.remove();
-                      });
+                      ).forEach(el => el.remove());
 
-                      // Remove all box-shadows in cloned tree to eliminate color smudges on borders
                       clonedCard.querySelectorAll('*').forEach(el => {
                         if (el.style) el.style.boxShadow = 'none';
                       });
 
-                      // Reset badge vertical baselines and heights
-                      clonedCard.querySelectorAll(
-                        '#rep-cum-pct, #rep-variance-badge, #rep-legend-original > span, ' +
-                        '#rep-today-table-badge, span[class*="rounded"], .rounded-md, .rounded-full, ' +
-                        'td span'
-                      ).forEach(b => {
-                        b.style.display = 'inline-flex';
-                        b.style.alignItems = 'center';
-                        b.style.justifyContent = 'center';
-                        b.style.alignSelf = 'center';
-                        b.style.verticalAlign = 'middle';
-                        b.style.lineHeight = '1';
-                        b.style.boxSizing = 'border-box';
+                      clonedCard.querySelectorAll('.table-wrapper, .overflow-x-auto, .overflow-y-auto').forEach(w => {
+                        w.style.setProperty('overflow', 'visible', 'important');
+                        w.style.setProperty('max-height', 'none', 'important');
+                        w.style.setProperty('height', 'auto', 'important');
                       });
 
                       clonedCard.querySelectorAll('th, td').forEach(c => {
                         c.style.verticalAlign = 'middle';
                         c.style.lineHeight = '1.2';
-                        c.style.padding = '5px 3px';
+                        c.style.padding = '6px 4px';
                       });
                     }
                   }
@@ -6306,12 +6357,14 @@
             } finally {
               reportCard.style.width = origCardW;
               reportCard.style.maxWidth = origCardMaxW;
+              reportCard.style.minWidth = origCardMinW || '';
               reportCard.style.margin = origCardMargin;
               reportCard.style.boxShadow = origCardBoxShadow;
               reportCard.style.borderRadius = origCardBorderRadius;
               reportCard.style.overflow = origCardOverflow;
               reportCard.style.backgroundColor = origCardBg;
-              reportCard.classList.remove('is-export-capturing');
+              reportCard.classList.remove('is-export-capturing', 'export-portrait');
+              reportPage.classList.remove('is-export-capturing', 'export-portrait');
               renderPlanSnapshotCanvas();
               scheduleReportScurveRender();
               hideInExport.forEach((el, idx) => {
@@ -6334,14 +6387,67 @@
             reportPage.style.position = '';
             reportPage.style.left = '';
             reportPage.style.top = '';
+            reportPage.style.zIndex = '';
             reportPage.style.opacity = '';
             reportPage.style.pointerEvents = '';
             reportPage.classList.add('hidden');
           }
         } else {
-          // 3D / CAD View mode
+          // 3D / CAD View mode: Render directly at target high resolution
+          let targetW = 1920;
+          let targetH = 1080;
+          if (currentExportRatio === '4:3') {
+            targetW = 1600;
+            targetH = 1200;
+          } else if (currentExportRatio === '1:1') {
+            targetW = 1200;
+            targetH = 1200;
+          } else if (currentExportRatio === 'a4') {
+            targetW = 1200;
+            targetH = 1697;
+          }
+
+          const origSize = new THREE.Vector2();
+          renderer.getSize(origSize);
+          const origPixelRatio = renderer.getPixelRatio();
+          const origAspect = activeCamera.aspect;
+          const origLeft = orthoCamera.left;
+          const origRight = orthoCamera.right;
+          const origTop = orthoCamera.top;
+          const origBottom = orthoCamera.bottom;
+
+          // Temporarily set renderer and camera to export target dimensions
+          renderer.setPixelRatio(1);
+          renderer.setSize(targetW, targetH, false);
+          const targetAspect = targetW / targetH;
+          if (activeCamera.isPerspectiveCamera) {
+            activeCamera.aspect = targetAspect;
+            activeCamera.updateProjectionMatrix();
+          } else {
+            orthoCamera.left = -frustumHeight * targetAspect / 2;
+            orthoCamera.right = frustumHeight * targetAspect / 2;
+            orthoCamera.top = frustumHeight / 2;
+            orthoCamera.bottom = -frustumHeight / 2;
+            orthoCamera.updateProjectionMatrix();
+          }
+
           renderer.render(scene, activeCamera);
           const webglDataUrl = renderer.domElement.toDataURL('image/png');
+
+          // Restore original renderer size & camera
+          renderer.setPixelRatio(origPixelRatio);
+          renderer.setSize(origSize.x, origSize.y, false);
+          if (activeCamera.isPerspectiveCamera) {
+            activeCamera.aspect = origAspect;
+            activeCamera.updateProjectionMatrix();
+          } else {
+            orthoCamera.left = origLeft;
+            orthoCamera.right = origRight;
+            orthoCamera.top = origTop;
+            orthoCamera.bottom = origBottom;
+            orthoCamera.updateProjectionMatrix();
+          }
+
           const img = new Image();
           await new Promise((resolve) => {
             img.onload = resolve;
@@ -6350,20 +6456,17 @@
 
           if (myRequestId !== exportRequestId) return;
 
-          // Compose CAD view canvas with project header stamp
-          const w = img.width;
-          const h = img.height;
           const cadCanvas = document.createElement('canvas');
-          cadCanvas.width = w;
-          cadCanvas.height = h;
+          cadCanvas.width = targetW;
+          cadCanvas.height = targetH;
           const ctx = cadCanvas.getContext('2d');
 
           // Clean white background
           ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, w, h);
+          ctx.fillRect(0, 0, targetW, targetH);
 
           // Draw 3D view
-          ctx.drawImage(img, 0, 0, w, h);
+          ctx.drawImage(img, 0, 0, targetW, targetH);
 
           // Add sleek header stamp
           let drivenCount = 0;
@@ -6375,16 +6478,16 @@
             }
           });
 
-          const bannerScale = Math.max(1, w / 1200);
+          const bannerScale = Math.max(1, targetW / 1200);
           ctx.save();
           // Header banner
           const bH = 64 * bannerScale;
           const bPad = 16 * bannerScale;
           ctx.fillStyle = 'rgba(255, 255, 255, 0.96)';
-          ctx.fillRect(bPad, bPad, w - bPad * 2, bH);
+          ctx.fillRect(bPad, bPad, targetW - bPad * 2, bH);
           ctx.strokeStyle = '#475569';
           ctx.lineWidth = 2 * bannerScale;
-          ctx.strokeRect(bPad, bPad, w - bPad * 2, bH);
+          ctx.strokeRect(bPad, bPad, targetW - bPad * 2, bH);
 
           // Brand tag
           const tagW = 114 * bannerScale;
@@ -6421,13 +6524,17 @@
           throw new Error('Unable to create source canvas');
         }
 
-        // Apply chosen Aspect Ratio
+        // Apply chosen Aspect Ratio with elegant framing (พอดีเอกสาร 100%)
         const finalCanvas = formatCanvasAspect(sourceCanvas, currentExportRatio);
         currentExportCanvas = finalCanvas;
 
         // Render to preview
         previewCanvas.width = finalCanvas.width;
         previewCanvas.height = finalCanvas.height;
+        previewCanvas.style.maxWidth = '100%';
+        previewCanvas.style.maxHeight = '55vh';
+        previewCanvas.style.width = 'auto';
+        previewCanvas.style.height = 'auto';
         const pCtx = previewCanvas.getContext('2d');
         pCtx.drawImage(finalCanvas, 0, 0);
 
@@ -6444,9 +6551,17 @@
     }
 
     function formatCanvasAspect(src, ratioStr) {
-      // Auto Fit or Full: return source canvas directly with NO padding or letterboxing
+      // Auto Fit or Full: Frame cleanly with neat 24px padding around the report card
+      const pad = 24;
       if (ratioStr === 'fit' || ratioStr === 'full') {
-        return src;
+        const outCanvas = document.createElement('canvas');
+        outCanvas.width = src.width + pad * 2;
+        outCanvas.height = src.height + pad * 2;
+        const ctx = outCanvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+        ctx.drawImage(src, pad, pad);
+        return outCanvas;
       }
 
       let targetAspect = 16 / 9;
@@ -6462,12 +6577,12 @@
       let outW, outH;
       if (srcAspect > targetAspect) {
         // Source is wider than target aspect -> height expands
-        outW = srcW;
-        outH = Math.round(srcW / targetAspect);
+        outW = srcW + pad * 2;
+        outH = Math.round(outW / targetAspect);
       } else {
         // Source is taller than target aspect -> width expands
-        outH = srcH;
-        outW = Math.round(srcH * targetAspect);
+        outH = srcH + pad * 2;
+        outW = Math.round(outH * targetAspect);
       }
 
       const outCanvas = document.createElement('canvas');
@@ -6703,8 +6818,8 @@
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no] || { status: 'pending', date: '' };
         const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
-        const actTop = rec.actual_top !== undefined ? rec.actual_top : '';
-        const diffMm = (rec.actual_top !== undefined) ? Math.round((rec.actual_top - pco) * 1000) : '';
+        const actTop = rec.actual_top !== undefined ? rec.actual_top : (rec.status === 'driven' ? pco : '');
+        const diffMm = (rec.actual_top !== undefined) ? Math.round((rec.actual_top - pco) * 1000) : (rec.status === 'driven' ? 0 : '');
         const actN = rec.actual_n !== undefined ? rec.actual_n : '';
         const actE = rec.actual_e !== undefined ? rec.actual_e : '';
         const diffN_mm = (actN !== '' && p.northing !== undefined) ? Math.round((actN - p.northing) * 1000) : '';
