@@ -261,17 +261,21 @@
     #report-page-card.is-landscape #report-sec-scurve .chart-wrapper {
       height: 210px !important;
     }
-    /* Floating HUD Responsive Layout (แก้ปัญหาเมนูทับบน Galaxy Z Fold และมือถือ) */
+    /* Floating HUD Responsive Layout (ปรับขนาดให้กะทัดรัด ไม่กว้างเกินไป กว้างพอดี 190px) */
     .floating-hud {
+      width: 190px;
+      max-width: 190px;
       top: 105px;
       max-height: calc(100vh - 125px);
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      transition: top 0.15s ease-out;
+      transition: top 0.15s ease-out, width 0.15s ease-out;
     }
     @media (min-width: 1280px) {
       .floating-hud {
+        width: 195px;
+        max-width: 195px;
         top: 56px;
         max-height: calc(100vh - 75px);
       }
@@ -557,14 +561,14 @@
   </header>
 
   <!-- Floating Toast when PCO Inspector Mode is active -->
-  <div id="toast-pco-inspect" class="fixed top-14 left-1/2 -translate-x-1/2 z-30 bg-[#fef08a] border-2 border-[#475569] px-4 py-1.5 rounded-full shadow-[3px_3px_0_#475569] text-xs font-black text-[#854d0e] flex items-center gap-2.5 hidden pointer-events-auto transition-all">
-    <i data-lucide="crosshair" class="w-4 h-4 text-[#d97706]"></i>
-    <span>เปิดเครื่องมือเช็คข้อมูลแล้ว: คลิกที่เสาเข็มต้นใดก็ได้ เพื่อเปิดดูค่า PCO และพิกัด Co</span>
-    <button id="btn-close-pco-toast" class="ml-1 px-2 py-0.5 rounded-full bg-white border border-[#475569] text-[10px] font-bold text-slate-700 hover:bg-slate-100 shadow-xs cursor-pointer">ปิดโหมด</button>
+  <div id="toast-pco-inspect" class="fixed top-[108px] xl:top-14 left-1/2 -translate-x-1/2 z-30 bg-[#fef08a] border-2 border-[#475569] px-3 py-1 rounded-full shadow-[2px_2px_0_#475569] text-[11px] font-black text-[#854d0e] flex items-center gap-2 hidden pointer-events-auto transition-all max-w-[92vw]">
+    <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
+    <span class="truncate">โหมดเช็คข้อมูล: คลิกที่เสาเข็มเพื่อดูค่า PCO & Co</span>
+    <button id="btn-close-pco-toast" class="ml-1 px-1.5 py-0.2 rounded-full bg-white border border-[#475569] text-[9.5px] font-bold text-slate-700 hover:bg-slate-100 shadow-xs cursor-pointer shrink-0">ปิด</button>
   </div>
 
   <!-- Left Floating Toolbar: Views & Pile Filters -->
-  <div id="floating-hud" class="floating-hud absolute left-2 top-[105px] xl:top-14 z-20 flex flex-col gap-1.5 pointer-events-auto">
+  <div id="floating-hud" class="floating-hud absolute left-2 top-[105px] xl:top-14 z-20 flex flex-col gap-1.5 pointer-events-auto w-[190px] xl:w-[195px] max-w-[195px]">
     <!-- Mobile HUD Collapse/Expand Bar (สำหรับหน้าจอมือถือ/Galaxy Z Fold) -->
     <div class="flex items-center justify-between xl:hidden bg-white/95 px-2 py-1 rounded-lg border border-[#475569] shadow-xs">
       <span class="text-[10px] font-black text-[#34383b] flex items-center gap-1">
@@ -577,134 +581,95 @@
 
     <div id="floating-hud-body" class="flex flex-col gap-1.5">
     <!-- Views Card -->
-    <div class="pop-card p-2 flex flex-col gap-1">
-      <span class="text-[9.5px] text-[#667277] font-black px-1 uppercase tracking-wider">มุมมอง (Views)</span>
-      <button id="view-top-ortho" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-2">
+    <div class="pop-card p-1.5 flex flex-col gap-1">
+      <span class="text-[9px] text-[#667277] font-black px-0.5 uppercase tracking-wider">มุมมอง (Views)</span>
+      <button id="view-top-ortho" class="pop-btn px-2 py-1 text-[11px] flex items-center gap-1.5">
         <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#1e3a29]"></i> แปลน Top View (2D)
       </button>
-      <button id="view-iso3d" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center gap-2">
+      <button id="view-iso3d" class="pop-btn active px-2 py-1 text-[11px] flex items-center gap-1.5">
         <i data-lucide="box" class="w-3.5 h-3.5"></i> 3D สามมิติ (Iso)
       </button>
       <!-- Sub-controls for 3D View Angles -->
-      <div id="sub-views-3d" class="hidden flex flex-col gap-1 pt-1.5 border-t border-[#475569]/20">
-        <span class="text-[9px] font-bold text-[#667277]">ปรับมุมมอง 3D:</span>
-        <div class="grid grid-cols-2 gap-1 text-[10px]">
-          <button id="btn-view-front" class="pop-btn py-1 text-center font-bold" title="มองจากด้านหน้า ทิศใต้">
+      <div id="sub-views-3d" class="hidden flex flex-col gap-1 pt-1 border-t border-[#475569]/20">
+        <span class="text-[8.5px] font-bold text-[#667277]">ปรับมุมมอง 3D:</span>
+        <div class="grid grid-cols-2 gap-1 text-[9.5px]">
+          <button id="btn-view-front" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านหน้า ทิศใต้">
             หน้า (S)
           </button>
-          <button id="btn-view-side" class="pop-btn py-1 text-center font-bold" title="มองจากด้านข้าง ทิศตะวันตก">
+          <button id="btn-view-side" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านข้าง ทิศตะวันตก">
             ข้าง (W)
           </button>
         </div>
-        <button id="btn-view-focus-center" class="pop-btn py-1 text-[10px] flex items-center justify-center gap-1 font-bold">
+        <button id="btn-view-focus-center" class="pop-btn py-0.5 text-[9.5px] flex items-center justify-center gap-1 font-bold">
           <i data-lucide="target" class="w-3 h-3 text-[#ed6845]"></i> เล็งกึ่งกลางไซต์
         </button>
       </div>
     </div>
 
     <!-- Pile Filter Card -->
-    <div class="pop-card p-2 flex flex-col gap-1">
-      <span class="text-[9.5px] text-[#667277] font-black px-1 uppercase tracking-wider">กรองแสดงเข็ม</span>
-      <button id="filter-all" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center justify-between gap-2">
-        <span class="flex items-center gap-1.5">
+    <div class="pop-card p-1.5 flex flex-col gap-1">
+      <span class="text-[9px] text-[#667277] font-black px-0.5 uppercase tracking-wider">กรองแสดงเข็ม</span>
+      <button id="filter-all" class="pop-btn active px-2 py-1 text-[11px] flex items-center justify-between gap-1">
+        <span class="flex items-center gap-1">
           <i data-lucide="layers" class="w-3.5 h-3.5"></i> ทั้งหมด
         </span>
-        <span class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[10px]">93</span>
+        <span class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[9.5px]">93</span>
       </button>
-      <button id="filter-driven" class="pop-btn px-2.5 py-1.5 text-xs flex items-center justify-between gap-2" style="background:#e5f4e9;">
-        <span class="flex items-center gap-1.5 text-[#1e3a29]">
-          <span class="w-2.5 h-2.5 rounded-full bg-[#10b981] border border-[#064e3b]"></span> กดแล้ว
+      <button id="filter-driven" class="pop-btn px-2 py-1 text-[11px] flex items-center justify-between gap-1" style="background:#e5f4e9;">
+        <span class="flex items-center gap-1 text-[#1e3a29]">
+          <span class="w-2 h-2 rounded-full bg-[#10b981] border border-[#064e3b]"></span> กดแล้ว
         </span>
-        <span id="badge-driven" class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[10px]">0</span>
+        <span id="badge-driven" class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[9.5px]">0</span>
       </button>
-      <button id="filter-pending" class="pop-btn px-2.5 py-1.5 text-xs flex items-center justify-between gap-2">
-        <span class="flex items-center gap-1.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-[#cbd5e1] border border-[#475569]"></span> ยังไม่กด
+      <button id="filter-pending" class="pop-btn px-2 py-1 text-[11px] flex items-center justify-between gap-1">
+        <span class="flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-[#cbd5e1] border border-[#475569]"></span> ยังไม่กด
         </span>
-        <span id="badge-pending" class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[10px]">93</span>
+        <span id="badge-pending" class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[9.5px]">93</span>
       </button>
     </div>
 
     <!-- Layer Toggles -->
-    <div class="pop-card p-2 flex flex-col gap-1">
-      <span class="text-[9.5px] text-[#667277] font-black px-1 uppercase tracking-wider">เลเยอร์แผนผัง</span>
-      <label class="flex items-center gap-1.5 text-[11px] font-bold text-[#34383b] cursor-pointer px-1">
-        <input id="layer-grid" type="checkbox" checked class="accent-[#ed6845]">
-        <span>กริด & มิติ (Grid Lines)</span>
+    <div class="pop-card p-1.5 flex flex-col gap-0.5">
+      <span class="text-[9px] text-[#667277] font-black px-0.5 uppercase tracking-wider">เลเยอร์แผนผัง</span>
+      <label class="flex items-center gap-1.5 text-[10.5px] font-bold text-[#34383b] cursor-pointer px-0.5 py-0.5">
+        <input id="layer-grid" type="checkbox" checked class="accent-[#ed6845] w-3 h-3">
+        <span class="truncate">กริด & มิติ (Grid Lines)</span>
       </label>
-      <label class="flex items-center gap-1.5 text-[11px] font-bold text-[#34383b] cursor-pointer px-1">
-        <input id="layer-boundary" type="checkbox" checked class="accent-[#ed6845]">
-        <span>แนวเขตที่ดิน (Boundary)</span>
+      <label class="flex items-center gap-1.5 text-[10.5px] font-bold text-[#34383b] cursor-pointer px-0.5 py-0.5">
+        <input id="layer-boundary" type="checkbox" checked class="accent-[#ed6845] w-3 h-3">
+        <span class="truncate">แนวเขตที่ดิน (Boundary)</span>
       </label>
-      <label class="flex items-center gap-1.5 text-[11px] font-bold text-[#34383b] cursor-pointer px-1">
-        <input id="layer-hex" type="checkbox" class="accent-[#ed6845]">
-        <span>เข็มถังบำบัด & ผนัง (137 ต้น)</span>
+      <label class="flex items-center gap-1.5 text-[10.5px] font-bold text-[#34383b] cursor-pointer px-0.5 py-0.5">
+        <input id="layer-hex" type="checkbox" class="accent-[#ed6845] w-3 h-3">
+        <span class="truncate">ถังบำบัด & ผนัง (137 ต้น)</span>
       </label>
     </div>
 
-    <!-- เครื่องมือเช็คข้อมูลแต่ละต้น (PCO & ค่า Co) สะอาด ไร้สีเลอะใน 3D -->
-    <div id="card-pco-inspector-tool" class="pop-card p-2.5 flex flex-col gap-2 bg-[#fffdfa] border-2 border-[#475569] shadow-[2px_2px_0_#475569]">
+    <!-- เครื่องมือเช็คข้อมูลแต่ละต้น (PCO & ค่า Co) ขนาดกะทัดรัด พอดีแถบเครื่องมือ -->
+    <div id="card-pco-inspector-tool" class="pop-card p-1.5 flex flex-col gap-1 bg-[#fffdfa] border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569]">
       <div class="flex items-center justify-between">
-        <span class="text-[10px] text-[#34383b] font-black px-0.5 uppercase tracking-wider flex items-center gap-1.5">
-          <i data-lucide="crosshair" class="w-4 h-4 text-[#ed6845]"></i> เครื่องมือเช็คข้อมูลแต่ละต้น
+        <span class="text-[9px] text-[#34383b] font-black uppercase tracking-wider flex items-center gap-1">
+          <i data-lucide="crosshair" class="w-3 h-3 text-[#ed6845]"></i> เช็คข้อมูลรายต้น
         </span>
-        <span id="badge-sidebar-inspect-active" class="hidden px-2 py-0.5 rounded text-[9px] font-black bg-emerald-600 text-white animate-pulse">
-          เปิดใช้งาน
+        <span id="badge-sidebar-inspect-active" class="hidden px-1.5 py-0.2 rounded text-[8px] font-black bg-emerald-600 text-white animate-pulse">
+          ON
         </span>
       </div>
 
-      <button id="btn-sidebar-toggle-inspector" type="button" class="pop-btn w-full py-2 px-2.5 text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-[2px_2px_0_#475569] bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border-2 border-[#475569]">
-        <i data-lucide="crosshair" class="w-4 h-4 text-[#b45309]"></i>
-        <span id="lbl-sidebar-toggle-inspector">กดเปิดเครื่องมือเช็คข้อมูล</span>
+      <button id="btn-sidebar-toggle-inspector" type="button" class="pop-btn w-full py-1 px-1.5 text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer shadow-[1px_1px_0_#475569] bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border border-[#475569]">
+        <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#b45309]"></i>
+        <span id="lbl-sidebar-toggle-inspector">เปิดเครื่องมือเช็ค</span>
       </button>
 
-      <div class="text-[9.5px] font-medium text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-200 leading-snug">
-        💡 <b>วิธีใช้งาน:</b> กดที่เครื่องมือนี้ แล้วไปคลิกที่เสาเข็มต้นใดก็ได้ในแบบ จะมีหน้าต่าง Flat-Pop แสดงค่า PCO และพิกัด Co เด้งขึ้นมาเปรียบเทียบทันที (สะอาด ไม่มีสีเลอะใน 3D)
+      <div class="text-[8px] font-medium text-slate-500 bg-slate-50 p-1 rounded border border-slate-200 text-center leading-tight">
+        คลิกที่เสาเข็มเพื่อดู PCO & Co
       </div>
 
-      <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-1.5 text-[10px] font-bold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 flex items-center justify-center gap-1.5 shadow-xs" title="ดูตารางรวมพิกัดและระดับตัดหัวเข็ม 93 ต้น">
-        <i data-lucide="table" class="w-3.5 h-3.5 text-slate-600"></i>
-        <span>ดูตารางรวมทั้ง 93 ต้น</span>
+      <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-0.5 text-[9px] font-bold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 flex items-center justify-center gap-1 shadow-xs" title="ดูตารางรวมพิกัดและระดับตัดหัวเข็ม 93 ต้น">
+        <i data-lucide="table" class="w-3 h-3 text-slate-600"></i>
+        <span>ดูตารางรวม 93 ต้น</span>
       </button>
-    </div>
-
-      <!-- Group Filter Selector -->
-      <div id="pco-group-selector-wrap" class="hidden flex flex-col gap-1.5 pt-1.5 border-t border-[#475569]/20">
-        <div class="text-[9px] font-bold text-[#667277]">เลือกกลุ่มระดับ PCO:</div>
-        <select id="sel-pco-group" class="text-[10px] font-bold bg-white border border-[#475569] rounded px-1.5 py-1 text-slate-800 focus:outline-none cursor-pointer">
-          <option value="all">แสดงครบทุกกลุ่ม (11 กลุ่มระดับ PCO)</option>
-          <option value="F18A_-4.326">F18A · PCO: -4.326 ม. (18 ต้น - บ่อลิฟต์/บำบัด)</option>
-          <option value="F3_-3.251">F3 · PCO: -3.251 ม. (3 ต้น)</option>
-          <option value="F20A_-2.626">F20A · PCO: -2.626 ม. (20 ต้น)</option>
-          <option value="F6_F8_-1.826">F6/F8 · PCO: -1.826 ม. (6 ต้น)</option>
-          <option value="F5_-1.726">F5 · PCO: -1.726 ม. (5 ต้น)</option>
-          <option value="F6_-1.676">F6 · PCO: -1.676 ม. (6 ต้น)</option>
-          <option value="F2_-1.626">F2 · PCO: -1.626 ม. (4 ต้น)</option>
-          <option value="F6_-1.526">F6 · PCO: -1.526 ม. (18 ต้น)</option>
-          <option value="F2_-1.426">F2 · PCO: -1.426 ม. (2 ต้น)</option>
-          <option value="F3_-1.226">F3 · PCO: -1.226 ม. (9 ต้น)</option>
-          <option value="F1_-0.651">F1 · PCO: -0.651 ม. (2 ต้น)</option>
-        </select>
-        
-        <div class="flex items-center gap-1 text-[9.5px]">
-          <button id="btn-pco-focus" type="button" class="flex-1 pop-btn py-1 text-center font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300 flex items-center justify-center gap-1" title="เล็งกล้อง 3D ไปที่กลุ่มนี้">
-            🎯 เล็งกลุ่มนี้
-          </button>
-          <button id="btn-pco-filter-toggle" type="button" class="flex-1 pop-btn py-1 text-center font-bold text-slate-700 hover:bg-slate-100 border border-slate-300" title="กรองเฉพาะเข็มกลุ่มนี้">
-            กรองเฉพาะกลุ่ม
-          </button>
-          <button id="btn-pco-reset" type="button" class="px-2 pop-btn py-1 text-center font-bold" title="ดูทั้งหมด">
-            รีเซ็ต
-          </button>
-        </div>
-        <button id="btn-hud-open-pco-inspect" type="button" class="w-full pop-btn py-1 text-[10px] font-black text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300 flex items-center justify-center gap-1.5 shadow-xs" title="เปิดหน้าต่างตรวจสอบ PCO & ค่า Co แต่ละต้น">
-          <i data-lucide="crosshair" class="w-3 h-3 text-amber-700"></i>
-          <span>เช็ค PCO / ค่า Co แต่ละต้น (Popup)</span>
-        </button>
-        <div id="pco-info-badge" class="text-[9px] font-semibold text-amber-800 bg-amber-50/80 px-1.5 py-0.5 rounded border border-amber-200">
-          แสดงระนาบระดับตัดหัวเข็ม PCO ใน 3D
-        </div>
-      </div>
     </div>
 
     </div>
@@ -7070,7 +7035,7 @@
           sidebarBtn.style.background = '#86efac';
           sidebarBtn.classList.add('ring-2', 'ring-emerald-600');
         }
-        if (sidebarLbl) sidebarLbl.textContent = '🟢 กำลังทำงาน (คลิกที่เสาเข็ม)';
+        if (sidebarLbl) sidebarLbl.textContent = '🟢 กำลังทำงาน';
         if (sidebarBadge) sidebarBadge.classList.remove('hidden');
 
         if (renderer && renderer.domElement) {
@@ -7093,7 +7058,7 @@
           sidebarBtn.style.background = '#fef08a';
           sidebarBtn.classList.remove('ring-2', 'ring-emerald-600');
         }
-        if (sidebarLbl) sidebarLbl.textContent = 'กดเปิดเครื่องมือเช็คข้อมูล';
+        if (sidebarLbl) sidebarLbl.textContent = 'เปิดเครื่องมือเช็ค';
         if (sidebarBadge) sidebarBadge.classList.add('hidden');
 
         if (renderer && renderer.domElement) {
