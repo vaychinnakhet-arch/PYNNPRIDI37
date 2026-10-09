@@ -592,7 +592,10 @@
       <!-- Sub-controls for 3D View Angles -->
       <div id="sub-views-3d" class="hidden flex flex-col gap-1 pt-1 border-t border-[#475569]/20">
         <span class="text-[8.5px] font-bold text-[#667277]">ปรับมุมมอง 3D:</span>
-        <div class="grid grid-cols-2 gap-1 text-[9.5px]">
+        <div class="grid grid-cols-3 gap-1 text-[9.5px]">
+          <button id="btn-view-top-3d" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านบน (Top View ใน 3D)">
+            บน (Top)
+          </button>
           <button id="btn-view-front" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านหน้า ทิศใต้">
             หน้า (S)
           </button>
@@ -1048,7 +1051,7 @@
             <span class="w-5 h-5 rounded bg-[#0284c7] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[0.5px_0.5px_0_#475569]">
               <i data-lucide="hammer" class="w-3 h-3"></i>
             </span>
-            <span class="text-xs font-black text-[#0369a1] whitespace-nowrap">แผนวันนี้ 3</span>
+            <span class="text-xs font-black text-[#0369a1] whitespace-nowrap">แผนวันนี้ 3 ต้น</span>
           </div>
           <div class="flex items-baseline gap-1 shrink-0 font-bold">
             <span class="text-[10px] text-[#64748b]">กดแล้ว</span>
@@ -3814,6 +3817,10 @@
 
         // Boundary dimension text labels (41.91 m, 19.25 m (SOI PRIDI 37), 39.15 m, 19.77 m) are now 100% native 3D geometry from SketchUp GLB
 
+        currentModel.updateMatrixWorld(true);
+        if (typeof computeExactPilePositions === 'function') {
+          computeExactPilePositions();
+        }
 
         resetIsoView(); // 3D Isometric View as default
         updatePileMeshVisuals();
@@ -3953,14 +3960,56 @@
       pointerDownPos = { x: e.clientX, y: e.clientY, time: performance.now() };
     });
 
+    // แผนที่เก็บพิกัด 3D World ที่แท้จริงของหัวเสาเข็มและวงกลม Badge (คำนวณจาก Bounding Box ของโมเดล 3D โดยตรง)
+    const pileExactPos = new Map();
+
+    function computeExactPilePositions() {
+      if (!currentModel) return;
+      currentModel.updateMatrixWorld(true);
+
+      for (let pNo = 1; pNo <= 93; pNo++) {
+        const meshes = pileMeshesMap.get(pNo) || [];
+        let badgeCenter = null;
+        let headCenter = null;
+
+        for (const m of meshes) {
+          if (m.userData?.isBadge && !badgeCenter) {
+            try {
+              const box = new THREE.Box3().setFromObject(m);
+              badgeCenter = new THREE.Vector3();
+              box.getCenter(badgeCenter);
+            } catch (e) {}
+          }
+          if (m.userData?.isIBeam && !headCenter) {
+            try {
+              const box = new THREE.Box3().setFromObject(m);
+              headCenter = new THREE.Vector3();
+              box.getCenter(headCenter);
+              headCenter.z = box.max.z; // ระดับสูงสุดของหัวเข็ม (Top Cap Elevation)
+            } catch (e) {}
+          }
+        }
+
+        const dbPile = PILES_DATABASE.find(p => p.no === pNo);
+        if (!headCenter && dbPile) {
+          const topZ = dbPile.pco_level !== undefined ? dbPile.pco_level : (dbPile.co_level || -1.226);
+          headCenter = new THREE.Vector3(dbPile.x, dbPile.y, topZ);
+        }
+        if (!badgeCenter && headCenter) {
+          badgeCenter = headCenter.clone();
+        }
+
+        pileExactPos.set(pNo, { badgeCenter, headCenter });
+      }
+    }
+
     /**
-     * ค้นหาเสาเข็มที่ตำแหน่งเคอร์เซอร์ด้วยความแม่นยำสูงสุด (Pin-Point Accuracy):
-     * 1. ใช้ getBoundingClientRect() เพื่อป้องกันปัญหา offset จากแถบ URL และแถบสถานะบนมือถือ/แท็บเล็ต
-     * 2. คัดกรองเฉพาะ Visible Mesh ของเสาเข็ม ตัด LineSegments ขอบดำที่มี line threshold 1m ออก
-     * 3. คำนวณระยะห่าง 2D (Plan Distance) ระหว่างจุดปะทะ 3D กับศูนย์กลางเสาเข็มในฐานข้อมูล
-     *    ป้องกันไม่ให้เสาเข็มต้นข้างๆ (ที่อยู่ห่าง 1-2 เมตร) แย่งคลิกไป
-     * 4. ให้ความสำคัญสูงสุดกับหัวเข็ม (Badge) และตัวเลข (Text) ที่อยู่ด้านบนเสาเข็มโดยตรง
-     * 5. ระบบสำรอง Screen-Space Proximity สำหรับนิ้วสัมผัสบนหน้าจอทัชสกรีน
+     * ค้นหาเสาเข็มที่ตำแหน่งเคอร์เซอร์ด้วยความแม่นยำระดับพินพอยต์ 100%:
+     * แก้ไขปัญหามุมมอง 3D ที่คลิกต้นหนึ่งแล้วไปติดต้นข้างๆ:
+     * 1. หากคลิกโดนวงกลม Badge หรือตัวเลข (Text) ของเสาเข็มโดยตรง -> คืนค่าเสาเข็มต้นนั้นทันที แม่นยำ 100%
+     * 2. หากคลิกโดนหัวเสาเข็ม (I-Beam Cap) -> ตรวจสอบลำแสงชนโดยตรง พร้อมเทียบตำแหน่งบนหน้าจอ (Screen Space)
+     *    ป้องกันไม่ให้ลำแสงที่เฉียดเสาเข็มใต้ดินต้นหน้าหรือต้นข้างๆ แย่งคลิกต้นที่ผู้ใช้ต้องการ
+     * 3. คำนวณ Screen-Space Distance โดยใช้พิกัดจริงจาก Bounding Box ของโมเดล 3D ทุกต้น
      */
     function getPileAtPointer(e) {
       if (!renderer || !renderer.domElement || !activeCamera || !currentModel) return null;
@@ -3972,89 +4021,120 @@
       // ป้องกันการคลิกนอกพื้นที่ Canvas ของ 3D
       if (clickX < 0 || clickX > rect.width || clickY < 0 || clickY > rect.height) return null;
 
-      // Normalized Device Coordinates (-1 ถึง +1) ภายในขอบเขต Canvas ที่แท้จริง
       const normX = (clickX / rect.width) * 2 - 1;
       const normY = -(clickY / rect.height) * 2 + 1;
 
       mouse.set(normX, normY);
       raycaster.setFromCamera(mouse, activeCamera);
 
-      // ลด Line threshold เพื่อไม่ให้เส้นขอบรอบเข็มต้นข้างๆ แย่งการคลิก
-      raycaster.params.Line.threshold = 0.04;
-
-      // ค้นหาวัตถุที่ลำแสงพุ่งผ่านในโมเดล 3D
+      // ยิง 3D Raycaster หาวัตถุที่ชนโดยตรง
+      raycaster.params.Line.threshold = 0.05;
       const allIntersects = raycaster.intersectObjects(currentModel.children, true);
 
-      // กรองเฉพาะ Mesh ที่มองเห็นได้และมีรหัสเสาเข็ม (userData.pileNo)
-      const validMeshHits = allIntersects.filter(h => {
+      // กรองเฉพาะ Mesh ที่มี pileNo และแสดงผลอยู่
+      const pileHits = [];
+      for (const h of allIntersects) {
         const obj = h.object;
-        if (!obj || !obj.isMesh || !obj.visible) return false;
+        if (!obj || !obj.isMesh || !obj.visible) continue;
         let p = obj.parent;
+        let isVis = true;
         while (p && p !== scene) {
-          if (!p.visible) return false;
+          if (!p.visible) { isVis = false; break; }
           p = p.parent;
         }
-        return Boolean(obj.userData?.pileNo);
-      });
-
-      // ยุทธวิธีที่ 1: ตรวจสอบจาก Mesh ที่ลำแสงพุ่งชนโดยตรง
-      if (validMeshHits.length > 0) {
-        let bestPileNo = null;
-        let bestScore = Infinity;
-
-        for (const hit of validMeshHits) {
-          const pNo = hit.object.userData.pileNo;
-          const pileData = PILES_DATABASE.find(p => p.no === pNo);
-          if (!pileData) continue;
-
-          // หากคลิกโดนวงกลมหัวเข็ม (Badge) หรือตัวเลขตรงๆ (Text) นั่นคือต้นนี้แน่นอน 100%!
-          if (hit.object.userData?.isBadge || hit.object.userData?.isText) {
-            return pNo;
-          }
-
-          // ระยะห่าง 2D ในแนวระนาบระหว่างจุดที่ Ray ยิงโดน กับจุดศูนย์กลางเสาเข็มตามแบบ
-          const dist2D = Math.hypot(hit.point.x - pileData.x, hit.point.y - pileData.y);
-
-          // เสาเข็ม I-0.40m มีรัศมีจากศูนย์กลางไม่เกิน 0.35m หากโดนเข็มต้นข้างๆ dist2D จะเกิน 1.0m แน่นอน
-          // ถ่วงน้ำหนักคะแนนความใกล้เคียง: ระยะลำแสง + ระยะห่าง 2D จากศูนย์กลางเข็ม
-          const score = hit.distance + dist2D * 4.0;
-
-          if (score < bestScore) {
-            bestScore = score;
-            bestPileNo = pNo;
-          }
+        if (!isVis) continue;
+        const pNo = obj.userData?.pileNo;
+        if (pNo) {
+          pileHits.push({
+            pNo,
+            hit: h,
+            distance: h.distance,
+            isBadge: Boolean(obj.userData?.isBadge),
+            isText: Boolean(obj.userData?.isText),
+            isIBeam: Boolean(obj.userData?.isIBeam)
+          });
         }
-
-        if (bestPileNo) return bestPileNo;
       }
 
-      // ยุทธวิธีที่ 2: ระบบตรวจจับความใกล้เคียงบนระนาบหน้าจอ 2D (Touch / Tap Tolerance)
-      // เผื่อกรณีจิ้มนิ้วเฉียดขอบหัวเข็มบนมือถือ แปลงพิกัด 3D ของหัวเข็มทุกต้นเป็น Pixel บนหน้าจอ
-      let closestScreenPile = null;
-      let minPixelDist = 22; // รัศมีตรวจจับ 22 พิกเซลบนหน้าจอ
+      // ลำดับที่ 1: หากคลิกโดน Badge หรือ Text ของต้นใดโดยตรง คืนค่าต้นนั้นทันที (เจาะจงและแม่นยำที่สุด)
+      const directBadgeHit = pileHits.find(h => h.isBadge || h.isText);
+      if (directBadgeHit) {
+        return directBadgeHit.pNo;
+      }
 
+      // คำนวณระยะห่างบนหน้าจอ (Screen-Space Distance) ของเสาเข็มทุกต้นโดยใช้พิกัดจริง 3D
       const projVec = new THREE.Vector3();
-      for (const p of PILES_DATABASE) {
-        const meshes = pileMeshesMap.get(p.no);
+      const screenDistances = [];
+
+      for (let pNo = 1; pNo <= 93; pNo++) {
+        const meshes = pileMeshesMap.get(pNo);
         if (meshes && meshes.length > 0 && !meshes[0].visible) continue;
 
-        const topZ = (p.pco_level !== undefined ? p.pco_level : (p.co_level || -1.2));
-        projVec.set(p.x, p.y, topZ);
-        projVec.project(activeCamera);
+        const pos = pileExactPos.get(pNo);
+        if (!pos) continue;
 
-        // ตรวจสอบว่าอยู่ด้านหน้ากล้อง
-        if (projVec.z > -1 && projVec.z < 1) {
-          const sx = (projVec.x * 0.5 + 0.5) * rect.width;
-          const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
-          const dist = Math.hypot(clickX - sx, clickY - sy);
-          if (dist < minPixelDist) {
-            minPixelDist = dist;
-            closestScreenPile = p.no;
+        let minD = Infinity;
+
+        // เช็คระยะห่างจากจุดกึ่งกลาง Badge
+        if (pos.badgeCenter) {
+          projVec.copy(pos.badgeCenter).project(activeCamera);
+          if (projVec.z > -1 && projVec.z < 1) {
+            const sx = (projVec.x * 0.5 + 0.5) * rect.width;
+            const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
+            const d = Math.hypot(clickX - sx, clickY - sy);
+            if (d < minD) minD = d;
           }
+        }
+
+        // เช็คระยะห่างจากหัวเสาเข็ม (Head Cap)
+        if (pos.headCenter) {
+          projVec.copy(pos.headCenter).project(activeCamera);
+          if (projVec.z > -1 && projVec.z < 1) {
+            const sx = (projVec.x * 0.5 + 0.5) * rect.width;
+            const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
+            const d = Math.hypot(clickX - sx, clickY - sy);
+            if (d < minD) minD = d;
+          }
+        }
+
+        if (minD < Infinity) {
+          screenDistances.push({ pNo, dist: minD });
         }
       }
 
-      return closestScreenPile;
+      screenDistances.sort((a, b) => a.dist - b.dist);
+
+      // ลำดับที่ 2: หากคลิกโดน Mesh ของเสาเข็ม (I-Beam)
+      if (pileHits.length > 0) {
+        // หากวัตถุชิ้นแรกที่ลำแสงชน (ใกล้กล้องที่สุด) มีระยะห่างบนหน้าจอใกล้เคียงกับตำแหน่งคลิก (<= 28px)
+        const firstHit = pileHits[0];
+        const firstScreen = screenDistances.find(s => s.pNo === firstHit.pNo);
+        if (firstScreen && firstScreen.dist <= 28) {
+          return firstHit.pNo;
+        }
+
+        // หากมีหลายต้นในลำแสง (เช่น ลำแสงพุ่งทะลุเสาใต้ดินของต้นข้างๆ)
+        // ให้เลือกต้นที่ถูกชนและมีศูนย์กลางหัวเข็ม/Badge อยู่ใกล้ตำแหน่งเคอร์เซอร์บนหน้าจอมากที่สุด
+        let bestHitPile = null;
+        let bestDist = Infinity;
+        for (const h of pileHits) {
+          const s = screenDistances.find(item => item.pNo === h.pNo);
+          if (s && s.dist < bestDist) {
+            bestDist = s.dist;
+            bestHitPile = h.pNo;
+          }
+        }
+        if (bestHitPile && bestDist <= 32) {
+          return bestHitPile;
+        }
+      }
+
+      // ลำดับที่ 3: Fallback สำหรับการแตะบนหน้าจอมือถือ (Touch/Tap) หรือคลิกเฉียดในช่องว่าง
+      if (screenDistances.length > 0 && screenDistances[0].dist <= 22) {
+        return screenDistances[0].pNo;
+      }
+
+      return null;
     }
 
     // Raycast on pointerup ONLY if it was a quick stationary click (NOT a drag to rotate or pan!)
@@ -4065,8 +4145,8 @@
       const dist = Math.hypot(dx, dy);
       const dt = performance.now() - pointerDownPos.time;
 
-      // If user dragged more than 5px or held longer than 350ms, they were rotating or panning!
-      if (dist > 5 || dt > 350) return;
+      // If user dragged more than 8px or held longer than 400ms, they were rotating or panning!
+      if (dist > 8 || dt > 400) return;
 
       const hitPileNo = getPileAtPointer(e);
       if (hitPileNo) {
@@ -4421,6 +4501,13 @@
     document.getElementById('view-iso3d').addEventListener('click', resetIsoView);
 
     // Preset 3D Directional Views
+    document.getElementById('btn-view-top-3d')?.addEventListener('click', () => {
+      if (activeCamera !== perspCamera) resetIsoView();
+      perspCamera.position.set(PLAN_CENTER.x, PLAN_CENTER.y - 0.05, 65);
+      controlsPersp.target.copy(PLAN_CENTER);
+      controlsPersp.update();
+    });
+
     document.getElementById('btn-view-front')?.addEventListener('click', () => {
       if (activeCamera !== perspCamera) resetIsoView();
       perspCamera.position.set(PLAN_CENTER.x, PLAN_CENTER.y - 45, 14);
@@ -7534,11 +7621,14 @@
       document.getElementById('btn-open-cotable')?.click();
     });
 
-    // ให้ฟีดแบ็กเคอร์เซอร์เมื่อเลื่อนเมาส์ผ่านเสาเข็มในโหมดเช็คข้อมูล
+    // ให้ฟีดแบ็กเคอร์เซอร์เมื่อเลื่อนเมาส์ผ่านเสาเข็ม (ทั้งโหมดปกติและโหมดเช็คข้อมูล)
     renderer.domElement.addEventListener('pointermove', (e) => {
-      if (isPcoInspectMode && currentModel) {
-        const hitPileNo = getPileAtPointer(e);
+      if (!currentModel) return;
+      const hitPileNo = getPileAtPointer(e);
+      if (isPcoInspectMode) {
         renderer.domElement.style.cursor = hitPileNo ? 'pointer' : 'crosshair';
+      } else {
+        renderer.domElement.style.cursor = hitPileNo ? 'pointer' : 'default';
       }
     });
 
