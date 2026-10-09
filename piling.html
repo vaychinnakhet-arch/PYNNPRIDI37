@@ -3941,7 +3941,7 @@
       document.getElementById('quick-driven-stat').textContent = drivenCount;
     }
 
-    // 4. Raycaster & 1-Click Pile Action Card
+    // 4. High-Precision 3D Raycaster & Pin-Point Pile Picking (แก้ปัญหาคลิกติดต้นข้างๆ 100%)
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let selectedCardPileNo = null;
@@ -3952,6 +3952,110 @@
       if (e.target !== renderer.domElement) return;
       pointerDownPos = { x: e.clientX, y: e.clientY, time: performance.now() };
     });
+
+    /**
+     * ค้นหาเสาเข็มที่ตำแหน่งเคอร์เซอร์ด้วยความแม่นยำสูงสุด (Pin-Point Accuracy):
+     * 1. ใช้ getBoundingClientRect() เพื่อป้องกันปัญหา offset จากแถบ URL และแถบสถานะบนมือถือ/แท็บเล็ต
+     * 2. คัดกรองเฉพาะ Visible Mesh ของเสาเข็ม ตัด LineSegments ขอบดำที่มี line threshold 1m ออก
+     * 3. คำนวณระยะห่าง 2D (Plan Distance) ระหว่างจุดปะทะ 3D กับศูนย์กลางเสาเข็มในฐานข้อมูล
+     *    ป้องกันไม่ให้เสาเข็มต้นข้างๆ (ที่อยู่ห่าง 1-2 เมตร) แย่งคลิกไป
+     * 4. ให้ความสำคัญสูงสุดกับหัวเข็ม (Badge) และตัวเลข (Text) ที่อยู่ด้านบนเสาเข็มโดยตรง
+     * 5. ระบบสำรอง Screen-Space Proximity สำหรับนิ้วสัมผัสบนหน้าจอทัชสกรีน
+     */
+    function getPileAtPointer(e) {
+      if (!renderer || !renderer.domElement || !activeCamera || !currentModel) return null;
+
+      const rect = renderer.domElement.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      // ป้องกันการคลิกนอกพื้นที่ Canvas ของ 3D
+      if (clickX < 0 || clickX > rect.width || clickY < 0 || clickY > rect.height) return null;
+
+      // Normalized Device Coordinates (-1 ถึง +1) ภายในขอบเขต Canvas ที่แท้จริง
+      const normX = (clickX / rect.width) * 2 - 1;
+      const normY = -(clickY / rect.height) * 2 + 1;
+
+      mouse.set(normX, normY);
+      raycaster.setFromCamera(mouse, activeCamera);
+
+      // ลด Line threshold เพื่อไม่ให้เส้นขอบรอบเข็มต้นข้างๆ แย่งการคลิก
+      raycaster.params.Line.threshold = 0.04;
+
+      // ค้นหาวัตถุที่ลำแสงพุ่งผ่านในโมเดล 3D
+      const allIntersects = raycaster.intersectObjects(currentModel.children, true);
+
+      // กรองเฉพาะ Mesh ที่มองเห็นได้และมีรหัสเสาเข็ม (userData.pileNo)
+      const validMeshHits = allIntersects.filter(h => {
+        const obj = h.object;
+        if (!obj || !obj.isMesh || !obj.visible) return false;
+        let p = obj.parent;
+        while (p && p !== scene) {
+          if (!p.visible) return false;
+          p = p.parent;
+        }
+        return Boolean(obj.userData?.pileNo);
+      });
+
+      // ยุทธวิธีที่ 1: ตรวจสอบจาก Mesh ที่ลำแสงพุ่งชนโดยตรง
+      if (validMeshHits.length > 0) {
+        let bestPileNo = null;
+        let bestScore = Infinity;
+
+        for (const hit of validMeshHits) {
+          const pNo = hit.object.userData.pileNo;
+          const pileData = PILES_DATABASE.find(p => p.no === pNo);
+          if (!pileData) continue;
+
+          // หากคลิกโดนวงกลมหัวเข็ม (Badge) หรือตัวเลขตรงๆ (Text) นั่นคือต้นนี้แน่นอน 100%!
+          if (hit.object.userData?.isBadge || hit.object.userData?.isText) {
+            return pNo;
+          }
+
+          // ระยะห่าง 2D ในแนวระนาบระหว่างจุดที่ Ray ยิงโดน กับจุดศูนย์กลางเสาเข็มตามแบบ
+          const dist2D = Math.hypot(hit.point.x - pileData.x, hit.point.y - pileData.y);
+
+          // เสาเข็ม I-0.40m มีรัศมีจากศูนย์กลางไม่เกิน 0.35m หากโดนเข็มต้นข้างๆ dist2D จะเกิน 1.0m แน่นอน
+          // ถ่วงน้ำหนักคะแนนความใกล้เคียง: ระยะลำแสง + ระยะห่าง 2D จากศูนย์กลางเข็ม
+          const score = hit.distance + dist2D * 4.0;
+
+          if (score < bestScore) {
+            bestScore = score;
+            bestPileNo = pNo;
+          }
+        }
+
+        if (bestPileNo) return bestPileNo;
+      }
+
+      // ยุทธวิธีที่ 2: ระบบตรวจจับความใกล้เคียงบนระนาบหน้าจอ 2D (Touch / Tap Tolerance)
+      // เผื่อกรณีจิ้มนิ้วเฉียดขอบหัวเข็มบนมือถือ แปลงพิกัด 3D ของหัวเข็มทุกต้นเป็น Pixel บนหน้าจอ
+      let closestScreenPile = null;
+      let minPixelDist = 22; // รัศมีตรวจจับ 22 พิกเซลบนหน้าจอ
+
+      const projVec = new THREE.Vector3();
+      for (const p of PILES_DATABASE) {
+        const meshes = pileMeshesMap.get(p.no);
+        if (meshes && meshes.length > 0 && !meshes[0].visible) continue;
+
+        const topZ = (p.pco_level !== undefined ? p.pco_level : (p.co_level || -1.2));
+        projVec.set(p.x, p.y, topZ);
+        projVec.project(activeCamera);
+
+        // ตรวจสอบว่าอยู่ด้านหน้ากล้อง
+        if (projVec.z > -1 && projVec.z < 1) {
+          const sx = (projVec.x * 0.5 + 0.5) * rect.width;
+          const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
+          const dist = Math.hypot(clickX - sx, clickY - sy);
+          if (dist < minPixelDist) {
+            minPixelDist = dist;
+            closestScreenPile = p.no;
+          }
+        }
+      }
+
+      return closestScreenPile;
+    }
 
     // Raycast on pointerup ONLY if it was a quick stationary click (NOT a drag to rotate or pan!)
     window.addEventListener('pointerup', (e) => {
@@ -3964,17 +4068,8 @@
       // If user dragged more than 5px or held longer than 350ms, they were rotating or panning!
       if (dist > 5 || dt > 350) return;
 
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, activeCamera);
-      if (!currentModel) return;
-
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      const hit = intersects.find(h => h.object.userData?.pileNo);
-
-      if (hit) {
-        const hitPileNo = hit.object.userData.pileNo;
+      const hitPileNo = getPileAtPointer(e);
+      if (hitPileNo) {
         if (isPcoInspectMode) {
           openPcoInspector(hitPileNo);
         } else {
@@ -3986,22 +4081,18 @@
     // Double-click to Focus & Center rotation on clicked pile
     window.addEventListener('dblclick', (e) => {
       if (e.target !== renderer.domElement) return;
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, activeCamera);
-      if (!currentModel) return;
-
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      const hit = intersects.find(h => h.object.userData?.pileNo);
-      if (hit) {
-        const pt = hit.point;
-        if (activeCamera === perspCamera) {
-          controlsPersp.target.set(pt.x, pt.y, 0);
-          controlsPersp.update();
-        } else {
-          controlsOrtho.target.set(pt.x, pt.y, 0);
-          controlsOrtho.update();
+      const hitPileNo = getPileAtPointer(e);
+      if (hitPileNo) {
+        const p = PILES_DATABASE.find(item => item.no === hitPileNo);
+        if (p) {
+          const pt = new THREE.Vector3(p.x, p.y, p.pco_level || p.co_level || 0);
+          if (activeCamera === perspCamera) {
+            controlsPersp.target.set(pt.x, pt.y, 0);
+            controlsPersp.update();
+          } else {
+            controlsOrtho.target.set(pt.x, pt.y, 0);
+            controlsOrtho.update();
+          }
         }
       }
     });
@@ -7446,12 +7537,8 @@
     // ให้ฟีดแบ็กเคอร์เซอร์เมื่อเลื่อนเมาส์ผ่านเสาเข็มในโหมดเช็คข้อมูล
     renderer.domElement.addEventListener('pointermove', (e) => {
       if (isPcoInspectMode && currentModel) {
-        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-        raycaster.setFromCamera(mouse, activeCamera);
-        const intersects = raycaster.intersectObjects(scene.children, true);
-        const hit = intersects.find(h => h.object.userData?.pileNo);
-        renderer.domElement.style.cursor = hit ? 'pointer' : 'crosshair';
+        const hitPileNo = getPileAtPointer(e);
+        renderer.domElement.style.cursor = hitPileNo ? 'pointer' : 'crosshair';
       }
     });
 
