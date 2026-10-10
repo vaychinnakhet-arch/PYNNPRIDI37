@@ -305,31 +305,32 @@
       max-height: 365px !important;
       overflow-y: auto !important;
     }
-    /* เส้นตารางและเส้นขอบทุกช่องให้เต็มสมบูรณ์ คมชัด ไม่ขาดช่วง (Full grid lines for every cell) */
+    /* เส้นตารางและเส้นขอบทุกช่องสีดำเต็มสมบูรณ์ คมชัด ไม่ขาดช่วง (Crisp black grid lines for every cell & container) */
+    #report-sec-table {
+      border: 2px solid #000000 !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+    }
+    #report-sec-table-head {
+      border-bottom: 2px solid #000000 !important;
+    }
     #rep-today-table {
-      border-collapse: collapse;
-      border-bottom: 2px solid #475569;
+      border-collapse: collapse !important;
+      border: 2px solid #000000 !important;
+      width: 100% !important;
     }
     #rep-today-table th {
-      border-right: 1px solid rgba(71, 85, 105, 0.25);
+      border: 1px solid #000000 !important;
+      border-bottom: 2px solid #000000 !important;
+      box-sizing: border-box !important;
     }
     #rep-today-table td {
-      border-right: 1px solid #cbd5e1;
-      border-bottom: 1px solid #cbd5e1;
-      vertical-align: middle;
-    }
-    #rep-today-table th:last-child,
-    #rep-today-table td:last-child {
-      border-right: none;
+      border: 1px solid #000000 !important;
+      vertical-align: middle !important;
+      box-sizing: border-box !important;
     }
     #rep-today-table tbody tr:last-child td {
-      border-bottom: 2px solid #475569 !important;
-    }
-    #rep-today-table tbody tr:last-child td:first-child {
-      border-bottom-left-radius: 10px;
-    }
-    #rep-today-table tbody tr:last-child td:last-child {
-      border-bottom-right-radius: 10px;
+      border-bottom: 2px solid #000000 !important;
     }
 
     /* Print & Capture Hide Styles (ตอนแคปภาพรายงาน และพิมพ์) */
@@ -470,7 +471,7 @@
       flex-shrink: 0 !important;
     }
 
-    /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง */
+    /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง พร้อมเส้นตารางสีดำคมชัด */
     .is-export-capturing #report-page-card {
       overflow: visible !important;
       padding-bottom: 48px !important;
@@ -480,11 +481,14 @@
       height: auto !important;
       max-height: none !important;
       overflow: visible !important;
-      border: 1px solid #cbd5e1 !important;
+      border: 2px solid #000000 !important;
       border-radius: 12px !important;
       box-shadow: none !important;
       background: #ffffff !important;
       margin-bottom: 24px !important;
+    }
+    .is-export-capturing #report-sec-table-head {
+      border-bottom: 2px solid #000000 !important;
     }
     .is-export-capturing #report-sec-table .table-wrapper,
     .is-export-capturing #report-sec-table .table-wrapper.has-scroll,
@@ -506,26 +510,26 @@
       min-width: 100% !important;
       table-layout: auto !important;
       border-collapse: collapse !important;
-      border-bottom: 1.5px solid #94a3b8 !important;
+      border: 2px solid #000000 !important;
     }
     .is-export-capturing #rep-today-table th {
-      border-right: 1px solid rgba(71, 85, 105, 0.25) !important;
+      border: 1px solid #000000 !important;
+      border-bottom: 2px solid #000000 !important;
       box-sizing: border-box !important;
     }
     .is-export-capturing #rep-today-table td {
-      border-right: 1px solid #cbd5e1 !important;
-      border-bottom: 1px solid #cbd5e1 !important;
+      border: 1px solid #000000 !important;
       box-sizing: border-box !important;
     }
     .is-export-capturing #rep-today-table th:last-child,
     .is-export-capturing #rep-today-table td:last-child {
-      border-right: none !important;
+      border-right: 1px solid #000000 !important;
     }
     .is-export-capturing #rep-today-table tbody tr:last-child {
-      border-bottom: 1.5px solid #94a3b8 !important;
+      border-bottom: 2px solid #000000 !important;
     }
     .is-export-capturing #rep-today-table tbody tr:last-child td {
-      border-bottom: 1.5px solid #94a3b8 !important;
+      border-bottom: 2px solid #000000 !important;
     }
     .is-export-capturing #rep-today-table th,
     .is-export-capturing #rep-today-table td:not([colspan]) {
@@ -538,7 +542,69 @@
       text-align: center !important;
       vertical-align: middle !important;
       box-sizing: border-box !important;
-      border-bottom: 2px solid #475569 !important;
+      border: 1px solid #000000 !important;
+      border-bottom: 2px solid #000000 !important;
+    }
+
+    /* โหมดแคปภาพแนวตั้ง 4:3 (Portrait 3:4) ปรับสัดส่วนทุกอย่างให้พอดีเป๊ะเต็มเฟรม */
+    #report-page-card.is-export-capturing.export-ratio-3-4,
+    .is-export-capturing.export-ratio-3-4 #report-page-card {
+      width: 1200px !important;
+      min-width: 1200px !important;
+      max-width: 1200px !important;
+      min-height: 1560px !important;
+      height: 1560px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      box-sizing: border-box !important;
+      padding: 24px 28px !important;
+      border: 2px solid #000000 !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-main-grid {
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      gap: 14px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-col-plan {
+      flex: 1.15 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      min-height: 520px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-sec-plan {
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      border: 2px solid #000000 !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #planSnapshotCanvasWrapper {
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 10px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #planCanvasContainer {
+      flex: 1 !important;
+      height: 100% !important;
+      min-height: 480px !important;
+      max-height: none !important;
+      aspect-ratio: auto !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-sec-scurve {
+      flex: 0 0 auto !important;
+      border: 2px solid #000000 !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-sec-scurve .chart-wrapper {
+      height: 250px !important;
+      max-height: 250px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-sec-table {
+      flex: 0 0 auto !important;
+      margin-bottom: 0 !important;
+      border: 2px solid #000000 !important;
     }
   </style>
 
@@ -1297,8 +1363,8 @@
           </div>
 
           <!-- SECTION 3: TODAY'S PRESSED PILES LOG TABLE -->
-          <div id="report-sec-table" class="border border-slate-300 rounded-xl overflow-hidden shadow-xs bg-white">
-            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2 border-b border-slate-300 flex flex-wrap items-center justify-between gap-2 rounded-t-[11px]">
+          <div id="report-sec-table" class="border-2 border-black rounded-xl overflow-hidden shadow-xs bg-white">
+            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2 border-b-2 border-black flex flex-wrap items-center justify-between gap-2 rounded-t-[10px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
                   <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#34383b]"></i>
@@ -1320,24 +1386,24 @@
               </div>
             </div>
             <div class="table-wrapper overflow-x-auto">
-              <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
-                <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
+              <table id="rep-today-table" class="w-full text-xs text-left border-collapse border-2 border-black">
+                <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#000000] border-b-2 border-black font-black text-xs">
                   <tr>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">No.</th>
-                    <th class="p-2 border-r-2 border-[#475569]/30">รหัสเข็ม (ID)</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ฐานราก</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ตำแหน่งกริด</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono" title="พิกัดสำรวจตามแบบ (Northing, Easting)">Co (N, E) แบบ (m)</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">Co (n,e) หลังกด (m)</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30 font-mono text-[#047857]" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E) และระยะหนีศูนย์รวมของแต่ละต้น">ผลต่าง (Δn, Δe)</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
-                    <th class="p-2 text-right border-r-2 border-[#475569]/30 text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30 font-mono" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่าง (Diff PCO) (ม.)</th>
-                    <th class="p-2 text-center border-r-2 border-[#475569]/30">ชนิดเข็ม</th>
-                    <th class="p-2 text-center">วันที่กด</th>
+                    <th class="p-2 text-center border border-black border-b-2 border-b-black">No.</th>
+                    <th class="p-2 border border-black border-b-2 border-b-black">รหัสเข็ม (ID)</th>
+                    <th class="p-2 text-center border border-black border-b-2 border-b-black">ฐานราก</th>
+                    <th class="p-2 text-center border border-black border-b-2 border-b-black">ตำแหน่งกริด</th>
+                    <th class="p-2 text-right border border-black border-b-2 border-b-black font-mono" title="พิกัดสำรวจตามแบบ (Northing, Easting)">Co (N, E) แบบ (m)</th>
+                    <th class="p-2 text-right border border-black border-b-2 border-b-black font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">Co (n,e) หลังกด (m)</th>
+                    <th class="p-2 text-center border border-black border-b-2 border-b-black font-mono text-[#047857]" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E) และระยะหนีศูนย์รวมของแต่ละต้น">ผลต่าง (Δn, Δe)</th>
+                    <th class="p-2 text-right border border-black border-b-2 border-b-black text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
+                    <th class="p-2 text-right border border-black border-b-2 border-b-black text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
+                    <th class="p-2 text-center border border-black border-b-2 border-b-black font-mono" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่าง (Diff PCO) (ม.)</th>
+                    <th class="p-2 text-center border border-black border-b-2 border-b-black">ชนิดเข็ม</th>
+                    <th class="p-2 text-center border border-black border-b-2 border-b-black">วันที่กด</th>
                   </tr>
                 </thead>
-                <tbody id="rep-today-table-body" class="divide-y divide-[#e5f1ed]">
+                <tbody id="rep-today-table-body">
                   <!-- Injected by JS -->
                 </tbody>
                 <tfoot id="rep-today-table-foot">
@@ -1411,8 +1477,11 @@
             <button data-ratio="fit" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-[#475569] font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-[1.5px_1.5px_0_#475569]">
               📑 พอดีเอกสาร (Auto Fit)
             </button>
+            <button data-ratio="3:4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
+              📱 แนวตั้ง 4:3 (Portrait Fit)
+            </button>
             <button data-ratio="4:3" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
-              📐 อัตราส่วน 4:3 (Standard)
+              📐 แนวนอน 4:3 (Landscape)
             </button>
             <button data-ratio="16:9" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
               🔲 แนวนอน 16:9 (Slide)
@@ -6667,7 +6736,7 @@
           const isLandscapeRatio = (currentExportRatio === '16:9' || currentExportRatio === '4:3');
           if (isLandscapeRatio) {
             setReportLayout('landscape');
-          } else if (currentExportRatio === 'a4' || currentExportRatio === '1:1') {
+          } else if (currentExportRatio === 'a4' || currentExportRatio === '1:1' || currentExportRatio === '3:4') {
             setReportLayout('portrait');
           }
 
@@ -6704,6 +6773,10 @@
             if (isPortraitLayout) {
               reportCard.classList.add('export-portrait');
               reportPage.classList.add('export-portrait');
+            }
+            if (currentExportRatio === '3:4') {
+              reportCard.classList.add('export-ratio-3-4');
+              reportPage.classList.add('export-ratio-3-4');
             }
 
             const hideInExport = reportCard.querySelectorAll('.no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, #btn-rep-filter-today, #btn-rep-filter-all');
@@ -6771,23 +6844,35 @@
               cell.style.setProperty('padding', '6px 4px', 'important');
             });
 
-            // Ensure #report-sec-table and #rep-today-table have solid borders and clean containment
+            // Ensure #report-sec-table and #rep-today-table have solid black borders and clean containment
             const expSecTable = reportCard.querySelector('#report-sec-table');
             if (expSecTable) {
               expSecTable.style.setProperty('overflow', 'visible', 'important');
               expSecTable.style.setProperty('height', 'auto', 'important');
               expSecTable.style.setProperty('max-height', 'none', 'important');
-              expSecTable.style.setProperty('border', '1px solid #cbd5e1', 'important');
+              expSecTable.style.setProperty('border', '2px solid #000000', 'important');
               expSecTable.style.setProperty('border-radius', '12px', 'important');
+            }
+            const expSecHead = reportCard.querySelector('#report-sec-table-head');
+            if (expSecHead) {
+              expSecHead.style.setProperty('border-bottom', '2px solid #000000', 'important');
             }
             const expTable = reportCard.querySelector('#rep-today-table');
             if (expTable) {
-              expTable.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
+              expTable.style.setProperty('border', '2px solid #000000', 'important');
+              expTable.style.setProperty('border-collapse', 'collapse', 'important');
+              expTable.querySelectorAll('th').forEach(th => {
+                th.style.setProperty('border', '1px solid #000000', 'important');
+                th.style.setProperty('border-bottom', '2px solid #000000', 'important');
+              });
+              expTable.querySelectorAll('td').forEach(td => {
+                td.style.setProperty('border', '1px solid #000000', 'important');
+              });
               const lastRow = expTable.querySelector('tbody tr:last-child');
               if (lastRow) {
-                lastRow.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
+                lastRow.style.setProperty('border-bottom', '2px solid #000000', 'important');
                 lastRow.querySelectorAll('td').forEach(td => {
-                  td.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
+                  td.style.setProperty('border-bottom', '2px solid #000000', 'important');
                 });
               }
             }
@@ -6914,19 +6999,31 @@
                         clonedSecTable.style.setProperty('overflow', 'visible', 'important');
                         clonedSecTable.style.setProperty('height', 'auto', 'important');
                         clonedSecTable.style.setProperty('max-height', 'none', 'important');
-                        clonedSecTable.style.setProperty('border', '1px solid #cbd5e1', 'important');
+                        clonedSecTable.style.setProperty('border', '2px solid #000000', 'important');
                         clonedSecTable.style.setProperty('border-radius', '12px', 'important');
+                      }
+
+                      const clonedSecHead = clonedDoc.getElementById('report-sec-table-head');
+                      if (clonedSecHead) {
+                        clonedSecHead.style.setProperty('border-bottom', '2px solid #000000', 'important');
                       }
 
                       const clonedTable = clonedDoc.getElementById('rep-today-table');
                       if (clonedTable) {
                         clonedTable.style.setProperty('border-collapse', 'collapse', 'important');
-                        clonedTable.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
+                        clonedTable.style.setProperty('border', '2px solid #000000', 'important');
+                        clonedTable.querySelectorAll('th').forEach(th => {
+                          th.style.setProperty('border', '1px solid #000000', 'important');
+                          th.style.setProperty('border-bottom', '2px solid #000000', 'important');
+                        });
+                        clonedTable.querySelectorAll('td').forEach(td => {
+                          td.style.setProperty('border', '1px solid #000000', 'important');
+                        });
                         const lastRow = clonedTable.querySelector('tbody tr:last-child');
                         if (lastRow) {
-                          lastRow.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
+                          lastRow.style.setProperty('border-bottom', '2px solid #000000', 'important');
                           lastRow.querySelectorAll('td').forEach(td => {
-                            td.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
+                            td.style.setProperty('border-bottom', '2px solid #000000', 'important');
                           });
                         }
                       }
@@ -6984,8 +7081,8 @@
               }
               if (typeof origPagePad !== 'undefined') reportPage.style.padding = origPagePad;
               if (typeof origPageMargin !== 'undefined') reportPage.style.margin = origPageMargin;
-              reportCard.classList.remove('is-export-capturing', 'export-portrait');
-              reportPage.classList.remove('is-export-capturing', 'export-portrait');
+              reportCard.classList.remove('is-export-capturing', 'export-portrait', 'export-ratio-3-4');
+              reportPage.classList.remove('is-export-capturing', 'export-portrait', 'export-ratio-3-4');
               renderPlanSnapshotCanvas();
               scheduleReportScurveRender();
               hideInExport.forEach((el, idx) => {
@@ -7020,6 +7117,9 @@
           if (currentExportRatio === '4:3') {
             targetW = 1600;
             targetH = 1200;
+          } else if (currentExportRatio === '3:4') {
+            targetW = 1200;
+            targetH = 1600;
           } else if (currentExportRatio === '1:1') {
             targetW = 1200;
             targetH = 1200;
@@ -7180,7 +7280,7 @@
 
       function drawCrispOuterBorder(ctx, x, y, w, h) {
         ctx.save();
-        ctx.strokeStyle = '#475569';
+        ctx.strokeStyle = '#000000';
         ctx.lineWidth = strokeW;
         if (typeof ctx.roundRect === 'function') {
           ctx.beginPath();
@@ -7207,6 +7307,7 @@
 
       let targetAspect = 16 / 9;
       if (ratioStr === 'a4') targetAspect = 1 / 1.414; // Portrait A4
+      if (ratioStr === '3:4') targetAspect = 3 / 4;   // Portrait 3:4
       if (ratioStr === '4:3') targetAspect = 4 / 3;
       if (ratioStr === '1:1') targetAspect = 1 / 1;
       if (ratioStr === '16:9') targetAspect = 16 / 9;
