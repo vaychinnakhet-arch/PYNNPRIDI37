@@ -305,12 +305,25 @@
       max-height: 365px !important;
       overflow-y: auto !important;
     }
-    /* เส้นขอบล่างของตารางรายการเสาเข็ม ป้องกันเส้นล่างตารางหาย */
+    /* เส้นตารางและเส้นขอบทุกช่องให้เต็มสมบูรณ์ คมชัด ไม่ขาดช่วง (Full grid lines for every cell) */
     #rep-today-table {
+      border-collapse: collapse;
       border-bottom: 2px solid #475569;
     }
+    #rep-today-table th {
+      border-right: 1px solid rgba(71, 85, 105, 0.25);
+    }
+    #rep-today-table td {
+      border-right: 1px solid #cbd5e1;
+      border-bottom: 1px solid #cbd5e1;
+      vertical-align: middle;
+    }
+    #rep-today-table th:last-child,
+    #rep-today-table td:last-child {
+      border-right: none;
+    }
     #rep-today-table tbody tr:last-child td {
-      border-bottom: 2px solid #475569;
+      border-bottom: 2px solid #475569 !important;
     }
     #rep-today-table tbody tr:last-child td:first-child {
       border-bottom-left-radius: 10px;
@@ -466,7 +479,7 @@
     .is-export-capturing #report-sec-table {
       height: auto !important;
       max-height: none !important;
-      overflow: hidden !important;
+      overflow: visible !important;
       border: 2px solid #475569 !important;
       border-radius: 12px !important;
       box-shadow: none !important;
@@ -492,7 +505,21 @@
       width: 100% !important;
       min-width: 100% !important;
       table-layout: auto !important;
+      border-collapse: collapse !important;
       border-bottom: 2px solid #475569 !important;
+    }
+    .is-export-capturing #rep-today-table th {
+      border-right: 1px solid rgba(71, 85, 105, 0.25) !important;
+      box-sizing: border-box !important;
+    }
+    .is-export-capturing #rep-today-table td {
+      border-right: 1px solid #cbd5e1 !important;
+      border-bottom: 1px solid #cbd5e1 !important;
+      box-sizing: border-box !important;
+    }
+    .is-export-capturing #rep-today-table th:last-child,
+    .is-export-capturing #rep-today-table td:last-child {
+      border-right: none !important;
     }
     .is-export-capturing #rep-today-table tbody tr:last-child {
       border-bottom: 2px solid #475569 !important;
@@ -3554,25 +3581,17 @@
     grid.material.transparent = true;
     scene.add(grid);
 
-    // Materials with Crisp Lines & Black Outlines
-    const matToday = new THREE.MeshStandardMaterial({
+    // Materials with Crisp Lines & Black Outlines (สีฟ้าและเขียวสดสว่างชัดเจน ไม่ดร็อปตามมุมแสง)
+    const matToday = new THREE.MeshBasicMaterial({
       color: 0x0284c7, // Vibrant sky blue (กดวันนี้ - สีฟ้าเด่นชัด)
-      emissive: 0x38bdf8,
-      emissiveIntensity: 0.75,
-      roughness: 0.15,
-      metalness: 0.05,
       side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1
     });
 
-    const matDriven = new THREE.MeshStandardMaterial({
-      color: 0x059669, // Vibrant emerald green (กดวันก่อน - สีเขียวสดใสชัดเจน)
-      emissive: 0x10b981,
-      emissiveIntensity: 0.55,
-      roughness: 0.2,
-      metalness: 0.05,
+    const matDriven = new THREE.MeshBasicMaterial({
+      color: 0x10b981, // Vibrant emerald green (กดแล้ว - สีเขียวสดใสชัดเจน)
       side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: 1,
@@ -3580,7 +3599,7 @@
     });
 
     const matPending = new THREE.MeshBasicMaterial({
-      color: 0xf8fafc, // Clean faint pale soft silver/white (ลดสีเทาให้จางลงมาก ไม่แย่งซีนเขียวและฟ้า)
+      color: 0xf8fafc, // Clean faint pale soft silver/white
       side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: 1,
@@ -3588,22 +3607,16 @@
     });
 
     // Badge materials (circular tag behind the number)
-    const matBadgeToday = new THREE.MeshStandardMaterial({
+    const matBadgeToday = new THREE.MeshBasicMaterial({
       color: 0x0284c7, // Sky blue (กดวันนี้)
-      emissive: 0x38bdf8,
-      emissiveIntensity: 0.80,
-      roughness: 0.15,
       side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1
     });
 
-    const matBadgeDriven = new THREE.MeshStandardMaterial({
-      color: 0x059669, // Emerald green (กดวันก่อน)
-      emissive: 0x10b981,
-      emissiveIntensity: 0.60,
-      roughness: 0.2,
+    const matBadgeDriven = new THREE.MeshBasicMaterial({
+      color: 0x10b981, // Emerald green (กดแล้ว)
       side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: 1,
@@ -3611,7 +3624,7 @@
     });
 
     const matBadgePending = new THREE.MeshBasicMaterial({
-      color: 0xffffff, // Pure clean white circle tag (ยังไม่ตอก - สะอาดตา ชัดเจน)
+      color: 0xffffff, // Pure clean white circle tag
       side: THREE.DoubleSide,
       polygonOffset: true,
       polygonOffsetFactor: 1,
@@ -5413,6 +5426,79 @@
             w,
             h
           };
+
+          // Overlay high-contrast, crystal-clear vibrant badges on driven piles!
+          // ทำให้สีฟ้า (วันนี้) และสีเขียว (กดแล้ว) ลอยเด่น สดใส ชัดเจน สวยงามสะดุดตา
+          const curDate = datePicker.value || todayStr;
+          const mapSnapX = (x) => ((x - (centerX - camW / 2)) / camW) * w;
+          const mapSnapY = (y) => (1 - (y - (centerY - camH / 2)) / camH) * h;
+          const badgeR = Math.max(8.5, Math.min(12.0, (w / camW) * 0.48));
+          const numFont = `900 ${Math.max(8, Math.round(badgeR * 1.05))}px Montserrat, Sarabun, sans-serif`;
+
+          PILES_DATABASE.forEach(p => {
+            const rec = progressRecords[p.no];
+            const isDriven = rec && rec.status === 'driven';
+            if (!isDriven) return;
+
+            const pileDate = rec ? rec.date : null;
+            const isToday = isDriven && pileDate === curDate;
+            const px = mapSnapX(p.x);
+            const py = mapSnapY(p.y);
+
+            ctx.save();
+            if (isToday) {
+              // 1. กดวันนี้: สีฟ้าสดใสเรืองแสง พร้อมวงแหวนประกายสีฟ้า (Vibrant Cyan/Sky-Blue)
+              ctx.shadowColor = 'rgba(2, 132, 199, 0.75)';
+              ctx.shadowBlur = 10;
+
+              // Outer Cyan Pulse Ring
+              ctx.beginPath();
+              ctx.arc(px, py, badgeR + 3.5, 0, Math.PI * 2);
+              ctx.strokeStyle = '#38bdf8';
+              ctx.lineWidth = 2.2;
+              ctx.stroke();
+
+              // Inner Vivid Blue Solid Badge
+              ctx.beginPath();
+              ctx.arc(px, py, badgeR, 0, Math.PI * 2);
+              ctx.fillStyle = '#0284c7';
+              ctx.fill();
+              ctx.strokeStyle = '#ffffff';
+              ctx.lineWidth = 1.8;
+              ctx.stroke();
+
+              // Crisp White Bold Pile Number
+              ctx.shadowBlur = 0;
+              ctx.fillStyle = '#ffffff';
+              ctx.font = numFont;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(p.no.toString(), px, py);
+            } else {
+              // 2. กดแล้ว: สีเขียวมรกตสดใสเด่นชัด (Vibrant Emerald Green)
+              ctx.shadowColor = 'rgba(16, 185, 129, 0.6)';
+              ctx.shadowBlur = 8;
+
+              // Inner Vivid Emerald Green Badge
+              ctx.beginPath();
+              ctx.arc(px, py, badgeR, 0, Math.PI * 2);
+              ctx.fillStyle = '#10b981';
+              ctx.fill();
+              ctx.strokeStyle = '#065f46';
+              ctx.lineWidth = 1.8;
+              ctx.stroke();
+
+              // Crisp White Bold Pile Number
+              ctx.shadowBlur = 0;
+              ctx.fillStyle = '#ffffff';
+              ctx.font = numFont;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(p.no.toString(), px, py);
+            }
+            ctx.restore();
+          });
+
           return;
         } catch (err) {
           console.warn('3D snapshot render error, falling back to 2D vector:', err);
@@ -6759,7 +6845,7 @@
             // Ensure #report-sec-table and #rep-today-table have solid borders and clean containment
             const expSecTable = reportCard.querySelector('#report-sec-table');
             if (expSecTable) {
-              expSecTable.style.setProperty('overflow', 'hidden', 'important');
+              expSecTable.style.setProperty('overflow', 'visible', 'important');
               expSecTable.style.setProperty('height', 'auto', 'important');
               expSecTable.style.setProperty('max-height', 'none', 'important');
               expSecTable.style.setProperty('border', '2px solid #475569', 'important');
@@ -6776,6 +6862,24 @@
                 });
               }
             }
+
+            // Equalize cell heights in each row so all vertical borders span 100% of the row (เส้นเต็มช่องตาราง)
+            const expRows = reportCard.querySelectorAll('#rep-today-table tbody tr');
+            expRows.forEach(r => {
+              const rCells = r.querySelectorAll('td');
+              let maxH = 0;
+              rCells.forEach(c => {
+                const h = c.offsetHeight || c.getBoundingClientRect().height;
+                if (h > maxH) maxH = h;
+              });
+              if (maxH > 0) {
+                rCells.forEach(c => {
+                  c.style.setProperty('height', `${maxH}px`, 'important');
+                  c.style.setProperty('box-sizing', 'border-box', 'important');
+                  c.style.setProperty('vertical-align', 'middle', 'important');
+                });
+              }
+            });
 
             // Force layout reflow
             void reportCard.offsetHeight;
@@ -6878,7 +6982,7 @@
                       const clonedSecTable = clonedDoc.getElementById('report-sec-table');
                       if (clonedSecTable) {
                         clonedSecTable.style.setProperty('box-sizing', 'border-box', 'important');
-                        clonedSecTable.style.setProperty('overflow', 'hidden', 'important');
+                        clonedSecTable.style.setProperty('overflow', 'visible', 'important');
                         clonedSecTable.style.setProperty('height', 'auto', 'important');
                         clonedSecTable.style.setProperty('max-height', 'none', 'important');
                         clonedSecTable.style.setProperty('border', '2px solid #475569', 'important');
@@ -6887,6 +6991,7 @@
 
                       const clonedTable = clonedDoc.getElementById('rep-today-table');
                       if (clonedTable) {
+                        clonedTable.style.setProperty('border-collapse', 'collapse', 'important');
                         clonedTable.style.setProperty('border-bottom', '2px solid #475569', 'important');
                         const lastRow = clonedTable.querySelector('tbody tr:last-child');
                         if (lastRow) {
@@ -6907,6 +7012,22 @@
                         c.style.verticalAlign = 'middle';
                         c.style.lineHeight = '1.2';
                         c.style.padding = '6px 4px';
+                        c.style.boxSizing = 'border-box';
+                      });
+
+                      // Equalize row heights in clonedCard
+                      clonedCard.querySelectorAll('#rep-today-table tbody tr').forEach(r => {
+                        const rCells = r.querySelectorAll('td');
+                        let maxH = 0;
+                        rCells.forEach(c => {
+                          const h = c.offsetHeight || c.getBoundingClientRect().height;
+                          if (h > maxH) maxH = h;
+                        });
+                        if (maxH > 0) {
+                          rCells.forEach(c => {
+                            c.style.setProperty('height', `${maxH}px`, 'important');
+                          });
+                        }
                       });
                     }
                   }
