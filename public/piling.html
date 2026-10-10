@@ -392,6 +392,28 @@
       border-radius: 12px !important;
       overflow: hidden !important;
     }
+    /* ป้องกันตัวหนังสือตกบรรทัดและป้องกันส่วนท้ายตารางถูกตัดในโหมดส่งออกภาพ (Prevent text wrapping and table clipping in export mode) */
+    .is-export-capturing #rep-date-badge-wrapper {
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+    }
+    .is-export-capturing #rep-date-badge-wrapper span {
+      white-space: nowrap !important;
+      display: inline-block !important;
+      flex-shrink: 0 !important;
+    }
+    .is-export-capturing #rep-header-tag,
+    .is-export-capturing #rep-header-subtag,
+    .is-export-capturing #rep-header-title,
+    .is-export-capturing #rep-header-title * {
+      white-space: nowrap !important;
+      display: inline-block !important;
+      flex-shrink: 0 !important;
+    }
+
     /* กรอบสรุป KPI สไตล์ Flat-Pop แถวเดียว ไม่ให้ขึ้นหลายแถวในโหมดแคปเจอร์ */
     .is-export-capturing #rep-kpi-summary-box {
       display: grid !important;
@@ -399,9 +421,36 @@
       gap: 0.5rem !important;
       margin-bottom: 0.75rem !important;
     }
+    .is-export-capturing #rep-kpi-summary-box * {
+      white-space: nowrap !important;
+    }
+    .is-export-capturing #rep-variance-badge {
+      display: none !important;
+    }
+
+    .is-export-capturing #rep-sec-plan-head *,
+    .is-export-capturing #rep-sec-scurve-head *,
+    .is-export-capturing #report-sec-table-head * {
+      white-space: nowrap !important;
+    }
+    .is-export-capturing #rep-sec-scurve-badge,
+    .is-export-capturing #rep-today-table-badge {
+      white-space: nowrap !important;
+      display: inline-block !important;
+      flex-shrink: 0 !important;
+    }
+
+    /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง */
+    .is-export-capturing #report-page-card {
+      overflow: visible !important;
+      padding-bottom: 32px !important;
+      box-sizing: border-box !important;
+    }
     .is-export-capturing #report-sec-table {
       height: auto !important;
       max-height: none !important;
+      overflow: visible !important;
+      margin-bottom: 12px !important;
     }
     .is-export-capturing #report-sec-table .table-wrapper,
     .is-export-capturing #report-sec-table .table-wrapper.has-scroll,
@@ -427,6 +476,7 @@
     .is-export-capturing #rep-today-table td {
       padding: 6px 4px !important;
       vertical-align: middle !important;
+      box-sizing: border-box !important;
     }
   </style>
 
@@ -952,13 +1002,13 @@
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap">
-                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569]">
+                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569] whitespace-nowrap shrink-0 inline-block">
                   โครงการ Pynn pridi 37
                 </span>
-                <span id="rep-header-subtag" class="text-xs text-[#667277] font-bold">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
+                <span id="rep-header-subtag" class="text-xs text-[#667277] font-bold whitespace-nowrap shrink-0 inline-block">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
               </div>
-              <h2 id="rep-header-title" class="text-xl md:text-2xl font-black text-[#34383b] mt-1">
-                รายงานความคืบหน้างานเสาเข็ม <span class="text-xs md:text-sm font-bold text-[#667277] hidden sm:inline">(Piling Progress Report)</span>
+              <h2 id="rep-header-title" class="text-xl md:text-2xl font-black text-[#34383b] mt-1 whitespace-nowrap">
+                รายงานความคืบหน้างานเสาเข็ม <span class="text-xs md:text-sm font-bold text-[#667277] hidden sm:inline whitespace-nowrap">(Piling Progress Report)</span>
               </h2>
             </div>
           </div>
@@ -978,9 +1028,9 @@
 
             <!-- Date Badge -->
             <div id="rep-date-badge-wrapper" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1.5px_1.5px_0_#475569] whitespace-nowrap shrink-0">
-              <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ed6845]"></i>
-              <span class="hidden sm:inline">ประจำวันที่:</span>
-              <span id="rep-header-date" class="text-[#ed6845] font-mono font-black">-</span>
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ed6845] shrink-0"></i>
+              <span class="inline-block whitespace-nowrap shrink-0">ประจำวันที่:</span>
+              <span id="rep-header-date" class="text-[#ed6845] font-mono font-black inline-block whitespace-nowrap shrink-0">-</span>
             </div>
 
             <!-- Orientation Switch -->
@@ -1051,10 +1101,10 @@
             <span class="w-5 h-5 rounded bg-[#0284c7] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[0.5px_0.5px_0_#475569]">
               <i data-lucide="hammer" class="w-3 h-3"></i>
             </span>
-            <span class="text-xs font-black text-[#0369a1] whitespace-nowrap">แผนวันนี้ 3</span>
+            <span class="text-xs font-black text-[#0369a1] whitespace-nowrap">แผนวันนี้ 3 ต้น</span>
           </div>
-          <div class="flex items-baseline gap-1 shrink-0 font-bold">
-            <span class="text-[10px] text-[#64748b]">กดแล้ว</span>
+          <div class="flex items-baseline gap-1 shrink-0 font-bold whitespace-nowrap">
+            <span class="text-[10px] text-[#64748b] whitespace-nowrap shrink-0 inline-block">กดแล้ว</span>
             <span id="rep-today-count" class="text-base font-black font-montserrat text-[#0284c7] leading-none">0</span>
             <span class="text-[10px] text-[#34383b]">ต้น</span>
             <span id="rep-today-sub" class="hidden">0</span>
@@ -1062,28 +1112,28 @@
         </div>
 
         <!-- Card 2: แผนกดสะสม .... ต้น -->
-        <div id="rep-kpi-2" class="bg-[#fff7ed] border-2 border-[#475569] rounded-lg px-2.5 py-1.5 shadow-[2px_2px_0_#475569] flex items-center justify-between gap-1.5 overflow-hidden">
-          <div class="flex items-center gap-1.5 min-w-0">
+        <div id="rep-kpi-2" class="bg-[#fff7ed] border-2 border-[#475569] rounded-lg px-2.5 py-1.5 shadow-[2px_2px_0_#475569] flex items-center justify-between gap-1.5 overflow-hidden whitespace-nowrap">
+          <div class="flex items-center gap-1.5 min-w-0 shrink-0">
             <span class="w-5 h-5 rounded bg-[#ea580c] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[0.5px_0.5px_0_#475569]">
               <i data-lucide="calendar" class="w-3 h-3"></i>
             </span>
             <span class="text-xs font-black text-[#c2410c] whitespace-nowrap">แผนสะสม (<span id="rep-elapsed-days" class="font-mono">0</span>/31 วัน)</span>
           </div>
-          <div class="flex items-baseline gap-1 shrink-0 font-bold">
+          <div class="flex items-baseline gap-1 shrink-0 font-bold whitespace-nowrap">
             <span id="rep-plan-cum-count" class="text-base font-black font-montserrat text-[#ea580c] leading-none">0</span>
             <span class="text-[10px] text-[#34383b]">ต้น</span>
           </div>
         </div>
 
         <!-- Card 3: กดสะสมจริง .... ต้น -->
-        <div id="rep-kpi-3" class="bg-[#e5f4e9] border-2 border-[#475569] rounded-lg px-2.5 py-1.5 shadow-[2px_2px_0_#475569] flex items-center justify-between gap-1.5 overflow-hidden">
-          <div class="flex items-center gap-1.5 min-w-0">
+        <div id="rep-kpi-3" class="bg-[#e5f4e9] border-2 border-[#475569] rounded-lg px-2.5 py-1.5 shadow-[2px_2px_0_#475569] flex items-center justify-between gap-1.5 overflow-hidden whitespace-nowrap">
+          <div class="flex items-center gap-1.5 min-w-0 shrink-0">
             <span class="w-5 h-5 rounded bg-[#10b981] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[0.5px_0.5px_0_#475569]">
               <i data-lucide="check-circle-2" class="w-3 h-3"></i>
             </span>
             <span class="text-xs font-black text-[#1e3a29] whitespace-nowrap">กดจริงสะสม</span>
           </div>
-          <div class="flex items-center gap-1.5 shrink-0 font-bold">
+          <div class="flex items-center gap-1.5 shrink-0 font-bold whitespace-nowrap">
             <span class="text-base font-black font-montserrat text-[#10b981] leading-none"><span id="rep-cum-count">0</span><span class="text-[10px] text-[#667277]">/93</span></span>
             <span id="rep-cum-pct" class="px-1.5 py-0.5 rounded text-[10px] font-black bg-white border border-[#475569] text-[#10b981] leading-none shadow-[0.5px_0.5px_0_#475569]">0%</span>
             <div class="hidden"><div id="rep-cum-bar" style="width:0%"></div></div>
@@ -1091,16 +1141,16 @@
         </div>
 
         <!-- Card 4: สถานะเทียบแผนงาน -->
-        <div id="rep-variance-card" class="bg-[#fff1f2] border-2 border-[#475569] rounded-lg px-2.5 py-1.5 shadow-[2px_2px_0_#475569] flex items-center justify-between gap-1.5 overflow-hidden">
-          <div class="flex items-center gap-1.5 min-w-0">
+        <div id="rep-variance-card" class="bg-[#fff1f2] border-2 border-[#475569] rounded-lg px-2.5 py-1.5 shadow-[2px_2px_0_#475569] flex items-center justify-between gap-1.5 overflow-hidden whitespace-nowrap">
+          <div class="flex items-center gap-1.5 min-w-0 shrink-0">
             <span class="w-5 h-5 rounded bg-[#e11d48] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[0.5px_0.5px_0_#475569]">
               <i data-lucide="activity" class="w-3 h-3"></i>
             </span>
             <span class="text-xs font-black text-[#881337] whitespace-nowrap">เทียบแผน</span>
           </div>
-          <div class="flex items-center gap-1 shrink-0 font-bold">
-            <span id="rep-variance-display" class="font-black text-xs md:text-sm text-[#e11d48] leading-none truncate">ช้ากว่าแผน 0 ต้น</span>
-            <span id="rep-variance-badge" class="px-1.5 py-0.5 rounded text-[10px] font-black bg-white border border-[#475569] hidden xl:inline leading-none shadow-[0.5px_0.5px_0_#475569]">ตามแผน</span>
+          <div class="flex items-center gap-1 shrink-0 font-bold whitespace-nowrap">
+            <span id="rep-variance-display" class="font-black text-xs md:text-sm text-[#e11d48] leading-none whitespace-nowrap shrink-0">ช้ากว่าแผน 0 ต้น</span>
+            <span id="rep-variance-badge" class="px-1.5 py-0.5 rounded text-[10px] font-black bg-white border border-[#475569] hidden xl:inline leading-none shadow-[0.5px_0.5px_0_#475569] whitespace-nowrap shrink-0">ตามแผน</span>
             <span id="rep-plan-sub" class="hidden">0</span>
             <span id="rep-cum-sub" class="hidden">0</span>
           </div>
@@ -1173,7 +1223,7 @@
                 </span>
                 กราฟเปรียบเทียบผลงานสะสม S-Curve (Actual vs Plan: 3 ต้น/วัน)
               </span>
-              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] text-[#34383b] whitespace-nowrap shrink-0">
+              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] text-[#34383b] whitespace-nowrap shrink-0 inline-block">
                 แผนงานรวม 93 ต้น / 31 วันทำการ
               </span>
             </div>
@@ -3876,6 +3926,10 @@
 
         // Boundary dimension text labels (41.91 m, 19.25 m (SOI PRIDI 37), 39.15 m, 19.77 m) are now 100% native 3D geometry from SketchUp GLB
 
+        currentModel.updateMatrixWorld(true);
+        if (typeof computeExactPilePositions === 'function') {
+          computeExactPilePositions();
+        }
 
         resetIsoView(); // 3D Isometric View as default
         updatePileMeshVisuals();
@@ -4019,18 +4073,56 @@
       pointerDownPos = { x: e.clientX, y: e.clientY, time: performance.now() };
     });
 
-    // พิกัดวงกลมหัวเข็ม (Badge World Coordinates) อ้างอิงโมเดล 3D ที่แท้จริงครบทั้ง 93 ต้น
-    const PILE_BADGE_OFFSETS = {"1":[-0.254,13.374],"2":[0.975,13.373],"3":[0.357,10.888],"4":[4.274,13.431],"5":[6.814,13.43],"6":[4.274,12.251],"7":[6.814,12.25],"8":[4.273,11.031],"9":[6.813,11.031],"10":[10.384,13.079],"11":[13.424,13.078],"12":[11.904,12.229],"13":[10.384,11.379],"14":[13.424,11.378],"15":[18.434,13.427],"16":[21.064,13.426],"17":[18.434,12.147],"18":[21.064,12.146],"19":[18.433,11.047],"20":[21.063,11.046],"21":[25.934,13.424],"22":[28.564,13.424],"23":[25.934,12.144],"24":[28.564,12.143],"25":[25.933,11.044],"26":[28.563,11.043],"27":[30.927,12.659],"28":[33.915,12.658],"29":[32.422,10.777],"30":[-1.759,5.049],"31":[1.251,5.048],"32":[-1.759,3.733],"33":[1.251,3.732],"34":[-1.759,2.593],"35":[1.251,2.592],"36":[-1.76,1.133],"37":[1.25,1.132],"38":[5.482,5.768],"39":[5.48,1.982],"40":[9.737,6.633],"41":[11.064,6.632],"42":[12.517,6.632],"43":[14.097,6.631],"44":[9.736,5.219],"45":[11.064,5.218],"46":[12.517,5.218],"47":[14.096,5.217],"48":[9.736,4.019],"49":[11.063,4.018],"50":[12.516,4.018],"51":[14.096,4.017],"52":[9.735,2.169],"53":[11.062,2.168],"54":[12.515,2.168],"55":[14.096,2.167],"56":[9.735,0.319],"57":[11.062,0.318],"58":[12.515,0.318],"59":[14.095,0.317],"60":[16.576,6.372],"61":[19.176,6.372],"62":[21.176,6.371],"63":[17.876,5.372],"64":[20.175,5.371],"65":[15.993,3.808],"66":[19.785,3.806],"67":[21.752,3.806],"68":[17.87,2.262],"69":[20.172,2.261],"70":[15.984,1.803],"71":[19.159,1.287],"72":[21.831,1.801],"73":[17.897,1.287],"74":[20.735,0.767],"75":[15.937,-0.143],"76":[19.16,-0.728],"77":[21.16,-0.729],"78":[26.184,5.273],"79":[26.201,2.487],"80":[26.248,-0.14],"81":[27.787,5.06],"82":[30.531,5.059],"83":[27.786,3.835],"84":[30.531,3.834],"85":[27.786,2.635],"86":[30.531,2.634],"87":[32.085,4.5],"88":[33.222,4.5],"89":[32.614,1.939],"90":[28.824,-0.87],"91":[30.114,-0.87],"92":[32.053,-0.871],"93":[33.352,-0.871]};
+    // แผนที่เก็บพิกัด 3D World ที่แท้จริงของหัวเสาเข็มและวงกลม Badge (คำนวณจาก Bounding Box ของโมเดล 3D โดยตรง)
+    const pileExactPos = new Map();
+
+    function computeExactPilePositions() {
+      if (!currentModel) return;
+      currentModel.updateMatrixWorld(true);
+
+      for (let pNo = 1; pNo <= 93; pNo++) {
+        const meshes = pileMeshesMap.get(pNo) || [];
+        let badgeCenter = null;
+        let headCenter = null;
+
+        for (const m of meshes) {
+          if (m.userData?.isBadge && !badgeCenter) {
+            try {
+              const box = new THREE.Box3().setFromObject(m);
+              badgeCenter = new THREE.Vector3();
+              box.getCenter(badgeCenter);
+            } catch (e) {}
+          }
+          if (m.userData?.isIBeam && !headCenter) {
+            try {
+              const box = new THREE.Box3().setFromObject(m);
+              headCenter = new THREE.Vector3();
+              box.getCenter(headCenter);
+              headCenter.z = box.max.z; // ระดับสูงสุดของหัวเข็ม (Top Cap Elevation)
+            } catch (e) {}
+          }
+        }
+
+        const dbPile = PILES_DATABASE.find(p => p.no === pNo);
+        if (!headCenter && dbPile) {
+          const topZ = dbPile.pco_level !== undefined ? dbPile.pco_level : (dbPile.co_level || -1.226);
+          headCenter = new THREE.Vector3(dbPile.x, dbPile.y, topZ);
+        }
+        if (!badgeCenter && headCenter) {
+          badgeCenter = headCenter.clone();
+        }
+
+        pileExactPos.set(pNo, { badgeCenter, headCenter });
+      }
+    }
 
     /**
-     * ค้นหาเสาเข็มที่ตำแหน่งเคอร์เซอร์ด้วยความแม่นยำระดับพินพอยต์ (Pin-Point Precision 100%):
-     * แก้ไขปัญหามุมมอง 3D และ Top View ที่คลิกต้นหนึ่งแล้วไปติดต้นข้างๆ:
-     * 1. คำนวณ Screen-Space Distance (พิกเซล 2D บนหน้าจอ) ของทั้งหัวเข็ม (Head Cap) และวงกลมตัวเลข (Badge) ทุกต้น
-     *    เพราะเมื่อผู้ใช้คลิกบนหน้าจอ ดวงตาของผู้ใช้มองที่ตำแหน่งหัวเข็ม/วงกลมตัวเลขบนหน้าจอโดยตรง
-     * 2. กรองลำแสง 3D Raycaster โดยแยกแยะ:
-     *    - การคลิกโดนหัวเข็ม / Badge / Text โดยตรง
-     *    - ป้องกันไม่ให้เสาเข็มต้นหน้า (Foreground Shaft) ที่อยู่ใต้ดินลึก 6 เมตรแย่งคลิกเสาเข็มต้นหลัง
-     * 3. เลือกเสาเข็มที่ตรงกับตำแหน่งที่ผู้ใช้คลิกอย่างแม่นยำที่สุด
+     * ค้นหาเสาเข็มที่ตำแหน่งเคอร์เซอร์ด้วยความแม่นยำระดับพินพอยต์ 100%:
+     * แก้ไขปัญหามุมมอง 3D ที่คลิกต้นหนึ่งแล้วไปติดต้นข้างๆ:
+     * 1. หากคลิกโดนวงกลม Badge หรือตัวเลข (Text) ของเสาเข็มโดยตรง -> คืนค่าเสาเข็มต้นนั้นทันที แม่นยำ 100%
+     * 2. หากคลิกโดนหัวเสาเข็ม (I-Beam Cap) -> ตรวจสอบลำแสงชนโดยตรง พร้อมเทียบตำแหน่งบนหน้าจอ (Screen Space)
+     *    ป้องกันไม่ให้ลำแสงที่เฉียดเสาเข็มใต้ดินต้นหน้าหรือต้นข้างๆ แย่งคลิกต้นที่ผู้ใช้ต้องการ
+     * 3. คำนวณ Screen-Space Distance โดยใช้พิกัดจริงจาก Bounding Box ของโมเดล 3D ทุกต้น
      */
     function getPileAtPointer(e) {
       if (!renderer || !renderer.domElement || !activeCamera || !currentModel) return null;
@@ -4048,66 +4140,12 @@
       mouse.set(normX, normY);
       raycaster.setFromCamera(mouse, activeCamera);
 
-      // รัศมีค้นหา 2D บนหน้าจอสำหรับเสาเข็มทุกต้น
-      const projVec = new THREE.Vector3();
-      const candidates = [];
-
-      for (const p of PILES_DATABASE) {
-        const meshes = pileMeshesMap.get(p.no);
-        if (meshes && meshes.length > 0 && !meshes[0].visible) continue;
-
-        const topZ = (p.pco_level !== undefined ? p.pco_level : (p.co_level || -1.226));
-        
-        // 1. ตรวจสอบพิกัดหัวเข็มบนหน้าจอ
-        projVec.set(p.x, p.y, topZ);
-        projVec.project(activeCamera);
-
-        let minPixelDist = Infinity;
-        let isFront = false;
-
-        if (projVec.z > -1 && projVec.z < 1) {
-          isFront = true;
-          const sx = (projVec.x * 0.5 + 0.5) * rect.width;
-          const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
-          const distHead = Math.hypot(clickX - sx, clickY - sy);
-          minPixelDist = Math.min(minPixelDist, distHead);
-        }
-
-        // 2. ตรวจสอบพิกัดวงกลมหัวเข็ม (Badge) บนหน้าจอ
-        const bOffset = PILE_BADGE_OFFSETS[p.no];
-        if (bOffset) {
-          projVec.set(bOffset[0], bOffset[1], 0.02);
-        } else {
-          projVec.set(p.x, p.y, 0.02);
-        }
-        projVec.project(activeCamera);
-
-        if (projVec.z > -1 && projVec.z < 1) {
-          isFront = true;
-          const sx = (projVec.x * 0.5 + 0.5) * rect.width;
-          const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
-          const distBadge = Math.hypot(clickX - sx, clickY - sy);
-          minPixelDist = Math.min(minPixelDist, distBadge);
-        }
-
-        if (isFront) {
-          candidates.push({
-            no: p.no,
-            dist: minPixelDist,
-            data: p
-          });
-        }
-      }
-
-      // เรียงลำดับเสาเข็มตามระยะพิกเซลบนหน้าจอจากใกล้ไปไกล
-      candidates.sort((a, b) => a.dist - b.dist);
-
-      // ยิง 3D Raycaster เพื่อดูวัตถุที่ถูกชนโดยตรง
-      raycaster.params.Line.threshold = 0.02;
+      // ยิง 3D Raycaster หาวัตถุที่ชนโดยตรง
+      raycaster.params.Line.threshold = 0.05;
       const allIntersects = raycaster.intersectObjects(currentModel.children, true);
 
-      // กรอง Mesh ที่มี pileNo
-      const validMeshHits = [];
+      // กรองเฉพาะ Mesh ที่มี pileNo และแสดงผลอยู่
+      const pileHits = [];
       for (const h of allIntersects) {
         const obj = h.object;
         if (!obj || !obj.isMesh || !obj.visible) continue;
@@ -4120,9 +4158,10 @@
         if (!isVis) continue;
         const pNo = obj.userData?.pileNo;
         if (pNo) {
-          validMeshHits.push({
+          pileHits.push({
             pNo,
             hit: h,
+            distance: h.distance,
             isBadge: Boolean(obj.userData?.isBadge),
             isText: Boolean(obj.userData?.isText),
             isIBeam: Boolean(obj.userData?.isIBeam)
@@ -4130,37 +4169,82 @@
         }
       }
 
-      // หากคลิกโดน Badge หรือ Text หรือ Head Cap ของเสาเข็มที่อยู่ใกล้เคอร์เซอร์บนหน้าจอ (< 35px)
-      if (validMeshHits.length > 0) {
-        // หา hit ที่ตรงกับ candidate ที่ใกล้บนหน้าจอที่สุด
-        for (const cand of candidates.slice(0, 3)) {
-          if (cand.dist > 35) break;
-          // ตรวจว่า candidate นี้มี hit หรือไม่
-          const matchHit = validMeshHits.find(v => v.pNo === cand.no);
-          if (matchHit) {
-            return cand.no;
+      // ลำดับที่ 1: หากคลิกโดน Badge หรือ Text ของต้นใดโดยตรง คืนค่าต้นนั้นทันที (เจาะจงและแม่นยำที่สุด)
+      const directBadgeHit = pileHits.find(h => h.isBadge || h.isText);
+      if (directBadgeHit) {
+        return directBadgeHit.pNo;
+      }
+
+      // คำนวณระยะห่างบนหน้าจอ (Screen-Space Distance) ของเสาเข็มทุกต้นโดยใช้พิกัดจริง 3D
+      const projVec = new THREE.Vector3();
+      const screenDistances = [];
+
+      for (let pNo = 1; pNo <= 93; pNo++) {
+        const meshes = pileMeshesMap.get(pNo);
+        if (meshes && meshes.length > 0 && !meshes[0].visible) continue;
+
+        const pos = pileExactPos.get(pNo);
+        if (!pos) continue;
+
+        let minD = Infinity;
+
+        // เช็คระยะห่างจากจุดกึ่งกลาง Badge
+        if (pos.badgeCenter) {
+          projVec.copy(pos.badgeCenter).project(activeCamera);
+          if (projVec.z > -1 && projVec.z < 1) {
+            const sx = (projVec.x * 0.5 + 0.5) * rect.width;
+            const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
+            const d = Math.hypot(clickX - sx, clickY - sy);
+            if (d < minD) minD = d;
           }
         }
 
-        // หาก candidate อันดับ 1 อยู่ใกล้เคอร์เซอร์มาก (< 18px) ให้เลือก candidate อันดับ 1 ทันที
-        // เพื่อป้องกันกรณี Ray ไปชนเสาเข็มต้นข้างๆ หรือต้นหน้า
-        if (candidates.length > 0 && candidates[0].dist < 18) {
-          return candidates[0].no;
+        // เช็คระยะห่างจากหัวเสาเข็ม (Head Cap)
+        if (pos.headCenter) {
+          projVec.copy(pos.headCenter).project(activeCamera);
+          if (projVec.z > -1 && projVec.z < 1) {
+            const sx = (projVec.x * 0.5 + 0.5) * rect.width;
+            const sy = (-(projVec.y * 0.5) + 0.5) * rect.height;
+            const d = Math.hypot(clickX - sx, clickY - sy);
+            if (d < minD) minD = d;
+          }
         }
 
-        // ถ้าไม่มี candidate ใกล้เคียงมาก ให้เลือก hit แรกที่มีระยะห่างบนหน้าจอสมเหตุสมผล (< 42px)
-        for (const v of validMeshHits) {
-          const cand = candidates.find(c => c.no === v.pNo);
-          if (cand && cand.dist < 42) {
-            return v.pNo;
-          }
+        if (minD < Infinity) {
+          screenDistances.push({ pNo, dist: minD });
         }
       }
 
-      // หากไม่โดน Mesh โดยตรง หรือคลิกเฉียดบนจอมือถือ (Touch / Tap)
-      // เลือกต้นที่ใกล้ตำแหน่งคลิกบนหน้าจอมากที่สุด (รัศมีไม่เกิน 26 พิกเซล)
-      if (candidates.length > 0 && candidates[0].dist <= 26) {
-        return candidates[0].no;
+      screenDistances.sort((a, b) => a.dist - b.dist);
+
+      // ลำดับที่ 2: หากคลิกโดน Mesh ของเสาเข็ม (I-Beam)
+      if (pileHits.length > 0) {
+        // หากวัตถุชิ้นแรกที่ลำแสงชน (ใกล้กล้องที่สุด) มีระยะห่างบนหน้าจอใกล้เคียงกับตำแหน่งคลิก (<= 28px)
+        const firstHit = pileHits[0];
+        const firstScreen = screenDistances.find(s => s.pNo === firstHit.pNo);
+        if (firstScreen && firstScreen.dist <= 28) {
+          return firstHit.pNo;
+        }
+
+        // หากมีหลายต้นในลำแสง (เช่น ลำแสงพุ่งทะลุเสาใต้ดินของต้นข้างๆ)
+        // ให้เลือกต้นที่ถูกชนและมีศูนย์กลางหัวเข็ม/Badge อยู่ใกล้ตำแหน่งเคอร์เซอร์บนหน้าจอมากที่สุด
+        let bestHitPile = null;
+        let bestDist = Infinity;
+        for (const h of pileHits) {
+          const s = screenDistances.find(item => item.pNo === h.pNo);
+          if (s && s.dist < bestDist) {
+            bestDist = s.dist;
+            bestHitPile = h.pNo;
+          }
+        }
+        if (bestHitPile && bestDist <= 32) {
+          return bestHitPile;
+        }
+      }
+
+      // ลำดับที่ 3: Fallback สำหรับการแตะบนหน้าจอมือถือ (Touch/Tap) หรือคลิกเฉียดในช่องว่าง
+      if (screenDistances.length > 0 && screenDistances[0].dist <= 22) {
+        return screenDistances[0].pNo;
       }
 
       return null;
@@ -6024,7 +6108,7 @@
       }
 
       if (displayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="12" class="p-6 text-center text-[#667277] font-semibold">
+        tbody.innerHTML = `<tr><td colspan="12" class="p-4 text-xs text-center text-[#667277] font-semibold leading-normal">
           ${isFilterAll ? 'ยังไม่มีเสาเข็มที่กดในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่กดในวันที่ ${curDate} (คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)`}
         </td></tr>`;
         const tfoot = document.getElementById('rep-today-table-foot');
@@ -6581,6 +6665,7 @@
             const origCardBoxShadow = reportCard.style.boxShadow;
             const origCardBorderRadius = reportCard.style.borderRadius;
             const origCardOverflow = reportCard.style.overflow;
+            const origCardPadBottom = reportCard.style.paddingBottom;
             const origCardBg = reportCard.style.backgroundColor;
 
             reportCard.style.setProperty('box-sizing', 'border-box', 'important');
@@ -6591,9 +6676,10 @@
             reportCard.style.setProperty('margin-left', '0', 'important');
             reportCard.style.setProperty('margin-right', '0', 'important');
             reportCard.style.setProperty('border', '2px solid #475569', 'important');
+            reportCard.style.setProperty('padding-bottom', '32px', 'important');
             reportCard.style.boxShadow = 'none';
             reportCard.style.borderRadius = '12px';
-            reportCard.style.overflow = 'hidden';
+            reportCard.style.overflow = 'visible';
             reportCard.style.backgroundColor = '#ffffff';
 
             const origPagePad = reportPage.style.padding;
@@ -6630,7 +6716,8 @@
 
             try {
               const scrollW = exportTargetW;
-              const scrollH = Math.ceil(reportCard.scrollHeight);
+              const rectH = reportCard.getBoundingClientRect ? reportCard.getBoundingClientRect().height : 0;
+              const scrollH = Math.ceil(Math.max(reportCard.scrollHeight, reportCard.offsetHeight, rectH)) + 28;
 
               // Priority 1: Use htmlToImage for 100% native browser text rendering & vertical centering
               if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
@@ -6706,7 +6793,8 @@
                       clonedCard.style.setProperty('margin-left', '0', 'important');
                       clonedCard.style.setProperty('margin-right', '0', 'important');
                       clonedCard.style.setProperty('border', '2px solid #475569', 'important');
-                      clonedCard.style.overflow = 'hidden';
+                      clonedCard.style.setProperty('padding-bottom', '32px', 'important');
+                      clonedCard.style.overflow = 'visible';
                       clonedCard.style.boxShadow = 'none';
                       clonedCard.style.borderRadius = '12px';
                       clonedCard.style.backgroundColor = '#ffffff';
@@ -6740,6 +6828,7 @@
               reportCard.style.maxWidth = origCardMaxW;
               reportCard.style.minWidth = origCardMinW || '';
               reportCard.style.margin = origCardMargin;
+              reportCard.style.paddingBottom = origCardPadBottom;
               reportCard.style.boxShadow = origCardBoxShadow;
               reportCard.style.borderRadius = origCardBorderRadius;
               reportCard.style.overflow = origCardOverflow;
