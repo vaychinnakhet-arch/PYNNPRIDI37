@@ -1253,6 +1253,7 @@ html = <<~'HTML_PAGE'
         modelRoot.add(currentModel);
 
         let lastBadgePileNo = null;
+        const leaderLinesToInsert = [];
 
         currentModel.traverse((child) => {
           if (child.isMesh && child.geometry) {
@@ -1274,10 +1275,8 @@ html = <<~'HTML_PAGE'
             const beamMatch = (parentName + '_' + myName).match(/Pile_(\d+)/i);
             if (beamMatch) {
               const pileNo = parseInt(beamMatch[1], 10);
-              if (!pileMeshesMap.has(pileNo)) {
-                pileMeshesMap.set(pileNo, []);
-                pileEdgesMap.set(pileNo, []);
-              }
+              if (!pileMeshesMap.has(pileNo)) pileMeshesMap.set(pileNo, []);
+              if (!pileEdgesMap.has(pileNo)) pileEdgesMap.set(pileNo, []);
               child.userData.pileNo = pileNo;
               child.userData.isIBeam = true;
               pileMeshesMap.get(pileNo).push(child);
@@ -1302,10 +1301,8 @@ html = <<~'HTML_PAGE'
               const pileNo = badgeLayerMatch ? parseInt(badgeLayerMatch[1], 10) : lastBadgePileNo;
               if (pileNo) {
                 lastBadgePileNo = pileNo;
-                if (!pileMeshesMap.has(pileNo)) {
-                  pileMeshesMap.set(pileNo, []);
-                  pileEdgesMap.set(pileNo, []);
-                }
+                if (!pileMeshesMap.has(pileNo)) pileMeshesMap.set(pileNo, []);
+                if (!pileEdgesMap.has(pileNo)) pileEdgesMap.set(pileNo, []);
                 child.userData.pileNo = pileNo;
                 child.userData.isBadge = true;
                 child.renderOrder = 2;
@@ -1330,10 +1327,8 @@ html = <<~'HTML_PAGE'
             if (matName === 'Mat_Pile_Text' && lastBadgePileNo !== null) {
               const pileNo = lastBadgePileNo;
               lastBadgePileNo = null;
-              if (!pileMeshesMap.has(pileNo)) {
-                pileMeshesMap.set(pileNo, []);
-                pileEdgesMap.set(pileNo, []);
-              }
+              if (!pileMeshesMap.has(pileNo)) pileMeshesMap.set(pileNo, []);
+              if (!pileEdgesMap.has(pileNo)) pileEdgesMap.set(pileNo, []);
               child.userData.pileNo = pileNo;
               child.userData.isText = true;
               child.renderOrder = 3;
@@ -1341,14 +1336,79 @@ html = <<~'HTML_PAGE'
               return;
             }
 
-          } else if (child.isLine) {
-            // High contrast CAD lines (Grid lines, boundary lines, leader lines)
+          } else if (child.isLine || child.isLineSegments) {
+            const parentName = child.parent?.name || '';
+            const myName = child.name || '';
+            const nodeLayer = child.userData?.layer || child.parent?.userData?.layer || '';
+
+            // 1. ตรวจสอบว่าเป็นเส้นโยงบอกตำแหน่งเสาเข็ม (Leader lines จาก PILE NUMBER TAGS / S-PILE-TAGS) หรือไม่
+            if (myName.includes('PILE NUMBER TAGS') || parentName.includes('PILE NUMBER TAGS') || nodeLayer === 'S-PILE-TAGS') {
+              child.visible = false;
+
+              const geom = child.geometry;
+              if (geom && geom.attributes && geom.attributes.position) {
+                const posAttr = geom.attributes.position;
+                const indexAttr = geom.index;
+                const segCount = indexAttr ? Math.floor(indexAttr.count / 2) : Math.floor(posAttr.count / 2);
+
+                for (let i = 0; i < segCount; i++) {
+                  const idxA = indexAttr ? indexAttr.getX(i * 2) : (i * 2);
+                  const idxB = indexAttr ? indexAttr.getX(i * 2 + 1) : (i * 2 + 1);
+
+                  const pAx = posAttr.getX(idxA);
+                  const pAy = posAttr.getY(idxA);
+                  const pAz = posAttr.getZ(idxA);
+
+                  const pBx = posAttr.getX(idxB);
+                  const pBy = posAttr.getY(idxB);
+                  const pBz = posAttr.getZ(idxB);
+
+                  let matchedPileNo = i + 1;
+                  if (typeof PILES_DATABASE !== 'undefined' && Array.isArray(PILES_DATABASE)) {
+                    const found = PILES_DATABASE.find(p => {
+                      const d1 = Math.hypot(pAx - p.x, pAz - (-p.y));
+                      const d2 = Math.hypot(pBx - p.x, pBz - (-p.y));
+                      return Math.min(d1, d2) < 0.25;
+                    });
+                    if (found) matchedPileNo = found.no;
+                  }
+
+                  const segGeom = new THREE.BufferGeometry();
+                  const segPositions = new Float32Array([pAx, pAy, pAz, pBx, pBy, pBz]);
+                  segGeom.setAttribute('position', new THREE.BufferAttribute(segPositions, 3));
+
+                  const segMat = new THREE.LineBasicMaterial({
+                    color: 0x334155,
+                    linewidth: 1.5,
+                    transparent: false,
+                    opacity: 1.0
+                  });
+                  const segLine = new THREE.LineSegments(segGeom, segMat);
+                  segLine.name = 'LeaderLine_Pile_' + matchedPileNo;
+                  segLine.userData.pileNo = matchedPileNo;
+                  segLine.userData.isLeaderLine = true;
+                  segLine.renderOrder = 1;
+
+                  if (!pileEdgesMap.has(matchedPileNo)) pileEdgesMap.set(matchedPileNo, []);
+                  pileEdgesMap.get(matchedPileNo).push(segLine);
+
+                  leaderLinesToInsert.push(segLine);
+                }
+              }
+              return;
+            }
+
+            // High contrast CAD lines (Grid lines, boundary lines)
             if (child.material) {
               child.material.color.setHex(0x334155);
               child.material.transparent = false;
               child.material.opacity = 1.0;
             }
           }
+        });
+
+        leaderLinesToInsert.forEach(line => {
+          currentModel.add(line);
         });
 
         resetTopView();
@@ -1403,7 +1463,9 @@ html = <<~'HTML_PAGE'
         edges.forEach(e => {
           e.visible = visible;
           if (e.material) {
-            if (isToday) {
+            if (e.userData && e.userData.isLeaderLine) {
+              e.material.color.setHex(0x334155);
+            } else if (isToday) {
               e.material.color.setHex(0x00f0ff); // Neon Cyan outline
             } else if (isDriven) {
               e.material.color.setHex(0x064e3b); // Emerald outline
