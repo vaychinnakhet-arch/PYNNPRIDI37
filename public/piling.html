@@ -305,6 +305,19 @@
       max-height: 365px !important;
       overflow-y: auto !important;
     }
+    /* เส้นขอบล่างของตารางรายการเสาเข็ม ป้องกันเส้นล่างตารางหาย */
+    #rep-today-table {
+      border-bottom: 2px solid #475569;
+    }
+    #rep-today-table tbody tr:last-child td {
+      border-bottom: 2px solid #475569;
+    }
+    #rep-today-table tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 10px;
+    }
+    #rep-today-table tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 10px;
+    }
 
     /* Print & Capture Hide Styles (ตอนแคปภาพรายงาน และพิมพ์) */
     @media print {
@@ -453,7 +466,11 @@
     .is-export-capturing #report-sec-table {
       height: auto !important;
       max-height: none !important;
-      overflow: visible !important;
+      overflow: hidden !important;
+      border: 2px solid #475569 !important;
+      border-radius: 12px !important;
+      box-shadow: none !important;
+      background: #ffffff !important;
       margin-bottom: 24px !important;
     }
     .is-export-capturing #report-sec-table .table-wrapper,
@@ -475,6 +492,13 @@
       width: 100% !important;
       min-width: 100% !important;
       table-layout: auto !important;
+      border-bottom: 2px solid #475569 !important;
+    }
+    .is-export-capturing #rep-today-table tbody tr:last-child {
+      border-bottom: 2px solid #475569 !important;
+    }
+    .is-export-capturing #rep-today-table tbody tr:last-child td {
+      border-bottom: 2px solid #475569 !important;
     }
     .is-export-capturing #rep-today-table th,
     .is-export-capturing #rep-today-table td:not([colspan]) {
@@ -483,10 +507,11 @@
       box-sizing: border-box !important;
     }
     .is-export-capturing #rep-today-table td[colspan] {
-      padding: 24px 16px !important;
+      padding: 16px 12px !important;
       text-align: center !important;
       vertical-align: middle !important;
       box-sizing: border-box !important;
+      border-bottom: 2px solid #475569 !important;
     }
   </style>
 
@@ -6109,10 +6134,10 @@
       }
 
       if (displayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="12" class="py-8 px-4 text-center">
-          <div class="inline-flex items-center justify-center gap-2 py-2.5 px-6 rounded-xl bg-slate-50 border border-slate-200 text-[#475569] font-bold text-xs sm:text-sm leading-relaxed shadow-xs">
+        tbody.innerHTML = `<tr><td colspan="12" class="py-5 px-3 text-center border-b-2 border-[#475569]">
+          <div class="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-50 border border-slate-200 text-[#475569] font-bold text-xs leading-normal">
             <i data-lucide="info" class="w-4 h-4 text-[#ed6845] shrink-0"></i>
-            <span>${isFilterAll ? 'ยังไม่มีเสาเข็มที่กดในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่กดในวันที่ ${curDate} (คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)`}</span>
+            <span>${isFilterAll ? 'ยังไม่มีเสาเข็มที่กดในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่กดในวันที่ ${curDate} <span class="no-export no-print text-[11px] text-[#667277] font-normal block sm:inline mt-1 sm:mt-0">(คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)</span>`}</span>
           </div>
         </td></tr>`;
         if (window.lucide) lucide.createIcons();
@@ -6242,38 +6267,50 @@
             </span>
           `;
 
+          const isLastRow = (index === displayPilesList.length - 1);
+
           if (currentReportTheme === 'excel') {
-            tr.className = 'hover:bg-[#ecfdf5] transition-colors border-b border-slate-200 cursor-pointer ' + (index % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white');
+            tr.className = 'hover:bg-[#ecfdf5] transition-colors cursor-pointer ' +
+              (isLastRow ? 'border-b-2 border-slate-400 ' : 'border-b border-slate-200 ') +
+              (index % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white');
             tr.innerHTML = `
-              <td class="p-2 text-center font-bold text-slate-500 border border-slate-200">${p.no}</td>
-              <td class="p-2 font-bold text-slate-800 border border-slate-200">${p.tag}</td>
-              <td class="p-2 text-center font-bold text-blue-700 border border-slate-200">${p.footing || '-'}</td>
-              <td class="p-2 text-center font-bold text-slate-700 border border-slate-200">${p.grid}</td>
-              <td class="p-2 text-right border border-slate-200">${designCoordsHtml}</td>
-              <td class="p-2 text-right border border-slate-200 bg-emerald-50/20">${afterPressCoordsHtml}</td>
-              <td class="p-2 text-center border border-slate-200 bg-emerald-50/40">${coordDiffHtml}</td>
-              <td class="p-2 text-right font-bold text-slate-800 font-mono border border-slate-200">${pco.toFixed(3)}</td>
-              <td class="p-2 text-right font-mono border border-slate-200">${actualTopDisplay}</td>
-              <td class="p-2 text-center font-mono border border-slate-200">${diffDisplay}</td>
-              <td class="p-2 text-center font-medium text-slate-700 border border-slate-200">${p.type}</td>
-              <td class="p-2 text-center border border-slate-200">${dateDisplay}</td>
+              <td class="p-2 text-center font-bold text-slate-500 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.no}</td>
+              <td class="p-2 font-bold text-slate-800 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.tag}</td>
+              <td class="p-2 text-center font-bold text-blue-700 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.footing || '-'}</td>
+              <td class="p-2 text-center font-bold text-slate-700 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.grid}</td>
+              <td class="p-2 text-right border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${designCoordsHtml}</td>
+              <td class="p-2 text-right border border-slate-200 bg-emerald-50/20 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${afterPressCoordsHtml}</td>
+              <td class="p-2 text-center border border-slate-200 bg-emerald-50/40 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${coordDiffHtml}</td>
+              <td class="p-2 text-right font-bold text-slate-800 font-mono border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${pco.toFixed(3)}</td>
+              <td class="p-2 text-right font-mono border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${actualTopDisplay}</td>
+              <td class="p-2 text-center font-mono border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${diffDisplay}</td>
+              <td class="p-2 text-center font-medium text-slate-700 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.type}</td>
+              <td class="p-2 text-center border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${dateDisplay}</td>
             `;
+            if (isLastRow) {
+              tr.style.borderBottom = '2px solid #94a3b8';
+            }
           } else {
-            tr.className = 'hover:bg-[#f0fdf4] transition-colors border-b border-[#e5f1ed] cursor-pointer ' + (index % 2 === 1 ? 'bg-[#fdfbf7]' : 'bg-white');
+            tr.className = 'hover:bg-[#f0fdf4] transition-colors cursor-pointer ' +
+              (isLastRow ? 'border-b-2 border-[#475569] ' : 'border-b border-[#e5f1ed] ') +
+              (index % 2 === 1 ? 'bg-[#fdfbf7]' : 'bg-white');
             tr.innerHTML = `
-              <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed]">${p.no}</td>
-              <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
-              <td class="p-2.5 text-center font-black text-[#0284c7] border-r border-[#e5f1ed]">${p.footing || '-'}</td>
-              <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
-              <td class="p-2.5 text-right border-r border-[#e5f1ed]">${designCoordsHtml}</td>
-              <td class="p-2.5 text-right border-r border-[#e5f1ed] bg-emerald-50/20">${afterPressCoordsHtml}</td>
-              <td class="p-2.5 text-center border-r border-[#e5f1ed] bg-emerald-50/40">${coordDiffHtml}</td>
-              <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
-              <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed]">${actualTopDisplay}</td>
-              <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed]">${diffDisplay}</td>
-              <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type || 'I-0.40m'}</td>
-              <td class="p-2 text-center">${dateDisplay}</td>
+              <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.no}</td>
+              <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.tag}</td>
+              <td class="p-2.5 text-center font-black text-[#0284c7] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.footing || '-'}</td>
+              <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.grid}</td>
+              <td class="p-2.5 text-right border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${designCoordsHtml}</td>
+              <td class="p-2.5 text-right border-r border-[#e5f1ed] bg-emerald-50/20 ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${afterPressCoordsHtml}</td>
+              <td class="p-2.5 text-center border-r border-[#e5f1ed] bg-emerald-50/40 ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${coordDiffHtml}</td>
+              <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${pco.toFixed(3)}</td>
+              <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${actualTopDisplay}</td>
+              <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${diffDisplay}</td>
+              <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.type || 'I-0.40m'}</td>
+              <td class="p-2 text-center ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${dateDisplay}</td>
             `;
+            if (isLastRow) {
+              tr.style.borderBottom = '2px solid #475569';
+            }
           }
           tbody.appendChild(tr);
         });
@@ -6719,10 +6756,35 @@
               cell.style.setProperty('padding', '6px 4px', 'important');
             });
 
+            // Ensure #report-sec-table and #rep-today-table have solid borders and clean containment
+            const expSecTable = reportCard.querySelector('#report-sec-table');
+            if (expSecTable) {
+              expSecTable.style.setProperty('overflow', 'hidden', 'important');
+              expSecTable.style.setProperty('height', 'auto', 'important');
+              expSecTable.style.setProperty('max-height', 'none', 'important');
+              expSecTable.style.setProperty('border', '2px solid #475569', 'important');
+              expSecTable.style.setProperty('border-radius', '12px', 'important');
+            }
+            const expTable = reportCard.querySelector('#rep-today-table');
+            if (expTable) {
+              expTable.style.setProperty('border-bottom', '2px solid #475569', 'important');
+              const lastRow = expTable.querySelector('tbody tr:last-child');
+              if (lastRow) {
+                lastRow.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                lastRow.querySelectorAll('td').forEach(td => {
+                  td.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                });
+              }
+            }
+
+            // Force layout reflow
+            void reportCard.offsetHeight;
+            if (expSecTable) void expSecTable.offsetHeight;
+
             try {
               const scrollW = exportTargetW;
               const rectH = reportCard.getBoundingClientRect ? reportCard.getBoundingClientRect().height : 0;
-              const scrollH = Math.ceil(Math.max(reportCard.scrollHeight, reportCard.offsetHeight, rectH)) + 28;
+              const scrollH = Math.ceil(Math.max(reportCard.scrollHeight, reportCard.offsetHeight, rectH)) + 36;
 
               // Priority 1: Use htmlToImage for 100% native browser text rendering & vertical centering
               if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
@@ -6813,6 +6875,28 @@
                         if (el.style) el.style.boxShadow = 'none';
                       });
 
+                      const clonedSecTable = clonedDoc.getElementById('report-sec-table');
+                      if (clonedSecTable) {
+                        clonedSecTable.style.setProperty('box-sizing', 'border-box', 'important');
+                        clonedSecTable.style.setProperty('overflow', 'hidden', 'important');
+                        clonedSecTable.style.setProperty('height', 'auto', 'important');
+                        clonedSecTable.style.setProperty('max-height', 'none', 'important');
+                        clonedSecTable.style.setProperty('border', '2px solid #475569', 'important');
+                        clonedSecTable.style.setProperty('border-radius', '12px', 'important');
+                      }
+
+                      const clonedTable = clonedDoc.getElementById('rep-today-table');
+                      if (clonedTable) {
+                        clonedTable.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                        const lastRow = clonedTable.querySelector('tbody tr:last-child');
+                        if (lastRow) {
+                          lastRow.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                          lastRow.querySelectorAll('td').forEach(td => {
+                            td.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                          });
+                        }
+                      }
+
                       clonedCard.querySelectorAll('.table-wrapper, .overflow-x-auto, .overflow-y-auto').forEach(w => {
                         w.style.setProperty('overflow', 'visible', 'important');
                         w.style.setProperty('max-height', 'none', 'important');
@@ -6838,6 +6922,16 @@
               reportCard.style.borderRadius = origCardBorderRadius;
               reportCard.style.overflow = origCardOverflow;
               reportCard.style.backgroundColor = origCardBg;
+              if (typeof expSecTable !== 'undefined' && expSecTable) {
+                expSecTable.style.overflow = '';
+                expSecTable.style.height = '';
+                expSecTable.style.maxHeight = '';
+                expSecTable.style.border = '';
+                expSecTable.style.borderRadius = '';
+              }
+              if (typeof expTable !== 'undefined' && expTable) {
+                expTable.style.borderBottom = '';
+              }
               if (typeof origPagePad !== 'undefined') reportPage.style.padding = origPagePad;
               if (typeof origPageMargin !== 'undefined') reportPage.style.margin = origPageMargin;
               reportCard.classList.remove('is-export-capturing', 'export-portrait');
