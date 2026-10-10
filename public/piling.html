@@ -480,7 +480,7 @@
       height: auto !important;
       max-height: none !important;
       overflow: visible !important;
-      border: 2px solid #475569 !important;
+      border: 1px solid #cbd5e1 !important;
       border-radius: 12px !important;
       box-shadow: none !important;
       background: #ffffff !important;
@@ -506,7 +506,7 @@
       min-width: 100% !important;
       table-layout: auto !important;
       border-collapse: collapse !important;
-      border-bottom: 2px solid #475569 !important;
+      border-bottom: 1.5px solid #94a3b8 !important;
     }
     .is-export-capturing #rep-today-table th {
       border-right: 1px solid rgba(71, 85, 105, 0.25) !important;
@@ -522,10 +522,10 @@
       border-right: none !important;
     }
     .is-export-capturing #rep-today-table tbody tr:last-child {
-      border-bottom: 2px solid #475569 !important;
+      border-bottom: 1.5px solid #94a3b8 !important;
     }
     .is-export-capturing #rep-today-table tbody tr:last-child td {
-      border-bottom: 2px solid #475569 !important;
+      border-bottom: 1.5px solid #94a3b8 !important;
     }
     .is-export-capturing #rep-today-table th,
     .is-export-capturing #rep-today-table td:not([colspan]) {
@@ -1158,9 +1158,9 @@
       <!-- 4 KPI Summary Cards (สไตล์ Flat-Pop โปร่งสวย ความสูงกำลังดี ไม่บีบเล็ก) -->
       <div id="rep-kpi-summary-box" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mb-4">
         <!-- Card 1: แผนวันนี้ 3 ต้น / กดแล้ว X ต้น -->
-        <div id="rep-kpi-1" class="bg-[#f0f9ff] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
+        <div id="rep-kpi-1" class="bg-[#f0f9ff] border border-slate-300 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="w-7 h-7 rounded-lg bg-[#0284c7] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[1px_1px_0_#475569]">
+            <span class="w-7 h-7 rounded-lg bg-[#0284c7] text-white flex items-center justify-center border border-[#0284c7]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="hammer" class="w-4 h-4"></i>
             </span>
             <span class="text-xs sm:text-sm font-black text-[#0369a1] whitespace-nowrap">แผนวันนี้ 3 ต้น</span>
@@ -1174,9 +1174,9 @@
         </div>
 
         <!-- Card 2: แผนกดสะสม .... ต้น -->
-        <div id="rep-kpi-2" class="bg-[#fff7ed] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
+        <div id="rep-kpi-2" class="bg-[#fff7ed] border border-slate-300 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0 shrink-0">
-            <span class="w-7 h-7 rounded-lg bg-[#ea580c] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[1px_1px_0_#475569]">
+            <span class="w-7 h-7 rounded-lg bg-[#ea580c] text-white flex items-center justify-center border border-[#ea580c]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="calendar" class="w-4 h-4"></i>
             </span>
             <span class="text-xs sm:text-sm font-black text-[#c2410c] whitespace-nowrap">แผนสะสม (<span id="rep-elapsed-days" class="font-mono">0</span>/31 วัน)</span>
@@ -1188,24 +1188,24 @@
         </div>
 
         <!-- Card 3: กดสะสมจริง .... ต้น -->
-        <div id="rep-kpi-3" class="bg-[#e5f4e9] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
+        <div id="rep-kpi-3" class="bg-[#e5f4e9] border border-slate-300 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0 shrink-0">
-            <span class="w-7 h-7 rounded-lg bg-[#10b981] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[1px_1px_0_#475569]">
+            <span class="w-7 h-7 rounded-lg bg-[#10b981] text-white flex items-center justify-center border border-[#10b981]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="check-circle-2" class="w-4 h-4"></i>
             </span>
             <span class="text-xs sm:text-sm font-black text-[#1e3a29] whitespace-nowrap">กดจริงสะสม</span>
           </div>
           <div class="flex items-center gap-2 shrink-0 font-bold whitespace-nowrap">
             <span class="text-lg sm:text-xl font-black font-montserrat text-[#10b981] leading-none"><span id="rep-cum-count">0</span><span class="text-xs text-[#667277]">/93</span></span>
-            <span id="rep-cum-pct" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-white border border-[#475569] text-[#10b981] leading-none shadow-[1px_1px_0_#475569]">0%</span>
+            <span id="rep-cum-pct" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-white border border-slate-300 text-[#10b981] leading-none shadow-xs">0%</span>
             <div class="hidden"><div id="rep-cum-bar" style="width:0%"></div></div>
           </div>
         </div>
 
         <!-- Card 4: สถานะเทียบแผนงาน (แสดงผลเต็มข้อความ ไม่ตัดทอน ...) -->
-        <div id="rep-variance-card" class="bg-[#fff1f2] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
+        <div id="rep-variance-card" class="bg-[#fff1f2] border border-slate-300 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0 shrink-0">
-            <span class="w-7 h-7 rounded-lg bg-[#e11d48] text-white flex items-center justify-center border border-[#475569] shrink-0 text-xs shadow-[1px_1px_0_#475569]">
+            <span class="w-7 h-7 rounded-lg bg-[#e11d48] text-white flex items-center justify-center border border-[#e11d48]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="activity" class="w-4 h-4"></i>
             </span>
             <span class="text-xs sm:text-sm font-black text-[#881337] whitespace-nowrap">เทียบแผน</span>
@@ -1224,10 +1224,10 @@
         
         <!-- COLUMN 1: LARGE PILING PROGRESS PLAN -->
         <div id="report-col-plan" class="w-full">
-          <div id="report-sec-plan" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white h-full flex flex-col">
-            <div id="report-sec-plan-head" class="bg-[#fff0c8] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2 rounded-t-[10px]">
+          <div id="report-sec-plan" class="border border-slate-300 rounded-xl overflow-hidden shadow-xs bg-white h-full flex flex-col">
+            <div id="report-sec-plan-head" class="bg-[#fff0c8] px-4 py-2 border-b border-slate-300 flex flex-wrap items-center justify-between gap-2 rounded-t-[11px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
+                <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
                   <i data-lucide="map" class="w-3.5 h-3.5 text-[#10b981]"></i>
                 </span>
                 แผนผังความคืบหน้างานเสาเข็ม (Piling Progress Plan)
@@ -1235,15 +1235,15 @@
               
               <!-- Legend Badges (Original Theme) -->
               <div id="rep-legend-original" class="flex items-center gap-1.5 text-[11px] font-black shrink-0">
-                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-[#475569] shadow-xs">
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#0284c7] border border-[#0284c7]"></span> 
+                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-slate-300 shadow-xs">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#0284c7]"></span> 
                   <span class="text-[#0284c7] whitespace-nowrap">★ กดวันนี้</span>
                 </span>
-                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-[#475569] shadow-xs">
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#10b981] border border-[#064e3b]"></span> 
+                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-slate-300 shadow-xs">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> 
                   <span class="text-[#10b981] whitespace-nowrap">● กดแล้ว</span>
                 </span>
-                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-[#475569] shadow-xs">
+                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-slate-300 shadow-xs">
                   <span class="w-2.5 h-2.5 rounded-full bg-[#e2e8f0] border border-[#94a3b8]"></span> 
                   <span class="text-[#64748b] whitespace-nowrap">○ รอกด</span>
                 </span>
@@ -1266,8 +1266,8 @@
               </div>
             </div>
 
-            <div id="planSnapshotCanvasWrapper" class="p-3">
-              <div id="planCanvasContainer" class="w-full bg-white border-2 border-[#475569] rounded overflow-hidden flex items-center justify-center relative" style="aspect-ratio: 2 / 1; max-height: 520px;">
+            <div id="planSnapshotCanvasWrapper" class="p-2 sm:p-2.5">
+              <div id="planCanvasContainer" class="w-full bg-white border border-slate-200 rounded-lg overflow-hidden flex items-center justify-center relative" style="aspect-ratio: 1.95 / 1; min-height: 340px; max-height: 520px;">
                 <canvas id="planSnapshotCanvas" class="w-full h-full block cursor-pointer" title="คลิกที่ต้นเข็มเพื่อดูหรือเปลี่ยนสถานะ / กรอกระดับ TOP เข็มจริง"></canvas>
               </div>
             </div>
@@ -1277,15 +1277,15 @@
         <!-- COLUMN 2: S-CURVE + TODAY'S TABLE -->
         <div id="report-col-side" class="w-full flex flex-col gap-5">
           <!-- SECTION 2: S-CURVE PROGRESS GRAPH -->
-          <div id="report-sec-scurve" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white">
-            <div id="report-sec-scurve-head" class="bg-[#dff1f5] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between rounded-t-[10px]">
+          <div id="report-sec-scurve" class="border border-slate-300 rounded-xl overflow-hidden shadow-xs bg-white">
+            <div id="report-sec-scurve-head" class="bg-[#dff1f5] px-4 py-2 border-b border-slate-300 flex items-center justify-between rounded-t-[11px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
+                <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
                   <i data-lucide="trending-up" class="w-3.5 h-3.5 text-[#ed6845]"></i>
                 </span>
                 กราฟเปรียบเทียบผลงานสะสม S-Curve (Actual vs Plan: 3 ต้น/วัน)
               </span>
-              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] text-[#34383b] whitespace-nowrap shrink-0 inline-block">
+              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border border-slate-300 shadow-xs text-[#34383b] whitespace-nowrap shrink-0 inline-block">
                 แผนงานรวม 93 ต้น / 31 วันทำการ
               </span>
             </div>
@@ -1297,24 +1297,24 @@
           </div>
 
           <!-- SECTION 3: TODAY'S PRESSED PILES LOG TABLE -->
-          <div id="report-sec-table" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white">
-            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2 rounded-t-[10px]">
+          <div id="report-sec-table" class="border border-slate-300 rounded-xl overflow-hidden shadow-xs bg-white">
+            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2 border-b border-slate-300 flex flex-wrap items-center justify-between gap-2 rounded-t-[11px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-white border-2 border-[#475569] flex items-center justify-center shadow-[1px_1px_0_#475569]">
+                <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
                   <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#34383b]"></i>
                 </span>
                 <span id="rep-sec-table-title">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
               </span>
               <div class="flex items-center gap-2 shrink-0">
-                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-[#475569]/40 text-[10.5px] whitespace-nowrap shrink-0 no-export no-print" title="ตัวเลือกกรองรายการกดเสาเข็ม">
-                  <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569] whitespace-nowrap">
+                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-slate-300 text-[10.5px] whitespace-nowrap shrink-0 no-export no-print" title="ตัวเลือกกรองรายการกดเสาเข็ม">
+                  <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-slate-300 whitespace-nowrap">
                     เฉพาะวันที่นี้
                   </button>
                   <button id="btn-rep-filter-all" type="button" class="px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b] whitespace-nowrap">
                     ทั้งหมด (ประวัติการกด)
                   </button>
                 </div>
-                <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] whitespace-nowrap shrink-0">
+                <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border border-slate-300 shadow-xs whitespace-nowrap shrink-0">
                   0 ต้น
                 </span>
               </div>
@@ -5384,11 +5384,11 @@
           renderer.setSize(renderW, renderH, false);
           renderer.setPixelRatio(1);
 
-          // Center of the site in Three.js coordinates (กว้างพอดี ไม่หลุดขอบ)
-          const centerX = 16.8;
-          const centerY = 8.8;
-          const spanX = 52.0;
-          const spanY = 30.0;
+          // Center of the site in Three.js coordinates (คำนวณระยะให้ Fit เต็มกรอบพอดี ไม่เหลือขอบขาวกว้าง)
+          const centerX = 16.85;
+          const centerY = 8.30;
+          const spanX = 46.5;
+          const spanY = 23.8;
           const canvasAspect = renderW / renderH;
           let camW, camH;
           if (canvasAspect > spanX / spanY) {
@@ -5427,78 +5427,7 @@
             h
           };
 
-          // Overlay high-contrast, crystal-clear vibrant badges on driven piles!
-          // ทำให้สีฟ้า (วันนี้) และสีเขียว (กดแล้ว) ลอยเด่น สดใส ชัดเจน สวยงามสะดุดตา
-          const curDate = datePicker.value || todayStr;
-          const mapSnapX = (x) => ((x - (centerX - camW / 2)) / camW) * w;
-          const mapSnapY = (y) => (1 - (y - (centerY - camH / 2)) / camH) * h;
-          const badgeR = Math.max(8.5, Math.min(12.0, (w / camW) * 0.48));
-          const numFont = `900 ${Math.max(8, Math.round(badgeR * 1.05))}px Montserrat, Sarabun, sans-serif`;
-
-          PILES_DATABASE.forEach(p => {
-            const rec = progressRecords[p.no];
-            const isDriven = rec && rec.status === 'driven';
-            if (!isDriven) return;
-
-            const pileDate = rec ? rec.date : null;
-            const isToday = isDriven && pileDate === curDate;
-            const px = mapSnapX(p.x);
-            const py = mapSnapY(p.y);
-
-            ctx.save();
-            if (isToday) {
-              // 1. กดวันนี้: สีฟ้าสดใสเรืองแสง พร้อมวงแหวนประกายสีฟ้า (Vibrant Cyan/Sky-Blue)
-              ctx.shadowColor = 'rgba(2, 132, 199, 0.75)';
-              ctx.shadowBlur = 10;
-
-              // Outer Cyan Pulse Ring
-              ctx.beginPath();
-              ctx.arc(px, py, badgeR + 3.5, 0, Math.PI * 2);
-              ctx.strokeStyle = '#38bdf8';
-              ctx.lineWidth = 2.2;
-              ctx.stroke();
-
-              // Inner Vivid Blue Solid Badge
-              ctx.beginPath();
-              ctx.arc(px, py, badgeR, 0, Math.PI * 2);
-              ctx.fillStyle = '#0284c7';
-              ctx.fill();
-              ctx.strokeStyle = '#ffffff';
-              ctx.lineWidth = 1.8;
-              ctx.stroke();
-
-              // Crisp White Bold Pile Number
-              ctx.shadowBlur = 0;
-              ctx.fillStyle = '#ffffff';
-              ctx.font = numFont;
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillText(p.no.toString(), px, py);
-            } else {
-              // 2. กดแล้ว: สีเขียวมรกตสดใสเด่นชัด (Vibrant Emerald Green)
-              ctx.shadowColor = 'rgba(16, 185, 129, 0.6)';
-              ctx.shadowBlur = 8;
-
-              // Inner Vivid Emerald Green Badge
-              ctx.beginPath();
-              ctx.arc(px, py, badgeR, 0, Math.PI * 2);
-              ctx.fillStyle = '#10b981';
-              ctx.fill();
-              ctx.strokeStyle = '#065f46';
-              ctx.lineWidth = 1.8;
-              ctx.stroke();
-
-              // Crisp White Bold Pile Number
-              ctx.shadowBlur = 0;
-              ctx.fillStyle = '#ffffff';
-              ctx.font = numFont;
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillText(p.no.toString(), px, py);
-            }
-            ctx.restore();
-          });
-
+          // ระบายสีแบบเดิมจากโมเดล 3D โดยตรง (หัวเข็ม I-beam และวงกลมแท็กเข็มที่ปลายเส้นโยง) คมชัด สวยงาม ไม่วาดวงกลมทับหัวเข็ม
           return;
         } catch (err) {
           console.warn('3D snapshot render error, falling back to 2D vector:', err);
@@ -5506,13 +5435,13 @@
       }
 
       // 2. FALLBACK 2D VECTOR RENDERING (If 3D model is still loading)
-      const minX = -8.5, maxX = 42.5; // spanX = 51.0m
-      const minY = -5.5, maxY = 23.0; // spanY = 28.5m
+      const minX = -6.2, maxX = 39.8; // spanX = 46.0m
+      const minY = -3.4, maxY = 20.0; // spanY = 23.4m
       const spanX = maxX - minX;
       const spanY = maxY - minY;
 
-      const padX = 32;
-      const padY = 26;
+      const padX = 14;
+      const padY = 12;
       const availW = Math.max(80, w - padX * 2);
       const availH = Math.max(80, h - padY * 2);
       const scale = Math.min(availW / spanX, availH / spanY);
@@ -6848,17 +6777,17 @@
               expSecTable.style.setProperty('overflow', 'visible', 'important');
               expSecTable.style.setProperty('height', 'auto', 'important');
               expSecTable.style.setProperty('max-height', 'none', 'important');
-              expSecTable.style.setProperty('border', '2px solid #475569', 'important');
+              expSecTable.style.setProperty('border', '1px solid #cbd5e1', 'important');
               expSecTable.style.setProperty('border-radius', '12px', 'important');
             }
             const expTable = reportCard.querySelector('#rep-today-table');
             if (expTable) {
-              expTable.style.setProperty('border-bottom', '2px solid #475569', 'important');
+              expTable.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
               const lastRow = expTable.querySelector('tbody tr:last-child');
               if (lastRow) {
-                lastRow.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                lastRow.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
                 lastRow.querySelectorAll('td').forEach(td => {
-                  td.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                  td.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
                 });
               }
             }
@@ -6963,7 +6892,7 @@
                       clonedCard.style.setProperty('margin', '0', 'important');
                       clonedCard.style.setProperty('margin-left', '0', 'important');
                       clonedCard.style.setProperty('margin-right', '0', 'important');
-                      clonedCard.style.setProperty('border', '2px solid #475569', 'important');
+                      clonedCard.style.setProperty('border', '1px solid #cbd5e1', 'important');
                       clonedCard.style.setProperty('padding-bottom', '32px', 'important');
                       clonedCard.style.overflow = 'visible';
                       clonedCard.style.boxShadow = 'none';
@@ -6985,19 +6914,19 @@
                         clonedSecTable.style.setProperty('overflow', 'visible', 'important');
                         clonedSecTable.style.setProperty('height', 'auto', 'important');
                         clonedSecTable.style.setProperty('max-height', 'none', 'important');
-                        clonedSecTable.style.setProperty('border', '2px solid #475569', 'important');
+                        clonedSecTable.style.setProperty('border', '1px solid #cbd5e1', 'important');
                         clonedSecTable.style.setProperty('border-radius', '12px', 'important');
                       }
 
                       const clonedTable = clonedDoc.getElementById('rep-today-table');
                       if (clonedTable) {
                         clonedTable.style.setProperty('border-collapse', 'collapse', 'important');
-                        clonedTable.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                        clonedTable.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
                         const lastRow = clonedTable.querySelector('tbody tr:last-child');
                         if (lastRow) {
-                          lastRow.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                          lastRow.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
                           lastRow.querySelectorAll('td').forEach(td => {
-                            td.style.setProperty('border-bottom', '2px solid #475569', 'important');
+                            td.style.setProperty('border-bottom', '1.5px solid #94a3b8', 'important');
                           });
                         }
                       }
