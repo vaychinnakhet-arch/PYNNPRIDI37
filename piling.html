@@ -305,32 +305,41 @@
       max-height: 365px !important;
       overflow-y: auto !important;
     }
-    /* เส้นตารางและเส้นขอบทุกช่องสีดำเต็มสมบูรณ์ คมชัด ไม่ขาดช่วง (Crisp black grid lines for every cell & container) */
+    /* เส้นตารางและกรอบตารางสไตล์ Soft Ink Flat-Pop คมชัด เรียบหรู ไม่ซ้อนทับ */
     #report-sec-table {
-      border: 2px solid #000000 !important;
+      border: 2px solid #475569 !important;
       border-radius: 12px !important;
       overflow: hidden !important;
     }
     #report-sec-table-head {
-      border-bottom: 2px solid #000000 !important;
+      border-bottom: 2px solid #475569 !important;
     }
     #rep-today-table {
       border-collapse: collapse !important;
-      border: 2px solid #000000 !important;
+      border: none !important;
       width: 100% !important;
     }
     #rep-today-table th {
-      border: 1px solid #000000 !important;
-      border-bottom: 2px solid #000000 !important;
+      border: none !important;
+      border-right: 1px solid rgba(71, 85, 105, 0.25) !important;
+      border-bottom: 2px solid #475569 !important;
       box-sizing: border-box !important;
     }
+    #rep-today-table th:last-child {
+      border-right: none !important;
+    }
     #rep-today-table td {
-      border: 1px solid #000000 !important;
+      border: none !important;
+      border-right: 1px solid #cbd5e1 !important;
+      border-bottom: 1px solid #cbd5e1 !important;
       vertical-align: middle !important;
       box-sizing: border-box !important;
     }
+    #rep-today-table td:last-child {
+      border-right: none !important;
+    }
     #rep-today-table tbody tr:last-child td {
-      border-bottom: 2px solid #000000 !important;
+      border-bottom: none !important;
     }
 
     /* Print & Capture Hide Styles (ตอนแคปภาพรายงาน และพิมพ์) */
@@ -471,24 +480,24 @@
       flex-shrink: 0 !important;
     }
 
-    /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง พร้อมเส้นตารางสีดำคมชัด */
+    /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง พร้อมเส้นตาราง Soft Ink คมชัด ไม่ซ้อนทับ */
     .is-export-capturing #report-page-card {
       overflow: visible !important;
-      padding-bottom: 48px !important;
+      padding-bottom: 36px !important;
       box-sizing: border-box !important;
     }
     .is-export-capturing #report-sec-table {
       height: auto !important;
       max-height: none !important;
       overflow: visible !important;
-      border: 2px solid #000000 !important;
+      border: 2px solid #475569 !important;
       border-radius: 12px !important;
       box-shadow: none !important;
       background: #ffffff !important;
-      margin-bottom: 24px !important;
+      margin-bottom: 16px !important;
     }
     .is-export-capturing #report-sec-table-head {
-      border-bottom: 2px solid #000000 !important;
+      border-bottom: 2px solid #475569 !important;
     }
     .is-export-capturing #report-sec-table .table-wrapper,
     .is-export-capturing #report-sec-table .table-wrapper.has-scroll,
@@ -510,40 +519,39 @@
       min-width: 100% !important;
       table-layout: auto !important;
       border-collapse: collapse !important;
-      border: 2px solid #000000 !important;
+      border: none !important;
     }
     .is-export-capturing #rep-today-table th {
-      border: 1px solid #000000 !important;
-      border-bottom: 2px solid #000000 !important;
+      border: none !important;
+      border-right: 1px solid rgba(71, 85, 105, 0.25) !important;
+      border-bottom: 2px solid #475569 !important;
       box-sizing: border-box !important;
-    }
-    .is-export-capturing #rep-today-table td {
-      border: 1px solid #000000 !important;
-      box-sizing: border-box !important;
-    }
-    .is-export-capturing #rep-today-table th:last-child,
-    .is-export-capturing #rep-today-table td:last-child {
-      border-right: 1px solid #000000 !important;
-    }
-    .is-export-capturing #rep-today-table tbody tr:last-child {
-      border-bottom: 2px solid #000000 !important;
-    }
-    .is-export-capturing #rep-today-table tbody tr:last-child td {
-      border-bottom: 2px solid #000000 !important;
-    }
-    .is-export-capturing #rep-today-table th,
-    .is-export-capturing #rep-today-table td:not([colspan]) {
       padding: 6px 4px !important;
       vertical-align: middle !important;
+    }
+    .is-export-capturing #rep-today-table th:last-child {
+      border-right: none !important;
+    }
+    .is-export-capturing #rep-today-table td {
+      border: none !important;
+      border-right: 1px solid #cbd5e1 !important;
+      border-bottom: 1px solid #cbd5e1 !important;
       box-sizing: border-box !important;
+      padding: 6px 4px !important;
+      vertical-align: middle !important;
+    }
+    .is-export-capturing #rep-today-table td:last-child {
+      border-right: none !important;
+    }
+    .is-export-capturing #rep-today-table tbody tr:last-child td {
+      border-bottom: none !important;
     }
     .is-export-capturing #rep-today-table td[colspan] {
       padding: 16px 12px !important;
       text-align: center !important;
       vertical-align: middle !important;
       box-sizing: border-box !important;
-      border: 1px solid #000000 !important;
-      border-bottom: 2px solid #000000 !important;
+      border: none !important;
     }
 
     /* โหมดแคปภาพแนวตั้ง 4:3 (Portrait 3:4) ปรับสัดส่วนทุกอย่างให้พอดีเป๊ะเต็มเฟรม */
@@ -559,7 +567,7 @@
       justify-content: space-between !important;
       box-sizing: border-box !important;
       padding: 24px 28px !important;
-      border: 2px solid #000000 !important;
+      border: 2px solid #475569 !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-main-grid {
       flex: 1 !important;
@@ -578,7 +586,7 @@
       flex: 1 !important;
       display: flex !important;
       flex-direction: column !important;
-      border: 2px solid #000000 !important;
+      border: 2px solid #475569 !important;
     }
     .is-export-capturing.export-ratio-3-4 #planSnapshotCanvasWrapper {
       flex: 1 !important;
@@ -595,7 +603,7 @@
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-scurve {
       flex: 0 0 auto !important;
-      border: 2px solid #000000 !important;
+      border: 2px solid #475569 !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-scurve .chart-wrapper {
       height: 250px !important;
@@ -604,7 +612,7 @@
     .is-export-capturing.export-ratio-3-4 #report-sec-table {
       flex: 0 0 auto !important;
       margin-bottom: 0 !important;
-      border: 2px solid #000000 !important;
+      border: 2px solid #475569 !important;
     }
   </style>
 
@@ -1363,8 +1371,8 @@
           </div>
 
           <!-- SECTION 3: TODAY'S PRESSED PILES LOG TABLE -->
-          <div id="report-sec-table" class="border-2 border-black rounded-xl overflow-hidden shadow-xs bg-white">
-            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2 border-b-2 border-black flex flex-wrap items-center justify-between gap-2 rounded-t-[10px]">
+          <div id="report-sec-table" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-xs bg-white">
+            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2 rounded-t-[10px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
                   <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#34383b]"></i>
@@ -1386,21 +1394,21 @@
               </div>
             </div>
             <div class="table-wrapper overflow-x-auto">
-              <table id="rep-today-table" class="w-full text-xs text-left border-collapse border-2 border-black">
-                <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#000000] border-b-2 border-black font-black text-xs">
+              <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
+                <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
                   <tr>
-                    <th class="p-2 text-center border border-black border-b-2 border-b-black">No.</th>
-                    <th class="p-2 border border-black border-b-2 border-b-black">รหัสเข็ม (ID)</th>
-                    <th class="p-2 text-center border border-black border-b-2 border-b-black">ฐานราก</th>
-                    <th class="p-2 text-center border border-black border-b-2 border-b-black">ตำแหน่งกริด</th>
-                    <th class="p-2 text-right border border-black border-b-2 border-b-black font-mono" title="พิกัดสำรวจตามแบบ (Northing, Easting)">Co (N, E) แบบ (m)</th>
-                    <th class="p-2 text-right border border-black border-b-2 border-b-black font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">Co (n,e) หลังกด (m)</th>
-                    <th class="p-2 text-center border border-black border-b-2 border-b-black font-mono text-[#047857]" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E) และระยะหนีศูนย์รวมของแต่ละต้น">ผลต่าง (Δn, Δe)</th>
-                    <th class="p-2 text-right border border-black border-b-2 border-b-black text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
-                    <th class="p-2 text-right border border-black border-b-2 border-b-black text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
-                    <th class="p-2 text-center border border-black border-b-2 border-b-black font-mono" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่าง (Diff PCO) (ม.)</th>
-                    <th class="p-2 text-center border border-black border-b-2 border-b-black">ชนิดเข็ม</th>
-                    <th class="p-2 text-center border border-black border-b-2 border-b-black">วันที่กด</th>
+                    <th class="p-2 text-center border-r border-[#cbd5e1]">No.</th>
+                    <th class="p-2 border-r border-[#cbd5e1]">รหัสเข็ม (ID)</th>
+                    <th class="p-2 text-center border-r border-[#cbd5e1]">ฐานราก</th>
+                    <th class="p-2 text-center border-r border-[#cbd5e1]">ตำแหน่งกริด</th>
+                    <th class="p-2 text-right border-r border-[#cbd5e1] font-mono" title="พิกัดสำรวจตามแบบ (Northing, Easting)">Co (N, E) แบบ (m)</th>
+                    <th class="p-2 text-right border-r border-[#cbd5e1] font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">Co (n,e) หลังกด (m)</th>
+                    <th class="p-2 text-center border-r border-[#cbd5e1] font-mono text-[#047857]" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E) และระยะหนีศูนย์รวมของแต่ละต้น">ผลต่าง (Δn, Δe)</th>
+                    <th class="p-2 text-right border-r border-[#cbd5e1] text-[#a84631] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
+                    <th class="p-2 text-right border-r border-[#cbd5e1] text-[#0284c7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
+                    <th class="p-2 text-center border-r border-[#cbd5e1] font-mono" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่าง (Diff PCO) (ม.)</th>
+                    <th class="p-2 text-center border-r border-[#cbd5e1]">ชนิดเข็ม</th>
+                    <th class="p-2 text-center">วันที่กด</th>
                   </tr>
                 </thead>
                 <tbody id="rep-today-table-body">
@@ -6355,46 +6363,40 @@
 
           if (currentReportTheme === 'excel') {
             tr.className = 'hover:bg-[#ecfdf5] transition-colors cursor-pointer ' +
-              (isLastRow ? 'border-b-2 border-slate-400 ' : 'border-b border-slate-200 ') +
+              (isLastRow ? '' : 'border-b border-slate-200 ') +
               (index % 2 === 1 ? 'bg-[#f8fafc]' : 'bg-white');
             tr.innerHTML = `
-              <td class="p-2 text-center font-bold text-slate-500 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.no}</td>
-              <td class="p-2 font-bold text-slate-800 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.tag}</td>
-              <td class="p-2 text-center font-bold text-blue-700 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.footing || '-'}</td>
-              <td class="p-2 text-center font-bold text-slate-700 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.grid}</td>
-              <td class="p-2 text-right border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${designCoordsHtml}</td>
-              <td class="p-2 text-right border border-slate-200 bg-emerald-50/20 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${afterPressCoordsHtml}</td>
-              <td class="p-2 text-center border border-slate-200 bg-emerald-50/40 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${coordDiffHtml}</td>
-              <td class="p-2 text-right font-bold text-slate-800 font-mono border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${pco.toFixed(3)}</td>
-              <td class="p-2 text-right font-mono border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${actualTopDisplay}</td>
-              <td class="p-2 text-center font-mono border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${diffDisplay}</td>
-              <td class="p-2 text-center font-medium text-slate-700 border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${p.type}</td>
-              <td class="p-2 text-center border border-slate-200 ${isLastRow ? '!border-b-2 !border-b-slate-400' : ''}">${dateDisplay}</td>
+              <td class="p-2 text-center font-bold text-slate-500 border-r border-slate-200">${p.no}</td>
+              <td class="p-2 font-bold text-slate-800 border-r border-slate-200">${p.tag}</td>
+              <td class="p-2 text-center font-bold text-blue-700 border-r border-slate-200">${p.footing || '-'}</td>
+              <td class="p-2 text-center font-bold text-slate-700 border-r border-slate-200">${p.grid}</td>
+              <td class="p-2 text-right border-r border-slate-200">${designCoordsHtml}</td>
+              <td class="p-2 text-right border-r border-slate-200 bg-emerald-50/20">${afterPressCoordsHtml}</td>
+              <td class="p-2 text-center border-r border-slate-200 bg-emerald-50/40">${coordDiffHtml}</td>
+              <td class="p-2 text-right font-bold text-slate-800 font-mono border-r border-slate-200">${pco.toFixed(3)}</td>
+              <td class="p-2 text-right font-mono border-r border-slate-200">${actualTopDisplay}</td>
+              <td class="p-2 text-center font-mono border-r border-slate-200">${diffDisplay}</td>
+              <td class="p-2 text-center font-medium text-slate-700 border-r border-slate-200">${p.type}</td>
+              <td class="p-2 text-center">${dateDisplay}</td>
             `;
-            if (isLastRow) {
-              tr.style.borderBottom = '2px solid #94a3b8';
-            }
           } else {
             tr.className = 'hover:bg-[#f0fdf4] transition-colors cursor-pointer ' +
-              (isLastRow ? 'border-b-2 border-[#475569] ' : 'border-b border-[#e5f1ed] ') +
+              (isLastRow ? '' : 'border-b border-[#e5f1ed] ') +
               (index % 2 === 1 ? 'bg-[#fdfbf7]' : 'bg-white');
             tr.innerHTML = `
-              <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.no}</td>
-              <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.tag}</td>
-              <td class="p-2.5 text-center font-black text-[#0284c7] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.footing || '-'}</td>
-              <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.grid}</td>
-              <td class="p-2.5 text-right border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${designCoordsHtml}</td>
-              <td class="p-2.5 text-right border-r border-[#e5f1ed] bg-emerald-50/20 ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${afterPressCoordsHtml}</td>
-              <td class="p-2.5 text-center border-r border-[#e5f1ed] bg-emerald-50/40 ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${coordDiffHtml}</td>
-              <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${pco.toFixed(3)}</td>
-              <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${actualTopDisplay}</td>
-              <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${diffDisplay}</td>
-              <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.type || 'I-0.40m'}</td>
-              <td class="p-2 text-center ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${dateDisplay}</td>
+              <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed]">${p.no}</td>
+              <td class="p-2.5 font-black text-[#34383b] border-r border-[#e5f1ed]">${p.tag}</td>
+              <td class="p-2.5 text-center font-black text-[#0284c7] border-r border-[#e5f1ed]">${p.footing || '-'}</td>
+              <td class="p-2.5 text-center font-bold text-[#34383b] border-r border-[#e5f1ed]">${p.grid}</td>
+              <td class="p-2.5 text-right border-r border-[#e5f1ed]">${designCoordsHtml}</td>
+              <td class="p-2.5 text-right border-r border-[#e5f1ed] bg-emerald-50/20">${afterPressCoordsHtml}</td>
+              <td class="p-2.5 text-center border-r border-[#e5f1ed] bg-emerald-50/40">${coordDiffHtml}</td>
+              <td class="p-2.5 text-right font-black text-[#a84631] font-mono border-r border-[#e5f1ed]">${pco.toFixed(3)}</td>
+              <td class="p-2.5 text-right font-mono border-r border-[#e5f1ed]">${actualTopDisplay}</td>
+              <td class="p-2.5 text-center font-mono border-r border-[#e5f1ed]">${diffDisplay}</td>
+              <td class="p-2.5 text-center font-semibold text-[#34383b] border-r border-[#e5f1ed]">${p.type || 'I-0.40m'}</td>
+              <td class="p-2 text-center">${dateDisplay}</td>
             `;
-            if (isLastRow) {
-              tr.style.borderBottom = '2px solid #475569';
-            }
           }
           tbody.appendChild(tr);
         });
@@ -6844,37 +6846,45 @@
               cell.style.setProperty('padding', '6px 4px', 'important');
             });
 
-            // Ensure #report-sec-table and #rep-today-table have solid black borders and clean containment
+            // Ensure #report-sec-table and #rep-today-table have clean Soft Ink theme borders and clean containment
             const expSecTable = reportCard.querySelector('#report-sec-table');
             if (expSecTable) {
               expSecTable.style.setProperty('overflow', 'visible', 'important');
               expSecTable.style.setProperty('height', 'auto', 'important');
               expSecTable.style.setProperty('max-height', 'none', 'important');
-              expSecTable.style.setProperty('border', '2px solid #000000', 'important');
+              expSecTable.style.setProperty('border', '2px solid #475569', 'important');
               expSecTable.style.setProperty('border-radius', '12px', 'important');
             }
             const expSecHead = reportCard.querySelector('#report-sec-table-head');
             if (expSecHead) {
-              expSecHead.style.setProperty('border-bottom', '2px solid #000000', 'important');
+              expSecHead.style.setProperty('border-bottom', '2px solid #475569', 'important');
             }
             const expTable = reportCard.querySelector('#rep-today-table');
             if (expTable) {
-              expTable.style.setProperty('border', '2px solid #000000', 'important');
+              expTable.style.setProperty('border', 'none', 'important');
               expTable.style.setProperty('border-collapse', 'collapse', 'important');
-              expTable.querySelectorAll('th').forEach(th => {
-                th.style.setProperty('border', '1px solid #000000', 'important');
-                th.style.setProperty('border-bottom', '2px solid #000000', 'important');
+              const allTh = expTable.querySelectorAll('th');
+              allTh.forEach((th, thIdx) => {
+                th.style.setProperty('border', 'none', 'important');
+                if (thIdx < allTh.length - 1) {
+                  th.style.setProperty('border-right', '1px solid rgba(71, 85, 105, 0.25)', 'important');
+                }
+                th.style.setProperty('border-bottom', '2px solid #475569', 'important');
               });
-              expTable.querySelectorAll('td').forEach(td => {
-                td.style.setProperty('border', '1px solid #000000', 'important');
-              });
-              const lastRow = expTable.querySelector('tbody tr:last-child');
-              if (lastRow) {
-                lastRow.style.setProperty('border-bottom', '2px solid #000000', 'important');
-                lastRow.querySelectorAll('td').forEach(td => {
-                  td.style.setProperty('border-bottom', '2px solid #000000', 'important');
+              const allRows = expTable.querySelectorAll('tbody tr');
+              allRows.forEach((tr, rIdx) => {
+                const isLast = (rIdx === allRows.length - 1);
+                const tds = tr.querySelectorAll('td');
+                tds.forEach((td, tdIdx) => {
+                  td.style.setProperty('border', 'none', 'important');
+                  if (tdIdx < tds.length - 1) {
+                    td.style.setProperty('border-right', '1px solid #cbd5e1', 'important');
+                  }
+                  if (!isLast) {
+                    td.style.setProperty('border-bottom', '1px solid #cbd5e1', 'important');
+                  }
                 });
-              }
+              });
             }
 
             // Equalize cell heights in each row so all vertical borders span 100% of the row (เส้นเต็มช่องตาราง)
@@ -6999,33 +7009,41 @@
                         clonedSecTable.style.setProperty('overflow', 'visible', 'important');
                         clonedSecTable.style.setProperty('height', 'auto', 'important');
                         clonedSecTable.style.setProperty('max-height', 'none', 'important');
-                        clonedSecTable.style.setProperty('border', '2px solid #000000', 'important');
+                        clonedSecTable.style.setProperty('border', '2px solid #475569', 'important');
                         clonedSecTable.style.setProperty('border-radius', '12px', 'important');
                       }
 
                       const clonedSecHead = clonedDoc.getElementById('report-sec-table-head');
                       if (clonedSecHead) {
-                        clonedSecHead.style.setProperty('border-bottom', '2px solid #000000', 'important');
+                        clonedSecHead.style.setProperty('border-bottom', '2px solid #475569', 'important');
                       }
 
                       const clonedTable = clonedDoc.getElementById('rep-today-table');
                       if (clonedTable) {
                         clonedTable.style.setProperty('border-collapse', 'collapse', 'important');
-                        clonedTable.style.setProperty('border', '2px solid #000000', 'important');
-                        clonedTable.querySelectorAll('th').forEach(th => {
-                          th.style.setProperty('border', '1px solid #000000', 'important');
-                          th.style.setProperty('border-bottom', '2px solid #000000', 'important');
+                        clonedTable.style.setProperty('border', 'none', 'important');
+                        const cThs = clonedTable.querySelectorAll('th');
+                        cThs.forEach((th, thIdx) => {
+                          th.style.setProperty('border', 'none', 'important');
+                          if (thIdx < cThs.length - 1) {
+                            th.style.setProperty('border-right', '1px solid rgba(71, 85, 105, 0.25)', 'important');
+                          }
+                          th.style.setProperty('border-bottom', '2px solid #475569', 'important');
                         });
-                        clonedTable.querySelectorAll('td').forEach(td => {
-                          td.style.setProperty('border', '1px solid #000000', 'important');
-                        });
-                        const lastRow = clonedTable.querySelector('tbody tr:last-child');
-                        if (lastRow) {
-                          lastRow.style.setProperty('border-bottom', '2px solid #000000', 'important');
-                          lastRow.querySelectorAll('td').forEach(td => {
-                            td.style.setProperty('border-bottom', '2px solid #000000', 'important');
+                        const cRows = clonedTable.querySelectorAll('tbody tr');
+                        cRows.forEach((r, rIdx) => {
+                          const isLast = (rIdx === cRows.length - 1);
+                          const cTds = r.querySelectorAll('td');
+                          cTds.forEach((td, tdIdx) => {
+                            td.style.setProperty('border', 'none', 'important');
+                            if (tdIdx < cTds.length - 1) {
+                              td.style.setProperty('border-right', '1px solid #cbd5e1', 'important');
+                            }
+                            if (!isLast) {
+                              td.style.setProperty('border-bottom', '1px solid #cbd5e1', 'important');
+                            }
                           });
-                        }
+                        });
                       }
 
                       clonedCard.querySelectorAll('.table-wrapper, .overflow-x-auto, .overflow-y-auto').forEach(w => {
@@ -7280,7 +7298,7 @@
 
       function drawCrispOuterBorder(ctx, x, y, w, h) {
         ctx.save();
-        ctx.strokeStyle = '#000000';
+        ctx.strokeStyle = '#475569';
         ctx.lineWidth = strokeW;
         if (typeof ctx.roundRect === 'function') {
           ctx.beginPath();
