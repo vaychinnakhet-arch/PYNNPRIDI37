@@ -1334,7 +1334,7 @@
             <span class="w-7 h-7 rounded-lg bg-[#ea580c] text-white flex items-center justify-center border border-[#ea580c]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="calendar" class="w-4 h-4"></i>
             </span>
-            <span class="text-xs sm:text-sm font-black text-[#c2410c] whitespace-nowrap">แผนสะสม (<span id="rep-elapsed-days" class="font-mono">0</span>/31 วัน)</span>
+            <span class="text-xs sm:text-sm font-black text-[#c2410c] whitespace-nowrap">แผนสะสม (<span id="rep-elapsed-days" class="font-mono">0</span>/31 วันทำการ)</span>
           </div>
           <div class="flex items-baseline gap-1.5 shrink-0 font-bold whitespace-nowrap">
             <span id="rep-plan-cum-count" class="text-lg sm:text-xl font-black font-montserrat text-[#ea580c] leading-none">0</span>
@@ -1441,7 +1441,7 @@
                 กราฟเปรียบเทียบผลงานสะสม S-Curve (Actual vs Plan: 3 ต้น/วัน)
               </span>
               <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border border-slate-300 shadow-xs text-[#34383b] whitespace-nowrap shrink-0 inline-block">
-                แผนงานรวม 93 ต้น / 31 วันทำการ
+                แผนงานรวม 93 ต้น / 31 วันทำการ (ไม่นับวันอาทิตย์ & นักขัตฤกษ์)
               </span>
             </div>
             <div class="p-3">
@@ -6000,7 +6000,143 @@
     });
 
     // =========================================================================
-    // 9. S-CURVE CHART (ขอกราฟชัดๆ)
+    // THAI WORKING DAYS & PUBLIC HOLIDAYS SYSTEM (ไม่นับวันอาทิตย์ & วันหยุดราชการ)
+    // =========================================================================
+    const THAI_PUBLIC_HOLIDAYS = {
+      // 2024
+      '2024-01-01': 'วันขึ้นปีใหม่',
+      '2024-01-02': 'วันหยุดชดเชยวันสิ้นปี',
+      '2024-02-26': 'วันหยุดชดเชยวันมาฆบูชา',
+      '2024-04-08': 'วันหยุดชดเชยวันจักรี',
+      '2024-04-15': 'วันสงกรานต์',
+      '2024-04-16': 'วันหยุดชดเชยวันสงกรานต์',
+      '2024-05-01': 'วันแรงงานแห่งชาติ',
+      '2024-05-06': 'วันหยุดชดเชยวันฉัตรมงคล',
+      '2024-05-22': 'วันวิสาขบูชา',
+      '2024-06-03': 'วันเฉลิมฯ สมเด็จพระนางเจ้าฯ พระบรมราชินี',
+      '2024-07-22': 'วันหยุดชดเชยวันอาสาฬหบูชา',
+      '2024-07-29': 'วันหยุดชดเชยวันเฉลิมฯ ร.10',
+      '2024-08-12': 'วันแม่แห่งชาติ',
+      '2024-10-14': 'วันหยุดชดเชยวันนวมินทรมหาราช',
+      '2024-10-23': 'วันปิยมหาราช',
+      '2024-12-05': 'วันพ่อแห่งชาติ',
+      '2024-12-10': 'วันรัฐธรรมนูญ',
+      '2024-12-31': 'วันสิ้นปี',
+
+      // 2025
+      '2025-01-01': 'วันขึ้นปีใหม่',
+      '2025-02-12': 'วันมาฆบูชา',
+      '2025-04-07': 'วันหยุดชดเชยวันจักรี',
+      '2025-04-14': 'วันสงกรานต์',
+      '2025-04-15': 'วันสงกรานต์',
+      '2025-04-16': 'วันหยุดชดเชยวันสงกรานต์',
+      '2025-05-01': 'วันแรงงานแห่งชาติ',
+      '2025-05-05': 'วันหยุดชดเชยวันฉัตรมงคล',
+      '2025-05-12': 'วันหยุดชดเชยวันวิสาขบูชา',
+      '2025-06-03': 'วันเฉลิมฯ พระบรมราชินี',
+      '2025-07-10': 'วันอาสาฬหบูชา',
+      '2025-07-11': 'วันเข้าพรรษา',
+      '2025-07-28': 'วันเฉลิมฯ ร.10',
+      '2025-08-12': 'วันแม่แห่งชาติ',
+      '2025-10-13': 'วันนวมินทรมหาราช',
+      '2025-10-23': 'วันปิยมหาราช',
+      '2025-12-05': 'วันพ่อแห่งชาติ',
+      '2025-12-10': 'วันรัฐธรรมนูญ',
+      '2025-12-31': 'วันสิ้นปี',
+
+      // 2026
+      '2026-01-01': 'วันขึ้นปีใหม่',
+      '2026-01-02': 'วันหยุดพิเศษราชการ',
+      '2026-03-03': 'วันมาฆบูชา',
+      '2026-04-06': 'วันจักรี',
+      '2026-04-13': 'วันสงกรานต์',
+      '2026-04-14': 'วันสงกรานต์',
+      '2026-04-15': 'วันสงกรานต์',
+      '2026-05-01': 'วันแรงงานแห่งชาติ',
+      '2026-05-04': 'วันฉัตรมงคล',
+      '2026-05-31': 'วันวิสาขบูชา',
+      '2026-06-01': 'วันหยุดชดเชยวันวิสาขบูชา',
+      '2026-06-03': 'วันเฉลิมฯ พระบรมราชินี',
+      '2026-07-28': 'วันเฉลิมฯ ร.10',
+      '2026-07-29': 'วันอาสาฬหบูชา',
+      '2026-07-30': 'วันเข้าพรรษา',
+      '2026-08-12': 'วันแม่แห่งชาติ',
+      '2026-10-13': 'วันนวมินทรมหาราช (ร.9)',
+      '2026-10-23': 'วันปิยมหาราช',
+      '2026-12-05': 'วันพ่อแห่งชาติ / วันชาติ',
+      '2026-12-07': 'วันหยุดชดเชยวันพ่อแห่งชาติ',
+      '2026-12-10': 'วันรัฐธรรมนูญ',
+      '2026-12-31': 'วันสิ้นปี',
+
+      // 2027
+      '2027-01-01': 'วันขึ้นปีใหม่',
+      '2027-02-22': 'วันหยุดชดเชยวันมาฆบูชา',
+      '2027-04-06': 'วันจักรี',
+      '2027-04-13': 'วันสงกรานต์',
+      '2027-04-14': 'วันสงกรานต์',
+      '2027-04-15': 'วันสงกรานต์',
+      '2027-05-03': 'วันหยุดชดเชยวันแรงงานแห่งชาติ',
+      '2027-05-04': 'วันฉัตรมงคล',
+      '2027-05-20': 'วันวิสาขบูชา',
+      '2027-06-03': 'วันเฉลิมฯ พระบรมราชินี',
+      '2027-07-19': 'วันหยุดชดเชยวันอาสาฬหบูชา',
+      '2027-07-28': 'วันเฉลิมฯ ร.10',
+      '2027-08-12': 'วันแม่แห่งชาติ',
+      '2027-10-13': 'วันนวมินทรมหาราช',
+      '2027-10-25': 'วันหยุดชดเชยวันปิยมหาราช',
+      '2027-12-06': 'วันหยุดชดเชยวันพ่อแห่งชาติ',
+      '2027-12-10': 'วันรัฐธรรมนูญ',
+      '2027-12-31': 'วันสิ้นปี'
+    };
+
+    function parseDateLocal(str) {
+      if (!str) return new Date();
+      const parts = str.split('-');
+      return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    }
+
+    function formatDateLocal(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + day;
+    }
+
+    function isThaiWorkingDay(dateStr) {
+      if (!dateStr) return false;
+      const d = parseDateLocal(dateStr);
+      // 1. วันอาทิตย์ (0) -> ไม่นับเป็นวันทำการ
+      if (d.getDay() === 0) return false;
+      // 2. วันหยุดราชการและวันหยุดนักขัตฤกษ์
+      if (THAI_PUBLIC_HOLIDAYS[dateStr]) return false;
+      const mmdd = dateStr.slice(5);
+      const fixedHolidays = ['01-01', '04-06', '04-13', '04-14', '04-15', '05-01', '05-04', '06-03', '07-28', '08-12', '10-13', '10-23', '12-05', '12-10', '12-31'];
+      if (fixedHolidays.includes(mmdd)) return false;
+      return true;
+    }
+
+    // สร้างลิสต์ 31 วันทำการจริงของโครงการ โดยข้ามวันอาทิตย์และวันหยุดราชการทั้งหมด
+    function getWorkingDaysSchedule(startDateStr, totalWorkingDays = 31) {
+      const schedule = [];
+      let cur = parseDateLocal(startDateStr);
+      
+      // ถ้าวันเริ่มต้นตรงกับวันอาทิตย์หรือวันหยุด เลื่อนไปวันทำการแรก
+      while (!isThaiWorkingDay(formatDateLocal(cur)) && schedule.length === 0) {
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      while (schedule.length < totalWorkingDays) {
+        const s = formatDateLocal(cur);
+        if (isThaiWorkingDay(s)) {
+          schedule.push(s);
+        }
+        cur.setDate(cur.getDate() + 1);
+      }
+      return schedule;
+    }
+
+    // =========================================================================
+    // 9. S-CURVE CHART (คำนวณวันทำการแท้จริง ไม่นับวันอาทิตย์และวันหยุดราชการ)
     // =========================================================================
     let reportScurveChartInstance = null;
 
@@ -6010,25 +6146,33 @@
       const planData = [];
       const actualData = [];
 
-      const drivenDatesMap = {};
-      Object.values(progressRecords).forEach(r => {
-        if (r.status === 'driven' && r.date) {
-          drivenDatesMap[r.date] = (drivenDatesMap[r.date] || 0) + 1;
-        }
-      });
-      const sortedDates = Object.keys(drivenDatesMap).sort();
+      const drivenRecords = Object.values(progressRecords).filter(r => r && r.status === 'driven');
+      const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
+      const curDate = (typeof datePicker !== 'undefined' && datePicker && datePicker.value) ? datePicker.value : todayStr;
+      const projectStartDate = (uniqueDates.length > 0) ? uniqueDates[0] : (curDate || todayStr);
 
-      let cumActual = 0;
+      const workingDaysSchedule = getWorkingDaysSchedule(projectStartDate, daysCount);
+
+      // คำนวณจำนวนวันทำการสะสมถึงวันที่รายงาน (curDate)
+      let elapsedWorkingDays = 1;
+      if (curDate >= projectStartDate) {
+        elapsedWorkingDays = workingDaysSchedule.filter(d => d <= curDate).length;
+      }
+      elapsedWorkingDays = Math.min(daysCount, Math.max(1, elapsedWorkingDays));
+
+      // สร้างข้อมูลแผนงาน 31 วันทำการ (3 ต้น/วันทำการ รวม 93 ต้น)
       for (let day = 1; day <= daysCount; day++) {
         labels.push(`D${day}`);
         planData.push(Math.min(day * 3, 93));
+      }
 
-        if (day <= sortedDates.length) {
-          cumActual += drivenDatesMap[sortedDates[day - 1]];
-          actualData.push(cumActual);
-        } else if (sortedDates.length === 0 && day === 1) {
-          actualData.push(0);
-        }
+      // สร้างข้อมูลผลงานจริงสะสม (Actual) เฉพาะวันทำการถึงปัจจุบัน (ตรงกับหัวการ์ด 100%)
+      for (let i = 0; i < elapsedWorkingDays; i++) {
+        const schedDate = workingDaysSchedule[i];
+        const cumCount = Object.values(progressRecords).filter(r => 
+          r && r.status === 'driven' && r.date && (r.date <= schedDate || (i === elapsedWorkingDays - 1 && r.date <= curDate))
+        ).length;
+        actualData.push(cumCount);
       }
 
       return {
@@ -6037,7 +6181,7 @@
           labels: labels,
           datasets: [
             {
-              label: 'แผนงานสะสม (3 ต้น/วัน)',
+              label: 'แผนงานสะสม (3 ต้น/วันทำการ)',
               data: planData,
               borderColor: '#ed6845',
               borderWidth: 2.5,
@@ -6091,10 +6235,31 @@
               }
             },
             tooltip: {
-              backgroundColor: '#34383b',
+              backgroundColor: '#1e293b',
               titleFont: { family: 'Sarabun', size: 12, weight: 'bold' },
               bodyFont: { family: 'Sarabun', size: 12 },
-              padding: 8
+              padding: 10,
+              callbacks: {
+                title: function(items) {
+                  if (!items || items.length === 0) return '';
+                  const idx = items[0].dataIndex;
+                  const dayNum = idx + 1;
+                  const dateStr = workingDaysSchedule[idx] || '';
+                  if (dateStr) {
+                    const parts = dateStr.split('-');
+                    return `วันทำการ D${dayNum} (${parts[2]}/${parts[1]}/${parts[0]})`;
+                  }
+                  return `วันทำการ D${dayNum}`;
+                },
+                label: function(context) {
+                  const val = context.parsed.y;
+                  if (context.datasetIndex === 0) {
+                    return ` แผนงานสะสม: ${val} ต้น (3 ต้น/วันทำการ)`;
+                  } else {
+                    return ` ผลงานจริงสะสม: ${val} ต้น`;
+                  }
+                }
+              }
             }
           },
           scales: {
@@ -6107,7 +6272,7 @@
             },
             x: {
               grid: { color: '#f1f5f9' },
-              title: { display: true, text: 'วันทำการ (Days: D1 - D31)', font: { family: 'Sarabun', size: 11, weight: 'bold' }, color: '#475569' },
+              title: { display: true, text: 'วันทำการ (Days: D1 - D31: ไม่นับวันอาทิตย์ & วันหยุดราชการ)', font: { family: 'Sarabun', size: 11, weight: 'bold' }, color: '#475569' },
               ticks: { maxTicksLimit: 16, font: { family: 'Sarabun', weight: 'bold' }, color: '#34383b' }
             }
           }
@@ -6786,23 +6951,18 @@
         return a.pile.no - b.pile.no;
       });
 
-      // 1. Calculate Elapsed Working Days & Cumulative Plan (ปรับตามวันที่ที่เลือก)
+            // 1. Calculate Elapsed Working Days & Cumulative Plan (ไม่นับวันอาทิตย์และวันหยุดราชการ)
       const drivenRecords = Object.values(progressRecords).filter(r => r && r.status === 'driven');
       const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
       
+      const projectStartDate = (uniqueDates.length > 0) ? uniqueDates[0] : (curDate || todayStr);
+      const workingDaysSchedule = getWorkingDaysSchedule(projectStartDate, 31);
+      
       let elapsedDays = 1;
-      if (uniqueDates.length > 0) {
-        const startDate = uniqueDates[0];
-        if (curDate >= startDate) {
-          const d1 = new Date(startDate + 'T00:00:00');
-          const d2 = new Date(curDate + 'T00:00:00');
-          const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
-          elapsedDays = Math.min(31, Math.max(uniqueDates.filter(d => d <= curDate).length, diffDays));
-        } else {
-          elapsedDays = 1;
-        }
+      if (curDate >= projectStartDate) {
+        elapsedDays = workingDaysSchedule.filter(d => d <= curDate).length;
       }
-      elapsedDays = Math.min(Math.max(elapsedDays, 1), 31);
+      elapsedDays = Math.min(31, Math.max(1, elapsedDays));
       const planCumCount = Math.min(elapsedDays * 3, 93);
       const variance = drivenCount - planCumCount; // negative means delayed, positive means ahead
 
