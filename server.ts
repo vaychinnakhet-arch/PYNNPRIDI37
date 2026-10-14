@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 
+dotenv.config({ path: '.env.local' });
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -315,6 +316,71 @@ app.post('/api/supabase/sync', async (req, res) => {
     console.error('API Error:', err);
     res.status(500).json({ error: err.message || 'Server error' });
   }
+});
+
+// AI Proxy Endpoint (keeps API key secure on server)
+app.post('/api/ai/generate', async (req, res) => {
+  const apiKey = process.env.GEMINI_API_KEY || '';
+  if (!apiKey) {
+    return res.status(503).json({
+      error: 'GEMINI_API_KEY is not configured on the server. Please set it in .env',
+    });
+  }
+
+  try {
+    const { model = 'gemini-2.5-flash', contents, config, prompt } = req.body;
+    const modelName = String(model).replace(/^models\//, '');
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+    const payload: any = {};
+    if (contents) {
+      payload.contents = contents;
+    } else if (prompt) {
+      payload.contents = [{ parts: [{ text: prompt }] }];
+    }
+
+    if (config?.systemInstruction) {
+      payload.systemInstruction = {
+        parts: [{ text: typeof config.systemInstruction === 'string' ? config.systemInstruction : config.systemInstruction.text }]
+      };
+    }
+    if (config?.responseMimeType) {
+      payload.generationConfig = { responseMimeType: config.responseMimeType };
+    }
+
+    const aiRes = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await aiRes.json();
+    if (!aiRes.ok) {
+      console.error('Gemini API Error:', data);
+      return res.status(aiRes.status).json({ error: data.error?.message || 'Gemini API call failed' });
+    }
+
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    res.json({ text, candidates: data.candidates });
+  } catch (err: any) {
+    console.error('AI Proxy Error:', err);
+    res.status(500).json({ error: err.message || 'Internal server error during AI analysis' });
+  }
+});
+
+// Explicit Route for serving 3D Model GLB
+app.get('/model.glb', (req, res) => {
+  const modelPath = path.join(__dirname, 'model.glb');
+  if (fs.existsSync(modelPath)) {
+    res.setHeader('Content-Type', 'model/gltf-binary');
+    return res.sendFile(modelPath);
+  }
+  const publicModel = path.join(__dirname, 'public', 'model.glb');
+  if (fs.existsSync(publicModel)) {
+    res.setHeader('Content-Type', 'model/gltf-binary');
+    return res.sendFile(publicModel);
+  }
+  res.status(404).send('model.glb not found');
 });
 
 // Explicit Route for Piling CAD & 3D

@@ -1,3 +1,150 @@
+:root {
+  --p-density: 1;
+  --p-scale: 1;
+  --p-color-amount: 0.65;
+
+  /* --- FLAT POP INK SOFT DESIGN SYSTEM --- */
+  /* Paper Surfaces & Canvas (Soft, warm, tactile) */
+  --color-bg-app: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f1f5f9;
+  --color-border: #0f172a;        /* Crisp Solid Black Ink Border */
+  --color-border-soft: #1e293b;   /* Secondary Dark Ink Border */
+
+  /* Deep Soft Ink Typography (No harsh pure-black) */
+  --ink-primary: #1e293b;        /* Deep Soft Slate Ink */
+  --ink-secondary: #475569;      /* Balanced Neutral Ink */
+  --ink-muted: #64748b;          /* Gentle Supporting Ink */
+  --ink-subtle: #94a3b8;         /* Soft Border & Icon Ink */
+
+  /* Flat Pop Semantic Accents (Distinct, cheerful, soft pastel base + rich ink) */
+  /* 1. Emerald Pop: Pass, Done, Healthy */
+  --pop-emerald: #10b981;
+  --pop-emerald-ink: #065f46;
+  --pop-emerald-soft: #ecfdf5;
+  --pop-emerald-border: #a7f3d0;
+
+  /* 2. Rose Pop: Defect, Attention, Critical */
+  --pop-rose: #f43f5e;
+  --pop-rose-ink: #9f1239;
+  --pop-rose-soft: #fff1f2;
+  --pop-rose-border: #fecdd3;
+
+  /* 3. Amber Pop: In-Progress, Inspection, Warning */
+  --pop-amber: #f59e0b;
+  --pop-amber-ink: #92400e;
+  --pop-amber-soft: #fffbeb;
+  --pop-amber-border: #fde68a;
+
+  /* 4. Indigo Pop: Actions, Primary, Navigation */
+  --pop-indigo: #6366f1;
+  --pop-indigo-ink: #3730a3;
+  --pop-indigo-soft: #eef2ff;
+  --pop-indigo-border: #c7d2fe;
+
+  /* 5. Sky Pop: 3D CAD, Piling Coordinates, Targets */
+  --pop-sky: #0ea5e9;
+  --pop-sky-ink: #0369a1;
+  --pop-sky-soft: #f0f9ff;
+  --pop-sky-border: #bae6fd;
+
+  /* 6. Tangerine Pop: Milestone, 100%, Brand Highlight */
+  --pop-tangerine: #ea580c;
+  --pop-tangerine-ink: #9a3412;
+  --pop-tangerine-soft: #fff7ed;
+  --pop-tangerine-border: #fed7aa;
+
+  /* Compatibility Mapping */
+  --color-text-main: var(--ink-primary);
+  --color-text-muted: var(--ink-muted);
+  --color-primary: var(--pop-indigo);
+  --color-success: var(--pop-emerald);
+  --color-warning: var(--pop-amber);
+  --color-danger: var(--pop-rose);
+
+  /* Typography Font Stacks */
+  --font-display: 'Prompt', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Prompt', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Sarabun', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-data: 'Montserrat', 'JetBrains Mono', -apple-system, BlinkMacSystemFont, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typographic Hierarchy Scale (Bound to --p-scale) */
+  --text-hero: calc(2.25rem * var(--p-scale, 1));     /* 36px */
+  --text-title: calc(1.5rem * var(--p-scale, 1));     /* 24px */
+  --text-subtitle: calc(1.25rem * var(--p-scale, 1));  /* 20px */
+  --text-h3: calc(1.125rem * var(--p-scale, 1));       /* 18px */
+  --text-base: calc(0.9375rem * var(--p-scale, 1));    /* 15px */
+  --text-sm: calc(0.8125rem * var(--p-scale, 1));      /* 13px */
+  --text-xs: calc(0.6875rem * var(--p-scale, 1));      /* 11px */
+  --text-stat: calc(1.75rem * var(--p-scale, 1));     /* 28px tabular stat */
+
+  /* Line Heights for Thai + English Harmony */
+  --leading-display: 1.15;
+  --leading-heading: 1.3;
+  --leading-body: 1.55;
+  --leading-tight: 1.25;
+  --leading-table: 1.4;
+
+  /* 4-Unit Base Spacing Scale */
+  --space-1: calc(0.25rem * var(--p-density, 1));
+  --space-2: calc(0.5rem * var(--p-density, 1));
+  --space-3: calc(0.75rem * var(--p-density, 1));
+  --space-4: calc(1rem * var(--p-density, 1));
+  --space-5: calc(1.25rem * var(--p-density, 1));
+  --space-6: calc(1.5rem * var(--p-density, 1));
+  --space-8: calc(2rem * var(--p-density, 1));
+
+  /* Elevation */
+  --shadow-subtle: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-overlay: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+}
+
+/* System-Wide Typography Architecture */
+body {
+  font-family: var(--font-body);
+  line-height: var(--leading-body);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.015em;
+}
+
+/* Universal Tabular Numerics for Data Precision */
+.tabular-nums,
+.percentage-text,
+.exec-kpi-val,
+.pile-stat-val,
+.stat-counter,
+.coordinate-val,
+#main-table td,
+#main-table th,
+#common-defect-unified-table td,
+.card-pile-metric,
+.report-table td,
+.report-table th {
+  font-variant-numeric: tabular-nums lining-nums !important;
+  font-feature-settings: "tnum" 1, "lnum" 1 !important;
+}
+
+/* Status Badges Unified Typography */
+.status-badge,
+.nav-step-badge,
+.common-cap-badge,
+.badge-status {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+
+
 /* Refined first-page experience */
 #splash-screen {
   --splash-ink: #1e293b;
@@ -2029,42 +2176,46 @@ th.qc-current-week {
 }
 
 .common-defect-status-card {
-  --defect-accent: #0f172a;
-  --defect-border: #0f172a;
+  --defect-accent: var(--ink-primary);
+  --defect-border: var(--color-border);
   --defect-surface: #ffffff;
-  --defect-head-bg: #f8fafc;
+  --defect-head-bg: var(--color-surface-soft);
   min-width: 0;
   overflow: hidden;
-  border: 2.5px solid #0f172a;
+  border: 1px solid var(--defect-border);
   border-radius: 1rem;
   background: var(--defect-surface);
-  box-shadow: 0 5px 0 #0f172a;
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
 }
 
 .common-defect-status-card.is-fixed {
-  --defect-accent: #15803d;
-  --defect-head-bg: #dcfce7;
-  --defect-surface: #f0fdf4;
+  --defect-border: var(--pop-emerald-border);
+  --defect-accent: var(--pop-emerald-ink);
+  --defect-head-bg: var(--pop-emerald-soft);
+  --defect-surface: #ffffff;
 }
 
 .common-defect-status-card.is-left {
-  --defect-accent: #dc2626;
-  --defect-head-bg: #ffe4e6;
-  --defect-surface: #fff1f2;
+  --defect-border: var(--pop-rose-border);
+  --defect-accent: var(--pop-rose-ink);
+  --defect-head-bg: var(--pop-rose-soft);
+  --defect-surface: #ffffff;
 }
 
 .common-defect-status-card.is-pending {
-  --defect-accent: #d97706;
-  --defect-head-bg: #fef3c7;
-  --defect-surface: #fffbeb;
+  --defect-border: var(--pop-amber-border);
+  --defect-accent: var(--pop-amber-ink);
+  --defect-head-bg: var(--pop-amber-soft);
+  --defect-surface: #ffffff;
 }
 
 .common-defect-status-card.is-uninspected {
-  --defect-accent: #4f46e5;
-  --defect-head-bg: #e0e7ff;
-  --defect-surface: #f8faff;
+  --defect-border: var(--pop-indigo-border);
+  --defect-accent: var(--pop-indigo-ink);
+  --defect-head-bg: var(--pop-indigo-soft);
+  --defect-surface: #ffffff;
 }
 
 .common-defect-status-heading {
@@ -2769,11 +2920,11 @@ th.qc-current-week {
   font-size: 0.62rem;
 }
 
-.paper-status-badge.is-passed { background: #dcfce7; color: #047857; }
-.paper-status-badge.is-left { background: #ffe4e6; color: #dc2626; }
-.paper-status-badge.is-pending { background: #fef3c7; color: #b45309; }
-.paper-status-badge.is-unchecked { background: #e0e7ff; color: #4338ca; }
-.paper-status-badge.is-clear { background: #f1f5f9; color: #475569; }
+.paper-status-badge.is-passed { background: var(--pop-emerald-soft, #ecfdf5); color: var(--pop-emerald-ink, #065f46); border: 1px solid var(--pop-emerald-border, #a7f3d0); }
+.paper-status-badge.is-left { background: var(--pop-rose-soft, #fff1f2); color: var(--pop-rose-ink, #9f1239); border: 1px solid var(--pop-rose-border, #fecdd3); }
+.paper-status-badge.is-pending { background: var(--pop-amber-soft, #fffbeb); color: var(--pop-amber-ink, #92400e); border: 1px solid var(--pop-amber-border, #fde68a); }
+.paper-status-badge.is-unchecked { background: var(--pop-indigo-soft, #eef2ff); color: var(--pop-indigo-ink, #3730a3); border: 1px solid var(--pop-indigo-border, #c7d2fe); }
+.paper-status-badge.is-clear { background: var(--color-surface-soft, #f1f5f9); color: var(--ink-secondary, #475569); border: 1px solid var(--color-border, #e2e8f0); }
 
 .common-defect-excel-table tfoot td {
   height: 3.25rem;
@@ -4041,17 +4192,28 @@ body:not(.is-line-capturing) #main-app-container {
 
 #main-table.table-fit-screen th,
 #main-table.table-fit-screen td {
-  padding-left: 2px !important;
-  padding-right: 2px !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  line-height: var(--leading-table) !important;
+  font-variant-numeric: tabular-nums lining-nums;
+  vertical-align: middle;
 }
 
 #main-table.table-fit-screen .percentage-text {
-  font-size: 0.72rem !important;
+  font-family: var(--font-data);
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
 }
 
 #main-table.table-fit-screen .room-col-header,
 #main-table.table-fit-screen .floor-col-header {
-  font-size: 0.72rem !important;
+  font-family: var(--font-heading);
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
 }
 
 #main-table th.task-summary-th,
@@ -4065,8 +4227,10 @@ body:not(.is-line-capturing) #main-app-container {
 }
 
 .table-cell .sub-task-name {
-  font-size: 7.5px;
-  line-height: 1;
+  font-family: var(--font-body);
+  font-size: 8.5px;
+  line-height: 1.25;
+  font-weight: 600;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5363,25 +5527,28 @@ body:not(.is-line-capturing) .modal .modal-content {
 
 /* Splash Workflow Cards */
 .workflow-card {
-  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  border-radius: 1rem !important;
 }
 
 .workflow-card:hover {
-  border-color: var(--play-ink, #253047) !important;
+  border-color: #6366f1 !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--play-ink, #253047) !important;
+  box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.15), 0 4px 6px -2px rgba(15, 23, 42, 0.05) !important;
 }
 
 .workflow-card:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--play-ink, #253047) !important;
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
 }
 
-/* Update Modal Nintendo Paper Pop styling */
+/* Update Modal Clean Styling */
 #updateModal .bg-\[\#FFFDF9\] {
-  border: 2.5px solid var(--play-ink, #253047) !important;
-  border-bottom: 6px solid var(--play-ink, #253047) !important;
-  box-shadow: 0 20px 50px rgba(37, 48, 71, 0.28) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.18) !important;
+  border-radius: 1.5rem !important;
 }
 
 #updateModal #progress-input {
@@ -5392,139 +5559,139 @@ body:not(.is-line-capturing) .modal .modal-content {
 }
 
 #updateModal #modal-task-buttons button {
-  border-radius: 0.85rem !important;
-  font-weight: 800 !important;
+  border-radius: 0.75rem !important;
+  font-weight: 700 !important;
   font-size: 0.8rem !important;
+  border: 1px solid #cbd5e1 !important;
   transition: all 0.15s ease !important;
 }
 
 #updateModal #modal-task-buttons button:hover {
   transform: translateY(-1px);
+  border-color: #94a3b8 !important;
 }
 
 #updateModal #modal-task-buttons button:active {
-  transform: translateY(1px);
+  transform: translateY(0);
 }
 
-/* =========================================================
-   COMMON DEFECT CAPTURE MODAL - 2D LAYER PAPER MARIO STYLE
-   "ปรับปรุงหน้าเเคปเจอร์ defect ส่วนกลางให้ดูง่าย คุม style 2d layer paper mario nintendo ทั้งเมนูนี้"
-   ========================================================= */
+/* Common Defect Capture Modal - Refined Industrial Standard */
 #commonDefectCaptureModal .paper-mario-modal-box {
-  background-color: #faf8f2 !important;
-  border: 3px solid #0f172a !important;
-  box-shadow: 8px 8px 0 #0f172a !important;
-  border-radius: 1.75rem !important;
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.18) !important;
+  border-radius: 1.5rem !important;
 }
 
 .paper-mario-stitch-top {
   position: relative;
-  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%) !important;
-  border-bottom: 3px solid #0f172a !important;
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 }
 
 .paper-mario-card-layer {
   background: #ffffff;
-  border: 2px solid #0f172a !important;
-  box-shadow: 3.5px 3.5px 0 #0f172a !important;
-  border-radius: 1.25rem !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04) !important;
+  border-radius: 1rem !important;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .paper-mario-card-parchment {
-  background: #fffdf5 !important;
-  border: 2px solid #0f172a !important;
-  box-shadow: 3.5px 3.5px 0 #0f172a !important;
-  border-radius: 1.25rem !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  border-radius: 1rem !important;
 }
 
 .paper-mario-tip-banner {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
-  border: 2px solid #0f172a !important;
-  box-shadow: 2.5px 2.5px 0 #0f172a !important;
-  border-radius: 1rem !important;
+  border: 1px solid #f59e0b !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  border-radius: 0.75rem !important;
 }
 
-/* Paper Mario Checkbox & Group Item Cards */
+/* Checkbox & Group Item Cards */
 .paper-mario-cap-card {
   background: #ffffff;
-  border: 2px solid #0f172a !important;
-  box-shadow: 2.5px 2.5px 0 #0f172a !important;
-  border-radius: 0.85rem !important;
-  transition: all 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.15s ease;
 }
 .paper-mario-cap-card:hover {
-  transform: translate(1px, 1px);
-  box-shadow: 1.5px 1.5px 0 #0f172a !important;
-  background: #fffbeb !important;
+  transform: translateY(-1px);
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08) !important;
+  background: #f8fafc !important;
 }
 .paper-mario-cap-card:has(input:checked) {
-  background: #fffdf2 !important;
-  border-color: #0f172a !important;
-  box-shadow: 3.5px 3.5px 0 #b45309 !important;
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.12) !important;
 }
 
-/* Custom Checkbox inside Paper Mario Cards */
+/* Custom Checkbox inside Cards */
 .paper-mario-checkbox {
   appearance: none;
   -webkit-appearance: none;
   width: 1.25rem;
   height: 1.25rem;
-  border: 2px solid #0f172a !important;
-  border-radius: 0.4rem;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 0.375rem;
   background-color: #ffffff;
   display: grid;
   place-content: center;
   cursor: pointer;
-  box-shadow: 1.5px 1.5px 0 #0f172a;
-  transition: all 0.1s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: all 0.12s ease;
 }
 .paper-mario-checkbox:checked {
-  background-color: #f59e0b;
+  background-color: #10b981;
+  border-color: #059669 !important;
 }
 .paper-mario-checkbox:checked::before {
   content: "";
-  width: 0.65rem;
-  height: 0.4rem;
-  border-left: 2.5px solid #0f172a;
-  border-bottom: 2.5px solid #0f172a;
+  width: 0.6rem;
+  height: 0.35rem;
+  border-left: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
   transform: rotate(-45deg) translate(1px, -1px);
 }
 
-/* Solid Directional 2D Nintendo Buttons */
+/* Modal Action Buttons */
 .paper-mario-btn-primary {
-  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%) !important;
-  border: 2.5px solid #0f172a !important;
-  box-shadow: 0 4px 0 #78350f, 0 5px 0 #0f172a !important;
-  color: #0f172a !important;
-  font-weight: 900 !important;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
+  border: 1px solid #1d4ed8 !important;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.15s ease;
 }
 .paper-mario-btn-primary:hover {
-  transform: translateY(1px);
-  box-shadow: 0 3px 0 #78350f, 0 4px 0 #0f172a !important;
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%) !important;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25) !important;
 }
 .paper-mario-btn-primary:active {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 #78350f, 0 1px 0 #0f172a !important;
+  transform: scale(0.98);
 }
 
 .paper-mario-btn-secondary {
   background: #ffffff !important;
-  border: 2.5px solid #0f172a !important;
-  box-shadow: 3px 3px 0 #0f172a !important;
-  color: #0f172a !important;
-  font-weight: 800 !important;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+  color: #334155 !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.15s ease;
 }
 .paper-mario-btn-secondary:hover {
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0 #0f172a !important;
   background: #f8fafc !important;
+  border-color: #94a3b8 !important;
 }
 .paper-mario-btn-secondary:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 #0f172a !important;
+  transform: scale(0.98);
 }
 
 .paper-mario-badge-tag {
@@ -5532,11 +5699,12 @@ body:not(.is-line-capturing) .modal .modal-content {
   align-items: center;
   gap: 0.35rem;
   padding: 0.2rem 0.55rem;
-  border: 1.5px solid #0f172a;
-  box-shadow: 1.5px 1.5px 0 #0f172a;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   border-radius: 0.5rem;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 700;
+  background: #ffffff;
 }
 
 /* Custom Clean Scrollbar for Paper Mario Modal */
@@ -5554,6 +5722,144 @@ body:not(.is-line-capturing) .modal .modal-content {
 }
 #common-cap-groups-list::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+
+/* =========================================================================
+   CRISP SOLID BLACK INK BORDER SYSTEM (User Request: เส้นกรอบ สีดำ ไม่เอาสีเทา)
+   ========================================================================= */
+#unified-controls,
+.control-deck {
+  border: 2px solid #0f172a !important;
 }
 
+.executive-kpi-card,
+.workflow-card,
+#main-splash-container .border-2,
+#main-splash-container .border {
+  border-color: #0f172a !important;
+}
 
+.workflow-card {
+  border: 2px solid #0f172a !important;
+}
+
+#updateModal .bg-white,
+#updateModal .modal-content,
+#roomQrScannerModal .bg-white,
+#roomStatusHubModal .bg-white,
+#doorQrPrintModal .bg-white,
+#commonDefectCaptureModal .paper-mario-modal-box {
+  border: 2px solid #0f172a !important;
+}
+
+.action-btn,
+.view-toggle-btn.active,
+.control-group {
+  border-color: #0f172a !important;
+}
+
+.paper-mario-badge-tag {
+  border: 1.5px solid #0f172a !important;
+}
+
+/* =========================================================================
+   IMPECCABLE ADAPT: RESPONSIVE SYSTEM ACROSS MULTI-DEVICES
+   (Mobile, Tablet, Foldable, Desktop, Ultra-wide)
+   ========================================================================= */
+
+/* Safe Area Insets (iOS Notch, Home Indicator, Edge-to-Edge) */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Touch targets for mobile & coarse pointers (>= 42px) */
+@media (pointer: coarse) {
+  button,
+  .action-btn,
+  .view-toggle-btn,
+  .workflow-card,
+  .executive-kpi-card,
+  input,
+  select {
+    min-height: 42px;
+    touch-action: manipulation;
+  }
+}
+
+@media (hover: none) {
+  .workflow-card:hover,
+  .action-btn:hover,
+  .executive-kpi-card:hover {
+    transform: none !important;
+  }
+  .workflow-card:active,
+  .action-btn:active,
+  .executive-kpi-card:active {
+    transform: scale(0.98) !important;
+  }
+}
+
+/* QC Matrix Sticky Identification Column for Mobile / Tablet */
+@media (max-width: 1279px) {
+  #main-table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  #main-table th:first-child,
+  #main-table td:first-child {
+    position: sticky !important;
+    left: 0 !important;
+    background: #ffffff !important;
+    z-index: 10 !important;
+    box-shadow: 2px 0 5px -1px rgba(15, 23, 42, 0.15) !important;
+  }
+  #main-table thead th:first-child {
+    background: #f8fafc !important;
+    z-index: 20 !important;
+  }
+}
+
+/* Control Deck Mobile & Tablet Swipe Strip */
+@media (max-width: 768px) {
+  #unified-controls {
+    padding: 0.5rem 0.65rem !important;
+  }
+  #unified-controls .flex-wrap {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  #unified-controls .flex-wrap::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+/* Splash Screen Max-Width on Ultra-wide 4K (Prevent stretching) */
+@media (min-width: 1600px) {
+  #splash-screen,
+  #main-splash-container {
+    max-width: 1680px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Modals Mobile Adaptation */
+@media (max-width: 639px) {
+  #updateModal .modal-content,
+  #updateModal .bg-white,
+  #roomQrScannerModal .bg-white,
+  #roomStatusHubModal .bg-white,
+  #doorQrPrintModal .bg-white,
+  #commonDefectCaptureModal .paper-mario-modal-box {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    margin: 8px auto !important;
+    max-height: 90vh !important;
+    border-radius: 16px !important;
+  }
+}

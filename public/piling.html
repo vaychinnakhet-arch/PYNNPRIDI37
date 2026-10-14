@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Pynn pridi 37 - ติดตามงานเสาเข็ม 93 ต้น & รายงาน (3D WebGL & Plan)</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Sarabun:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Montserrat:wght@600;700;800;900&family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -20,20 +20,71 @@
 
   <style>
     :root {
-      --fp-paper: #fffdf8;
-      --fp-bg: #eef7f4;
-      --fp-ink: #34383b;
-      --fp-muted: #667277;
-      --fp-line: #475569;
-      --fp-blue: #7dbbd0;
-      --fp-blue-soft: #dff1f5;
-      --fp-green: #98cfad;
-      --fp-green-soft: #e5f4e9;
-      --fp-green-bold: #10b981;
-      --fp-yellow: #ffc45b;
-      --fp-yellow-soft: #fff0c8;
-      --fp-coral: #ed6845;
-      --fp-shadow: #c9dfd9;
+      --p-scale: 1;
+
+      --p-color-amount: 0.65;
+
+      /* Flat Pop Ink Soft Palette for 3D Piling CAD */
+      --fp-paper: #ffffff;
+      --fp-bg: #f8fafc;
+      --fp-ink: #1e293b;            /* Deep Soft Slate Ink */
+      --fp-ink-secondary: #475569;  /* Balanced Ink */
+      --fp-muted: #64748b;          /* Soft Supporting Ink */
+      --fp-line: #0f172a;           /* Crisp Solid Black Ink Border */
+      --fp-line-soft: #1e293b;      /* Secondary Dark Ink Border */
+
+      /* Soft Pop Semantic Accents */
+      --fp-green: #10b981;          /* Emerald Pop (Driven / Passed) */
+      --fp-green-ink: #065f46;
+      --fp-green-soft: #ecfdf5;
+      --fp-green-border: #a7f3d0;
+      --fp-green-bold: #059669;
+
+      --fp-rose: #f43f5e;           /* Rose Pop (Tolerance exceeded / Alert) */
+      --fp-rose-ink: #9f1239;
+      --fp-rose-soft: #fff1f2;
+      --fp-rose-border: #fecdd3;
+
+      --fp-blue: #0284c7;           /* Sky Blue Pop (Piling Target / 3D Raycast) */
+      --fp-blue-ink: #0369a1;
+      --fp-blue-soft: #f0f9ff;
+      --fp-blue-border: #bae6fd;
+
+      --fp-yellow: #f59e0b;         /* Honey Amber Pop (Pending / Selection) */
+      --fp-yellow-ink: #92400e;
+      --fp-yellow-soft: #fffbeb;
+      --fp-yellow-border: #fde68a;
+
+      --fp-coral: #ea580c;          /* Tangerine Coral Pop (Primary Brand Highlight) */
+      --fp-coral-ink: #9a3412;
+      --fp-coral-soft: #fff7ed;
+      --fp-coral-border: #fed7aa;
+
+      --fp-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+
+      /* Typography Font Stacks */
+      --font-display: 'Prompt', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Prompt', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-body: 'Sarabun', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-data: 'Montserrat', 'JetBrains Mono', -apple-system, BlinkMacSystemFont, monospace;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Typographic Hierarchy Scale */
+      --text-hero: calc(2.25rem * var(--p-scale, 1));
+      --text-title: calc(1.5rem * var(--p-scale, 1));
+      --text-subtitle: calc(1.25rem * var(--p-scale, 1));
+      --text-h3: calc(1.125rem * var(--p-scale, 1));
+      --text-base: calc(0.9375rem * var(--p-scale, 1));
+      --text-sm: calc(0.8125rem * var(--p-scale, 1));
+      --text-xs: calc(0.6875rem * var(--p-scale, 1));
+      --text-stat: calc(1.75rem * var(--p-scale, 1));
+
+      /* Line Heights */
+      --leading-display: 1.15;
+      --leading-heading: 1.3;
+      --leading-body: 1.55;
+      --leading-tight: 1.25;
+      --leading-table: 1.45;
     }
 
     body {
@@ -41,9 +92,46 @@
       overflow: hidden;
       background: var(--fp-bg);
       color: var(--fp-ink);
-      font-family: 'Sarabun', sans-serif;
+      font-family: var(--font-body);
+      line-height: var(--leading-body);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
       user-select: none;
       -webkit-user-select: none;
+    }
+
+    h1, h2, h3, h4, .font-heading {
+      font-family: var(--font-heading);
+      line-height: var(--leading-heading);
+      letter-spacing: -0.015em;
+    }
+
+    /* Tabular Numerics for Piling Menu, Coordinates & Counters */
+    .font-mono,
+    .tabular-nums,
+    #stat-driven-count,
+    #stat-driven-pct,
+    #stat-today-count,
+    #stat-remain-count,
+    #card-pile-northing,
+    #card-pile-easting,
+    #card-pile-actual-top,
+    #card-pile-diff-text,
+    #card-pile-actual-n,
+    #card-pile-actual-e,
+    #card-pile-coord-diff-text,
+    #rep-today-table td,
+    #rep-today-table th,
+    .rep-metric-val,
+    .pile-table td,
+    .pile-table th {
+      font-variant-numeric: tabular-nums lining-nums !important;
+      font-feature-settings: "tnum" 1, "lnum" 1 !important;
+    }
+
+    /* Piling Table Clean Leading & Spacing */
+    table td, table th {
+      line-height: var(--leading-table);
     }
 
     #viewport {
@@ -53,79 +141,92 @@
       top: 0;
       left: 0;
       z-index: 1;
+      touch-action: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
 
     .pop-card {
-      background: var(--fp-paper);
-      border: 2px solid var(--fp-line);
-      border-radius: 12px;
-      box-shadow: 3px 4px 0 var(--fp-shadow);
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
     }
 
     .pop-header {
-      background: var(--fp-yellow);
-      border: 2px solid var(--fp-line);
-      border-radius: 12px;
-      box-shadow: 3px 3px 0 #475569;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
     }
 
     .pop-btn {
-      background: #f4ece7;
-      color: var(--fp-ink);
-      border: 1.5px solid var(--fp-line);
-      border-radius: 8px;
-      box-shadow: 2px 2px 0 var(--fp-shadow);
+      background: #ffffff;
+      color: var(--fp-ink, #1e293b);
+      border: 1px solid var(--fp-line, #e2e8f0);
+      border-radius: 10px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
       font-weight: 700;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+      transition: all 0.15s ease;
       cursor: pointer;
     }
     .pop-btn:hover {
-      background: var(--fp-yellow-soft);
-      transform: translate(-1px, -1px);
-      box-shadow: 3px 3px 0 var(--fp-shadow);
+      background: #f8fafc;
+      border-color: #94a3b8;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
+      transform: translateY(-1px);
     }
     .pop-btn:active {
-      transform: translate(1.5px, 1.5px);
-      box-shadow: 0 0 0 transparent;
+      transform: translateY(0);
+      box-shadow: none;
     }
     .pop-btn.active {
-      background: var(--fp-green);
-      box-shadow: 2px 2px 0 #475569;
-      color: #1e3a29;
+      background: #ecfdf5;
+      border-color: #10b981;
+      color: #065f46;
     }
     .pop-btn-primary {
-      background: var(--fp-coral);
-      color: #fffaf7;
-      border: 1.8px solid var(--fp-line);
+      background: #4f46e5;
+      color: #ffffff;
+      border: 1px solid #4338ca;
       border-radius: 9px;
-      box-shadow: 2.5px 2.5px 0 #9c3b23;
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
       font-weight: 800;
       cursor: pointer;
-      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      transition: all 0.15s ease;
     }
     .pop-btn-primary:hover {
-      background: #dc5b3a;
-      transform: translate(-1px, -1px);
-      box-shadow: 3.5px 3.5px 0 #9c3b23;
+      background: #4338ca;
+      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+      transform: translateY(-1px);
     }
     .pop-btn-primary:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0 0 0 transparent;
+      transform: translateY(0);
+      box-shadow: none;
     }
 
     .pop-btn-green {
       background: #10b981;
       color: white;
-      border: 1.8px solid #064e3b;
+      border: 1px solid #059669;
       border-radius: 9px;
-      box-shadow: 2px 2px 0 #064e3b;
+      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25);
       font-weight: 800;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
     .pop-btn-green:hover {
       background: #059669;
-      transform: translate(-1px, -1px);
-      box-shadow: 3px 3px 0 #064e3b;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
     }
 
     .palette-dot {
@@ -261,23 +362,33 @@
     #report-page-card.is-landscape #report-sec-scurve .chart-wrapper {
       height: 210px !important;
     }
-    /* Floating HUD Responsive Layout (ปรับขนาดให้กะทัดรัด ไม่กว้างเกินไป กว้างพอดี 190px) */
+    /* Floating HUD Responsive Layout - Impeccable 4-Unit Rhythm */
     .floating-hud {
-      width: 190px;
-      max-width: 190px;
-      top: 105px;
-      max-height: calc(100vh - 125px);
+      width: 215px;
+      max-width: 215px;
+      top: calc(56px * var(--p-density, 1));
+      max-height: calc(100vh - 75px);
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      transition: top 0.15s ease-out, width 0.15s ease-out;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    @media (min-width: 1280px) {
+    @media (max-width: 1279px) {
       .floating-hud {
-        width: 195px;
-        max-width: 195px;
-        top: 56px;
-        max-height: calc(100vh - 75px);
+        top: calc(64px * var(--p-density, 1));
+        max-height: calc(100vh - 80px);
+      }
+    }
+    @media (max-width: 768px) {
+      .floating-hud {
+        width: calc(100vw - 16px);
+        max-width: calc(100vw - 16px);
+        left: 8px;
+        top: auto;
+        bottom: 56px;
+        max-height: 52vh;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
       }
     }
     .floating-hud::-webkit-scrollbar {
@@ -640,7 +751,7 @@
       <span class="text-[#ed6845]">P</span>YNN PRIDI 37 PILING TRACKER
     </h2>
     <p id="loading-text" class="text-xs text-[#667277] mt-1 font-semibold">กำลังโหลดแปลนเสาเข็ม 93 ต้น...</p>
-    <div class="w-56 h-2.5 bg-white border border-[#475569] rounded-full mt-3 overflow-hidden shadow-[2px_2px_0_#c9dfd9]">
+    <div class="w-56 h-2.5 bg-white border-1.5 border-slate-900 rounded-full mt-3 overflow-hidden shadow-xs">
       <div id="loading-bar" class="h-full bg-[#10b981] w-0 transition-all duration-200"></div>
     </div>
   </div>
@@ -648,36 +759,44 @@
   <!-- Top Bar: Brand, Stats & Quick Access Buttons -->
   <!-- Top Bar: Single Unified Responsive Executive Navbar -->
   <header class="absolute top-2 left-2 right-2 z-30 pointer-events-none">
-    <div class="pop-header px-3 py-1.5 pointer-events-auto flex flex-wrap xl:flex-nowrap items-center justify-between gap-2 shadow-[3px_3px_0_#475569]">
+    <div class="pop-header px-3.5 py-2 pointer-events-auto flex flex-wrap xl:flex-nowrap items-center justify-between gap-2.5 shadow-sm border-2 border-slate-900 rounded-2xl bg-white/95 backdrop-blur-md">
       
-      <!-- Left: Brand & Project Info -->
-      <div class="flex items-center gap-2">
-        <a href="index.html" class="px-2 py-1 rounded-md bg-white hover:bg-slate-100 border border-[#475569] text-[#34383b] font-black text-[11px] flex items-center gap-1 shadow-xs transition-colors" title="กลับหน้าแรก (Home)">
+      <!-- Left: Brand & Unified Navigation Shell -->
+      <div class="flex items-center gap-2.5">
+        <a href="index.html" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border-1.5 border-slate-900 text-slate-900 font-bold text-[11px] flex items-center gap-1 shadow-xs transition-colors" title="กลับหน้าแรก (Home)">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           <span class="hidden sm:inline">หน้าแรก</span>
         </a>
-        <div class="w-7 h-7 rounded-lg bg-[#107c41] text-white border-2 border-[#475569] flex items-center justify-center font-montserrat font-black text-xs shadow-[1px_1px_0_#475569]">
+        <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-montserrat font-black text-xs shadow-sm">
           P37
         </div>
         <div>
           <div class="flex items-center gap-1.5">
-            <h1 class="text-xs font-black font-montserrat tracking-tight text-[#34383b]">
+            <h1 class="text-xs font-black font-montserrat tracking-tight text-slate-800">
               Pynn pridi 37
             </h1>
-            <span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-white border border-[#475569] text-[#ed6845]">
+            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
               93 ต้น
             </span>
           </div>
-          <p class="text-[9.5px] text-[#555d61] font-bold leading-none hidden sm:block">แผนงานเสาเข็ม 3 ต้น/วัน</p>
+          <p class="text-[9.5px] text-slate-500 font-semibold leading-none hidden sm:block">แผนงานเสาเข็ม & คุณภาพโครงสร้าง</p>
         </div>
 
+        <!-- Piling Focus Badge (100% Piling Phase 1) -->
+        <div id="piling-focus-badge" class="flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-xl border-1.5 border-slate-900 shadow-xs ml-1">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-emerald-900 text-[11px] font-bold flex items-center gap-1.5 whitespace-nowrap" style="font-family: 'Prompt', 'Sarabun', 'Noto Sans Thai', sans-serif;">
+            <i data-lucide="box" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>แบบจำลอง 3D เสาเข็ม 93 ต้น</span>
+          </span>
         </div>
-
+      </div>
       <!-- Center: Key Metrics & Date Selector -->
 
-      <div class="flex items-center gap-2 text-xs bg-white/70 px-2 py-1 rounded-lg border border-[#475569]/30">
+
+      <div class="pop-header-metrics flex items-center gap-2 text-xs bg-white/70 px-2 py-1 rounded-lg border-1.5 border-slate-900">
         <!-- Cumulative Metric -->
-        <div class="flex items-center gap-1.5 pr-2 border-r border-[#475569]/20">
+        <div class="flex items-center gap-1.5 pr-2 border-r-1.5 border-slate-900">
           <span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
           <span class="text-[10px] text-[#667277] font-bold hidden sm:inline">กดสะสม:</span>
           <span class="text-xs font-black text-[#34383b]">
@@ -687,8 +806,8 @@
         </div>
 
         <!-- Date & Today's Metric -->
-        <div class="flex items-center gap-1.5 pr-2 border-r border-[#475569]/20">
-          <input id="inp-report-date" type="date" class="text-[10px] bg-white border border-[#475569] rounded px-1 py-0.5 font-bold text-[#34383b] focus:outline-none">
+        <div class="flex items-center gap-1.5 pr-2 border-r-1.5 border-slate-900">
+          <input id="inp-report-date" type="date" class="text-[10px] bg-white border-1.5 border-slate-900 rounded px-1 py-0.5 font-bold text-[#34383b] focus:outline-none">
           <span class="text-[10px] text-[#667277] font-bold hidden sm:inline">กดวันนี้:</span>
           <span class="text-xs font-black text-[#34383b]">
             <span id="stat-today-count" class="text-[#0284c7]">0</span> ต้น
@@ -703,32 +822,32 @@
       </div>
 
       <!-- Right: Action Buttons (Grouped & Compact) -->
-      <div class="flex items-center gap-1.5">
-        <button id="btn-quick-select" class="pop-btn-green px-2.5 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#064e3b]" title="ระบุต้นที่กดด่วน">
+      <div class="pop-header-actions flex items-center gap-1.5">
+        <button id="btn-quick-select" class="pop-btn-green px-2.5 py-1 text-xs flex items-center gap-1 shadow-xs" title="ระบุต้นที่กดด่วน">
           <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
           <span class="hidden md:inline font-bold">ระบุต้นที่กด</span>
         </button>
 
-        <button id="btn-supabase-sync" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-[1.5px_1.5px_0_#1e3a8a] text-white" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
+        <button id="btn-supabase-sync" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs text-white" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
           <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
           <span class="font-bold hidden sm:inline" id="lbl-supabase-top-btn">บันทึก Supabase</span>
         </button>
 
-        <button id="btn-open-report" class="pop-btn-primary px-2.5 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#9c3b23]" title="หน้ารายงานความคืบหน้า">
+        <button id="btn-open-report" class="pop-btn-primary px-2.5 py-1 text-xs flex items-center gap-1 shadow-xs" title="หน้ารายงานความคืบหน้า">
           <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
           <span class="font-bold">หน้ารายงาน</span>
         </button>
 
-        <button id="btn-open-export" class="pop-btn px-2 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#475569]" style="background:#fff0c8;" title="ส่งออกภาพรายงาน PNG">
+        <button id="btn-open-export" class="pop-btn px-2 py-1 text-xs flex items-center gap-1 shadow-xs" style="background:#fff0c8;" title="ส่งออกภาพรายงาน PNG">
           <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ed6845]"></i>
           <span class="hidden sm:inline font-bold">ส่งออกภาพ</span>
         </button>
 
         <!-- เมนูเช็ค PCO & ข้อมูลค่า Co แต่ละต้น (กดแล้วกดที่เข็มจะได้ Popup Flat-Pop) -->
-        <button id="btn-pco-inspector" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-[1.5px_1.5px_0_#475569] transition-all hover:scale-102 cursor-pointer font-black border-2 border-[#475569]" style="background:#fef08a;" title="เครื่องมือเช็คข้อมูลแต่ละต้น (กดที่เครื่องมือนี้ แล้วไปคลิกที่เสาเข็ม จะมีข้อมูลเด้งขึ้นมา)">
+        <button id="btn-pco-inspector" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs transition-all hover:scale-102 cursor-pointer font-black border-2 border-slate-900" style="background:#fef08a;" title="เครื่องมือเช็คข้อมูลแต่ละต้น (กดที่เครื่องมือนี้ แล้วไปคลิกที่เสาเข็ม จะมีข้อมูลเด้งขึ้นมา)">
           <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#854d0e]"></i>
           <span id="lbl-pco-inspector-header" class="text-[#854d0e]">เครื่องมือเช็คข้อมูล</span>
-          <span id="badge-pco-inspect-mode" class="hidden px-1.5 py-0.2 rounded text-[9px] font-black bg-[#059669] text-white">ON</span>
+          <span id="badge-pco-inspect-mode" class="hidden px-2 py-0.5 rounded text-[9px] font-black bg-[#059669] text-white">ON</span>
         </button>
 
         <button id="btn-open-cotable" class="pop-btn px-2 py-1 text-xs flex items-center gap-1" style="background:#dff1f5;" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO รวมทั้งหมด 93 ต้น">
@@ -736,11 +855,11 @@
           <span class="hidden xl:inline font-bold">ตารางรวม</span>
         </button>
 
-        <button id="btn-reset-view" title="รีเซ็ตมุมมอง Top View" class="pop-btn p-1">
+        <button id="btn-reset-view" title="Top View (Reset Camera)" aria-label="Top View" class="pop-btn p-2 min-h-[38px] min-w-[38px] flex items-center justify-center">
           <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
         </button>
 
-        <button id="btn-fullscreen" title="เต็มจอ" class="pop-btn p-1">
+        <button id="btn-fullscreen" title="Fullscreen" aria-label="Fullscreen" class="pop-btn p-2 min-h-[38px] min-w-[38px] flex items-center justify-center">
           <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
         </button>
       </div>
@@ -749,16 +868,16 @@
   </header>
 
   <!-- Floating Toast when PCO Inspector Mode is active -->
-  <div id="toast-pco-inspect" class="fixed top-[108px] xl:top-14 left-1/2 -translate-x-1/2 z-30 bg-[#fef08a] border-2 border-[#475569] px-3 py-1 rounded-full shadow-[2px_2px_0_#475569] text-[11px] font-black text-[#854d0e] flex items-center gap-2 hidden pointer-events-auto transition-all max-w-[92vw]">
+  <div id="toast-pco-inspect" class="fixed top-[108px] xl:top-14 left-1/2 -translate-x-1/2 z-30 bg-[#fef08a] border-2 border-slate-900 px-3 py-1 rounded-full shadow-sm text-[11px] font-black text-[#854d0e] flex items-center gap-2 hidden pointer-events-auto transition-all max-w-[92vw]">
     <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
     <span class="truncate">โหมดเช็คข้อมูล: คลิกที่เสาเข็มเพื่อดูค่า PCO & Co</span>
-    <button id="btn-close-pco-toast" class="ml-1 px-1.5 py-0.2 rounded-full bg-white border border-[#475569] text-[9.5px] font-bold text-slate-700 hover:bg-slate-100 shadow-xs cursor-pointer shrink-0">ปิด</button>
+    <button id="btn-close-pco-toast" class="ml-1 px-2 py-0.5 rounded-full bg-white border-1.5 border-slate-900 text-[9.5px] font-bold text-slate-700 hover:bg-slate-100 shadow-xs cursor-pointer shrink-0">ปิด</button>
   </div>
 
   <!-- Left Floating Toolbar: Views & Pile Filters -->
-  <div id="floating-hud" class="floating-hud absolute left-2 top-[105px] xl:top-14 z-20 flex flex-col gap-1.5 pointer-events-auto w-[215px] xl:w-[225px] max-w-[225px]">
+  <div id="floating-hud" class="floating-hud absolute left-2 top-14 z-20 flex flex-col gap-2 pointer-events-auto w-[215px] xl:w-[225px] max-w-[225px]">
     <!-- Mobile HUD Collapse/Expand Bar (สำหรับหน้าจอมือถือ/Galaxy Z Fold) -->
-    <div class="flex items-center justify-between xl:hidden bg-white/95 px-2 py-1 rounded-lg border border-[#475569] shadow-xs">
+    <div class="flex items-center justify-between xl:hidden bg-white/95 px-2 py-1 rounded-lg border-1.5 border-slate-900 shadow-xs">
       <span class="text-[10px] font-black text-[#34383b] flex items-center gap-1">
         <i data-lucide="menu" class="w-3.5 h-3.5 text-[#ed6845]"></i> เมนูควบคุมแปลน/3D
       </span>
@@ -769,8 +888,8 @@
 
     <div id="floating-hud-body" class="flex flex-col gap-1.5">
     <!-- 1. มุมมอง (VIEWS) Card -->
-    <div id="card-views-control" class="pop-card p-2 flex flex-col gap-1.5 bg-[#fffdf8] border-2 border-[#475569] shadow-[2.5px_3px_0_#475569] rounded-xl">
-      <div class="flex items-center justify-between pb-0.5 border-b border-[#475569]/20">
+    <div id="card-views-control" class="pop-card p-2 flex flex-col gap-1.5 bg-[#fffdf8] border-2 border-slate-900 shadow-sm rounded-xl">
+      <div class="flex items-center justify-between pb-0.5 border-b-1.5 border-slate-900">
         <span class="text-[9.5px] font-black uppercase text-[#475569] tracking-wider flex items-center gap-1">
           <i data-lucide="compass" class="w-3.5 h-3.5 text-[#ed6845]"></i> มุมมอง (VIEWS)
         </span>
@@ -788,7 +907,7 @@
       </div>
 
       <!-- Sub-controls for 3D View Angles -->
-      <div id="sub-views-3d" class="flex flex-col gap-1 pt-1 border-t border-[#475569]/20">
+      <div id="sub-views-3d" class="flex flex-col gap-1 pt-1 border-t-1.5 border-slate-900">
         <span class="text-[8.5px] font-bold text-[#667277]">ปรับมุมมอง 3D:</span>
         <div class="grid grid-cols-3 gap-1 text-[9.5px]">
           <button id="btn-view-top-3d" type="button" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านบน (Top View ใน 3D)">
@@ -808,26 +927,26 @@
       </div>
     </div>
 
-    <div class="pop-card p-2 flex flex-col gap-2 bg-[#fffdf8] border-2 border-[#475569] shadow-[2.5px_3px_0_#475569] rounded-xl">
-      <div class="flex items-center justify-between pb-1 border-b border-[#475569]/20">
+    <div class="pop-card p-2 flex flex-col gap-2 bg-[#fffdf8] border-2 border-slate-900 shadow-sm rounded-xl">
+      <div class="flex items-center justify-between pb-1 border-b-1.5 border-slate-900">
         <span class="text-[9.5px] font-black uppercase text-[#34383b] flex items-center gap-1">
           <i data-lucide="sliders" class="w-3.5 h-3.5 text-[#ed6845]"></i> เลเยอร์แผนผัง (Flat-Pop)
         </span>
-        <span class="text-[8px] font-black px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+        <span class="text-[8px] font-black px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
           3D & แปลน
         </span>
       </div>
 
             <!-- 1. การ์ดงานเสาเข็ม (Piles Flat-Pop Card) - กดตรงไหนก็ได้เพื่อเปิด/ปิดทั้งหมด -->
-      <div id="sidebar-card-piles" class="p-1.5 rounded-lg border-2 transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-[1.5px_1.5px_0_#059669] ring-2 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none" title="คลิกเพื่อเปิด/ปิดงานเสาเข็มทั้งหมด">
+      <div id="sidebar-card-piles" class="p-1.5 rounded-lg border transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-xs ring-1 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none" title="คลิกเพื่อเปิด/ปิดงานเสาเข็มทั้งหมด">
         <!-- Main Header -->
         <div class="flex items-center justify-between" id="trigger-sidebar-piles">
           <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#10b981] animate-pulse" id="dot-sidebar-piles"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]" id="dot-sidebar-piles"></span>
             <i data-lucide="layers" class="w-3.5 h-3.5 text-[#059669]" id="icon-sidebar-piles"></i>
             <span class="text-[11px] font-black text-[#065f46]" id="title-sidebar-piles">งานเสาเข็ม (93 ต้น)</span>
           </div>
-          <span id="badge-sidebar-piles" class="text-[8.5px] font-black px-1.5 py-0.2 rounded-full bg-[#10b981] text-white">เปิด</span>
+          <span id="badge-sidebar-piles" class="text-[8.5px] font-black px-2 py-0.5 rounded-full bg-[#10b981] text-white">เปิด</span>
         </div>
 
         <!-- Sub-toggles: โมเดล 3D & ข้อความ/ป้าย (ปุ่ม toggle สลับเปิดปิด) -->
@@ -844,7 +963,7 @@
       </div>
 
       <!-- 2. การ์ดงานท่อระบายน้ำ & บ่อพัก (Drainage Flat-Pop Card) - ตั้งต้นปิดไว้ (เปิดเฉพาะเข็ม) -->
-      <div id="sidebar-card-drainage" class="p-1.5 rounded-lg border-2 transition-all duration-150 bg-slate-50 border-slate-300 shadow-[1px_1px_0_#94a3b8] text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none" title="คลิกเพื่อเปิด/ปิดงานท่อระบายน้ำทั้งหมด">
+      <div id="sidebar-card-drainage" class="p-1.5 rounded-lg border transition-all duration-150 bg-slate-50 border-slate-300 shadow-xs text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none" title="คลิกเพื่อเปิด/ปิดงานท่อระบายน้ำทั้งหมด">
         <!-- Main Header -->
         <div class="flex items-center justify-between" id="trigger-sidebar-drainage">
           <div class="flex items-center gap-1.5">
@@ -852,11 +971,11 @@
             <i data-lucide="git-commit" class="w-3.5 h-3.5 text-slate-400" id="icon-sidebar-drainage"></i>
             <span class="text-[11px] font-bold text-slate-500" id="title-sidebar-drainage">ท่อ & บ่อพัก (12 บ่อ)</span>
           </div>
-          <span id="badge-sidebar-drainage" class="text-[8.5px] font-black px-1.5 py-0.2 rounded-full bg-slate-300 text-slate-600">ปิด</span>
+          <span id="badge-sidebar-drainage" class="text-[8.5px] font-black px-2 py-0.5 rounded-full bg-slate-300 text-slate-600">ปิด</span>
         </div>
 
         <!-- Sub-toggles: โมเดล 3D & ข้อความ/ระดับ (ปุ่ม toggle สลับเปิดปิด) -->
-        <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-200 text-[10px]">
+        <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]">
           <button type="button" id="btn-toggle-drain-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D ท่อและบ่อพัก">
             <span id="dot-drain-model" class="w-2 h-2 rounded-full bg-slate-300"></span>
             <span>โมเดล 3D</span>
@@ -869,30 +988,30 @@
       </div>
 
       <!-- ผังอ้างอิงอื่นๆ (กริด, เขตที่ดิน, ถังบำบัด) -->
-      <div class="flex flex-col gap-0.5 pt-1 border-t border-slate-200">
-        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-0.5 py-0.3 hover:text-black">
+      <div class="flex flex-col gap-0.5 pt-1 border-t-1.5 border-slate-900">
+        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-1 py-0.5 hover:text-black">
           <input id="layer-grid" type="checkbox" checked class="accent-[#ed6845] w-3 h-3 cursor-pointer">
           <span class="truncate">กริด & มิติ (Grid Lines)</span>
         </label>
-        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-0.5 py-0.3 hover:text-black">
+        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-1 py-0.5 hover:text-black">
           <input id="layer-boundary" type="checkbox" checked class="accent-[#ed6845] w-3 h-3 cursor-pointer">
           <span class="truncate">แนวเขตที่ดิน (Boundary)</span>
         </label>
-        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-0.5 py-0.3 hover:text-black">
+        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-1 py-0.5 hover:text-black">
           <input id="layer-hex" type="checkbox" class="accent-[#ed6845] w-3 h-3 cursor-pointer">
           <span class="truncate">ถังบำบัด & ผนัง (137 ต้น)</span>
         </label>
       </div>
 
       <!-- ปุ่มเปิดตารางท่อระบายน้ำ คสล. -->
-      <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-0.8 text-[9px] font-bold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1 shadow-xs" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
+      <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-1.5 text-[10px] font-bold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1 shadow-xs" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
         <i data-lucide="table" class="w-3 h-3 text-[#0284c7]"></i>
         <span>ตารางท่อระบายน้ำ & บ่อพัก</span>
       </button>
     </div>
 
         <!-- 3. Pile Filter Card (กรองแสดงเข็ม) -->
-    <div id="card-pile-filter" class="pop-card p-1.5 flex flex-col gap-1 bg-[#fffdf8] border-2 border-[#475569] shadow-[2px_2px_0_#475569] rounded-xl">
+    <div id="card-pile-filter" class="pop-card p-1.5 flex flex-col gap-1 bg-[#fffdf8] border-2 border-slate-900 shadow-sm rounded-xl">
       <span class="text-[9px] text-[#475569] font-black px-0.5 uppercase tracking-wider flex items-center gap-1">
         <i data-lucide="filter" class="w-3 h-3 text-[#ed6845]"></i> กรองแสดงเข็ม
       </span>
@@ -900,34 +1019,34 @@
         <span class="flex items-center gap-1">
           <i data-lucide="layers" class="w-3.5 h-3.5"></i> ทั้งหมด
         </span>
-        <span class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[9.5px]">93</span>
+        <span class="font-black px-1 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[9.5px]">93</span>
       </button>
       <button id="filter-driven" type="button" class="pop-btn px-2 py-1 text-[11px] flex items-center justify-between gap-1" style="background:#e5f4e9;">
         <span class="flex items-center gap-1 text-[#1e3a29]">
           <span class="w-2 h-2 rounded-full bg-[#10b981] border border-[#064e3b]"></span> กดแล้ว
         </span>
-        <span id="badge-driven" class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[9.5px]">0</span>
+        <span id="badge-driven" class="font-black px-1 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[9.5px]">0</span>
       </button>
       <button id="filter-pending" type="button" class="pop-btn px-2 py-1 text-[11px] flex items-center justify-between gap-1">
         <span class="flex items-center gap-1">
-          <span class="w-2 h-2 rounded-full bg-[#cbd5e1] border border-[#475569]"></span> ยังไม่กด
+          <span class="w-2 h-2 rounded-full bg-[#cbd5e1] border-1.5 border-slate-900"></span> ยังไม่กด
         </span>
-        <span id="badge-pending" class="font-black px-1 py-0.2 rounded bg-white border border-[#475569] text-[9.5px]">93</span>
+        <span id="badge-pending" class="font-black px-1 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[9.5px]">93</span>
       </button>
     </div>
 
     <!-- เครื่องมือเช็คข้อมูลแต่ละต้น (PCO & ค่า Co) ขนาดกะทัดรัด พอดีแถบเครื่องมือ -->
-    <div id="card-pco-inspector-tool" class="pop-card p-1.5 flex flex-col gap-1 bg-[#fffdfa] border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569]">
+    <div id="card-pco-inspector-tool" class="pop-card p-1.5 flex flex-col gap-1 bg-[#fffdfa] border-2 border-slate-900 shadow-sm rounded-xl">
       <div class="flex items-center justify-between">
         <span class="text-[9px] text-[#34383b] font-black uppercase tracking-wider flex items-center gap-1">
           <i data-lucide="crosshair" class="w-3 h-3 text-[#ed6845]"></i> เช็คข้อมูลรายต้น
         </span>
-        <span id="badge-sidebar-inspect-active" class="hidden px-1.5 py-0.2 rounded text-[8px] font-black bg-emerald-600 text-white animate-pulse">
+        <span id="badge-sidebar-inspect-active" class="hidden px-2 py-0.5 rounded text-[8px] font-black bg-emerald-600 text-white animate-pulse">
           ON
         </span>
       </div>
 
-      <button id="btn-sidebar-toggle-inspector" type="button" class="pop-btn w-full py-1 px-1.5 text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer shadow-[1px_1px_0_#475569] bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border border-[#475569]">
+      <button id="btn-sidebar-toggle-inspector" type="button" class="pop-btn w-full py-1 px-1.5 text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer shadow-xs bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border-1.5 border-slate-900">
         <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#b45309]"></i>
         <span id="lbl-sidebar-toggle-inspector">เปิดเครื่องมือเช็ค</span>
       </button>
@@ -936,7 +1055,7 @@
         คลิกที่เสาเข็มเพื่อดู PCO & Co
       </div>
 
-      <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-0.5 text-[9px] font-bold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 flex items-center justify-center gap-1 shadow-xs" title="ดูตารางรวมพิกัดและระดับตัดหัวเข็ม 93 ต้น">
+      <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-0.5 text-[9px] font-bold text-slate-700 bg-white hover:bg-slate-100 border-1.5 border-slate-900 flex items-center justify-center gap-1 shadow-xs" title="ดูตารางรวมพิกัดและระดับตัดหัวเข็ม 93 ต้น">
         <i data-lucide="table" class="w-3 h-3 text-slate-600"></i>
         <span>ดูตารางรวม 93 ต้น</span>
       </button>
@@ -959,7 +1078,7 @@
       </div>
     </div>
 
-    <div class="pop-card px-3 py-1.5 text-[11px] font-bold flex flex-wrap items-center gap-3 pointer-events-auto bg-white border-2 border-[#475569] shadow-[2px_2px_0_#475569]">
+    <div class="pop-card px-3 py-1.5 text-[11px] font-bold flex flex-wrap items-center gap-3 pointer-events-auto bg-white border-2 border-slate-900 shadow-sm">
       <span class="flex items-center gap-1.5">
         <span class="w-3.5 h-3.5 rounded-full bg-[#0284c7] border-2 border-[#0369a1] shadow-[0_0_8px_#00f0ff]"></span>
         <span class="font-black text-[#0369a1]">กดวันนี้ (สีฟ้า)</span>
@@ -985,13 +1104,13 @@
     <div class="pop-card w-full max-w-3xl p-4 bg-[#fffdf8] max-h-[92vh] flex flex-col">
       
       <!-- Header -->
-      <div class="flex items-center justify-between border-b-2 border-[#475569] pb-3 mb-3">
+      <div class="flex items-center justify-between border-b-2 border-slate-900 pb-3 mb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-[#98cfad] border-2 border-[#475569] flex items-center justify-center text-[#1e3a29] shadow-[1.5px_1.5px_0_#475569]">
+          <div class="w-9 h-9 rounded-xl bg-[#98cfad] border-2 border-slate-900 flex items-center justify-center text-[#1e3a29] shadow-xs">
             <i data-lucide="check-square" class="w-5 h-5"></i>
           </div>
           <div>
-            <h3 class="text-sm font-black text-[#34383b]">แผงระบุเสาเข็มที่กด (Quick Pile Selector 1-93)</h3>
+            <h2 class="text-sm font-black text-[#34383b]">แผงระบุเสาเข็มที่กด (Quick Pile Selector 1-93)</h2>
             <p class="text-[11px] text-[#667277] font-semibold">คลิกที่ปุ่มเบอร์เข็มเพื่อสลับสถานะ "กดแล้ว / ยังไม่กด" ได้ทันที</p>
           </div>
         </div>
@@ -1002,12 +1121,12 @@
       </div>
 
       <!-- Date Picker Bar for Quick Selector (เลือกวันที่เพื่อปรับแก้ข้อมูลเก่า หรือบันทึกใหม่) -->
-      <div class="p-2.5 rounded-xl bg-amber-50 border-2 border-[#475569] flex flex-wrap items-center justify-between gap-2 mb-2 shadow-xs">
+      <div class="p-2.5 rounded-xl bg-amber-50 border-2 border-slate-900 flex flex-wrap items-center justify-between gap-2 mb-2 shadow-xs">
         <div class="flex items-center gap-2 flex-wrap">
           <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
             <i data-lucide="calendar" class="w-4 h-4 text-[#ed6845]"></i> วันที่บันทึก / ปรับแก้:
           </span>
-          <input id="quick-date-picker" type="date" class="text-xs bg-white border-2 border-[#475569] rounded-lg px-2.5 py-1 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0284c7] shadow-inner">
+          <input id="quick-date-picker" type="date" class="text-xs bg-white border-2 border-slate-900 rounded-lg px-2.5 py-1 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-[#0284c7] shadow-inner">
           <button id="btn-quick-date-today" type="button" class="pop-btn px-2.5 py-1 text-xs font-black" style="background:#fff0c8;">วันนี้</button>
         </div>
         <div class="text-[11px] text-[#475569] font-bold">
@@ -1019,7 +1138,7 @@
       <div class="p-2.5 rounded-xl bg-[#fff0c8] border-[1.5px] border-[#475569] flex flex-wrap items-center justify-between gap-2 mb-3">
         <div class="flex items-center gap-2">
           <span class="text-xs font-black text-[#a84631]">คำสั่งด่วน:</span>
-          <button id="btn-drive-next-3" class="pop-btn-green px-2.5 py-1 text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0_#064e3b]">
+          <button id="btn-drive-next-3" class="pop-btn-green px-2.5 py-1 text-xs flex items-center gap-1 shadow-xs">
             <i data-lucide="plus" class="w-3.5 h-3.5"></i> กด 3 ต้นถัดไป (ตามเป้าวันนี้)
           </button>
         </div>
@@ -1027,7 +1146,7 @@
         <!-- Range Input: e.g. 1-24 -->
         <div class="flex items-center gap-1.5">
           <span class="text-xs font-bold text-[#34383b]">ระบุเป็นช่วง:</span>
-          <input id="inp-batch-range" type="text" placeholder="เช่น 1-24 หรือ 25-27" class="w-36 text-xs bg-white border border-[#475569] rounded px-2 py-1 font-mono font-bold focus:outline-none">
+          <input id="inp-batch-range" type="text" placeholder="เช่น 1-24 หรือ 25-27" class="w-36 text-xs bg-white border-1.5 border-slate-900 rounded px-2 py-1 font-mono font-bold focus:outline-none">
           <button id="btn-apply-range" class="pop-btn px-2.5 py-1 text-xs font-black" style="background:#98cfad;">
             บันทึก
           </button>
@@ -1038,7 +1157,7 @@
       <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div class="flex items-center gap-2">
           <span class="text-xs font-extrabold text-[#34383b]">ค้นหา / กรองกริด:</span>
-          <input id="quick-search" type="text" placeholder="พิมพ์เบอร์เข็ม หรือกริด เช่น 7-A..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none w-44">
+          <input id="quick-search" type="text" placeholder="พิมพ์เบอร์เข็ม หรือกริด เช่น 7-A..." class="text-xs bg-white border-1.5 border-slate-900 rounded-lg px-2.5 py-1 font-medium focus:outline-none w-44">
         </div>
         <div class="flex items-center gap-3">
           <label class="flex items-center gap-1.5 cursor-pointer text-[11px] font-black text-slate-700 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-300 shadow-xs transition-colors">
@@ -1052,7 +1171,7 @@
       </div>
 
       <!-- 93 Pile Chips Grid -->
-      <div id="quick-chips-container" class="flex-1 overflow-y-auto border-2 border-[#475569] rounded-xl p-3 bg-white grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 shadow-inner max-h-[50vh]">
+      <div id="quick-chips-container" class="flex-1 overflow-y-auto border-2 border-slate-900 rounded-xl p-3 bg-white grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 shadow-inner max-h-[50vh]">
         <!-- Injected by JavaScript -->
       </div>
 
@@ -1070,13 +1189,13 @@
   <!-- Pile Mini Quick Card (Direct 1-Click Action & Date Adjuster) -->
   <div id="pile-card" class="fixed bottom-5 right-5 z-[70] w-80 max-w-[92vw] pop-card p-3.5 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto shadow-2xl hidden ring-4 ring-amber-400/50">
     <!-- Quick Button: เช็ค PCO & Co เปรียบเทียบ สไตล์ Flat-Pop -->
-    <button id="btn-card-open-pco-inspect" type="button" class="w-full py-1 px-2 text-[11px] font-black rounded-lg bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border-2 border-[#475569] flex items-center justify-center gap-1.5 shadow-[1.5px_1.5px_0_#475569] mb-2 cursor-pointer transition-transform hover:scale-101">
+    <button id="btn-card-open-pco-inspect" type="button" class="w-full py-1 px-2 text-[11px] font-black rounded-lg bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border-2 border-slate-900 flex items-center justify-center gap-1.5 shadow-xs mb-2 cursor-pointer transition-transform hover:scale-101">
       <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#d97706]"></i>
       <span>🔍 เช็ค PCO & ค่า Co เปรียบเทียบ (Flat-Pop)</span>
     </button>
     <div class="flex items-start justify-between border-b-[1.5px] border-[#475569]/30 pb-1.5 mb-2">
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-[#98cfad] border border-[#475569] flex items-center justify-center text-[#1e3a29]">
+        <div class="w-7 h-7 rounded-lg bg-[#98cfad] border-1.5 border-slate-900 flex items-center justify-center text-[#1e3a29]">
           <i data-lucide="hammer" class="w-4 h-4"></i>
         </div>
         <div>
@@ -1126,8 +1245,8 @@
         <span id="card-pile-diff-badge" class="font-mono font-bold text-[10px]"></span>
       </div>
       <div class="flex items-center gap-1.5 pt-0.5">
-        <input type="number" step="0.001" id="card-pile-actual-top" placeholder="เช่น -1.250" class="flex-1 px-2.5 py-1 text-xs font-mono font-bold border-2 border-[#475569] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7]" title="กรอกระดับ TOP เข็มที่กดได้จริง (ม.)">
-        <button id="btn-card-copy-pco" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-sky-100 shadow-xs shrink-0 text-slate-700" title="ใส่ค่าตามระดับ PCO ในแบบ">ตามแบบ PCO</button>
+        <input type="number" step="0.001" id="card-pile-actual-top" placeholder="เช่น -1.250" class="flex-1 px-2.5 py-1 text-xs font-mono font-bold border-2 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7]" title="กรอกระดับ TOP เข็มที่กดได้จริง (ม.)">
+        <button id="btn-card-copy-pco" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border-1.5 border-slate-900 hover:bg-sky-100 shadow-xs shrink-0 text-slate-700" title="ใส่ค่าตามระดับ PCO ในแบบ">ตามแบบ PCO</button>
       </div>
       <div class="text-[9.5px] text-[#0369a1] font-medium pt-0.5 flex items-center justify-between">
         <span>แบบ PCO: <b id="card-pile-pco-hint" class="font-mono text-[#a84631]">-</b></span>
@@ -1149,14 +1268,14 @@
             <span>พิกัดจริง N:</span>
             <span class="font-mono text-[9px] text-slate-500">แบบ: <b id="card-pile-design-n-hint">-</b></span>
           </label>
-          <input type="number" step="0.0001" id="card-pile-actual-n" placeholder="เช่น 1518672.698" class="w-full px-2 py-1 text-xs font-mono font-bold border-2 border-[#475569] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Northing (N)">
+          <input type="number" step="0.0001" id="card-pile-actual-n" placeholder="เช่น 1518672.698" class="w-full px-2 py-1 text-xs font-mono font-bold border-2 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Northing (N)">
         </div>
         <div>
           <label class="text-[9.5px] font-bold text-emerald-900 flex justify-between">
             <span>พิกัดจริง E:</span>
             <span class="font-mono text-[9px] text-slate-500">แบบ: <b id="card-pile-design-e-hint">-</b></span>
           </label>
-          <input type="number" step="0.0001" id="card-pile-actual-e" placeholder="เช่น 672390.806" class="w-full px-2 py-1 text-xs font-mono font-bold border-2 border-[#475569] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Easting (E)">
+          <input type="number" step="0.0001" id="card-pile-actual-e" placeholder="เช่น 672390.806" class="w-full px-2 py-1 text-xs font-mono font-bold border-2 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Easting (E)">
         </div>
       </div>
       <div class="flex items-center justify-between pt-0.5">
@@ -1176,9 +1295,9 @@
         <span id="card-pile-date-badge" class="font-mono font-bold text-slate-700 text-[10.5px]"></span>
       </div>
       <div class="flex items-center gap-1.5 pt-0.5">
-        <input type="date" id="card-pile-date-input" class="flex-1 px-2 py-1 text-xs font-mono font-bold border-2 border-[#475569] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7]" title="ระบุหรือปรับแก้วันที่ตอกย้อนหลังได้อิสระ">
-        <button id="btn-card-date-yesterday" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นเมื่อวาน">เมื่อวาน</button>
-        <button id="btn-card-date-today" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border border-[#475569] hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นวันนี้">วันนี้</button>
+        <input type="date" id="card-pile-date-input" class="flex-1 px-2 py-1 text-xs font-mono font-bold border-2 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#0284c7]" title="ระบุหรือปรับแก้วันที่ตอกย้อนหลังได้อิสระ">
+        <button id="btn-card-date-yesterday" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border-1.5 border-slate-900 hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นเมื่อวาน">เมื่อวาน</button>
+        <button id="btn-card-date-today" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border-1.5 border-slate-900 hover:bg-[#fff0c8] shadow-xs shrink-0" title="ตั้งเป็นวันนี้">วันนี้</button>
       </div>
       <div class="text-[9.5px] text-[#b45309] font-medium pt-0.5">
         💡 บันทึกวันที่กด และระดับ TOP เข็มที่กดได้จริงได้อิสระ
@@ -1187,11 +1306,11 @@
 
     <!-- 1-Click Action Buttons -->
     <div class="space-y-1.5">
-      <button id="btn-card-quick-drive" type="button" class="w-full py-2 text-xs flex items-center justify-center gap-1.5 font-black rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_2px_0_#064e3b] transition-all hover:translate-y-0.5 cursor-pointer">
+      <button id="btn-card-quick-drive" type="button" class="w-full py-2 text-xs flex items-center justify-center gap-1.5 font-black rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs hover:shadow-sm active:scale-95 transition-all cursor-pointer">
         <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
         <span>⚡ กดเสาเข็มต้นนี้ทันที (บันทึกออนไลน์ Supabase)</span>
       </button>
-      <button id="btn-card-save-date" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5 font-black shadow-[1.5px_1.5px_0_#064e3b]">
+      <button id="btn-card-save-date" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5 font-black shadow-xs">
         <i data-lucide="check" class="w-3.5 h-3.5"></i>
         <span id="btn-card-save-date-lbl">💾 บันทึกข้อมูล (วันกด + ระดับ TOP)</span>
       </button>
@@ -1206,20 +1325,20 @@
   <!-- DEDICATED EXECUTIVE REPORT SHEET (ธีมเดิม FLAT-POP พร้อมเลือกสไตล์ EXCEL ได้) -->
   <!-- ========================================================================= -->
   <div id="report-page" class="fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-2 sm:p-4 md:p-5 hidden">
-    <div id="report-page-card" class="w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-3 sm:p-4 md:p-6 transition-all">
+    <div id="report-page-card" class="w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-slate-900 rounded-2xl shadow-lg border-1.5 border-slate-900 p-3 sm:p-4 md:p-6 transition-all">
       
       <!-- Report Header & Controls Bar (Transforms between Original Flat-Pop & Excel) -->
-      <div id="report-header-bar" class="bg-gradient-to-r from-[#fff0c8] via-[#fffdf8] to-[#e5f4e9] border-2 border-[#475569] rounded-2xl p-4 md:p-5 shadow-[4px_4px_0_#475569] mb-4 transition-all">
+      <div id="report-header-bar" class="bg-white border-2 border-slate-900 rounded-2xl p-4 md:p-5 shadow-xs mb-4 transition-all">
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <!-- Title & Project Info -->
           <div class="flex items-center gap-3">
-            <div id="rep-header-logo" class="w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-[#475569] flex flex-col items-center justify-center font-montserrat font-black text-[#34383b] shadow-[2px_2px_0_#475569] leading-tight shrink-0">
+            <div id="rep-header-logo" class="w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-slate-900 flex flex-col items-center justify-center font-montserrat font-black text-[#34383b] shadow-sm leading-tight shrink-0">
               <span class="text-[9px] font-black uppercase text-[#a84631]">PYNN</span>
               <span class="text-base font-black">37</span>
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap">
-                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569] whitespace-nowrap shrink-0 inline-block">
+                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs whitespace-nowrap shrink-0 inline-block">
                   โครงการ Pynn pridi 37
                 </span>
                 <span id="rep-header-subtag" class="text-xs text-[#667277] font-bold whitespace-nowrap shrink-0 inline-block">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
@@ -1234,7 +1353,7 @@
           <div class="flex items-center flex-wrap gap-2 self-end md:self-auto">
             
             <!-- Report Format Selector (เลือกรูปแบบรายงาน: ธีมดั้งเดิม / สไตล์ Excel) -->
-            <div id="report-theme-selector" class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export" title="เลือกรูปแบบหน้ารายงาน">
+            <div id="report-theme-selector" class="flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs no-print no-export" title="เลือกรูปแบบหน้ารายงาน">
               <button id="btn-theme-original" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1" title="ธีมดั้งเดิม (Soft Ink Flat-Pop)">
                 <span>🎨 ธีมดั้งเดิม</span>
               </button>
@@ -1244,14 +1363,14 @@
             </div>
 
             <!-- Date Badge -->
-            <div id="rep-date-badge-wrapper" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1.5px_1.5px_0_#475569] whitespace-nowrap shrink-0">
+            <div id="rep-date-badge-wrapper" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs whitespace-nowrap shrink-0">
               <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ed6845] shrink-0"></i>
               <span class="inline-block whitespace-nowrap shrink-0">ประจำวันที่:</span>
               <span id="rep-header-date" class="text-[#ed6845] font-mono font-black inline-block whitespace-nowrap shrink-0">-</span>
             </div>
 
             <!-- Orientation Switch -->
-            <div id="rep-layout-switch-wrapper" class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export">
+            <div id="rep-layout-switch-wrapper" class="flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs no-print no-export">
               <button id="btn-layout-portrait" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1" title="จัดหน้าแนวตั้ง (Portrait)">
                 <i data-lucide="smartphone" class="w-3 h-3"></i>
                 <span>แนวตั้ง</span>
@@ -1264,23 +1383,23 @@
 
             <!-- Buttons -->
             <div class="flex items-center gap-1.5 no-print no-export">
-              <button id="btn-back-to-3d" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#475569] font-black border-2 border-[#475569]" style="background:#ffc45b; color:#34383b;" title="กลับสู่โมเดล 3D & แปลน (ปิดหน้ารายงาน)">
+              <button id="btn-back-to-3d" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-sm font-black border-2 border-slate-900" style="background:#ffc45b; color:#34383b;" title="กลับสู่โมเดล 3D & แปลน (ปิดหน้ารายงาน)">
                 <i data-lucide="box" class="w-3.5 h-3.5"></i>
                 <span>🏗️ กลับสู่โมเดล 3D</span>
               </button>
-              <button id="btn-report-supabase-sync" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#1e3a8a] text-white font-black" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase">
+              <button id="btn-report-supabase-sync" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 text-white font-black" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase">
                 <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
                 <span id="lbl-report-supabase">บันทึก Supabase</span>
               </button>
-              <button id="btn-export-png" class="pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#064e3b] font-black" title="ส่งออกภาพรายงาน PNG">
+              <button id="btn-export-png" class="pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black" title="ส่งออกภาพรายงาน PNG">
                 <i data-lucide="camera" class="w-3.5 h-3.5"></i>
                 <span>ส่งออกภาพ PNG</span>
               </button>
-              <button id="btn-print-report" class="pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#9c3b23] font-black" title="พิมพ์รายงาน / บันทึก PDF">
+              <button id="btn-print-report" class="pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black" title="พิมพ์รายงาน / บันทึก PDF">
                 <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                 <span>พิมพ์ / PDF</span>
               </button>
-              <button id="btn-close-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[1.5px_1.5px_0_#475569] bg-white hover:bg-slate-100 text-slate-800 font-black cursor-pointer" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
+              <button id="btn-close-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs bg-white hover:bg-slate-100 text-slate-800 font-black cursor-pointer" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
                 <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-blue-600"></i>
                 <span>กลับสู่โมเดล 3D ✕</span>
               </button>
@@ -1313,7 +1432,7 @@
       <!-- 4 KPI Summary Cards (สไตล์ Flat-Pop โปร่งสวย ความสูงกำลังดี ไม่บีบเล็ก) -->
       <div id="rep-kpi-summary-box" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 mb-4">
         <!-- Card 1: แผนวันนี้ 3 ต้น / กดแล้ว X ต้น -->
-        <div id="rep-kpi-1" class="bg-[#f0f9ff] border border-slate-300 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
+        <div id="rep-kpi-1" class="bg-[#f0f9ff] border-1.5 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0">
             <span class="w-7 h-7 rounded-lg bg-[#0284c7] text-white flex items-center justify-center border border-[#0284c7]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="hammer" class="w-4 h-4"></i>
@@ -1329,7 +1448,7 @@
         </div>
 
                 <!-- Card 2: แผนกดสะสม .... ต้น -->
-        <div id="rep-kpi-2" class="bg-[#fff7ed] border border-slate-300 rounded-xl px-2.5 sm:px-3.5 py-2.5 sm:py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-1.5 sm:gap-2 overflow-hidden whitespace-nowrap" title="แผนสะสมตามวันทำการ (ไม่นับวันอาทิตย์และวันหยุดราชการ)">
+        <div id="rep-kpi-2" class="bg-[#fff7ed] border-1.5 border-slate-900 rounded-xl px-2.5 sm:px-3.5 py-2.5 sm:py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-1.5 sm:gap-2 overflow-hidden whitespace-nowrap" title="แผนสะสมตามวันทำการ (ไม่นับวันอาทิตย์และวันหยุดราชการ)">
           <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
             <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#ea580c] text-white flex items-center justify-center border border-[#ea580c]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="calendar" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
@@ -1343,7 +1462,7 @@
         </div>
 
 <!-- Card 3: กดสะสมจริง .... ต้น -->
-        <div id="rep-kpi-3" class="bg-[#e5f4e9] border border-slate-300 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
+        <div id="rep-kpi-3" class="bg-[#e5f4e9] border-1.5 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0 shrink-0">
             <span class="w-7 h-7 rounded-lg bg-[#10b981] text-white flex items-center justify-center border border-[#10b981]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="check-circle-2" class="w-4 h-4"></i>
@@ -1352,13 +1471,13 @@
           </div>
           <div class="flex items-center gap-2 shrink-0 font-bold whitespace-nowrap">
             <span class="text-lg sm:text-xl font-black font-montserrat text-[#10b981] leading-none"><span id="rep-cum-count">0</span><span class="text-xs text-[#667277]">/93</span></span>
-            <span id="rep-cum-pct" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-white border border-slate-300 text-[#10b981] leading-none shadow-xs">0%</span>
+            <span id="rep-cum-pct" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-white border-1.5 border-slate-900 text-[#10b981] leading-none shadow-xs">0%</span>
             <div class="hidden"><div id="rep-cum-bar" style="width:0%"></div></div>
           </div>
         </div>
 
         <!-- Card 4: สถานะเทียบแผนงาน (แสดงผลเต็มข้อความ ไม่ตัดทอน ...) -->
-        <div id="rep-variance-card" class="bg-[#fff1f2] border border-slate-300 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
+        <div id="rep-variance-card" class="bg-[#fff1f2] border-1.5 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs min-h-[58px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap">
           <div class="flex items-center gap-2 min-w-0 shrink-0">
             <span class="w-7 h-7 rounded-lg bg-[#e11d48] text-white flex items-center justify-center border border-[#e11d48]/40 shrink-0 text-xs shadow-xs">
               <i data-lucide="activity" class="w-4 h-4"></i>
@@ -1379,10 +1498,10 @@
         
         <!-- COLUMN 1: LARGE PILING PROGRESS PLAN -->
         <div id="report-col-plan" class="w-full">
-          <div id="report-sec-plan" class="border border-slate-300 rounded-xl overflow-hidden shadow-xs bg-white h-full flex flex-col">
-            <div id="report-sec-plan-head" class="bg-[#fff0c8] px-4 py-2 border-b border-slate-300 flex flex-wrap items-center justify-between gap-2 rounded-t-[11px]">
+          <div id="report-sec-plan" class="border-1.5 border-slate-900 rounded-xl overflow-hidden shadow-xs bg-white h-full flex flex-col">
+            <div id="report-sec-plan-head" class="bg-[#fff0c8] px-4 py-2 border-b-2 border-slate-900 flex flex-wrap items-center justify-between gap-2 rounded-t-[11px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
+                <span class="w-6 h-6 rounded-md bg-white border-1.5 border-slate-900 flex items-center justify-center shadow-xs">
                   <i data-lucide="map" class="w-3.5 h-3.5 text-[#10b981]"></i>
                 </span>
                 แผนผังความคืบหน้างานเสาเข็ม (Piling Progress Plan)
@@ -1390,15 +1509,15 @@
               
               <!-- Legend Badges (Original Theme) -->
               <div id="rep-legend-original" class="flex items-center gap-1.5 text-[11px] font-black shrink-0">
-                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-slate-300 shadow-xs">
+                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border-1.5 border-slate-900 shadow-xs">
                   <span class="w-2.5 h-2.5 rounded-full bg-[#0284c7]"></span> 
                   <span class="text-[#0284c7] whitespace-nowrap">★ กดวันนี้</span>
                 </span>
-                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-slate-300 shadow-xs">
+                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border-1.5 border-slate-900 shadow-xs">
                   <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> 
                   <span class="text-[#10b981] whitespace-nowrap">● กดแล้ว</span>
                 </span>
-                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border border-slate-300 shadow-xs">
+                <span class="flex items-center gap-1 bg-white px-1.5 py-0.5 rounded-md border-1.5 border-slate-900 shadow-xs">
                   <span class="w-2.5 h-2.5 rounded-full bg-[#e2e8f0] border border-[#94a3b8]"></span> 
                   <span class="text-[#64748b] whitespace-nowrap">○ รอกด</span>
                 </span>
@@ -1432,15 +1551,15 @@
         <!-- COLUMN 2: S-CURVE + TODAY'S TABLE -->
         <div id="report-col-side" class="w-full flex flex-col gap-5">
           <!-- SECTION 2: S-CURVE PROGRESS GRAPH -->
-          <div id="report-sec-scurve" class="border border-slate-300 rounded-xl overflow-hidden shadow-xs bg-white">
-            <div id="report-sec-scurve-head" class="bg-[#dff1f5] px-4 py-2 border-b border-slate-300 flex items-center justify-between rounded-t-[11px]">
+          <div id="report-sec-scurve" class="border-1.5 border-slate-900 rounded-xl overflow-hidden shadow-xs bg-white">
+            <div id="report-sec-scurve-head" class="bg-[#dff1f5] px-4 py-2 border-b-2 border-slate-900 flex items-center justify-between rounded-t-[11px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
+                <span class="w-6 h-6 rounded-md bg-white border-1.5 border-slate-900 flex items-center justify-center shadow-xs">
                   <i data-lucide="trending-up" class="w-3.5 h-3.5 text-[#ed6845]"></i>
                 </span>
                 กราฟเปรียบเทียบผลงานสะสม S-Curve (Actual vs Plan: 3 ต้น/วัน)
               </span>
-              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border border-slate-300 shadow-xs text-[#34383b] whitespace-nowrap shrink-0 inline-block">
+              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-2.5 py-1 rounded-lg border-1.5 border-slate-900 shadow-xs text-[#34383b] whitespace-nowrap shrink-0 inline-block">
                 แผนงานรวม 93 ต้น / 31 วันทำการ (ไม่นับวันอาทิตย์ & นักขัตฤกษ์)
               </span>
             </div>
@@ -1452,31 +1571,31 @@
           </div>
 
           <!-- SECTION 3: TODAY'S PRESSED PILES LOG TABLE -->
-          <div id="report-sec-table" class="border-2 border-[#475569] rounded-xl overflow-hidden shadow-xs bg-white">
-            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2 rounded-t-[10px]">
+          <div id="report-sec-table" class="border-2 border-slate-900 rounded-xl overflow-hidden shadow-xs bg-white">
+            <div id="report-sec-table-head" class="bg-[#ffc45b] px-4 py-2 border-b-2 border-slate-900 flex flex-wrap items-center justify-between gap-2 rounded-t-[10px]">
               <span class="text-xs md:text-sm font-black text-[#34383b] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-md bg-white border border-slate-300 flex items-center justify-center shadow-xs">
+                <span class="w-6 h-6 rounded-md bg-white border-1.5 border-slate-900 flex items-center justify-center shadow-xs">
                   <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#34383b]"></i>
                 </span>
                 <span id="rep-sec-table-title">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
               </span>
               <div class="flex items-center gap-2 shrink-0">
-                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border border-slate-300 text-[10.5px] whitespace-nowrap shrink-0 no-export no-print" title="ตัวเลือกกรองรายการกดเสาเข็ม">
-                  <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-slate-300 whitespace-nowrap">
+                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-white/70 p-0.5 rounded-lg border-1.5 border-slate-900 text-[10.5px] whitespace-nowrap shrink-0 no-export no-print" title="ตัวเลือกกรองรายการกดเสาเข็ม">
+                  <button id="btn-rep-filter-today" type="button" class="px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border-1.5 border-slate-900 whitespace-nowrap">
                     เฉพาะวันที่นี้
                   </button>
                   <button id="btn-rep-filter-all" type="button" class="px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b] whitespace-nowrap">
                     ทั้งหมด (ประวัติการกด)
                   </button>
                 </div>
-                <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border border-slate-300 shadow-xs whitespace-nowrap shrink-0">
+                <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-lg bg-white border-1.5 border-slate-900 shadow-xs whitespace-nowrap shrink-0">
                   0 ต้น
                 </span>
               </div>
             </div>
             <div class="table-wrapper overflow-x-auto">
               <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
-                <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs">
+                <thead id="rep-today-table-head" class="bg-[#fff0c8] text-[#34383b] border-b-2 border-slate-900 font-black text-xs">
                   <tr>
                     <th class="p-2 text-center border-r border-[#cbd5e1]">No.</th>
                     <th class="p-2 border-r border-[#cbd5e1]">รหัสเข็ม (ID)</th>
@@ -1510,7 +1629,7 @@
         <span class="text-xs font-bold text-[#667277]">
           💡 สามารถกดที่ต้นเข็มหรือวันที่ในตารางด้านบนเพื่อแก้ไขข้อมูลได้ตลอดเวลา
         </span>
-        <button type="button" onclick="document.getElementById('btn-close-report').click()" class="pop-btn-primary px-4 py-2 text-xs font-black flex items-center gap-2 shadow-[2px_2px_0_#253047] cursor-pointer">
+        <button type="button" onclick="document.getElementById('btn-close-report').click()" class="pop-btn-primary px-4 py-2 text-xs font-black flex items-center gap-2 shadow-xs hover:shadow-sm active:scale-95 cursor-pointer">
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
           <span>กลับสู่หน้าโมเดล 3D & แปลน CAD</span>
         </button>
@@ -1522,12 +1641,12 @@
   <!-- MODAL: EXPORT PROGRESS REPORT IMAGE (ส่งออกภาพรายงาน PNG ตามสัดส่วน) -->
   <!-- ========================================================================= -->
   <div id="modal-export-image" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-3 md:p-6 hidden">
-    <div class="pop-card bg-white w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden shadow-2xl border-2 border-[#475569]">
+    <div class="pop-card bg-white w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden shadow-2xl border-2 border-slate-900">
       
       <!-- Modal Header -->
-      <div class="bg-gradient-to-r from-[#fff0c8] via-[#f4ece7] to-[#e5f4e9] p-3 px-5 border-b-2 border-[#475569] flex items-center justify-between">
+      <div class="bg-gradient-to-r from-[#fff0c8] via-[#f4ece7] to-[#e5f4e9] p-3 px-5 border-b-2 border-slate-900 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-[#ed6845] text-white flex items-center justify-center border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569]">
+          <div class="w-9 h-9 rounded-xl bg-[#ed6845] text-white flex items-center justify-center border-2 border-slate-900 shadow-sm rounded-xl">
             <i data-lucide="camera" class="w-5 h-5"></i>
           </div>
           <div>
@@ -1545,11 +1664,11 @@
       </div>
 
       <!-- Controls & Ratio Bar -->
-      <div class="p-3 bg-[#f8fbf9] border-b border-[#475569]/20 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+      <div class="p-3 bg-[#f8fbf9] border-b-1.5 border-slate-900 flex flex-wrap items-center justify-between gap-2.5 text-xs">
         
         <!-- Mode Tabs -->
-        <div class="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-[#475569]/30">
-          <button id="exp-tab-report" class="px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border border-[#475569] shadow-xs flex items-center gap-1.5">
+        <div class="flex items-center gap-1.5 bg-white p-1 rounded-xl border-1.5 border-slate-900">
+          <button id="exp-tab-report" class="px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5">
             <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
             <span>หน้ารายงานสรุป (Report Card)</span>
           </button>
@@ -1563,22 +1682,22 @@
         <div class="flex items-center gap-2">
           <span class="font-black text-[#34383b]">สัดส่วนภาพ:</span>
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button data-ratio="fit" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-[#475569] font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-[1.5px_1.5px_0_#475569]">
+            <button data-ratio="fit" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs">
               📑 พอดีเอกสาร (Auto Fit)
             </button>
-            <button data-ratio="3:4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
+            <button data-ratio="3:4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
               📱 แนวตั้ง 4:3 (Portrait Fit)
             </button>
-            <button data-ratio="4:3" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
+            <button data-ratio="4:3" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
               📐 แนวนอน 4:3 (Landscape)
             </button>
-            <button data-ratio="16:9" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
+            <button data-ratio="16:9" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
               🔲 แนวนอน 16:9 (Slide)
             </button>
-            <button data-ratio="a4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
+            <button data-ratio="a4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
               📄 A4 แนวตั้ง (Portrait)
             </button>
-            <button data-ratio="1:1" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]">
+            <button data-ratio="1:1" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
               📱 จัตุรัส 1:1 (Square)
             </button>
           </div>
@@ -1587,7 +1706,7 @@
         <!-- Resolution Scale -->
         <div class="flex items-center gap-1.5">
           <span class="font-bold text-[#667277]">ความคมชัด:</span>
-          <select id="exp-scale" class="bg-white border border-[#475569] rounded px-2 py-1 font-bold text-xs text-[#34383b] focus:outline-none">
+          <select id="exp-scale" class="bg-white border-1.5 border-slate-900 rounded px-2 py-1 font-bold text-xs text-[#34383b] focus:outline-none">
             <option value="2" selected>2x Ultra HD (คมกริบ)</option>
             <option value="1">1x Standard</option>
           </select>
@@ -1603,7 +1722,7 @@
             <span class="text-xs font-bold text-[#34383b]">กำลังสร้างภาพรายงานความละเอียดสูง...</span>
           </div>
           <!-- Live Preview Canvas -->
-          <canvas id="exportPreviewCanvas" class="max-w-full max-h-[50vh] object-contain rounded-lg border-2 border-[#475569] shadow-lg bg-white"></canvas>
+          <canvas id="exportPreviewCanvas" class="max-w-full max-h-[50vh] object-contain rounded-lg border-2 border-slate-900 shadow-lg bg-white"></canvas>
         </div>
       </div>
 
@@ -1619,7 +1738,7 @@
             <i data-lucide="copy" class="w-4 h-4 text-[#ed6845]"></i>
             <span id="txt-copy-btn">คัดลอกรูปภาพ (Ctrl+V ใน LINE ได้ทันที)</span>
           </button>
-          <button id="btn-download-export-png" class="pop-btn-green px-5 py-2 text-xs flex items-center gap-1.5 font-black shadow-[2px_2px_0_#064e3b]">
+          <button id="btn-download-export-png" class="pop-btn-green px-5 py-2 text-xs flex items-center gap-1.5 font-black shadow-xs hover:shadow-sm active:scale-95">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span>ดาวน์โหลดภาพ PNG</span>
           </button>
@@ -1631,17 +1750,17 @@
 
   <!-- Modal: หน้าต่างตรวจสอบข้อมูล PCO และค่า Co แต่ละต้น (Style Flat-Pop) -->
   <div id="modal-pco-inspector" class="fixed inset-0 z-[80] modal-backdrop flex items-center justify-center p-3 md:p-6 bg-slate-900/40 backdrop-blur-xs hidden">
-    <div class="pop-card w-full max-w-xl md:max-w-2xl bg-[#fffdf8] border-2 border-[#475569] rounded-2xl shadow-[6px_6px_0_#475569] overflow-hidden flex flex-col max-h-[92vh]">
+    <div class="pop-card w-full max-w-xl md:max-w-2xl bg-[#fffdf8] border-2 border-slate-900 rounded-2xl shadow-2xl border-2 border-slate-900 overflow-hidden flex flex-col max-h-[92vh]">
       
       <!-- Flat-Pop Header -->
-      <div class="bg-[#fef08a] border-b-2 border-[#475569] p-3 md:p-3.5 flex items-center justify-between gap-2 shrink-0">
+      <div class="bg-[#fef08a] border-b-2 border-slate-900 p-3 md:p-3.5 flex items-center justify-between gap-2 shrink-0">
         <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-xl bg-[#ffc45b] border-2 border-[#475569] shadow-[2px_2px_0_#475569] flex items-center justify-center text-[#854d0e] shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-[#ffc45b] border-2 border-slate-900 shadow-sm flex items-center justify-center text-[#854d0e] shrink-0">
             <i data-lucide="crosshair" class="w-5 h-5"></i>
           </div>
           <div>
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="px-2 py-0.5 rounded text-[9.5px] font-black bg-[#ffc45b] border border-[#475569] text-[#854d0e]">
+              <span class="px-2 py-0.5 rounded text-[9.5px] font-black bg-[#ffc45b] border-1.5 border-slate-900 text-[#854d0e]">
                 FLAT-POP STYLE
               </span>
               <span class="text-[11px] font-bold text-[#a16207]">ตรวจสอบข้อมูลเสาเข็มรายต้น</span>
@@ -1654,7 +1773,7 @@
 
         <!-- Controls: Prev, Next, Select, Close -->
         <div class="flex items-center gap-1.5">
-          <div class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569]">
+          <div class="flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs">
             <button id="btn-pco-inspect-prev" type="button" class="px-2 py-1 text-xs font-black text-[#34383b] hover:bg-[#fff0c8] rounded cursor-pointer" title="ต้นก่อนหน้า">
               ◀
             </button>
@@ -1678,16 +1797,16 @@
 
       <!-- Flat-Pop Modal Footer -->
       <div class="bg-[#f8fafc] border-t-2 border-[#475569] p-2.5 md:p-3 flex items-center justify-between gap-2 shrink-0 flex-wrap">
-        <button id="btn-pco-open-cotable" type="button" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-white border border-[#475569] hover:bg-slate-100 shadow-xs flex items-center gap-1 text-slate-700 cursor-pointer">
+        <button id="btn-pco-open-cotable" type="button" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-white border-1.5 border-slate-900 hover:bg-slate-100 shadow-xs flex items-center gap-1 text-slate-700 cursor-pointer">
           <i data-lucide="table" class="w-3.5 h-3.5"></i>
           <span>ดูตารางพิกัด PCO ทั้งหมด (93 ต้น)</span>
         </button>
         <div class="flex items-center gap-2">
-          <button id="btn-pco-modal-edit" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-[#ffc45b] border-2 border-[#475569] hover:bg-[#fde047] shadow-[2px_2px_0_#475569] text-[#34383b] flex items-center gap-1 cursor-pointer">
+          <button id="btn-pco-modal-edit" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-[#ffc45b] border-2 border-slate-900 hover:bg-[#fde047] shadow-sm text-[#34383b] flex items-center gap-1 cursor-pointer">
             <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
             <span id="lbl-pco-modal-edit">บันทึก/แก้ไขข้อมูลต้นนี้</span>
           </button>
-          <button id="btn-pco-modal-close" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-white border-2 border-[#475569] hover:bg-slate-100 shadow-[2px_2px_0_#475569] text-[#34383b] cursor-pointer">
+          <button id="btn-pco-modal-close" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-white border-2 border-slate-900 hover:bg-slate-100 shadow-sm text-[#34383b] cursor-pointer">
             ปิด
           </button>
         </div>
@@ -1699,9 +1818,9 @@
   <!-- Modal: หน้าตารางค่าพิกัดและระดับตัดหัวเข็มตามแบบ PCO (Pile Coordinates & PCO Summary Table) -->
   <div id="modal-cotable" class="fixed inset-0 z-40 modal-backdrop flex items-center justify-center p-3 md:p-6 hidden">
     <div class="pop-card w-full max-w-6xl p-4 md:p-5 bg-[#fffdf8] max-h-[92vh] flex flex-col">
-      <div class="flex items-center justify-between border-b-2 border-[#475569]/30 pb-2.5 mb-3 gap-2 flex-wrap">
+      <div class="flex items-center justify-between border-b-2 border-slate-900/30 pb-2.5 mb-3 gap-2 flex-wrap">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-[#1e40af] border-2 border-[#475569] flex items-center justify-center text-white shadow-[1.5px_1.5px_0_#475569]">
+          <div class="w-8 h-8 rounded-lg bg-[#1e40af] border-2 border-slate-900 flex items-center justify-center text-white shadow-xs">
             <i data-lucide="table-2" class="w-4.5 h-4.5"></i>
           </div>
           <div>
@@ -1712,7 +1831,7 @@
 
         <div class="flex items-center gap-2 flex-wrap">
           <!-- View Switcher -->
-          <div class="flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1px_1px_0_#475569]">
+          <div class="flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs">
             <button id="btn-cotable-tab-sketchup" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#1e40af] text-white flex items-center gap-1 shadow-xs">
               <i data-lucide="columns-3" class="w-3.5 h-3.5"></i> ตาราง 3 คอลัมน์ (ตามแบบ SketchUp)
             </button>
@@ -1811,12 +1930,12 @@
       <!-- VIEW 2: Searchable & Interactive Filter Table -->
       <div id="cotable-view-list" class="flex-1 flex flex-col overflow-hidden hidden">
         <div class="flex items-center justify-between pb-2">
-          <input id="table-search" type="text" placeholder="ค้นหาเบอร์เข็ม / กริด / ฐานราก (F1, F2...)..." class="text-xs bg-white border border-[#475569] rounded-lg px-2.5 py-1 font-medium focus:outline-none w-72">
+          <input id="table-search" type="text" placeholder="ค้นหาเบอร์เข็ม / กริด / ฐานราก (F1, F2...)..." class="text-xs bg-white border-1.5 border-slate-900 rounded-lg px-2.5 py-1 font-medium focus:outline-none w-72">
           <span class="text-[11px] text-[#64748b]">คลิกที่ปุ่มสลับสถานะเพื่อบันทึกการกด</span>
         </div>
-        <div class="flex-1 overflow-auto border-2 border-[#475569] rounded-xl bg-white shadow-[2px_2px_0_#c9dfd9]">
+        <div class="flex-1 overflow-auto border-2 border-slate-900 rounded-xl bg-white shadow-xs">
           <table class="w-full text-xs text-left border-collapse">
-            <thead class="bg-[#ffc45b] text-[#34383b] sticky top-0 z-10 border-b-2 border-[#475569]">
+            <thead class="bg-[#ffc45b] text-[#34383b] sticky top-0 z-10 border-b-2 border-slate-900">
               <tr>
                 <th class="p-2 border-r border-[#475569]/30 font-black text-center">No.</th>
                 <th class="p-2 border-r border-[#475569]/30 font-black">รหัสเข็ม</th>
@@ -3880,13 +3999,16 @@
     let drainageObjects = window.drainageObjects;
 
     // Load Embedded GLB directly from memory via ArrayBuffer (avoids browser fetch / data-URI length limits)
-    function base64ToArrayBuffer(base64) {
+        function base64ToArrayBuffer(base64) {
+      const lBar = document.getElementById('loading-bar');
+      if (lBar) lBar.style.width = '35%';
       const binaryString = window.atob(base64);
       const len = binaryString.length;
       const bytes = new Uint8Array(len);
       for (let i = 0; i < len; i++) {
         bytes[i] = binaryString.charCodeAt(i);
       }
+      if (lBar) lBar.style.width = '70%';
       return bytes.buffer;
     }
 
@@ -3897,6 +4019,8 @@
       arrayBuffer,
       '',
       (gltf) => {
+        const lBar = document.getElementById('loading-bar');
+        if (lBar) lBar.style.width = '100%';
         currentModel = gltf.scene;
 
         // CRITICAL FIX: Rotate model around X by +90 degrees to align North (+Y) UP and East (+X) RIGHT!
@@ -4291,12 +4415,29 @@
           setTimeout(() => overlay.remove(), 400);
         }
       },
-      (err) => {
+            (err) => {
         console.error('Error parsing GLB:', err);
         const lText = document.getElementById('loading-text');
-        if (lText) lText.textContent = 'โหลดโมเดลไม่สำเร็จ: ' + (err?.message || err);
+        if (lText) lText.textContent = "Error loading 3D model: " + (err?.message || err);
+        setTimeout(() => {
+          const overlay = document.getElementById('loading-overlay');
+          if (overlay) {
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.remove(), 400);
+          }
+        }, 2500);
       }
     );
+
+    // Safety timeout: ensure overlay never permanently freezes UI
+    setTimeout(() => {
+      const overlay = document.getElementById('loading-overlay');
+      if (overlay && !overlay.classList.contains('opacity-0')) {
+        console.warn('Safety timeout: forcing loading overlay removal');
+        overlay.classList.add('opacity-0');
+        setTimeout(() => overlay.remove(), 400);
+      }
+    }, 10000);
 
     // PCO Groups Definition & Active PCO filter state
     const PCO_GROUPS = {
@@ -5382,18 +5523,18 @@
       const btnText = document.getElementById('btn-toggle-pile-text');
       const dotText = document.getElementById('dot-pile-text');
 
-      const sideActive = "p-1.5 rounded-lg border-2 transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-[1.5px_1.5px_0_#059669] ring-2 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none";
-      const sideInactive = "p-1.5 rounded-lg border-2 transition-all duration-150 bg-slate-50 border-slate-300 shadow-[1px_1px_0_#94a3b8] text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none";
+      const sideActive = "p-1.5 rounded-lg border transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-xs ring-1 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none";
+      const sideInactive = "p-1.5 rounded-lg border transition-all duration-150 bg-slate-50 border-slate-300 shadow-xs text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none";
 
       if (sideCard) sideCard.className = state.enabled ? sideActive : sideInactive;
-      if (sideDot) sideDot.className = state.enabled ? "w-2.5 h-2.5 rounded-full bg-[#10b981] animate-pulse" : "w-2.5 h-2.5 rounded-full bg-slate-400";
+      if (sideDot) sideDot.className = state.enabled ? "w-2.5 h-2.5 rounded-full bg-[#10b981]" : "w-2.5 h-2.5 rounded-full bg-slate-400";
       if (sideIcon) sideIcon.setAttribute('class', state.enabled ? "w-3.5 h-3.5 text-[#059669]" : "w-3.5 h-3.5 text-slate-400");
       if (sideTitle) sideTitle.className = state.enabled ? "text-[11px] font-black text-[#065f46]" : "text-[11px] font-bold text-slate-500";
       if (sideBadge) {
-        sideBadge.className = state.enabled ? "text-[8.5px] font-black px-1.5 py-0.2 rounded-full bg-[#10b981] text-white" : "text-[8.5px] font-black px-1.5 py-0.2 rounded-full bg-slate-300 text-slate-600";
+        sideBadge.className = state.enabled ? "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-[#10b981] text-white" : "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-slate-300 text-slate-600";
         sideBadge.textContent = state.enabled ? "เปิด" : "ปิด";
       }
-      if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-200 text-[10px]";
+      if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]";
 
       const btnActive = "flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer select-none bg-white border-[#10b981] text-[#065f46] shadow-2xs hover:bg-emerald-50";
       const btnInactive = "flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer select-none bg-slate-100 border-slate-300 text-slate-400 shadow-none hover:bg-slate-200";
@@ -5420,18 +5561,18 @@
       const btnText = document.getElementById('btn-toggle-drain-text');
       const dotText = document.getElementById('dot-drain-text');
 
-      const sideActive = "p-1.5 rounded-lg border-2 transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-[1.5px_1.5px_0_#059669] ring-2 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none";
-      const sideInactive = "p-1.5 rounded-lg border-2 transition-all duration-150 bg-slate-50 border-slate-300 shadow-[1px_1px_0_#94a3b8] text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none";
+      const sideActive = "p-1.5 rounded-lg border transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-xs ring-1 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none";
+      const sideInactive = "p-1.5 rounded-lg border transition-all duration-150 bg-slate-50 border-slate-300 shadow-xs text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none";
 
       if (sideCard) sideCard.className = state.enabled ? sideActive : sideInactive;
-      if (sideDot) sideDot.className = state.enabled ? "w-2.5 h-2.5 rounded-full bg-[#10b981] animate-pulse" : "w-2.5 h-2.5 rounded-full bg-slate-400";
+      if (sideDot) sideDot.className = state.enabled ? "w-2.5 h-2.5 rounded-full bg-[#10b981]" : "w-2.5 h-2.5 rounded-full bg-slate-400";
       if (sideIcon) sideIcon.setAttribute('class', state.enabled ? "w-3.5 h-3.5 text-[#059669]" : "w-3.5 h-3.5 text-slate-400");
       if (sideTitle) sideTitle.className = state.enabled ? "text-[11px] font-black text-[#065f46]" : "text-[11px] font-bold text-slate-500";
       if (sideBadge) {
-        sideBadge.className = state.enabled ? "text-[8.5px] font-black px-1.5 py-0.2 rounded-full bg-[#10b981] text-white" : "text-[8.5px] font-black px-1.5 py-0.2 rounded-full bg-slate-300 text-slate-600";
+        sideBadge.className = state.enabled ? "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-[#10b981] text-white" : "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-slate-300 text-slate-600";
         sideBadge.textContent = state.enabled ? "เปิด" : "ปิด";
       }
-      if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-200 text-[10px]";
+      if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]";
 
       const btnActive = "flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer select-none bg-white border-[#10b981] text-[#065f46] shadow-2xs hover:bg-emerald-50";
       const btnInactive = "flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer select-none bg-slate-100 border-slate-300 text-slate-400 shadow-none hover:bg-slate-200";
@@ -5665,9 +5806,9 @@
         modal.id = 'modal-drainage-schedule';
         modal.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 transition-opacity';
         modal.innerHTML = `
-          <div class="pop-card w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#fffdf8] border-2 border-[#475569] shadow-[4px_6px_0_#334155] rounded-xl overflow-hidden">
+          <div class="pop-card w-full max-w-4xl max-h-[90vh] flex flex-col bg-[#fffdf8] border-2 border-slate-900 shadow-2xl border-2 border-slate-900 rounded-xl overflow-hidden">
             <!-- Modal Header -->
-            <div class="pop-header p-3 flex items-center justify-between bg-[#bae6fd] border-b-2 border-[#475569]">
+            <div class="pop-header p-3 flex items-center justify-between bg-[#bae6fd] border-b-2 border-slate-900">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-[#0284c7] text-white flex items-center justify-center font-black text-sm shadow-xs">
                   <i data-lucide="git-commit" class="w-5 h-5"></i>
@@ -5681,7 +5822,7 @@
                   </p>
                 </div>
               </div>
-              <button id="btn-close-drainage-modal" type="button" class="pop-btn w-7 h-7 flex items-center justify-center rounded-lg bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-600 border border-slate-300">
+              <button id="btn-close-drainage-modal" type="button" class="pop-btn w-7 h-7 flex items-center justify-center rounded-lg bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-600 border-1.5 border-slate-900">
                 <i data-lucide="x" class="w-4 h-4"></i>
               </button>
             </div>
@@ -5712,10 +5853,10 @@
                 <i data-lucide="table" class="w-4 h-4 text-[#0284c7]"></i>
                 <span>ตารางสรุปพิกัด ระดับก้นท่อ (INV.) และความลึกบ่อพัก คสล.</span>
               </div>
-              <div class="overflow-x-auto rounded-lg border border-slate-300 bg-white">
+              <div class="overflow-x-auto rounded-lg border-1.5 border-slate-900 bg-white">
                 <table class="w-full text-left text-[11px] border-collapse">
                   <thead>
-                    <tr class="bg-[#f8fafc] text-slate-700 border-b border-slate-300 font-black">
+                    <tr class="bg-[#f8fafc] text-slate-700 border-b-2 border-slate-900 font-black">
                       <th class="p-2 border-r border-slate-200">รหัสบ่อ</th>
                       <th class="p-2 border-r border-slate-200">ประเภทบ่อ</th>
                       <th class="p-2 border-r border-slate-200 text-center text-emerald-800">ฝาบ่อ (TOP)</th>
@@ -5733,7 +5874,7 @@
             </div>
 
             <!-- Footer -->
-            <div class="p-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+            <div class="p-2.5 bg-slate-50 border-t-1.5 border-slate-900 flex items-center justify-between">
               <span class="text-[10px] text-slate-500 font-bold">
                 * ระดับอ้างอิงเทียบกับระดับพื้นโครงการ (Top of Ground = ±0.000)
               </span>
@@ -5822,15 +5963,15 @@
         const isToday = isDriven && rec.date === curDate;
 
         const btn = document.createElement('button');
-        let colorClass = 'bg-[#f8fafc] text-[#34383b] border-[#475569] hover:bg-[#fff0c8] shadow-[1px_1px_0_#475569]';
+        let colorClass = 'bg-[#f8fafc] text-[#34383b] border-[#475569] hover:bg-[#fff0c8] shadow-xs';
         let badgeText = 'ยังไม่กด';
         let dateSubText = '';
         if (isToday) {
-          colorClass = 'bg-[#0284c7] text-white border-[#0369a1] shadow-[2px_2px_0_#0369a1] ring-2 ring-[#38bdf8]';
+          colorClass = 'bg-[#0284c7] text-white border-[#0369a1] shadow-xs ring-2 ring-sky-400';
           badgeText = '★ กดวันนี้';
           dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || curDate}</div>`;
         } else if (isDriven) {
-          colorClass = 'bg-[#10b981] text-white border-[#064e3b] shadow-[1.5px_1.5px_0_#064e3b]';
+          colorClass = 'bg-[#10b981] text-white border-[#064e3b] shadow-xs';
           badgeText = '✓ กดวันก่อน';
           dateSubText = `<div class="text-[8.5px] font-mono mt-0.5 bg-black/20 rounded px-1">${rec.date || ''}</div>`;
         }
@@ -6742,7 +6883,7 @@
           reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-slate-100 p-2 sm:p-4 md:p-5' + (isHidden ? ' hidden' : '');
         }
         if (reportCard) {
-          reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border border-slate-300 rounded-xl shadow-lg p-3 sm:p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
+          reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-1.5 border-slate-900 rounded-xl shadow-lg p-3 sm:p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
         if (header) header.className = 'bg-[#107c41] text-white rounded-lg p-3.5 md:p-4 mb-4 shadow-sm border border-[#0d6535] transition-all';
         if (logoBox) {
@@ -6782,13 +6923,13 @@
         if (kpi2) kpi2.className = 'bg-[#fefce8] border border-amber-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap';
         if (kpi3) kpi3.className = 'bg-[#f0fdf4] border border-emerald-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap';
 
-        if (secPlan) secPlan.className = 'border border-slate-300 rounded-lg overflow-hidden bg-white h-full flex flex-col shadow-xs';
+        if (secPlan) secPlan.className = 'border-1.5 border-slate-900 rounded-lg overflow-hidden bg-white h-full flex flex-col shadow-xs';
         if (secPlanHead) secPlanHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2';
-        if (planCanvasBox) planCanvasBox.className = 'w-full bg-white border border-slate-300 rounded overflow-hidden flex items-center justify-center relative';
-        if (secScurve) secScurve.className = 'border border-slate-300 rounded-lg overflow-hidden bg-white shadow-xs';
+        if (planCanvasBox) planCanvasBox.className = 'w-full bg-white border-1.5 border-slate-900 rounded overflow-hidden flex items-center justify-center relative';
+        if (secScurve) secScurve.className = 'border-1.5 border-slate-900 rounded-lg overflow-hidden bg-white shadow-xs';
         if (secScurveHead) secScurveHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex items-center justify-between';
         if (scurveBadge) scurveBadge.className = 'text-[11px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200';
-        if (secTable) secTable.className = 'border border-slate-300 rounded-lg overflow-hidden bg-white shadow-xs';
+        if (secTable) secTable.className = 'border-1.5 border-slate-900 rounded-lg overflow-hidden bg-white shadow-xs';
         if (secTableHead) secTableHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex items-center justify-between';
         if (theadTable) theadTable.className = 'bg-[#107c41] text-white font-bold text-xs border-b border-[#0d6535]';
 
@@ -6801,15 +6942,15 @@
           reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-[#eef7f4] p-2 sm:p-4 md:p-5' + (isHidden ? ' hidden' : '');
         }
         if (reportCard) {
-          reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-[#475569] rounded-2xl shadow-[6px_8px_0_#c9dfd9] p-3 sm:p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
+          reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-slate-900 rounded-2xl shadow-lg border-1.5 border-slate-900 p-3 sm:p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
-        if (header) header.className = 'bg-gradient-to-r from-[#fff0c8] via-[#fffdf8] to-[#e5f4e9] border-2 border-[#475569] rounded-2xl p-4 md:p-5 shadow-[4px_4px_0_#475569] mb-4 transition-all';
+        if (header) header.className = 'bg-white border-2 border-slate-900 rounded-2xl p-4 md:p-5 shadow-xs mb-4 transition-all';
         if (logoBox) {
-          logoBox.className = 'w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-[#475569] flex flex-col items-center justify-center font-montserrat font-black text-[#34383b] shadow-[2px_2px_0_#475569] leading-tight shrink-0';
+          logoBox.className = 'w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-slate-900 flex flex-col items-center justify-center font-montserrat font-black text-[#34383b] shadow-sm leading-tight shrink-0';
           logoBox.innerHTML = '<span class="text-[9px] font-black uppercase text-[#a84631]">PYNN</span><span class="text-base font-black">37</span>';
         }
         if (tagPill) {
-          tagPill.className = 'px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1px_1px_0_#475569]';
+          tagPill.className = 'px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs';
           tagPill.textContent = 'โครงการ PYNN PRIDI 37';
         }
         if (subtag) subtag.className = 'text-xs text-[#667277] font-bold';
@@ -6818,38 +6959,38 @@
           titleText.innerHTML = 'รายงานความคืบหน้างานเสาเข็ม <span class="text-xs md:text-sm font-bold text-[#667277] hidden sm:inline">(Piling Progress Report)</span>';
         }
 
-        if (themeSel) themeSel.className = 'flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export';
+        if (themeSel) themeSel.className = 'flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs no-print no-export';
         if (btnOrig) btnOrig.className = 'px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1';
         if (btnExcel) btnExcel.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1';
 
         if (dateBadge) {
-          dateBadge.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-[#475569] text-xs font-black text-[#34383b] shadow-[1.5px_1.5px_0_#475569]';
+          dateBadge.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs';
           const dIcon = dateBadge.querySelector('i');
           if (dIcon) dIcon.className = 'w-3.5 h-3.5 text-[#ed6845]';
           const dText = document.getElementById('rep-header-date');
           if (dText) dText.className = 'text-[#ed6845] font-mono font-black';
         }
-        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-white rounded-lg border-2 border-[#475569] p-0.5 shadow-[1.5px_1.5px_0_#475569] no-print no-export';
-        if (btnExport) btnExport.className = 'pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#064e3b] font-black';
-        if (btnPrint) btnPrint.className = 'pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-[2px_2px_0_#9c3b23] font-black';
-        if (btnClose) btnClose.className = 'pop-btn p-1.5 text-xs flex items-center justify-center shadow-[1.5px_1.5px_0_#475569]';
+        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs no-print no-export';
+        if (btnExport) btnExport.className = 'pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black';
+        if (btnPrint) btnPrint.className = 'pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black';
+        if (btnClose) btnClose.className = 'pop-btn p-1.5 text-xs flex items-center justify-center shadow-xs';
 
         if (formulaBar) formulaBar.classList.add('hidden');
         if (sheetTabs) sheetTabs.classList.add('hidden');
 
-        if (kpi1) kpi1.className = 'bg-[#f0f9ff] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
-        if (kpi2) kpi2.className = 'bg-[#fff7ed] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
-        if (kpi3) kpi3.className = 'bg-[#e5f4e9] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
+        if (kpi1) kpi1.className = 'bg-[#f0f9ff] border-2 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
+        if (kpi2) kpi2.className = 'bg-[#fff7ed] border-2 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
+        if (kpi3) kpi3.className = 'bg-[#e5f4e9] border-2 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
 
-        if (secPlan) secPlan.className = 'border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white h-full flex flex-col';
-        if (secPlanHead) secPlanHead.className = 'bg-[#fff0c8] px-4 py-2.5 border-b-2 border-[#475569] flex flex-wrap items-center justify-between gap-2';
-        if (planCanvasBox) planCanvasBox.className = 'w-full bg-white border-2 border-[#475569] rounded overflow-hidden flex items-center justify-center relative';
-        if (secScurve) secScurve.className = 'border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white';
-        if (secScurveHead) secScurveHead.className = 'bg-[#dff1f5] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between';
-        if (scurveBadge) scurveBadge.className = 'text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-[#475569] shadow-[1.5px_1.5px_0_#475569] text-[#34383b]';
-        if (secTable) secTable.className = 'border-2 border-[#475569] rounded-xl overflow-hidden shadow-[3px_3px_0_#475569] bg-white';
-        if (secTableHead) secTableHead.className = 'bg-[#ffc45b] px-4 py-2.5 border-b-2 border-[#475569] flex items-center justify-between';
-        if (theadTable) theadTable.className = 'bg-[#fff0c8] text-[#34383b] border-b-2 border-[#475569] font-black text-xs';
+        if (secPlan) secPlan.className = 'border-2 border-slate-900 rounded-xl overflow-hidden shadow-sm bg-white h-full flex flex-col';
+        if (secPlanHead) secPlanHead.className = 'bg-[#fff0c8] px-4 py-2.5 border-b-2 border-slate-900 flex flex-wrap items-center justify-between gap-2';
+        if (planCanvasBox) planCanvasBox.className = 'w-full bg-white border-2 border-slate-900 rounded overflow-hidden flex items-center justify-center relative';
+        if (secScurve) secScurve.className = 'border-2 border-slate-900 rounded-xl overflow-hidden shadow-sm bg-white';
+        if (secScurveHead) secScurveHead.className = 'bg-[#dff1f5] px-4 py-2.5 border-b-2 border-slate-900 flex items-center justify-between';
+        if (scurveBadge) scurveBadge.className = 'text-xs font-black bg-white px-2.5 py-1 rounded-lg border-2 border-slate-900 shadow-sm rounded-xl text-[#34383b]';
+        if (secTable) secTable.className = 'border-2 border-slate-900 rounded-xl overflow-hidden shadow-sm bg-white';
+        if (secTableHead) secTableHead.className = 'bg-[#ffc45b] px-4 py-2.5 border-b-2 border-slate-900 flex items-center justify-between';
+        if (theadTable) theadTable.className = 'bg-[#fff0c8] text-[#34383b] border-b-2 border-slate-900 font-black text-xs';
 
         if (legendOrig) legendOrig.classList.remove('hidden');
         if (legendExcel) legendExcel.classList.add('hidden');
@@ -7011,7 +7152,7 @@
         if (varCard) {
           varCard.className = currentReportTheme === 'excel'
             ? 'bg-[#fef2f2] border border-rose-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap'
-            : 'bg-[#fff1f2] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
+            : 'bg-[#fff1f2] border-2 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
         }
       } else if (variance > 0) {
         if (varDisplay) {
@@ -7026,7 +7167,7 @@
         if (varCard) {
           varCard.className = currentReportTheme === 'excel'
             ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap'
-            : 'bg-[#e5f4e9] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
+            : 'bg-[#e5f4e9] border-2 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
         }
       } else {
         if (varDisplay) {
@@ -7041,7 +7182,7 @@
         if (varCard) {
           varCard.className = currentReportTheme === 'excel'
             ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap'
-            : 'bg-[#f0fdf4] border-2 border-[#475569] rounded-xl px-3.5 py-3 shadow-[2.5px_2.5px_0_#475569] flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
+            : 'bg-[#f0fdf4] border-2 border-slate-900 rounded-xl px-3.5 py-3 shadow-xs flex items-center justify-between gap-2 overflow-hidden min-h-[58px] whitespace-nowrap';
         }
       }
 
@@ -7068,16 +7209,16 @@
       const btnFilterAll = document.getElementById('btn-rep-filter-all');
       if (btnFilterToday && btnFilterAll) {
         if (isFilterAll) {
-          btnFilterAll.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]';
+          btnFilterAll.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border-1.5 border-slate-900';
           btnFilterToday.className = 'px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]';
         } else {
-          btnFilterToday.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border border-[#475569]';
+          btnFilterToday.className = 'px-2 py-0.5 rounded font-black bg-white text-[#34383b] shadow-xs border-1.5 border-slate-900';
           btnFilterAll.className = 'px-2 py-0.5 rounded font-bold text-[#667277] hover:text-[#34383b]';
         }
       }
 
       if (displayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="12" class="py-5 px-3 text-center border-b-2 border-[#475569]">
+        tbody.innerHTML = `<tr><td colspan="12" class="py-5 px-3 text-center border-b-2 border-slate-900">
           <div class="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-50 border border-slate-200 text-[#475569] font-bold text-xs leading-normal">
             <i data-lucide="info" class="w-4 h-4 text-[#ed6845] shrink-0"></i>
             <span>${isFilterAll ? 'ยังไม่มีเสาเข็มที่กดในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่กดในวันที่ ${curDate} <span class="no-export no-print text-[11px] text-[#667277] font-normal block sm:inline mt-1 sm:mt-0">(คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)</span>`}</span>
@@ -7235,7 +7376,7 @@
             }
           } else {
             tr.className = 'hover:bg-[#f0fdf4] transition-colors cursor-pointer ' +
-              (isLastRow ? 'border-b-2 border-[#475569] ' : 'border-b border-[#e5f1ed] ') +
+              (isLastRow ? 'border-b-2 border-slate-900 ' : 'border-b border-[#e5f1ed] ') +
               (index % 2 === 1 ? 'bg-[#fdfbf7]' : 'bg-white');
             tr.innerHTML = `
               <td class="p-2.5 text-center font-bold text-[#667277] border-r border-[#e5f1ed] ${isLastRow ? '!border-b-2 !border-b-[#475569]' : ''}">${p.no}</td>
@@ -7499,21 +7640,21 @@
       if (isReportOpen) {
         currentExportMode = 'report';
         currentExportRatio = 'fit';
-        if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border border-[#475569] shadow-xs flex items-center gap-1.5';
+        if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
         if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       } else {
         currentExportMode = '3d';
         currentExportRatio = '16:9';
-        if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border border-[#475569] shadow-xs flex items-center gap-1.5';
+        if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
         if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       }
 
       // Update ratio button UI
       document.querySelectorAll('.exp-ratio-btn').forEach(b => {
         if (b.getAttribute('data-ratio') === currentExportRatio) {
-          b.className = 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-[#475569] font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-[1.5px_1.5px_0_#475569]';
+          b.className = 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs';
         } else {
-          b.className = 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]';
+          b.className = 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
         }
       });
 
@@ -7537,12 +7678,12 @@
       currentExportRatio = 'fit';
       const bRep = document.getElementById('exp-tab-report');
       const b3d = document.getElementById('exp-tab-3d');
-      if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border border-[#475569] shadow-xs flex items-center gap-1.5';
+      if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
       if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       document.querySelectorAll('.exp-ratio-btn').forEach(b => {
         b.className = b.getAttribute('data-ratio') === 'fit'
-          ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-[#475569] font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-[1.5px_1.5px_0_#475569]'
-          : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]';
+          ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs'
+          : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
       });
       updateExportPreview();
     });
@@ -7552,12 +7693,12 @@
       currentExportRatio = '16:9';
       const bRep = document.getElementById('exp-tab-report');
       const b3d = document.getElementById('exp-tab-3d');
-      if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border border-[#475569] shadow-xs flex items-center gap-1.5';
+      if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
       if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       document.querySelectorAll('.exp-ratio-btn').forEach(b => {
         b.className = b.getAttribute('data-ratio') === '16:9'
-          ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-[#475569] font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-[1.5px_1.5px_0_#475569]'
-          : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]';
+          ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs'
+          : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
       });
       updateExportPreview();
     });
@@ -7566,9 +7707,9 @@
     document.querySelectorAll('.exp-ratio-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.exp-ratio-btn').forEach(b => {
-          b.className = 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-[#475569]/40 font-bold text-xs bg-white text-[#667277]';
+          b.className = 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
         });
-        btn.className = 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-[#475569] font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-[1.5px_1.5px_0_#475569]';
+        btn.className = 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs';
         currentExportRatio = btn.getAttribute('data-ratio');
         updateExportPreview();
       });
@@ -8350,7 +8491,7 @@
               <div class="text-[#047857] font-bold">N: ${actN.toFixed(4)}</div>
               <div class="text-[#047857] font-bold">E: ${actE.toFixed(4)}</div>
               <div class="mt-0.5">
-                <span class="inline-block px-1.5 py-0.2 rounded font-mono font-bold text-[9px] ${isCoordTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}">
+                <span class="inline-block px-2 py-0.5 rounded font-mono font-bold text-[9px] ${isCoordTol ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300'}">
                   ${totMm === 0 ? '✓ ตรงหมุด (0mm)' : `Δ ${totMm}mm`}
                 </span>
               </div>
@@ -8358,28 +8499,28 @@
           ` : (isDriven ? `<span class="text-slate-400 font-mono text-[10.5px]">-</span>` : `<span class="text-slate-400 font-mono text-[10.5px]">- (รอตอก)</span>`);
 
           tr.innerHTML = `
-            <td class="p-2 border-r border-[#475569]/20 text-center font-bold text-[#667277]">${p.no}</td>
-            <td class="p-2 border-r border-[#475569]/20 font-black text-[#34383b]">${p.tag}</td>
-            <td class="p-2 border-r border-[#475569]/20 text-center font-black text-[#1e40af]">${p.footing || '-'}</td>
-            <td class="p-2 border-r border-[#475569]/20 text-center font-bold text-[#34383b]">${p.grid}</td>
-            <td class="p-2 border-r border-[#475569]/20 text-right font-mono text-[11px] text-slate-700 leading-tight">
+            <td class="p-2 border-r-1.5 border-slate-900 text-center font-bold text-[#667277]">${p.no}</td>
+            <td class="p-2 border-r-1.5 border-slate-900 font-black text-[#34383b]">${p.tag}</td>
+            <td class="p-2 border-r-1.5 border-slate-900 text-center font-black text-[#1e40af]">${p.footing || '-'}</td>
+            <td class="p-2 border-r-1.5 border-slate-900 text-center font-bold text-[#34383b]">${p.grid}</td>
+            <td class="p-2 border-r-1.5 border-slate-900 text-right font-mono text-[11px] text-slate-700 leading-tight">
               <div>N: ${nStr}</div>
               <div>E: ${eStr}</div>
             </td>
-            <td class="p-2 border-r border-[#475569]/20 text-right bg-emerald-50/40">
+            <td class="p-2 border-r-1.5 border-slate-900 text-right bg-emerald-50/40">
               ${afterPressHtml}
             </td>
-            <td class="p-2 border-r border-[#475569]/20 text-right font-black text-[#a84631] font-mono">${pco.toFixed(3)}</td>
-            <td class="p-2 border-r border-[#475569]/20 text-center">
+            <td class="p-2 border-r-1.5 border-slate-900 text-right font-black text-[#a84631] font-mono">${pco.toFixed(3)}</td>
+            <td class="p-2 border-r-1.5 border-slate-900 text-center">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-black border ${isDriven ? 'bg-[#98cfad] text-[#1e3a29] border-[#475569]' : 'bg-slate-100 text-[#667277] border-slate-300'}">
                 ${isDriven ? '✓ ตอกแล้ว' : 'รอการตอก'}
               </span>
             </td>
-            <td class="p-2 border-r border-[#475569]/20 text-center font-mono text-[11px] text-[#667277]">
+            <td class="p-2 border-r-1.5 border-slate-900 text-center font-mono text-[11px] text-[#667277]">
               ${isDriven ? (rec.date || '-') : '-'}
             </td>
             <td class="p-2 text-center">
-              <button class="px-2.5 py-0.5 rounded text-[10.5px] font-black border border-[#475569] shadow-[1px_1px_0_#475569] ${isDriven ? 'bg-[#f4ece7] hover:bg-[#fff0c8]' : 'bg-[#98cfad] text-[#1e3a29] hover:bg-[#10b981]'}" data-toggle-no="${p.no}">
+              <button class="px-2.5 py-0.5 rounded text-[10.5px] font-black border-1.5 border-slate-900 shadow-xs ${isDriven ? 'bg-[#f4ece7] hover:bg-[#fff0c8]' : 'bg-[#98cfad] text-[#1e3a29] hover:bg-[#10b981]'}" data-toggle-no="${p.no}">
                 ${isDriven ? 'ยกเลิก' : 'ตอกแล้ว'}
               </button>
             </td>
@@ -8528,18 +8669,18 @@
 
       // Top Status Pill
       const statusPill = isDriven
-        ? `<span class="px-3 py-1 rounded-lg text-xs font-black bg-[#d1fae5] border-2 border-[#059669] text-[#065f46] shadow-[1.5px_1.5px_0_#059669] flex items-center gap-1.5">
+        ? `<span class="px-3 py-1 rounded-lg text-xs font-black bg-[#d1fae5] border border-emerald-300 text-[#065f46] shadow-xs font-bold flex items-center gap-1.5">
              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> ตอกเสร็จแล้ว (${rec.date || 'วันนี้'})
            </span>`
-        : `<span class="px-3 py-1 rounded-lg text-xs font-black bg-[#f1f5f9] border-2 border-[#64748b] text-[#475569] shadow-[1.5px_1.5px_0_#64748b] flex items-center gap-1.5">
+        : `<span class="px-3 py-1 rounded-lg text-xs font-black bg-[#f1f5f9] border-1.5 border-slate-900 text-[#475569] shadow-xs font-bold flex items-center gap-1.5">
              <i data-lucide="clock" class="w-3.5 h-3.5"></i> ยังไม่ได้กด (รอดำเนินการ)
            </span>`;
 
       let inner = `
         <!-- Top Pile Identification Header Card (Flat-Pop Style) -->
-        <div class="p-3 rounded-xl bg-white border-2 border-[#475569] shadow-[3px_3px_0_#475569] flex items-center justify-between flex-wrap gap-2">
+        <div class="p-3 rounded-xl bg-white border-2 border-slate-900 shadow-sm flex items-center justify-between flex-wrap gap-2">
           <div class="flex items-center gap-2.5">
-            <div class="w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-[#475569] flex items-center justify-center font-montserrat font-black text-sm text-[#34383b] shadow-[1.5px_1.5px_0_#475569] shrink-0">
+            <div class="w-12 h-12 rounded-xl bg-[#ffc45b] border-2 border-slate-900 flex items-center justify-center font-montserrat font-black text-sm text-[#34383b] shadow-xs shrink-0">
               ${pileData.tag}
             </div>
             <div>
@@ -8571,7 +8712,7 @@
           </div>
 
           <!-- 1. ระดับตัดหัวเข็มตามแบบ (PCO Level) -->
-          <div class="p-3.5 rounded-xl bg-[#fffbeb] border-2 border-[#d97706] shadow-[3px_3px_0_#d97706] space-y-1.5">
+          <div class="p-3.5 rounded-xl bg-[#fffbeb] border border-amber-300 shadow-xs hover:shadow-sm space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-[#b45309] flex items-center gap-1.5">
                 <i data-lucide="ruler" class="w-4 h-4 text-[#d97706]"></i>
@@ -8594,7 +8735,7 @@
           </div>
 
           <!-- 2. ค่าพิกัดสำรวจตามแบบ (Coordinates Co) -->
-          <div class="p-3.5 rounded-xl bg-[#f0fdf4] border-2 border-[#059669] shadow-[3px_3px_0_#059669] space-y-2">
+          <div class="p-3.5 rounded-xl bg-[#f0fdf4] border border-emerald-300 shadow-xs hover:shadow-sm space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-[#047857] flex items-center gap-1.5">
                 <i data-lucide="crosshair" class="w-4 h-4 text-[#059669]"></i>
@@ -8624,9 +8765,9 @@
           </div>
 
           <!-- Quick Drive Strip -->
-          <div class="p-3 rounded-xl bg-white border-2 border-[#475569] shadow-[2px_2px_0_#475569] flex items-center justify-between gap-2 flex-wrap">
+          <div class="p-3 rounded-xl bg-white border-2 border-slate-900 shadow-sm flex items-center justify-between gap-2 flex-wrap">
             <span class="text-xs font-black text-[#34383b]">ต้องการกดเสาเข็มต้นนี้เลยหรือไม่?</span>
-            <button id="btn-pco-quick-drive-this" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white shadow-[1.5px_1.5px_0_#064e3b] flex items-center gap-1.5 cursor-pointer">
+            <button id="btn-pco-quick-drive-this" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs flex items-center gap-1.5 cursor-pointer">
               <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-300"></i>
               <span>กดเสาเข็มต้นนี้ทันที</span>
             </button>
@@ -8728,7 +8869,7 @@
           </div>
 
           <!-- 1. ระดับตัดหัวเข็ม PCO vs Actual TOP -->
-          <div class="p-3.5 rounded-xl bg-[#fffbeb] border-2 border-[#d97706] shadow-[3px_3px_0_#d97706] space-y-2.5">
+          <div class="p-3.5 rounded-xl bg-[#fffbeb] border border-amber-300 shadow-xs hover:shadow-sm space-y-2.5">
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-[#b45309] flex items-center gap-1.5">
                 <i data-lucide="ruler" class="w-4 h-4 text-[#d97706]"></i>
@@ -8774,7 +8915,7 @@
           </div>
 
           <!-- 2. เปรียบเทียบพิกัดสำรวจ (Coordinates Co) -->
-          <div class="p-3.5 rounded-xl bg-[#f0fdf4] border-2 border-[#059669] shadow-[3px_3px_0_#059669] space-y-2.5">
+          <div class="p-3.5 rounded-xl bg-[#f0fdf4] border border-emerald-300 shadow-xs hover:shadow-sm space-y-2.5">
             <div class="flex items-center justify-between">
               <span class="text-xs font-black text-[#047857] flex items-center gap-1.5">
                 <i data-lucide="crosshair" class="w-4 h-4 text-[#059669]"></i>
@@ -8789,10 +8930,10 @@
           </div>
 
           <!-- Summary & Date Strip -->
-          <div class="p-3 rounded-xl bg-white border-2 border-[#475569] shadow-[2px_2px_0_#475569] flex items-center justify-between gap-2 flex-wrap text-xs">
+          <div class="p-3 rounded-xl bg-white border-2 border-slate-900 shadow-sm flex items-center justify-between gap-2 flex-wrap text-xs">
             <div class="flex items-center gap-2">
               <span class="font-bold text-slate-600">วันที่กดเสร็จ:</span>
-              <span class="font-mono font-black text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-300">${rec.date || 'วันนี้'}</span>
+              <span class="font-mono font-black text-slate-900 bg-slate-100 px-2 py-0.5 rounded border-1.5 border-slate-900">${rec.date || 'วันนี้'}</span>
             </div>
             <div class="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
               <i data-lucide="check" class="w-3.5 h-3.5"></i>
