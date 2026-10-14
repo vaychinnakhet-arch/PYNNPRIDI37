@@ -7666,7 +7666,7 @@ body:not(.is-line-capturing) .modal .modal-content {
         <!-- Summary Dashboard (Core KPIs) -->
         <div
           id="splash-summary-grid"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 mb-8"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 mb-8"
         >
           <!-- Overall Progress -->
           <div
@@ -7738,6 +7738,42 @@ body:not(.is-line-capturing) .modal .modal-content {
             <div class="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-medium">
               <span>เกณฑ์มาตรฐาน: &ge; 80%</span>
               <span class="font-bold text-[#16A34A]">พร้อมส่งมอบ</span>
+            </div>
+          </div>
+
+          <!-- 3D Piling Progress KPI -->
+          <div
+            class="splash-card p-5 md:p-6 flex flex-col justify-between cursor-pointer hover:bg-slate-50 transition-all overflow-hidden rounded-2xl group relative"
+            onclick="window.location.href='piling.html?view=3d#3d'"
+            title="คลิกเพื่อเข้าสู่ระบบติดตามงานเสาเข็ม 93 ต้น แปลน 3D & รายงาน"
+          >
+            <div class="flex items-center justify-between w-full gap-2 mb-3">
+              <span class="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+                งานเสาเข็ม 93 ต้น (Piling 3D)
+              </span>
+              <span class="text-xs font-extrabold text-amber-700 group-hover:underline transition-all flex items-center gap-1 shrink-0 whitespace-nowrap">
+                เปิดแปลน 3D &rarr;
+              </span>
+            </div>
+            <div class="flex items-center gap-4 sm:gap-6 my-auto py-2">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-amber-50 border-2 border-amber-300 flex flex-col items-center justify-center shrink-0 shadow-xs">
+                <p
+                  id="splash-piling-rate"
+                  class="text-2xl sm:text-3xl font-black text-amber-800 tracking-tight leading-none"
+                >
+                  0%
+                </p>
+                <span class="text-[10px] font-black text-amber-700 uppercase tracking-widest mt-1.5">DRIVEN</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-base sm:text-lg font-black text-[#253047] leading-tight">ความคืบหน้าตอกเสาเข็ม</p>
+                <p class="text-xs text-slate-500 font-medium mt-1"><span id="splash-piling-count-text" class="font-bold text-slate-800">0 / 93 ต้น</span> ตามพิกัดแปลนจริง</p>
+              </div>
+            </div>
+            <div class="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-medium">
+              <span>รายงาน S-Curve ประจำวัน</span>
+              <span class="font-bold text-amber-700">โมเดล 3D & รายงาน</span>
             </div>
           </div>
 
@@ -14326,7 +14362,9 @@ if (typeof window !== "undefined") {
             if (elToday) elToday.textContent = todayPiles;
             if (elRemain) elRemain.textContent = (93 - drivenPiles);
             if (elBar) elBar.style.width = `${pct}%`;
-            if (elSplashCount) elSplashCount.textContent = `${drivenPiles}/93`;
+            if (elSplashCount) elSplashCount.textContent = `${drivenPiles} / 93 ต้น`;
+            const elSplashRate = document.getElementById("splash-piling-rate");
+            if (elSplashRate) elSplashRate.textContent = `${pct}%`;
           } catch (e) {
             console.warn("Could not calculate live piling portal stats", e);
           }
