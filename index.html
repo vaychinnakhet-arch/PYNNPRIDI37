@@ -7458,12 +7458,12 @@ body:not(.is-line-capturing) .modal .modal-content {
                   </h2>
                 </div>
                 <div class="flex items-center gap-3 text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-3">
-                  <span class="flex items-center gap-1.5 font-bold text-slate-700">
-                    <span class="w-3 h-1 bg-[#ed6845] rounded-full inline-block"></span>
+                  <span class="flex items-center gap-2 font-bold text-slate-700">
+                    <span class="w-6 h-0 border-t-2 border-dashed border-[#ed6845] inline-block"></span>
                     แผนสะสม (3 ต้น/วัน)
                   </span>
-                  <span class="flex items-center gap-1.5 font-bold text-emerald-700">
-                    <span class="w-3 h-2 bg-emerald-500 rounded-sm inline-block"></span>
+                  <span class="flex items-center gap-2 font-bold text-emerald-700">
+                    <span class="inline-flex items-center gap-0.5"><span class="w-3 h-0.5 bg-[#10b981]"></span><span class="w-2 h-2 rounded-full bg-[#10b981]"></span><span class="w-3 h-0.5 bg-[#10b981]"></span></span>
                     ผลงานจริงสะสม
                   </span>
                   <span class="text-xs text-slate-400 hidden sm:inline">| แผนรวม 93 ต้น / 31 วันทำการ</span>
@@ -13742,6 +13742,7 @@ if (typeof window !== "undefined") {
                   datasets: [
                     {
                       label: 'แผนงานสะสม (3 ต้น/วัน)',
+                      pointStyle: 'line',
                       data: planData,
                       borderColor: '#ed6845',
                       borderWidth: 2.5,
@@ -13753,6 +13754,7 @@ if (typeof window !== "undefined") {
                     },
                     {
                       label: 'ผลงานจริงสะสม (Actual)',
+                      pointStyle: 'line',
                       data: actualData,
                       borderColor: '#10b981',
                       backgroundColor: 'rgba(16, 185, 129, 0.15)',
@@ -13771,13 +13773,28 @@ if (typeof window !== "undefined") {
                   maintainAspectRatio: false,
                   interaction: { mode: 'index', intersect: false },
                   plugins: {
-                    legend: {
+                                        legend: {
                       position: 'top',
                       labels: {
+                        usePointStyle: true,
+                        pointStyle: 'line',
+                        boxWidth: 36,
+                        pointStyleWidth: 36,
                         font: { family: 'Sarabun', size: 12, weight: 'bold' },
                         color: '#334155',
-                        boxWidth: 14,
-                        padding: 12
+                        padding: 16,
+                        generateLabels: function(chart) {
+                          return chart.data.datasets.map((dataset, i) => ({
+                            text: dataset.label,
+                            fillStyle: 'transparent',
+                            strokeStyle: dataset.borderColor,
+                            lineWidth: dataset.borderWidth || 3,
+                            lineDash: dataset.borderDash || [],
+                            pointStyle: 'line',
+                            hidden: !chart.isDatasetVisible(i),
+                            datasetIndex: i
+                          }));
+                        }
                       }
                     },
                     tooltip: {
