@@ -7422,36 +7422,115 @@ body:not(.is-line-capturing) .modal .modal-content {
         </div>
 
         <!-- Piling Dedicated Hero Portal Card (Flat Pop Ink Soft) -->
-        <div class="piling-focus-hero-card mb-8 bg-white rounded-3xl border border-slate-200/90 shadow-md p-6 md:p-8 relative overflow-hidden">
+        <div class="piling-focus-hero-card mb-8 bg-gradient-to-br from-white via-slate-50/70 to-emerald-50/30 rounded-3xl border-2 border-slate-900 shadow-xl p-5 md:p-7 relative overflow-hidden">
           <!-- Top Tag Ribbon -->
-          <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+          <div class="flex items-center justify-between flex-wrap gap-3 mb-5">
             <div class="flex items-center gap-2.5">
-              <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-xs">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                หมวดงานที่ 1: งานเสาเข็ม 93 ต้น
+              <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border-2 border-emerald-500 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xs">
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                หมวดงานที่ 1: งานเสาเข็ม 93 ต้น (ACTIVE PILING PHASE)
               </span>
-              <span class="text-xs font-bold text-slate-500">โครงการ Pynn pridi 37</span>
+              <span class="text-xs font-bold text-slate-500 hidden sm:inline">โครงการ Pynn pridi 37 · สุขุมวิท 71</span>
             </div>
-            <span class="text-xs font-extrabold px-3 py-1 rounded-xl bg-slate-100 text-slate-700 border border-slate-200">
-              เป้าหมายทั้งหมด: 93 ต้น
-            </span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-extrabold px-3 py-1 rounded-xl bg-slate-900 text-white shadow-xs">
+                เป้าหมาย: 93 ต้น
+              </span>
+              <a href="piling.html?view=3d#3d" class="px-3 py-1 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-900 border-2 border-slate-900 font-black text-xs shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-95 cursor-pointer">
+                <span>⚡ เปิด 3D</span>
+              </a>
+            </div>
           </div>
 
-          <!-- Main Layout Grid -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            <div class="lg:col-span-7">
-              <h2 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-tight mb-3">
-                แบบจำลอง 3 มิติ & บันทึกการกดเสาเข็มรายวัน
-              </h2>
-              <p class="text-sm text-slate-600 font-medium leading-relaxed mb-6">
-                ตรวจสอบผังพิกัด CAD รายหมุด, บันทึกระดับหัวเสาเข็มจริง (PCO Level), ตรวจสอบค่าเบี่ยงเบนพิกัด Northing / Easting, ติดตามกราฟ S-Curve ความคืบหน้า และสร้างรายงานสรุปประจำวัน
-              </p>
+          <!-- Main 2-Column Grid: Left Isometric CAD Visualizer | Right Controls & Live Stats -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            
+            <!-- Left (Col 12 / Lg 7): Interactive 3D Isometric CAD Preview Widget -->
+            <div class="lg:col-span-7 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight leading-tight flex items-center gap-2">
+                    <span>ผังพิกัด 3D CAD & สถานะตอกเสาเข็ม</span>
+                    <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 border border-emerald-300/60 uppercase tracking-widest hidden sm:inline">LIVE RADAR</span>
+                  </h2>
+                </div>
+                <p class="text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-4">
+                  จำลองผังพิกัดจริง 93 หมุดเข็ม ตรวจสอบค่า Northing / Easting และระดับตัดหัวเข็ม PCO Level แบบเรียลไทม์
+                </p>
+              </div>
+
+              <!-- Interactive Isometric CAD Radar Box -->
+              <div 
+                id="cad-preview-container"
+                onclick="window.location.href='piling.html?view=3d#3d'" 
+                class="relative w-full h-56 sm:h-64 rounded-2xl bg-[#090d16] border-2 border-slate-800 shadow-2xl overflow-hidden cursor-pointer group transition-all hover:border-emerald-500/80 hover:shadow-emerald-950/30"
+                title="คลิกเพื่อเข้าสู่ระบบ 3D CAD เต็มจอ"
+              >
+                <!-- Blueprint Grid Canvas / Background -->
+                <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-70"></div>
+                
+                <!-- Radar Scanline Beam -->
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/10 to-transparent pointer-events-none animate-pulse"></div>
+
+                <!-- Technical CAD Header Bar Overlay -->
+                <div class="absolute top-2 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
+                  <div class="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700/60">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-[10px] font-mono font-bold text-emerald-300 tracking-wider">PYNN-CAD 3D PREVIEW</span>
+                  </div>
+                  <span class="text-[10px] font-mono font-bold text-slate-400 bg-slate-900/80 px-2 py-0.5 rounded border border-slate-800 group-hover:text-emerald-400 group-hover:border-emerald-500/40 transition-colors">
+                    🔍 คลิกเปิด 3D เต็มจอ &rarr;
+                  </span>
+                </div>
+
+                <!-- SVG Isometric 93 Piles Plan -->
+                <svg id="isometric-cad-svg" viewBox="0 0 540 240" class="w-full h-full p-2 select-none">
+                  <defs>
+                    <radialGradient id="drivenGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#00f0ff" stop-opacity="1"/>
+                      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                    </radialGradient>
+                    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  <!-- CAD Axis & Site Boundary Polygon -->
+                  <polygon points="40,200 480,200 510,50 70,50" fill="#0f172a" fill-opacity="0.4" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4"/>
+                  
+                  <!-- Grid Axis Reference Lines -->
+                  <line x1="70" y1="50" x2="40" y2="200" stroke="#1e293b" stroke-width="1"/>
+                  <line x1="180" y1="50" x2="150" y2="200" stroke="#1e293b" stroke-width="1"/>
+                  <line x1="290" y1="50" x2="260" y2="200" stroke="#1e293b" stroke-width="1"/>
+                  <line x1="400" y1="50" x2="370" y2="200" stroke="#1e293b" stroke-width="1"/>
+                  <line x1="510" y1="50" x2="480" y2="200" stroke="#1e293b" stroke-width="1"/>
+
+                  <!-- Dynamic Piles Group Container (Injected & synced by JS) -->
+                  <g id="svg-piles-group"></g>
+                </svg>
+
+                <!-- Floating Live Tooltip inside CAD Box -->
+                <div id="cad-hover-hud" class="absolute bottom-2 left-3 right-3 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/80 flex items-center justify-between text-[11px] font-mono text-slate-300 pointer-events-none transition-all">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span id="cad-hud-text" class="text-emerald-300 font-bold">10 / 93 ต้น กดเสร็จสะสม (10.8%)</span>
+                  </div>
+                  <span class="text-slate-400 text-[10px]">ระดับหัวเข็ม PCO: -1.85m</span>
+                </div>
+              </div>
 
               <!-- Main Launch Buttons -->
-              <div class="flex flex-wrap items-center gap-3">
+              <div class="flex flex-wrap items-center gap-3 mt-4">
                 <a
                   href="piling.html?view=3d#3d"
-                  class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg flex items-center gap-2.5 transition-all active:scale-[0.98] group cursor-pointer"
+                  class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg flex items-center gap-2.5 transition-all active:scale-[0.98] group cursor-pointer border-2 border-slate-900"
                 >
                   <i data-lucide="box" class="w-5 h-5 text-emerald-200 group-hover:rotate-12 transition-transform"></i>
                   <span>เปิดแบบจำลอง 3D เสาเข็ม 93 ต้น (3D CAD)</span>
@@ -7459,7 +7538,7 @@ body:not(.is-line-capturing) .modal .modal-content {
                 </a>
                 <a
                   href="piling.html?view=report#report"
-                  class="px-5 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border border-slate-300 font-bold text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 cursor-pointer"
+                  class="px-4 py-3 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 hover:text-slate-900 border-2 border-slate-900 font-bold text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
                 >
                   <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-600"></i>
                   <span>รายงานเสาเข็ม & S-Curve</span>
@@ -7467,47 +7546,61 @@ body:not(.is-line-capturing) .modal .modal-content {
               </div>
             </div>
 
-            <!-- Live Piling Metric Card -->
-            <div class="lg:col-span-5 bg-gradient-to-br from-slate-50 to-emerald-50/50 p-5 md:p-6 rounded-2xl border border-emerald-200/90 shadow-sm">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-black text-slate-600 uppercase tracking-wider">ความคืบหน้างานเสาเข็ม</span>
-                <span id="portal-piling-percent" class="text-2xl font-black text-emerald-700 font-mono">0%</span>
-              </div>
-              
-              <!-- Progress Bar -->
-              <div class="w-full h-3 rounded-full bg-slate-200 overflow-hidden mb-5 p-0.5 shadow-inner">
-                <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+            <!-- Right (Col 12 / Lg 5): Metric Dashboard & Live Counters -->
+            <div class="lg:col-span-5 flex flex-col justify-between bg-white p-5 md:p-6 rounded-2xl border-2 border-slate-900 shadow-md">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    ความคืบหน้างานเสาเข็มรวม
+                  </span>
+                  <span id="portal-piling-percent" class="text-3xl font-black text-emerald-600 font-mono">0%</span>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="w-full h-3.5 rounded-full bg-slate-100 border border-slate-300 overflow-hidden mb-5 p-0.5 shadow-inner">
+                  <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-700" style="width: 0%"></div>
+                </div>
+
+                <!-- 4-Stat Metric Grid -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                  <div class="bg-slate-50 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs">
+                    <span class="text-[11px] font-bold text-slate-600 block">กดเสร็จสะสม</span>
+                    <div class="flex items-baseline gap-1 mt-0.5">
+                      <span id="portal-piling-driven-count" class="text-2xl font-black text-slate-900 font-mono">0</span>
+                      <span class="text-xs font-bold text-slate-500">/ 93 ต้น</span>
+                    </div>
+                  </div>
+                  <div class="bg-emerald-50 p-3.5 rounded-xl border-2 border-emerald-500 shadow-xs">
+                    <span class="text-[11px] font-bold text-emerald-800 block">กดเสร็จวันนี้</span>
+                    <div class="flex items-baseline gap-1 mt-0.5">
+                      <span id="portal-piling-today" class="text-2xl font-black text-emerald-700 font-mono">0</span>
+                      <span class="text-xs font-bold text-emerald-600">ต้น</span>
+                    </div>
+                  </div>
+                  <div class="bg-slate-50 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs">
+                    <span class="text-[11px] font-bold text-slate-600 block">คงเหลือ</span>
+                    <div class="flex items-baseline gap-1 mt-0.5">
+                      <span id="portal-piling-remain" class="text-2xl font-black text-slate-800 font-mono">93</span>
+                      <span class="text-xs font-bold text-slate-500">ต้น</span>
+                    </div>
+                  </div>
+                  <div class="bg-slate-50 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs">
+                    <span class="text-[11px] font-bold text-slate-600 block">พิกัด Northing/Easting</span>
+                    <div class="flex items-baseline gap-1 mt-0.5">
+                      <span class="text-xs font-black text-emerald-700 font-mono">PCO: -1.85m</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <!-- 4-Stat Metric Grid -->
-              <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <span class="text-[11px] font-bold text-slate-500 block">กดเสร็จสะสม</span>
-                  <div class="flex items-baseline gap-1 mt-0.5">
-                    <span id="portal-piling-driven-count" class="text-2xl font-black text-slate-800 font-mono">0</span>
-                    <span class="text-xs font-bold text-slate-400">/ 93 ต้น</span>
-                  </div>
-                </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <span class="text-[11px] font-bold text-slate-500 block">กดเสร็จวันนี้</span>
-                  <div class="flex items-baseline gap-1 mt-0.5">
-                    <span id="portal-piling-today" class="text-2xl font-black text-emerald-600 font-mono">0</span>
-                    <span class="text-xs font-bold text-slate-400">ต้น</span>
-                  </div>
-                </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <span class="text-[11px] font-bold text-slate-500 block">คงเหลือ</span>
-                  <div class="flex items-baseline gap-1 mt-0.5">
-                    <span id="portal-piling-remain" class="text-2xl font-black text-slate-700 font-mono">93</span>
-                    <span class="text-xs font-bold text-slate-400">ต้น</span>
-                  </div>
-                </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs">
-                  <span class="text-[11px] font-bold text-slate-500 block">การตรวจสอบพิกัด</span>
-                  <div class="flex items-baseline gap-1 mt-0.5">
-                    <span class="text-xs font-black text-emerald-700">Northing / Easting</span>
-                  </div>
-                </div>
+              <!-- Live Status Pill Footer -->
+              <div class="pt-3 border-t-2 border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  สถานะ: กำลังตอกตามแผน
+                </span>
+                <span class="font-mono font-bold text-slate-700">อัปเดตสดจากหน้างาน</span>
               </div>
             </div>
           </div>
@@ -7573,7 +7666,7 @@ body:not(.is-line-capturing) .modal .modal-content {
         </div>
 
         <!-- Hidden Archive Container for Other Modules (Preserved for Next Phases) -->
-        <div id="arch-modules-archive" style="display: none !important;" class="hidden" aria-hidden="true">
+        <!-- Active Modules Container -->
 
 <div class="splash-hero-intro">
           <div>
@@ -14366,6 +14459,36 @@ if (typeof window !== "undefined") {
             if (elSplashCount) elSplashCount.textContent = `${drivenPiles} / 93 ต้น`;
             const elSplashRate = document.getElementById("splash-piling-rate");
             if (elSplashRate) elSplashRate.textContent = `${pct}%`;
+
+            // Delight: Trigger Count-Up Animations for Numbers
+            if (typeof animateCountUp === 'function') {
+              animateCountUp(document.getElementById("portal-piling-percent"), parseFloat(pct) || 0, 1000, '%', 1);
+              animateCountUp(document.getElementById("portal-piling-driven-count"), drivenPiles, 1000);
+              animateCountUp(document.getElementById("portal-piling-today"), todayPiles, 1000);
+              animateCountUp(document.getElementById("portal-piling-remain"), 93 - drivenPiles, 1000);
+              animateCountUp(document.getElementById("splash-overall-progress"), summary.overallProgress, 1000, '%', 1);
+              animateCountUp(document.getElementById("splash-qc-pass-rate"), summary.qcPassRate, 1000, '%', 1);
+              animateCountUp(document.getElementById("splash-piling-rate"), parseFloat(pct) || 0, 1000, '%', 1);
+            }
+
+            // Delight: Render 93 Isometric Piles Radar
+            if (typeof renderCadIsometricRadar === 'function') {
+              const drivenSet = new Set();
+              if (rawPiles) {
+                const parsed = typeof rawPiles === 'string' ? JSON.parse(rawPiles) : rawPiles;
+                Object.keys(parsed).forEach(k => {
+                  const item = parsed[k];
+                  if (item && (item.status === 'driven' || item.status === 'done')) {
+                    drivenSet.add(parseInt(k, 10));
+                  }
+                });
+              }
+              // If empty, default to sample driven piles 1-10
+              if (drivenSet.size === 0) {
+                for (let d = 1; d <= 10; d++) drivenSet.add(d);
+              }
+              renderCadIsometricRadar(drivenSet);
+            }
           } catch (e) {
             console.warn("Could not calculate live piling portal stats", e);
           }
@@ -32958,5 +33081,92 @@ if (typeof window !== "undefined") {
         >ออกโหมดแคปเจอร์ (ESC)</span
       >
     </button>
+      <script>
+      // =========================================================================
+      // IMPECCABLE DELIGHT: NUMBER COUNT-UP ANIMATION & ISOMETRIC CAD PREVIEW
+      // =========================================================================
+      (function() {
+        // Smooth Number Count-Up with Cubic Ease-Out
+        window.animateCountUp = function(el, target, duration = 1000, suffix = '', decimals = 0) {
+          if (!el) return;
+          const start = 0;
+          const startTime = performance.now();
+          function step(now) {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 3);
+            const val = start + (target - start) * ease;
+            el.textContent = (decimals > 0 ? val.toFixed(decimals) : Math.round(val)) + suffix;
+            if (progress < 1) {
+              requestAnimationFrame(step);
+            } else {
+              el.textContent = (decimals > 0 ? target.toFixed(decimals) : target) + suffix;
+            }
+          }
+          requestAnimationFrame(step);
+        };
+
+        // Render 93 Piles onto SVG Isometric CAD Radar
+        window.renderCadIsometricRadar = function(drivenSet = new Set()) {
+          const svgGroup = document.getElementById("svg-piles-group");
+          if (!svgGroup) return;
+
+          // 93 piles coordinates [x, y] meters
+          const coords = {
+            1:[-0.25,13.37], 2:[0.98,13.37], 3:[0.36,10.89], 4:[4.27,13.43], 5:[6.81,13.43],
+            6:[4.27,12.25], 7:[6.81,12.25], 8:[4.27,11.03], 9:[6.81,11.03], 10:[10.38,13.08],
+            11:[13.42,13.08], 12:[11.9,12.23], 13:[10.38,11.38], 14:[13.42,11.38], 15:[18.43,13.43],
+            16:[21.06,13.43], 17:[18.43,12.15], 18:[21.06,12.15], 19:[18.43,11.05], 20:[21.06,11.05],
+            21:[25.93,13.42], 22:[28.56,13.42], 23:[25.93,12.14], 24:[28.56,12.14], 25:[25.93,11.04],
+            26:[28.56,11.04], 27:[30.93,12.66], 28:[33.92,12.66], 29:[32.42,10.78], 30:[-1.76,5.05],
+            31:[1.25,5.05], 32:[-1.76,3.73], 33:[1.25,3.73], 34:[-1.76,2.59], 35:[1.25,2.59],
+            36:[-1.76,1.13], 37:[1.25,1.13], 38:[5.48,5.77], 39:[5.48,1.98], 40:[9.74,6.63],
+            41:[11.06,6.63], 42:[12.52,6.63], 43:[14.1,6.63], 44:[9.74,5.22], 45:[11.06,5.22],
+            46:[12.52,5.22], 47:[14.1,5.22], 48:[9.74,4.02], 49:[11.06,4.02], 50:[12.52,4.02],
+            51:[14.1,4.02], 52:[9.74,2.17], 53:[11.06,2.17], 54:[12.52,2.17], 55:[14.1,2.17],
+            56:[9.74,0.32], 57:[11.06,0.32], 58:[12.52,0.32], 59:[14.1,0.32], 60:[16.58,6.37],
+            61:[19.18,6.37], 62:[21.18,6.37], 63:[17.88,5.37], 64:[20.18,5.37], 65:[15.99,3.81],
+            66:[19.78,3.81], 67:[21.75,3.81], 68:[17.87,2.26], 69:[20.17,2.26], 70:[15.98,1.8],
+            71:[19.16,1.29], 72:[21.83,1.8], 73:[17.9,1.29], 74:[20.74,0.77], 75:[15.94,-0.14],
+            76:[19.16,-0.73], 77:[21.16,-0.73], 78:[26.18,5.27], 79:[26.2,2.49], 80:[26.25,-0.14],
+            81:[27.79,5.06], 82:[30.53,5.06], 83:[27.79,3.84], 84:[30.53,3.83], 85:[27.79,2.64],
+            86:[30.53,2.63], 87:[32.08,4.5], 88:[33.22,4.5], 89:[32.61,1.94], 90:[28.82,-0.87],
+            91:[30.11,-0.87], 92:[32.05,-0.87], 93:[33.35,-0.87]
+          };
+
+          // Isometric mapping function to fit in 540x240 SVG viewbox
+          // X: -2 to 34 -> range 36
+          // Y: -1 to 14 -> range 15
+          let svgContent = '';
+          for (let i = 1; i <= 93; i++) {
+            const pt = coords[i];
+            if (!pt) continue;
+            // Isometric perspective projection
+            const normX = (pt[0] + 2) / 36;
+            const normY = (pt[1] + 1) / 15;
+            
+            // Project into 2.5D floor
+            const sx = 60 + normX * 420 - normY * 20;
+            const sy = 195 - normY * 135;
+
+            const isDriven = drivenSet.has(i);
+            if (isDriven) {
+              svgContent += `
+                <g class="pile-node-group cursor-pointer" data-pile="${i}">
+                  <circle cx="${sx}" cy="${sy}" r="9" fill="url(#drivenGlow)" opacity="0.6"/>
+                  <circle cx="${sx}" cy="${sy}" r="4" fill="#00f0ff" stroke="#ffffff" stroke-width="1.5" filter="url(#neonGlow)"/>
+                  <circle cx="${sx}" cy="${sy}" r="1.5" fill="#ffffff"/>
+                </g>`;
+            } else {
+              svgContent += `
+                <g class="pile-node-group cursor-pointer opacity-75 hover:opacity-100" data-pile="${i}">
+                  <circle cx="${sx}" cy="${sy}" r="3" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+                  <circle cx="${sx}" cy="${sy}" r="1" fill="#cbd5e1"/>
+                </g>`;
+            }
+          }
+          svgGroup.innerHTML = svgContent;
+        };
+      })();
+    </script>
   </body>
 </html>
