@@ -459,3 +459,54 @@ label {
   box-shadow: var(--shadow-comic-sm) !important;
   border-radius: var(--radius-comic) !important;
 }
+
+/* ==========================================================================
+   HERO PRIMARY LAUNCH CTA (โดดเด่นกว่า Dashboard เห็นชัดเจนว่าต้องกดที่นี่)
+   ========================================================================== */
+.hero-cta-btn {
+  background: #05ffa1 !important;
+  color: #0f172a !important;
+  font-family: 'Prompt', var(--font-formal-body) !important;
+  font-weight: 900 !important;
+  border: 2.5px solid #0f172a !important;
+  border-radius: 12px !important;
+  box-shadow: 4.5px 4.5px 0px #0f172a !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.hero-cta-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.45);
+  transform: rotate(30deg);
+  pointer-events: none;
+  animation: hero-cta-shine 3.5s infinite;
+}
+
+@keyframes hero-cta-shine {
+  0%, 70% { left: -60%; }
+  85%, 100% { left: 140%; }
+}
+
+.hero-cta-btn:hover {
+  background: #00f0ff !important;
+  color: #0f172a !important;
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 6.5px 6.5px 0px #0f172a, 0 8px 24px rgba(5, 255, 161, 0.35) !important;
+}
+
+.hero-cta-btn:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1.5px 1.5px 0px #0f172a !important;
+}
+
