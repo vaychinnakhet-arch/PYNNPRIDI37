@@ -461,23 +461,33 @@ label {
 }
 
 /* ==========================================================================
-   HERO PRIMARY LAUNCH CTA (โดดเด่นกว่า Dashboard เห็นชัดเจนว่าต้องกดที่นี่)
+   HERO PRIMARY LAUNCH CTA (Bolder Edition: โดดเด่นกว่า Dashboard คลีน ไม่รก)
    ========================================================================== */
 .hero-cta-btn {
   background: #05ffa1 !important;
   color: #0f172a !important;
   font-family: 'Prompt', var(--font-formal-body) !important;
   font-weight: 900 !important;
-  border: 2.5px solid #0f172a !important;
+  border: 3px solid #0f172a !important;
   border-radius: 12px !important;
-  box-shadow: 4.5px 4.5px 0px #0f172a !important;
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 5px 5px 0px #0f172a, 0 4px 18px rgba(5, 255, 161, 0.25) !important;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.12s ease !important;
   position: relative;
   overflow: hidden;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  animation: hero-cta-pulse 3s infinite ease-in-out;
+}
+
+@keyframes hero-cta-pulse {
+  0%, 100% {
+    box-shadow: 5px 5px 0px #0f172a, 0 4px 14px rgba(5, 255, 161, 0.2);
+  }
+  50% {
+    box-shadow: 5px 5px 0px #0f172a, 0 8px 26px rgba(5, 255, 161, 0.45);
+  }
 }
 
 .hero-cta-btn::after {
@@ -487,22 +497,22 @@ label {
   left: -60%;
   width: 40%;
   height: 200%;
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.5);
   transform: rotate(30deg);
   pointer-events: none;
-  animation: hero-cta-shine 3.5s infinite;
+  animation: hero-cta-shine 4s infinite;
 }
 
 @keyframes hero-cta-shine {
-  0%, 70% { left: -60%; }
-  85%, 100% { left: 140%; }
+  0%, 75% { left: -60%; }
+  90%, 100% { left: 140%; }
 }
 
 .hero-cta-btn:hover {
   background: #00f0ff !important;
   color: #0f172a !important;
   transform: translate(-2px, -2px) !important;
-  box-shadow: 6.5px 6.5px 0px #0f172a, 0 8px 24px rgba(5, 255, 161, 0.35) !important;
+  box-shadow: 7px 7px 0px #0f172a, 0 10px 30px rgba(0, 240, 255, 0.45) !important;
 }
 
 .hero-cta-btn:active {
