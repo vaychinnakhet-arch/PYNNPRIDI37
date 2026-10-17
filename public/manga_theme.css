@@ -123,8 +123,8 @@ body.manga-screentone-bg {
 
 /* Selection Highlight */
 ::selection {
-  background: var(--manga-yellow) !important;
-  color: var(--manga-ink) !important;
+  background: #fed7aa !important;
+  color: #1e293b !important;
 }
 
 /* Comic Scrollbar */
@@ -137,12 +137,12 @@ body.manga-screentone-bg {
   border-left: 1.5px solid var(--manga-ink);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--manga-yellow);
+  background: #cbd5e1;
   border: 1.5px solid var(--manga-ink);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--manga-red);
+  background: #94a3b8;
 }
 
 /* ==========================================================================
@@ -231,38 +231,40 @@ body.manga-screentone-bg {
   box-shadow: 0.5px 0.5px 0px var(--manga-ink) !important;
 }
 
-/* Button Semantic Variants */
+/* Button Semantic Variants - Unified Soft Palette */
 .manga-btn-primary,
 .pop-btn-primary {
-  background: var(--manga-cyan) !important;
-  color: var(--manga-ink) !important;
+  background: #0284c7 !important;
+  color: #ffffff !important;
   border: var(--border-comic-sm) !important;
   box-shadow: var(--shadow-comic-sm) !important;
 }
 .manga-btn-primary:hover,
 .pop-btn-primary:hover {
-  background: #00d5e3 !important;
+  background: #0369a1 !important;
+  color: #ffffff !important;
 }
 
 .manga-btn-green,
 .pop-btn-green,
 .btn-piling-3d-launch {
-  background: var(--manga-green) !important;
-  color: var(--manga-ink) !important;
+  background: #10b981 !important;
+  color: #ffffff !important;
   border: var(--border-comic-sm) !important;
   box-shadow: var(--shadow-comic-sm) !important;
 }
 .manga-btn-green:hover,
 .pop-btn-green:hover,
 .btn-piling-3d-launch:hover {
-  background: #00e08b !important;
+  background: #059669 !important;
+  color: #ffffff !important;
 }
 
 .pop-btn.active,
 .manga-btn.active {
-  background: var(--manga-yellow) !important;
-  color: var(--manga-ink) !important;
-  border-color: var(--manga-ink) !important;
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #f59e0b !important;
   box-shadow: var(--shadow-comic-sm) !important;
 }
 
