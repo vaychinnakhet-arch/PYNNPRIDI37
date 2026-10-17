@@ -15,31 +15,31 @@
   --manga-ink-subtle: #475569;
   --manga-ink-muted: #64748b;
 
-  /* --- 2. Comic Vibrant Pops Palette --- */
-  --manga-yellow: #ffe600;
-  --manga-yellow-ink: #854d0e;
-  --manga-red: #ff2a5f;
+  /* --- 2. Comic Vibrant Pops Palette (Eye-Friendly & Quieter Refinement) --- */
+  --manga-yellow: #f59e0b;
+  --manga-yellow-ink: #78350f;
+  --manga-red: #e11d48;
   --manga-coral: #ea580c;
-  --manga-cyan: #00f0ff;
-  --manga-blue: #0284c7;
-  --manga-green: #05ffa1;
-  --manga-emerald: #10b981;
-  --manga-green-ink: #065f46;
-  --manga-purple: #9d4edd;
-  --manga-amber: #ff9f1c;
+  --manga-cyan: #0284c7;
+  --manga-blue: #2563eb;
+  --manga-green: #10b981;
+  --manga-emerald: #059669;
+  --manga-green-ink: #064e3b;
+  --manga-purple: #7c3aed;
+  --manga-amber: #d97706;
 
-  /* --- 3. 2D Layer Borders & Zero-Blur Block Shadows --- */
-  --border-comic-xs: 1.5px solid #11141a;
-  --border-comic-sm: 2px solid #11141a;
-  --border-comic: 2.5px solid #11141a;
-  --border-comic-thick: 3.5px solid #11141a;
+  /* --- 3. 2D Layer Borders & Zero-Blur Block Shadows (Softened Contrast) --- */
+  --border-comic-xs: 1.5px solid #1e293b;
+  --border-comic-sm: 2px solid #1e293b;
+  --border-comic: 2px solid #1e293b;
+  --border-comic-thick: 2.5px solid #1e293b;
 
-  --shadow-comic-xs: 1.5px 1.5px 0px #11141a;
-  --shadow-comic-sm: 2.5px 2.5px 0px #11141a;
-  --shadow-comic: 4px 4px 0px #11141a;
-  --shadow-comic-lg: 6px 6px 0px #11141a;
-  --shadow-comic-xl: 9px 9px 0px #11141a;
-  --shadow-comic-2xl: 12px 12px 0px #11141a;
+  --shadow-comic-xs: 1.5px 1.5px 0px #1e293b;
+  --shadow-comic-sm: 2px 2px 0px #1e293b;
+  --shadow-comic: 3px 3px 0px #1e293b;
+  --shadow-comic-lg: 4.5px 4.5px 0px #1e293b;
+  --shadow-comic-xl: 6px 6px 0px #1e293b;
+  --shadow-comic-2xl: 8px 8px 0px #1e293b;
 
   --radius-comic-xs: 4px;
   --radius-comic-sm: 6px;
@@ -284,24 +284,29 @@ body.manga-screentone-bg {
 }
 
 .sticker-yellow {
-  background: var(--manga-yellow) !important;
-  color: var(--manga-ink) !important;
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #f59e0b !important;
 }
 .sticker-red {
-  background: var(--manga-red) !important;
-  color: #ffffff !important;
+  background: #ffe4e6 !important;
+  color: #be123c !important;
+  border-color: #e11d48 !important;
 }
 .sticker-green {
-  background: var(--manga-green) !important;
-  color: var(--manga-ink) !important;
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #10b981 !important;
 }
 .sticker-cyan {
-  background: var(--manga-cyan) !important;
-  color: var(--manga-ink) !important;
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+  border-color: #0ea5e9 !important;
 }
 .sticker-ink {
-  background: var(--manga-ink) !important;
-  color: var(--manga-yellow) !important;
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border-color: #0f172a !important;
 }
 
 /* ==========================================================================
@@ -461,62 +466,38 @@ label {
 }
 
 /* ==========================================================================
-   HERO PRIMARY LAUNCH CTA (Bolder Edition: โดดเด่นกว่า Dashboard คลีน ไม่รก)
+   HERO PRIMARY LAUNCH CTA (Quieter Edition: คมชัด สบายตา ไม่แย่งโฟกัส)
    ========================================================================== */
 .hero-cta-btn {
-  background: #05ffa1 !important;
+  background: #10b981 !important;
   color: #0f172a !important;
   font-family: 'Prompt', var(--font-formal-body) !important;
-  font-weight: 900 !important;
-  border: 3px solid #0f172a !important;
+  font-weight: 800 !important;
+  border: 2px solid #0f172a !important;
   border-radius: 12px !important;
-  box-shadow: 5px 5px 0px #0f172a, 0 4px 18px rgba(5, 255, 161, 0.25) !important;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.12s ease !important;
+  box-shadow: 3px 3px 0px #0f172a !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease !important;
   position: relative;
   overflow: hidden;
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  animation: hero-cta-pulse 3s infinite ease-in-out;
-}
-
-@keyframes hero-cta-pulse {
-  0%, 100% {
-    box-shadow: 5px 5px 0px #0f172a, 0 4px 14px rgba(5, 255, 161, 0.2);
-  }
-  50% {
-    box-shadow: 5px 5px 0px #0f172a, 0 8px 26px rgba(5, 255, 161, 0.45);
-  }
 }
 
 .hero-cta-btn::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 40%;
-  height: 200%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: rotate(30deg);
-  pointer-events: none;
-  animation: hero-cta-shine 4s infinite;
-}
-
-@keyframes hero-cta-shine {
-  0%, 75% { left: -60%; }
-  90%, 100% { left: 140%; }
+  display: none !important;
 }
 
 .hero-cta-btn:hover {
-  background: #00f0ff !important;
-  color: #0f172a !important;
-  transform: translate(-2px, -2px) !important;
-  box-shadow: 7px 7px 0px #0f172a, 0 10px 30px rgba(0, 240, 255, 0.45) !important;
+  background: #059669 !important;
+  color: #ffffff !important;
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: 4.5px 4.5px 0px #0f172a !important;
 }
 
 .hero-cta-btn:active {
-  transform: translate(2px, 2px) !important;
-  box-shadow: 1.5px 1.5px 0px #0f172a !important;
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 1px 1px 0px #0f172a !important;
 }
 
