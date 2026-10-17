@@ -7435,22 +7435,10 @@ body.manga-screentone-bg,
             </p>
           </div>
 
-          <!-- Primary Actions (Consolidated & Focused) -->
-          <div class="flex items-center gap-2.5 shrink-0">
-            <a
-              href="piling.html?view=3d#3d"
-              class="manga-btn manga-btn-green px-4 py-2.5 text-xs sm:text-sm font-black group"
-            >
-              <i data-lucide="box" class="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform"></i>
-              <span>เปิดแบบจำลอง 3D CAD (93 ต้น)</span>
-            </a>
-            <a
-              href="piling.html?view=report#report"
-              class="manga-btn px-3.5 py-2.5 text-xs sm:text-sm font-black text-slate-900 bg-white"
-            >
-              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-700"></i>
-              <span>รายงานผลงาน</span>
-            </a>
+          <!-- Live System Status Chip (No duplicate buttons) -->
+          <div class="flex items-center gap-2 text-xs font-mono font-bold text-slate-700 bg-slate-50 px-3 py-1.5 rounded-lg border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#11141a] shrink-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>SYSTEM ONLINE · 93 PILES READY</span>
           </div>
         </div>
 
@@ -7506,20 +7494,59 @@ body.manga-screentone-bg,
                 </div>
               </div>
 
-              <!-- Quick Sub-navigation below chart -->
-              <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-2 text-xs font-bold text-slate-600 border-t border-slate-100 shrink-0">
+              <!-- Hero Primary Launch Command Bar: Perfectly fills the empty space under the chart! -->
+              <div class="mt-3.5 p-3 sm:p-3.5 bg-gradient-to-r from-emerald-50/90 via-teal-50/60 to-emerald-50/90 rounded-xl border-2.5 border-slate-900 shadow-[3.5px_3.5px_0px_#11141a] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-2.5 min-w-0 w-full sm:w-auto">
+                  <div class="w-10 h-10 rounded-lg bg-[#05ffa1] border-2 border-slate-900 flex items-center justify-center text-slate-950 shadow-[1.5px_1.5px_0px_#11141a] shrink-0">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <span class="manga-sticker sticker-green text-[9px] font-black px-1.5 py-0.2">● พร้อมเริ่มงาน</span>
+                      <span class="text-[11px] font-black text-slate-800 font-mono truncate">เสาเข็ม 93 ต้น</span>
+                    </div>
+                    <span class="text-xs font-black text-slate-950 block truncate" style="font-family: 'Prompt', sans-serif;">
+                      เข้าสู่ผังและโมเดล 3D CAD
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto shrink-0 justify-stretch sm:justify-end">
+                  <a
+                    href="piling.html?view=3d#3d"
+                    class="hero-cta-btn flex-1 sm:flex-initial px-5 py-2.5 text-xs sm:text-sm text-slate-950 font-black gap-2 group cursor-pointer shadow-[3.5px_3.5px_0px_#11141a]"
+                    title="คลิกเพื่อเข้าสู่แบบจำลอง 3D ทันที"
+                  >
+                    <i data-lucide="box" class="w-4 h-4 text-slate-950 group-hover:rotate-12 transition-transform"></i>
+                    <span>⚡ คลิกเข้าหน้างาน 3D ทันที</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 text-slate-950 group-hover:translate-x-1 transition-transform"></i>
+                  </a>
+
+                  <a
+                    href="piling.html?view=report#report"
+                    class="flex items-center justify-center gap-1.5 bg-white hover:bg-slate-100 text-slate-900 px-3 py-2.5 rounded-lg border-2 border-slate-900 shadow-[2px_2px_0px_#11141a] transition-all text-xs font-black shrink-0"
+                    title="เปิดหน้ารายงานผลงานเสาเข็ม"
+                  >
+                    <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-emerald-700"></i>
+                    <span class="hidden md:inline">รายงาน</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Quick Sub-navigation below command bar -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mt-2 pt-1 text-[11px] font-bold text-slate-600 shrink-0">
                 <div class="flex items-center gap-3">
                   <a href="piling.html?view=3d#3d" class="hover:text-emerald-700 underline decoration-slate-400 hover:decoration-emerald-600 transition-colors flex items-center gap-1 font-bold">
-                    <i data-lucide="scan" class="w-3.5 h-3.5 text-emerald-600"></i>
-                    <span>ตรวจดูตำแหน่งเสาเข็มใน 3D CAD</span>
+                    <i data-lucide="scan" class="w-3 h-3 text-emerald-600"></i>
+                    <span>ตรวจดูรายต้นใน 3D</span>
                   </a>
                   <span class="text-slate-300">|</span>
                   <a href="piling.html?view=report#daily" class="hover:text-emerald-700 underline decoration-slate-400 hover:decoration-emerald-600 transition-colors flex items-center gap-1 font-bold">
-                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-600"></i>
+                    <i data-lucide="calendar" class="w-3 h-3 text-slate-600"></i>
                     <span>บันทึกการกดรายวัน</span>
                   </a>
                 </div>
-                <span class="font-mono text-[11px] text-slate-400 hidden sm:inline">Pynn Pridi 37 · Piling Ops</span>
+                <span class="font-mono text-[10.5px] text-slate-400 hidden sm:inline">Pynn Pridi 37 · Piling Ops</span>
               </div>
             </div>
 
@@ -7613,55 +7640,6 @@ body.manga-screentone-bg,
             </div>
           </div>
 
-          <!-- ========================================================
-               HERO PRIMARY LAUNCH COMMAND DECK (Bolder & Clarified CTA)
-               เด่นชัดที่สุดในหน้า ตอบโจทย์ "กดตรงไหนดี" ได้ทันที
-               ======================================================== -->
-          <div class="mt-6 pt-5 border-t-2.5 border-slate-900 flex flex-col lg:flex-row items-center justify-between gap-4 bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-emerald-50/90 p-4 sm:p-5 rounded-xl border-2.5 border-slate-900 shadow-[4px_4px_0px_#11141a]">
-            <div class="flex items-center gap-3.5 w-full lg:w-auto">
-              <div class="w-12 h-12 rounded-xl bg-[#05ffa1] border-2.5 border-slate-900 flex items-center justify-center text-slate-950 shadow-[2px_2px_0px_#11141a] shrink-0">
-                <i data-lucide="layers" class="w-6 h-6"></i>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-2 mb-0.5">
-                  <span class="manga-sticker sticker-green text-[10px] font-black px-1.5 py-0.5">
-                    ● พร้อมเข้าปฏิบัติงาน
-                  </span>
-                  <span class="text-xs font-black text-slate-800 font-mono hidden sm:inline">
-                    PHASE 1 ACTIVE PORTAL
-                  </span>
-                </div>
-                <h3 class="text-base sm:text-lg font-black text-slate-950 leading-tight truncate" style="font-family: 'Prompt', sans-serif;">
-                  เข้าสู่แบบจำลอง 3D และผังเสาเข็ม 93 ต้น
-                </h3>
-                <p class="text-xs text-slate-600 font-bold truncate">
-                  คลิกเพื่อตรวจเช็กรายตำแหน่ง, ค่าโบล์วเคานต์ (Blow Count) และบันทึกผลงานเสาเข็ม
-                </p>
-              </div>
-            </div>
-
-            <!-- Bolder Call-to-Action Group -->
-            <div class="flex items-center gap-2.5 w-full lg:w-auto shrink-0 justify-stretch sm:justify-end">
-              <a
-                href="piling.html?view=3d#3d"
-                class="hero-cta-btn flex-1 sm:flex-initial px-6 sm:px-8 py-3.5 text-sm sm:text-base text-slate-950 font-black gap-2 group cursor-pointer"
-                title="คลิกเพื่อเข้าสู่แบบจำลอง 3D ทันที"
-              >
-                <i data-lucide="box" class="w-5 h-5 text-slate-950 group-hover:rotate-12 transition-transform"></i>
-                <span>⚡ คลิกเข้าสู่หน้างาน 3D ทันที</span>
-                <i data-lucide="arrow-right" class="w-5 h-5 text-slate-950 group-hover:translate-x-1.5 transition-transform"></i>
-              </a>
-
-              <a
-                href="piling.html?view=report#report"
-                class="flex items-center justify-center gap-1.5 bg-white hover:bg-slate-100 text-slate-900 px-4 py-3.5 rounded-xl border-2.5 border-slate-900 shadow-[3px_3px_0px_#11141a] hover:shadow-[4px_4px_0px_#11141a] transition-all text-xs sm:text-sm font-black shrink-0"
-                title="เปิดหน้ารายงานสรุปผลงานเสาเข็ม"
-              >
-                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-700"></i>
-                <span class="hidden sm:inline">รายงานผลงาน</span>
-              </a>
-            </div>
-          </div>
         </div>
 
         <!-- Mobile Sticky Action Bar for Piling (Manga Flat Layer) -->
