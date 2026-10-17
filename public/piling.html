@@ -7,7 +7,8 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Montserrat:wght@600;700;800;900&family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Prompt:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800&family=Space+Mono:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="manga_theme.css">
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -153,80 +154,110 @@
       }
     }
 
+    /* =========================================================================
+       MANGA 2D LAYER DESIGN SYSTEM (TECHNICAL BLUEPRINT EDITION)
+       ========================================================================= */
     .pop-card {
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 14px;
-      box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+      background: #ffffff !important;
+      border: 2.5px solid #11141a !important;
+      border-radius: 8px !important;
+      box-shadow: 4px 4px 0px #11141a !important;
+      color: #11141a !important;
     }
 
     .pop-header {
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(12px);
-      border: 1px solid #cbd5e1;
-      border-radius: 14px;
-      box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
+      background: #ffffff !important;
+      border: 3px solid #11141a !important;
+      border-radius: 12px !important;
+      box-shadow: 4.5px 4.5px 0px #11141a !important;
+      backdrop-filter: none !important;
     }
 
     .pop-btn {
-      background: #ffffff;
-      color: var(--fp-ink, #1e293b);
-      border: 1px solid var(--fp-line, #e2e8f0);
-      border-radius: 10px;
-      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
-      font-weight: 700;
-      transition: all 0.15s ease;
-      cursor: pointer;
+      background: #ffffff !important;
+      color: #11141a !important;
+      border: 2px solid #11141a !important;
+      border-radius: 6px !important;
+      box-shadow: 2px 2px 0px #11141a !important;
+      font-family: 'Prompt', sans-serif !important;
+      font-weight: 800 !important;
+      transition: all 0.1s ease !important;
+      cursor: pointer !important;
     }
     .pop-btn:hover {
-      background: #f8fafc;
-      border-color: #94a3b8;
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
-      transform: translateY(-1px);
+      background: #f8fafc !important;
+      transform: translate(-1.5px, -1.5px) !important;
+      box-shadow: 3.5px 3.5px 0px #11141a !important;
     }
     .pop-btn:active {
-      transform: translateY(0);
-      box-shadow: none;
+      transform: translate(2px, 2px) !important;
+      box-shadow: 0.5px 0.5px 0px #11141a !important;
     }
     .pop-btn.active {
-      background: #ecfdf5;
-      border-color: #10b981;
-      color: #065f46;
+      background: #ffe600 !important;
+      border-color: #11141a !important;
+      color: #11141a !important;
+      box-shadow: 2.5px 2.5px 0px #11141a !important;
     }
+
     .pop-btn-primary {
-      background: #4f46e5;
-      color: #ffffff;
-      border: 1px solid #4338ca;
-      border-radius: 9px;
-      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.15s ease;
+      background: #00f0ff !important;
+      color: #11141a !important;
+      border: 2px solid #11141a !important;
+      border-radius: 6px !important;
+      box-shadow: 2.5px 2.5px 0px #11141a !important;
+      font-family: 'Prompt', sans-serif !important;
+      font-weight: 800 !important;
+      cursor: pointer !important;
+      transition: all 0.1s ease !important;
     }
     .pop-btn-primary:hover {
-      background: #4338ca;
-      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
-      transform: translateY(-1px);
+      background: #00d5e3 !important;
+      transform: translate(-1.5px, -1.5px) !important;
+      box-shadow: 4px 4px 0px #11141a !important;
     }
     .pop-btn-primary:active {
-      transform: translateY(0);
-      box-shadow: none;
+      transform: translate(2px, 2px) !important;
+      box-shadow: 0.5px 0.5px 0px #11141a !important;
     }
 
     .pop-btn-green {
-      background: #10b981;
-      color: white;
-      border: 1px solid #059669;
-      border-radius: 9px;
-      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25);
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.15s ease;
+      background: #05ffa1 !important;
+      color: #11141a !important;
+      border: 2px solid #11141a !important;
+      border-radius: 6px !important;
+      box-shadow: 2.5px 2.5px 0px #11141a !important;
+      font-family: 'Prompt', sans-serif !important;
+      font-weight: 800 !important;
+      cursor: pointer !important;
+      transition: all 0.1s ease !important;
     }
     .pop-btn-green:hover {
-      background: #059669;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+      background: #00e08b !important;
+      transform: translate(-1.5px, -1.5px) !important;
+      box-shadow: 4px 4px 0px #11141a !important;
+    }
+    .pop-btn-green:active {
+      transform: translate(2px, 2px) !important;
+      box-shadow: 0.5px 0.5px 0px #11141a !important;
+    }
+
+    /* Manga Floating HUD & Pile Card */
+    .floating-hud {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    #pile-card {
+      background: #ffffff !important;
+      border: 3px solid #11141a !important;
+      border-radius: 10px !important;
+      box-shadow: 6px 6px 0px #11141a !important;
+    }
+    #report-page-card {
+      border: 3px solid #11141a !important;
+      border-radius: 10px !important;
+      box-shadow: 6px 6px 0px #11141a !important;
     }
 
     .palette-dot {
@@ -767,12 +798,12 @@
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           <span class="hidden sm:inline">หน้าแรก</span>
         </a>
-        <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-montserrat font-black text-xs shadow-sm">
+        <div class="w-8 h-8 rounded-lg bg-[#ffe600] border-2 border-slate-900 text-slate-950 flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_#11141a]" style="font-family: 'Bangers', cursive; font-size: 14px;">
           P37
         </div>
         <div>
           <div class="flex items-center gap-1.5">
-            <h1 class="text-xs font-black font-montserrat tracking-tight text-slate-800">
+            <h1 class="text-xs font-black tracking-tight text-slate-950 uppercase" style="font-family: 'Bangers', cursive; letter-spacing: 0.5px;">
               Pynn pridi 37
             </h1>
             <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -783,7 +814,7 @@
         </div>
 
         <!-- Piling Focus Badge (100% Piling Phase 1) -->
-        <div id="piling-focus-badge" class="flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-xl border-1.5 border-slate-900 shadow-xs ml-1">
+        <div id="piling-focus-badge" class="manga-sticker sticker-green text-[11px] font-black ml-1">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="text-emerald-900 text-[11px] font-bold flex items-center gap-1.5 whitespace-nowrap" style="font-family: 'Prompt', 'Sarabun', 'Noto Sans Thai', sans-serif;">
             <i data-lucide="box" class="w-3.5 h-3.5 text-emerald-600"></i>
@@ -800,7 +831,7 @@
           <span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
           <span class="text-[10px] text-[#667277] font-bold hidden sm:inline">กดสะสม:</span>
           <span class="text-xs font-black text-[#34383b]">
-            <span id="stat-driven-count" class="text-[#10b981]">0</span>/93
+            <span id="stat-driven-count" class="text-[#05ffa1] font-black" style="font-family: 'Bangers', cursive; font-size: 15px;">0</span>/93
             <span id="stat-driven-pct" class="text-[10px] text-[#667277] font-bold">(0%)</span>
           </span>
         </div>
@@ -810,14 +841,14 @@
           <input id="inp-report-date" type="date" class="text-[10px] bg-white border-1.5 border-slate-900 rounded px-1 py-0.5 font-bold text-[#34383b] focus:outline-none">
           <span class="text-[10px] text-[#667277] font-bold hidden sm:inline">กดวันนี้:</span>
           <span class="text-xs font-black text-[#34383b]">
-            <span id="stat-today-count" class="text-[#0284c7]">0</span> ต้น
+            <span id="stat-today-count" class="text-[#0ea5e9] font-black" style="font-family: 'Bangers', cursive; font-size: 15px;">0</span> ต้น
           </span>
         </div>
 
         <!-- Remaining Pill -->
         <div class="flex items-center gap-1 text-[10px] font-bold text-[#667277]">
           <span>คงเหลือ:</span>
-          <span id="stat-remain-count" class="text-xs font-black text-[#34383b]">93</span>
+          <span id="stat-remain-count" class="text-xs font-black text-[#11141a]" style="font-family: 'Bangers', cursive; font-size: 15px;">93</span>
         </div>
       </div>
 
@@ -1200,7 +1231,7 @@
         </div>
         <div>
           <span class="text-[9px] font-extrabold text-[#ed6845] uppercase">ข้อมูลเสาเข็ม</span>
-          <h3 id="card-pile-tag" class="text-xs font-black text-[#34383b]">P01 (Grid 1-A)</h3>
+          <h3 id="card-pile-tag" class="text-sm font-black text-slate-950" style="font-family: 'Bangers', cursive; letter-spacing: 0.5px;">P01 (Grid 1-A)</h3>
         </div>
       </div>
       <button id="btn-close-card" class="text-[#667277] hover:text-[#34383b] p-1">

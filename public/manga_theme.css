@@ -1,0 +1,464 @@
+/* ==========================================================================
+   MANGA 2D LAYER DESIGN SYSTEM (TECHNICAL BLUEPRINT & COMIC CEL EDITION)
+   Pynn Pridi 37 - Piling 93 Piles & Construction Progress Control
+   ========================================================================== */
+
+/* 1. Global Font Imports: Bangers (Hero Display) + Prompt + Sarabun (Formal Looped) + Space Mono */
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Prompt:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,700&display=swap');
+
+:root {
+  /* --- 1. Manga Comic Ink & Canvas --- */
+  --manga-ink: #11141a;
+  --manga-ink-dark: #090b0e;
+  --manga-paper: #ffffff;
+  --manga-canvas-bg: #f8fafc;
+  --manga-ink-subtle: #475569;
+  --manga-ink-muted: #64748b;
+
+  /* --- 2. Comic Vibrant Pops Palette --- */
+  --manga-yellow: #ffe600;
+  --manga-yellow-ink: #854d0e;
+  --manga-red: #ff2a5f;
+  --manga-coral: #ea580c;
+  --manga-cyan: #00f0ff;
+  --manga-blue: #0284c7;
+  --manga-green: #05ffa1;
+  --manga-emerald: #10b981;
+  --manga-green-ink: #065f46;
+  --manga-purple: #9d4edd;
+  --manga-amber: #ff9f1c;
+
+  /* --- 3. 2D Layer Borders & Zero-Blur Block Shadows --- */
+  --border-comic-xs: 1.5px solid #11141a;
+  --border-comic-sm: 2px solid #11141a;
+  --border-comic: 2.5px solid #11141a;
+  --border-comic-thick: 3.5px solid #11141a;
+
+  --shadow-comic-xs: 1.5px 1.5px 0px #11141a;
+  --shadow-comic-sm: 2.5px 2.5px 0px #11141a;
+  --shadow-comic: 4px 4px 0px #11141a;
+  --shadow-comic-lg: 6px 6px 0px #11141a;
+  --shadow-comic-xl: 9px 9px 0px #11141a;
+  --shadow-comic-2xl: 12px 12px 0px #11141a;
+
+  --radius-comic-xs: 4px;
+  --radius-comic-sm: 6px;
+  --radius-comic: 8px;
+  --radius-comic-lg: 12px;
+  --radius-comic-xl: 16px;
+
+  /* --- 4. Typography Stacks --- */
+  /* ฟอนต์มีหัว Sarabun: สำหรับเครื่องมือ, เมนูควบคุม, ตาราง, และหน้ารายงาน อ่านสบายตา */
+  --font-formal-body: 'Sarabun', 'TH Sarabun New', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+  /* ฟอนต์ดิสเพลย์ Bangers: สำหรับตัวเลข KPI มังงะตัวใหญ่ สติกเกอร์ และข้อความเสียง */
+  --font-manga-display: 'Bangers', cursive, 'Prompt', sans-serif;
+  --font-manga-mono: 'Space Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* --- 5. Flat Pop Compatibility Bridge (Sync across piling.html and index.html) --- */
+  --fp-paper: var(--manga-paper);
+  --fp-bg: var(--manga-canvas-bg);
+  --fp-ink: var(--manga-ink);
+  --fp-ink-secondary: var(--manga-ink-subtle);
+  --fp-muted: var(--manga-ink-muted);
+  --fp-line: var(--manga-ink);
+  --fp-line-soft: var(--manga-ink);
+
+  --fp-green: var(--manga-emerald);
+  --fp-green-ink: var(--manga-green-ink);
+  --fp-green-soft: #ecfdf5;
+  --fp-green-border: #a7f3d0;
+  --fp-green-bold: var(--manga-emerald);
+
+  --fp-rose: var(--manga-red);
+  --fp-rose-ink: #9f1239;
+  --fp-rose-soft: #fff1f2;
+  --fp-rose-border: #fecdd3;
+
+  --fp-blue: var(--manga-blue);
+  --fp-blue-ink: #0369a1;
+  --fp-blue-soft: #f0f9ff;
+  --fp-blue-border: #bae6fd;
+
+  --fp-yellow: var(--manga-yellow);
+  --fp-yellow-ink: var(--manga-yellow-ink);
+  --fp-yellow-soft: #fffbeb;
+  --fp-yellow-border: #fde68a;
+
+  --fp-coral: var(--manga-coral);
+  --fp-coral-ink: #9a3412;
+}
+
+/* ==========================================================================
+   GLOBAL MANGA CANVAS & 2D LAYER STYLES
+   ========================================================================== */
+html, body {
+  font-family: var(--font-formal-body) !important;
+  color: var(--manga-ink);
+  background-color: var(--manga-canvas-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* บังคับใช้ฟอนต์ไทยมีหัว (Sarabun) สบายตากับทุกตาราง เมนู ฟอร์ม และปุ่ม */
+p, span, div, a, li, input, select, textarea, button, table, th, td, label {
+  font-family: var(--font-formal-body);
+}
+
+/* ยกเว้นสำหรับหัวข้อหรือคลาสฟอนต์มังงะ/โค้ดพิเศษ */
+.font-bangers, .font-manga, .manga-display-title, .manga-kpi-val, .comic-bubble {
+  font-family: var(--font-manga-display) !important;
+}
+
+.font-mono, .code-coord, .manga-mono {
+  font-family: var(--font-manga-mono) !important;
+}
+
+/* Comic Screentone Halftone Dot Background Pattern */
+.manga-screentone-bg,
+body.manga-screentone-bg {
+  background-color: #f8fafc !important;
+  background-image: 
+    radial-gradient(#94a3b8 15%, transparent 16%),
+    radial-gradient(#94a3b8 15%, transparent 16%) !important;
+  background-size: 20px 20px !important;
+  background-position: 0 0, 10px 10px !important;
+}
+
+/* Selection Highlight */
+::selection {
+  background: var(--manga-yellow) !important;
+  color: var(--manga-ink) !important;
+}
+
+/* Comic Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-left: 1.5px solid var(--manga-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--manga-yellow);
+  border: 1.5px solid var(--manga-ink);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--manga-red);
+}
+
+/* ==========================================================================
+   MANGA 2D LAYER PANELS & CARDS (กรอบสี่เหลี่ยมมังงะ เงาซ้อนคมกริบ)
+   ========================================================================== */
+.manga-card,
+.pop-card,
+.piling-focus-hero-card,
+.piling-telemetry-console,
+.piling-metric-tile,
+.manga-roadmap-card {
+  background: var(--manga-paper) !important;
+  border: var(--border-comic) !important;
+  box-shadow: var(--shadow-comic) !important;
+  border-radius: var(--radius-comic) !important;
+  position: relative !important;
+  color: var(--manga-ink) !important;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.manga-card:hover,
+.piling-metric-tile:hover,
+.manga-roadmap-card:hover {
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: var(--shadow-comic-lg) !important;
+}
+
+.piling-focus-hero-card {
+  border: var(--border-comic-thick) !important;
+  box-shadow: 6px 6px 0px #11141a, 10px 10px 0px rgba(17, 20, 26, 0.12) !important;
+  border-radius: var(--radius-comic-lg) !important;
+}
+
+.piling-chart-monitor {
+  background: var(--manga-paper) !important;
+  border: var(--border-comic) !important;
+  box-shadow: var(--shadow-comic) !important;
+  border-radius: var(--radius-comic) !important;
+  position: relative !important;
+}
+
+/* Header Bars */
+.pop-header,
+#main-header {
+  border: var(--border-comic-thick) !important;
+  box-shadow: var(--shadow-comic-lg) !important;
+  border-radius: var(--radius-comic-lg) !important;
+}
+
+/* ==========================================================================
+   TACTILE COMIC BUTTON PHYSICS (ปุ่มกดมังงะ กดแล้วยุบตัวสมจริง)
+   ========================================================================== */
+.manga-btn,
+.pop-btn,
+.action-btn,
+.btn-piling-3d-launch,
+.btn-piling-report {
+  border: var(--border-comic-sm) !important;
+  box-shadow: var(--shadow-comic-sm) !important;
+  border-radius: var(--radius-comic-sm) !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  user-select: none !important;
+  text-decoration: none !important;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease !important;
+}
+
+.manga-btn:hover,
+.pop-btn:hover,
+.action-btn:hover,
+.btn-piling-3d-launch:hover,
+.btn-piling-report:hover {
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: var(--shadow-comic) !important;
+}
+
+.manga-btn:active,
+.pop-btn:active,
+.action-btn:active,
+.btn-piling-3d-launch:active,
+.btn-piling-report:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0.5px 0.5px 0px var(--manga-ink) !important;
+}
+
+/* Button Semantic Variants */
+.manga-btn-primary,
+.pop-btn-primary {
+  background: var(--manga-cyan) !important;
+  color: var(--manga-ink) !important;
+  border: var(--border-comic-sm) !important;
+  box-shadow: var(--shadow-comic-sm) !important;
+}
+.manga-btn-primary:hover,
+.pop-btn-primary:hover {
+  background: #00d5e3 !important;
+}
+
+.manga-btn-green,
+.pop-btn-green,
+.btn-piling-3d-launch {
+  background: var(--manga-green) !important;
+  color: var(--manga-ink) !important;
+  border: var(--border-comic-sm) !important;
+  box-shadow: var(--shadow-comic-sm) !important;
+}
+.manga-btn-green:hover,
+.pop-btn-green:hover,
+.btn-piling-3d-launch:hover {
+  background: #00e08b !important;
+}
+
+.pop-btn.active,
+.manga-btn.active {
+  background: var(--manga-yellow) !important;
+  color: var(--manga-ink) !important;
+  border-color: var(--manga-ink) !important;
+  box-shadow: var(--shadow-comic-sm) !important;
+}
+
+/* ==========================================================================
+   COMIC STICKERS, CHIPS & CALLOUTS (ป้ายสติกเกอร์มุมเฉียงสไตล์การ์ตูน)
+   ========================================================================== */
+.manga-sticker,
+.manga-chip,
+.manga-chip-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-weight: 800 !important;
+  padding: 3px 10px !important;
+  border: var(--border-comic-xs) !important;
+  box-shadow: var(--shadow-comic-xs) !important;
+  border-radius: var(--radius-comic-xs) !important;
+  user-select: none !important;
+}
+
+.sticker-yellow {
+  background: var(--manga-yellow) !important;
+  color: var(--manga-ink) !important;
+}
+.sticker-red {
+  background: var(--manga-red) !important;
+  color: #ffffff !important;
+}
+.sticker-green {
+  background: var(--manga-green) !important;
+  color: var(--manga-ink) !important;
+}
+.sticker-cyan {
+  background: var(--manga-cyan) !important;
+  color: var(--manga-ink) !important;
+}
+.sticker-ink {
+  background: var(--manga-ink) !important;
+  color: var(--manga-yellow) !important;
+}
+
+/* ==========================================================================
+   🛡️ สวนที่ 1: เครื่องมือและแถบควบคุม (TOOLS & TOOLBARS)
+   บังคับใช้ "FONT มีหัวดูสบายตา" (SARABUN) เพื่อความคมชัด อ่านง่าย ไม่ล้าสายตา
+   ========================================================================== */
+#floating-hud,
+#floating-hud-body,
+.floating-hud,
+.pop-header-actions,
+.controls-toolbar,
+.control-deck,
+.control-group,
+.view-toggle-btn,
+#view-toggle,
+#unified-controls,
+.pop-btn,
+.action-btn,
+#btn-quick-select,
+#btn-supabase-sync,
+#btn-open-report,
+#btn-open-export,
+#btn-pco-inspector,
+#btn-open-cotable,
+#btn-reset-view,
+#btn-fullscreen,
+#btn-toggle-hud,
+#view-top-ortho,
+#view-iso3d,
+#btn-view-top-3d,
+#btn-view-front,
+#btn-view-side,
+#btn-view-focus-center,
+#card-views-control,
+#card-views-control *,
+#sidebar-card-piles,
+#sidebar-card-piles *,
+#sidebar-card-drainage,
+#sidebar-card-drainage *,
+#card-pile-filter,
+#card-pile-filter *,
+#card-pco-inspector-tool,
+#card-pco-inspector-tool *,
+#lbl-pco-inspector-header,
+#lbl-sidebar-toggle-inspector,
+#toast-pco-inspect,
+#toast-pco-inspect *,
+#modal-quick-select,
+#modal-quick-select *,
+#modal-pco-inspect,
+#modal-pco-inspect *,
+#modal-co-table,
+#modal-co-table *,
+#modal-drainage-table,
+#modal-drainage-table *,
+#pile-card,
+#pile-card *,
+#compass-widget,
+#nav-hint-text,
+#nav-hint-text *,
+#quick-date-picker,
+#inp-batch-range,
+input,
+select,
+textarea,
+label {
+  font-family: var(--font-formal-body) !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.5 !important;
+}
+
+/* คงความหนาปานกลางให้ปุ่มควบคุมอ่านได้ชัดเจน */
+.pop-btn,
+.action-btn,
+.view-toggle-btn {
+  font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   🛡️ ส่วนที่ 2: หน้ารายงาน (REPORT PAGES & EXECUTIVE SUMMARY)
+   บังคับใช้ "FONT มีหัวดูสบายตา" (SARABUN) ทั้งหน้า สำหรับผู้บริหารและวิศวกร
+   ========================================================================== */
+#report-page,
+#report-page *,
+#report-page-card,
+#report-page-card *:not(#rep-header-logo):not(.manga-display-num),
+#report-header-bar,
+#report-header-bar *,
+#rep-header-title,
+#rep-header-tag,
+#rep-header-subtag,
+#report-theme-selector,
+#report-theme-selector *,
+#rep-date-badge-wrapper,
+#rep-date-badge-wrapper *,
+#rep-layout-switch-wrapper,
+#rep-layout-switch-wrapper *,
+#report-sec-plan,
+#report-sec-plan *,
+#report-sec-scurve,
+#report-sec-scurve *,
+#report-sec-table,
+#report-sec-table *,
+#rep-today-table,
+#rep-today-table *,
+#rep-today-table th,
+#rep-today-table td,
+.excel-header-table,
+.excel-header-table *,
+.excel-header-table th,
+.excel-header-table td,
+.executive-summary-compact,
+.executive-summary-compact *,
+.executive-summary-compact th,
+.executive-summary-compact td,
+.report-sheet-formal,
+.report-sheet-formal *,
+#reportModal,
+#reportModal *,
+#executiveReportModal,
+#executiveReportModal * {
+  font-family: var(--font-formal-body) !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.55 !important;
+}
+
+/* ตัวเลขในตารางและสถิติคลังข้อมูล: Tabular Lining Figures จัดชิดตรงหลัก อ่านง่าย */
+#rep-today-table td,
+#rep-today-table th,
+.excel-header-table td,
+.excel-header-table th,
+.executive-summary-compact td,
+.executive-summary-compact th,
+.rep-metric-val,
+.pile-table td,
+.pile-table th,
+#rep-header-date,
+.table-numeric {
+  font-variant-numeric: tabular-nums lining-nums !important;
+  font-feature-settings: "tnum" 1, "lnum" 1 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* กรอบหน้ารายงานแบบ Manga 2D Layer */
+#report-page-card {
+  border: var(--border-comic-thick) !important;
+  box-shadow: var(--shadow-comic-xl) !important;
+  border-radius: var(--radius-comic-lg) !important;
+}
+
+#report-sec-plan,
+#report-sec-scurve,
+#report-sec-table {
+  border: var(--border-comic) !important;
+  box-shadow: var(--shadow-comic-sm) !important;
+  border-radius: var(--radius-comic) !important;
+}

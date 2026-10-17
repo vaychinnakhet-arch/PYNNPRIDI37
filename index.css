@@ -3879,7 +3879,7 @@ html {
   --play-ink: #253047;
   --play-muted: #667085;
   --play-paper: #ffffff;
-  --play-canvas: #f1f4f1;
+  --play-canvas: #ffffff;
   --play-line: #d8ded9;
   --play-coral: #e96861;
   --play-sky: #68aeda;
@@ -3891,11 +3891,8 @@ html {
 #splash-screen {
   align-items: flex-start !important;
   padding: clamp(0.8rem, 2vw, 1.75rem) !important;
-  background:
-    linear-gradient(90deg, rgba(37, 48, 71, 0.025) 1px, transparent 1px),
-    linear-gradient(rgba(37, 48, 71, 0.025) 1px, transparent 1px),
-    var(--play-canvas) !important;
-  background-size: 32px 32px !important;
+  background: #ffffff !important;
+  background-image: none !important;
 }
 
 #splash-screen::before,
@@ -5841,7 +5838,6 @@ body:not(.is-line-capturing) .modal .modal-content {
 
 /* Splash Screen Max-Width on Ultra-wide 4K (Prevent stretching) */
 @media (min-width: 1600px) {
-  #splash-screen,
   #main-splash-container {
     max-width: 1680px !important;
     margin-left: auto !important;
@@ -5864,3 +5860,264 @@ body:not(.is-line-capturing) .modal .modal-content {
     border-radius: 16px !important;
   }
 }
+
+/* ==========================================================================
+   MANGA FLAT LAYER DESIGN SYSTEM (แบบเหลี่ยม มีเงาซ้อน)
+   หมวดงานเสาเข็ม 93 ต้น (ACTIVE PILING PHASE)
+   ========================================================================== */
+
+/* 1. Global Reset & Seamless Canvas (พื้นหลังสีขาวล้วน สะอาดตา ไม่มีตาราง) */
+html, body {
+  width: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #0f172a !important;
+}
+
+#splash-screen {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: clamp(0.75rem, 2vw, 2rem) !important;
+  box-sizing: border-box !important;
+  align-items: flex-start !important;
+}
+
+#splash-screen::before,
+#splash-screen::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+#splash-screen .splash-content {
+  width: 100% !important;
+  max-width: 1540px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+#splash-screen .splash-brand-name {
+  color: #0f172a !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
+}
+
+#splash-screen .splash-brand-subtitle {
+  color: #64748b !important;
+}
+
+#splash-screen .splash-live {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+  border: 1.5px solid #0f172a !important;
+  box-shadow: 2px 2px 0px #0f172a !important;
+  border-radius: 6px !important;
+  font-weight: 900 !important;
+}
+
+#splash-screen .title-text {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+#splash-screen .title-text span {
+  color: #059669 !important;
+  text-shadow: none !important;
+}
+
+/* 2. Manga Flat Layer Hero Card (กรอบสี่เหลี่ยม มีเงาซ้อน คมชัดสไตล์มังงะ/เปเปอร์) */
+.piling-focus-hero-card {
+  background: #ffffff !important;
+  border: 2.5px solid #0f172a !important;
+  border-radius: 12px !important;
+  box-shadow: 6px 6px 0px #0f172a, 10px 10px 0px rgba(15, 23, 42, 0.15) !important;
+  position: relative !important;
+  overflow: visible !important;
+  color: #0f172a !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 3. Manga Flat Koma / S-Curve Chart Panel (จอชาร์ตสีขาวคลีน มีเส้นขอบและเงาซ้อน) */
+.piling-chart-monitor {
+  background: #ffffff !important;
+  border: 2px solid #0f172a !important;
+  border-radius: 10px !important;
+  box-shadow: 4px 4px 0px #0f172a !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.piling-chart-monitor::after {
+  content: "MANGA FLAT · S-CURVE 93 PILES";
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-family: "Montserrat", monospace;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+/* 4. Manga Telemetry Console (คอนโซลฝั่งขวา เหลี่ยม คลีน สีขาวล้วน มีเงาซ้อน) */
+.piling-telemetry-console {
+  background: #ffffff !important;
+  border: 2px solid #0f172a !important;
+  border-radius: 10px !important;
+  box-shadow: 4px 4px 0px #0f172a !important;
+  position: relative !important;
+  color: #0f172a !important;
+}
+
+/* 5. Manga Flat Metric Tiles (แบบเหลี่ยม มีเงาซ้อน 3px 3px 0 #0f172a) */
+.piling-metric-tile {
+  background: #ffffff !important;
+  border: 2px solid #0f172a !important;
+  border-radius: 8px !important;
+  padding: 0.85rem 1rem !important;
+  box-shadow: 3px 3px 0px #0f172a !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  color: #0f172a !important;
+}
+
+.piling-metric-tile:hover {
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: 4.5px 4.5px 0px #0f172a !important;
+}
+
+.piling-metric-tile:active {
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 1.5px 1.5px 0px #0f172a !important;
+}
+
+/* 6. Manga Interactive Buttons (ปุ่มแบน เหลี่ยม สันขอบหนา กดแล้วยุบตัวสมจริง) */
+.btn-piling-3d-launch {
+  background: #34d399 !important;
+  color: #0f172a !important;
+  font-weight: 900 !important;
+  border: 2px solid #0f172a !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 0px #0f172a !important;
+  transition: all 0.12s ease !important;
+  cursor: pointer !important;
+}
+
+.btn-piling-3d-launch:hover {
+  background: #10b981 !important;
+  color: #0f172a !important;
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: 5.5px 5.5px 0px #0f172a !important;
+}
+
+.btn-piling-3d-launch:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0px #0f172a !important;
+}
+
+.btn-piling-report {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  border: 2px solid #0f172a !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 0px #0f172a !important;
+  transition: all 0.12s ease !important;
+  cursor: pointer !important;
+}
+
+.btn-piling-report:hover {
+  background: #f1f5f9 !important;
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: 5.5px 5.5px 0px #0f172a !important;
+}
+
+.btn-piling-report:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0px #0f172a !important;
+}
+
+/* 7. Mobile Sticky Action Bar in Manga Style */
+.piling-mobile-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #ffffff;
+  border-top: 2.5px solid #0f172a;
+  box-shadow: 0 -4px 0px #0f172a, 0 -10px 20px rgba(15, 23, 42, 0.08);
+  padding: 0.75rem 1rem;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+@media (max-width: 639px) {
+  body {
+    padding-bottom: 4.75rem !important;
+  }
+  
+  .piling-focus-hero-card {
+    padding: 1rem 0.85rem !important;
+    border-radius: 10px !important;
+  }
+  
+  .piling-chart-monitor {
+    height: 13rem !important;
+  }
+}
+
+/* 8. Manga 2D Layer Roadmap Panels */
+.manga-roadmap-card {
+  background: #ffffff !important;
+  border: 2px solid #0f172a !important;
+  border-radius: 8px !important;
+  box-shadow: 3px 3px 0px #0f172a !important;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.manga-roadmap-card:hover {
+  transform: translate(-1.5px, -1.5px) !important;
+  box-shadow: 4.5px 4.5px 0px #0f172a !important;
+}
+
+.manga-chip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1.5px solid #0f172a !important;
+  box-shadow: 1.5px 1.5px 0px #0f172a !important;
+  font-weight: 800 !important;
+}
+
+/* Global Manga 2D Layer Polish */
+::selection {
+  background: #34d399 !important;
+  color: #0f172a !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0f172a;
+  border-radius: 4px;
+}
+
+
+

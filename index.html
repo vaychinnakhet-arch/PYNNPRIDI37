@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
@@ -11,11 +11,13 @@
     <meta property="og:title" content="Pynn pridi 37" />
     <meta property="og:description" content="Pynn pridi 37 Defect Tracking &amp; Quality Control Dashboard" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Sarabun:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Prompt:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,700&display=swap"
       rel="stylesheet"
-      crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="manga_theme.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="chart.umd.js"></script>
@@ -27,6 +29,14 @@
 
     <!-- LUCIDE ICONS -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- THREE.JS 3D ENGINE -->
+    <script src="three.min.js"></script>
+    <script>
+      if (typeof THREE === 'undefined') {
+        document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>');
+      }
+    </script>
 
     <!-- GEMINI SDK -->
 
@@ -5387,7 +5397,7 @@ html {
   --play-ink: #253047;
   --play-muted: #667085;
   --play-paper: #ffffff;
-  --play-canvas: #f1f4f1;
+  --play-canvas: #ffffff;
   --play-line: #d8ded9;
   --play-coral: #e96861;
   --play-sky: #68aeda;
@@ -5399,11 +5409,8 @@ html {
 #splash-screen {
   align-items: flex-start !important;
   padding: clamp(0.8rem, 2vw, 1.75rem) !important;
-  background:
-    linear-gradient(90deg, rgba(37, 48, 71, 0.025) 1px, transparent 1px),
-    linear-gradient(rgba(37, 48, 71, 0.025) 1px, transparent 1px),
-    var(--play-canvas) !important;
-  background-size: 32px 32px !important;
+  background: #ffffff !important;
+  background-image: none !important;
 }
 
 #splash-screen::before,
@@ -7373,6 +7380,24 @@ body:not(.is-line-capturing) .modal .modal-content {
   }
 }
 
+/* Pure White Clean Background Override (ลบสีเทาและลายตารางทั้งหมด ให้เป็นสีขาว 100%) */
+html, body,
+#splash-screen,
+#splash-screen.min-h-screen,
+#main-splash-container {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+#splash-screen::before,
+#splash-screen::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -7380,242 +7405,286 @@ body:not(.is-line-capturing) .modal .modal-content {
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   </head>
-  <body class="p-0 md:p-4 bg-slate-50 relative">
+  <body class="p-0 md:p-4 bg-[#f8fafc] manga-screentone-bg relative min-h-screen text-slate-900">
     <!-- Splash Screen -->
     <div
       id="splash-screen"
-      class="min-h-screen flex items-center justify-center p-4"
+      class="min-h-screen w-full flex flex-col justify-start px-3 py-4 sm:px-6 md:px-8 lg:px-10"
     >
-      <div class="w-full max-w-6xl mx-auto splash-content">
-        <div class="splash-topbar">
-          <div class="splash-brand">
-            <div class="splash-brand-mark" aria-hidden="true">
-              <svg viewBox="0 0 48 48" role="img">
-                <rect x="4" y="4" width="40" height="40" rx="10"></rect>
-                <path d="M15 34V14h9.5c5 0 8 2.7 8 7.2s-3 7.3-8 7.3H20V34h-5Zm5-10h4.1c2.2 0 3.4-1 3.4-2.8 0-1.7-1.2-2.7-3.4-2.7H20V24Z"></path>
-                <circle cx="36" cy="14" r="3"></circle>
-                <path d="M33 34h6v-5h-6z"></path>
-              </svg>
-            </div>
-            <div>
-              <div class="splash-brand-name">Pynn pridi 37</div>
-              <div class="splash-brand-subtitle">Project progress control</div>
-            </div>
-          </div>
-          <div class="splash-live">LIVE PROJECT DATA</div>
-        </div>
-
+      <div class="w-full max-w-[1540px] mx-auto splash-content">
         <div class="splash-hero-intro mb-6">
           <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black uppercase tracking-wider mb-2 shadow-xs">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>ระยะที่ 1: งานฐานรากและเสาเข็ม (Active Piling Phase)</span>
+            <div class="manga-sticker sticker-ink manga-sticker-rotate-left mb-2 text-xs">
+              <span>⚡ ระยะที่ 1: งานฐานรากและเสาเข็ม (ACTIVE PILING PHASE)</span>
             </div>
-            <h1 class="title-text">
-              PYNN
-              <span>PRIDI 37</span>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-wider uppercase mb-1" style="font-family: 'Bangers', cursive; text-shadow: 2px 2px 0px #fff, 5px 5px 0px #ff2a5f;">
+              PYNN <span style="color: #ff2a5f;">PRIDI 37</span>
             </h1>
-            <p class="text-sm md:text-base text-slate-600 font-bold mt-2">
-              ระบบติดตามความคืบหน้างานก่อสร้าง (Construction Progress Control)
+            <p class="text-xs sm:text-sm text-slate-700 font-bold" style="font-family: 'Sarabun', sans-serif;">
+              ระบบติดตามความคืบหน้างานก่อสร้าง (CONSTRUCTION TELEMETRY COCKPIT)
             </p>
           </div>
         </div>
 
-        <!-- Piling Dedicated Hero Portal Card (Flat Pop Ink Soft) -->
-        <div class="piling-focus-hero-card mb-8 bg-gradient-to-br from-white via-slate-50/70 to-emerald-50/30 rounded-3xl border-2 border-slate-900 shadow-xl p-5 md:p-7 relative overflow-hidden">
+        <!-- Piling Dedicated Hero Portal Card (Manga Flat Layer Edition) -->
+        <div class="manga-panel-hero manga-hatch-pattern mb-8 p-5 md:p-7 relative bg-white">
           <!-- Top Tag Ribbon -->
-          <div class="flex items-center justify-between flex-wrap gap-3 mb-5">
-            <div class="flex items-center gap-2.5">
-              <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border-2 border-emerald-500 text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-xs">
-                <span class="relative flex h-2.5 w-2.5">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                </span>
-                หมวดงานที่ 1: งานเสาเข็ม 93 ต้น (ACTIVE PILING PHASE)
+          <div class="flex items-center justify-between flex-wrap gap-3 mb-6 relative z-10">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <span class="manga-sticker sticker-green manga-sticker-rotate-left text-xs font-black">
+                <span class="w-2 h-2 rounded-full bg-emerald-700 border border-slate-950 inline-block mr-1"></span>
+                หมวดงานที่ 1: งานเสาเข็ม 93 ต้น (ACTIVE PILING)
               </span>
-              <span class="text-xs font-bold text-slate-500 hidden sm:inline">โครงการ Pynn pridi 37 · สุขุมวิท 71</span>
+              <span class="text-xs font-bold text-slate-800 hidden sm:inline px-3 py-1 rounded bg-white border-2 border-slate-900 shadow-[2px_2px_0px_#11141a]" style="font-family: 'Sarabun', sans-serif;">
+                โครงการ Pynn pridi 37 · สุขุมวิท 71
+              </span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-extrabold px-3 py-1 rounded-xl bg-slate-900 text-white shadow-xs">
-                เป้าหมาย: 93 ต้น
+            <div class="flex items-center gap-2.5">
+              <span class="manga-sticker sticker-yellow text-xs font-black">
+                🎯 แผนงานรวม: 93 ต้น
               </span>
-              <a href="piling.html?view=3d#3d" class="px-3 py-1 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-900 border-2 border-slate-900 font-black text-xs shadow-xs hover:shadow transition-all flex items-center gap-1 active:scale-95 cursor-pointer">
-                <span>⚡ เปิด 3D</span>
+              <a href="piling.html?view=3d#3d" class="manga-btn manga-btn-cyan text-xs px-3.5 py-1.5 font-black">
+                <span>⚡ เปิดโมเดล 3D CAD</span>
               </a>
             </div>
           </div>
 
-          <!-- Main 2-Column Grid: Left Isometric CAD Visualizer | Right Controls & Live Stats -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          <!-- Main 2-Column Grid: Left S-Curve Progress Chart | Right Controls & Live Stats -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch relative z-10">
             
-            <!-- Left (Col 12 / Lg 7): S-Curve Piling Progress Chart (Plan vs Actual) -->
+            <!-- Left (Col 12 / Lg 7): S-Curve Progress Chart (Plan vs Actual) -->
             <div class="lg:col-span-7 flex flex-col justify-between">
               <div>
-                <div class="flex items-center justify-between mb-1.5">
-                  <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight leading-tight flex items-center gap-2">
+                <div class="flex items-center justify-between mb-2 shrink-0">
+                  <h2 class="text-xl md:text-2xl font-black text-slate-950 tracking-tight leading-tight flex items-center gap-2.5" style="font-family: 'Sarabun', sans-serif;">
                     <span>กราฟเปรียบเทียบผลงานเสาเข็ม</span>
-                    <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-800 border border-amber-300/60 uppercase tracking-widest hidden sm:inline">PLAN VS ACTUAL</span>
+                    <span class="manga-sticker sticker-ink text-[11px] font-mono hidden sm:inline">PLAN VS ACTUAL</span>
                   </h2>
+                  <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded bg-white border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#11141a] text-[11px] font-bold text-slate-700" style="font-family: 'Sarabun', sans-serif;">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 border border-slate-900"></span>
+                    <span>เสาเข็มไอ 0.40 ม. x 21.00 ม. (มอก. 396-2549)</span>
+                  </div>
                 </div>
-                <div class="flex items-center gap-3 text-xs md:text-sm text-slate-600 font-medium leading-relaxed mb-3">
-                  <span class="flex items-center gap-2 font-bold text-slate-700">
-                    <span class="inline-flex items-center justify-center w-6 h-3 relative">
-                      <span class="w-full h-0 border-t-2 border-dashed border-[#ed6845]"></span>
-                      <span class="absolute w-2 h-2 rounded-full bg-red-500 ring-1 ring-white"></span>
-                    </span>
+
+                <div class="flex items-center flex-wrap gap-2 text-xs font-bold leading-relaxed mb-2.5 shrink-0">
+                  <span class="manga-sticker sticker-red text-[11px]">
+                    <span class="w-3 h-0.5 bg-white inline-block mr-1"></span>
                     แผนสะสม (3 ต้น/วัน)
                   </span>
-                  <span class="flex items-center gap-2 font-bold text-emerald-700">
-                    <span class="inline-flex items-center justify-center w-6 h-3 relative">
-                      <span class="w-full h-0.5 bg-[#10b981]"></span>
-                      <span class="absolute w-2 h-2 rounded-full bg-[#10b981] ring-1 ring-white"></span>
-                    </span>
+                  <span class="manga-sticker sticker-green text-[11px]">
+                    <span class="w-2 h-2 rounded-full bg-emerald-900 inline-block mr-1"></span>
                     ผลงานจริงสะสม
                   </span>
-                  <span class="text-xs text-slate-400 hidden sm:inline">| แผนรวม 93 ต้น / 31 วันทำการ</span>
+                  <span class="text-xs text-slate-700 font-bold hidden sm:inline ml-1 font-mono">| แผนรวม 93 ต้น / 31 วันทำการ</span>
                 </div>
-              </div>
 
-              <!-- Interactive S-Curve Chart Canvas Box -->
-              <div 
-                class="relative w-full h-56 sm:h-64 rounded-2xl bg-white border-2 border-slate-900 shadow-md p-2.5 overflow-hidden"
-              >
-                <canvas id="splashScurveCanvas" class="w-full h-full"></canvas>
+                <!-- Chart Canvas Box: Manga Panel Frame with Hard Shadow -->
+                <div 
+                  class="piling-chart-monitor relative w-full h-[240px] sm:h-[250px] p-2.5 overflow-hidden bg-white border-3 border-slate-900 rounded-lg shadow-[4px_4px_0px_#11141a]"
+                >
+                  <canvas id="splashScurveCanvas" class="w-full h-full block"></canvas>
+                </div>
               </div>
 
               <!-- Main Launch Buttons below chart -->
-              <div class="flex flex-wrap items-center gap-3 mt-4">
+              <div class="flex flex-wrap items-center gap-2.5 mt-3 shrink-0">
                 <a
                   href="piling.html?view=3d#3d"
-                  class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-sm shadow-md hover:shadow-lg flex items-center gap-2.5 transition-all active:scale-[0.98] group cursor-pointer border-2 border-slate-900"
+                  class="manga-btn manga-btn-green px-4 py-2.5 text-xs sm:text-sm font-black group"
                 >
-                  <i data-lucide="box" class="w-5 h-5 text-emerald-200 group-hover:rotate-12 transition-transform"></i>
+                  <i data-lucide="box" class="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform"></i>
                   <span>เปิดแบบจำลอง 3D เสาเข็ม 93 ต้น (3D CAD)</span>
-                  <span class="text-[11px] font-bold bg-white/20 px-2 py-0.5 rounded-full ml-1">หลัก</span>
+                  <span class="text-[10px] font-black bg-slate-950 text-yellow-300 px-1.5 py-0.5 rounded ml-1">หลัก</span>
                 </a>
                 <a
                   href="piling.html?view=report#report"
-                  class="px-4 py-3 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 hover:text-slate-900 border-2 border-slate-900 font-bold text-sm shadow-xs hover:shadow transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
+                  class="manga-btn px-3.5 py-2.5 text-xs sm:text-sm font-black text-slate-900"
                 >
-                  <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-600"></i>
+                  <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-700"></i>
                   <span>รายงานผลงานเสาเข็ม</span>
                 </a>
               </div>
             </div>
 
-            <!-- Right (Col 12 / Lg 5): Metric Dashboard & Live Counters -->
-            <div class="lg:col-span-5 flex flex-col justify-between bg-white p-5 md:p-6 rounded-2xl border-2 border-slate-900 shadow-md">
+            <!-- Right (Col 12 / Lg 5): Metric Dashboard & Live Counters in Manga Flat Layer -->
+            <div class="lg:col-span-5 flex flex-col justify-between piling-telemetry-console p-4 sm:p-5 bg-white border-3 border-slate-900 rounded-xl shadow-[5px_5px_0px_#11141a]">
               <div>
+                <!-- Console Header / Status Pulse -->
                 <div class="flex items-center justify-between mb-2">
-                  <span class="text-xs font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    ความคืบหน้างานเสาเข็มรวม
-                  </span>
-                  <span id="portal-piling-percent" class="text-3xl font-black text-emerald-600 font-mono">0%</span>
+                  <div class="flex items-center gap-2">
+                    <span class="manga-sticker sticker-green text-[10px] font-black">ACTIVE</span>
+                    <span class="text-xs font-black text-slate-900 uppercase tracking-wider" style="font-family: 'Prompt', sans-serif;">
+                      ความคืบหน้างานเสาเข็มรวม
+                    </span>
+                  </div>
+                  <div class="flex items-baseline gap-1">
+                    <span id="portal-piling-percent" class="text-4xl sm:text-5xl font-black text-slate-950 font-mono tracking-tight" style="font-family: 'Bangers', cursive; color: #11141a;">0%</span>
+                  </div>
                 </div>
                 
-                <!-- Progress Bar -->
-                <div class="w-full h-3.5 rounded-full bg-slate-100 border border-slate-300 overflow-hidden mb-5 p-0.5 shadow-inner">
-                  <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-700" style="width: 0%"></div>
+                <!-- Manga Flat Progress Bar with solid border -->
+                <div class="w-full h-4.5 rounded-full bg-white border-2 border-slate-900 overflow-hidden mb-3 p-0.5 shadow-[2px_2px_0px_#11141a]">
+                  <div id="portal-piling-progress-bar" class="h-full bg-[#05ffa1] border border-slate-900 rounded-full transition-all duration-700" style="width: 0%"></div>
                 </div>
 
-                <!-- 4-Stat Metric Grid -->
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                  <div class="bg-slate-50 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs">
-                    <span class="text-[11px] font-bold text-slate-600 block">กดเสร็จสะสม</span>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-driven-count" class="text-2xl font-black text-slate-900 font-mono">0</span>
-                      <span class="text-xs font-bold text-slate-500">/ 93 ต้น</span>
-                    </div>
-                  </div>
-                  <div class="bg-emerald-50 p-3.5 rounded-xl border-2 border-emerald-500 shadow-xs">
-                    <span class="text-[11px] font-bold text-emerald-800 block">กดเสร็จวันนี้</span>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-today" class="text-2xl font-black text-emerald-700 font-mono">0</span>
-                      <span class="text-xs font-bold text-emerald-600">ต้น</span>
-                    </div>
-                  </div>
-                  <div class="bg-slate-50 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs">
-                    <span class="text-[11px] font-bold text-slate-600 block">คงเหลือ</span>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-remain" class="text-2xl font-black text-slate-800 font-mono">93</span>
-                      <span class="text-xs font-bold text-slate-500">ต้น</span>
-                    </div>
-                  </div>
-                  <div id="portal-piling-variance-card" class="bg-amber-50/80 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs">
+                <!-- 4-Stat Metric Grid in Manga 2D Layer Cards -->
+                <div class="grid grid-cols-2 gap-2.5 mb-2">
+                  <!-- Stat 1: Driven Cumulative -->
+                  <a href="piling.html?view=3d#completed" class="manga-card block p-2.5 bg-white hover:bg-emerald-50 transition-colors" title="คลิกเพื่อดูเสาเข็มที่กดเสร็จในโมเดล 3D">
                     <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-bold text-slate-700 block">สถานะเทียบแผน</span>
-                      <span id="portal-piling-variance-badge" class="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900 border border-amber-400">ช้ากว่าแผน</span>
+                      <span class="text-[11px] font-extrabold text-slate-700 block">กดเสร็จสะสม</span>
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
                     </div>
                     <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-variance-val" class="text-2xl font-black text-rose-600 font-mono">-16</span>
-                      <span id="portal-piling-variance-unit" class="text-xs font-bold text-slate-500">ต้น</span>
+                      <span id="portal-piling-driven-count" class="text-2xl sm:text-3xl font-black text-slate-950" style="font-family: 'Bangers', cursive;">0</span>
+                      <span class="text-[11px] font-bold text-slate-500 font-mono">/ 93 ต้น</span>
                     </div>
-                    <span id="portal-piling-variance-sub" class="text-[10px] text-slate-500 font-bold block truncate mt-0.5">แผนสะสม 27 · จริง 11 ต้น</span>
+                  </a>
+
+                  <!-- Stat 2: Today Driven -->
+                  <a href="piling.html?view=report#today" class="manga-card block p-2.5 bg-emerald-50 hover:bg-emerald-100 transition-colors" title="คลิกเพื่อเปิดรายงานประจำวัน">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-black text-emerald-950 block">กดเสร็จวันนี้</span>
+                      <span class="manga-sticker sticker-green text-[9px] px-1 py-0.2">TODAY</span>
+                    </div>
+                    <div class="flex items-baseline gap-1 mt-0.5">
+                      <span id="portal-piling-today" class="text-2xl sm:text-3xl font-black text-emerald-600" style="font-family: 'Bangers', cursive;">0</span>
+                      <span class="text-[11px] font-bold text-emerald-800">ต้น</span>
+                    </div>
+                  </a>
+
+                  <!-- Stat 3: Remaining Piles -->
+                  <a href="piling.html?view=3d#remaining" class="manga-card block p-2.5 bg-white hover:bg-amber-50 transition-colors" title="คลิกเพื่อดูเสาเข็มคงเหลือในโมเดล 3D">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-extrabold text-slate-700 block">คงเหลือ</span>
+                      <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-500"></i>
+                    </div>
+                    <div class="flex items-baseline gap-1 mt-0.5">
+                      <span id="portal-piling-remain" class="text-2xl sm:text-3xl font-black text-slate-900" style="font-family: 'Bangers', cursive;">93</span>
+                      <span class="text-[11px] font-bold text-slate-500">ต้น</span>
+                    </div>
+                  </a>
+
+                  <!-- Stat 4: Schedule Variance -->
+                  <a href="piling.html?view=report#variance" id="portal-piling-variance-card" class="manga-card block p-2.5 bg-rose-50 hover:bg-rose-100 transition-colors" title="คลิกเพื่อดูรายละเอียดผลงานเทียบแผน">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-extrabold text-slate-800 block">สถานะเทียบแผน</span>
+                      <span id="portal-piling-variance-badge" class="manga-sticker sticker-red text-[9px] px-1.5 py-0.2">ช้ากว่าแผน</span>
+                    </div>
+                    <div class="flex items-baseline gap-1 mt-0.5">
+                      <span id="portal-piling-variance-val" class="text-2xl sm:text-3xl font-black text-rose-600" style="font-family: 'Bangers', cursive;">-16</span>
+                      <span id="portal-piling-variance-unit" class="text-[11px] font-bold text-slate-500">ต้น</span>
+                    </div>
+                    <span id="portal-piling-variance-sub" class="text-[9.5px] text-slate-700 font-bold block truncate mt-0.5 font-mono">แผนสะสม 27 · จริง 11 ต้น</span>
+                  </a>
+                </div>
+
+                <!-- 3D Precast Concrete I-Pile Progress Bar (Frameless Clean Fit) -->
+                <div id="ipile-3d-progress-container" class="mt-4 sm:mt-5 mb-1 relative w-full h-18 sm:h-20 select-none">
+                  <canvas id="ipileProgressBarCanvas" class="w-full h-full block relative z-10"></canvas>
+
+                  <!-- Floating Tip Badge over the Glowing Head -->
+                  <div id="ipile-tip-callout" class="absolute top-1.5 z-20 pointer-events-none flex flex-col items-center -translate-x-1/2" style="left: 14.0%;">
+                    <div class="manga-sticker sticker-ink text-[10px] font-mono font-black border-2 border-slate-950 flex items-center gap-1 whitespace-nowrap shadow-[2px_2px_0px_#11141a]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                      <span id="ipile-tip-text">14.0%</span>
+                    </div>
+                    <div class="w-0.5 h-1.5 bg-slate-900"></div>
                   </div>
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
 
-        <!-- Upcoming Phases Roadmap (ทยอยพัฒนาและเปิดทีละเมนู) -->
+        <!-- Mobile Sticky Action Bar for Piling (Manga Flat Layer) -->
+        <div id="piling-mobile-sticky-bar" class="piling-mobile-sticky-bar sm:hidden flex items-center justify-between gap-3 bg-white border-t-3 border-slate-900 shadow-[0_-5px_0px_#11141a] px-3.5 py-2.5">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="w-3 h-3 rounded-full bg-[#05ffa1] border-2 border-slate-900 shrink-0"></span>
+            <div class="flex flex-col min-w-0">
+              <span class="text-[10px] text-slate-600 font-black uppercase tracking-wider truncate">เสาเข็ม 93 ต้น</span>
+              <span class="text-xs font-black text-slate-950 font-mono tracking-tight whitespace-nowrap">
+                <span id="portal-piling-mobile-driven">11</span>/93 (<span id="portal-piling-mobile-pct">11.8%</span>)
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <a
+              href="piling.html?view=report#report"
+              class="manga-btn px-3 py-1.5 text-xs font-black"
+            >
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-700"></i>
+              <span>รายงาน</span>
+            </a>
+            <a
+              href="piling.html?view=3d#3d"
+              class="manga-btn manga-btn-green px-3.5 py-1.5 text-xs font-black"
+            >
+              <i data-lucide="box" class="w-3.5 h-3.5"></i>
+              <span>เปิดแบบ 3D</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Upcoming Phases Roadmap (Manga 2D Layer Edition) -->
         <div class="upcoming-phases-section mb-6">
           <div class="flex items-center justify-between mb-3 px-1">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[10.5px] font-bold uppercase tracking-wider">
-                Roadmap
+            <div class="flex items-center gap-2.5">
+              <span class="manga-sticker sticker-yellow text-xs font-black">
+                ROADMAP
               </span>
-              <h3 class="text-sm font-black text-slate-700">หมวดงานระยะถัดไป (กำลังพัฒนาและจะทยอยเปิดทีละเมนู)</h3>
+              <h3 class="text-sm font-black text-slate-900" style="font-family: 'Prompt', sans-serif;">หมวดงานระยะถัดไป (กำลังพัฒนาและจะทยอยเปิดทีละเมนู)</h3>
             </div>
-            <span class="text-xs font-medium text-slate-400 hidden sm:inline">โครงการ Pynn pridi 37</span>
+            <span class="text-xs font-bold text-slate-700 hidden sm:inline px-3 py-1 rounded bg-white border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#11141a]">โครงการ Pynn pridi 37</span>
           </div>
           
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 opacity-60">
-            <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <!-- Phase 2: งานตรวจรับห้องพัก (QC) -->
+            <div class="manga-card p-3.5 bg-white flex items-center justify-between group">
               <div class="flex items-center gap-2.5">
-                <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-black">2</span>
+                <span class="w-7 h-7 rounded bg-slate-900 text-yellow-300 font-mono font-black text-xs border border-slate-900 flex items-center justify-center shadow-[1px_1px_0px_#0f172a]">2</span>
                 <div>
-                  <span class="text-xs font-bold text-slate-700 block">งานตรวจรับห้องพัก (QC)</span>
-                  <span class="text-[10px] text-slate-400 font-medium">รอเปิดหลังงานโครงสร้าง</span>
+                  <span class="text-xs font-black text-slate-900 block group-hover:text-emerald-700 transition-colors">งานตรวจรับห้องพัก (QC)</span>
+                  <span class="text-[10px] text-slate-500 font-bold">รอเปิดหลังงานโครงสร้าง</span>
                 </div>
               </div>
-              <span class="text-[9.5px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">Coming Soon</span>
+              <span class="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-900">Coming Soon</span>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+            <!-- Phase 3: พื้นที่ส่วนกลาง & Defect -->
+            <div class="manga-card p-3.5 bg-white flex items-center justify-between group">
               <div class="flex items-center gap-2.5">
-                <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-black">3</span>
+                <span class="w-7 h-7 rounded bg-slate-900 text-yellow-300 font-mono font-black text-xs border border-slate-900 flex items-center justify-center shadow-[1px_1px_0px_#0f172a]">3</span>
                 <div>
-                  <span class="text-xs font-bold text-slate-700 block">พื้นที่ส่วนกลาง & Defect</span>
-                  <span class="text-[10px] text-slate-400 font-medium">รอเปิดหลังงานสถาปัตย์</span>
+                  <span class="text-xs font-black text-slate-900 block group-hover:text-emerald-700 transition-colors">พื้นที่ส่วนกลาง & Defect</span>
+                  <span class="text-[10px] text-slate-500 font-bold">รอเปิดหลังงานสถาปัตย์</span>
                 </div>
               </div>
-              <span class="text-[9.5px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">Coming Soon</span>
+              <span class="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-900">Coming Soon</span>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+            <!-- Phase 4: สรุปคะแนน QC & ส่งมอบ -->
+            <div class="manga-card p-3.5 bg-white flex items-center justify-between group">
               <div class="flex items-center gap-2.5">
-                <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-black">4</span>
+                <span class="w-7 h-7 rounded bg-slate-900 text-yellow-300 font-mono font-black text-xs border border-slate-900 flex items-center justify-center shadow-[1px_1px_0px_#0f172a]">4</span>
                 <div>
-                  <span class="text-xs font-bold text-slate-700 block">สรุปคะแนน QC & ส่งมอบ</span>
-                  <span class="text-[10px] text-slate-400 font-medium">รอเปิดช่วงส่งมอบ</span>
+                  <span class="text-xs font-black text-slate-900 block group-hover:text-emerald-700 transition-colors">สรุปคะแนน QC & ส่งมอบ</span>
+                  <span class="text-[10px] text-slate-500 font-bold">รอเปิดช่วงส่งมอบ</span>
                 </div>
               </div>
-              <span class="text-[9.5px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">Coming Soon</span>
+              <span class="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-900">Coming Soon</span>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-between">
+            <!-- Phase 5: แผนงานเก็บสีรูปด้าน -->
+            <div class="manga-card p-3.5 bg-white flex items-center justify-between group">
               <div class="flex items-center gap-2.5">
-                <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-black">5</span>
+                <span class="w-7 h-7 rounded bg-slate-900 text-yellow-300 font-mono font-black text-xs border border-slate-900 flex items-center justify-center shadow-[1px_1px_0px_#0f172a]">5</span>
                 <div>
-                  <span class="text-xs font-bold text-slate-700 block">แผนงานเก็บสีรูปด้าน</span>
-                  <span class="text-[10px] text-slate-400 font-medium">รอเปิดช่วงสถาปัตยกรรมภายนอก</span>
+                  <span class="text-xs font-black text-slate-900 block group-hover:text-emerald-700 transition-colors">แผนงานเก็บสีรูปด้าน</span>
+                  <span class="text-[10px] text-slate-500 font-bold">รอเปิดช่วงสถาปัตยกรรมภายนอก</span>
                 </div>
               </div>
-              <span class="text-[9.5px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">Coming Soon</span>
+              <span class="text-[9.5px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-900">Coming Soon</span>
             </div>
           </div>
         </div>
@@ -7886,12 +7955,12 @@ body:not(.is-line-capturing) .modal .modal-content {
         
         </div>
 
-        <p
-          id="splash-loading-text"
-          class="mt-12 text-slate-500 text-sm font-medium text-center tracking-wide"
-        >
-          กำลังเชื่อมต่อฐานข้อมูล...
-        </p>
+        <div class="mt-8 mb-4 flex justify-center items-center">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white border-2 border-slate-900 text-slate-800 text-xs font-mono font-bold shadow-[2px_2px_0px_#0f172a]">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 border border-slate-900 animate-pulse"></span>
+            <span id="splash-loading-text">กำลังเชื่อมต่อฐานข้อมูล...</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -13742,32 +13811,32 @@ if (typeof window !== "undefined") {
                     {
                       label: 'แผนงานสะสม (3 ต้น/วัน)',
                       data: planData,
-                      borderColor: '#ed6845',
+                      borderColor: '#e11d48',
                       borderWidth: 2.5,
-                      borderDash: [5, 4],
+                      borderDash: [6, 4],
                       pointStyle: 'circle',
-                      pointRadius: 4,
-                      pointBackgroundColor: '#ef4444',
-                      pointBorderColor: '#ffffff',
+                      pointRadius: 3.5,
+                      pointBackgroundColor: '#e11d48',
+                      pointBorderColor: '#0f172a',
                       pointBorderWidth: 1.5,
                       pointHoverRadius: 6,
-                      pointHoverBackgroundColor: '#b91c1c',
+                      pointHoverBackgroundColor: '#9f1239',
                       fill: false,
                       tension: 0.1
                     },
                     {
                       label: 'ผลงานจริงสะสม (Actual)',
                       data: actualData,
-                      borderColor: '#10b981',
+                      borderColor: '#059669',
                       backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                      borderWidth: 3,
+                      borderWidth: 3.5,
                       pointStyle: 'circle',
-                      pointRadius: 4,
+                      pointRadius: 4.5,
                       pointBackgroundColor: '#10b981',
-                      pointBorderColor: '#ffffff',
-                      pointBorderWidth: 1.5,
-                      pointHoverRadius: 6,
-                      pointHoverBackgroundColor: '#064e3b',
+                      pointBorderColor: '#0f172a',
+                      pointBorderWidth: 2,
+                      pointHoverRadius: 7,
+                      pointHoverBackgroundColor: '#047857',
                       fill: true,
                       tension: 0.15
                     }
@@ -13778,34 +13847,17 @@ if (typeof window !== "undefined") {
                   maintainAspectRatio: false,
                   interaction: { mode: 'index', intersect: false },
                   plugins: {
-                                        legend: {
-                      position: 'top',
-                      labels: {
-                        usePointStyle: true,
-                        pointStyle: 'line',
-                        boxWidth: 36,
-                        pointStyleWidth: 36,
-                        font: { family: 'Sarabun', size: 12, weight: 'bold' },
-                        color: '#334155',
-                        padding: 16,
-                        generateLabels: function(chart) {
-                          return chart.data.datasets.map((dataset, i) => ({
-                            text: dataset.label,
-                            fillStyle: 'transparent',
-                            strokeStyle: dataset.borderColor,
-                            lineWidth: dataset.borderWidth || 3,
-                            lineDash: dataset.borderDash || [],
-                            pointStyle: 'line',
-                            hidden: !chart.isDatasetVisible(i),
-                            datasetIndex: i
-                          }));
-                        }
-                      }
+                    legend: {
+                      display: false
                     },
                     tooltip: {
-                      backgroundColor: '#1e293b',
-                      titleFont: { family: 'Sarabun', size: 12, weight: 'bold' },
-                      bodyFont: { family: 'Sarabun', size: 12 },
+                      backgroundColor: '#0f172a',
+                      borderColor: '#0f172a',
+                      borderWidth: 2,
+                      titleColor: '#ffffff',
+                      bodyColor: '#34d399',
+                      titleFont: { family: 'Prompt, Sarabun', size: 12, weight: 'bold' },
+                      bodyFont: { family: 'Prompt, Sarabun', size: 12, weight: 'bold' },
                       padding: 10,
                       callbacks: {
                         label: function (ctx) {
@@ -13818,14 +13870,16 @@ if (typeof window !== "undefined") {
                     y: {
                       min: 0,
                       max: 95,
-                      grid: { color: '#e2e8f0' },
-                      title: { display: true, text: 'จำนวนเสาเข็มสะสม (ต้น)', font: { family: 'Sarabun', size: 11, weight: 'bold' }, color: '#475569' },
-                      ticks: { stepSize: 15, font: { family: 'Sarabun', weight: 'bold' }, color: '#334155' }
+                      grid: { color: 'rgba(15, 23, 42, 0.08)' },
+                      border: { color: '#0f172a', width: 2 },
+                      title: { display: true, text: 'จำนวนเสาเข็มสะสม (ต้น)', font: { family: 'Prompt, Sarabun', size: 11, weight: 'bold' }, color: '#0f172a' },
+                      ticks: { stepSize: 15, font: { family: 'Prompt, Sarabun', weight: 'bold' }, color: '#0f172a' }
                     },
                     x: {
-                      grid: { color: '#f8fafc' },
-                      title: { display: true, text: 'วันทำการ (D1 - D31)', font: { family: 'Sarabun', size: 11, weight: 'bold' }, color: '#475569' },
-                      ticks: { maxTicksLimit: 16, font: { family: 'Sarabun', weight: 'bold' }, color: '#334155' }
+                      grid: { color: 'rgba(15, 23, 42, 0.05)' },
+                      border: { color: '#0f172a', width: 2 },
+                      title: { display: true, text: 'วันทำการ (D1 - D31)', font: { family: 'Prompt, Sarabun', size: 11, weight: 'bold' }, color: '#0f172a' },
+                      ticks: { maxTicksLimit: 16, font: { family: 'Prompt, Sarabun', weight: 'bold' }, color: '#0f172a' }
                     }
                   }
                 }
@@ -13836,7 +13890,7 @@ if (typeof window !== "undefined") {
             }
           }
 
-          // Fallback Direct Canvas Renderer
+          // Fallback Direct Canvas Renderer (Manga Flat Koma)
           drawSplashDirectScurve(canvas, planData, actualData, labels);
         }
 
@@ -13862,26 +13916,40 @@ if (typeof window !== "undefined") {
           const maxY = 95;
 
           // Y-Grid & ticks
-          ctx.font = 'bold 10px Sarabun, sans-serif';
+          ctx.font = 'bold 10px Prompt, Sarabun, sans-serif';
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
           for (let yVal = 0; yVal <= 90; yVal += 15) {
             const py = padT + plotH - (yVal / maxY) * plotH;
-            ctx.strokeStyle = '#e2e8f0';
+            ctx.strokeStyle = 'rgba(15, 23, 42, 0.08)';
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(padL, py);
             ctx.lineTo(w - padR, py);
             ctx.stroke();
 
-            ctx.fillStyle = '#64748b';
+            ctx.fillStyle = '#0f172a';
             ctx.fillText(yVal, padL - 8, py);
           }
 
-          // Plan line (Orange Dashed)
-          ctx.strokeStyle = '#ed6845';
+          // Bottom axis line (Ink border)
+          ctx.strokeStyle = '#0f172a';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(padL, padT + plotH);
+          ctx.lineTo(w - padR, padT + plotH);
+          ctx.stroke();
+
+          // Left axis line (Ink border)
+          ctx.beginPath();
+          ctx.moveTo(padL, padT);
+          ctx.lineTo(padL, padT + plotH);
+          ctx.stroke();
+
+          // Plan line (Rose Dashed)
+          ctx.strokeStyle = '#e11d48';
           ctx.lineWidth = 2.5;
-          ctx.setLineDash([5, 4]);
+          ctx.setLineDash([6, 4]);
           ctx.beginPath();
           for (let i = 0; i < planData.length; i++) {
             const px = padL + (i / (planData.length - 1)) * plotW;
@@ -13910,8 +13978,8 @@ if (typeof window !== "undefined") {
             ctx.fill();
 
             // Line stroke
-            ctx.strokeStyle = '#10b981';
-            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#059669';
+            ctx.lineWidth = 3.5;
             ctx.beginPath();
             for (let i = 0; i < actualData.length; i++) {
               const px = padL + (i / (planData.length - 1)) * plotW;
@@ -13927,31 +13995,31 @@ if (typeof window !== "undefined") {
               const py = padT + plotH - (actualData[i] / maxY) * plotH;
               ctx.fillStyle = '#10b981';
               ctx.beginPath();
-              ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+              ctx.arc(px, py, 4, 0, Math.PI * 2);
               ctx.fill();
-              ctx.strokeStyle = '#064e3b';
-              ctx.lineWidth = 1.5;
+              ctx.strokeStyle = '#0f172a';
+              ctx.lineWidth = 1.8;
               ctx.stroke();
             }
           }
 
           // Legend at top
-          ctx.font = 'bold 11px Sarabun, sans-serif';
+          ctx.font = 'bold 11px Prompt, Sarabun, sans-serif';
           ctx.textAlign = 'left';
           // Plan legend
-          ctx.strokeStyle = '#ed6845';
+          ctx.strokeStyle = '#e11d48';
           ctx.lineWidth = 2.5;
-          ctx.setLineDash([4, 3]);
+          ctx.setLineDash([5, 3]);
           ctx.beginPath();
           ctx.moveTo(padL + 10, 16);
           ctx.lineTo(padL + 30, 16);
           ctx.stroke();
           ctx.setLineDash([]);
-          ctx.fillStyle = '#334155';
+          ctx.fillStyle = '#0f172a';
           ctx.fillText('แผนงานสะสม (3 ต้น/วัน)', padL + 36, 16);
 
           // Actual legend
-          ctx.strokeStyle = '#10b981';
+          ctx.strokeStyle = '#059669';
           ctx.lineWidth = 3;
           ctx.beginPath();
           ctx.moveTo(padL + 175, 16);
@@ -13959,11 +14027,18 @@ if (typeof window !== "undefined") {
           ctx.stroke();
           ctx.fillStyle = '#10b981';
           ctx.beginPath();
-          ctx.arc(padL + 185, 16, 3, 0, Math.PI * 2);
+          ctx.arc(padL + 185, 16, 3.5, 0, Math.PI * 2);
           ctx.fill();
-          ctx.fillStyle = '#334155';
+          ctx.strokeStyle = '#0f172a';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = '#0f172a';
           ctx.fillText('ผลงานจริงสะสม (Actual)', padL + 201, 16);
         }
+
+        window.renderCadIsometricRadar = function () {
+          // Radar removed per user request
+        };
 
         window.syncPilingToSupabase = async function (e) {
           if (e && e.preventDefault) e.preventDefault();
@@ -14437,6 +14512,15 @@ if (typeof window !== "undefined") {
             if (elSplashCount) elSplashCount.textContent = `${drivenPiles} / 93 ต้น`;
             const elSplashRate = document.getElementById("splash-piling-rate");
             if (elSplashRate) elSplashRate.textContent = `${pct}%`;
+            const elMobileDriven = document.getElementById("portal-piling-mobile-driven");
+            const elMobilePct = document.getElementById("portal-piling-mobile-pct");
+            if (elMobileDriven) elMobileDriven.textContent = drivenPiles;
+            if (elMobilePct) elMobilePct.textContent = `${pct}%`;
+
+            // Update 3D Precast Concrete I-Pile Progress Bar Engine
+            if (typeof window.update3DIPileProgress === 'function') {
+              window.update3DIPileProgress(parseFloat(pct) || 0, drivenPiles, 93);
+            }
 
             // Delight: Trigger Count-Up Animations for Numbers
             if (typeof animateCountUp === 'function') {
@@ -14444,9 +14528,13 @@ if (typeof window !== "undefined") {
               animateCountUp(document.getElementById("portal-piling-driven-count"), drivenPiles, 1000);
               animateCountUp(document.getElementById("portal-piling-today"), todayPiles, 1000);
               animateCountUp(document.getElementById("portal-piling-remain"), 93 - drivenPiles, 1000);
+              animateCountUp(document.getElementById("portal-piling-mobile-pct"), parseFloat(pct) || 0, 1000, '%', 1);
+              animateCountUp(document.getElementById("portal-piling-mobile-driven"), drivenPiles, 1000);
               animateCountUp(document.getElementById("splash-overall-progress"), summary.overallProgress, 1000, '%', 1);
               animateCountUp(document.getElementById("splash-qc-pass-rate"), summary.qcPassRate, 1000, '%', 1);
-              animateCountUp(document.getElementById("splash-piling-rate"), parseFloat(pct) || 0, 1000, '%', 1);
+            }
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+              lucide.createIcons();
             }
 
             // Delight: Render 93 Isometric Piles Radar
@@ -14461,20 +14549,20 @@ if (typeof window !== "undefined") {
             if (elVarVal) {
               elVarVal.textContent = (variance > 0 ? `+${variance}` : `${variance}`);
               if (variance < 0) {
-                elVarVal.className = "text-2xl font-black text-rose-600 font-mono";
+                elVarVal.className = "text-2xl sm:text-3xl font-black text-rose-600 font-mono";
                 if (elVarBadge) {
                   elVarBadge.textContent = "ช้ากว่าแผน";
-                  elVarBadge.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-300";
+                  elVarBadge.className = "text-[10px] font-black px-2 py-0.5 rounded bg-rose-400 text-slate-950 border border-slate-900 shadow-[1px_1px_0px_#0f172a]";
                 }
-                if (elVarCard) elVarCard.className = "bg-rose-50/70 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs";
+                if (elVarCard) elVarCard.className = "piling-metric-tile border-2 border-slate-900 bg-rose-50 rounded-lg p-3.5 shadow-[3px_3px_0px_#0f172a] block group hover:no-underline";
               } else {
                 elVarVal.textContent = (variance === 0 ? "ตามแผน" : `+${variance}`);
-                elVarVal.className = "text-2xl font-black text-emerald-700 font-mono";
+                elVarVal.className = "text-2xl sm:text-3xl font-black text-emerald-600 font-mono";
                 if (elVarBadge) {
                   elVarBadge.textContent = "ตามแผนงาน";
-                  elVarBadge.className = "text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300";
+                  elVarBadge.className = "text-[10px] font-black px-2 py-0.5 rounded bg-emerald-400 text-slate-950 border border-slate-900 shadow-[1px_1px_0px_#0f172a]";
                 }
-                if (elVarCard) elVarCard.className = "bg-emerald-50/70 p-3.5 rounded-xl border-2 border-slate-900 shadow-xs";
+                if (elVarCard) elVarCard.className = "piling-metric-tile border-2 border-slate-900 bg-emerald-50 rounded-lg p-3.5 shadow-[3px_3px_0px_#0f172a] block group hover:no-underline";
               }
             }
             if (elVarSub) {
@@ -33185,5 +33273,6 @@ if (typeof window !== "undefined") {
         };
       })();
     </script>
+    <script src="ipile_3d.js"></script>
   </body>
 </html>
