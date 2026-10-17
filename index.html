@@ -7415,40 +7415,63 @@ body.manga-screentone-bg,
       class="min-h-screen w-full flex flex-col justify-start px-3 py-4 sm:px-6 md:px-8 lg:px-10"
     >
       <div class="w-full max-w-[1540px] mx-auto splash-content">
-        <div class="splash-hero-intro mb-6">
+        <!-- Splash Hero Header with Distilled Brand & Primary Actions -->
+        <div class="splash-hero-intro mb-5 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-slate-900 pb-4">
           <div>
-            <div class="manga-sticker sticker-ink manga-sticker-rotate-left mb-2 text-xs">
-              <span>⚡ ระยะที่ 1: งานฐานรากและเสาเข็ม (ACTIVE PILING PHASE)</span>
+            <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+              <span class="manga-sticker sticker-green text-[11px] font-black tracking-wide">
+                <span class="w-2 h-2 rounded-full bg-emerald-800 border border-slate-950 inline-block mr-1"></span>
+                ACTIVE PHASE · งานฐานรากและเสาเข็ม
+              </span>
+              <span class="text-xs font-bold text-slate-600 font-mono hidden sm:inline">
+                สุขุมวิท 71 · พระโขนงเหนือ
+              </span>
             </div>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-wider uppercase mb-1" style="font-family: 'Bangers', cursive; text-shadow: 2px 2px 0px #fff, 5px 5px 0px #ff2a5f;">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-slate-950 tracking-wider uppercase leading-none" style="font-family: 'Bangers', cursive; text-shadow: 2px 2px 0px #fff, 4px 4px 0px #ff2a5f;">
               PYNN <span style="color: #ff2a5f;">PRIDI 37</span>
             </h1>
-            <p class="text-xs sm:text-sm text-slate-700 font-bold" style="font-family: 'Sarabun', sans-serif;">
+            <p class="text-xs sm:text-sm text-slate-700 font-bold mt-1" style="font-family: 'Sarabun', sans-serif;">
               ระบบติดตามความคืบหน้างานก่อสร้าง (CONSTRUCTION TELEMETRY COCKPIT)
             </p>
+          </div>
+
+          <!-- Primary Actions (Consolidated & Focused) -->
+          <div class="flex items-center gap-2.5 shrink-0">
+            <a
+              href="piling.html?view=3d#3d"
+              class="manga-btn manga-btn-green px-4 py-2.5 text-xs sm:text-sm font-black group"
+            >
+              <i data-lucide="box" class="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform"></i>
+              <span>เปิดแบบจำลอง 3D CAD (93 ต้น)</span>
+            </a>
+            <a
+              href="piling.html?view=report#report"
+              class="manga-btn px-3.5 py-2.5 text-xs sm:text-sm font-black text-slate-900 bg-white"
+            >
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-700"></i>
+              <span>รายงานผลงาน</span>
+            </a>
           </div>
         </div>
 
         <!-- Piling Dedicated Hero Portal Card (Manga Flat Layer Edition) -->
         <div class="manga-panel-hero manga-hatch-pattern mb-8 p-5 md:p-7 relative bg-white">
-          <!-- Top Tag Ribbon -->
-          <div class="flex items-center justify-between flex-wrap gap-3 mb-6 relative z-10">
-            <div class="flex items-center gap-2.5 flex-wrap">
-              <span class="manga-sticker sticker-green manga-sticker-rotate-left text-xs font-black">
-                <span class="w-2 h-2 rounded-full bg-emerald-700 border border-slate-950 inline-block mr-1"></span>
-                หมวดงานที่ 1: งานเสาเข็ม 93 ต้น (ACTIVE PILING)
+          <!-- Consolidated Specification Bar (Single Row, Zero Clutter) -->
+          <div class="flex items-center justify-between flex-wrap gap-2.5 mb-5 pb-3 border-b-2 border-slate-100 relative z-10">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="manga-sticker sticker-ink text-[11px] font-mono font-black">
+                SPECIFICATION
               </span>
-              <span class="text-xs font-bold text-slate-800 hidden sm:inline px-3 py-1 rounded bg-white border-2 border-slate-900 shadow-[2px_2px_0px_#11141a]" style="font-family: 'Sarabun', sans-serif;">
-                โครงการ Pynn pridi 37 · สุขุมวิท 71
+              <span class="text-xs font-bold text-slate-900 px-2.5 py-1 rounded bg-slate-100 border border-slate-900" style="font-family: 'Sarabun', sans-serif;">
+                เสาเข็มคอนกรีตอัดแรงไอ 0.40 × 21.00 ม. (มอก. 396-2549)
+              </span>
+              <span class="text-xs font-bold text-slate-700 hidden sm:inline px-2.5 py-1 rounded bg-slate-50 border border-slate-300 font-mono">
+                แผนรวม 93 ต้น · อัตราเฉลี่ย 3 ต้น/วัน (31 วันทำการ)
               </span>
             </div>
-            <div class="flex items-center gap-2.5">
-              <span class="manga-sticker sticker-yellow text-xs font-black">
-                🎯 แผนงานรวม: 93 ต้น
-              </span>
-              <a href="piling.html?view=3d#3d" class="manga-btn manga-btn-cyan text-xs px-3.5 py-1.5 font-black">
-                <span>⚡ เปิดโมเดล 3D CAD</span>
-              </a>
+            <div class="flex items-center gap-2 text-xs font-mono font-bold text-slate-500">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>LIVE TELEMETRY</span>
             </div>
           </div>
 
@@ -7458,54 +7481,45 @@ body.manga-screentone-bg,
             <!-- Left (Col 12 / Lg 7): S-Curve Progress Chart (Plan vs Actual) -->
             <div class="lg:col-span-7 flex flex-col justify-between">
               <div>
-                <div class="flex items-center justify-between mb-2 shrink-0">
-                  <h2 class="text-xl md:text-2xl font-black text-slate-950 tracking-tight leading-tight flex items-center gap-2.5" style="font-family: 'Sarabun', sans-serif;">
+                <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5 shrink-0">
+                  <h2 class="text-lg md:text-xl font-black text-slate-950 tracking-tight leading-tight flex items-center gap-2" style="font-family: 'Sarabun', sans-serif;">
                     <span>กราฟเปรียบเทียบผลงานเสาเข็ม</span>
-                    <span class="manga-sticker sticker-ink text-[11px] font-mono hidden sm:inline">PLAN VS ACTUAL</span>
+                    <span class="manga-sticker sticker-ink text-[10px] font-mono">PLAN VS ACTUAL</span>
                   </h2>
-                  <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded bg-white border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#11141a] text-[11px] font-bold text-slate-700" style="font-family: 'Sarabun', sans-serif;">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 border border-slate-900"></span>
-                    <span>เสาเข็มไอ 0.40 ม. x 21.00 ม. (มอก. 396-2549)</span>
+                  <div class="flex items-center gap-2 text-xs font-bold">
+                    <span class="manga-sticker sticker-red text-[11px]">
+                      <span class="w-2.5 h-0.5 bg-white inline-block mr-1"></span>
+                      แผนสะสม (3 ต้น/วัน)
+                    </span>
+                    <span class="manga-sticker sticker-green text-[11px]">
+                      <span class="w-2 h-2 rounded-full bg-emerald-900 inline-block mr-1"></span>
+                      ผลงานจริงสะสม
+                    </span>
                   </div>
-                </div>
-
-                <div class="flex items-center flex-wrap gap-2 text-xs font-bold leading-relaxed mb-2.5 shrink-0">
-                  <span class="manga-sticker sticker-red text-[11px]">
-                    <span class="w-3 h-0.5 bg-white inline-block mr-1"></span>
-                    แผนสะสม (3 ต้น/วัน)
-                  </span>
-                  <span class="manga-sticker sticker-green text-[11px]">
-                    <span class="w-2 h-2 rounded-full bg-emerald-900 inline-block mr-1"></span>
-                    ผลงานจริงสะสม
-                  </span>
-                  <span class="text-xs text-slate-700 font-bold hidden sm:inline ml-1 font-mono">| แผนรวม 93 ต้น / 31 วันทำการ</span>
                 </div>
 
                 <!-- Chart Canvas Box: Manga Panel Frame with Hard Shadow -->
                 <div 
-                  class="piling-chart-monitor relative w-full h-[240px] sm:h-[250px] p-2.5 overflow-hidden bg-white border-3 border-slate-900 rounded-lg shadow-[4px_4px_0px_#11141a]"
+                  class="piling-chart-monitor relative w-full h-[255px] p-2.5 overflow-hidden bg-white border-3 border-slate-900 rounded-lg shadow-[4px_4px_0px_#11141a]"
                 >
                   <canvas id="splashScurveCanvas" class="w-full h-full block"></canvas>
                 </div>
               </div>
 
-              <!-- Main Launch Buttons below chart -->
-              <div class="flex flex-wrap items-center gap-2.5 mt-3 shrink-0">
-                <a
-                  href="piling.html?view=3d#3d"
-                  class="manga-btn manga-btn-green px-4 py-2.5 text-xs sm:text-sm font-black group"
-                >
-                  <i data-lucide="box" class="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform"></i>
-                  <span>เปิดแบบจำลอง 3D เสาเข็ม 93 ต้น (3D CAD)</span>
-                  <span class="text-[10px] font-black bg-slate-950 text-yellow-300 px-1.5 py-0.5 rounded ml-1">หลัก</span>
-                </a>
-                <a
-                  href="piling.html?view=report#report"
-                  class="manga-btn px-3.5 py-2.5 text-xs sm:text-sm font-black text-slate-900"
-                >
-                  <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-700"></i>
-                  <span>รายงานผลงานเสาเข็ม</span>
-                </a>
+              <!-- Quick Sub-navigation below chart -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-2 text-xs font-bold text-slate-600 border-t border-slate-100 shrink-0">
+                <div class="flex items-center gap-3">
+                  <a href="piling.html?view=3d#3d" class="hover:text-emerald-700 underline decoration-slate-400 hover:decoration-emerald-600 transition-colors flex items-center gap-1 font-bold">
+                    <i data-lucide="scan" class="w-3.5 h-3.5 text-emerald-600"></i>
+                    <span>ตรวจดูตำแหน่งเสาเข็มใน 3D CAD</span>
+                  </a>
+                  <span class="text-slate-300">|</span>
+                  <a href="piling.html?view=report#daily" class="hover:text-emerald-700 underline decoration-slate-400 hover:decoration-emerald-600 transition-colors flex items-center gap-1 font-bold">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-600"></i>
+                    <span>บันทึกการกดรายวัน</span>
+                  </a>
+                </div>
+                <span class="font-mono text-[11px] text-slate-400 hidden sm:inline">Pynn Pridi 37 · Piling Ops</span>
               </div>
             </div>
 
@@ -7636,9 +7650,11 @@ body.manga-screentone-bg,
               <span class="manga-sticker sticker-yellow text-xs font-black">
                 ROADMAP
               </span>
-              <h3 class="text-sm font-black text-slate-900" style="font-family: 'Prompt', sans-serif;">หมวดงานระยะถัดไป (กำลังพัฒนาและจะทยอยเปิดทีละเมนู)</h3>
+              <h3 class="text-sm font-black text-slate-900" style="font-family: 'Prompt', sans-serif;">
+                หมวดงานระยะถัดไป (เปิดตามลำดับความก้าวหน้าโครงการ)
+              </h3>
             </div>
-            <span class="text-xs font-bold text-slate-700 hidden sm:inline px-3 py-1 rounded bg-white border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#11141a]">โครงการ Pynn pridi 37</span>
+            <span class="text-xs font-bold text-slate-500 font-mono hidden sm:inline">Phase 2 – 5 Pipelines</span>
           </div>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
