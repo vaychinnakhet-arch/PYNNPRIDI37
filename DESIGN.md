@@ -66,7 +66,7 @@ A high-precision technical interface designed for tracking 93 piles and construc
 
 ## Colors
 - **Canvas & Ink**:
-  - `canvas-bg` (`#f8fafc`): Dot screentone paper canvas.
+  - `canvas-bg` (`#ffffff`): Pure white paper canvas (clean background, no dots).
   - `paper-surface` (`#ffffff`): High-contrast card surfaces.
   - `ink-primary` (`#11141a`): Solid black line art for borders, texts, and block shadows.
   - `ink-secondary` (`#475569`): Muted technical metadata and captions.
@@ -89,7 +89,7 @@ A high-precision technical interface designed for tracking 93 piles and construc
   - Purpose: Coordinates (X, Y, Z), cut-off levels, millimeter deviation metrics.
 
 ## Layout
-- Grid-based engineering dashboards with 20px screentone dots (`manga-screentone-bg`).
+- Clean grid-based engineering dashboards with seamless pure white canvas.
 - Floating HUD consoles and docked toolbars with clear physical separation.
 
 ## Elevation & Depth

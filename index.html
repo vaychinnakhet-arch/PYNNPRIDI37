@@ -43,7 +43,8 @@
     <style>
       body {
         font-family: "Sarabun", sans-serif;
-        background-color: #f1f5f9; /* slate-100 */
+        background-color: #ffffff !important;
+        background-image: none !important;
       }
 
       /* Make date input clickable anywhere */
@@ -7382,6 +7383,8 @@ body:not(.is-line-capturing) .modal .modal-content {
 
 /* Pure White Clean Background Override (ลบสีเทาและลายตารางทั้งหมด ให้เป็นสีขาว 100%) */
 html, body,
+body.manga-screentone-bg,
+.manga-screentone-bg,
 #splash-screen,
 #splash-screen.min-h-screen,
 #main-splash-container {
@@ -7405,7 +7408,7 @@ html, body,
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   </head>
-  <body class="p-0 md:p-4 bg-[#f8fafc] manga-screentone-bg relative min-h-screen text-slate-900">
+  <body class="p-0 md:p-4 bg-white relative min-h-screen text-slate-900">
     <!-- Splash Screen -->
     <div
       id="splash-screen"

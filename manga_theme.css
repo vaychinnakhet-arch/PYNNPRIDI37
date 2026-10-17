@@ -11,7 +11,7 @@
   --manga-ink: #11141a;
   --manga-ink-dark: #090b0e;
   --manga-paper: #ffffff;
-  --manga-canvas-bg: #f8fafc;
+  --manga-canvas-bg: #ffffff;
   --manga-ink-subtle: #475569;
   --manga-ink-muted: #64748b;
 
@@ -94,7 +94,8 @@
 html, body {
   font-family: var(--font-formal-body) !important;
   color: var(--manga-ink);
-  background-color: var(--manga-canvas-bg);
+  background-color: #ffffff !important;
+  background-image: none !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -113,15 +114,11 @@ p, span, div, a, li, input, select, textarea, button, table, th, td, label {
   font-family: var(--font-manga-mono) !important;
 }
 
-/* Comic Screentone Halftone Dot Background Pattern */
+/* Comic Clean Canvas Background (พื้นหลังสีขาวล้วน สะอาดตา ไม่มีจุด) */
 .manga-screentone-bg,
 body.manga-screentone-bg {
-  background-color: #f8fafc !important;
-  background-image: 
-    radial-gradient(#94a3b8 15%, transparent 16%),
-    radial-gradient(#94a3b8 15%, transparent 16%) !important;
-  background-size: 20px 20px !important;
-  background-position: 0 0, 10px 10px !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
 }
 
 /* Selection Highlight */

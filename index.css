@@ -5866,12 +5866,13 @@ body:not(.is-line-capturing) .modal .modal-content {
    หมวดงานเสาเข็ม 93 ต้น (ACTIVE PILING PHASE)
    ========================================================================== */
 
-/* 1. Global Reset & Seamless Canvas (พื้นหลังสีขาวล้วน สะอาดตา ไม่มีตาราง) */
-html, body {
+/* 1. Global Reset & Seamless Canvas (พื้นหลังสีขาวล้วน สะอาดตา ไม่มีตาราง ไม่มีจุด) */
+html, body, .manga-screentone-bg, body.manga-screentone-bg {
   width: 100% !important;
   min-height: 100vh !important;
   margin: 0 !important;
   padding: 0 !important;
+  background: #ffffff !important;
   background-color: #ffffff !important;
   background-image: none !important;
   color: #0f172a !important;
