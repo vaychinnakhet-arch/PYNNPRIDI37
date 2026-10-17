@@ -503,3 +503,210 @@ label {
   box-shadow: 1px 1px 0px #0f172a !important;
 }
 
+/* ==========================================================================
+   COLORIZED SEMANTIC CONTROLS (COLORIZE SKILL: มีสีสันตามหน้าที่ สบายตา คมชัด)
+   ========================================================================== */
+
+/* 1. Header Navigation & Quick Actions */
+#home-btn, a[href="index.html"].pop-btn {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+#btn-supabase-sync {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #93c5fd !important;
+}
+#btn-supabase-sync:hover {
+  background: #dbeafe !important;
+}
+#btn-open-report {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0369a1 !important;
+}
+#btn-open-report:hover {
+  background: #0369a1 !important;
+}
+#btn-open-export {
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  border-color: #fecdd3 !important;
+}
+#btn-open-export:hover {
+  background: #ffe4e6 !important;
+}
+#btn-pco-inspector {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #fde68a !important;
+}
+#btn-pco-inspector:hover {
+  background: #fde68a !important;
+}
+#btn-open-cotable {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+#btn-open-cotable:hover {
+  background: #d1fae5 !important;
+}
+#btn-reset-view, #btn-fullscreen {
+  background: #f8fafc !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+#btn-reset-view:hover, #btn-fullscreen:hover {
+  background: #e2e8f0 !important;
+}
+
+/* 2. Floating HUD - View Toggles */
+#view-top-ortho {
+  background: #f0f9ff !important;
+  color: #0369a1 !important;
+  border-color: #bae6fd !important;
+}
+#view-top-ortho.active {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0369a1 !important;
+}
+#view-iso3d {
+  background: #f0f9ff !important;
+  color: #0369a1 !important;
+  border-color: #bae6fd !important;
+}
+#view-iso3d.active {
+  background: #f59e0b !important;
+  color: #ffffff !important;
+  border-color: #d97706 !important;
+}
+#btn-view-top-3d, #btn-view-front, #btn-view-side {
+  background: #f8fafc !important;
+  color: #334155 !important;
+  border-color: #e2e8f0 !important;
+}
+#btn-view-top-3d:hover, #btn-view-front:hover, #btn-view-side:hover {
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+}
+#btn-view-focus-center {
+  background: #fff7ed !important;
+  color: #c2410c !important;
+  border-color: #fed7aa !important;
+}
+#btn-view-focus-center:hover {
+  background: #ffedd5 !important;
+}
+
+/* 3. Layer Sub-toggles */
+#btn-toggle-pile-model, #btn-toggle-pile-text {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1.5px solid #a7f3d0 !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+#btn-toggle-pile-model:hover, #btn-toggle-pile-text:hover {
+  background: #d1fae5 !important;
+}
+#btn-toggle-drain-model, #btn-toggle-drain-text {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+#btn-toggle-drain-model:hover, #btn-toggle-drain-text:hover {
+  background: #f1f5f9 !important;
+}
+#btn-sidebar-open-drainagetable {
+  background: #f0f9ff !important;
+  color: #0369a1 !important;
+  border-color: #bae6fd !important;
+}
+#btn-sidebar-open-drainagetable:hover {
+  background: #e0f2fe !important;
+}
+
+/* 4. Pile Filter Toggles (Distinct Semantic Color Coding - Green for Driven, Rose for Pending) */
+#filter-all {
+  background: #f8fafc !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+#filter-all.active {
+  background: #f59e0b !important;
+  color: #ffffff !important;
+  border-color: #d97706 !important;
+}
+#filter-all.active span.font-black {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+#filter-driven {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+#filter-driven:hover {
+  background: #d1fae5 !important;
+}
+#filter-driven.active {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+}
+#filter-driven.active span, #filter-driven.active span.font-black {
+  color: #ffffff !important;
+}
+#filter-driven.active span.font-black {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+#filter-pending {
+  background: #fff1f2 !important;
+  color: #9f1239 !important;
+  border-color: #fecdd3 !important;
+}
+#filter-pending:hover {
+  background: #ffe4e6 !important;
+}
+#filter-pending.active {
+  background: #f43f5e !important;
+  color: #ffffff !important;
+  border-color: #e11d48 !important;
+}
+#filter-pending.active span, #filter-pending.active span.font-black {
+  color: #ffffff !important;
+}
+#filter-pending.active span.font-black {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* 5. PCO Tool Card Buttons */
+#btn-sidebar-toggle-inspector {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #f59e0b !important;
+  font-weight: 800 !important;
+}
+#btn-sidebar-toggle-inspector:hover {
+  background: #fde68a !important;
+}
+#btn-sidebar-open-cotable {
+  background: #f1f5f9 !important;
+  color: #1e293b !important;
+  border-color: #cbd5e1 !important;
+}
+#btn-sidebar-open-cotable:hover {
+  background: #e2e8f0 !important;
+}
+
+
