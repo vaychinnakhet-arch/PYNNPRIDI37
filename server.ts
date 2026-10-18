@@ -60,6 +60,24 @@ ALTER TABLE piling_progress ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Allow all for piling" ON piling_progress;
 CREATE POLICY "Allow all for piling" ON piling_progress FOR ALL USING (true) WITH CHECK (true);`;
 
+// SQL Schema for footing table in Supabase
+const FOOTING_SQL_SCHEMA = `-- สร้างตารางบันทึกความคืบหน้างานฐานราก 21 ฐาน
+CREATE TABLE IF NOT EXISTS footing_progress (
+  footing_id TEXT PRIMARY KEY,
+  mark TEXT,
+  grid TEXT,
+  status TEXT DEFAULT 'pending',
+  pour_date TEXT,
+  concrete_m3 NUMERIC,
+  rebar_kg NUMERIC,
+  notes TEXT,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE footing_progress ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow all for footing" ON footing_progress;
+CREATE POLICY "Allow all for footing" ON footing_progress FOR ALL USING (true) WITH CHECK (true);`;
+
 // Check Supabase connection status
 app.get('/api/supabase/status', async (req, res) => {
   const { url, table, isValid } = getSupabaseConfig();
@@ -318,6 +336,116 @@ app.post('/api/supabase/sync', async (req, res) => {
   }
 });
 
+// Fetch all footing records from Supabase
+app.get('/api/supabase/footings', async (req, res) => {
+  const client = getSupabase();
+  const { isValid } = getSupabaseConfig();
+  if (!client || !isValid) {
+    return res.status(503).json({
+      error: 'Supabase is not configured yet. Please set SUPABASE_URL and SUPABASE_ANON_KEY in .env',
+      configured: false,
+    });
+  }
+  try {
+    // 1. Try reading from project_data under footingProgress
+    const { data: projRow } = await client
+      .from('project_data')
+      .select('data')
+      .eq('id', 1)
+      .maybeSingle();
+
+    if (projRow?.data && projRow.data.footingProgress !== undefined) {
+      return res.json({
+        data: projRow.data.footingProgress,
+        source: 'project_data',
+        timestamp: projRow.data.footingProgressLastUpdated || null
+      });
+    }
+
+    // 2. Try relational table footing_progress
+    const { data: footingRows, error: fError } = await client
+      .from('footing_progress')
+      .select('*')
+      .order('footing_id', { ascending: true });
+
+    if (!fError && footingRows && footingRows.length > 0) {
+      const dict: Record<string, any> = {};
+      footingRows.forEach((r: any) => {
+        dict[r.footing_id] = {
+          status: r.status,
+          date: r.pour_date,
+          notes: r.notes || '',
+          concrete_m3: r.concrete_m3,
+          rebar_kg: r.rebar_kg
+        };
+      });
+      return res.json({ data: dict, raw: footingRows, source: 'footing_progress' });
+    }
+
+    res.json({ data: null, source: 'none' });
+  } catch (err: any) {
+    console.error('API Error:', err);
+    res.status(500).json({ error: err.message || 'Server error' });
+  }
+});
+
+// Upsert single footing or batch footings
+app.post('/api/supabase/footings', async (req, res) => {
+  const client = getSupabase();
+  const { isValid } = getSupabaseConfig();
+  if (!client || !isValid) {
+    return res.status(503).json({
+      error: 'Supabase is not configured yet. Please set SUPABASE_URL and SUPABASE_ANON_KEY in .env',
+      configured: false,
+    });
+  }
+  try {
+    const records = Array.isArray(req.body) ? req.body : [req.body];
+    const now = new Date().toISOString();
+
+    const { data: projRow } = await client
+      .from('project_data')
+      .select('data')
+      .eq('id', 1)
+      .maybeSingle();
+
+    if (projRow && projRow.data) {
+      const currentFootings = projRow.data.footingProgress || {};
+      records.forEach((r: any) => {
+        const id = r.footing_id || r.id;
+        if (id) {
+          currentFootings[id] = {
+            status: r.status || 'poured',
+            date: r.pour_date || r.date || now.slice(0, 10),
+            notes: r.notes || '',
+            concrete_m3: r.concrete_m3,
+            rebar_kg: r.rebar_kg
+          };
+        }
+      });
+      projRow.data.footingProgress = currentFootings;
+      projRow.data.footingProgressLastUpdated = now;
+
+      await client
+        .from('project_data')
+        .update({ data: projRow.data })
+        .eq('id', 1);
+    }
+
+    // Also attempt upsert to footing_progress table
+    try {
+      await client
+        .from('footing_progress')
+        .upsert(records, { onConflict: 'footing_id' });
+    } catch (_) {}
+
+    res.json({ success: true, count: records.length, timestamp: now });
+  } catch (err: any) {
+    console.error('API Error:', err);
+    res.status(500).json({ error: err.message || 'Server error' });
+  }
+});
+
 // AI Proxy Endpoint (keeps API key secure on server)
 app.post('/api/ai/generate', async (req, res) => {
   const apiKey = process.env.GEMINI_API_KEY || '';
@@ -394,6 +522,23 @@ app.get('/piling.html', (req, res) => {
     return res.sendFile(distPiling);
   }
   res.sendFile(path.join(__dirname, 'piling.html'));
+});
+
+// Explicit Route for Footing Plan & Progress
+app.get('/footing', (req, res) => {
+  res.redirect('/footing.html');
+});
+
+app.get('/footing.html', (req, res) => {
+  const distFooting = path.join(__dirname, 'dist', 'footing.html');
+  if (fs.existsSync(distFooting)) {
+    return res.sendFile(distFooting);
+  }
+  const publicFooting = path.join(__dirname, 'public', 'footing.html');
+  if (fs.existsSync(publicFooting)) {
+    return res.sendFile(publicFooting);
+  }
+  res.sendFile(path.join(__dirname, 'footing.html'));
 });
 
 // Mount Vite middleware in development

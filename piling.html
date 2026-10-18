@@ -756,7 +756,120 @@
       margin-bottom: 0 !important;
       border: 2px solid #475569 !important;
     }
-  </style>
+  
+    /* =========================================================================
+       TACTILE BOLDER BIM LAYER TOGGLE CARDS (MATCHING FOOTING.HTML)
+       ========================================================================= */
+    .layer-card {
+      position: relative;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+    .layer-card:hover {
+      border-color: #0f172a;
+      transform: translateY(-1px);
+      box-shadow: 2px 2px 0px #0f172a;
+    }
+    .layer-card.active {
+      border: 2px solid #0f172a;
+      box-shadow: 2px 2px 0px #0f172a;
+    }
+    .layer-card.active.active-pile {
+      background: #fffbeb;
+    }
+    .layer-card.active.active-footing {
+      background: #f0f9ff;
+    }
+    .layer-card.active.active-drainage {
+      background: #ecfeff;
+    }
+    .layer-card.active.active-grid {
+      background: #f8fafc;
+    }
+    .layer-card.active.active-boundary {
+      background: #fff1f2;
+    }
+    .layer-card.active.active-hex {
+      background: #fef3c7;
+    }
+
+    /* Tactile Toggle Switch Pill */
+    .toggle-switch {
+      width: 36px;
+      height: 20px;
+      background: #cbd5e1;
+      border: 1.5px solid #0f172a;
+      border-radius: 9999px;
+      position: relative;
+      transition: background 0.22s ease;
+      flex-shrink: 0;
+    }
+    .toggle-knob {
+      width: 14px;
+      height: 14px;
+      background: #ffffff;
+      border: 1.5px solid #0f172a;
+      border-radius: 9999px;
+      position: absolute;
+      top: 1.5px;
+      left: 2px;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    }
+    .layer-card.active .toggle-knob {
+      transform: translateX(16px);
+      background: #ffffff;
+    }
+    .layer-card.active.active-pile .toggle-switch {
+      background: #f59e0b;
+    }
+    .layer-card.active.active-footing .toggle-switch {
+      background: #0284c7;
+    }
+    .layer-card.active.active-drainage .toggle-switch {
+      background: #06b6d4;
+    }
+    .layer-card.active.active-grid .toggle-switch {
+      background: #334155;
+    }
+    .layer-card.active.active-boundary .toggle-switch {
+      background: #e11d48;
+    }
+    .layer-card.active.active-hex .toggle-switch {
+      background: #d97706;
+    }
+
+    /* Isolate Solo Button */
+    .btn-solo {
+      opacity: 0;
+      padding: 1px 4px;
+      font-size: 9px;
+      font-weight: 800;
+      background: #f1f5f9;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      color: #334155;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .layer-card:hover .btn-solo {
+      opacity: 1;
+    }
+    .btn-solo:hover {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+</style>
 
   <script type="importmap">
     {
@@ -935,6 +1048,10 @@
           <i data-lucide="box" class="w-4 h-4"></i>
           <span>3D สามมิติ (Iso)</span>
         </button>
+        <a href="/footing.html" class="pop-btn py-1 px-2 text-xs font-bold flex items-center gap-2 transition-all bg-sky-50 text-sky-900 border-sky-600 hover:bg-sky-100" title="ไปดูผังความคืบหน้าฐานราก ค.ส.ล.">
+          <i data-lucide="layers" class="w-4 h-4 text-sky-600"></i>
+          <span>ผังฐานราก ค.ส.ล. (21 ฐาน)</span>
+        </a>
       </div>
 
       <!-- Sub-controls for 3D View Angles -->
@@ -958,55 +1075,88 @@
       </div>
     </div>
 
-    <div class="pop-card p-2 flex flex-col gap-2 bg-[#fffdf8] border-2 border-slate-900 shadow-sm rounded-xl">
-      <div class="flex items-center justify-between pb-1 border-b-1.5 border-slate-900">
-        <span class="text-[9.5px] font-black uppercase text-[#34383b] flex items-center gap-1">
-          <i data-lucide="sliders" class="w-3.5 h-3.5 text-[#ed6845]"></i> เลเยอร์แผนผัง (Flat-Pop)
+    <!-- 2. BOLDER BIM LAYER CONTROLS (ปุ่มเปิด-ปิดสวย เด่น สไตล์เดียวกับงานฟุตติ้ง) -->
+    <div class="pop-card p-2.5 bg-white/95 backdrop-blur flex flex-col gap-2 text-xs border-2 border-slate-900 shadow-[2.5px_2.5px_0px_#0f172a] rounded-xl">
+      <!-- Section Header with Quick Actions -->
+      <div class="flex items-center justify-between pb-1 border-b-2 border-slate-900">
+        <span class="text-[11px] font-black uppercase text-slate-900 tracking-wider flex items-center gap-1.5">
+          <i data-lucide="layers" class="w-4 h-4 text-[#ed6845]"></i> เลเยอร์งาน 3D
         </span>
-        <span class="text-[8px] font-black px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
-          3D & แปลน
-        </span>
+        <div class="flex items-center gap-1">
+          <button id="btn-layers-all" type="button" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
+          <button id="btn-layers-reset" type="button" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="รีเซ็ตค่าเริ่มต้น (เข็ม+กริด+เขต)">รีเซ็ต</button>
+        </div>
       </div>
 
-            <!-- 1. การ์ดงานเสาเข็ม (Piles Flat-Pop Card) - กดตรงไหนก็ได้เพื่อเปิด/ปิดทั้งหมด -->
-      <div id="sidebar-card-piles" class="p-1.5 rounded-lg border transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-xs ring-1 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none" title="คลิกเพื่อเปิด/ปิดงานเสาเข็มทั้งหมด">
-        <!-- Main Header -->
-        <div class="flex items-center justify-between" id="trigger-sidebar-piles">
-          <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]" id="dot-sidebar-piles"></span>
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#059669]" id="icon-sidebar-piles"></i>
-            <span class="text-[11px] font-black text-[#065f46]" id="title-sidebar-piles">งานเสาเข็ม (93 ต้น)</span>
+      <!-- Layer 1: งานเสาเข็ม I-beam (93 ต้น) -->
+      <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1.5" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam ทั้งหมด">
+        <div class="flex items-center justify-between w-full" id="trigger-sidebar-piles">
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="w-6 h-6 rounded bg-amber-400 border border-slate-900 flex items-center justify-center text-slate-950 shadow-sm flex-shrink-0">
+              <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+            </div>
+            <div class="truncate">
+              <div class="font-extrabold text-slate-900 text-xs leading-none" id="title-sidebar-piles">งานเสาเข็ม I-beam</div>
+              <div class="text-[10px] text-amber-800 font-bold font-mono">93 ต้น • เข็มหลัก</div>
+            </div>
           </div>
-          <span id="badge-sidebar-piles" class="text-[8.5px] font-black px-2 py-0.5 rounded-full bg-[#10b981] text-white">เปิด</span>
+          <div class="flex items-center gap-1.5">
+            <button type="button" class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
+            <span id="badge-sidebar-piles" class="hidden">เปิด</span>
+            <div class="toggle-switch"><div class="toggle-knob"></div></div>
+          </div>
         </div>
 
-        <!-- Sub-toggles: โมเดล 3D & ข้อความ/ป้าย (ปุ่ม toggle สลับเปิดปิด) -->
-        <div id="div-pile-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]">
-          <button type="button" id="btn-toggle-pile-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-[#10b981] text-[#065f46] shadow-2xs hover:bg-emerald-50 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D เสาเข็ม">
-            <span id="dot-pile-model" class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+        <!-- Sub-toggles: โมเดล 3D & ข้อความ/ป้าย -->
+        <div id="div-pile-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-amber-200/80 text-[10px] w-full">
+          <button type="button" id="btn-toggle-pile-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D เสาเข็ม">
+            <span id="dot-pile-model" class="w-2 h-2 rounded-full bg-amber-500"></span>
             <span>โมเดล 3D</span>
           </button>
-          <button type="button" id="btn-toggle-pile-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-[#10b981] text-[#065f46] shadow-2xs hover:bg-emerald-50 select-none" title="เปิด/ปิด เฉพาะข้อความ/ป้ายเบอร์เข็ม">
-            <span id="dot-pile-text" class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+          <button type="button" id="btn-toggle-pile-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เปิด/ปิด เฉพาะข้อความ/ป้ายเบอร์เข็ม">
+            <span id="dot-pile-text" class="w-2 h-2 rounded-full bg-amber-500"></span>
             <span>ข้อความ/ป้าย</span>
           </button>
         </div>
       </div>
 
-      <!-- 2. การ์ดงานท่อระบายน้ำ & บ่อพัก (Drainage Flat-Pop Card) - ตั้งต้นปิดไว้ (เปิดเฉพาะเข็ม) -->
-      <div id="sidebar-card-drainage" class="p-1.5 rounded-lg border transition-all duration-150 bg-slate-50 border-slate-300 shadow-xs text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none" title="คลิกเพื่อเปิด/ปิดงานท่อระบายน้ำทั้งหมด">
-        <!-- Main Header -->
-        <div class="flex items-center justify-between" id="trigger-sidebar-drainage">
-          <div class="flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-slate-400" id="dot-sidebar-drainage"></span>
-            <i data-lucide="git-commit" class="w-3.5 h-3.5 text-slate-400" id="icon-sidebar-drainage"></i>
-            <span class="text-[11px] font-bold text-slate-500" id="title-sidebar-drainage">ท่อ & บ่อพัก (12 บ่อ)</span>
+      <!-- Layer 2: ฐานราก ค.ส.ล. (21 ฐาน) - เชื่อมต่อไปหน้า footing.html -->
+      <a href="footing.html" id="sidebar-card-footings" class="layer-card active active-footing" title="คลิกเพื่อไปดูผังฐานราก ค.ส.ล. 21 ฐาน 3D">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-sky-500 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="box" class="w-3.5 h-3.5"></i>
           </div>
-          <span id="badge-sidebar-drainage" class="text-[8.5px] font-black px-2 py-0.5 rounded-full bg-slate-300 text-slate-600">ปิด</span>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">ฐานราก ค.ส.ล.</div>
+            <div class="text-[10px] text-sky-800 font-bold font-mono">21 ฐาน • ผัง 3D ↗</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-300">เปิดดูผัง</span>
+        </div>
+      </a>
+
+      <!-- Layer 3: ท่อระบายน้ำ & บ่อพัก (Drainage) -->
+      <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1.5" data-layer="drainage" title="คลิกเพื่อ เปิด/ปิด งานท่อระบายน้ำทั้งหมด">
+        <div class="flex items-center justify-between w-full" id="trigger-sidebar-drainage">
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="w-6 h-6 rounded bg-cyan-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+              <i data-lucide="git-commit" class="w-3.5 h-3.5"></i>
+            </div>
+            <div class="truncate">
+              <div class="font-extrabold text-slate-900 text-xs leading-none" id="title-sidebar-drainage">ท่อ & บ่อพัก ค.ส.ล.</div>
+              <div class="text-[10px] text-cyan-800 font-bold font-mono">12 บ่อ • 7 ท่อ</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" class="btn-solo" data-solo="drainage" title="ดูเฉพาะท่อระบายน้ำ">SOLO</button>
+            <span id="badge-sidebar-drainage" class="hidden">ปิด</span>
+            <div class="toggle-switch"><div class="toggle-knob"></div></div>
+          </div>
         </div>
 
-        <!-- Sub-toggles: โมเดล 3D & ข้อความ/ระดับ (ปุ่ม toggle สลับเปิดปิด) -->
-        <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]">
+        <!-- Sub-toggles: โมเดล 3D & ข้อความ/ระดับ -->
+        <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-200 text-[10px] w-full">
           <button type="button" id="btn-toggle-drain-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D ท่อและบ่อพัก">
             <span id="dot-drain-model" class="w-2 h-2 rounded-full bg-slate-300"></span>
             <span>โมเดล 3D</span>
@@ -1018,25 +1168,51 @@
         </div>
       </div>
 
-      <!-- ผังอ้างอิงอื่นๆ (กริด, เขตที่ดิน, ถังบำบัด) -->
-      <div class="flex flex-col gap-0.5 pt-1 border-t-1.5 border-slate-900">
-        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-1 py-0.5 hover:text-black">
-          <input id="layer-grid" type="checkbox" checked class="accent-[#ed6845] w-3 h-3 cursor-pointer">
-          <span class="truncate">กริด & มิติ (Grid Lines)</span>
-        </label>
-        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-1 py-0.5 hover:text-black">
-          <input id="layer-boundary" type="checkbox" checked class="accent-[#ed6845] w-3 h-3 cursor-pointer">
-          <span class="truncate">แนวเขตที่ดิน (Boundary)</span>
-        </label>
-        <label class="flex items-center gap-1.5 text-[10px] font-bold text-[#475569] cursor-pointer px-1 py-0.5 hover:text-black">
-          <input id="layer-hex" type="checkbox" class="accent-[#ed6845] w-3 h-3 cursor-pointer">
-          <span class="truncate">ถังบำบัด & ผนัง (137 ต้น)</span>
-        </label>
+      <!-- Layer 4: กริด & มิติวัด CAD (Grid Lines) -->
+      <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-slate-700 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">กริด & มิติ CAD</div>
+            <div class="text-[10px] text-slate-500 font-mono">1-10, A-E</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Layer 5: แนวเขตที่ดิน & หมุด (Boundary) -->
+      <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-rose-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
+            <div class="text-[10px] text-rose-700 font-mono">4 ด้าน • หมุดแดง</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Layer 6: ถังบำบัด & ผนัง (137 ต้น) -->
+      <div id="card-hex" class="layer-card" data-layer="hex" title="คลิกเพื่อ เปิด/ปิด เสาเข็มกลุ่มหกเหลี่ยมถังบำบัดและแนวผนัง">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-amber-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-800 text-xs leading-none">ถังบำบัด & ผนัง</div>
+            <div class="text-[10px] text-slate-400 font-mono">137 ต้น (เข็มกลุ่ม)</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
       </div>
 
       <!-- ปุ่มเปิดตารางท่อระบายน้ำ คสล. -->
-      <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-1.5 text-[10px] font-bold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1 shadow-xs" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
-        <i data-lucide="table" class="w-3 h-3 text-[#0284c7]"></i>
+      <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-1.5 text-[10.5px] font-extrabold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1.5 shadow-xs rounded-lg mt-0.5" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
+        <i data-lucide="table" class="w-3.5 h-3.5 text-[#0284c7]"></i>
         <span>ตารางท่อระบายน้ำ & บ่อพัก</span>
       </button>
     </div>
@@ -3415,6 +3591,9 @@
     let pileMeshesMap = new Map();
     let pileEdgesMap = new Map();
     let currentModel = null;
+    window.gridObjects = [];
+    window.boundaryObjects = [];
+    window.hexPileObjects = [];
     let activeFilter = 'all';
     window.drainageObjects = [];
 
@@ -4262,7 +4441,7 @@
                 side: THREE.DoubleSide,
                 depthWrite: true
               });
-              child.renderOrder = 8;
+              child.renderOrder = 8; if (window.gridObjects) window.gridObjects.push(child);
 
               // Add crisp black circular outline border (เส้นขอบวงกลมสีดำ คมชัดแบบ SketchUp)
               try {
@@ -5557,7 +5736,13 @@
       const sideActive = "p-1.5 rounded-lg border transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-xs ring-1 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none";
       const sideInactive = "p-1.5 rounded-lg border transition-all duration-150 bg-slate-50 border-slate-300 shadow-xs text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none";
 
-      if (sideCard) sideCard.className = state.enabled ? sideActive : sideInactive;
+      if (sideCard) {
+        if (state.enabled) {
+          sideCard.classList.add('active', 'active-pile');
+        } else {
+          sideCard.classList.remove('active', 'active-pile');
+        }
+      }
       if (sideDot) sideDot.className = state.enabled ? "w-2.5 h-2.5 rounded-full bg-[#10b981]" : "w-2.5 h-2.5 rounded-full bg-slate-400";
       if (sideIcon) sideIcon.setAttribute('class', state.enabled ? "w-3.5 h-3.5 text-[#059669]" : "w-3.5 h-3.5 text-slate-400");
       if (sideTitle) sideTitle.className = state.enabled ? "text-[11px] font-black text-[#065f46]" : "text-[11px] font-bold text-slate-500";
@@ -5595,7 +5780,13 @@
       const sideActive = "p-1.5 rounded-lg border transition-all duration-150 bg-[#ecfdf5] border-[#10b981] shadow-xs ring-1 ring-[#10b981]/40 flex flex-col gap-1.5 cursor-pointer select-none";
       const sideInactive = "p-1.5 rounded-lg border transition-all duration-150 bg-slate-50 border-slate-300 shadow-xs text-slate-500 opacity-80 hover:opacity-100 ring-0 flex flex-col gap-1.5 cursor-pointer select-none";
 
-      if (sideCard) sideCard.className = state.enabled ? sideActive : sideInactive;
+      if (sideCard) {
+        if (state.enabled) {
+          sideCard.classList.add('active', 'active-drainage');
+        } else {
+          sideCard.classList.remove('active', 'active-drainage');
+        }
+      }
       if (sideDot) sideDot.className = state.enabled ? "w-2.5 h-2.5 rounded-full bg-[#10b981]" : "w-2.5 h-2.5 rounded-full bg-slate-400";
       if (sideIcon) sideIcon.setAttribute('class', state.enabled ? "w-3.5 h-3.5 text-[#059669]" : "w-3.5 h-3.5 text-slate-400");
       if (sideTitle) sideTitle.className = state.enabled ? "text-[11px] font-black text-[#065f46]" : "text-[11px] font-bold text-slate-500";
@@ -5675,6 +5866,75 @@
     // =========================================================================
     // EVENT BINDINGS: CARD-LEVEL CLICK & SUB-TOGGLE PILLS
     // =========================================================================
+
+    // Event Listeners for Grid, Boundary, Hex, Solo, All, Reset
+    document.getElementById('card-grid')?.addEventListener('click', () => {
+      window.VISIBILITY_STATE.grid = !window.VISIBILITY_STATE.grid;
+      applyVisibilityChanges();
+    });
+
+    document.getElementById('card-boundary')?.addEventListener('click', () => {
+      window.VISIBILITY_STATE.boundary = !window.VISIBILITY_STATE.boundary;
+      applyVisibilityChanges();
+    });
+
+    document.getElementById('card-hex')?.addEventListener('click', () => {
+      window.VISIBILITY_STATE.hex = !window.VISIBILITY_STATE.hex;
+      applyVisibilityChanges();
+    });
+
+    // Solo Isolate Buttons
+    document.querySelectorAll('.btn-solo').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const target = btn.dataset.solo;
+        if (target === 'piles') {
+          window.VISIBILITY_STATE.piles.enabled = true;
+          window.VISIBILITY_STATE.piles.showModel = true;
+          window.VISIBILITY_STATE.piles.showText = true;
+          window.VISIBILITY_STATE.drainage.enabled = false;
+          window.VISIBILITY_STATE.drainage.showModel = false;
+          window.VISIBILITY_STATE.drainage.showText = false;
+          window.VISIBILITY_STATE.hex = false;
+        } else if (target === 'drainage') {
+          window.VISIBILITY_STATE.drainage.enabled = true;
+          window.VISIBILITY_STATE.drainage.showModel = true;
+          window.VISIBILITY_STATE.drainage.showText = true;
+          window.VISIBILITY_STATE.piles.enabled = false;
+          window.VISIBILITY_STATE.piles.showModel = false;
+          window.VISIBILITY_STATE.piles.showText = false;
+          window.VISIBILITY_STATE.hex = false;
+        }
+        applyVisibilityChanges();
+      });
+    });
+
+    // Batch Buttons
+    document.getElementById('btn-layers-all')?.addEventListener('click', () => {
+      window.VISIBILITY_STATE.piles.enabled = true;
+      window.VISIBILITY_STATE.piles.showModel = true;
+      window.VISIBILITY_STATE.piles.showText = true;
+      window.VISIBILITY_STATE.drainage.enabled = true;
+      window.VISIBILITY_STATE.drainage.showModel = true;
+      window.VISIBILITY_STATE.drainage.showText = true;
+      window.VISIBILITY_STATE.grid = true;
+      window.VISIBILITY_STATE.boundary = true;
+      window.VISIBILITY_STATE.hex = true;
+      applyVisibilityChanges();
+    });
+
+    document.getElementById('btn-layers-reset')?.addEventListener('click', () => {
+      window.VISIBILITY_STATE.piles.enabled = true;
+      window.VISIBILITY_STATE.piles.showModel = true;
+      window.VISIBILITY_STATE.piles.showText = true;
+      window.VISIBILITY_STATE.drainage.enabled = false;
+      window.VISIBILITY_STATE.drainage.showModel = false;
+      window.VISIBILITY_STATE.drainage.showText = false;
+      window.VISIBILITY_STATE.grid = true;
+      window.VISIBILITY_STATE.boundary = true;
+      window.VISIBILITY_STATE.hex = false;
+      applyVisibilityChanges();
+    });
 
     // 1. งานเสาเข็ม: กดตรงไหนก็ได้ของการ์ดเพื่อเปิด/ปิดทั้งหมด
     document.getElementById('sidebar-card-piles')?.addEventListener('click', (e) => {
