@@ -566,7 +566,7 @@
     if (tab === 'all') {
       if (p1) p1.style.display = 'block';
       if (p2) p2.style.display = 'block';
-      if (p3Container) p3Container.style.display = 'block';
+      if (p3Container) p3Container.style.display = 'flex';
     } else if (tab === 'p1') {
       if (p1) p1.style.display = 'block';
       if (p2) p2.style.display = 'none';
@@ -579,7 +579,7 @@
     } else if (tab === 'p3') {
       if (p1) p1.style.display = 'none';
       if (p2) p2.style.display = 'none';
-      if (p3Container) p3Container.style.display = 'block';
+      if (p3Container) p3Container.style.display = 'flex';
     }
   };
 
@@ -2066,7 +2066,7 @@
       }
 
       pagesHtml += `
-        <article id="dr-photo-page-${pageIdx + 1}" class="daily-a4-sheet">
+        <article id="dr-photo-page-${pageIdx + 1}" class="daily-a4-sheet mx-auto">
           <div class="border border-slate-800 p-4 h-full flex flex-col justify-between" style="height: 270mm; max-height: 270mm; box-sizing: border-box; overflow: hidden;">
             
             <!-- Header Section (Sansiri Logo) -->
@@ -2333,12 +2333,21 @@
         gap: 24px;
         padding: 20px 16px 80px 16px;
       }
+      #dr-photo-sheets-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
       .daily-a4-sheet {
         width: 210mm;
         height: 288mm;
         min-height: 288mm;
         max-height: 290mm;
         max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
         background: #ffffff;
         color: #000000;
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
@@ -2559,6 +2568,13 @@
           margin: 0 !important;
           gap: 0 !important;
           display: block !important;
+        }
+        body.is-printing-daily-report #dr-photo-sheets-container {
+          display: block !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          gap: 0 !important;
+          width: 100% !important;
         }
         body.is-printing-daily-report .daily-a4-sheet {
           width: 210mm !important;
