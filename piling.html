@@ -527,15 +527,16 @@
     #report-page-card.is-export-capturing,
     .is-export-capturing #report-page-card {
       box-shadow: none !important;
-      border: 2px solid #475569 !important;
-      border-radius: 12px !important;
+      border: 2px solid #334155 !important;
+      border-radius: 14px !important;
       background: #ffffff !important;
-      overflow: hidden !important;
+      overflow: visible !important;
       width: 1380px !important;
       min-width: 1380px !important;
       max-width: 1380px !important;
       margin: 0 !important;
       box-sizing: border-box !important;
+      padding: 24px 28px !important;
     }
     #report-page-card.is-export-capturing.export-portrait,
     .is-export-capturing.export-portrait #report-page-card {
@@ -544,16 +545,36 @@
       max-width: 1200px !important;
       margin: 0 !important;
       box-sizing: border-box !important;
+      padding: 24px 28px !important;
     }
     .is-export-capturing [class*="shadow-"] {
       box-shadow: none !important;
     }
-    .is-export-capturing #report-header-bar,
+    .is-export-capturing #report-header-bar {
+      box-shadow: none !important;
+      border: 2px solid #334155 !important;
+      border-radius: 12px !important;
+      overflow: visible !important;
+      flex-shrink: 0 !important;
+      min-height: 84px !important;
+      height: auto !important;
+      padding: 14px 20px !important;
+      margin-bottom: 14px !important;
+      background: #ffffff !important;
+    }
+    .is-export-capturing #report-header-bar > div:first-child {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      gap: 12px !important;
+    }
     .is-export-capturing #report-sec-plan,
     .is-export-capturing #report-sec-scurve,
     .is-export-capturing #report-sec-table {
       box-shadow: none !important;
-      border: 2px solid #475569 !important;
+      border: 2px solid #334155 !important;
       border-radius: 12px !important;
       overflow: hidden !important;
     }
@@ -583,7 +604,23 @@
       display: inline-block !important;
       flex-shrink: 0 !important;
     }
-    .is-export-capturing #rep-header-tag,
+    .is-export-capturing #rep-header-tag {
+      white-space: nowrap !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 4px 16px 4px 14px !important;
+      font-size: 11.5px !important;
+      font-weight: 900 !important;
+      line-height: 1.35 !important;
+      margin-right: 8px !important;
+      flex-shrink: 0 !important;
+      width: auto !important;
+      max-width: none !important;
+      box-sizing: border-box !important;
+      border: 2px solid #0f172a !important;
+      border-radius: 7px !important;
+    }
     .is-export-capturing #rep-header-subtag,
     .is-export-capturing #rep-header-title,
     .is-export-capturing #rep-header-title * {
@@ -610,16 +647,67 @@
       display: none !important;
     }
 
-    .is-export-capturing #rep-sec-plan-head *,
-    .is-export-capturing #rep-sec-scurve-head *,
+    .is-export-capturing #report-sec-plan-head,
+    .is-export-capturing #report-sec-scurve-head,
+    .is-export-capturing #report-sec-table-head {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 8px 16px !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      gap: 12px !important;
+    }
+    .is-export-capturing #report-sec-plan-head *,
+    .is-export-capturing #report-sec-scurve-head *,
     .is-export-capturing #report-sec-table-head * {
       white-space: nowrap !important;
     }
-    .is-export-capturing #rep-sec-scurve-badge,
+    .is-export-capturing #report-sec-scurve-head > span:first-child {
+      font-size: 12px !important;
+      font-weight: 900 !important;
+      white-space: nowrap !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      flex-shrink: 0 !important;
+    }
+    .is-export-capturing #rep-sec-scurve-badge {
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      padding: 3px 10px !important;
+      white-space: nowrap !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      flex-shrink: 0 !important;
+      border-radius: 8px !important;
+    }
     .is-export-capturing #rep-today-table-badge {
       white-space: nowrap !important;
       display: inline-block !important;
       flex-shrink: 0 !important;
+    }
+    .is-export-capturing #rep-daily-ledger-section .no-export {
+      display: none !important;
+    }
+    .is-export-capturing #rep-daily-ledger-section .flex.items-center.justify-between {
+      flex-wrap: nowrap !important;
+    }
+    .is-export-capturing #rep-today-table .empty-log-msg,
+    .is-export-capturing #rep-today-table .empty-log-row td div {
+      display: none !important;
+    }
+    .is-export-capturing #rep-today-table .empty-log-cell,
+    .is-export-capturing #rep-today-table tr.empty-log-row td[colspan] {
+      padding: 0 !important;
+      height: 32px !important;
+      min-height: 32px !important;
+      max-height: 32px !important;
+      line-height: 32px !important;
+      border: 1px solid #000000 !important;
+      border-bottom: 2px solid #000000 !important;
+      background: #ffffff !important;
     }
 
     /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง พร้อมเส้นตาราง Soft Ink คมชัด ไม่ซ้อนทับ */
@@ -702,59 +790,71 @@
       width: 1200px !important;
       min-width: 1200px !important;
       max-width: 1200px !important;
-      min-height: 1560px !important;
-      height: 1560px !important;
+      min-height: auto !important;
+      height: auto !important;
       display: flex !important;
       flex-direction: column !important;
-      justify-content: space-between !important;
       box-sizing: border-box !important;
       padding: 24px 28px !important;
-      border: 2px solid #475569 !important;
-    }
-    .is-export-capturing.export-ratio-3-4 #report-main-grid {
-      flex: 1 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: space-between !important;
+      border: 2px solid #334155 !important;
+      border-radius: 14px !important;
+      background: #ffffff !important;
       gap: 14px !important;
     }
-    .is-export-capturing.export-ratio-3-4 #report-col-plan {
-      flex: 1.15 !important;
+    .is-export-capturing.export-ratio-3-4 #report-header-bar {
+      flex-shrink: 0 !important;
+      min-height: 84px !important;
+      height: auto !important;
+      margin-bottom: 0 !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #rep-kpi-summary-box {
+      flex-shrink: 0 !important;
+      margin-bottom: 0 !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-main-grid {
       display: flex !important;
       flex-direction: column !important;
-      min-height: 520px !important;
+      gap: 14px !important;
+      width: 100% !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-col-plan {
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-plan {
-      flex: 1 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      border: 2px solid #475569 !important;
+      border: 2px solid #334155 !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
     }
     .is-export-capturing.export-ratio-3-4 #planSnapshotCanvasWrapper {
-      flex: 1 !important;
-      display: flex !important;
-      flex-direction: column !important;
       padding: 10px !important;
     }
     .is-export-capturing.export-ratio-3-4 #planCanvasContainer {
-      flex: 1 !important;
-      height: 100% !important;
+      height: 480px !important;
       min-height: 480px !important;
-      max-height: none !important;
-      aspect-ratio: auto !important;
+      max-height: 480px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #report-col-side {
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 14px !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-scurve {
-      flex: 0 0 auto !important;
-      border: 2px solid #475569 !important;
+      border: 2px solid #334155 !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-scurve .chart-wrapper {
-      height: 250px !important;
-      max-height: 250px !important;
+      height: 230px !important;
+      max-height: 230px !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-table {
-      flex: 0 0 auto !important;
       margin-bottom: 0 !important;
-      border: 2px solid #475569 !important;
+      border: 2px solid #334155 !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
     }
   
     /* =========================================================================
@@ -869,7 +969,133 @@
       color: #ffffff;
       border-color: #0f172a;
     }
-</style>
+
+        /* =========================================================================
+       PILING DAILY & CUMULATIVE PROGRESS TABLE (LEDGER - เนเธเธ 3 เธ•เนเธ/เธงเธฑเธเธ—เธณเธเธฒเธฃ)
+       ========================================================================= */
+    .piling-daily-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: max-content;
+      min-width: 100%;
+      font-size: 11px;
+      table-layout: fixed;
+    }
+    .piling-daily-table th,
+    .piling-daily-table td {
+      border-right: 1px solid #475569;
+      border-bottom: 1px solid #475569;
+      padding: 5px 6px;
+      text-align: center;
+      white-space: nowrap;
+      box-sizing: border-box;
+    }
+    .piling-daily-table thead th {
+      background-color: #fceee7;
+      color: #1e293b;
+      font-weight: 800;
+      font-size: 11px;
+    }
+    .piling-daily-table th.sticky-col,
+    .piling-daily-table td.sticky-col {
+      position: sticky;
+      left: 0;
+      min-width: 168px;
+      width: 168px;
+      max-width: 168px;
+      text-align: left;
+      padding-left: 10px;
+      padding-right: 6px;
+      box-sizing: border-box;
+    }
+    .piling-daily-table th.sticky-col {
+      z-index: 20;
+      background-color: #fceee7;
+      text-align: center;
+      padding-left: 6px;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.08);
+    }
+    .piling-daily-table td.sticky-col {
+      z-index: 10;
+      background-color: #ffffff;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.08);
+    }
+
+    /* --- Daily Rows (Rows 1 & 2) --- */
+    .piling-daily-table tr.row-plan td {
+      background-color: #ffffff;
+    }
+    .piling-daily-table tr.row-actual td {
+      background-color: #f8fafc;
+    }
+    .piling-daily-table tr.row-plan:hover td:not(.sticky-col):not(.active-col),
+    .piling-daily-table tr.row-actual:hover td:not(.sticky-col):not(.active-col) {
+      background-color: rgba(254, 243, 199, 0.45);
+    }
+
+    /* --- Accumulated Rows (Rows 3 & 4) Distinct Styling --- */
+    /* Bold divider separating Daily from Cumulative */
+    .piling-daily-table tr.row-accum-plan td {
+      border-top: 2.5px solid #1e293b !important;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+    .piling-daily-table tr.row-accum-plan td.sticky-col {
+      border-top: 2.5px solid #1e293b !important;
+      background-color: #e2e8f0;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+    }
+    .piling-daily-table tr.row-accum-plan:hover td:not(.sticky-col):not(.active-col) {
+      background-color: #e2e8f0;
+    }
+
+    .piling-daily-table tr.row-accum-actual td {
+      background-color: #ecfdf5;
+      color: #064e3b;
+    }
+    .piling-daily-table tr.row-accum-actual td.sticky-col {
+      background-color: #d1fae5;
+      box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+    }
+    .piling-daily-table tr.row-accum-actual:hover td:not(.sticky-col):not(.active-col) {
+      background-color: #d1fae5;
+    }
+
+    /* Orange rounded outline box for Active / Selected Reporting Date */
+    .piling-daily-table .active-col {
+      background-color: #fff7ed !important;
+    }
+    .piling-daily-table th.active-col {
+      border-top: 2.5px solid #ea580c !important;
+      border-left: 2.5px solid #ea580c !important;
+      border-right: 2.5px solid #ea580c !important;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      background-color: #ffedd5 !important;
+      color: #9a3412 !important;
+      font-weight: 900;
+    }
+    .piling-daily-table td.active-col {
+      border-left: 2.5px solid #ea580c !important;
+      border-right: 2.5px solid #ea580c !important;
+    }
+    /* Highlighted accumulate cells for active date */
+    .piling-daily-table tr.row-accum-plan td.active-col {
+      background-color: #fed7aa !important;
+      color: #9a3412 !important;
+      font-weight: 900;
+    }
+    .piling-daily-table tr.row-accum-actual td.active-col {
+      background-color: #a7f3d0 !important;
+      color: #064e3b !important;
+      font-weight: 900;
+    }
+    .piling-daily-table tr:last-child td.active-col {
+      border-bottom: 2.5px solid #ea580c !important;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+  </style>
 
   <script type="importmap">
     {
@@ -1545,8 +1771,8 @@
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap">
-                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs whitespace-nowrap shrink-0 inline-block">
-                  โครงการ Pynn pridi 37
+                <span id="rep-header-tag" class="px-3.5 py-1 rounded-md bg-[#ffc45b] border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs whitespace-nowrap shrink-0 inline-flex items-center justify-center leading-normal mr-2">
+                  โครงการ PYNN PRIDI 37
                 </span>
                 <span id="rep-header-subtag" class="text-xs text-[#667277] font-bold whitespace-nowrap shrink-0 inline-block">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
               </div>
@@ -1771,8 +1997,32 @@
               </span>
             </div>
             <div class="p-3">
-              <div class="chart-wrapper h-64 md:h-72 relative">
+                            <div class="chart-wrapper h-64 md:h-72 relative">
                 <canvas id="reportScurveCanvas"></canvas>
+              </div>
+
+              <!-- DAILY & CUMULATIVE PLAN VS ACTUAL TABLE (EXCEL STYLE LEDGER) -->
+              <div id="rep-daily-ledger-section" class="mt-3.5 pt-3 border-t-1.5 border-slate-900/15">
+                <div class="flex items-center justify-between mb-2 flex-wrap gap-2 px-1">
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-md bg-[#ea580c] text-white flex items-center justify-center text-[10px] font-black shadow-2xs">
+                      <i data-lucide="table" class="w-3 h-3"></i>
+                    </span>
+                    <span class="text-xs sm:text-sm font-black text-[#34383b]">
+                      ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วัน vs Actual)
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-2 text-[10.5px] font-bold text-[#667277]">
+                    <span class="inline-flex items-center gap-1">
+                      <span class="w-3 h-3 rounded border-2 border-[#ea580c] bg-[#ffedd5]"></span>
+                      <span>วันที่รายงาน</span>
+                    </span>
+                    <span class="hidden sm:inline no-export">· เลื่อนตารางแนวนอนเพื่อดูข้อมูลทั้ง 31 วันทำการ</span>
+                  </div>
+                </div>
+                <div id="rep-daily-ledger-container" class="overflow-x-auto rounded-lg border border-slate-700 bg-white shadow-inner max-w-full">
+                  <!-- Injected by JavaScript -->
+                </div>
               </div>
             </div>
           </div>
@@ -1889,10 +2139,10 @@
         <div class="flex items-center gap-2">
           <span class="font-black text-[#34383b]">สัดส่วนภาพ:</span>
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button data-ratio="fit" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs">
+            <button data-ratio="fit" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
               📑 พอดีเอกสาร (Auto Fit)
             </button>
-            <button data-ratio="3:4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
+            <button data-ratio="3:4" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs">
               📱 แนวตั้ง 4:3 (Portrait Fit)
             </button>
             <button data-ratio="4:3" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
@@ -7241,7 +7491,7 @@
           logoBox.innerHTML = '<span class="text-[9px] font-black uppercase text-[#a84631]">PYNN</span><span class="text-base font-black">37</span>';
         }
         if (tagPill) {
-          tagPill.className = 'px-2.5 py-0.5 rounded-md bg-[#ffc45b] border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs';
+          tagPill.className = 'px-3.5 py-1 rounded-md bg-[#ffc45b] border-2 border-slate-900 text-xs font-black text-[#34383b] shadow-xs inline-flex items-center justify-center leading-normal whitespace-nowrap shrink-0 mr-2';
           tagPill.textContent = 'โครงการ PYNN PRIDI 37';
         }
         if (subtag) subtag.className = 'text-xs text-[#667277] font-bold';
@@ -7509,8 +7759,8 @@
       }
 
       if (displayPilesList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="12" class="py-5 px-3 text-center border-b-2 border-slate-900">
-          <div class="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-50 border border-slate-200 text-[#475569] font-bold text-xs leading-normal">
+        tbody.innerHTML = `<tr class="empty-log-row"><td colspan="12" class="empty-log-cell py-5 px-3 text-center border-b-2 border-slate-900">
+          <div class="empty-log-msg no-export inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-50 border border-slate-200 text-[#475569] font-bold text-xs leading-normal">
             <i data-lucide="info" class="w-4 h-4 text-[#ed6845] shrink-0"></i>
             <span>${isFilterAll ? 'ยังไม่มีเสาเข็มที่กดในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่กดในวันที่ ${curDate} <span class="no-export no-print text-[11px] text-[#667277] font-normal block sm:inline mt-1 sm:mt-0">(คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)</span>`}</span>
           </div>
@@ -7718,7 +7968,208 @@
 
       // Render Crisp S-Curve in Report (Safe scheduling)
       scheduleReportScurveRender();
+
+      // Render Daily & Cumulative Plan vs Actual Ledger Table
+      renderPilingDailyLedgerTable(workingDaysSchedule, curDate);
     }
+
+    // -------------------------------------------------------------------------
+    // DAILY & CUMULATIVE PLAN VS ACTUAL PROGRESS TABLE (LEDGER: แผน 3 ต้น/วัน)
+    // -------------------------------------------------------------------------
+    function formatThaiDayMonth(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length < 3) return dateStr;
+      const day = parseInt(parts[2], 10);
+      const mIdx = parseInt(parts[1], 10) - 1;
+      const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      return day + ' ' + (thaiMonths[mIdx] || '');
+    }
+
+        function renderPilingDailyLedgerTable(workingDaysSchedule, curDate) {
+      window.__lastWorkingDaysSchedule = workingDaysSchedule;
+      const container = document.getElementById('rep-daily-ledger-container');
+      if (!container) return;
+
+      // Defer if container is currently hidden so width measurement is accurate
+      if (container.clientWidth <= 0) {
+        setTimeout(() => renderPilingDailyLedgerTable(workingDaysSchedule, curDate), 60);
+        return;
+      }
+
+      const totalDays = 31;
+      const dailyPlan = 3;
+      const totalPiles = 93;
+
+      const drivenRecords = Object.values(progressRecords || {}).filter(r => r && r.status === 'driven');
+
+      // 1. Identify active column index (เธงเธฑเธเธเธตเน / เธงเธฑเธเธ—เธตเนเน€เธฅเธทเธญเธเธฃเธฒเธขเธเธฒเธ)
+      const activeIdx = workingDaysSchedule.indexOf(curDate);
+      const targetIdx = (activeIdx >= 0) ? activeIdx : 0;
+      const pastDaysCount = targetIdx + 1; // Number of days up to today/active date
+
+      // 2. Measure available viewport width inside container
+      const containerW = container.clientWidth || 960;
+      const stickyW = 168; // width of sticky DATE column (168px fits Accumulated ACTUAL comfortably)
+      const availableW = Math.max(180, containerW - stickyW);
+
+      // 3. Perfect flush sizing with zero clipped columns:
+      // Minimum width for comfortable date & pile count is 58px.
+      const minColW = 58;
+      let numVisibleCols = pastDaysCount;
+      let startIdx = 0;
+      let scrollPos = 0;
+
+      if (pastDaysCount * minColW <= availableW) {
+        // All days up to today fit completely on screen!
+        // Day 1 (6 เธ•.เธ.) starts flush at the sticky column (0px cut off)
+        // and Today (Day 13) ends flush at the right edge!
+        numVisibleCols = pastDaysCount;
+        startIdx = 0;
+        scrollPos = 0;
+      } else {
+        // Screen is narrow or day count is high:
+        // Fit as many whole columns as possible so the first visible column is NEVER cut in half!
+        numVisibleCols = Math.max(2, Math.floor(availableW / 64));
+        numVisibleCols = Math.min(pastDaysCount, numVisibleCols);
+        startIdx = targetIdx - numVisibleCols + 1;
+      }
+
+      // Base width for the visible columns block so they fill availableW exactly
+      const baseColW = Math.floor(availableW / numVisibleCols);
+      const remW = availableW - (baseColW * numVisibleCols);
+
+      if (startIdx > 0) {
+        scrollPos = startIdx * baseColW;
+      }
+
+      let headerCells = '';
+      let planCells = '';
+      let actualCells = '';
+      let cumPlanCells = '';
+      let cumActualCells = '';
+
+      let runningPlanCum = 0;
+
+      for (let i = 0; i < totalDays; i++) {
+        const schedDate = workingDaysSchedule[i] || '';
+        const isTodayOrSelected = (schedDate === curDate);
+        const isFuture = schedDate ? (schedDate > curDate) : true;
+
+        const dayPlan = Math.min(dailyPlan, Math.max(0, totalPiles - runningPlanCum));
+        runningPlanCum = Math.min(totalPiles, runningPlanCum + dayPlan);
+
+        const dayActual = drivenRecords.filter(r => r.date === schedDate).length;
+        const cumActual = drivenRecords.filter(r => r.date && r.date <= schedDate).length;
+
+        const colClass = isTodayOrSelected ? 'active-col' : '';
+        const dateFormatted = schedDate ? formatThaiDayMonth(schedDate) : ('D' + (i + 1));
+
+        // Column width calculation: active column absorbs remaining pixels for a 100% flush fit
+        let colW = baseColW;
+        if (i === targetIdx) {
+          colW = baseColW + remW;
+        }
+        const colStyle = 'min-width: ' + colW + 'px; width: ' + colW + 'px; max-width: ' + colW + 'px;';
+
+        headerCells += '<th class="p-2 border border-slate-700 font-bold text-center select-none cursor-pointer transition-colors ' + colClass + '" data-date="' + schedDate + '" title="\u0E04\u0E25\u0E34\u0E01\u0E40\u0E1E\u0E37\u0E48\u0E2D\u0E40\u0E25\u0E37\u0E2D\u0E01\u0E27\u0E31\u0E19\u0E17\u0E35\u0E48 ' + schedDate + '" style="' + colStyle + '">' + dateFormatted + '</th>';
+        planCells += '<td class="p-2 border border-slate-700 font-mono text-center text-slate-800 ' + colClass + '" style="' + colStyle + '">' + dayPlan + ' <span class="text-[10px] font-sans text-slate-500">\u0E15\u0E49\u0E19</span></td>';
+
+        const actualDisplay = isFuture ? '' : (dayActual + ' <span class="text-[10px] font-sans text-slate-500">\u0E15\u0E49\u0E19</span>');
+        actualCells += '<td class="p-2 border border-slate-700 font-mono text-center font-bold text-slate-900 ' + colClass + '" style="' + colStyle + '">' + actualDisplay + '</td>';
+
+        cumPlanCells += '<td class="p-2 border border-slate-700 font-mono text-center font-bold text-slate-800 ' + colClass + '" style="' + colStyle + '">' + runningPlanCum + ' <span class="text-[10px] font-sans text-slate-500">\u0E15\u0E49\u0E19</span></td>';
+
+        const cumActualDisplay = isFuture ? '' : (cumActual + ' <span class="text-[10px] font-sans text-emerald-800 font-semibold">\u0E15\u0E49\u0E19</span>');
+        cumActualCells += '<td class="p-2 border border-slate-700 font-mono text-center font-black text-emerald-800 ' + colClass + '" style="' + colStyle + '">' + cumActualDisplay + '</td>';
+      }
+
+      container.innerHTML = 
+        '<table class="piling-daily-table w-full text-center border-collapse text-xs">' +
+          '<thead>' +
+            '<tr>' +
+              '<th class="p-2 border border-slate-700 sticky-col font-black tracking-wider text-center text-slate-900">DATE</th>' +
+              headerCells +
+            '</tr>' +
+          '</thead>' +
+          '<tbody>' +
+            '<tr class="row-plan">' +
+              '<td class="p-2 border border-slate-700 sticky-col font-bold text-slate-900">' +
+                '<div class="flex items-center gap-1.5">' +
+                  '<span class="w-2 h-2 rounded-full bg-slate-400 inline-block shrink-0"></span>' +
+                  '<span>PLAN</span>' +
+                '</div>' +
+                '<span class="text-[9.5px] font-normal text-slate-500 block leading-tight pl-3.5">\u0E41\u0E1C\u0E19\u0E23\u0E32\u0E22\u0E27\u0E31\u0E19</span>' +
+              '</td>' +
+              planCells +
+            '</tr>' +
+            '<tr class="row-actual">' +
+              '<td class="p-2 border border-slate-700 sticky-col font-bold text-slate-900">' +
+                '<div class="flex items-center gap-1.5">' +
+                  '<span class="w-2 h-2 rounded-full bg-slate-800 inline-block shrink-0"></span>' +
+                  '<span>ACTUAL</span>' +
+                '</div>' +
+                '<span class="text-[9.5px] font-normal text-slate-500 block leading-tight pl-3.5">\u0E1C\u0E25\u0E07\u0E32\u0E19\u0E23\u0E32\u0E22\u0E27\u0E31\u0E19</span>' +
+              '</td>' +
+              actualCells +
+            '</tr>' +
+            '<tr class="row-accum-plan">' +
+              '<td class="p-2 border border-slate-700 sticky-col font-extrabold text-slate-900 whitespace-nowrap">' +
+                '<div class="flex items-center gap-1.5">' +
+                  '<span class="w-3.5 h-3.5 rounded bg-orange-500 inline-flex items-center justify-center text-[9px] text-white font-black leading-none shrink-0">&#931;</span>' +
+                  '<span class="text-slate-900 font-extrabold text-[11px] tracking-tight">Accumulated PLAN</span>' +
+                '</div>' +
+                '<span class="text-[9.5px] font-semibold text-orange-800 block pl-5 leading-tight">\u0E41\u0E1C\u0E19\u0E07\u0E32\u0E19\u0E2A\u0E30\u0E2A\u0E21</span>' +
+              '</td>' +
+              cumPlanCells +
+            '</tr>' +
+            '<tr class="row-accum-actual">' +
+              '<td class="p-2 border border-slate-700 sticky-col font-black text-emerald-950 whitespace-nowrap">' +
+                '<div class="flex items-center gap-1.5">' +
+                  '<span class="w-3.5 h-3.5 rounded bg-emerald-600 inline-flex items-center justify-center text-[9px] text-white font-black leading-none shrink-0">&#931;</span>' +
+                  '<span class="text-emerald-950 font-black text-[11px] tracking-tight">Accumulated ACTUAL</span>' +
+                '</div>' +
+                '<span class="text-[9.5px] font-bold text-emerald-700 block pl-5 leading-tight">\u0E1C\u0E25\u0E07\u0E32\u0E19\u0E08\u0E23\u0E34\u0E07\u0E2A\u0E30\u0E2A\u0E21</span>' +
+              '</td>' +
+              cumActualCells +
+            '</tr>' +
+          '</tbody>' +
+        '</table>';
+
+      // Click to select date in report
+      container.querySelectorAll('th[data-date]').forEach(th => {
+        th.addEventListener('click', () => {
+          const d = th.getAttribute('data-date');
+          if (d && typeof datePicker !== 'undefined' && datePicker) {
+            datePicker.value = d;
+            if (typeof updateUI === 'function') updateUI();
+            if (typeof renderReportSheet === 'function') renderReportSheet();
+          }
+        });
+      });
+
+      // Align active column to the far right with ZERO column cut-off on the left
+      if (scrollPos > 0) {
+        setTimeout(() => {
+          container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+        }, 50);
+      } else {
+        container.scrollLeft = 0;
+      }
+    }
+
+    // Auto re-adjust daily ledger table on window resize so active day stays at far right
+    let dailyLedgerResizeTimer = null;
+    window.addEventListener('resize', () => {
+      if (dailyLedgerResizeTimer) clearTimeout(dailyLedgerResizeTimer);
+      dailyLedgerResizeTimer = setTimeout(() => {
+        const repPage = document.getElementById('report-page');
+        if (repPage && !repPage.classList.contains('hidden') && window.__lastWorkingDaysSchedule) {
+          const curDate = (typeof datePicker !== 'undefined' && datePicker?.value) || todayStr;
+          renderPilingDailyLedgerTable(window.__lastWorkingDaysSchedule, curDate);
+        }
+      }, 150);
+    });
 
     function scheduleReportScurveRender() {
       const repPage = document.getElementById('report-page');
@@ -7915,7 +8366,7 @@
     // 13. HIGH RESOLUTION IMAGE REPORT EXPORTER (ส่งออกภาพ PNG ตามสัดส่วน)
     // =========================================================================
     let currentExportMode = 'report'; // 'report' or '3d'
-    let currentExportRatio = 'fit';   // 'fit', 'a4', '1:1', '16:9'
+    let currentExportRatio = '3:4';   // 'fit', 'a4', '1:1', '16:9'
     let currentExportCanvas = null;
     let exportRequestId = 0;
 
@@ -7930,7 +8381,7 @@
 
       if (isReportOpen) {
         currentExportMode = 'report';
-        currentExportRatio = 'fit';
+        currentExportRatio = '3:4';
         if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
         if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       } else {
@@ -7966,13 +8417,13 @@
     // Switch Export Mode Tabs
     document.getElementById('exp-tab-report')?.addEventListener('click', () => {
       currentExportMode = 'report';
-      currentExportRatio = 'fit';
+      currentExportRatio = '3:4';
       const bRep = document.getElementById('exp-tab-report');
       const b3d = document.getElementById('exp-tab-3d');
       if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
       if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       document.querySelectorAll('.exp-ratio-btn').forEach(b => {
-        b.className = b.getAttribute('data-ratio') === 'fit'
+        b.className = b.getAttribute('data-ratio') === '3:4'
           ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs'
           : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
       });
@@ -8086,8 +8537,17 @@
             const origCardBoxShadow = reportCard.style.boxShadow;
             const origCardBorderRadius = reportCard.style.borderRadius;
             const origCardOverflow = reportCard.style.overflow;
-            const origCardPadBottom = reportCard.style.paddingBottom;
+            const origCardPadding = reportCard.style.padding;
             const origCardBg = reportCard.style.backgroundColor;
+
+            let origEmptyDisplay = "";
+            let origEmptyHeight = "";
+            let origEmptyPadding = "";
+            const origPagePad = reportPage.style.padding;
+            const origPageMargin = reportPage.style.margin;
+            const origPageScrollTop = reportPage.scrollTop;
+            reportPage.scrollTop = 0;
+            if (typeof window !== 'undefined') window.scrollTo(0, 0);
 
             reportCard.style.setProperty('box-sizing', 'border-box', 'important');
             reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
@@ -8096,15 +8556,13 @@
             reportCard.style.setProperty('margin', '0', 'important');
             reportCard.style.setProperty('margin-left', '0', 'important');
             reportCard.style.setProperty('margin-right', '0', 'important');
-            reportCard.style.setProperty('border', '2px solid #475569', 'important');
-            reportCard.style.setProperty('padding-bottom', '32px', 'important');
+            reportCard.style.setProperty('border', '2px solid #334155', 'important');
+            reportCard.style.setProperty('padding', '24px 28px', 'important');
             reportCard.style.boxShadow = 'none';
-            reportCard.style.borderRadius = '12px';
+            reportCard.style.borderRadius = '14px';
             reportCard.style.overflow = 'visible';
             reportCard.style.backgroundColor = '#ffffff';
 
-            const origPagePad = reportPage.style.padding;
-            const origPageMargin = reportPage.style.margin;
             reportPage.style.setProperty('padding', '0', 'important');
             reportPage.style.setProperty('margin', '0', 'important');
 
@@ -8165,12 +8623,28 @@
                 lastRow.querySelectorAll('td').forEach(td => {
                   td.style.setProperty('border-bottom', '2px solid #000000', 'important');
                 });
+              // If empty pile log row exists in #rep-today-table, make sure no text or box is displayed during export
+              const emptyCell = expTable.querySelector(".empty-log-cell");
+              if (emptyCell) {
+                const emptyMsg = emptyCell.querySelector(".empty-log-msg");
+                if (emptyMsg) {
+                  origEmptyDisplay = emptyMsg.style.display;
+                  emptyMsg.style.setProperty("display", "none", "important");
+                }
+                origEmptyHeight = emptyCell.style.height;
+                origEmptyPadding = emptyCell.style.padding;
+                emptyCell.style.setProperty("height", "32px", "important");
+                emptyCell.style.setProperty("padding", "0", "important");
+                emptyCell.style.setProperty("border", "1px solid #000000", "important");
+                emptyCell.style.setProperty("border-bottom", "2px solid #000000", "important");
+              }
               }
             }
 
             // Equalize cell heights in each row so all vertical borders span 100% of the row (เส้นเต็มช่องตาราง)
             const expRows = reportCard.querySelectorAll('#rep-today-table tbody tr');
             expRows.forEach(r => {
+              if (r.classList.contains('empty-log-row')) return;
               const rCells = r.querySelectorAll('td');
               let maxH = 0;
               rCells.forEach(c => {
@@ -8193,7 +8667,7 @@
             try {
               const scrollW = exportTargetW;
               const rectH = reportCard.getBoundingClientRect ? reportCard.getBoundingClientRect().height : 0;
-              const scrollH = Math.ceil(Math.max(reportCard.scrollHeight, reportCard.offsetHeight, rectH)) + 36;
+              const scrollH = Math.ceil(Math.max(reportCard.scrollHeight, reportCard.offsetHeight, rectH));
 
               // Priority 1: Use htmlToImage for 100% native browser text rendering & vertical centering
               if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
@@ -8268,12 +8742,43 @@
                       clonedCard.style.setProperty('margin', '0', 'important');
                       clonedCard.style.setProperty('margin-left', '0', 'important');
                       clonedCard.style.setProperty('margin-right', '0', 'important');
-                      clonedCard.style.setProperty('border', '1px solid #cbd5e1', 'important');
-                      clonedCard.style.setProperty('padding-bottom', '32px', 'important');
+                      clonedCard.style.setProperty('border', '2px solid #334155', 'important');
+                      clonedCard.style.setProperty('padding', '24px 28px', 'important');
                       clonedCard.style.overflow = 'visible';
                       clonedCard.style.boxShadow = 'none';
-                      clonedCard.style.borderRadius = '12px';
+                      clonedCard.style.borderRadius = '14px';
                       clonedCard.style.backgroundColor = '#ffffff';
+
+                      const clonedHeader = clonedDoc.getElementById('report-header-bar');
+                      if (clonedHeader) {
+                        clonedHeader.style.setProperty('flex-shrink', '0', 'important');
+                        clonedHeader.style.setProperty('min-height', '84px', 'important');
+                        clonedHeader.style.setProperty('height', 'auto', 'important');
+                        clonedHeader.style.setProperty('display', 'flex', 'important');
+                        clonedHeader.style.setProperty('flex-direction', 'row', 'important');
+                        clonedHeader.style.setProperty('align-items', 'center', 'important');
+                        clonedHeader.style.setProperty('justify-content', 'space-between', 'important');
+                        clonedHeader.style.setProperty('padding', '14px 20px', 'important');
+                        clonedHeader.style.setProperty('margin-bottom', '14px', 'important');
+                        clonedHeader.style.setProperty('border', '2px solid #334155', 'important');
+                        clonedHeader.style.border = '2px solid #334155';
+                        clonedHeader.style.borderRadius = '12px';
+                        clonedHeader.style.background = '#ffffff';
+                      }
+                      const clonedTag = clonedDoc.getElementById("rep-header-tag");
+                      if (clonedTag) {
+                        clonedTag.style.setProperty("display", "inline-flex", "important");
+                        clonedTag.style.setProperty("align-items", "center", "important");
+                        clonedTag.style.setProperty("justify-content", "center", "important");
+                        clonedTag.style.setProperty("padding", "4px 16px 4px 14px", "important");
+                        clonedTag.style.setProperty("font-size", "11.5px", "important");
+                        clonedTag.style.setProperty("line-height", "1.35", "important");
+                        clonedTag.style.setProperty("margin-right", "8px", "important");
+                        clonedTag.style.setProperty("border", "2px solid #0f172a", "important");
+                        clonedTag.style.setProperty("border-radius", "7px", "important");
+                        clonedTag.style.setProperty("width", "auto", "important");
+                        clonedTag.style.setProperty("max-width", "none", "important");
+                      }
 
                       clonedCard.querySelectorAll(
                         '.no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, ' +
@@ -8332,8 +8837,17 @@
                         c.style.boxSizing = 'border-box';
                       });
 
+                      const clonedEmptyCell = clonedCard.querySelector(".empty-log-cell");
+                      if (clonedEmptyCell) {
+                        clonedEmptyCell.innerHTML = "";
+                        clonedEmptyCell.style.setProperty("height", "32px", "important");
+                        clonedEmptyCell.style.setProperty("padding", "0", "important");
+                        clonedEmptyCell.style.setProperty("border", "1px solid #000000", "important");
+                        clonedEmptyCell.style.setProperty("border-bottom", "2px solid #000000", "important");
+                      }
                       // Equalize row heights in clonedCard
                       clonedCard.querySelectorAll('#rep-today-table tbody tr').forEach(r => {
+                        if (r.classList.contains('empty-log-row')) return;
                         const rCells = r.querySelectorAll('td');
                         let maxH = 0;
                         rCells.forEach(c => {
@@ -8355,7 +8869,7 @@
               reportCard.style.maxWidth = origCardMaxW;
               reportCard.style.minWidth = origCardMinW || '';
               reportCard.style.margin = origCardMargin;
-              reportCard.style.paddingBottom = origCardPadBottom;
+              reportCard.style.padding = origCardPadding || '';
               reportCard.style.boxShadow = origCardBoxShadow;
               reportCard.style.borderRadius = origCardBorderRadius;
               reportCard.style.overflow = origCardOverflow;
@@ -8369,9 +8883,17 @@
               }
               if (typeof expTable !== 'undefined' && expTable) {
                 expTable.style.borderBottom = '';
+                const emptyCell = expTable.querySelector(".empty-log-cell");
+                if (emptyCell) {
+                  const emptyMsg = emptyCell.querySelector(".empty-log-msg");
+                  if (emptyMsg && typeof origEmptyDisplay !== "undefined") emptyMsg.style.display = origEmptyDisplay;
+                  if (typeof origEmptyHeight !== "undefined") emptyCell.style.height = origEmptyHeight;
+                  if (typeof origEmptyPadding !== "undefined") emptyCell.style.padding = origEmptyPadding;
+                }
               }
               if (typeof origPagePad !== 'undefined') reportPage.style.padding = origPagePad;
               if (typeof origPageMargin !== 'undefined') reportPage.style.margin = origPageMargin;
+              if (typeof origPageScrollTop !== 'undefined') reportPage.scrollTop = origPageScrollTop;
               reportCard.classList.remove('is-export-capturing', 'export-portrait', 'export-ratio-3-4');
               reportPage.classList.remove('is-export-capturing', 'export-portrait', 'export-ratio-3-4');
               renderPlanSnapshotCanvas();
