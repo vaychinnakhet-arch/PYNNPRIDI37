@@ -185,15 +185,21 @@
         border-top-width: 2px !important;
         border-top-color: #1e293b !important; /* slate-800 */
       }
-      .is-line-capturing th,
-      .is-line-capturing td {
+      .is-line-capturing th:not(.allow-wrap-header),
+      .is-line-capturing td:not(.allow-wrap-header):not(.report-cell-note) {
         vertical-align: middle !important;
         white-space: nowrap !important;
       }
-      .is-line-capturing th {
+      .is-line-capturing th:not(.allow-wrap-header) {
         white-space: nowrap !important;
         padding-left: 0.75rem !important;
         padding-right: 0.75rem !important;
+      }
+      .is-line-capturing th.allow-wrap-header,
+      .is-line-capturing th.allow-wrap-header * {
+        white-space: normal !important;
+        word-break: break-word !important;
+        line-height: 1.25 !important;
       }
       .major-defect-highlight {
         box-shadow: inset 0 0 0 3px #facc15 !important; /* yellow-400 */
@@ -2458,15 +2464,104 @@ th.qc-current-week {
   white-space: nowrap !important;
 }
 
+/* High-Legibility Typeset Capture & Export System */
 .is-line-capturing #main-table {
   width: 100% !important;
   min-width: 100% !important;
   table-layout: auto !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .is-line-capturing #main-table th:last-child,
 .is-line-capturing #main-table tr:not(.bg-indigo-50) td:last-child {
   display: table-cell !important;
+}
+
+/* Ensure wrap headers never clip during capture */
+.is-line-capturing th.allow-wrap-header,
+.is-line-capturing th.allow-wrap-header *,
+.is-line-capturing #main-table th.allow-wrap-header,
+.is-line-capturing #main-table th.allow-wrap-header * {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+
+/* Table header font clarity and contrast */
+.is-line-capturing #main-table th {
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  padding: 8px 6px !important;
+  letter-spacing: -0.01em !important;
+  vertical-align: middle !important;
+}
+
+/* Room column badge in capture */
+.is-line-capturing #main-table td:first-child,
+.is-line-capturing #main-table td.room-col-cell,
+.is-line-capturing .room-number-badge {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Progress percentage text clarity */
+.is-line-capturing #main-table td .text-blue-600,
+.is-line-capturing #main-table td .font-bold.text-blue-600,
+.is-line-capturing .report-cell-percent {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #0284c7 !important;
+  line-height: 1.2 !important;
+}
+
+/* Completed checkmark size and contrast */
+.is-line-capturing #main-table td svg.lucide-check {
+  width: 22px !important;
+  height: 22px !important;
+  stroke: #16a34a !important;
+  stroke-width: 3.5px !important;
+  margin: 0 auto !important;
+}
+
+/* Sub-notes & remarks under percentages: prevent truncation and boost readability */
+.is-line-capturing #main-table td .text-amber-600,
+.is-line-capturing #main-table td [class*="text-amber-600"],
+.is-line-capturing #main-table td .report-cell-note,
+.is-line-capturing #main-table td .truncate {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-width: 100% !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  color: #b45309 !important;
+}
+
+/* Inspection score styling in capture */
+.is-line-capturing #main-table td .font-bold.text-lg {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+
+/* Header title typography */
+.is-line-capturing #status-title,
+.is-line-capturing #header-title-container h2 {
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.02em !important;
+}
+
+.is-line-capturing #header-date-container span {
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
 }
 
 .qc-summary-table {
@@ -7318,25 +7413,81 @@ body:not(.is-line-capturing) .modal .modal-content {
   }
 }
 
-/* QC Matrix Sticky Identification Column for Mobile / Tablet */
-@media (max-width: 1279px) {
-  #main-table {
-    display: block !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-  #main-table th:first-child,
-  #main-table td:first-child {
-    position: sticky !important;
-    left: 0 !important;
-    background: #ffffff !important;
-    z-index: 10 !important;
-    box-shadow: 2px 0 5px -1px rgba(15, 23, 42, 0.15) !important;
-  }
-  #main-table thead th:first-child {
-    background: #f8fafc !important;
-    z-index: 20 !important;
-  }
+/* Universal Sticky Header and Identification Column System (Mobile, Foldables, Tablet & Desktop) */
+.main-table-scroll-container {
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  max-height: 80vh;
+  position: relative;
+}
+
+/* Ensure table retains natural table layout for synchronized column/header widths */
+body:not(.is-line-capturing) #main-table {
+  display: table !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* Sticky Task Headers (Vertical Scroll Lock) */
+body:not(.is-line-capturing) #main-table thead th {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 30 !important;
+  box-shadow: 0 2px 4px -1px rgba(15, 23, 42, 0.12) !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+}
+
+/* Sticky Room Column (Horizontal Scroll Lock) */
+body:not(.is-line-capturing) #main-table th:first-child,
+body:not(.is-line-capturing) #main-table td:first-child,
+body:not(.is-line-capturing) #main-table .room-col-cell {
+  position: sticky !important;
+  left: 0 !important;
+  z-index: 20 !important;
+  background-color: #ffffff !important;
+  box-shadow: 2px 0 5px -1px rgba(15, 23, 42, 0.15) !important;
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+  isolation: isolate !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+}
+
+/* Sticky Top-Left Corner Cell ("ห้อง" Header: 2-Way Lock) */
+body:not(.is-line-capturing) #main-table thead th:first-child,
+body:not(.is-line-capturing) #main-table thead th.room-col-cell {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 45 !important;
+  background-color: #f8fafc !important;
+  box-shadow: 2px 2px 5px -1px rgba(15, 23, 42, 0.2) !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+}
+
+/* Room Number Hardware Compositor Layer to Prevent Android Touch Repaint Dropping */
+.room-number-badge,
+body:not(.is-line-capturing) #main-table td:first-child > span {
+  display: inline-block !important;
+  position: relative !important;
+  z-index: 2 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  pointer-events: none !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  will-change: transform !important;
+  font-variant-numeric: tabular-nums !important;
 }
 
 /* Control Deck Mobile & Tablet Swipe Strip */
@@ -8083,13 +8234,15 @@ body.manga-screentone-bg,
         </header>
 
         <!-- Main Content -->
-        <main class="p-0 md:p-4 overflow-x-auto">
-          <table
-            id="main-table"
-            class="w-full border-collapse text-center text-xs md:text-sm"
-          >
-            <!-- JS Generated Content -->
-          </table>
+        <main class="p-0 md:p-3 overflow-visible">
+          <div id="main-table-container" class="main-table-scroll-container w-full overflow-auto max-h-[80vh] relative bg-white border border-slate-300 md:rounded-xl shadow-xs">
+            <table
+              id="main-table"
+              class="w-full border-separate border-spacing-0 text-center text-xs md:text-sm"
+            >
+              <!-- JS Generated Content -->
+            </table>
+          </div>
 
           <!-- Common Area Defect tracking content -->
           <div id="common-defect-container" class="hidden w-full mx-auto p-2 md:p-4">
@@ -15061,9 +15214,9 @@ if (typeof window !== "undefined") {
           }
           mainTable.classList.remove("hidden");
 
-          // Reset table border classes (Schedule view might have changed them)
-          mainTable.classList.remove("border-separate", "border-spacing-0");
-          mainTable.classList.add("border-collapse");
+          // Maintain border-separate and border-spacing-0 for rock-solid sticky header and sticky columns across all devices
+          mainTable.classList.remove("border-collapse");
+          mainTable.classList.add("border-separate", "border-spacing-0");
           mainTable.classList.toggle(
             "qc-summary-table",
             currentView === "qcSummary",
@@ -15075,6 +15228,11 @@ if (typeof window !== "undefined") {
             "qc-handover-table",
             currentView === "qcHandover",
           );
+
+          const mainTableContainer = document.getElementById("main-table-container");
+          if (mainTableContainer) {
+            mainTableContainer.classList.toggle("hidden", currentView === "commonDefect");
+          }
 
           const floorSelection = document.getElementById(
             "summary-report-floor-selection",
@@ -15094,10 +15252,12 @@ if (typeof window !== "undefined") {
 
           if (currentView === "commonDefect") {
             mainTable.classList.add("hidden");
+            if (mainTableContainer) mainTableContainer.classList.add("hidden");
             captureArea.classList.remove("common-view-active");
             renderCommonDefectTable();
           } else {
             mainTable.classList.remove("hidden");
+            if (mainTableContainer) mainTableContainer.classList.remove("hidden");
             if (currentView === "residential") {
               captureArea.classList.remove("common-view-active");
               renderResidentialTable();
@@ -15255,13 +15415,20 @@ if (typeof window !== "undefined") {
 
           const headerHTML = `
                     <tr class="${headerColor}">
-                        <th class="border border-slate-400 p-2 sticky left-0 z-30 ${stickyHeaderColor} shadow-[2px_0_5px_rgba(0,0,0,0.1)]" style="min-width: 60px; font-size: 13px;">ห้อง</th>
+                        <th class="border border-slate-400 p-2 sticky left-0 z-45 ${stickyHeaderColor} shadow-[2px_0_5px_rgba(0,0,0,0.1)] select-none room-col-cell" style="min-width: 65px; font-size: 13px;">ห้อง</th>
                         ${activeTasks
                           .map((t) => {
+                            let displayName = t.reportName;
+                            let subName = "";
+                            if (t.key === "topping") {
+                              displayName = "งานเทปรับระดับ";
+                              subName = "พื้นห้องพัก";
+                            }
                             return `
-                                <th class="border border-slate-400 p-2" style="min-width: 90px;">
-                                    <div class="flex flex-col items-center justify-center gap-1">
-                                        <span class="font-bold" style="font-size: 12px;">${t.reportName}</span>
+                                <th class="border border-slate-400 p-2 allow-wrap-header align-middle" style="min-width: 100px;">
+                                    <div class="flex flex-col items-center justify-center gap-0.5 leading-tight">
+                                        <span class="font-bold text-xs md:text-sm text-slate-800">${displayName}</span>
+                                        ${subName ? `<span class="text-[11px] font-semibold text-slate-600">${subName}</span>` : ""}
                                     </div>
                                 </th>`;
                           })
@@ -15280,7 +15447,9 @@ if (typeof window !== "undefined") {
               row.className = "hover:bg-slate-50 transition-colors";
 
               let rowHTML = `
-                            <td class="border border-slate-400 p-2 font-bold text-center sticky left-0 z-20 bg-white">${floor * 100 + room}</td>
+                            <td class="border border-slate-400 p-2 font-bold text-center sticky left-0 z-20 bg-white select-none room-col-cell" style="user-select: none; -webkit-user-select: none;">
+                              <span class="room-number-badge font-extrabold text-slate-900 select-none pointer-events-none inline-block">${floor * 100 + room}</span>
+                            </td>
                         `;
 
               activeTasks.forEach((taskDef) => {
@@ -24642,9 +24811,13 @@ if (typeof window !== "undefined") {
           const mainAppContainer =
             document.getElementById("main-app-container");
           const table = document.getElementById("main-table");
+          const tableContainer = document.getElementById("main-table-container");
           const originalMainAppWidth = mainAppContainer ? mainAppContainer.style.width : "";
           const originalTableWidth = table ? table.style.width : "";
           const originalTableMinWidth = table ? table.style.minWidth : "";
+          const originalTableContainerWidth = tableContainer ? tableContainer.style.width : "";
+          const originalTableContainerOverflow = tableContainer ? tableContainer.style.overflow : "";
+          const originalTableContainerMaxHeight = tableContainer ? tableContainer.style.maxHeight : "";
 
           const execDashboard = document.getElementById(
             "executive-summary-dashboard",
@@ -24675,6 +24848,11 @@ if (typeof window !== "undefined") {
             if (table) {
               table.style.width = originalTableWidth;
               table.style.minWidth = originalTableMinWidth;
+            }
+            if (tableContainer) {
+              tableContainer.style.width = originalTableContainerWidth;
+              tableContainer.style.overflow = originalTableContainerOverflow;
+              tableContainer.style.maxHeight = originalTableContainerMaxHeight;
             }
             if (execDashboard) {
               execDashboard.style.width = originalExecWidth;
@@ -24724,6 +24902,11 @@ if (typeof window !== "undefined") {
             if (table && !table.classList.contains("hidden")) {
               table.style.width = fullWidth + "px";
               table.style.minWidth = fullWidth + "px";
+            }
+            if (tableContainer) {
+              tableContainer.style.width = fullWidth + "px";
+              tableContainer.style.overflow = "visible";
+              tableContainer.style.maxHeight = "none";
             }
             if (execDashboard && !execDashboard.classList.contains("hidden")) {
               execDashboard.style.width = "100%";
@@ -24838,9 +25021,13 @@ if (typeof window !== "undefined") {
           const mainAppContainer =
             document.getElementById("main-app-container");
           const table = document.getElementById("main-table");
+          const tableContainer = document.getElementById("main-table-container");
           const originalMainAppWidth = mainAppContainer ? mainAppContainer.style.width : "";
           const originalTableWidth = table ? table.style.width : "";
           const originalTableMinWidth = table ? table.style.minWidth : "";
+          const originalTableContainerWidth = tableContainer ? tableContainer.style.width : "";
+          const originalTableContainerOverflow = tableContainer ? tableContainer.style.overflow : "";
+          const originalTableContainerMaxHeight = tableContainer ? tableContainer.style.maxHeight : "";
 
           const execDashboard = document.getElementById(
             "executive-summary-dashboard",
@@ -24871,6 +25058,11 @@ if (typeof window !== "undefined") {
             if (table) {
               table.style.width = originalTableWidth;
               table.style.minWidth = originalTableMinWidth;
+            }
+            if (tableContainer) {
+              tableContainer.style.width = originalTableContainerWidth;
+              tableContainer.style.overflow = originalTableContainerOverflow;
+              tableContainer.style.maxHeight = originalTableContainerMaxHeight;
             }
             if (execDashboard) {
               execDashboard.style.width = originalExecWidth;
@@ -24917,6 +25109,11 @@ if (typeof window !== "undefined") {
             if (table && !table.classList.contains("hidden")) {
               table.style.width = fullWidth + "px";
               table.style.minWidth = fullWidth + "px";
+            }
+            if (tableContainer) {
+              tableContainer.style.width = fullWidth + "px";
+              tableContainer.style.overflow = "visible";
+              tableContainer.style.maxHeight = "none";
             }
             if (execDashboard && !execDashboard.classList.contains("hidden")) {
               execDashboard.style.width = "100%";
@@ -27262,6 +27459,7 @@ if (typeof window !== "undefined") {
           document.body.classList.add("is-line-capturing");
 
           const table = document.getElementById("main-table");
+          const tableContainer = document.getElementById("main-table-container");
           const fullWidth =
             table && !table.classList.contains("hidden")
               ? Math.max(table.scrollWidth, table.offsetWidth)
@@ -27274,7 +27472,10 @@ if (typeof window !== "undefined") {
             captureAreaWidth: captureArea.style.width,
             bodyWidth: document.body.style.width,
             htmlWidth: document.documentElement.style.width,
-            mainAppWidth: mainAppContainer.style.width,
+            mainAppWidth: mainAppContainer ? mainAppContainer.style.width : "",
+            tableContainerWidth: tableContainer ? tableContainer.style.width : "",
+            tableContainerOverflow: tableContainer ? tableContainer.style.overflow : "",
+            tableContainerMaxHeight: tableContainer ? tableContainer.style.maxHeight : "",
             execWidth: execDashboard ? execDashboard.style.width : "",
             execMaxWidth: execDashboard ? execDashboard.style.maxWidth : "",
             execMinWidth: execDashboard ? execDashboard.style.minWidth : "",
@@ -27287,7 +27488,12 @@ if (typeof window !== "undefined") {
           captureArea.style.width = fullWidth + "px";
           document.body.style.width = fullWidth + "px";
           document.documentElement.style.width = fullWidth + "px";
-          mainAppContainer.style.width = fullWidth + "px";
+          if (mainAppContainer) mainAppContainer.style.width = fullWidth + "px";
+          if (tableContainer) {
+            tableContainer.style.width = fullWidth + "px";
+            tableContainer.style.overflow = "visible";
+            tableContainer.style.maxHeight = "none";
+          }
           if (execDashboard && !execDashboard.classList.contains("hidden")) {
             execDashboard.style.width = "100%";
             execDashboard.style.maxWidth = "1080px";
@@ -27366,7 +27572,12 @@ if (typeof window !== "undefined") {
                 captureArea.style.width = originalStyles.captureAreaWidth;
                 document.body.style.width = originalStyles.bodyWidth;
                 document.documentElement.style.width = originalStyles.htmlWidth;
-                mainAppContainer.style.width = originalStyles.mainAppWidth;
+                if (mainAppContainer) mainAppContainer.style.width = originalStyles.mainAppWidth;
+                if (tableContainer) {
+                  tableContainer.style.width = originalStyles.tableContainerWidth;
+                  tableContainer.style.overflow = originalStyles.tableContainerOverflow;
+                  tableContainer.style.maxHeight = originalStyles.tableContainerMaxHeight;
+                }
                 if (execDashboard) {
                   execDashboard.style.width = originalStyles.execWidth;
                   execDashboard.style.maxWidth = originalStyles.execMaxWidth;
