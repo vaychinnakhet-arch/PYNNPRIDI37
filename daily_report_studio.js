@@ -818,7 +818,7 @@
         <div class="flex justify-between items-center pt-1 mt-0.5">
           <div class="flex items-center gap-1.5">
             <span class="font-bold text-[11.5px] shrink-0">เรียน :</span>
-            <input type="text" class="border-b border-slate-400 font-bold px-1.5 text-slate-900 bg-transparent outline-none w-80 text-[12px]" style="font-family: 'Sarabun', 'Prompt', sans-serif; height: 30px; line-height: normal; padding: 0 4px 1px 4px;" value="${escapeHtml(DailyReportState.recipient || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล')}" onchange="DailyReportState.recipient=this.value; autoDebouncedSaveSupabase();">
+            <span contenteditable="true" tabindex="0" role="textbox" id="dr-recipient-input" class="border-b border-slate-400 font-bold px-1.5 text-slate-900 bg-transparent outline-none w-80 text-[12px] inline-block align-middle cursor-text" style="font-family: 'Sarabun', 'Prompt', sans-serif; line-height: 1.8; min-height: 28px; padding-top: 1px; padding-bottom: 1px;" onblur="DailyReportState.recipient=(this.innerText||'').trim() || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล'; autoDebouncedSaveSupabase();" onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}" oninput="DailyReportState.recipient=(this.innerText||'').trim();">${escapeHtml(DailyReportState.recipient || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล')}</span>
           </div>
         </div>
 
