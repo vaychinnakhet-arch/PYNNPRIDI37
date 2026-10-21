@@ -17,7 +17,10 @@
   <script src="html-to-image.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="daily_report_studio.js"></script>
 
   <style>
     :root {
@@ -1208,6 +1211,11 @@
           <span class="font-bold">หน้ารายงาน</span>
         </button>
 
+        <button id="btn-open-daily-report" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs font-black border-2 border-slate-900 bg-[#ffc45b] text-[#1e293b] hover:brightness-105 active:scale-95 cursor-pointer" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
+          <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#1e293b]"></i>
+          <span class="font-bold">Daily Report</span>
+        </button>
+
         <button id="btn-open-export" class="pop-btn px-2 py-1 text-xs flex items-center gap-1 shadow-xs" style="background:#fff0c8;" title="ส่งออกภาพรายงาน PNG">
           <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ed6845]"></i>
           <span class="hidden sm:inline font-bold">ส่งออกภาพ</span>
@@ -1831,6 +1839,10 @@
               <button id="btn-print-report" class="pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black" title="พิมพ์รายงาน / บันทึก PDF">
                 <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                 <span>พิมพ์ / PDF</span>
+              </button>
+              <button id="btn-rep-open-daily-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black border-2 border-slate-900 bg-[#ffc45b] text-[#1e293b]" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
+                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                <span>Daily Report (PDF 3 หน้า)</span>
               </button>
               <button id="btn-close-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs bg-white hover:bg-slate-100 text-slate-800 font-black cursor-pointer" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
                 <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-blue-600"></i>
@@ -4058,6 +4070,7 @@
 
     // Progress State Manager (Live Sync from Supabase)
     let progressRecords = {};
+    window.progressRecords = progressRecords;
 
     async function loadProgress() {
       // 1. Load from localStorage cache
@@ -6798,6 +6811,7 @@
     }
 
     // สร้างลิสต์ 31 วันทำการจริงของโครงการ โดยข้ามวันอาทิตย์และวันหยุดราชการทั้งหมด
+    window.getWorkingDaysSchedule = getWorkingDaysSchedule;
     function getWorkingDaysSchedule(startDateStr, totalWorkingDays = 31) {
       const schedule = [];
       let cur = parseDateLocal(startDateStr);
