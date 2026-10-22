@@ -1096,7 +1096,7 @@
     }
 
         /* =========================================================================
-       PILING DAILY & CUMULATIVE PROGRESS TABLE (LEDGER - เนเธเธ 3 เธ•เนเธ/เธงเธฑเธเธ—เธณเธเธฒเธฃ)
+       PILING DAILY & CUMULATIVE PROGRESS TABLE (LEDGER - แผน 3 ต้น/วันทำการ)
        ========================================================================= */
     .piling-daily-table {
       border-collapse: separate;
@@ -1256,115 +1256,141 @@
   <header class="absolute top-2 left-2 right-2 z-30 pointer-events-none">
     <div class="pop-header px-3.5 py-2 pointer-events-auto flex flex-wrap xl:flex-nowrap items-center justify-between gap-2.5 shadow-sm border-2 border-slate-900 rounded-2xl bg-white/95 backdrop-blur-md">
       
-      <!-- Left: Brand & Unified Navigation Shell -->
-      <div class="flex items-center gap-2.5">
-        <a href="index.html" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border-1.5 border-slate-900 text-slate-900 font-bold text-[11px] flex items-center gap-1 shadow-xs transition-colors" title="กลับหน้าแรก (Home)">
+      <!-- Left: Brand & Unified Navigation Module Switcher -->
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border-1.5 border-slate-900 text-slate-900 font-bold text-[11px] flex items-center gap-1 shadow-xs transition-colors shrink-0" title="กลับหน้าแรกโครงการ">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">หน้าแรก</span>
+          <span class="hidden md:inline">หน้าแรก</span>
         </a>
-        <div class="w-8 h-8 rounded-lg bg-[#ffe600] border-2 border-slate-900 text-slate-950 flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_#11141a]" style="font-family: 'Bangers', cursive; font-size: 14px;">
-          P37
-        </div>
-        <div>
-          <div class="flex items-center gap-1.5">
-            <h1 class="text-xs font-black tracking-tight text-slate-950 uppercase" style="font-family: 'Bangers', cursive; letter-spacing: 0.5px;">
+        
+        <div class="flex items-center gap-1.5 shrink-0">
+          <div class="w-7 h-7 rounded-lg bg-[#ffe600] border-2 border-slate-900 text-slate-950 flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#11141a]" style="font-family: 'Bangers', cursive; font-size: 13px;">
+            P37
+          </div>
+          <div class="hidden sm:block">
+            <h1 class="text-xs font-black tracking-tight text-slate-950 uppercase leading-none" style="font-family: 'Bangers', cursive; letter-spacing: 0.5px;">
               Pynn pridi 37
             </h1>
-            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-              93 ต้น
-            </span>
+            <p class="text-[9px] text-slate-500 font-bold leading-none mt-0.5">แผนงานโครงสร้างใต้ดิน</p>
           </div>
-          <p class="text-[9.5px] text-slate-500 font-semibold leading-none hidden sm:block">แผนงานเสาเข็ม & คุณภาพโครงสร้าง</p>
         </div>
 
-        <!-- Piling Focus Badge (100% Piling Phase 1) -->
-        <div id="piling-focus-badge" class="manga-sticker sticker-green text-[11px] font-black ml-1">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-emerald-900 text-[11px] font-bold flex items-center gap-1.5 whitespace-nowrap" style="font-family: 'Prompt', 'Sarabun', 'Noto Sans Thai', sans-serif;">
-            <i data-lucide="box" class="w-3.5 h-3.5 text-emerald-600"></i>
-            <span>แบบจำลอง 3D เสาเข็ม 93 ต้น</span>
+        <!-- Symmetrical Module Switcher (📍 เสาเข็ม 93 ต้น vs 🏗️ ผังฐานราก 21 ฐาน) -->
+        <div class="inline-flex items-center p-0.5 bg-slate-100 border-1.5 border-slate-900 rounded-lg shadow-2xs ml-1 select-none shrink-0">
+          <span id="piling-focus-badge" class="px-2 py-1 rounded-md bg-[#ffe600] border border-slate-900 text-slate-950 font-black text-[11px] flex items-center gap-1.5 shadow-2xs cursor-default">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>📍 เสาเข็ม (93)</span>
           </span>
+          <a href="footing.html" class="px-2 py-1 rounded-md text-slate-700 hover:text-slate-950 hover:bg-white text-[11px] font-bold flex items-center gap-1 transition-all" title="สลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน (3D Footings & BOQ)">
+            <i data-lucide="box" class="w-3.5 h-3.5 text-sky-600"></i>
+            <span>ผังฐานราก (21)</span>
+            <span class="text-[9px] font-mono font-extrabold text-sky-700 bg-sky-100 px-1 rounded border border-sky-300">3D ↗</span>
+          </a>
         </div>
       </div>
+
       <!-- Center: Key Metrics & Date Selector -->
-
-
-      <div class="pop-header-metrics flex items-center gap-2 text-xs bg-white/70 px-2 py-1 rounded-lg border-1.5 border-slate-900">
+      <div class="pop-header-metrics flex items-center gap-2 text-xs bg-white/80 px-2.5 py-1 rounded-lg border-1.5 border-slate-900 shadow-2xs shrink-0">
         <!-- Cumulative Metric -->
-        <div class="flex items-center gap-1.5 pr-2 border-r-1.5 border-slate-900">
+        <div class="flex items-center gap-1.5 pr-2 border-r-1.5 border-slate-300">
           <span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
-          <span class="text-[10px] text-[#667277] font-bold hidden sm:inline">กดสะสม:</span>
-          <span class="text-xs font-black text-[#34383b]">
-            <span id="stat-driven-count" class="text-[#05ffa1] font-black" style="font-family: 'Bangers', cursive; font-size: 15px;">0</span>/93
-            <span id="stat-driven-pct" class="text-[10px] text-[#667277] font-bold">(0%)</span>
+          <span class="text-[10px] text-slate-600 font-bold hidden sm:inline">กดสะสม:</span>
+          <span class="text-xs font-black text-slate-900">
+            <span id="stat-driven-count" class="text-emerald-600 font-black" style="font-family: 'Bangers', cursive; font-size: 15px;">0</span>/93
+            <span id="stat-driven-pct" class="text-[10px] text-slate-500 font-bold">(0%)</span>
           </span>
         </div>
 
         <!-- Date & Today's Metric -->
-        <div class="flex items-center gap-1.5 pr-2 border-r-1.5 border-slate-900">
-          <input id="inp-report-date" type="date" class="text-[10px] bg-white border-1.5 border-slate-900 rounded px-1 py-0.5 font-bold text-[#34383b] focus:outline-none">
-          <span class="text-[10px] text-[#667277] font-bold hidden sm:inline">กดวันนี้:</span>
-          <span class="text-xs font-black text-[#34383b]">
-            <span id="stat-today-count" class="text-[#0ea5e9] font-black" style="font-family: 'Bangers', cursive; font-size: 15px;">0</span> ต้น
+        <div class="flex items-center gap-1.5 pr-2 border-r-1.5 border-slate-300">
+          <input id="inp-report-date" type="date" class="text-[10px] bg-white border border-slate-300 rounded px-1.5 py-0.5 font-bold text-slate-800 focus:outline-none focus:border-slate-900">
+          <span class="text-[10px] text-slate-600 font-bold hidden md:inline">วันนี้:</span>
+          <span class="text-xs font-black text-slate-900">
+            <span id="stat-today-count" class="text-sky-600 font-black" style="font-family: 'Bangers', cursive; font-size: 15px;">0</span> ต้น
           </span>
         </div>
 
         <!-- Remaining Pill -->
-        <div class="flex items-center gap-1 text-[10px] font-bold text-[#667277]">
-          <span>คงเหลือ:</span>
-          <span id="stat-remain-count" class="text-xs font-black text-[#11141a]" style="font-family: 'Bangers', cursive; font-size: 15px;">93</span>
+        <div class="flex items-center gap-1 text-[10px] font-bold text-slate-600">
+          <span class="hidden sm:inline">คงเหลือ:</span>
+          <span id="stat-remain-count" class="text-xs font-black text-slate-900" style="font-family: 'Bangers', cursive; font-size: 15px;">93</span>
         </div>
       </div>
 
-            <!-- Right: Action Toolbars (Segmented into 3 Logical Groups) -->
+      <!-- Right: Action Toolbars (Distilled into 3 Clean Logical Clusters) -->
       <div class="pop-header-actions flex items-center gap-1.5 flex-wrap xl:flex-nowrap">
 
-        <!-- Cluster 1: Field Actions (Quick Select, Lengths, PCO) -->
+        <!-- Cluster 1: หน้างาน (Field Actions: Quick Select, PCO Inspector) -->
         <div class="hdr-cluster">
           <button id="btn-quick-select" class="hdr-btn hdr-btn-green" title="ระบุต้นที่กดด่วน (Quick Select 93 ต้น)">
             <i data-lucide="check-square" class="w-3.5 h-3.5 text-white"></i>
             <span>ระบุต้นที่กด</span>
           </button>
-          <button id="btn-open-pile-lengths" class="hdr-btn hdr-btn-white" title="กรอกระบุความยาวเสาเข็ม (ท่อนล่าง, ท่อนกลาง, ท่อนบน, ความสูง TOP)">
-            <i data-lucide="ruler" class="w-3.5 h-3.5 text-sky-600"></i>
-            <span class="hidden sm:inline">ความยาวเข็ม</span>
-          </button>
-          <button id="btn-pco-inspector" class="hdr-btn hdr-btn-yellow" title="เครื่องมือเช็คข้อมูลแต่ละต้น (กดที่เครื่องมือนี้ แล้วไปคลิกที่เสาเข็ม จะมีข้อมูลเด้งขึ้นมา)">
+          <button id="btn-pco-inspector" class="hdr-btn hdr-btn-yellow" title="เครื่องมือเช็คข้อมูลแต่ละต้น (กดที่เครื่องมือนี้ แล้วไปคลิกที่เสาเข็มในผังหรือ 3D จะมีข้อมูลเด้งขึ้นมา)">
             <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#b45309]"></i>
-            <span id="lbl-pco-inspector-header">เช็คข้อมูล PCO</span>
+            <span id="lbl-pco-inspector-header">เช็ค PCO</span>
             <span id="badge-pco-inspect-mode" class="hidden px-1.5 py-0.5 rounded text-[9px] font-black bg-[#059669] text-white leading-none">ON</span>
           </button>
         </div>
 
-        <!-- Cluster 2: Reports & Tables Suite (Daily Report, Progress, Summary, CO) -->
+        <!-- Cluster 2: ข้อมูล & สเปก (Consolidated Tables & Specs Dropdown) -->
+        <div class="hdr-cluster relative" id="cluster-tables-dropdown">
+          <button id="btn-tables-dropdown-toggle" type="button" class="hdr-btn hdr-btn-white" title="เปิดตารางและข้อมูลสเปกเสาเข็ม (ความยาวเข็ม, สรุปข้อมูล, ตารางรวม)">
+            <i data-lucide="table" class="w-3.5 h-3.5 text-slate-700"></i>
+            <span>ตาราง & สเปก</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-slate-500 transition-transform duration-150" id="arrow-tables-dropdown"></i>
+          </button>
+          
+          <div id="menu-tables-dropdown" class="hidden absolute right-0 top-full mt-1.5 w-64 bg-white border-2 border-slate-900 rounded-xl shadow-[3px_3px_0px_#0f172a] p-1.5 z-50 flex flex-col gap-1">
+            <button id="btn-open-pile-lengths" type="button" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-100 text-xs font-bold text-slate-800 flex items-center gap-2.5 transition-colors cursor-pointer border border-transparent hover:border-slate-300" title="กรอกระบุความยาวเสาเข็ม (ท่อนล่าง, ท่อนกลาง, ท่อนบน, ความสูง TOP)">
+              <div class="w-6 h-6 rounded bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 border border-sky-300">
+                <i data-lucide="ruler" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="truncate">
+                <div class="text-xs font-black text-slate-900 leading-tight">ความยาวเสาเข็ม</div>
+                <div class="text-[9.5px] text-slate-500 font-normal">ท่อนล่าง / กลาง / บน / ระดับ TOP</div>
+              </div>
+            </button>
+
+            <button id="btn-open-pile-summary-report" type="button" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-100 text-xs font-bold text-slate-800 flex items-center gap-2.5 transition-colors cursor-pointer border border-transparent hover:border-slate-300" title="หน้าตารางรายงานสรุปงานเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
+              <div class="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-300">
+                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="truncate">
+                <div class="text-xs font-black text-slate-900 leading-tight">สรุปข้อมูลเข็ม</div>
+                <div class="text-[9.5px] text-slate-500 font-normal">ค่าโค & ความยาวรวม 93 ต้น</div>
+              </div>
+            </button>
+
+            <button id="btn-open-cotable" type="button" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-100 text-xs font-bold text-slate-800 flex items-center gap-2.5 transition-colors cursor-pointer border border-transparent hover:border-slate-300" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO รวมทั้งหมด 93 ต้น">
+              <div class="w-6 h-6 rounded bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-300">
+                <i data-lucide="table-2" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="truncate">
+                <div class="text-xs font-black text-slate-900 leading-tight">ตารางรวมพิกัด PCO</div>
+                <div class="text-[9.5px] text-slate-500 font-normal">ระดับตัดหัวเข็ม & พิกัดแบบ 93 ต้น</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cluster 3: รายงาน & ระบบ (Reports, Cloud Sync, Export, Camera) -->
         <div class="hdr-cluster">
           <button id="btn-open-daily-report" class="hdr-btn hdr-btn-amber" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
             <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#78350f]"></i>
             <span>Daily Report</span>
           </button>
-          <button id="btn-open-report" class="hdr-btn hdr-btn-white" title="หน้ารายงานความคืบหน้า">
+          <button id="btn-open-report" class="hdr-btn hdr-btn-white" title="หน้ารายงานความคืบหน้า S-Curve & สรุปภาพรวม">
             <i data-lucide="file-text" class="w-3.5 h-3.5 text-blue-600"></i>
             <span class="hidden md:inline">หน้ารายงาน</span>
           </button>
-          <button id="btn-open-pile-summary-report" class="hdr-btn hdr-btn-white" title="หน้าตารางรายงานสรุปงานเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-600"></i>
-            <span class="hidden lg:inline">สรุปข้อมูลเข็ม</span>
-          </button>
-          <button id="btn-open-cotable" class="hdr-btn hdr-btn-white" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO รวมทั้งหมด 93 ต้น">
-            <i data-lucide="table" class="w-3.5 h-3.5 text-slate-600"></i>
-            <span class="hidden 2xl:inline">ตารางรวม</span>
-          </button>
-        </div>
-
-        <!-- Cluster 3: Sync & Viewport Controls (Supabase, Export, Camera) -->
-        <div class="hdr-cluster">
           <button id="btn-supabase-sync" class="hdr-btn hdr-btn-blue" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
             <i data-lucide="cloud" class="w-3.5 h-3.5 text-white"></i>
             <span id="lbl-supabase-top-btn" class="hidden sm:inline">บันทึก Supabase</span>
           </button>
           <button id="btn-open-export" class="hdr-btn hdr-btn-white" title="ส่งออกภาพรายงาน PNG">
             <i data-lucide="camera" class="w-3.5 h-3.5 text-rose-500"></i>
-            <span class="hidden xl:inline">ส่งออกภาพ</span>
+            <span class="hidden 2xl:inline">ส่งออกภาพ</span>
           </button>
           <div class="flex items-center pl-1 border-l-1.5 border-slate-300 gap-1 ml-0.5">
             <button id="btn-reset-view" class="hdr-btn-icon" title="Top View (Reset Camera)" aria-label="Top View">
@@ -1406,15 +1432,15 @@
         
         <!-- Segmented Tab Header -->
         <div class="flex items-center p-1 bg-slate-100 border-b-2 border-slate-900 gap-1 select-none">
-          <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-900 bg-[#ffe600] text-slate-950 shadow-2xs" data-tab="layers" id="tab-btn-layers" title="เลยเยอร์และชิ้นส่วน 3D">
+          <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-900 bg-[#ffe600] text-slate-950 shadow-2xs" data-tab="layers" id="tab-btn-layers" title="เลเยอร์และชิ้นส่วน 3D">
             <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-            <span>เลยเยอร์</span>
+            <span>เลเยอร์</span>
           </button>
           <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-300 bg-white text-slate-700 hover:bg-slate-50" data-tab="views" id="tab-btn-views" title="มุมมองกล้อง 2D/3D">
             <i data-lucide="compass" class="w-3.5 h-3.5 text-[#ed6845]"></i>
             <span>มุมมอง</span>
           </button>
-          <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-300 bg-white text-slate-700 hover:bg-slate-50" data-tab="filter" id="tab-btn-filter" title="ตัวกรองสถานาเสาเข็ม">
+          <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-300 bg-white text-slate-700 hover:bg-slate-50" data-tab="filter" id="tab-btn-filter" title="ตัวกรองสถานะเสาเข็ม">
             <i data-lucide="filter" class="w-3.5 h-3.5 text-emerald-600"></i>
             <span>ตัวกรอง</span>
           </button>
@@ -1423,20 +1449,20 @@
         <!-- Tab Body Container with Smooth Scroll -->
         <div class="p-2 overflow-y-auto max-h-[calc(100vh-230px)] custom-scrollbar flex flex-col gap-2">
 
-          <!-- Pane 1: เน€เธฅเน€เธขเธญเธฃเน 3D (Default Tab) -->
+          <!-- Pane 1: เลเยอร์ 3D (Default Tab) -->
           <div id="pane-layers" class="sidebar-tab-pane flex flex-col gap-2">
             <div class="flex items-center justify-between pb-1 border-b border-slate-200">
               <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1">
                 <i data-lucide="box" class="w-3 h-3 text-[#ed6845]"></i> ชิ้นส่วนโมเดล 3D
               </span>
               <div class="flex items-center gap-1">
-                <button id="btn-layers-all" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="เน€เธเธดเธ”เนเธชเธ”เธเธเธฅเธ—เธธเธเน€เธฅเน€เธขเธญเธฃเน">เปิดหมด</button>
-                <button id="btn-layers-reset" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="เธฃเธตเน€เธเนเธ•เธเนเธฒเน€เธฃเธดเนเธกเธ•เนเธ (เน€เธเนเธก+เธเธฃเธดเธ”+เน€เธเธ•)">รีเซ็ต</button>
+                <button id="btn-layers-all" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
+                <button id="btn-layers-reset" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="รีเซ็ตค่าเริ่มต้น (เข็ม+กริด+เขต)">รีเซ็ต</button>
               </div>
             </div>
 
-            <!-- Layer 1: เน€เธชเธฒเน€เธเนเธก I-beam -->
-            <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1.5" data-layer="piles" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เน€เธชเธฒเน€เธเนเธก I-beam เธ—เธฑเนเธเธซเธกเธ”">
+            <!-- Layer 1: เสาเข็ม I-beam -->
+            <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1.5" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam ทั้งหมด">
               <div class="flex items-center justify-between w-full" id="trigger-sidebar-piles">
                 <div class="flex items-center gap-2 min-w-0">
                   <div class="w-6 h-6 rounded bg-amber-400 border border-slate-900 flex items-center justify-center text-slate-950 shadow-sm flex-shrink-0">
@@ -1448,41 +1474,43 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <button type="button" class="btn-solo" data-solo="piles" title="เธ”เธนเน€เธเธเธฒเธฐเน€เธชเธฒเน€เธเนเธก">SOLO</button>
-                  <span id="badge-sidebar-piles" class="hidden">เน€เธเธดเธ”</span>
+                  <button type="button" class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
+                  <span id="badge-sidebar-piles" class="hidden">เปิด</span>
                   <div class="toggle-switch"><div class="toggle-knob"></div></div>
                 </div>
               </div>
               <div id="div-pile-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-amber-200/80 text-[10px] w-full">
-                <button type="button" id="btn-toggle-pile-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธ•เธฑเธงเนเธกเน€เธ”เธฅ 3D เน€เธชเธฒเน€เธเนเธก">
+                <button type="button" id="btn-toggle-pile-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D เสาเข็ม">
                   <span id="dot-pile-model" class="w-2 h-2 rounded-full bg-amber-500"></span>
                   <span>โมเดล 3D</span>
                 </button>
-                <button type="button" id="btn-toggle-pile-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธเนเธญเธเธงเธฒเธก/เธเนเธฒเธขเน€เธเธญเธฃเนเน€เธเนเธก">
+                <button type="button" id="btn-toggle-pile-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เปิด/ปิด เฉพาะข้อความ/ป้ายเบอร์เข็ม">
                   <span id="dot-pile-text" class="w-2 h-2 rounded-full bg-amber-500"></span>
-                  <span>ข้อความ/ป้ย</span>
+                  <span>ข้อความ/ป้าย</span>
                 </button>
               </div>
             </div>
 
-            <!-- Layer 2: เธเธฒเธเธฃเธฒเธ เธ.เธช.เธฅ. -->
-            <a href="footing.html" id="sidebar-card-footings" class="layer-card active active-footing" title="เธเธฅเธดเธเน€เธเธทเนเธญเนเธเธ”เธนเธเธฑเธเธเธฒเธเธฃเธฒเธ เธ.เธช.เธฅ. 21 เธเธฒเธ 3D">
+            <!-- Layer 2: ผังฐานราก ค.ส.ล. -->
+            <a href="footing.html" id="sidebar-card-footings" class="layer-card active active-footing hover:translate-x-0.5 transition-transform group" title="คลิกเพื่อสลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน (โมเดล 3D และ BOQ ปริมาณวัสดุ)">
               <div class="flex items-center gap-2 min-w-0">
-                <div class="w-6 h-6 rounded bg-sky-500 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                <div class="w-6 h-6 rounded bg-sky-500 border border-slate-900 flex items-center justify-center text-white shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
                   <i data-lucide="box" class="w-3.5 h-3.5"></i>
                 </div>
                 <div class="truncate">
-                  <div class="font-extrabold text-slate-900 text-xs leading-none">ฐานราก ค.ส.ล.</div>
-                  <div class="text-[10px] text-sky-800 font-bold font-mono">21 ฐาน • ผัง 3D ↗</div>
+                  <div class="font-extrabold text-slate-900 text-xs leading-none">ผังฐานราก ค.ส.ล.</div>
+                  <div class="text-[10px] text-sky-800 font-bold font-mono">21 ฐาน • โมเดล 3D & BOQ</div>
                 </div>
               </div>
               <div class="flex items-center gap-1">
-                <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-300">เปิดดูผัง</span>
+                <span class="text-[9.5px] font-extrabold px-1.5 py-0.5 rounded bg-sky-500 text-white border border-slate-900 shadow-2xs group-hover:bg-sky-600 transition-colors">
+                  เปิด 3D ↗
+                </span>
               </div>
             </a>
 
-            <!-- Layer 3: เธ—เนเธญ & เธเนเธญเธเธฑเธ -->
-            <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1.5" data-layer="drainage" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เธเธฒเธเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณเธ—เธฑเนเธเธซเธกเธ”">
+            <!-- Layer 3: ท่อ & บ่อพัก ค.ส.ล. -->
+            <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1.5" data-layer="drainage" title="คลิกเพื่อ เปิด/ปิด งานท่อระบายน้ำทั้งหมด">
               <div class="flex items-center justify-between w-full" id="trigger-sidebar-drainage">
                 <div class="flex items-center gap-2 min-w-0">
                   <div class="w-6 h-6 rounded bg-cyan-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
@@ -1494,25 +1522,25 @@
                   </div>
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <button type="button" class="btn-solo" data-solo="drainage" title="เธ”เธนเน€เธเธเธฒเธฐเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ">SOLO</button>
-                  <span id="badge-sidebar-drainage" class="hidden">เธเธดเธ”</span>
+                  <button type="button" class="btn-solo" data-solo="drainage" title="ดูเฉพาะท่อระบายน้ำ">SOLO</button>
+                  <span id="badge-sidebar-drainage" class="hidden">ปิด</span>
                   <div class="toggle-switch"><div class="toggle-knob"></div></div>
                 </div>
               </div>
               <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-200 text-[10px] w-full">
-                <button type="button" id="btn-toggle-drain-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธ•เธฑเธงเนเธกเน€เธ”เธฅ 3D เธ—เนเธญเนเธฅเธฐเธเนเธญเธเธฑเธ">
+                <button type="button" id="btn-toggle-drain-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D ท่อและบ่อพัก">
                   <span id="dot-drain-model" class="w-2 h-2 rounded-full bg-slate-300"></span>
                   <span>โมเดล 3D</span>
                 </button>
-                <button type="button" id="btn-toggle-drain-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธเนเธญเธเธงเธฒเธก/เธฃเธฐเธ”เธฑเธเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ">
+                <button type="button" id="btn-toggle-drain-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เปิด/ปิด เฉพาะข้อความ/ระดับท่อระบายน้ำ">
                   <span id="dot-drain-text" class="w-2 h-2 rounded-full bg-slate-300"></span>
                   <span>ข้อความ/ระดับ</span>
                 </button>
               </div>
             </div>
 
-            <!-- Layer 4: เธเธฃเธดเธ” & เธกเธดเธ•เธด CAD -->
-            <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เธเธฃเธดเธ”เนเธฅเธเนเนเธฅเธฐเธ•เธฑเธงเน€เธฅเธเธกเธดเธ•เธด">
+            <!-- Layer 4: กริด & มิติ CAD -->
+            <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
               <div class="flex items-center gap-2 min-w-0">
                 <div class="w-6 h-6 rounded bg-slate-700 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
                   <i data-lucide="grid" class="w-3.5 h-3.5"></i>
@@ -1525,8 +1553,8 @@
               <div class="toggle-switch"><div class="toggle-knob"></div></div>
             </div>
 
-            <!-- Layer 5: เนเธเธงเน€เธเธ•เธ—เธตเนเธ”เธดเธ & เธซเธกเธธเธ” -->
-            <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เนเธเธงเน€เธเธ•เธ—เธตเนเธ”เธดเธเนเธฅเธฐเธซเธกเธธเธ”เธชเธณเธฃเธงเธ">
+            <!-- Layer 5: แนวเขตที่ดิน & หมุด -->
+            <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
               <div class="flex items-center gap-2 min-w-0">
                 <div class="w-6 h-6 rounded bg-rose-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
                   <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
@@ -1539,8 +1567,8 @@
               <div class="toggle-switch"><div class="toggle-knob"></div></div>
             </div>
 
-            <!-- Layer 6: เธ–เธฑเธเธเธณเธเธฑเธ” & เธเธเธฑเธ -->
-            <div id="card-hex" class="layer-card" data-layer="hex" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เน€เธชเธฒเน€เธเนเธกเธเธฅเธธเนเธกเธซเธเน€เธซเธฅเธตเนเธขเธกเธ–เธฑเธเธเธณเธเธฑเธ”เนเธฅเธฐเนเธเธงเธเธเธฑเธ">
+            <!-- Layer 6: ถังบำบัด & ผนัง -->
+            <div id="card-hex" class="layer-card" data-layer="hex" title="คลิกเพื่อ เปิด/ปิด เสาเข็มกลุ่มหกเหลี่ยมถังบำบัดและแนวผนัง">
               <div class="flex items-center gap-2 min-w-0">
                 <div class="w-6 h-6 rounded bg-amber-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
                   <i data-lucide="layers" class="w-3.5 h-3.5"></i>
@@ -1553,17 +1581,17 @@
               <div class="toggle-switch"><div class="toggle-knob"></div></div>
             </div>
 
-            <!-- เธ•เธฒเธฃเธฒเธเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ -->
-            <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-1 text-[10px] font-extrabold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1.5 shadow-2xs rounded-lg mt-0.5" title="เธ•เธฒเธฃเธฒเธเธชเธฃเธธเธเธเนเธญเธเธฑเธเนเธฅเธฐเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ เธเธชเธฅ.">
+            <!-- à¸à¸²à¸£à¸²à¸à¸à¹à¸­à¸£à¸°à¸à¸²à¸¢à¸à¹à¸³ -->
+            <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-1 text-[10px] font-extrabold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1.5 shadow-2xs rounded-lg mt-0.5" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
               <i data-lucide="table" class="w-3.5 h-3.5 text-[#0284c7]"></i>
               <span>ตารางท่อระบายน้ำ & บ่อพัก</span>
             </button>
           </div>
 
-          <!-- Pane 2: เธกเธธเธกเธกเธญเธเธเธฅเนเธญเธ (Views) -->
+          <!-- Pane 2: มุมมองกล้อง (Views) -->
           <div id="pane-views" class="sidebar-tab-pane hidden flex flex-col gap-2">
             <div id="card-views-control" class="flex flex-col gap-1.5">
-              <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider pb-0.5 border-b border-slate-200">เนเธซเธกเธ”เธกเธธเธกเธกเธญเธเธซเธฅเธฑเธ</span>
+              <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider pb-0.5 border-b border-slate-200">โหมดมุมมองหลัก</span>
               <button id="view-top-ortho" type="button" class="pop-btn py-1.5 px-2 text-xs font-bold flex items-center gap-2 transition-all">
                 <i data-lucide="layout-grid" class="w-4 h-4 text-[#34383b]"></i>
                 <span>แปลน Top View (2D)</span>
@@ -1572,7 +1600,7 @@
                 <i data-lucide="box" class="w-4 h-4"></i>
                 <span>3D สามมิติ (Iso)</span>
               </button>
-              <a href="footing.html" class="pop-btn py-1.5 px-2 text-xs font-bold flex items-center gap-2 transition-all bg-sky-50 text-sky-900 border-sky-600 hover:bg-sky-100" title="เนเธเธ”เธนเธเธฑเธเธเธงเธฒเธกเธเธทเธเธซเธเนเธฒเธเธฒเธเธฃเธฒเธ เธ.เธช.เธฅ.">
+              <a href="footing.html" class="pop-btn py-1.5 px-2 text-xs font-bold flex items-center gap-2 transition-all bg-sky-50 text-sky-900 border-sky-600 hover:bg-sky-100" title="ไปดูผังความคืบหน้าฐานราก ค.ส.ล.">
                 <i data-lucide="layers" class="w-4 h-4 text-sky-600"></i>
                 <span>ผังฐานราก ค.ส.ล. (21 ฐาน)</span>
               </a>
@@ -1582,23 +1610,23 @@
             <div id="sub-views-3d" class="flex flex-col gap-1 pt-1.5 border-t border-slate-200">
               <span class="text-[9px] font-bold text-slate-500">มุมมองแกนมาตรฐาน:</span>
               <div class="grid grid-cols-3 gap-1 text-[10px]">
-                <button id="btn-view-top-3d" type="button" class="pop-btn py-1 text-center font-bold" title="เธกเธญเธเธเธฒเธเธ”เนเธฒเธเธเธ (Top View เนเธ 3D)">บน (Top)</button>
-                <button id="btn-view-front" type="button" class="pop-btn py-1 text-center font-bold" title="เธกเธญเธเธเธฒเธเธ”เนเธฒเธเธซเธเนเธฒ เธ—เธดเธจเนเธ•เน">หน้า (S)</button>
-                <button id="btn-view-side" type="button" class="pop-btn py-1 text-center font-bold" title="เธกเธญเธเธเธฒเธเธ”เนเธฒเธเธเนเธฒเธ เธ—เธดเธจเธ•เธฐเธงเธฑเธเธ•เธ">ข้าง (W)</button>
+                <button id="btn-view-top-3d" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านบน (Top View ใน 3D)">บน (Top)</button>
+                <button id="btn-view-front" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านหน้า ทิศใต้">หน้า (S)</button>
+                <button id="btn-view-side" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านข้าง ทิศตะวันตก">ข้าง (W)</button>
               </div>
-              <button id="btn-view-focus-center" type="button" class="pop-btn w-full py-1 text-[10px] flex items-center justify-center gap-1.5 font-bold mt-0.5" style="background:#fff0c8;" title="เน€เธฅเนเธเธเธฅเนเธญเธเนเธเธ—เธตเนเธเธถเนเธเธเธฅเธฒเธเนเธเธ•เนเนเธเธฃเธเธเธฒเธฃ">
-                <span class="text-[12px] leading-none">๐ฏ</span>
+              <button id="btn-view-focus-center" type="button" class="pop-btn w-full py-1 text-[10px] flex items-center justify-center gap-1.5 font-bold mt-0.5" style="background:#fff0c8;" title="เล็งกล้องไปที่กึ่งกลางไซต์โครงการ">
+                <span class="text-[12px] leading-none">🎯</span>
                 <span>เล็งกึ่งกลางไซต์</span>
               </button>
             </div>
           </div>
 
-          <!-- Pane 3: เธ•เธฑเธงเธเธฃเธญเธเธชเธ–เธฒเธเธฐ & เน€เธเนเธเธฃเธฒเธขเธ•เนเธ (Filter & Inspect) -->
+          <!-- Pane 3: ตัวกรองสถานะ & เช็ครายต้น (Filter & Inspect) -->
           <div id="pane-filter" class="sidebar-tab-pane hidden flex flex-col gap-2">
-            <!-- เธเธฃเธญเธเธชเธ–เธฒเธเธฐเน€เธเนเธก -->
+            <!-- à¸à¸£à¸­à¸à¸ªà¸à¸²à¸à¸°à¹à¸à¹à¸¡ -->
             <div id="card-pile-filter" class="flex flex-col gap-1.5">
               <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider pb-0.5 border-b border-slate-200 flex items-center gap-1">
-                <i data-lucide="filter" class="w-3 h-3 text-emerald-600"></i> กรอกแสดงสถานะเข็ม
+                <i data-lucide="filter" class="w-3 h-3 text-emerald-600"></i> กรองแสดงสถานะเข็ม
               </span>
               <button id="filter-all" type="button" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center justify-between gap-1">
                 <span class="flex items-center gap-1.5 font-bold">
@@ -1620,7 +1648,7 @@
               </button>
             </div>
 
-            <!-- เน€เธเธฃเธทเนเธญเธเธกเธทเธญเน€เธเนเธเธเนเธญเธกเธนเธฅเธฃเธฒเธขเธ•เนเธ -->
+            <!-- à¹à¸à¸£à¸·à¹à¸­à¸à¸¡à¸·à¸­à¹à¸à¹à¸à¸à¹à¸­à¸¡à¸¹à¸¥à¸£à¸²à¸¢à¸à¹à¸ -->
             <div id="card-pco-inspector-tool" class="flex flex-col gap-1.5 pt-2 border-t border-slate-200">
               <div class="flex items-center justify-between">
                 <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1">
@@ -1635,7 +1663,7 @@
               <div class="text-[8.5px] font-medium text-slate-500 bg-slate-50 p-1 rounded border border-slate-200 text-center leading-tight">
                 คลิกที่เสาเข็มเพื่อดู PCO & Co
               </div>
-              <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-1 text-[9.5px] font-bold text-slate-700 bg-white hover:bg-slate-100 border-1.5 border-slate-900 flex items-center justify-center gap-1 shadow-xs" title="เธ”เธนเธ•เธฒเธฃเธฒเธเธฃเธงเธกเธเธดเธเธฑเธ”เนเธฅเธฐเธฃเธฐเธ”เธฑเธเธ•เธฑเธ”เธซเธฑเธงเน€เธเนเธก 93 เธ•เนเธ">
+              <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-1 text-[9.5px] font-bold text-slate-700 bg-white hover:bg-slate-100 border-1.5 border-slate-900 flex items-center justify-center gap-1 shadow-xs" title="ดูตารางรวมพิกัดและระดับตัดหัวเข็ม 93 ต้น">
                 <i data-lucide="table" class="w-3 h-3 text-slate-600"></i>
                 <span>ดูตารางรวม 93 ต้น</span>
               </button>
@@ -8841,7 +8869,7 @@
 
       const drivenRecords = Object.values(progressRecords || {}).filter(r => r && r.status === 'driven');
 
-      // 1. Identify active column index (เธงเธฑเธเธเธตเน / เธงเธฑเธเธ—เธตเนเน€เธฅเธทเธญเธเธฃเธฒเธขเธเธฒเธ)
+      // 1. Identify active column index (วันนี้ / วันที่เลือกรายงาน)
       const activeIdx = workingDaysSchedule.indexOf(curDate);
       const targetIdx = (activeIdx >= 0) ? activeIdx : 0;
       const pastDaysCount = targetIdx + 1; // Number of days up to today/active date
@@ -8860,7 +8888,7 @@
 
       if (pastDaysCount * minColW <= availableW) {
         // All days up to today fit completely on screen!
-        // Day 1 (6 เธ•.เธ.) starts flush at the sticky column (0px cut off)
+        // Day 1 (6 ต.ค.) starts flush at the sticky column (0px cut off)
         // and Today (Day 13) ends flush at the right edge!
         numVisibleCols = pastDaysCount;
         startIdx = 0;
@@ -10694,6 +10722,38 @@
     });
 
     document.getElementById('table-search')?.addEventListener('input', renderCoTable);
+
+        // Tables & Specs Dropdown Menu Toggle (Distilled Toolbar)
+    const tblToggle = document.getElementById('btn-tables-dropdown-toggle');
+    const tblMenu = document.getElementById('menu-tables-dropdown');
+    const tblArrow = document.getElementById('arrow-tables-dropdown');
+    if (tblToggle && tblMenu) {
+      tblToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = tblMenu.classList.contains('hidden');
+        if (isHidden) {
+          tblMenu.classList.remove('hidden');
+          if (tblArrow) tblArrow.style.transform = 'rotate(180deg)';
+        } else {
+          tblMenu.classList.add('hidden');
+          if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
+        }
+      });
+      // Close dropdown when any item clicked
+      tblMenu.querySelectorAll('button').forEach(b => {
+        b.addEventListener('click', () => {
+          tblMenu.classList.add('hidden');
+          if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
+        });
+      });
+      // Close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!tblMenu.contains(e.target) && e.target !== tblToggle) {
+          tblMenu.classList.add('hidden');
+          if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
 
     document.getElementById('btn-open-cotable')?.addEventListener('click', () => {
       document.getElementById('modal-cotable').classList.remove('hidden');

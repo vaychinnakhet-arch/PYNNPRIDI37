@@ -184,7 +184,8 @@
       workers: [
         { label: 'Staff ควบคุมงานกดเข็ม', count: 1 },
         { label: 'Survey / ช่างสำรวจ', count: 2 },
-        { label: 'คนงานกดเข็ม', count: 4 },
+        { label: 'คนงานกดเข็ม', count: 3 },
+        { label: 'คนขับโมบาย', count: 1 },
         { label: 'ช่างไฟ', count: 1 },
         { label: 'คนงานทั่วไป', count: 2 },
         { label: 'ช่างเชื่อม / ผรม. ทั่วไป', count: 0 }
@@ -201,6 +202,7 @@
     materials: [
       { label: 'เข็ม I-0.40m ยาว 10 เมตร', count: 10, unit: 'ต้น' },
       { label: 'เข็ม I-0.40m ยาว 7 เมตร', count: 5, unit: 'ต้น' },
+      { label: 'เข็ม I-0.40m ยาว 6 เมตร', count: 0, unit: 'ต้น' },
       { label: 'เหล็กข้ออ้อย SD40 DB12/20', count: 0, unit: 'เส้น' },
       { label: 'คอนกรีตหยาบ Lean Concrete', count: 0, unit: 'คิว' }
     ],
@@ -401,15 +403,44 @@
           if (!hasStaff) {
             cfg.manpower.workers.unshift({ label: 'Staff ควบคุมงานกดเข็ม', count: staffCount });
           }
+          const hasMobileDriver = cfg.manpower.workers.some(w => w && w.label && w.label.includes('คนขับโมบาย'));
+          if (!hasMobileDriver) {
+            const pileWorkerIdx = cfg.manpower.workers.findIndex(w => w && w.label && w.label.includes('คนงานกดเข็ม'));
+            if (pileWorkerIdx >= 0) {
+              cfg.manpower.workers.splice(pileWorkerIdx + 1, 0, { label: 'คนขับโมบาย', count: 1 });
+            } else {
+              cfg.manpower.workers.push({ label: 'คนขับโมบาย', count: 1 });
+            }
+          }
           DailyReportState.manpower.workers = cfg.manpower.workers;
         }
       } else if (cfg.manpower.workers) {
+        const hasMobileDriver = cfg.manpower.workers.some(w => w && w.label && w.label.includes('คนขับโมบาย'));
+        if (!hasMobileDriver) {
+          const pileWorkerIdx = cfg.manpower.workers.findIndex(w => w && w.label && w.label.includes('คนงานกดเข็ม'));
+          if (pileWorkerIdx >= 0) {
+            cfg.manpower.workers.splice(pileWorkerIdx + 1, 0, { label: 'คนขับโมบาย', count: 1 });
+          } else {
+            cfg.manpower.workers.push({ label: 'คนขับโมบาย', count: 1 });
+          }
+        }
         DailyReportState.manpower.workers = cfg.manpower.workers;
       }
       if (cfg.manpower.machinery) DailyReportState.manpower.machinery = cfg.manpower.machinery;
       else if (cfg.machinery) DailyReportState.manpower.machinery = cfg.machinery;
     }
-    if (cfg.materials) DailyReportState.materials = cfg.materials;
+    if (cfg.materials) {
+      const has6m = cfg.materials.some(m => m && m.label && (m.label.includes('6 เมตร') || m.label.includes('6m') || m.label.includes('6 ม.')));
+      if (!has6m) {
+        const idx7m = cfg.materials.findIndex(m => m && m.label && (m.label.includes('7 เมตร') || m.label.includes('7m')));
+        if (idx7m >= 0) {
+          cfg.materials.splice(idx7m + 1, 0, { label: 'เข็ม I-0.40m ยาว 6 เมตร', count: 0, unit: 'ต้น' });
+        } else {
+          cfg.materials.unshift({ label: 'เข็ม I-0.40m ยาว 6 เมตร', count: 0, unit: 'ต้น' });
+        }
+      }
+      DailyReportState.materials = cfg.materials;
+    }
     if (cfg.obstacles) DailyReportState.obstacles = cfg.obstacles;
     if (cfg.solutions) DailyReportState.solutions = cfg.solutions;
     if (cfg.startTime) DailyReportState.startTime = cfg.startTime;
@@ -516,7 +547,7 @@
 
   // Sync state with piling database for the current date
   function syncDailyReportState() {
-    const dateInput = document.getElementById('report-date-picker') || document.getElementById('date-picker');
+    const dateInput = document.getElementById('inp-report-date') || document.getElementById('report-date-picker') || document.getElementById('date-picker');
     const curDate = dateInput ? dateInput.value : (window.todayStr || new Date().toISOString().split('T')[0]);
     DailyReportState.date = curDate;
 
@@ -1161,30 +1192,67 @@
     } else {
       todayPilesList.forEach((item, idx) => {
         const p = item.pile;
-        const r = item.rec;
-        const targetN = p.targetCo?.y ? p.targetCo.y.toFixed(3) : '-';
-        const targetE = p.targetCo?.x ? p.targetCo.x.toFixed(3) : '-';
-        const actualN = r.actualCo?.y ? r.actualCo.y.toFixed(3) : '-';
-        const actualE = r.actualCo?.x ? r.actualCo.x.toFixed(3) : '-';
-        const dn = (r.actualCo?.y && p.targetCo?.y) ? (r.actualCo.y - p.targetCo.y).toFixed(3) : '-';
-        const de = (r.actualCo?.x && p.targetCo?.x) ? (r.actualCo.x - p.targetCo.x).toFixed(3) : '-';
-        const pco = p.targetTop ? p.targetTop.toFixed(3) : '-';
-        const actualTop = r.actualTop ? r.actualTop.toFixed(3) : '-';
-        const diffTop = (r.actualTop && p.targetTop) ? (r.actualTop - p.targetTop).toFixed(3) : '-';
+        const r = item.rec || {};
+
+        // รหัสเสาเข็ม
+        const pileId = p.tag || (p.no ? ('P' + String(p.no).padStart(2, '0')) : (p.name || '-'));
+
+        // พิกัดแบบ N, E
+        const nVal = (p.northing !== undefined && p.northing !== null && !isNaN(Number(p.northing))) ? Number(p.northing) : null;
+        const eVal = (p.easting !== undefined && p.easting !== null && !isNaN(Number(p.easting))) ? Number(p.easting) : null;
+        const targetN = nVal !== null ? nVal.toFixed(3) : '-';
+        const targetE = eVal !== null ? eVal.toFixed(3) : '-';
+        const targetCoStr = (nVal !== null && eVal !== null) ? `${targetN}, ${targetE}` : '-';
+
+        // พิกัดจริงหลังกด n, e
+        const hasActualN = r && r.actual_n !== undefined && r.actual_n !== null && String(r.actual_n).trim() !== '' && !isNaN(parseFloat(r.actual_n));
+        const hasActualE = r && r.actual_e !== undefined && r.actual_e !== null && String(r.actual_e).trim() !== '' && !isNaN(parseFloat(r.actual_e));
+        const actN = hasActualN ? parseFloat(r.actual_n) : null;
+        const actE = hasActualE ? parseFloat(r.actual_e) : null;
+        const actualN = actN !== null ? actN.toFixed(3) : '-';
+        const actualE = actE !== null ? actE.toFixed(3) : '-';
+        const actualCoStr = (actN !== null && actE !== null) ? `${actualN}, ${actualE}` : '-';
+
+        // ผลต่างพิกัด Δn, Δe
+        let dn = '-', de = '-';
+        if (actN !== null && nVal !== null) {
+          const diffN = actN - nVal;
+          dn = (diffN >= 0 ? '+' : '') + diffN.toFixed(3);
+        }
+        if (actE !== null && eVal !== null) {
+          const diffE = actE - eVal;
+          de = (diffE >= 0 ? '+' : '') + diffE.toFixed(3);
+        }
+        const diffCoStr = (dn !== '-' || de !== '-') ? `${dn}, ${de}` : '-';
+
+        // ระดับ PCO (แบบ)
+        const pcoVal = (p.pco_level !== undefined && p.pco_level !== null) ? Number(p.pco_level) : ((p.co_level !== undefined && p.co_level !== null) ? Number(p.co_level) : null);
+        const pco = (pcoVal !== null && !isNaN(pcoVal)) ? pcoVal.toFixed(3) : '-';
+
+        // ระดับ TOP จริง และผลต่าง
+        const hasActualTop = r && r.actual_top !== undefined && r.actual_top !== null && String(r.actual_top).trim() !== '' && !isNaN(parseFloat(r.actual_top));
+        const actTopVal = hasActualTop ? parseFloat(r.actual_top) : (pcoVal !== null ? pcoVal : null);
+        const actualTop = actTopVal !== null ? actTopVal.toFixed(3) : '-';
+
+        let diffTop = '-';
+        if (actTopVal !== null && pcoVal !== null) {
+          const dt = actTopVal - pcoVal;
+          diffTop = (dt >= 0 ? '+' : '') + dt.toFixed(3);
+        }
 
         pilesLogRows += `
           <tr class="text-[9.5px]">
             <td class="border border-slate-700 p-1 text-center font-mono">${idx + 1}</td>
-            <td class="border border-slate-700 p-1 font-bold text-center">${p.pileId}</td>
+            <td class="border border-slate-700 p-1 font-bold text-center text-slate-900">${pileId}</td>
             <td class="border border-slate-700 p-1 text-center">${p.footing || '-'}</td>
             <td class="border border-slate-700 p-1 text-center font-mono">${p.grid || '-'}</td>
-            <td class="border border-slate-700 p-1 text-right font-mono text-[9px]">${targetN}, ${targetE}</td>
-            <td class="border border-slate-700 p-1 text-right font-mono text-[9px] font-bold">${actualN}, ${actualE}</td>
-            <td class="border border-slate-700 p-1 text-center font-mono text-[9px]">${dn}, ${de}</td>
+            <td class="border border-slate-700 p-1 text-right font-mono text-[9px]">${targetCoStr}</td>
+            <td class="border border-slate-700 p-1 text-right font-mono text-[9px] font-bold text-emerald-800">${actualCoStr}</td>
+            <td class="border border-slate-700 p-1 text-center font-mono text-[9px]">${diffCoStr}</td>
             <td class="border border-slate-700 p-1 text-right font-mono">${pco}</td>
             <td class="border border-slate-700 p-1 text-right font-mono font-bold">${actualTop}</td>
             <td class="border border-slate-700 p-1 text-center font-mono">${diffTop}</td>
-            <td class="border border-slate-700 p-1 text-center text-[9px]">I-0.40m</td>
+            <td class="border border-slate-700 p-1 text-center text-[9px]">${p.type || 'I-0.40m'}</td>
             <td class="border border-slate-700 p-1 text-center font-mono text-[9px]">${r.date || curDate}</td>
           </tr>
         `;
@@ -1239,9 +1307,9 @@
         <div class="bg-slate-100 border-b border-black px-2.5 py-0.5 flex items-center justify-between text-[11px] font-black">
           <span>แผนผังความคืบหน้างานเสาเข็ม (Piling Progress Plan)</span>
           <div class="flex items-center gap-4 text-[10.5px]">
-            <span class="inline-flex items-center gap-1.5 font-bold text-sky-700"><span class="w-3 h-3 rounded-full bg-[#0284c7] inline-block border border-sky-800 shadow-2xs"></span> ★ กดวันนี้</span>
-            <span class="inline-flex items-center gap-1.5 font-bold text-emerald-800"><span class="w-3 h-3 rounded-full bg-[#10b981] inline-block border border-emerald-800 shadow-2xs"></span> ⚫ กดแล้ว</span>
-            <span class="inline-flex items-center gap-1.5 font-bold text-slate-800"><span class="w-3 h-3 rounded-full bg-white inline-block border-1.5 border-black shadow-2xs"></span> ○ รอกด</span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-sky-700"><span class="w-3 h-3 rounded-full bg-[#0284c7] inline-block border border-sky-800 shadow-2xs"></span> กดวันนี้</span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-emerald-800"><span class="w-3 h-3 rounded-full bg-[#10b981] inline-block border border-emerald-800 shadow-2xs"></span> กดแล้ว</span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-slate-800"><span class="w-3 h-3 rounded-full bg-white inline-block border-1.5 border-black shadow-2xs"></span> รอกด</span>
           </div>
         </div>
         <div class="p-1 flex items-center justify-center bg-white" style="height: 245px;">
