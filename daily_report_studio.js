@@ -176,7 +176,8 @@
     manpower: {
       mgmt: [
         { label: 'ผู้จัดการส่วนก่อสร้าง', count: 1 },
-        { label: 'วิศวกรโครงการ / โฟร์แมน', count: 0 },
+        { label: 'วิศวกรโครงการ', count: 0 },
+        { label: 'โฟร์แมน', count: 0 },
         { label: 'เจ้าหน้าที่ความปลอดภัย (จป.)', count: 0 },
         { label: 'ฝ่ายแบบ / Drawing / QS', count: 0 }
       ],
@@ -379,12 +380,19 @@
     if (cfg.manpower) {
       if (cfg.manpower.mgmt) {
         let staffCount = 1;
-        const filteredMgmt = cfg.manpower.mgmt.filter(m => {
-          if (m && m.label && m.label.includes('Staff')) {
+        const filteredMgmt = [];
+        cfg.manpower.mgmt.forEach(m => {
+          if (!m || !m.label) return;
+          if (m.label.includes('Staff')) {
             staffCount = m.count || 1;
-            return false;
+            return;
           }
-          return true;
+          if (m.label.includes('วิศวกร') && m.label.includes('โฟร์แมน')) {
+            filteredMgmt.push({ label: 'วิศวกรโครงการ', count: m.count || 0 });
+            filteredMgmt.push({ label: 'โฟร์แมน', count: 0 });
+            return;
+          }
+          filteredMgmt.push(m);
         });
         DailyReportState.manpower.mgmt = filteredMgmt;
 
