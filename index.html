@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
@@ -13919,7 +13919,7 @@ if (typeof window !== "undefined") {
                 <span class="text-xs font-bold text-slate-400">คลิกการ์ดเพื่อเข้าใช้งานทันที</span>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5">
                 
                 <!-- Tile 1: 3D Model & 2D Top View Plan -->
                 <a href="piling.html?view=3d#3d" class="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 active:scale-[0.99] transition-all flex flex-col justify-between group cursor-pointer" title="เปิดโมเดล 3D และแปลนเสาเข็ม">
@@ -14013,6 +14013,30 @@ if (typeof window !== "undefined") {
                   </div>
                   <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#d97706]">
                     <span>ระบุต้นที่ตอกด่วน</span>
+                    <span>&rarr;</span>
+                  </div>
+                </a>
+
+                <!-- Tile 5: Pile Summary Report & Segment Lengths (ท่อนล่าง, กลาง, บน, TOP, รวม) -->
+                <a href="piling.html#summary" class="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:shadow-md hover:border-slate-300 active:scale-[0.99] transition-all flex flex-col justify-between group cursor-pointer" title="เปิดตารางรายงานสรุปข้อมูลเสาเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
+                  <div>
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="w-10 h-10 rounded-xl bg-emerald-100 border-2 border-[#253047] flex items-center justify-center text-emerald-700 font-black text-lg shadow-sm">
+                        📏
+                      </div>
+                      <span class="text-[10px] font-black px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-300 text-emerald-800">
+                        ท่อนเข็ม & TOP
+                      </span>
+                    </div>
+                    <h4 class="font-black text-slate-800 text-sm group-hover:text-emerald-700 transition-colors leading-tight">
+                      ตารางสรุปข้อมูลเข็ม & ความยาวท่อน
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium mt-1.5 leading-relaxed">
+                      ตารางรายงานสรุปครบ 93 ต้น: ค่าพิกัดโค, ท่อนล่าง, ท่อนกลาง, ท่อนบน หักความสูง TOP และความยาวเข็มรวมใช้งาน พร้อมฟอร์มระบุความยาวรายต้น
+                    </p>
+                  </div>
+                  <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-black text-emerald-700">
+                    <span>ดูตารางสรุปความยาวเข็ม</span>
                     <span>&rarr;</span>
                   </div>
                 </a>

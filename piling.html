@@ -245,6 +245,105 @@
       box-shadow: 0.5px 0.5px 0px #1e293b !important;
     }
 
+    /* Header Toolbar Clusters & Segmented Controls */
+    .hdr-cluster {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 4px;
+      background: rgba(248, 250, 252, 0.95);
+      border: 1.5px solid #0f172a;
+      border-radius: 10px;
+      box-shadow: 1.5px 1.5px 0px #0f172a;
+    }
+    .hdr-btn {
+      height: 32px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: 'Prompt', sans-serif !important;
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1.5px solid #0f172a;
+      border-radius: 6px;
+      box-shadow: 1.5px 1.5px 0px #0f172a;
+      transition: all 0.1s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      user-select: none;
+    }
+    .hdr-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 2.5px 2.5px 0px #0f172a;
+    }
+    .hdr-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 0px 0px 0px #0f172a;
+    }
+    .hdr-btn-green {
+      background: #059669 !important;
+      color: #ffffff !important;
+    }
+    .hdr-btn-green:hover {
+      background: #047857 !important;
+    }
+    .hdr-btn-amber {
+      background: #fef3c7 !important;
+      color: #78350f !important;
+    }
+    .hdr-btn-amber:hover {
+      background: #fde68a !important;
+    }
+    .hdr-btn-yellow {
+      background: #fef08a !important;
+      color: #854d0e !important;
+    }
+    .hdr-btn-yellow:hover {
+      background: #fde047 !important;
+    }
+    .hdr-btn-blue {
+      background: #2563eb !important;
+      color: #ffffff !important;
+    }
+    .hdr-btn-blue:hover {
+      background: #1d4ed8 !important;
+    }
+    .hdr-btn-white {
+      background: #ffffff !important;
+      color: #1e293b !important;
+    }
+    .hdr-btn-white:hover {
+      background: #f8fafc !important;
+    }
+    .hdr-btn-icon {
+      height: 32px;
+      width: 32px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff !important;
+      color: #334155 !important;
+      border: 1.5px solid #0f172a;
+      border-radius: 6px;
+      box-shadow: 1.5px 1.5px 0px #0f172a;
+      transition: all 0.1s ease;
+      cursor: pointer;
+    }
+    .hdr-btn-icon:hover {
+      background: #f1f5f9 !important;
+      color: #0f172a !important;
+      transform: translate(-1px, -1px);
+      box-shadow: 2.5px 2.5px 0px #0f172a;
+    }
+    .hdr-btn-icon:active {
+      transform: translate(1px, 1px);
+      box-shadow: 0px 0px 0px #0f172a;
+    }
+
     /* Manga Floating HUD & Pile Card */
     .floating-hud {
       background: transparent !important;
@@ -1217,64 +1316,66 @@
         </div>
       </div>
 
-      <!-- Right: Action Buttons (Grouped & Compact) -->
-      <div class="pop-header-actions flex items-center gap-1.5">
-        <button id="btn-quick-select" class="pop-btn-green px-2.5 py-1 text-xs flex items-center gap-1 shadow-xs" title="ระบุต้นที่กดด่วน">
-          <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
-          <span class="hidden md:inline font-bold">ระบุต้นที่กด</span>
-        </button>
+            <!-- Right: Action Toolbars (Segmented into 3 Logical Groups) -->
+      <div class="pop-header-actions flex items-center gap-1.5 flex-wrap xl:flex-nowrap">
 
-        <button id="btn-supabase-sync" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs text-white" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
-          <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
-          <span class="font-bold hidden sm:inline" id="lbl-supabase-top-btn">บันทึก Supabase</span>
-        </button>
+        <!-- Cluster 1: Field Actions (Quick Select, Lengths, PCO) -->
+        <div class="hdr-cluster">
+          <button id="btn-quick-select" class="hdr-btn hdr-btn-green" title="ระบุต้นที่กดด่วน (Quick Select 93 ต้น)">
+            <i data-lucide="check-square" class="w-3.5 h-3.5 text-white"></i>
+            <span>ระบุต้นที่กด</span>
+          </button>
+          <button id="btn-open-pile-lengths" class="hdr-btn hdr-btn-white" title="กรอกระบุความยาวเสาเข็ม (ท่อนล่าง, ท่อนกลาง, ท่อนบน, ความสูง TOP)">
+            <i data-lucide="ruler" class="w-3.5 h-3.5 text-sky-600"></i>
+            <span class="hidden sm:inline">ความยาวเข็ม</span>
+          </button>
+          <button id="btn-pco-inspector" class="hdr-btn hdr-btn-yellow" title="เครื่องมือเช็คข้อมูลแต่ละต้น (กดที่เครื่องมือนี้ แล้วไปคลิกที่เสาเข็ม จะมีข้อมูลเด้งขึ้นมา)">
+            <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#b45309]"></i>
+            <span id="lbl-pco-inspector-header">เช็คข้อมูล PCO</span>
+            <span id="badge-pco-inspect-mode" class="hidden px-1.5 py-0.5 rounded text-[9px] font-black bg-[#059669] text-white leading-none">ON</span>
+          </button>
+        </div>
 
-        <button id="btn-open-report" class="pop-btn-primary px-2.5 py-1 text-xs flex items-center gap-1 shadow-xs" title="หน้ารายงานความคืบหน้า">
-          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
-          <span class="font-bold">หน้ารายงาน</span>
-        </button>
+        <!-- Cluster 2: Reports & Tables Suite (Daily Report, Progress, Summary, CO) -->
+        <div class="hdr-cluster">
+          <button id="btn-open-daily-report" class="hdr-btn hdr-btn-amber" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
+            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#78350f]"></i>
+            <span>Daily Report</span>
+          </button>
+          <button id="btn-open-report" class="hdr-btn hdr-btn-white" title="หน้ารายงานความคืบหน้า">
+            <i data-lucide="file-text" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span class="hidden md:inline">หน้ารายงาน</span>
+          </button>
+          <button id="btn-open-pile-summary-report" class="hdr-btn hdr-btn-white" title="หน้าตารางรายงานสรุปงานเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span class="hidden lg:inline">สรุปข้อมูลเข็ม</span>
+          </button>
+          <button id="btn-open-cotable" class="hdr-btn hdr-btn-white" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO รวมทั้งหมด 93 ต้น">
+            <i data-lucide="table" class="w-3.5 h-3.5 text-slate-600"></i>
+            <span class="hidden 2xl:inline">ตารางรวม</span>
+          </button>
+        </div>
 
-        <button id="btn-open-daily-report" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs font-black border-2 border-slate-900 bg-[#ffc45b] text-[#1e293b] hover:brightness-105 active:scale-95 cursor-pointer" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
-          <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#1e293b]"></i>
-          <span class="font-bold">Daily Report</span>
-        </button>
+        <!-- Cluster 3: Sync & Viewport Controls (Supabase, Export, Camera) -->
+        <div class="hdr-cluster">
+          <button id="btn-supabase-sync" class="hdr-btn hdr-btn-blue" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
+            <i data-lucide="cloud" class="w-3.5 h-3.5 text-white"></i>
+            <span id="lbl-supabase-top-btn" class="hidden sm:inline">บันทึก Supabase</span>
+          </button>
+          <button id="btn-open-export" class="hdr-btn hdr-btn-white" title="ส่งออกภาพรายงาน PNG">
+            <i data-lucide="camera" class="w-3.5 h-3.5 text-rose-500"></i>
+            <span class="hidden xl:inline">ส่งออกภาพ</span>
+          </button>
+          <div class="flex items-center pl-1 border-l-1.5 border-slate-300 gap-1 ml-0.5">
+            <button id="btn-reset-view" class="hdr-btn-icon" title="Top View (Reset Camera)" aria-label="Top View">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            </button>
+            <button id="btn-fullscreen" class="hdr-btn-icon" title="Fullscreen" aria-label="Fullscreen">
+              <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
 
-        <button id="btn-open-export" class="pop-btn px-2 py-1 text-xs flex items-center gap-1 shadow-xs" style="background:#fff0c8;" title="ส่งออกภาพรายงาน PNG">
-          <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ed6845]"></i>
-          <span class="hidden sm:inline font-bold">ส่งออกภาพ</span>
-        </button>
-
-        <!-- เมนูเช็ค PCO & ข้อมูลค่า Co แต่ละต้น (กดแล้วกดที่เข็มจะได้ Popup Flat-Pop) -->
-        <button id="btn-pco-inspector" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs transition-all hover:scale-102 cursor-pointer font-black border-2 border-slate-900" style="background:#fef08a;" title="เครื่องมือเช็คข้อมูลแต่ละต้น (กดที่เครื่องมือนี้ แล้วไปคลิกที่เสาเข็ม จะมีข้อมูลเด้งขึ้นมา)">
-          <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#854d0e]"></i>
-          <span id="lbl-pco-inspector-header" class="text-[#854d0e]">เครื่องมือเช็คข้อมูล</span>
-          <span id="badge-pco-inspect-mode" class="hidden px-2 py-0.5 rounded text-[9px] font-black bg-[#059669] text-white">ON</span>
-        </button>
-
-        <!-- เมนูกรอกระบุความยาวเข็ม (ท่อนล่าง กลาง บน และ TOP) -->
-        <button id="btn-open-pile-lengths" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs font-black border-2 border-slate-900 bg-[#38bdf8] text-[#0f172a] hover:brightness-105 active:scale-95 cursor-pointer" title="กรอกระบุความยาวเสาเข็ม (ท่อนล่าง, ท่อนกลาง, ท่อนบน, ความสูง TOP)">
-          <i data-lucide="ruler" class="w-3.5 h-3.5 text-[#0369a1]"></i>
-          <span class="font-bold">กรอกความยาวเข็ม</span>
-        </button>
-
-        <!-- หน้าตารางรายงานสรุปงานเข็ม (ค่าโค ความยาวแต่ละท่อน ความยาวรวม) -->
-        <button id="btn-open-pile-summary-report" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1.5 shadow-xs font-black border-2 border-slate-900 bg-[#4ade80] text-[#052e16] hover:brightness-105 active:scale-95 cursor-pointer" title="หน้าตารางรายงานสรุปงานเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
-          <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#15803d]"></i>
-          <span class="font-bold">สรุปข้อมูลเข็ม</span>
-        </button>
-
-        <button id="btn-open-cotable" class="pop-btn px-2 py-1 text-xs flex items-center gap-1" style="background:#dff1f5;" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO รวมทั้งหมด 93 ต้น">
-          <i data-lucide="table" class="w-3.5 h-3.5 text-[#34383b]"></i>
-          <span class="hidden xl:inline font-bold">ตารางรวม</span>
-        </button>
-
-        <button id="btn-reset-view" title="Top View (Reset Camera)" aria-label="Top View" class="pop-btn p-2 min-h-[38px] min-w-[38px] flex items-center justify-center">
-          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-        </button>
-
-        <button id="btn-fullscreen" title="Fullscreen" aria-label="Fullscreen" class="pop-btn p-2 min-h-[38px] min-w-[38px] flex items-center justify-center">
-          <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
-        </button>
       </div>
 
     </div>
@@ -1299,247 +1400,252 @@
       </button>
     </div>
 
-    <div id="floating-hud-body" class="flex flex-col gap-1.5">
-    <!-- 1. มุมมอง (VIEWS) Card -->
-    <div id="card-views-control" class="pop-card p-2 flex flex-col gap-1.5 bg-[#fffdf8] border-2 border-slate-900 shadow-sm rounded-xl">
-      <div class="flex items-center justify-between pb-0.5 border-b-1.5 border-slate-900">
-        <span class="text-[9.5px] font-black uppercase text-[#475569] tracking-wider flex items-center gap-1">
-          <i data-lucide="compass" class="w-3.5 h-3.5 text-[#ed6845]"></i> มุมมอง (VIEWS)
-        </span>
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <button id="view-top-ortho" type="button" class="pop-btn py-1 px-2 text-xs font-bold flex items-center gap-2 transition-all">
-          <i data-lucide="layout-grid" class="w-4 h-4 text-[#34383b]"></i>
-          <span>แปลน Top View (2D)</span>
-        </button>
-        <button id="view-iso3d" type="button" class="pop-btn active py-1 px-2 text-xs font-bold flex items-center gap-2 transition-all">
-          <i data-lucide="box" class="w-4 h-4"></i>
-          <span>3D สามมิติ (Iso)</span>
-        </button>
-        <a href="/footing.html" class="pop-btn py-1 px-2 text-xs font-bold flex items-center gap-2 transition-all bg-sky-50 text-sky-900 border-sky-600 hover:bg-sky-100" title="ไปดูผังความคืบหน้าฐานราก ค.ส.ล.">
-          <i data-lucide="layers" class="w-4 h-4 text-sky-600"></i>
-          <span>ผังฐานราก ค.ส.ล. (21 ฐาน)</span>
-        </a>
-      </div>
-
-      <!-- Sub-controls for 3D View Angles -->
-      <div id="sub-views-3d" class="flex flex-col gap-1 pt-1 border-t-1.5 border-slate-900">
-        <span class="text-[8.5px] font-bold text-[#667277]">ปรับมุมมอง 3D:</span>
-        <div class="grid grid-cols-3 gap-1 text-[9.5px]">
-          <button id="btn-view-top-3d" type="button" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านบน (Top View ใน 3D)">
-            บน (Top)
-          </button>
-          <button id="btn-view-front" type="button" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านหน้า ทิศใต้">
-            หน้า (S)
-          </button>
-          <button id="btn-view-side" type="button" class="pop-btn py-0.5 text-center font-bold" title="มองจากด้านข้าง ทิศตะวันตก">
-            ข้าง (W)
-          </button>
-        </div>
-        <button id="btn-view-focus-center" type="button" class="pop-btn w-full py-0.5 text-[9.5px] flex items-center justify-center gap-1.5 font-bold" style="background:#fff0c8;" title="เล็งกล้องไปที่กึ่งกลางไซต์โครงการ">
-          <span class="text-[12px] leading-none">🎯</span>
-          <span>เล็งกึ่งกลางไซต์</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- 2. BOLDER BIM LAYER CONTROLS (ปุ่มเปิด-ปิดสวย เด่น สไตล์เดียวกับงานฟุตติ้ง) -->
-    <div class="pop-card p-2.5 bg-white/95 backdrop-blur flex flex-col gap-2 text-xs border-2 border-slate-900 shadow-[2.5px_2.5px_0px_#0f172a] rounded-xl">
-      <!-- Section Header with Quick Actions -->
-      <div class="flex items-center justify-between pb-1 border-b-2 border-slate-900">
-        <span class="text-[11px] font-black uppercase text-slate-900 tracking-wider flex items-center gap-1.5">
-          <i data-lucide="layers" class="w-4 h-4 text-[#ed6845]"></i> เลเยอร์งาน 3D
-        </span>
-        <div class="flex items-center gap-1">
-          <button id="btn-layers-all" type="button" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
-          <button id="btn-layers-reset" type="button" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="รีเซ็ตค่าเริ่มต้น (เข็ม+กริด+เขต)">รีเซ็ต</button>
-        </div>
-      </div>
-
-      <!-- Layer 1: งานเสาเข็ม I-beam (93 ต้น) -->
-      <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1.5" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam ทั้งหมด">
-        <div class="flex items-center justify-between w-full" id="trigger-sidebar-piles">
-          <div class="flex items-center gap-2 min-w-0">
-            <div class="w-6 h-6 rounded bg-amber-400 border border-slate-900 flex items-center justify-center text-slate-950 shadow-sm flex-shrink-0">
-              <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
-            </div>
-            <div class="truncate">
-              <div class="font-extrabold text-slate-900 text-xs leading-none" id="title-sidebar-piles">งานเสาเข็ม I-beam</div>
-              <div class="text-[10px] text-amber-800 font-bold font-mono">93 ต้น • เข็มหลัก</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button type="button" class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
-            <span id="badge-sidebar-piles" class="hidden">เปิด</span>
-            <div class="toggle-switch"><div class="toggle-knob"></div></div>
-          </div>
-        </div>
-
-        <!-- Sub-toggles: โมเดล 3D & ข้อความ/ป้าย -->
-        <div id="div-pile-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-amber-200/80 text-[10px] w-full">
-          <button type="button" id="btn-toggle-pile-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D เสาเข็ม">
-            <span id="dot-pile-model" class="w-2 h-2 rounded-full bg-amber-500"></span>
-            <span>โมเดล 3D</span>
-          </button>
-          <button type="button" id="btn-toggle-pile-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เปิด/ปิด เฉพาะข้อความ/ป้ายเบอร์เข็ม">
-            <span id="dot-pile-text" class="w-2 h-2 rounded-full bg-amber-500"></span>
-            <span>ข้อความ/ป้าย</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Layer 2: ฐานราก ค.ส.ล. (21 ฐาน) - เชื่อมต่อไปหน้า footing.html -->
-      <a href="footing.html" id="sidebar-card-footings" class="layer-card active active-footing" title="คลิกเพื่อไปดูผังฐานราก ค.ส.ล. 21 ฐาน 3D">
-        <div class="flex items-center gap-2 min-w-0">
-          <div class="w-6 h-6 rounded bg-sky-500 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
-            <i data-lucide="box" class="w-3.5 h-3.5"></i>
-          </div>
-          <div class="truncate">
-            <div class="font-extrabold text-slate-900 text-xs leading-none">ฐานราก ค.ส.ล.</div>
-            <div class="text-[10px] text-sky-800 font-bold font-mono">21 ฐาน • ผัง 3D ↗</div>
-          </div>
-        </div>
-        <div class="flex items-center gap-1">
-          <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-300">เปิดดูผัง</span>
-        </div>
-      </a>
-
-      <!-- Layer 3: ท่อระบายน้ำ & บ่อพัก (Drainage) -->
-      <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1.5" data-layer="drainage" title="คลิกเพื่อ เปิด/ปิด งานท่อระบายน้ำทั้งหมด">
-        <div class="flex items-center justify-between w-full" id="trigger-sidebar-drainage">
-          <div class="flex items-center gap-2 min-w-0">
-            <div class="w-6 h-6 rounded bg-cyan-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
-              <i data-lucide="git-commit" class="w-3.5 h-3.5"></i>
-            </div>
-            <div class="truncate">
-              <div class="font-extrabold text-slate-900 text-xs leading-none" id="title-sidebar-drainage">ท่อ & บ่อพัก ค.ส.ล.</div>
-              <div class="text-[10px] text-cyan-800 font-bold font-mono">12 บ่อ • 7 ท่อ</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button type="button" class="btn-solo" data-solo="drainage" title="ดูเฉพาะท่อระบายน้ำ">SOLO</button>
-            <span id="badge-sidebar-drainage" class="hidden">ปิด</span>
-            <div class="toggle-switch"><div class="toggle-knob"></div></div>
-          </div>
-        </div>
-
-        <!-- Sub-toggles: โมเดล 3D & ข้อความ/ระดับ -->
-        <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-200 text-[10px] w-full">
-          <button type="button" id="btn-toggle-drain-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D ท่อและบ่อพัก">
-            <span id="dot-drain-model" class="w-2 h-2 rounded-full bg-slate-300"></span>
-            <span>โมเดล 3D</span>
-          </button>
-          <button type="button" id="btn-toggle-drain-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เปิด/ปิด เฉพาะข้อความ/ระดับท่อระบายน้ำ">
-            <span id="dot-drain-text" class="w-2 h-2 rounded-full bg-slate-300"></span>
-            <span>ข้อความ/ระดับ</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Layer 4: กริด & มิติวัด CAD (Grid Lines) -->
-      <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
-        <div class="flex items-center gap-2 min-w-0">
-          <div class="w-6 h-6 rounded bg-slate-700 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
-            <i data-lucide="grid" class="w-3.5 h-3.5"></i>
-          </div>
-          <div class="truncate">
-            <div class="font-extrabold text-slate-900 text-xs leading-none">กริด & มิติ CAD</div>
-            <div class="text-[10px] text-slate-500 font-mono">1-10, A-E</div>
-          </div>
-        </div>
-        <div class="toggle-switch"><div class="toggle-knob"></div></div>
-      </div>
-
-      <!-- Layer 5: แนวเขตที่ดิน & หมุด (Boundary) -->
-      <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
-        <div class="flex items-center gap-2 min-w-0">
-          <div class="w-6 h-6 rounded bg-rose-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
-            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-          </div>
-          <div class="truncate">
-            <div class="font-extrabold text-slate-900 text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
-            <div class="text-[10px] text-rose-700 font-mono">4 ด้าน • หมุดแดง</div>
-          </div>
-        </div>
-        <div class="toggle-switch"><div class="toggle-knob"></div></div>
-      </div>
-
-      <!-- Layer 6: ถังบำบัด & ผนัง (137 ต้น) -->
-      <div id="card-hex" class="layer-card" data-layer="hex" title="คลิกเพื่อ เปิด/ปิด เสาเข็มกลุ่มหกเหลี่ยมถังบำบัดและแนวผนัง">
-        <div class="flex items-center gap-2 min-w-0">
-          <div class="w-6 h-6 rounded bg-amber-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+        <div id="floating-hud-body" class="flex flex-col gap-1.5">
+      <!-- Consolidated Single Console Card with Tabs -->
+      <div id="sidebar-main-console" class="pop-card bg-white/95 backdrop-blur-md border-2 border-slate-900 shadow-[2.5px_2.5px_0px_#0f172a] rounded-xl overflow-hidden flex flex-col">
+        
+        <!-- Segmented Tab Header -->
+        <div class="flex items-center p-1 bg-slate-100 border-b-2 border-slate-900 gap-1 select-none">
+          <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-900 bg-[#ffe600] text-slate-950 shadow-2xs" data-tab="layers" id="tab-btn-layers" title="เลยเยอร์และชิ้นส่วน 3D">
             <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-          </div>
-          <div class="truncate">
-            <div class="font-extrabold text-slate-800 text-xs leading-none">ถังบำบัด & ผนัง</div>
-            <div class="text-[10px] text-slate-400 font-mono">137 ต้น (เข็มกลุ่ม)</div>
-          </div>
+            <span>เลยเยอร์</span>
+          </button>
+          <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-300 bg-white text-slate-700 hover:bg-slate-50" data-tab="views" id="tab-btn-views" title="มุมมองกล้อง 2D/3D">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-[#ed6845]"></i>
+            <span>มุมมอง</span>
+          </button>
+          <button type="button" class="sidebar-tab-btn flex-1 py-1 px-1 rounded-lg text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-slate-300 bg-white text-slate-700 hover:bg-slate-50" data-tab="filter" id="tab-btn-filter" title="ตัวกรองสถานาเสาเข็ม">
+            <i data-lucide="filter" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>ตัวกรอง</span>
+          </button>
         </div>
-        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+
+        <!-- Tab Body Container with Smooth Scroll -->
+        <div class="p-2 overflow-y-auto max-h-[calc(100vh-230px)] custom-scrollbar flex flex-col gap-2">
+
+          <!-- Pane 1: เน€เธฅเน€เธขเธญเธฃเน 3D (Default Tab) -->
+          <div id="pane-layers" class="sidebar-tab-pane flex flex-col gap-2">
+            <div class="flex items-center justify-between pb-1 border-b border-slate-200">
+              <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                <i data-lucide="box" class="w-3 h-3 text-[#ed6845]"></i> ชิ้นส่วนโมเดล 3D
+              </span>
+              <div class="flex items-center gap-1">
+                <button id="btn-layers-all" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="เน€เธเธดเธ”เนเธชเธ”เธเธเธฅเธ—เธธเธเน€เธฅเน€เธขเธญเธฃเน">เปิดหมด</button>
+                <button id="btn-layers-reset" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shadow-2xs cursor-pointer" title="เธฃเธตเน€เธเนเธ•เธเนเธฒเน€เธฃเธดเนเธกเธ•เนเธ (เน€เธเนเธก+เธเธฃเธดเธ”+เน€เธเธ•)">รีเซ็ต</button>
+              </div>
+            </div>
+
+            <!-- Layer 1: เน€เธชเธฒเน€เธเนเธก I-beam -->
+            <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1.5" data-layer="piles" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เน€เธชเธฒเน€เธเนเธก I-beam เธ—เธฑเนเธเธซเธกเธ”">
+              <div class="flex items-center justify-between w-full" id="trigger-sidebar-piles">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-6 h-6 rounded bg-amber-400 border border-slate-900 flex items-center justify-center text-slate-950 shadow-sm flex-shrink-0">
+                    <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="font-extrabold text-slate-900 text-xs leading-none" id="title-sidebar-piles">งานเสาเข็ม I-beam</div>
+                    <div class="text-[10px] text-amber-800 font-bold font-mono">93 ต้น • เข็มหลัก</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" class="btn-solo" data-solo="piles" title="เธ”เธนเน€เธเธเธฒเธฐเน€เธชเธฒเน€เธเนเธก">SOLO</button>
+                  <span id="badge-sidebar-piles" class="hidden">เน€เธเธดเธ”</span>
+                  <div class="toggle-switch"><div class="toggle-knob"></div></div>
+                </div>
+              </div>
+              <div id="div-pile-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-amber-200/80 text-[10px] w-full">
+                <button type="button" id="btn-toggle-pile-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธ•เธฑเธงเนเธกเน€เธ”เธฅ 3D เน€เธชเธฒเน€เธเนเธก">
+                  <span id="dot-pile-model" class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span>โมเดล 3D</span>
+                </button>
+                <button type="button" id="btn-toggle-pile-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-black transition-all cursor-pointer bg-white border-amber-400 text-amber-900 shadow-2xs hover:bg-amber-50 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธเนเธญเธเธงเธฒเธก/เธเนเธฒเธขเน€เธเธญเธฃเนเน€เธเนเธก">
+                  <span id="dot-pile-text" class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span>ข้อความ/ป้ย</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Layer 2: เธเธฒเธเธฃเธฒเธ เธ.เธช.เธฅ. -->
+            <a href="footing.html" id="sidebar-card-footings" class="layer-card active active-footing" title="เธเธฅเธดเธเน€เธเธทเนเธญเนเธเธ”เธนเธเธฑเธเธเธฒเธเธฃเธฒเธ เธ.เธช.เธฅ. 21 เธเธฒเธ 3D">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded bg-sky-500 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                  <i data-lucide="box" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-slate-900 text-xs leading-none">ฐานราก ค.ส.ล.</div>
+                  <div class="text-[10px] text-sky-800 font-bold font-mono">21 ฐาน • ผัง 3D ↗</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-300">เปิดดูผัง</span>
+              </div>
+            </a>
+
+            <!-- Layer 3: เธ—เนเธญ & เธเนเธญเธเธฑเธ -->
+            <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1.5" data-layer="drainage" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เธเธฒเธเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณเธ—เธฑเนเธเธซเธกเธ”">
+              <div class="flex items-center justify-between w-full" id="trigger-sidebar-drainage">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-6 h-6 rounded bg-cyan-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                    <i data-lucide="git-commit" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="font-extrabold text-slate-900 text-xs leading-none" id="title-sidebar-drainage">ท่อ & บ่อพัก ค.ส.ล.</div>
+                    <div class="text-[10px] text-cyan-800 font-bold font-mono">12 บ่อ • 7 ท่อ</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" class="btn-solo" data-solo="drainage" title="เธ”เธนเน€เธเธเธฒเธฐเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ">SOLO</button>
+                  <span id="badge-sidebar-drainage" class="hidden">เธเธดเธ”</span>
+                  <div class="toggle-switch"><div class="toggle-knob"></div></div>
+                </div>
+              </div>
+              <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-slate-200 text-[10px] w-full">
+                <button type="button" id="btn-toggle-drain-model" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธ•เธฑเธงเนเธกเน€เธ”เธฅ 3D เธ—เนเธญเนเธฅเธฐเธเนเธญเธเธฑเธ">
+                  <span id="dot-drain-model" class="w-2 h-2 rounded-full bg-slate-300"></span>
+                  <span>โมเดล 3D</span>
+                </button>
+                <button type="button" id="btn-toggle-drain-text" class="flex items-center justify-center gap-1 py-1 px-1 rounded-md border font-normal transition-all cursor-pointer bg-slate-100 border-slate-300 text-slate-400 hover:bg-slate-200 select-none" title="เน€เธเธดเธ”/เธเธดเธ” เน€เธเธเธฒเธฐเธเนเธญเธเธงเธฒเธก/เธฃเธฐเธ”เธฑเธเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ">
+                  <span id="dot-drain-text" class="w-2 h-2 rounded-full bg-slate-300"></span>
+                  <span>ข้อความ/ระดับ</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Layer 4: เธเธฃเธดเธ” & เธกเธดเธ•เธด CAD -->
+            <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เธเธฃเธดเธ”เนเธฅเธเนเนเธฅเธฐเธ•เธฑเธงเน€เธฅเธเธกเธดเธ•เธด">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded bg-slate-700 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                  <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-slate-900 text-xs leading-none">กริด & มิติ CAD</div>
+                  <div class="text-[10px] text-slate-500 font-mono">1-10, A-E</div>
+                </div>
+              </div>
+              <div class="toggle-switch"><div class="toggle-knob"></div></div>
+            </div>
+
+            <!-- Layer 5: เนเธเธงเน€เธเธ•เธ—เธตเนเธ”เธดเธ & เธซเธกเธธเธ” -->
+            <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เนเธเธงเน€เธเธ•เธ—เธตเนเธ”เธดเธเนเธฅเธฐเธซเธกเธธเธ”เธชเธณเธฃเธงเธ">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded bg-rose-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-slate-900 text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
+                  <div class="text-[10px] text-rose-700 font-mono">4 ด้าน • หมุดแดง</div>
+                </div>
+              </div>
+              <div class="toggle-switch"><div class="toggle-knob"></div></div>
+            </div>
+
+            <!-- Layer 6: เธ–เธฑเธเธเธณเธเธฑเธ” & เธเธเธฑเธ -->
+            <div id="card-hex" class="layer-card" data-layer="hex" title="เธเธฅเธดเธเน€เธเธทเนเธญ เน€เธเธดเธ”/เธเธดเธ” เน€เธชเธฒเน€เธเนเธกเธเธฅเธธเนเธกเธซเธเน€เธซเธฅเธตเนเธขเธกเธ–เธฑเธเธเธณเธเธฑเธ”เนเธฅเธฐเนเธเธงเธเธเธฑเธ">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-6 h-6 rounded bg-amber-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                  <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-slate-800 text-xs leading-none">ถังบำบัด & ผนัง</div>
+                  <div class="text-[10px] text-slate-400 font-mono">137 ต้น (เข็มกลุ่ม)</div>
+                </div>
+              </div>
+              <div class="toggle-switch"><div class="toggle-knob"></div></div>
+            </div>
+
+            <!-- เธ•เธฒเธฃเธฒเธเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ -->
+            <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-1 text-[10px] font-extrabold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1.5 shadow-2xs rounded-lg mt-0.5" title="เธ•เธฒเธฃเธฒเธเธชเธฃเธธเธเธเนเธญเธเธฑเธเนเธฅเธฐเธ—เนเธญเธฃเธฐเธเธฒเธขเธเนเธณ เธเธชเธฅ.">
+              <i data-lucide="table" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>ตารางท่อระบายน้ำ & บ่อพัก</span>
+            </button>
+          </div>
+
+          <!-- Pane 2: เธกเธธเธกเธกเธญเธเธเธฅเนเธญเธ (Views) -->
+          <div id="pane-views" class="sidebar-tab-pane hidden flex flex-col gap-2">
+            <div id="card-views-control" class="flex flex-col gap-1.5">
+              <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider pb-0.5 border-b border-slate-200">เนเธซเธกเธ”เธกเธธเธกเธกเธญเธเธซเธฅเธฑเธ</span>
+              <button id="view-top-ortho" type="button" class="pop-btn py-1.5 px-2 text-xs font-bold flex items-center gap-2 transition-all">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-[#34383b]"></i>
+                <span>แปลน Top View (2D)</span>
+              </button>
+              <button id="view-iso3d" type="button" class="pop-btn active py-1.5 px-2 text-xs font-bold flex items-center gap-2 transition-all">
+                <i data-lucide="box" class="w-4 h-4"></i>
+                <span>3D สามมิติ (Iso)</span>
+              </button>
+              <a href="footing.html" class="pop-btn py-1.5 px-2 text-xs font-bold flex items-center gap-2 transition-all bg-sky-50 text-sky-900 border-sky-600 hover:bg-sky-100" title="เนเธเธ”เธนเธเธฑเธเธเธงเธฒเธกเธเธทเธเธซเธเนเธฒเธเธฒเธเธฃเธฒเธ เธ.เธช.เธฅ.">
+                <i data-lucide="layers" class="w-4 h-4 text-sky-600"></i>
+                <span>ผังฐานราก ค.ส.ล. (21 ฐาน)</span>
+              </a>
+            </div>
+
+            <!-- Sub-views for 3D View Angles -->
+            <div id="sub-views-3d" class="flex flex-col gap-1 pt-1.5 border-t border-slate-200">
+              <span class="text-[9px] font-bold text-slate-500">มุมมองแกนมาตรฐาน:</span>
+              <div class="grid grid-cols-3 gap-1 text-[10px]">
+                <button id="btn-view-top-3d" type="button" class="pop-btn py-1 text-center font-bold" title="เธกเธญเธเธเธฒเธเธ”เนเธฒเธเธเธ (Top View เนเธ 3D)">บน (Top)</button>
+                <button id="btn-view-front" type="button" class="pop-btn py-1 text-center font-bold" title="เธกเธญเธเธเธฒเธเธ”เนเธฒเธเธซเธเนเธฒ เธ—เธดเธจเนเธ•เน">หน้า (S)</button>
+                <button id="btn-view-side" type="button" class="pop-btn py-1 text-center font-bold" title="เธกเธญเธเธเธฒเธเธ”เนเธฒเธเธเนเธฒเธ เธ—เธดเธจเธ•เธฐเธงเธฑเธเธ•เธ">ข้าง (W)</button>
+              </div>
+              <button id="btn-view-focus-center" type="button" class="pop-btn w-full py-1 text-[10px] flex items-center justify-center gap-1.5 font-bold mt-0.5" style="background:#fff0c8;" title="เน€เธฅเนเธเธเธฅเนเธญเธเนเธเธ—เธตเนเธเธถเนเธเธเธฅเธฒเธเนเธเธ•เนเนเธเธฃเธเธเธฒเธฃ">
+                <span class="text-[12px] leading-none">๐ฏ</span>
+                <span>เล็งกึ่งกลางไซต์</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Pane 3: เธ•เธฑเธงเธเธฃเธญเธเธชเธ–เธฒเธเธฐ & เน€เธเนเธเธฃเธฒเธขเธ•เนเธ (Filter & Inspect) -->
+          <div id="pane-filter" class="sidebar-tab-pane hidden flex flex-col gap-2">
+            <!-- เธเธฃเธญเธเธชเธ–เธฒเธเธฐเน€เธเนเธก -->
+            <div id="card-pile-filter" class="flex flex-col gap-1.5">
+              <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider pb-0.5 border-b border-slate-200 flex items-center gap-1">
+                <i data-lucide="filter" class="w-3 h-3 text-emerald-600"></i> กรอกแสดงสถานะเข็ม
+              </span>
+              <button id="filter-all" type="button" class="pop-btn active px-2.5 py-1.5 text-xs flex items-center justify-between gap-1">
+                <span class="flex items-center gap-1.5 font-bold">
+                  <i data-lucide="layers" class="w-3.5 h-3.5"></i> ทั้งหมด
+                </span>
+                <span class="font-black px-1.5 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[10px]">93</span>
+              </button>
+              <button id="filter-driven" type="button" class="pop-btn px-2.5 py-1.5 text-xs flex items-center justify-between gap-1" style="background:#e5f4e9;">
+                <span class="flex items-center gap-1.5 text-[#1e3a29] font-bold">
+                  <span class="w-2 h-2 rounded-full bg-[#10b981] border border-[#064e3b]"></span> กดแล้ว
+                </span>
+                <span id="badge-driven" class="font-black px-1.5 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[10px]">0</span>
+              </button>
+              <button id="filter-pending" type="button" class="pop-btn px-2.5 py-1.5 text-xs flex items-center justify-between gap-1">
+                <span class="flex items-center gap-1.5 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-[#cbd5e1] border-1.5 border-slate-900"></span> ยังไม่กด
+                </span>
+                <span id="badge-pending" class="font-black px-1.5 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[10px]">93</span>
+              </button>
+            </div>
+
+            <!-- เน€เธเธฃเธทเนเธญเธเธกเธทเธญเน€เธเนเธเธเนเธญเธกเธนเธฅเธฃเธฒเธขเธ•เนเธ -->
+            <div id="card-pco-inspector-tool" class="flex flex-col gap-1.5 pt-2 border-t border-slate-200">
+              <div class="flex items-center justify-between">
+                <span class="text-[9.5px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                  <i data-lucide="crosshair" class="w-3 h-3 text-[#ed6845]"></i> เช็คข้อมูลรายต้น
+                </span>
+                <span id="badge-sidebar-inspect-active" class="hidden px-2 py-0.5 rounded text-[8px] font-black bg-emerald-600 text-white animate-pulse">ON</span>
+              </div>
+              <button id="btn-sidebar-toggle-inspector" type="button" class="pop-btn w-full py-1.5 px-2 text-[11px] font-black flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border-1.5 border-slate-900">
+                <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#b45309]"></i>
+                <span id="lbl-sidebar-toggle-inspector">เปิดเครื่องมือเช็ค</span>
+              </button>
+              <div class="text-[8.5px] font-medium text-slate-500 bg-slate-50 p-1 rounded border border-slate-200 text-center leading-tight">
+                คลิกที่เสาเข็มเพื่อดู PCO & Co
+              </div>
+              <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-1 text-[9.5px] font-bold text-slate-700 bg-white hover:bg-slate-100 border-1.5 border-slate-900 flex items-center justify-center gap-1 shadow-xs" title="เธ”เธนเธ•เธฒเธฃเธฒเธเธฃเธงเธกเธเธดเธเธฑเธ”เนเธฅเธฐเธฃเธฐเธ”เธฑเธเธ•เธฑเธ”เธซเธฑเธงเน€เธเนเธก 93 เธ•เนเธ">
+                <i data-lucide="table" class="w-3 h-3 text-slate-600"></i>
+                <span>ดูตารางรวม 93 ต้น</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
-
-      <!-- ปุ่มเปิดตารางท่อระบายน้ำ คสล. -->
-      <button id="btn-sidebar-open-drainagetable" type="button" class="pop-btn w-full py-1.5 text-[10.5px] font-extrabold text-[#0369a1] bg-[#e0f2fe] hover:bg-[#bae6fd] border border-[#0284c7] flex items-center justify-center gap-1.5 shadow-xs rounded-lg mt-0.5" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
-        <i data-lucide="table" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-        <span>ตารางท่อระบายน้ำ & บ่อพัก</span>
-      </button>
-    </div>
-
-        <!-- 3. Pile Filter Card (กรองแสดงเข็ม) -->
-    <div id="card-pile-filter" class="pop-card p-1.5 flex flex-col gap-1 bg-[#fffdf8] border-2 border-slate-900 shadow-sm rounded-xl">
-      <span class="text-[9px] text-[#475569] font-black px-0.5 uppercase tracking-wider flex items-center gap-1">
-        <i data-lucide="filter" class="w-3 h-3 text-[#ed6845]"></i> กรองแสดงเข็ม
-      </span>
-      <button id="filter-all" type="button" class="pop-btn active px-2 py-1 text-[11px] flex items-center justify-between gap-1">
-        <span class="flex items-center gap-1">
-          <i data-lucide="layers" class="w-3.5 h-3.5"></i> ทั้งหมด
-        </span>
-        <span class="font-black px-1 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[9.5px]">93</span>
-      </button>
-      <button id="filter-driven" type="button" class="pop-btn px-2 py-1 text-[11px] flex items-center justify-between gap-1" style="background:#e5f4e9;">
-        <span class="flex items-center gap-1 text-[#1e3a29]">
-          <span class="w-2 h-2 rounded-full bg-[#10b981] border border-[#064e3b]"></span> กดแล้ว
-        </span>
-        <span id="badge-driven" class="font-black px-1 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[9.5px]">0</span>
-      </button>
-      <button id="filter-pending" type="button" class="pop-btn px-2 py-1 text-[11px] flex items-center justify-between gap-1">
-        <span class="flex items-center gap-1">
-          <span class="w-2 h-2 rounded-full bg-[#cbd5e1] border-1.5 border-slate-900"></span> ยังไม่กด
-        </span>
-        <span id="badge-pending" class="font-black px-1 py-0.2 rounded bg-white border-1.5 border-slate-900 text-[9.5px]">93</span>
-      </button>
-    </div>
-
-    <!-- เครื่องมือเช็คข้อมูลแต่ละต้น (PCO & ค่า Co) ขนาดกะทัดรัด พอดีแถบเครื่องมือ -->
-    <div id="card-pco-inspector-tool" class="pop-card p-1.5 flex flex-col gap-1 bg-[#fffdfa] border-2 border-slate-900 shadow-sm rounded-xl">
-      <div class="flex items-center justify-between">
-        <span class="text-[9px] text-[#34383b] font-black uppercase tracking-wider flex items-center gap-1">
-          <i data-lucide="crosshair" class="w-3 h-3 text-[#ed6845]"></i> เช็คข้อมูลรายต้น
-        </span>
-        <span id="badge-sidebar-inspect-active" class="hidden px-2 py-0.5 rounded text-[8px] font-black bg-emerald-600 text-white animate-pulse">
-          ON
-        </span>
-      </div>
-
-      <button id="btn-sidebar-toggle-inspector" type="button" class="pop-btn w-full py-1 px-1.5 text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer shadow-xs bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border-1.5 border-slate-900">
-        <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#b45309]"></i>
-        <span id="lbl-sidebar-toggle-inspector">เปิดเครื่องมือเช็ค</span>
-      </button>
-
-      <div class="text-[8px] font-medium text-slate-500 bg-slate-50 p-1 rounded border border-slate-200 text-center leading-tight">
-        คลิกที่เสาเข็มเพื่อดู PCO & Co
-      </div>
-
-      <button id="btn-sidebar-open-cotable" type="button" class="pop-btn w-full py-0.5 text-[9px] font-bold text-slate-700 bg-white hover:bg-slate-100 border-1.5 border-slate-900 flex items-center justify-center gap-1 shadow-xs" title="ดูตารางรวมพิกัดและระดับตัดหัวเข็ม 93 ต้น">
-        <i data-lucide="table" class="w-3 h-3 text-slate-600"></i>
-        <span>ดูตารางรวม 93 ต้น</span>
-      </button>
-    </div>
-
     </div>
   </div>
-
   <!-- Bottom Helper Bar & Compass -->
   <footer class="absolute bottom-3 left-3 z-20 pointer-events-none flex items-center gap-2">
     <!-- 3D North Compass Widget -->
@@ -1710,7 +1816,7 @@
       </button>
       <button id="btn-minibar-expand" type="button" class="px-2 py-1 text-[10.5px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 flex items-center gap-1 cursor-pointer">
         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-        <span>กดทันที</span>
+        <span>ขยาย</span>
       </button>
     </div>
 
@@ -1719,7 +1825,7 @@
       <!-- Quick Button: เช็ค PCO & Co เปรียบเทียบ สไตล์ Flat-Pop -->
       <button id="btn-card-open-pco-inspect" type="button" class="w-full py-1 px-2 text-[11px] font-black rounded-lg bg-[#fef08a] hover:bg-[#fde047] text-[#854d0e] border-2 border-slate-900 flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition-transform hover:scale-101">
         <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#d97706]"></i>
-        <span>กดทันที</span>
+        <span>🔍 เช็ค PCO & ค่า Co เปรียบเทียบ (Flat-Pop)</span>
       </button>
 
       <!-- Quick Info -->
@@ -1768,39 +1874,35 @@
         </div>
       </div>
 
-      <!-- Pile Segment Lengths & TOP (กรอกระบุความยาวเข็ม ท่อนล่าง กลาง บน และ TOP) -->
+      <!-- Pile Segment Lengths (กรอกระบุความยาวเข็ม ท่อนล่าง กลาง บน - ใช้ TOP จากช่องบน) -->
       <div class="p-2.5 rounded-xl bg-amber-50/90 border-2 border-amber-300 space-y-1.5 shadow-xs">
         <div class="flex items-center justify-between text-[11px]">
           <span class="font-black text-[#b45309] flex items-center gap-1">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-600"></i> ระบุความยาวท่อนเข็ม & TOP (ม.):
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-600"></i> ระบุความยาวท่อนเข็ม (ม.):
           </span>
           <span id="card-pile-eff-len-badge" class="font-mono font-black text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">รวม 21.00 ม.</span>
         </div>
-        <div class="grid grid-cols-2 gap-1.5 pt-0.5 text-[10px]">
+        <div class="grid grid-cols-3 gap-1.5 pt-0.5 text-[10px]">
           <div>
             <label class="font-bold text-slate-700 block">ท่อนล่าง (ม.):</label>
-            <input type="number" step="0.01" id="card-pile-seg-bottom" placeholder="7.00" class="w-full px-2 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
+            <input type="number" step="0.01" id="card-pile-seg-bottom" placeholder="7.00" class="w-full px-1.5 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
           </div>
           <div>
             <label class="font-bold text-slate-700 block">ท่อนกลาง (ม.):</label>
-            <input type="number" step="0.01" id="card-pile-seg-middle" placeholder="7.00" class="w-full px-2 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
+            <input type="number" step="0.01" id="card-pile-seg-middle" placeholder="7.00" class="w-full px-1.5 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
           </div>
           <div>
             <label class="font-bold text-slate-700 block">ท่อนบน (ม.):</label>
-            <input type="number" step="0.01" id="card-pile-seg-top" placeholder="10.00" class="w-full px-2 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
-          </div>
-          <div>
-            <label class="font-bold text-[#b91c1c] block">ความสูง TOP (ม.):</label>
-            <input type="number" step="0.01" id="card-pile-seg-topcut" placeholder="3.00" class="w-full px-2 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white text-[#b91c1c] focus:outline-none">
+            <input type="number" step="0.01" id="card-pile-seg-top" placeholder="10.00" class="w-full px-1.5 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
           </div>
         </div>
         <div class="bg-white/90 p-1.5 rounded-lg border border-amber-200 text-[10px] space-y-0.5">
           <div class="flex justify-between font-bold text-blue-900">
-            <span>กดทันที</span>
+            <span>ท่อนบนสุทธิ (หัก TOP ช่องบน):</span>
             <span id="card-pile-top-net-text" class="font-mono text-blue-700 font-black">7.00 ม.</span>
           </div>
           <div class="flex justify-between font-bold text-emerald-900">
-            <span>กดทันที</span>
+            <span>ความยาวใช้งานรวม:</span>
             <span id="card-pile-eff-len-text" class="font-mono text-emerald-700 font-black">21.00 ม.</span>
           </div>
         </div>
@@ -1822,14 +1924,14 @@
         <div class="grid grid-cols-2 gap-1.5 pt-0.5">
           <div>
             <label class="text-[9.5px] font-bold text-emerald-900 flex justify-between">
-              <span>กดทันที</span>
+              <span>พิกัดจริง N:</span>
               <span class="font-mono text-[9px] text-slate-500">แบบ: <b id="card-pile-design-n-hint">-</b></span>
             </label>
             <input type="number" step="0.0001" id="card-pile-actual-n" placeholder="เช่น 1518672.698" class="w-full px-2 py-1 text-xs font-mono font-bold border-2 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Northing (N)">
           </div>
           <div>
             <label class="text-[9.5px] font-bold text-emerald-900 flex justify-between">
-              <span>กดทันที</span>
+              <span>พิกัดจริง E:</span>
               <span class="font-mono text-[9px] text-slate-500">แบบ: <b id="card-pile-design-e-hint">-</b></span>
             </label>
             <input type="number" step="0.0001" id="card-pile-actual-e" placeholder="เช่น 672390.806" class="w-full px-2 py-1 text-xs font-mono font-bold border-2 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Easting (E)">
@@ -1865,7 +1967,7 @@
       <div class="space-y-1.5 pt-1">
         <button id="btn-card-quick-drive" type="button" class="w-full py-2 text-xs flex items-center justify-center gap-1.5 font-black rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs hover:shadow-sm active:scale-95 transition-all cursor-pointer">
           <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
-          <span>กดทันที</span>
+          <span>⚡ กดเสาเข็มต้นนี้ทันที (บันทึกออนไลน์ Supabase)</span>
         </button>
         <button id="btn-card-save-date" class="pop-btn-green w-full py-1.5 text-xs flex items-center justify-center gap-1.5 font-black shadow-xs">
           <i data-lucide="check" class="w-3.5 h-3.5"></i>
@@ -1913,10 +2015,10 @@
             <!-- Report Format Selector (เลือกรูปแบบรายงาน: ธีมดั้งเดิม / สไตล์ Excel) -->
             <div id="report-theme-selector" class="flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs no-print no-export" title="เลือกรูปแบบหน้ารายงาน">
               <button id="btn-theme-original" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1" title="ธีมดั้งเดิม (Soft Ink Flat-Pop)">
-                <span>กดทันที</span>
+                <span>🎨 ธีมดั้งเดิม</span>
               </button>
               <button id="btn-theme-excel" class="px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1" title="สไตล์เรียบง่ายแบบ Excel (Spreadsheet)">
-                <span>กดทันที</span>
+                <span>📊 สไตล์ Excel</span>
               </button>
             </div>
 
@@ -1931,11 +2033,11 @@
             <div id="rep-layout-switch-wrapper" class="flex items-center bg-white rounded-lg border-2 border-slate-900 p-0.5 shadow-xs no-print no-export">
               <button id="btn-layout-portrait" class="px-2.5 py-1 rounded-md text-xs font-black transition-all bg-[#ffc45b] text-[#34383b] shadow-xs flex items-center gap-1" title="จัดหน้าแนวตั้ง (Portrait)">
                 <i data-lucide="smartphone" class="w-3 h-3"></i>
-                <span>กดทันที</span>
+                <span>แนวตั้ง</span>
               </button>
               <button id="btn-layout-landscape" class="px-2.5 py-1 rounded-md text-xs font-bold text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1" title="จัดหน้ารายงานแนวนอน (Landscape)">
                 <i data-lucide="monitor" class="w-3 h-3"></i>
-                <span>กดทันที</span>
+                <span>แนวนอน</span>
               </button>
             </div>
 
@@ -1943,7 +2045,7 @@
             <div class="flex items-center gap-1.5 no-print no-export">
               <button id="btn-back-to-3d" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-sm font-black border-2 border-slate-900" style="background:#ffc45b; color:#34383b;" title="กลับสู่โมเดล 3D & แปลน (ปิดหน้ารายงาน)">
                 <i data-lucide="box" class="w-3.5 h-3.5"></i>
-                <span>กดทันที</span>
+                <span>🏗️ กลับสู่โมเดล 3D</span>
               </button>
               <button id="btn-report-supabase-sync" class="pop-btn px-2.5 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 text-white font-black" style="background:#2563eb;" title="บันทึกข้อมูลเข้า Supabase">
                 <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
@@ -1951,19 +2053,23 @@
               </button>
               <button id="btn-export-png" class="pop-btn-green px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black" title="ส่งออกภาพรายงาน PNG">
                 <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                <span>กดทันที</span>
+                <span>ส่งออกภาพ PNG</span>
               </button>
               <button id="btn-print-report" class="pop-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black" title="พิมพ์รายงาน / บันทึก PDF">
                 <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-                <span>กดทันที</span>
+                <span>พิมพ์ / PDF</span>
+              </button>
+              <button id="btn-rep-open-summary" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black border-2 border-slate-900 bg-[#4ade80] text-[#052e16] cursor-pointer" title="เปิดหน้าตารางรายงานสรุปงานเข็ม (ค่าโค ความยาวแต่ละท่อน และความยาวรวม)">
+                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                <span>ตารางสรุปงานเข็ม</span>
               </button>
               <button id="btn-rep-open-daily-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs hover:shadow-sm active:scale-95 font-black border-2 border-slate-900 bg-[#ffc45b] text-[#1e293b]" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
                 <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
-                <span>กดทันที</span>
+                <span>Daily Report (PDF 3 หน้า)</span>
               </button>
               <button id="btn-close-report" class="pop-btn px-3 py-1.5 text-xs flex items-center gap-1.5 shadow-xs bg-white hover:bg-slate-100 text-slate-800 font-black cursor-pointer" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
                 <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-blue-600"></i>
-                <span>กดทันที</span>
+                <span>กลับสู่โมเดล 3D ✕</span>
               </button>
             </div>
           </div>
@@ -1980,13 +2086,13 @@
       <!-- Excel Sheet Tabs Row (Shown only in Excel Theme) -->
       <div id="rep-excel-sheet-tabs" class="flex items-center gap-1 border-b border-slate-200 mb-4 px-1 text-xs no-print no-export hidden">
         <div class="bg-white text-[#107c41] font-bold px-3 py-1.5 border-t-2 border-l border-r border-[#107c41] rounded-t flex items-center gap-1.5 shadow-xs">
-          <span>กดทันที</span>
+          <span>📑 Sheet 1: สรุปผลงาน & แผนผัง</span>
         </div>
         <div class="bg-slate-50 text-slate-600 hover:text-slate-900 font-medium px-3 py-1.5 border-t border-l border-r border-slate-200 rounded-t flex items-center gap-1.5">
-          <span>กดทันที</span>
+          <span>📈 Sheet 2: S-Curve</span>
         </div>
         <div class="bg-slate-50 text-slate-600 hover:text-slate-900 font-medium px-3 py-1.5 border-t border-l border-r border-slate-200 rounded-t flex items-center gap-1.5">
-          <span>กดทันที</span>
+          <span>📋 Sheet 3: รายการเสาเข็ม</span>
         </div>
         <span class="text-slate-400 text-xs px-2">+</span>
       </div>
@@ -2144,7 +2250,7 @@
                   <div class="flex items-center gap-2 text-[10.5px] font-bold text-[#667277]">
                     <span class="inline-flex items-center gap-1">
                       <span class="w-3 h-3 rounded border-2 border-[#ea580c] bg-[#ffedd5]"></span>
-                      <span>กดทันที</span>
+                      <span>วันที่รายงาน</span>
                     </span>
                     <span class="hidden sm:inline no-export">· เลื่อนตารางแนวนอนเพื่อดูข้อมูลทั้ง 31 วันทำการ</span>
                   </div>
@@ -2217,7 +2323,7 @@
         </span>
         <button type="button" onclick="document.getElementById('btn-close-report').click()" class="pop-btn-primary px-4 py-2 text-xs font-black flex items-center gap-2 shadow-xs hover:shadow-sm active:scale-95 cursor-pointer">
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
-          <span>กดทันที</span>
+          <span>กลับสู่หน้าโมเดล 3D & แปลน CAD</span>
         </button>
       </div>
 
@@ -2256,11 +2362,11 @@
         <div class="flex items-center gap-1.5 bg-white p-1 rounded-xl border-1.5 border-slate-900">
           <button id="exp-tab-report" class="px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5">
             <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
-            <span>กดทันที</span>
+            <span>หน้ารายงานสรุป (Report Card)</span>
           </button>
           <button id="exp-tab-3d" class="px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5">
             <i data-lucide="box" class="w-3.5 h-3.5"></i>
-            <span>กดทันที</span>
+            <span>มุมมอง 3D / แปลน (3D CAD View)</span>
           </button>
         </div>
 
@@ -2316,7 +2422,7 @@
       <div class="p-3.5 px-5 bg-white border-t-2 border-[#475569] flex flex-col sm:flex-row items-center justify-between gap-3">
         <div class="text-xs text-[#667277] font-semibold flex items-center gap-2">
           <span id="export-dim-label" class="font-mono font-bold text-[#34383b] bg-[#f1f5f9] px-2 py-0.5 rounded border border-[#cbd5e1]">-</span>
-          <span>กดทันที</span>
+          <span>• PNG คมชัดสูง เหมาะสำหรับแชร์ในแชทและแนบสไลด์</span>
         </div>
 
         <div class="flex items-center gap-2.5">
@@ -2326,7 +2432,7 @@
           </button>
           <button id="btn-download-export-png" class="pop-btn-green px-5 py-2 text-xs flex items-center gap-1.5 font-black shadow-xs hover:shadow-sm active:scale-95">
             <i data-lucide="download" class="w-4 h-4"></i>
-            <span>กดทันที</span>
+            <span>ดาวน์โหลดภาพ PNG</span>
           </button>
         </div>
       </div>
@@ -2385,7 +2491,7 @@
       <div class="bg-[#f8fafc] border-t-2 border-[#475569] p-2.5 md:p-3 flex items-center justify-between gap-2 shrink-0 flex-wrap">
         <button id="btn-pco-open-cotable" type="button" class="px-2.5 py-1.5 text-xs font-bold rounded-lg bg-white border-1.5 border-slate-900 hover:bg-slate-100 shadow-xs flex items-center gap-1 text-slate-700 cursor-pointer">
           <i data-lucide="table" class="w-3.5 h-3.5"></i>
-          <span>กดทันที</span>
+          <span>ดูตารางพิกัด PCO ทั้งหมด (93 ต้น)</span>
         </button>
         <div class="flex items-center gap-2">
           <button id="btn-pco-modal-edit" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-[#ffc45b] border-2 border-slate-900 hover:bg-[#fde047] shadow-sm text-[#34383b] flex items-center gap-1 cursor-pointer">
@@ -2426,6 +2532,9 @@
             </button>
           </div>
 
+          <button id="btn-cotable-to-summary" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1 font-black border-2 border-slate-900 bg-[#4ade80] text-[#052e16] cursor-pointer" title="เปิดหน้าตารางรายงานสรุปงานเข็ม (ค่าโค ความยาวแต่ละท่อน และความยาวรวม)">
+            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> ตารางสรุปข้อมูลเข็ม
+          </button>
           <button id="btn-export-csv" class="pop-btn px-2.5 py-1 text-xs flex items-center gap-1" style="background:#e5f4e9;">
             <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
           </button>
@@ -2541,7 +2650,7 @@
       </div>
 
       <div class="mt-2.5 flex justify-between items-center text-[11px] text-[#667277] font-semibold">
-        <span>กดทันที</span>
+        <span>เสาเข็มไอ 0.40 ม. ทั้งหมด 93 ต้น | แถวสีเขียวอ่อน = กดแล้ว</span>
         <span id="cotable-summary-stat" class="font-black text-[#34383b]">กดแล้ว 0 / 93 ต้น</span>
       </div>
     </div>
@@ -2622,7 +2731,7 @@
           <!-- ท่อนล่าง -->
           <div class="bg-white p-2.5 rounded-xl border-1.5 border-slate-900 shadow-2xs">
             <label class="font-black text-slate-800 flex items-center justify-between mb-1">
-              <span>กดทันที</span>
+              <span>1. ความยาวท่อนล่าง (ม.):</span>
               <span class="text-[10px] text-slate-400">เมตร (m)</span>
             </label>
             <input type="number" step="0.01" id="len-modal-inp-bottom" placeholder="7.00" class="w-full px-2.5 py-1.5 text-sm font-mono font-black border-1.5 border-slate-900 rounded-lg bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
@@ -2631,7 +2740,7 @@
           <!-- ท่อนกลาง -->
           <div class="bg-white p-2.5 rounded-xl border-1.5 border-slate-900 shadow-2xs">
             <label class="font-black text-slate-800 flex items-center justify-between mb-1">
-              <span>กดทันที</span>
+              <span>2. ความยาวท่อนกลาง (ม.):</span>
               <span class="text-[10px] text-slate-400">เมตร (m)</span>
             </label>
             <input type="number" step="0.01" id="len-modal-inp-middle" placeholder="7.00" class="w-full px-2.5 py-1.5 text-sm font-mono font-black border-1.5 border-slate-900 rounded-lg bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
@@ -2640,19 +2749,19 @@
           <!-- ท่อนบน -->
           <div class="bg-white p-2.5 rounded-xl border-1.5 border-slate-900 shadow-2xs">
             <label class="font-black text-slate-800 flex items-center justify-between mb-1">
-              <span>กดทันที</span>
+              <span>3. ความยาวท่อนบน (ม.):</span>
               <span class="text-[10px] text-slate-400">เมตร (m)</span>
             </label>
             <input type="number" step="0.01" id="len-modal-inp-top" placeholder="10.00" class="w-full px-2.5 py-1.5 text-sm font-mono font-black border-1.5 border-slate-900 rounded-lg bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
           </div>
 
-          <!-- ความสูง TOP (ตัดออก) -->
+          <!-- ระดับ TOP เข็มจริง (ใช้อันบน ค่าเดียวกัน) -->
           <div class="bg-rose-50/80 p-2.5 rounded-xl border-1.5 border-rose-900 shadow-2xs">
             <label class="font-black text-rose-900 flex items-center justify-between mb-1">
-              <span>กดทันที</span>
-              <span class="text-[10px] text-rose-700">เมตร (m)</span>
+              <span>4. ระดับ TOP เข็มจริง (ม.):</span>
+              <span class="text-[9.5px] text-rose-700 font-bold">(ค่าเดียวกับช่องบน)</span>
             </label>
-            <input type="number" step="0.01" id="len-modal-inp-topcut" placeholder="3.00" class="w-full px-2.5 py-1.5 text-sm font-mono font-black border-1.5 border-rose-900 rounded-lg bg-white text-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
+            <input type="number" step="0.001" id="len-modal-inp-topcut" placeholder="เช่น 3.71 หรือ -1.25" class="w-full px-2.5 py-1.5 text-sm font-mono font-black border-1.5 border-rose-900 rounded-lg bg-white text-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500">
           </div>
         </div>
 
@@ -2660,8 +2769,8 @@
         <div class="p-3 rounded-xl bg-white border-2 border-slate-900 space-y-2 shadow-xs">
           <div class="flex items-center justify-between border-b pb-2">
             <div>
-              <span class="text-[11px] font-bold text-slate-500 block">✂️ ท่อนบนสุทธิ (หักความสูง TOP):</span>
-              <span class="text-xs text-slate-600 font-mono" id="len-modal-calc-formula">ท่อนบน (10.00 ม.) - TOP (3.00 ม.)</span>
+              <span class="text-[11px] font-bold text-slate-500 block">✂️ ท่อนบนสุทธิ (หักระดับ TOP เข็มจริง):</span>
+              <span class="text-xs text-slate-600 font-mono" id="len-modal-calc-formula">ท่อนบน (10.00 ม.) - ระดับ TOP (3.00 ม.)</span>
             </div>
             <div class="text-right">
               <span id="len-modal-net-top-val" class="text-base font-black text-blue-700 font-mono">7.00 ม.</span>
@@ -2679,7 +2788,7 @@
           </div>
 
           <div class="flex items-center justify-between text-[11px] text-slate-500 pt-0.5 border-t border-dashed">
-            <span>กดทันที</span>
+            <span>ความยาวผลิตรวม (ก่อนตัด):</span>
             <span id="len-modal-total-mfg-val" class="font-mono font-bold text-slate-700">24.00 ม.</span>
           </div>
         </div>
@@ -2695,7 +2804,7 @@
           </button>
           <button id="btn-len-apply-all" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-white hover:bg-amber-50 text-amber-900 border-1.5 border-slate-900 flex items-center gap-1 cursor-pointer">
             <i data-lucide="globe" class="w-3.5 h-3.5 text-amber-600"></i>
-            <span>กดทันที</span>
+            <span>ใช้ความยาวนี้กับเสาเข็มทั้งโครงการ (93 ต้น)</span>
           </button>
         </div>
       </div>
@@ -2704,16 +2813,16 @@
       <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200 flex-wrap">
         <button id="btn-len-modal-to-report" type="button" class="pop-btn px-3 py-1.5 text-xs font-black bg-[#4ade80] text-emerald-950 flex items-center gap-1.5 cursor-pointer">
           <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
-          <span>กดทันที</span>
+          <span>📑 เปิดตารางสรุปงานเข็ม</span>
         </button>
         <div class="flex items-center gap-2">
           <button id="btn-len-modal-save-next" type="button" class="pop-btn px-3 py-1.5 text-xs font-black bg-[#ffc45b] text-[#34383b] flex items-center gap-1 cursor-pointer">
             <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-            <span>กดทันที</span>
+            <span>💾 บันทึก & ไปต้นถัดไป</span>
           </button>
           <button id="btn-len-modal-save" type="button" class="pop-btn-green px-3.5 py-1.5 text-xs font-black flex items-center gap-1 cursor-pointer">
             <i data-lucide="save" class="w-3.5 h-3.5"></i>
-            <span>กดทันที</span>
+            <span>💾 บันทึกความยาว</span>
           </button>
         </div>
       </div>
@@ -2750,15 +2859,15 @@
         <div class="flex items-center gap-1.5 flex-wrap">
           <button id="btn-sum-rep-open-lengths" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-[#38bdf8] text-slate-900 flex items-center gap-1 cursor-pointer">
             <i data-lucide="ruler" class="w-3.5 h-3.5 text-sky-950"></i>
-            <span>กดทันที</span>
+            <span>กรอกความยาวเข็ม</span>
           </button>
           <button id="btn-sum-rep-print" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-white hover:bg-slate-100 text-slate-800 flex items-center gap-1 cursor-pointer">
             <i data-lucide="printer" class="w-3.5 h-3.5 text-slate-600"></i>
-            <span>กดทันที</span>
+            <span>พิมพ์รายงาน</span>
           </button>
           <button id="btn-sum-rep-export-csv" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-[#e5f4e9] text-emerald-900 flex items-center gap-1 cursor-pointer">
             <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-700"></i>
-            <span>กดทันที</span>
+            <span>ส่งออก CSV</span>
           </button>
           <button id="btn-close-pile-summary-report" type="button" class="pop-btn p-1.5 hover:bg-slate-100 rounded-lg cursor-pointer">
             <i data-lucide="x" class="w-4 h-4"></i>
@@ -2770,7 +2879,7 @@
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
         <div class="p-2.5 rounded-xl bg-sky-50 border-1.5 border-slate-900 shadow-2xs">
           <div class="flex items-center justify-between text-xs text-sky-800 font-bold">
-            <span>กดทันที</span>
+            <span>เสาเข็มที่กดแล้ว</span>
             <i data-lucide="hammer" class="w-3.5 h-3.5 text-sky-600"></i>
           </div>
           <div class="text-base sm:text-lg font-black text-sky-950 mt-0.5">
@@ -2781,7 +2890,7 @@
 
         <div class="p-2.5 rounded-xl bg-emerald-50 border-1.5 border-slate-900 shadow-2xs">
           <div class="flex items-center justify-between text-xs text-emerald-800 font-bold">
-            <span>กดทันที</span>
+            <span>ความยาวใช้งานรวม (สุทธิ)</span>
             <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
           </div>
           <div class="text-base sm:text-lg font-black text-emerald-700 mt-0.5 font-mono">
@@ -2791,7 +2900,7 @@
 
         <div class="p-2.5 rounded-xl bg-amber-50 border-1.5 border-slate-900 shadow-2xs">
           <div class="flex items-center justify-between text-xs text-amber-800 font-bold">
-            <span>กดทันที</span>
+            <span>ความยาวผลิตรวม (ก่อนตัด)</span>
             <i data-lucide="package" class="w-3.5 h-3.5 text-amber-600"></i>
           </div>
           <div class="text-base sm:text-lg font-black text-amber-800 mt-0.5 font-mono">
@@ -2801,7 +2910,7 @@
 
         <div class="p-2.5 rounded-xl bg-rose-50 border-1.5 border-rose-900 shadow-2xs">
           <div class="flex items-center justify-between text-xs text-rose-800 font-bold">
-            <span>กดทันที</span>
+            <span>ระดับ TOP หักรวม</span>
             <i data-lucide="scissors" class="w-3.5 h-3.5 text-rose-600"></i>
           </div>
           <div class="text-base sm:text-lg font-black text-rose-700 mt-0.5 font-mono">
@@ -2851,12 +2960,11 @@
               <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono" title="พิกัดตามแบบ Easting (E)">Co (E) แบบ</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#047857]" title="พิกัดจริง (n, e) หลังกดเสร็จ">Co (n, e) จริง</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#a84631]" title="ระดับตัดหัวเข็มตามแบบ PCO">PCO แบบ (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-sky-800" title="ระดับ TOP เข็มที่กดได้จริง">TOP จริง (ม.)</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-sky-800 bg-sky-50" title="ระดับ TOP เข็มจริงที่กดได้ (TOP คืออันเดียวกัน ใช้อันบน)">ระดับ TOP จริง (ม.)</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/70" title="ความยาวท่อนล่าง">ท่อนล่าง (ม.)</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/70" title="ความยาวท่อนกลาง">ท่อนกลาง (ม.)</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/70" title="ความยาวท่อนบน (ก่อนตัด)">ท่อนบน (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right text-rose-700 bg-rose-100/70" title="ความสูง TOP (ส่วนที่ตัดออก)">ความสูง TOP (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right text-blue-900 bg-blue-100/80" title="ท่อนบนสุทธิ = ท่อนบน - TOP">ท่อนบนสุทธิ (ม.)</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right text-blue-900 bg-blue-100/80" title="ท่อนบนสุทธิ = ท่อนบน - ระดับ TOP จริง">ท่อนบนสุทธิ (ม.)</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right text-emerald-950 bg-emerald-100" title="ความยาวเข็มรวมใช้งาน = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ">ความยาวรวม (ม.)</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-center w-28">สถานะ</th>
               <th class="p-2 font-black text-center w-16">แก้ไข</th>
@@ -2867,13 +2975,13 @@
           </tbody>
           <tfoot class="bg-slate-900 text-white font-black text-xs sticky bottom-0 z-10 border-t-2 border-slate-900 shadow-md">
             <tr>
-              <td colspan="9" class="p-2.5 text-right font-bold text-amber-300">
+              <td colspan="8" class="p-2.5 text-right font-bold text-amber-300">
                 รวมทั้งหมด <span id="sum-foot-visible-count">93</span> ต้น :
               </td>
+              <td id="sum-foot-topcut" class="p-2 text-right font-mono text-sky-300 font-bold">-</td>
               <td id="sum-foot-bottom" class="p-2 text-right font-mono text-amber-200">-</td>
               <td id="sum-foot-middle" class="p-2 text-right font-mono text-amber-200">-</td>
               <td id="sum-foot-top" class="p-2 text-right font-mono text-amber-200">-</td>
-              <td id="sum-foot-topcut" class="p-2 text-right font-mono text-rose-300">-</td>
               <td id="sum-foot-topnet" class="p-2 text-right font-mono text-sky-300">-</td>
               <td id="sum-foot-efftotal" class="p-2 text-right font-mono text-emerald-300 text-sm font-black bg-emerald-950/60">-</td>
               <td colspan="2" class="p-2 text-center text-[10.5px] text-slate-300">ความยาวสุทธิใช้งานจริง</td>
@@ -2884,7 +2992,7 @@
 
       <!-- Report Footer Note -->
       <div class="mt-2.5 flex justify-between items-center text-[11px] text-slate-500 font-semibold">
-        <span>กดทันที</span>
+        <span>* ความยาวสุทธิใช้งานจริง = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ (หักระดับ TOP เข็มจริง)</span>
         <span id="sum-report-rendered-info" class="font-bold text-slate-700">แสดง 93 / 93 ต้น</span>
       </div>
 
@@ -4349,7 +4457,7 @@
                  type === 'error' ? 'bg-rose-600 text-white border-rose-700 shadow-rose-900/20' :
                  'bg-slate-800 text-white border-slate-900 shadow-slate-900/20';
       toast.className = `${bg} px-4 py-2 rounded-xl text-xs font-bold border-2 shadow-lg flex items-center gap-2 pointer-events-auto transform transition-all duration-200 translate-y-0 opacity-100 z-[100]`;
-      toast.innerHTML = `<span>กดทันที</span>`;
+      toast.innerHTML = `<span>${message}</span>`;
       container.appendChild(toast);
       setTimeout(() => {
         toast.classList.add('-translate-y-2', 'opacity-0');
@@ -4563,6 +4671,7 @@
       renderQuickChips();
       renderCoTable();
       renderReportSheet();
+      if (typeof renderPileSummaryReportTable === 'function') renderPileSummaryReportTable();
 
       // 2. Immediately pull live data from Supabase on startup
       await pullPilingFromSupabase(true);
@@ -4578,6 +4687,7 @@
       renderQuickChips();
       renderCoTable();
       renderReportSheet();
+      if (typeof renderPileSummaryReportTable === 'function') renderPileSummaryReportTable();
 
       // Debounced silent auto-sync to Supabase
       if (supabaseSyncTimeout) clearTimeout(supabaseSyncTimeout);
@@ -4619,6 +4729,7 @@
                 renderQuickChips();
                 renderCoTable();
                 renderReportSheet();
+                if (typeof renderPileSummaryReportTable === 'function') renderPileSummaryReportTable();
                 const now = new Date();
                 const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
                 updateSyncButtonUI('success', timeStr);
@@ -5969,17 +6080,15 @@
         (hasSavedCoords && rec && rec.actual_e !== undefined) ? rec.actual_e : null
       );
 
-      // Set pile segment lengths (ท่อนล่าง กลาง บน และ ความสูง TOP)
+      // Set pile segment lengths (ท่อนล่าง กลาง บน - คำนวณ TOP สดจากช่องบน)
       if (typeof getPileLengthData === 'function') {
         const lenData = getPileLengthData(pileNo);
         const segBotInp = document.getElementById('card-pile-seg-bottom');
         const segMidInp = document.getElementById('card-pile-seg-middle');
         const segTopInp = document.getElementById('card-pile-seg-top');
-        const segCutInp = document.getElementById('card-pile-seg-topcut');
         if (segBotInp) segBotInp.value = lenData.bottom.toFixed(2);
         if (segMidInp) segMidInp.value = lenData.middle.toFixed(2);
         if (segTopInp) segTopInp.value = lenData.top.toFixed(2);
-        if (segCutInp) segCutInp.value = lenData.topCut.toFixed(2);
         if (typeof updatePileCardLengthCalc === 'function') {
           updatePileCardLengthCalc();
         }
@@ -6083,6 +6192,7 @@
       if (inp) {
         inp.value = pco.toFixed(3);
         updatePileCardDiff(pco, pco);
+        if (typeof updatePileCardLengthCalc === 'function') updatePileCardLengthCalc();
       }
     });
 
@@ -6094,6 +6204,7 @@
       const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
       const v = e.target.value.trim();
       updatePileCardDiff(pco, v === '' ? null : parseFloat(v));
+      if (typeof updatePileCardLengthCalc === 'function') updatePileCardLengthCalc();
     });
 
     // Dynamic diff update when typing actual coordinates N or E
@@ -6250,16 +6361,15 @@
         record.coords_entered = true;
       }
 
-      // Read Segment Lengths & TOP
+      // Read Segment Lengths (ท่อนล่าง, กลาง, บน - ใช้ TOP จากช่องระดับ TOP เข็มจริงด้านบน)
       const segBotInp = document.getElementById('card-pile-seg-bottom');
       const segMidInp = document.getElementById('card-pile-seg-middle');
       const segTopInp = document.getElementById('card-pile-seg-top');
-      const segCutInp = document.getElementById('card-pile-seg-topcut');
       if (segBotInp && segMidInp && segTopInp) {
         const b = parseFloat(segBotInp.value) || 0;
         const m = parseFloat(segMidInp.value) || 0;
         const t = parseFloat(segTopInp.value) || 0;
-        const c = parseFloat(segCutInp?.value) || 0;
+        const c = (record.actual_top !== undefined) ? record.actual_top : (parseFloat(rawTop) || 0);
         const netTop = Math.max(0, t - c);
         const effTotal = b + m + netTop;
         record.seg_bottom = b;
@@ -7118,7 +7228,7 @@
             <div class="flex-1 overflow-auto p-3">
               <div class="text-xs font-black text-slate-800 mb-1.5 flex items-center gap-1">
                 <i data-lucide="table" class="w-4 h-4 text-[#0284c7]"></i>
-                <span>กดทันที</span>
+                <span>ตารางสรุปพิกัด ระดับก้นท่อ (INV.) และความลึกบ่อพัก คสล.</span>
               </div>
               <div class="overflow-x-auto rounded-lg border-1.5 border-slate-900 bg-white">
                 <table class="w-full text-left text-[11px] border-collapse">
@@ -8825,7 +8935,7 @@
               '<td class="p-2 border border-slate-700 sticky-col font-bold text-slate-900">' +
                 '<div class="flex items-center gap-1.5">' +
                   '<span class="w-2 h-2 rounded-full bg-slate-400 inline-block shrink-0"></span>' +
-                  '<span>กดทันที</span>' +
+                  '<span>PLAN</span>' +
                 '</div>' +
                 '<span class="text-[9.5px] font-normal text-slate-500 block leading-tight pl-3.5">\u0E41\u0E1C\u0E19\u0E23\u0E32\u0E22\u0E27\u0E31\u0E19</span>' +
               '</td>' +
@@ -8835,7 +8945,7 @@
               '<td class="p-2 border border-slate-700 sticky-col font-bold text-slate-900">' +
                 '<div class="flex items-center gap-1.5">' +
                   '<span class="w-2 h-2 rounded-full bg-slate-800 inline-block shrink-0"></span>' +
-                  '<span>กดทันที</span>' +
+                  '<span>ACTUAL</span>' +
                 '</div>' +
                 '<span class="text-[9.5px] font-normal text-slate-500 block leading-tight pl-3.5">\u0E1C\u0E25\u0E07\u0E32\u0E19\u0E23\u0E32\u0E22\u0E27\u0E31\u0E19</span>' +
               '</td>' +
@@ -10270,7 +10380,7 @@
               <span class="text-sm font-bold text-[#64748b]">ม. (เมตร)</span>
             </div>
             <div class="text-[11px] font-semibold text-[#854d0e] pt-1 border-t border-amber-200 flex items-center justify-between">
-              <span>กดทันที</span>
+              <span>ระดับตัดหัวเข็มอ้างอิงของเสาเข็มต้นนี้</span>
               <span class="font-mono font-bold">PCO: ${pcoVal.toFixed(3)} m</span>
             </div>
           </div>
@@ -10310,7 +10420,7 @@
             <span class="text-xs font-black text-[#34383b]">ต้องการกดเสาเข็มต้นนี้เลยหรือไม่?</span>
             <button id="btn-pco-quick-drive-this" type="button" class="px-3 py-1.5 text-xs font-black rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs flex items-center gap-1.5 cursor-pointer">
               <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-300"></i>
-              <span>กดทันที</span>
+              <span>กดเสาเข็มต้นนี้ทันที</span>
             </button>
           </div>
         `;
@@ -10393,7 +10503,7 @@
                 <span class="text-slate-500 font-semibold">พิกัด Easting (E) ตามแบบ: <b class="font-mono text-slate-800">${designE ? designE.toFixed(4) : '-'}</b></span>
               </div>
               <div class="text-[11px] font-bold text-amber-800 bg-amber-50 p-2 rounded border border-amber-200 flex items-center justify-between flex-wrap gap-2">
-                <span>กดทันที</span>
+                <span>⚠️ ยังไม่ได้ระบุพิกัดที่กดได้จริง (กดปุ่มแก้ไขด้านล่างเพื่อกรอกค่า N, E จริง)</span>
                 <button id="btn-pco-fill-coords-now" type="button" class="px-2.5 py-1 rounded bg-white border border-amber-400 text-[10.5px] font-black text-amber-900 shadow-xs hover:bg-amber-100 cursor-pointer">
                   กรอกพิกัดจริง
                 </button>
@@ -10478,7 +10588,7 @@
             </div>
             <div class="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
               <i data-lucide="check" class="w-3.5 h-3.5"></i>
-              <span>กดทันที</span>
+              <span>บันทึกสถานะการตอกเรียบร้อยแล้ว</span>
             </div>
           </div>
         `;
@@ -10654,6 +10764,545 @@
       }
     }
 
+    // =========================================================================
+    // PILE SEGMENT LENGTHS & SUMMARY REPORT MODULE (ท่อนล่าง, กลาง, บน, TOP, รายงานสรุป)
+    // =========================================================================
+
+    /**
+     * ดึงข้อมูลความยาวแต่ละท่อนของเสาเข็ม
+     * เช่น เบอร์ 50 มี ท่อนล่าง, กลาง, บน (ก่อนตัด), ความสูง TOP (ส่วนที่ตัดออก)
+     * ท่อนบนสุทธิ = ท่อนบน - TOP
+     * ความยาวเข็มรวม = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ
+     */
+    function getPileLengthData(pileNo) {
+      pileNo = parseInt(pileNo, 10);
+      const rec = (typeof progressRecords !== 'undefined' && progressRecords[pileNo]) || {};
+      
+      let custom = null;
+      try {
+        const raw = localStorage.getItem('PYNN37_PILE_LENGTHS');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed[pileNo]) custom = parsed[pileNo];
+        }
+      } catch(e) {}
+
+      // Default standard values for 21m pile: bottom 7, middle 7, top 7, topCut 0
+      const bottom = (rec.seg_bottom !== undefined) ? Number(rec.seg_bottom) :
+                     (custom && custom.seg_bottom !== undefined) ? Number(custom.seg_bottom) : 7.00;
+
+      const middle = (rec.seg_middle !== undefined) ? Number(rec.seg_middle) :
+                     (custom && custom.seg_middle !== undefined) ? Number(custom.seg_middle) : 7.00;
+
+      const top = (rec.seg_top !== undefined) ? Number(rec.seg_top) :
+                  (custom && custom.seg_top !== undefined) ? Number(custom.seg_top) : 7.00;
+
+      // TOP คืออันเดียวกัน ใช้อันบน: ดึงจากระดับ TOP เข็มจริง (actual_top) เป็นหลัก
+      const topCut = (rec.actual_top !== undefined && rec.actual_top !== null && String(rec.actual_top).trim() !== '' && !isNaN(parseFloat(rec.actual_top)))
+                     ? Number(rec.actual_top)
+                     : (rec.top_cutoff !== undefined && rec.top_cutoff !== null && String(rec.top_cutoff).trim() !== '' && !isNaN(parseFloat(rec.top_cutoff)))
+                     ? Number(rec.top_cutoff)
+                     : (custom && custom.top_cutoff !== undefined) ? Number(custom.top_cutoff) : 0.00;
+
+      const topNet = Math.max(0, top - topCut);
+      const totalEffective = bottom + middle + topNet;
+      const totalManufactured = bottom + middle + top;
+      const isCustomized = (rec.seg_bottom !== undefined || (custom && custom.seg_bottom !== undefined));
+
+      return {
+        pileNo,
+        bottom,
+        middle,
+        top,
+        topCut,
+        topNet,
+        totalEffective,
+        totalManufactured,
+        isCustomized
+      };
+    }
+
+    /**
+     * บันทึกความยาวแต่ละท่อนของเสาเข็ม
+     */
+    function savePileLengthData(pileNo, bottom, middle, top, topCut) {
+      pileNo = parseInt(pileNo, 10);
+      bottom = parseFloat(bottom) || 0;
+      middle = parseFloat(middle) || 0;
+      top = parseFloat(top) || 0;
+      topCut = parseFloat(topCut) || 0;
+      const topNet = Math.max(0, top - topCut);
+      const totalEffective = bottom + middle + topNet;
+
+      if (!progressRecords[pileNo]) {
+        progressRecords[pileNo] = { status: 'pending' };
+      }
+      progressRecords[pileNo].seg_bottom = bottom;
+      progressRecords[pileNo].seg_middle = middle;
+      progressRecords[pileNo].seg_top = top;
+      progressRecords[pileNo].actual_top = topCut;
+      progressRecords[pileNo].top_cutoff = topCut;
+      progressRecords[pileNo].seg_top_net = topNet;
+      progressRecords[pileNo].total_length = totalEffective;
+
+      try {
+        let raw = localStorage.getItem('PYNN37_PILE_LENGTHS');
+        let map = raw ? JSON.parse(raw) : {};
+        map[pileNo] = {
+          seg_bottom: bottom,
+          seg_middle: middle,
+          seg_top: top,
+          actual_top: topCut,
+          top_cutoff: topCut,
+          seg_top_net: topNet,
+          total_length: totalEffective
+        };
+        localStorage.setItem('PYNN37_PILE_LENGTHS', JSON.stringify(map));
+      } catch(e) {}
+
+      // ถ้าการ์ดของต้นนี้เปิดอยู่ ให้ปรับค่าในช่องระดับ TOP จริงด้านบนด้วย
+      if (typeof selectedCardPileNo !== 'undefined' && selectedCardPileNo === pileNo) {
+        const topInp = document.getElementById('card-pile-actual-top');
+        if (topInp) topInp.value = topCut !== 0 ? topCut : '';
+        if (typeof updatePileCardLengthCalc === 'function') updatePileCardLengthCalc();
+      }
+
+      saveProgress();
+      if (typeof syncPilingToSupabase === 'function') {
+        syncPilingToSupabase(false);
+      }
+      if (typeof renderPileSummaryReportTable === 'function') {
+        renderPileSummaryReportTable();
+      }
+    }
+
+    // Modal Lengths State & Calculation
+    let currentLengthModalPileNo = 1;
+
+    function initPileLengthsSelect() {
+      const sel = document.getElementById('len-modal-pile-select');
+      if (!sel || sel.options.length > 0) return;
+      PILES_DATABASE.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.no;
+        opt.textContent = `ต้นที่ ${p.no} (${p.tag}) - ฐานราก ${p.footing || '-'} - กริด ${p.grid}`;
+        sel.appendChild(opt);
+      });
+      sel.addEventListener('change', (e) => {
+        loadPileIntoLengthModal(parseInt(e.target.value, 10));
+      });
+    }
+
+    function loadPileIntoLengthModal(pileNo) {
+      pileNo = parseInt(pileNo, 10) || 1;
+      if (pileNo < 1) pileNo = 1;
+      if (pileNo > 93) pileNo = 93;
+      currentLengthModalPileNo = pileNo;
+
+      initPileLengthsSelect();
+      const sel = document.getElementById('len-modal-pile-select');
+      if (sel) sel.value = pileNo;
+
+      const pile = PILES_DATABASE.find(p => p.no === pileNo) || {};
+      const rec = (typeof progressRecords !== 'undefined' && progressRecords[pileNo]) || {};
+      const lenData = getPileLengthData(pileNo);
+
+      // Info pills
+      const elF = document.getElementById('len-modal-info-footing'); if (elF) elF.textContent = pile.footing || '-';
+      const elG = document.getElementById('len-modal-info-grid'); if (elG) elG.textContent = pile.grid || '-';
+      const pco = pile.pco_level !== undefined ? pile.pco_level : pile.co_level;
+      const elP = document.getElementById('len-modal-info-pco'); if (elP) elP.textContent = `${Number(pco).toFixed(3)} ม.`;
+      const elS = document.getElementById('len-modal-info-status');
+      if (elS) {
+        if (rec.status === 'driven') {
+          elS.textContent = `✓ กดแล้ว (${rec.date || '-'})`;
+          elS.className = 'text-emerald-700 font-black';
+        } else {
+          elS.textContent = 'รอการกด';
+          elS.className = 'text-slate-500 font-bold';
+        }
+      }
+
+      // Input values
+      const botInp = document.getElementById('len-modal-inp-bottom');
+      const midInp = document.getElementById('len-modal-inp-middle');
+      const topInp = document.getElementById('len-modal-inp-top');
+      const cutInp = document.getElementById('len-modal-inp-topcut');
+      if (botInp) botInp.value = lenData.bottom.toFixed(2);
+      if (midInp) midInp.value = lenData.middle.toFixed(2);
+      if (topInp) topInp.value = lenData.top.toFixed(2);
+      if (cutInp) cutInp.value = lenData.topCut.toFixed(2);
+
+      const lblApplyF = document.getElementById('lbl-len-apply-footing');
+      if (lblApplyF) lblApplyF.textContent = `ใช้กับทุกต้นในฐานราก ${pile.footing || '-'}`;
+
+      updateLenModalLiveCalc();
+    }
+
+    function updateLenModalLiveCalc() {
+      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
+      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
+      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
+      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+
+      const netTop = Math.max(0, t - c);
+      const totalEff = b + m + netTop;
+      const totalMfg = b + m + t;
+
+      const formEl = document.getElementById('len-modal-calc-formula');
+      if (formEl) formEl.textContent = `ท่อนบน (${t.toFixed(2)} ม.) - ความสูง TOP (${c.toFixed(2)} ม.) = ${netTop.toFixed(2)} ม.`;
+
+      const netTopEl = document.getElementById('len-modal-net-top-val');
+      if (netTopEl) netTopEl.textContent = `${netTop.toFixed(2)} ม.`;
+
+      const effEl = document.getElementById('len-modal-total-eff-val');
+      if (effEl) effEl.textContent = `${totalEff.toFixed(2)} ม.`;
+
+      const mfgEl = document.getElementById('len-modal-total-mfg-val');
+      if (mfgEl) mfgEl.textContent = `${totalMfg.toFixed(2)} ม. (ท่อนล่าง ${b.toFixed(2)} + กลาง ${m.toFixed(2)} + บน ${t.toFixed(2)})`;
+    }
+
+    function openPileLengthModal(pileNo) {
+      if (!pileNo && selectedCardPileNo) pileNo = selectedCardPileNo;
+      pileNo = pileNo || 1;
+      loadPileIntoLengthModal(pileNo);
+      document.getElementById('modal-pile-lengths')?.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closePileLengthModal() {
+      document.getElementById('modal-pile-lengths')?.classList.add('hidden');
+    }
+
+    // Pile Length Modal Events
+    document.getElementById('btn-open-pile-lengths')?.addEventListener('click', () => {
+      openPileLengthModal(selectedCardPileNo || 1);
+    });
+    document.getElementById('btn-close-pile-lengths')?.addEventListener('click', closePileLengthModal);
+
+    ['len-modal-inp-bottom', 'len-modal-inp-middle', 'len-modal-inp-top', 'len-modal-inp-topcut'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', updateLenModalLiveCalc);
+    });
+
+    document.getElementById('btn-len-modal-prev')?.addEventListener('click', () => {
+      let p = currentLengthModalPileNo - 1;
+      if (p < 1) p = 93;
+      loadPileIntoLengthModal(p);
+    });
+
+    document.getElementById('btn-len-modal-next')?.addEventListener('click', () => {
+      let p = currentLengthModalPileNo + 1;
+      if (p > 93) p = 1;
+      loadPileIntoLengthModal(p);
+    });
+
+    document.getElementById('btn-len-modal-save')?.addEventListener('click', () => {
+      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
+      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
+      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
+      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+      savePileLengthData(currentLengthModalPileNo, b, m, t, c);
+      if (typeof showSyncToast === 'function') {
+        showSyncToast(`✓ บันทึกความยาวเข็มต้นที่ ${currentLengthModalPileNo} สำเร็จ (รวม ${ (b + m + Math.max(0, t - c)).toFixed(2) } ม.)`);
+      }
+      if (selectedCardPileNo === currentLengthModalPileNo) {
+        openPileCard(currentLengthModalPileNo);
+      }
+    });
+
+    document.getElementById('btn-len-modal-save-next')?.addEventListener('click', () => {
+      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
+      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
+      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
+      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+      savePileLengthData(currentLengthModalPileNo, b, m, t, c);
+      if (typeof showSyncToast === 'function') {
+        showSyncToast(`✓ บันทึกต้นที่ ${currentLengthModalPileNo} เรียบร้อย`);
+      }
+      let nextNo = currentLengthModalPileNo + 1;
+      if (nextNo > 93) nextNo = 1;
+      loadPileIntoLengthModal(nextNo);
+    });
+
+    document.getElementById('btn-len-apply-footing')?.addEventListener('click', () => {
+      const curPile = PILES_DATABASE.find(p => p.no === currentLengthModalPileNo);
+      if (!curPile || !curPile.footing) return;
+      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
+      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
+      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
+      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+
+      const sameFootingPiles = PILES_DATABASE.filter(p => p.footing === curPile.footing);
+      sameFootingPiles.forEach(p => {
+        savePileLengthData(p.no, b, m, t, c);
+      });
+      if (typeof showSyncToast === 'function') {
+        showSyncToast(`✓ คัดลอกความยาวเข็มไปยังฐานราก ${curPile.footing} รวม ${sameFootingPiles.length} ต้น เรียบร้อย`);
+      }
+    });
+
+    document.getElementById('btn-len-apply-all')?.addEventListener('click', () => {
+      if (!confirm('ต้องการใช้ค่าความยาวเข็มนี้ (ล่าง/กลาง/บน/TOP) กับเสาเข็มทั้งหมด 93 ต้น หรือไม่?')) return;
+      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
+      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
+      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
+      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+
+      PILES_DATABASE.forEach(p => {
+        savePileLengthData(p.no, b, m, t, c);
+      });
+      if (typeof showSyncToast === 'function') {
+        showSyncToast(`✓ นำความยาวเข็มไปใช้กับเสาเข็มทั้งหมด 93 ต้น เรียบร้อย`);
+      }
+    });
+
+    document.getElementById('btn-len-modal-to-report')?.addEventListener('click', () => {
+      closePileLengthModal();
+      openPileSummaryReport();
+    });
+
+    // Card Live Segment Inputs Calculation (TOP คืออันเดียวกัน ใช้อันบน: card-pile-actual-top)
+    function updatePileCardLengthCalc() {
+      const segBotInp = document.getElementById('card-pile-seg-bottom');
+      const segMidInp = document.getElementById('card-pile-seg-middle');
+      const segTopInp = document.getElementById('card-pile-seg-top');
+      const actualTopInp = document.getElementById('card-pile-actual-top');
+      const b = parseFloat(segBotInp?.value) || 0;
+      const m = parseFloat(segMidInp?.value) || 0;
+      const t = parseFloat(segTopInp?.value) || 0;
+      const c = parseFloat(actualTopInp?.value) || 0;
+      const netTop = Math.max(0, t - c);
+      const totalEff = b + m + netTop;
+
+      const topNetEl = document.getElementById('card-pile-top-net-text');
+      if (topNetEl) {
+        topNetEl.textContent = `${netTop.toFixed(2)} ม. (หัก TOP ${c.toFixed(2)} ม.)`;
+      }
+
+      const effEl = document.getElementById('card-pile-eff-len-text');
+      if (effEl) effEl.textContent = `${totalEff.toFixed(2)} ม.`;
+
+      const badgeEl = document.getElementById('card-pile-eff-len-badge');
+      if (badgeEl) badgeEl.textContent = `รวม ${totalEff.toFixed(2)} ม.`;
+    }
+
+    ['card-pile-seg-bottom', 'card-pile-seg-middle', 'card-pile-seg-top', 'card-pile-actual-top'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', updatePileCardLengthCalc);
+    });
+
+    document.getElementById('btn-card-open-len-modal')?.addEventListener('click', () => {
+      if (selectedCardPileNo) {
+        openPileLengthModal(selectedCardPileNo);
+      }
+    });
+
+    // =========================================================================
+    // DEDICATED PILE SUMMARY REPORT TABLE (หน้าตารางรายงานสรุปงานเข็ม)
+    // =========================================================================
+    let sumRepActiveFooting = 'all';
+    let sumRepActiveStatus = 'all';
+
+    function openPileSummaryReport() {
+      document.getElementById('modal-pile-summary-report')?.classList.remove('hidden');
+      renderPileSummaryReportTable();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closePileSummaryReport() {
+      document.getElementById('modal-pile-summary-report')?.classList.add('hidden');
+    }
+
+    function renderPileSummaryReportTable() {
+      const tbody = document.getElementById('pile-summary-report-tbody');
+      if (!tbody) return;
+
+      const searchKeyword = (document.getElementById('sum-rep-search')?.value || '').trim().toLowerCase();
+
+      let visibleCount = 0;
+      let totalBottom = 0;
+      let totalMiddle = 0;
+      let totalTop = 0;
+      let totalTopCut = 0;
+      let totalTopNet = 0;
+      let totalEffSum = 0;
+      let totalMfgSum = 0;
+      let drivenCount = 0;
+
+      let html = '';
+
+      PILES_DATABASE.forEach(p => {
+        const rec = progressRecords[p.no] || { status: 'pending', date: '' };
+        const isDriven = rec && rec.status === 'driven';
+        if (isDriven) drivenCount++;
+
+        // Filter: Footing
+        if (sumRepActiveFooting !== 'all' && (p.footing || '') !== sumRepActiveFooting) {
+          return;
+        }
+
+        // Filter: Status
+        if (sumRepActiveStatus === 'driven' && !isDriven) return;
+        if (sumRepActiveStatus === 'pending' && isDriven) return;
+
+        // Filter: Search keyword (matches pile no, tag, footing, grid)
+        if (searchKeyword) {
+          const matchString = `${p.no} ${p.tag} ${p.footing || ''} ${p.grid}`.toLowerCase();
+          if (!matchString.includes(searchKeyword)) return;
+        }
+
+        visibleCount++;
+
+        const len = getPileLengthData(p.no);
+        totalBottom += len.bottom;
+        totalMiddle += len.middle;
+        totalTop += len.top;
+        totalTopCut += len.topCut;
+        totalTopNet += len.topNet;
+        totalEffSum += len.totalEffective;
+        totalMfgSum += len.totalManufactured;
+
+        const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+        const actTop = (rec && rec.actual_top !== undefined) ? Number(rec.actual_top).toFixed(3) : '-';
+
+        const hasCustomCoords = rec && (rec.coords_entered === true || (rec.actual_n !== undefined && p.northing !== undefined && (parseFloat(rec.actual_n) !== p.northing || parseFloat(rec.actual_e) !== p.easting)));
+        const actualCoordsStr = hasCustomCoords
+          ? `<span class="text-emerald-700 font-bold">${Number(rec.actual_n).toFixed(3)}, ${Number(rec.actual_e).toFixed(3)}</span>`
+          : '<span class="text-slate-400">-</span>';
+
+        const rowBg = isDriven ? 'bg-emerald-50/70 hover:bg-emerald-100/70' : 'bg-white hover:bg-slate-50';
+
+        html += `
+          <tr class="${rowBg} transition-colors border-b border-slate-100">
+            <td class="p-2 border-r border-slate-200 text-center font-bold text-slate-800">${p.no}</td>
+            <td class="p-2 border-r border-slate-200 text-center font-black text-slate-900">${p.tag}</td>
+            <td class="p-2 border-r border-slate-200 text-center font-bold text-slate-700">${p.footing || '-'}</td>
+            <td class="p-2 border-r border-slate-200 text-center font-bold text-slate-700">${p.grid || '-'}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono text-slate-700">${p.northing !== undefined ? p.northing.toFixed(4) : '-'}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono text-slate-700">${p.easting !== undefined ? p.easting.toFixed(4) : '-'}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono">${actualCoordsStr}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono font-bold text-amber-800">${Number(pco).toFixed(3)}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono font-bold text-sky-800">${actTop}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono font-medium bg-amber-50/40">${len.bottom.toFixed(2)}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono font-medium bg-amber-50/40">${len.middle.toFixed(2)}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono font-medium bg-amber-50/40">${len.top.toFixed(2)}</td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono font-black text-blue-900 bg-blue-50/60">
+              <span class="px-1.5 py-0.5 rounded bg-blue-100/80 text-blue-800">${len.topNet.toFixed(2)}</span>
+            </td>
+            <td class="p-2 border-r border-slate-200 text-right font-mono font-black text-emerald-950 bg-emerald-100/70">
+              <span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 border border-emerald-300">${len.totalEffective.toFixed(2)}</span>
+            </td>
+            <td class="p-2 border-r border-slate-200 text-center">
+              ${isDriven
+                ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>กดแล้ว ${rec.date ? rec.date.slice(5) : ''}
+                   </span>`
+                : `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">รอการกด</span>`
+              }
+            </td>
+            <td class="p-2 text-center">
+              <button type="button" class="btn-edit-pile-len p-1 rounded hover:bg-sky-100 text-sky-700 cursor-pointer transition-colors" data-pile="${p.no}" title="แก้ไขความยาวต้นที่ ${p.no}">
+                <i data-lucide="edit-2" class="w-3.5 h-3.5 pointer-events-none"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html || `<tr><td colspan="16" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+
+      // Wire row edit buttons
+      tbody.querySelectorAll('.btn-edit-pile-len').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const pNo = parseInt(btn.getAttribute('data-pile'), 10);
+          openPileLengthModal(pNo);
+        });
+      });
+
+      // Update KPI Cards
+      const pct = ((drivenCount / 93) * 100).toFixed(1);
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setTxt('sum-kpi-driven-count', drivenCount);
+      setTxt('sum-kpi-driven-pct', `(${pct}%)`);
+      setTxt('sum-kpi-total-eff-len', totalEffSum.toFixed(2));
+      setTxt('sum-kpi-total-mfg-len', totalMfgSum.toFixed(2));
+      setTxt('sum-kpi-total-topcut-len', totalTopCut.toFixed(2));
+
+      // Update Footer totals
+      setTxt('sum-foot-visible-count', visibleCount);
+      setTxt('sum-foot-bottom', totalBottom.toFixed(2));
+      setTxt('sum-foot-middle', totalMiddle.toFixed(2));
+      setTxt('sum-foot-top', totalTop.toFixed(2));
+      setTxt('sum-foot-topcut', totalTopCut.toFixed(2));
+      setTxt('sum-foot-topnet', totalTopNet.toFixed(2));
+      setTxt('sum-foot-efftotal', `${totalEffSum.toFixed(2)} ม.`);
+      setTxt('sum-report-rendered-info', `แสดง ${visibleCount} / 93 ต้น | ความยาวใช้งานรวม: ${totalEffSum.toFixed(2)} ม.`);
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // Wiring Summary Report Controls
+    document.getElementById('btn-open-pile-summary-report')?.addEventListener('click', openPileSummaryReport);
+    document.getElementById('btn-close-pile-summary-report')?.addEventListener('click', closePileSummaryReport);
+    document.getElementById('btn-sum-rep-open-lengths')?.addEventListener('click', () => {
+      openPileLengthModal(selectedCardPileNo || 1);
+    });
+
+    document.getElementById('sum-rep-search')?.addEventListener('input', renderPileSummaryReportTable);
+
+    // Footing Filter Buttons
+    document.querySelectorAll('.sum-footing-filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sum-footing-filter').forEach(b => {
+          b.classList.remove('active', 'bg-slate-900', 'text-white', 'font-black');
+          b.classList.add('bg-white', 'text-slate-800');
+        });
+        btn.classList.add('active', 'bg-slate-900', 'text-white', 'font-black');
+        btn.classList.remove('bg-white', 'text-slate-800');
+        sumRepActiveFooting = btn.getAttribute('data-footing') || 'all';
+        renderPileSummaryReportTable();
+      });
+    });
+
+    // Status Filter Buttons
+    document.querySelectorAll('.sum-status-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sum-status-btn').forEach(b => {
+          b.classList.remove('bg-slate-900', 'text-white', 'font-black');
+          b.classList.add('text-slate-700');
+        });
+        btn.classList.add('bg-slate-900', 'text-white', 'font-black');
+        btn.classList.remove('text-slate-700');
+        sumRepActiveStatus = btn.getAttribute('data-status') || 'all';
+        renderPileSummaryReportTable();
+      });
+    });
+
+    // CSV Export for Pile Summary Report
+    document.getElementById('btn-sum-rep-export-csv')?.addEventListener('click', () => {
+      let csv = "\uFEFFNo,Pile_Tag,Footing,Grid,Design_Northing,Design_Easting,Actual_Northing,Actual_Easting,PCO_Design_m,Actual_Top_m,Bottom_Seg_m,Middle_Seg_m,Top_Seg_m,Top_Net_m,Total_Effective_Length_m,Total_Manufactured_m,Status,Drive_Date\n";
+      PILES_DATABASE.forEach(p => {
+        const rec = progressRecords[p.no] || { status: 'pending', date: '' };
+        const len = getPileLengthData(p.no);
+        const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
+        const actTop = rec.actual_top !== undefined ? rec.actual_top : '';
+        const actN = rec.actual_n !== undefined ? rec.actual_n : '';
+        const actE = rec.actual_e !== undefined ? rec.actual_e : '';
+
+        csv += `${p.no},${p.tag},${p.footing || ''},${p.grid},${p.northing || ''},${p.easting || ''},${actN},${actE},${pco},${actTop},${len.bottom},${len.middle},${len.top},${len.topNet},${len.totalEffective},${len.totalManufactured},${rec.status},${rec.date || ''}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `PYNN_PRIDI_37_Pile_Summary_Length_Report_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+    });
+
+    // Print Pile Summary Report
+    document.getElementById('btn-sum-rep-print')?.addEventListener('click', () => {
+      window.print();
+    });
+
     function animate() {
       requestAnimationFrame(animate);
       if (activeCamera === orthoCamera) {
@@ -10687,6 +11336,14 @@
         setTimeout(() => {
           document.getElementById('btn-open-cotable')?.click();
         }, 300);
+      } else if (view === 'lengths' || hash === 'lengths') {
+        setTimeout(() => {
+          document.getElementById('btn-open-pile-lengths')?.click();
+        }, 300);
+      } else if (view === 'summary' || hash === 'summary' || view === 'pile-summary') {
+        setTimeout(() => {
+          document.getElementById('btn-open-pile-summary-report')?.click();
+        }, 300);
       } else if (view === 'quick') {
         setTimeout(() => {
           document.getElementById('btn-quick-select')?.click();
@@ -10695,6 +11352,8 @@
         document.getElementById('report-page')?.classList.add('hidden');
         document.getElementById('modal-export-image')?.classList.add('hidden');
         document.getElementById('modal-cotable')?.classList.add('hidden');
+        document.getElementById('modal-pile-lengths')?.classList.add('hidden');
+        document.getElementById('modal-pile-summary-report')?.classList.add('hidden');
         document.getElementById('quick-select-drawer')?.classList.add('hidden');
         setTimeout(() => {
           resetTopView();
@@ -10704,10 +11363,22 @@
         document.getElementById('report-page')?.classList.add('hidden');
         document.getElementById('modal-export-image')?.classList.add('hidden');
         document.getElementById('modal-cotable')?.classList.add('hidden');
+        document.getElementById('modal-pile-lengths')?.classList.add('hidden');
+        document.getElementById('modal-pile-summary-report')?.classList.add('hidden');
         document.getElementById('quick-select-drawer')?.classList.add('hidden');
         resetIsoView();
       }
     }
+
+    // Connect shortcut buttons to Pile Summary Report
+    document.getElementById('btn-rep-open-summary')?.addEventListener('click', () => {
+      document.getElementById('report-page')?.classList.add('hidden');
+      openPileSummaryReport();
+    });
+    document.getElementById('btn-cotable-to-summary')?.addEventListener('click', () => {
+      document.getElementById('modal-cotable')?.classList.add('hidden');
+      openPileSummaryReport();
+    });
 
     // Run navigation immediately and on events
     handleHashAndUrlNavigation();
@@ -10718,6 +11389,32 @@
     updateUI();
     loadProgress();
     setTimeout(setupPilingRealtime, 1000);
-  </script>
+  
+    // Sidebar Console Tab Switching Logic
+    document.querySelectorAll('.sidebar-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-tab');
+        document.querySelectorAll('.sidebar-tab-btn').forEach(b => {
+          const isAct = b.getAttribute('data-tab') === targetTab;
+          if (isAct) {
+            b.classList.add('bg-[#ffe600]', 'border-slate-900', 'text-slate-950', 'font-black', 'shadow-2xs');
+            b.classList.remove('bg-white', 'border-slate-300', 'text-slate-700', 'font-bold');
+          } else {
+            b.classList.remove('bg-[#ffe600]', 'border-slate-900', 'text-slate-950', 'font-black', 'shadow-2xs');
+            b.classList.add('bg-white', 'border-slate-300', 'text-slate-700', 'font-bold');
+          }
+        });
+        document.querySelectorAll('.sidebar-tab-pane').forEach(p => {
+          if (p.id === 'pane-' + targetTab) {
+            p.classList.remove('hidden');
+          } else {
+            p.classList.add('hidden');
+          }
+        });
+        if (window.lucide) lucide.createIcons();
+      });
+    });
+
+</script>
 </body>
 </html>
