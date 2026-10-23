@@ -1307,9 +1307,24 @@
         <div class="bg-slate-100 border-b border-black px-2.5 py-0.5 flex items-center justify-between text-[11px] font-black">
           <span>แผนผังความคืบหน้างานเสาเข็ม (Piling Progress Plan)</span>
           <div class="flex items-center gap-4 text-[10.5px]">
-            <span class="inline-flex items-center gap-1.5 font-bold text-sky-700"><span class="w-3 h-3 rounded-full bg-[#0284c7] inline-block border border-sky-800 shadow-2xs"></span> กดวันนี้</span>
-            <span class="inline-flex items-center gap-1.5 font-bold text-emerald-800"><span class="w-3 h-3 rounded-full bg-[#10b981] inline-block border border-emerald-800 shadow-2xs"></span> กดแล้ว</span>
-            <span class="inline-flex items-center gap-1.5 font-bold text-slate-800"><span class="w-3 h-3 rounded-full bg-white inline-block border-1.5 border-black shadow-2xs"></span> รอกด</span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-sky-700">
+              <svg class="w-3 h-3 inline-block shrink-0" viewBox="0 0 12 12" width="12" height="12" style="display:inline-block; vertical-align:middle;">
+                <circle cx="6" cy="6" r="5" fill="#0284c7" stroke="#0369a1" stroke-width="1.2" />
+              </svg>
+              <span>กดวันนี้</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-emerald-800">
+              <svg class="w-3 h-3 inline-block shrink-0" viewBox="0 0 12 12" width="12" height="12" style="display:inline-block; vertical-align:middle;">
+                <circle cx="6" cy="6" r="5" fill="#10b981" stroke="#047857" stroke-width="1.2" />
+              </svg>
+              <span>กดแล้ว</span>
+            </span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-slate-800">
+              <svg class="w-3 h-3 inline-block shrink-0" viewBox="0 0 12 12" width="12" height="12" style="display:inline-block; vertical-align:middle;">
+                <circle cx="6" cy="6" r="5" fill="#ffffff" stroke="#1e293b" stroke-width="1.2" />
+              </svg>
+              <span>รอกด</span>
+            </span>
           </div>
         </div>
         <div class="p-1 flex items-center justify-center bg-white" style="height: 245px;">
@@ -2435,6 +2450,14 @@
         overflow: hidden;
         page-break-after: always;
         break-after: page;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      .daily-a4-sheet * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
       }
       .daily-a4-sheet input[type="text"],
       .daily-a4-sheet input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
@@ -2615,14 +2638,25 @@
           size: A4 portrait;
           margin: 0;
         }
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+        }
         html, body {
           margin: 0 !important;
           padding: 0 !important;
           background: #ffffff !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
         }
         body.is-printing-daily-report {
           overflow: visible !important;
           background: #ffffff !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
         }
         body.is-printing-daily-report > *:not(#modal-daily-report) {
           display: none !important;
@@ -2635,6 +2669,14 @@
           margin: 0 !important;
           overflow: visible !important;
           inset: auto !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+        }
+        body.is-printing-daily-report #modal-daily-report * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
         }
         body.is-printing-daily-report #modal-daily-report .daily-no-print {
           display: none !important;
@@ -2667,6 +2709,9 @@
           padding: 7mm 8mm 6mm 8mm !important;
           box-sizing: border-box !important;
           overflow: hidden !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
         }
       }
     `;
