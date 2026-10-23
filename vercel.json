@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/piling", "destination": "/piling.html" }
+    { "source": "/piling", "destination": "/piling.html" },
+    { "source": "/footing", "destination": "/footing.html" }
   ]
 }

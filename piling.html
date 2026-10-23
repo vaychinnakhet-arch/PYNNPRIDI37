@@ -3693,26 +3693,28 @@
     let drainageObjects = window.drainageObjects;
 
     // Load Embedded GLB directly from memory via ArrayBuffer (avoids browser fetch / data-URI length limits)
-        function base64ToArrayBuffer(base64) {
-      const lBar = document.getElementById('loading-bar');
-      if (lBar) lBar.style.width = '35%';
-      const binaryString = window.atob(base64);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
+    function base64ToArrayBuffer(base64) {
+      if (!base64 || typeof base64 !== 'string') return null;
+      try {
+        const lBar = document.getElementById('loading-bar');
+        if (lBar) lBar.style.width = '35%';
+        const binaryString = window.atob(base64);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        if (lBar) lBar.style.width = '70%';
+        return bytes.buffer;
+      } catch (err) {
+        console.warn('base64ToArrayBuffer decode failed:', err);
+        return null;
       }
-      if (lBar) lBar.style.width = '70%';
-      return bytes.buffer;
     }
 
     const loader = new GLTFLoader();
-    const arrayBuffer = base64ToArrayBuffer(window.__EMBEDDED_GLB_BASE64__);
 
-    loader.parse(
-      arrayBuffer,
-      '',
-      (gltf) => {
+    function onModelLoaded(gltf) {
         const lBar = document.getElementById('loading-bar');
         if (lBar) lBar.style.width = '100%';
         currentModel = gltf.scene;
@@ -4108,9 +4110,31 @@
           overlay.classList.add('opacity-0');
           setTimeout(() => overlay.remove(), 400);
         }
-      },
-            (err) => {
-        console.error('Error parsing GLB:', err);
+      }
+
+      function onModelError(err) {
+        console.error('Error loading GLB:', err);
+        if (!window._triedDirectModelLoad) {
+          window._triedDirectModelLoad = true;
+          console.log('Attempting fallback: loader.load("model.glb")');
+          loader.load('model.glb', onModelLoaded, (xhr) => {
+            if (xhr.lengthComputable) {
+              const lBar = document.getElementById('loading-bar');
+              if (lBar) lBar.style.width = Math.round((xhr.loaded / xhr.total) * 100) + '%';
+            }
+          }, (err2) => {
+            console.error('Fallback model.glb load failed:', err2);
+            const lText = document.getElementById('loading-text');
+            if (lText) lText.textContent = "Error loading 3D model: " + (err2?.message || err2);
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+              overlay.classList.add('opacity-0');
+              setTimeout(() => overlay.remove(), 400);
+            }
+          });
+          return;
+        }
+
         const lText = document.getElementById('loading-text');
         if (lText) lText.textContent = "Error loading 3D model: " + (err?.message || err);
         setTimeout(() => {
@@ -4121,7 +4145,20 @@
           }
         }, 2500);
       }
-    );
+
+      const arrayBuffer = base64ToArrayBuffer(window.__EMBEDDED_GLB_BASE64__);
+      if (arrayBuffer) {
+        loader.parse(arrayBuffer, '', onModelLoaded, onModelError);
+      } else {
+        console.log('__EMBEDDED_GLB_BASE64__ not present, loading model.glb directly');
+        window._triedDirectModelLoad = true;
+        loader.load('model.glb', onModelLoaded, (xhr) => {
+          if (xhr.lengthComputable) {
+            const lBar = document.getElementById('loading-bar');
+            if (lBar) lBar.style.width = Math.round((xhr.loaded / xhr.total) * 100) + '%';
+          }
+        }, onModelError);
+      }
 
     // Safety timeout: ensure overlay never permanently freezes UI
     setTimeout(() => {

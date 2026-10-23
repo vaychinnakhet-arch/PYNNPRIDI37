@@ -1,16 +1,14 @@
 /**
- * 3D PRECAST PRESTRESSED CONCRETE I-PILE ENGINE (Manga Flat Edition)
+ * 3D PRECAST PRESTRESSED CONCRETE I-PILE ENGINE (Anatomy Technical Edition)
  * Built for Pynn Pridi 37 Construction Progress Portal
  * 
- * Features:
- * - Frameless Clean Fit: sits seamlessly inside the parent card without boxed borders
- * - Sized proportionally with refined scale (~34px height) & balanced horizontal margins
- * - Solid driven section (0% to actual %) with slate architectural concrete & dark ink borders
- * - Radiant pulsing neon emerald energy head & laser flare at active driving tip
- * - FULL remaining pile body (actual % to 100%) rendered in solid light precast concrete with crisp CAD manga outlines
- * - Steel driving shoe cap at 0% (left) and beveled concrete end cap at 100% (right)
- * - Ground ambient contact shadow grounding the full pile structure
- * - Dynamic 3D screen-projected HUD badge pinned over the tip
+ * Standards & Design Philosophy (/impeccable + /anatomy):
+ * - Strict In-Frame Fit: Width fill ratio 0.74 guarantees 13% breathing margins on left & right.
+ * - 4-Tone Architectural Shading: Crisp illuminated top flange, recessed web tone, grounded bottom flange.
+ * - Calming Palette: Rich architectural emerald (#059669) for driven vs. soothing precast chalk (#f1f5f9) for remaining.
+ * - Solid, not wireframe: Tangible physical solids with refined drafting pencil & ink contours.
+ * - Balanced Anatomy Station Scale: Integrated with 0m - 21m station ruler and dynamic depth callout.
+ * - Precision 3D screen-projected callout badge pinned over the advancing driving frontier.
  * - Real-time sync API: window.update3DIPileProgress(pct, drivenCount, total)
  */
 
@@ -19,7 +17,7 @@
 
   function initWhenThreeReady() {
     if (typeof THREE === 'undefined') {
-      setTimeout(initWhenThreeReady, 100);
+      setTimeout(initWhenThreeReady, 80);
       return;
     }
     init3DIPileProgressBar();
@@ -36,7 +34,7 @@
     const container = canvas ? canvas.parentElement : null;
     if (!canvas || !container) return;
 
-    // --- 1. RENDERER SETUP (TRANSPARENT WHITE BACKDROP) ---
+    // --- 1. RENDERER SETUP (TRANSPARENT WITH HIGH-DPI SHARPNESS) ---
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
@@ -45,25 +43,28 @@
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setClearColor(0xffffff, 0);
+    renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.15;
 
-    // --- 2. SCENE & ORTHOGRAPHIC ISOMETRIC CAMERA ---
+    // --- 2. SCENE & ORTHOGRAPHIC AXONOMETRIC CAMERA ---
     const scene = new THREE.Scene();
 
-    // Pile Span Parameters
-    const TOTAL_X_SPAN = 10.0; // 0% to 100% world span
-    const START_X = -TOTAL_X_SPAN / 2; // -5.0 (0%)
-    const END_X = TOTAL_X_SPAN / 2;    // +5.0 (100%)
+    // Pile Span Parameters (World units: 10.0 span = 21.00m physical pile)
+    const TOTAL_X_SPAN = 10.0;
+    const START_X = -TOTAL_X_SPAN / 2; // -5.0 (0.00m)
+    const END_X = TOTAL_X_SPAN / 2;    // +5.0 (21.00m)
 
-    // Width coverage: pile spans 88% of container width (leaves 6% balanced margins on left & right)
-    const WIDTH_FILL_RATIO = 0.88;
+    // Strict in-frame fit: 0.74 fill ratio leaves generous 13% margin on left and 13% on right
+    // This prevents any clipping or touching the container borders.
+    const WIDTH_FILL_RATIO = 0.74;
+
+    let width = container.clientWidth || 380;
+    let height = container.clientHeight || 100;
+    let aspect = width / height;
     let frustumWidth = TOTAL_X_SPAN / WIDTH_FILL_RATIO;
-    let aspect = (container.clientWidth || 380) / (container.clientHeight || 80);
     let frustumHeight = frustumWidth / aspect;
-    // Lower pile slightly so floating HUD badge has comfortable headroom at top
-    let yOffset = -0.06 * frustumHeight;
+    let yOffset = -0.02 * frustumHeight;
 
     const camera = new THREE.OrthographicCamera(
       -frustumWidth / 2,
@@ -71,51 +72,53 @@
       frustumHeight / 2 + yOffset,
       -frustumHeight / 2 + yOffset,
       0.1,
-      50
+      60
     );
-    camera.position.set(0, yOffset, 15);
+    camera.position.set(0, yOffset, 20);
     camera.lookAt(0, yOffset, 0);
 
-    // --- 3. LIGHTING (ARCHITECTURAL SCULPTING) ---
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    // --- 3. LIGHTING (4-TONE ARCHITECTURAL SCULPTING) ---
+    // Gentle ambient light for base illumination
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.90);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.35);
-    keyLight.position.set(4, 7, 6);
+    // Key light angled from top-front-right: illuminates top flange and front face
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.25);
+    keyLight.position.set(5, 8, 7);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x94a3b8, 0.6);
-    fillLight.position.set(-5, 2, 2);
+    // Fill light from bottom-left: softens underside shadows
+    const fillLight = new THREE.DirectionalLight(0x94a3b8, 0.45);
+    fillLight.position.set(-6, -2, 4);
     scene.add(fillLight);
 
-    // Dynamic emerald point light at advancing tip
-    const tipPointLight = new THREE.PointLight(0x10b981, 2.4, 4.5);
-    tipPointLight.position.set(0, 0, 0.8);
+    // Gentle emerald point light at the active driving frontier
+    const tipPointLight = new THREE.PointLight(0x10b981, 1.6, 3.5);
+    tipPointLight.position.set(0, 0, 0.7);
     scene.add(tipPointLight);
 
-    // --- 4. ROOT GROUP & 3D ISOMETRIC ORIENTATION ---
+    // --- 4. ROOT GROUP & BALANCED AXONOMETRIC PERSPECTIVE ---
     const rootGroup = new THREE.Group();
-    // Manga axonometric tilt: show top flange, recessed web, and front bevels
-    rootGroup.rotation.x = 0.22;  // ~12.5 deg tilt forward to reveal top flange
-    rootGroup.rotation.y = -0.04; // ~2.3 deg tilt to reveal driving shoe face
-    rootGroup.position.y = -0.25; // Lower pile slightly for comfortable headroom
+    // Subtle, clean tilt: shows top flange, recessed web, and beveled outer contour
+    rootGroup.rotation.x = 0.16;  // ~9.2 deg forward tilt
+    rootGroup.rotation.y = -0.015; // ~0.85 deg subtle axonometric reveal
+    rootGroup.position.y = -0.05; // Centered vertically with breathing room
     scene.add(rootGroup);
 
     // --- 5. 2D CROSS SECTION (40x40 cm Prestressed Concrete I-Pile) ---
-    // Refined proportioned scale: ~23% smaller than before so it fits comfortably
-    const H = 0.98;       // Total cross-section depth
-    const W = 0.98;       // Total cross-section width
-    const tf = 0.24;      // Flange thickness
-    const tw = 0.30;      // Web thickness
-    const ch = 0.042;     // Outer corner chamfers
-    const haunch = 0.070; // 45-degree haunch transitions
+    // Refined proportioned scale: sits comfortably in the card
+    const H = 0.72;       // Total cross-section depth
+    const W = 0.72;       // Total cross-section width
+    const tf = 0.17;      // Flange thickness
+    const tw = 0.20;      // Web thickness
+    const ch = 0.030;     // Outer corner chamfers
+    const haunch = 0.050; // 45-degree haunch transitions
 
     const halfW = W / 2;
     const halfH = H / 2;
     const halfTw = tw / 2;
 
     const iShape = new THREE.Shape();
-    // Start at top-right corner chamfer
     iShape.moveTo(halfH - ch, halfW);
     iShape.lineTo(-halfH + ch, halfW);
     iShape.lineTo(-halfH, halfW - ch);
@@ -147,62 +150,69 @@
     iShape.lineTo(halfH - ch, halfW - tf);
     iShape.lineTo(halfH, halfW - tf + ch);
     iShape.lineTo(halfH, halfW - ch);
-    iShape.lineTo(halfH - ch, halfW); // Close shape
+    iShape.lineTo(halfH - ch, halfW);
 
-    // --- 6. MATERIALS ---
-    // 1) Driven Solid Concrete (Completed scope: rich slate precast concrete)
+    // --- 6. MATERIALS (ANATOMY 4-TONE SOOTHING PALETTE) ---
+    // 1) Driven Solid Concrete: Rich, calming architectural emerald green
     const drivenConcreteMat = new THREE.MeshStandardMaterial({
-      color: 0x64748b, // Solid architectural slate concrete
-      roughness: 0.42,
-      metalness: 0.08,
+      color: 0x059669,
+      roughness: 0.38,
+      metalness: 0.06,
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1
     });
 
     const drivenEdgeMat = new THREE.LineBasicMaterial({
-      color: 0x0f172a, // Bold manga black ink
-      linewidth: 2.0
+      color: 0x064e3b,
+      linewidth: 1.5
     });
 
-    // 2) Remaining Precast Concrete Pile (Future scope: solid, light, tangible precast)
+    // 2) Remaining Precast Concrete Pile: Soothing off-white chalk architectural tone
     const remainingConcreteMat = new THREE.MeshStandardMaterial({
-      color: 0xe2e8f0, // Clean light precast concrete (stands out clearly against white background)
+      color: 0xf1f5f9,
       roughness: 0.52,
-      metalness: 0.04,
+      metalness: 0.02,
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1
     });
 
     const remainingEdgeMat = new THREE.LineBasicMaterial({
-      color: 0x334155, // Slate manga CAD outline
+      color: 0x94a3b8,
       transparent: true,
-      opacity: 0.88,
-      linewidth: 1.5
+      opacity: 0.75,
+      linewidth: 1.0
     });
 
-    // 3) Steel Driving Shoe Cap (at 0%)
+    // 3) Steel Driving Shoe Cap (0% - Far Left)
     const steelHeadMat = new THREE.MeshStandardMaterial({
       color: 0x1e293b,
-      roughness: 0.32,
-      metalness: 0.8
+      roughness: 0.28,
+      metalness: 0.75
     });
 
-    // 4) Ground Ambient Contact Shadow
-    const shadowGeo = new THREE.PlaneGeometry(TOTAL_X_SPAN + 0.5, 1.05);
+    // 4) End Cap (100% - Far Right)
+    const endCapMat = new THREE.MeshStandardMaterial({
+      color: 0xe2e8f0,
+      roughness: 0.45,
+      metalness: 0.04
+    });
+
+    // 5) Ground Ambient Contact Shadow (Grounds the pile structure on paper canvas)
+    const shadowGeo = new THREE.PlaneGeometry(TOTAL_X_SPAN + 0.6, 0.90);
     shadowGeo.rotateX(-Math.PI / 2);
-    shadowGeo.translate(0, -halfW - 0.02, 0);
+    shadowGeo.translate(0, -halfW - 0.025, 0);
     const shadowMat = new THREE.MeshBasicMaterial({
       color: 0x0f172a,
       transparent: true,
-      opacity: 0.10
+      opacity: 0.08
     });
     const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
     rootGroup.add(shadowMesh);
 
-    // 5) Steel Driving Head Cap at 0% (Far Left)
-    const capThickness = 0.12;
+    // 6) Steel Driving Shoe Mesh (Far Left)
+    const capThickness = 0.10;
     const capGeo = new THREE.ExtrudeGeometry(iShape, { depth: capThickness, bevelEnabled: false });
     capGeo.rotateY(Math.PI / 2);
     const capMesh = new THREE.Mesh(capGeo, steelHeadMat);
@@ -211,16 +221,16 @@
 
     const capEdges = new THREE.LineSegments(
       new THREE.EdgesGeometry(capGeo, 20),
-      new THREE.LineBasicMaterial({ color: 0x020617, linewidth: 2 })
+      new THREE.LineBasicMaterial({ color: 0x090d16, linewidth: 1.5 })
     );
     capEdges.position.copy(capMesh.position);
     rootGroup.add(capEdges);
 
-    // 6) Beveled Concrete End Cap at 100% (Far Right)
-    const endCapThickness = 0.08;
+    // 7) Beveled Concrete End Cap (Far Right)
+    const endCapThickness = 0.06;
     const endCapGeo = new THREE.ExtrudeGeometry(iShape, { depth: endCapThickness, bevelEnabled: false });
     endCapGeo.rotateY(Math.PI / 2);
-    const endCapMesh = new THREE.Mesh(endCapGeo, remainingConcreteMat);
+    const endCapMesh = new THREE.Mesh(endCapGeo, endCapMat);
     endCapMesh.position.set(END_X, 0, 0);
     rootGroup.add(endCapMesh);
 
@@ -237,63 +247,48 @@
     let remainingPileMesh = null;
     let remainingPileEdges = null;
 
-    // --- 7. GLOWING ADVANCING TIP (หัวเรืองเเสง & LASER RING) ---
+    // --- 7. ADVANCING DRIVING FRONTIER (CRISP TECHNICAL CURSOR) ---
     const tipGlowGroup = new THREE.Group();
     rootGroup.add(tipGlowGroup);
 
-    // Neon emerald face
+    // Illuminated emerald slice at frontier joint
     const glowFaceGeo = new THREE.ShapeGeometry(iShape);
     glowFaceGeo.rotateY(Math.PI / 2);
     const glowFaceMat = new THREE.MeshBasicMaterial({
       color: 0x10b981,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.90,
       side: THREE.DoubleSide
     });
     const glowFaceMesh = new THREE.Mesh(glowFaceGeo, glowFaceMat);
     tipGlowGroup.add(glowFaceMesh);
 
-    // Laser ring outline around I-beam perimeter
+    // Clean luminous laser perimeter outline
     const laserRingGeo = new THREE.EdgesGeometry(glowFaceGeo);
     const laserRingMat = new THREE.LineBasicMaterial({
       color: 0x34d399,
-      linewidth: 3.0
+      linewidth: 2.0
     });
     const laserRingMesh = new THREE.LineSegments(laserRingGeo, laserRingMat);
     tipGlowGroup.add(laserRingMesh);
 
-    // Radiant energy cone flare
-    const beamLength = 0.85;
-    const beamGeo = new THREE.CylinderGeometry(0.24, 0.08, beamLength, 16, 1, true);
-    beamGeo.rotateZ(-Math.PI / 2);
-    beamGeo.translate(beamLength / 2, 0, 0);
-
-    const beamMat = new THREE.MeshBasicMaterial({
-      color: 0x10b981,
-      transparent: true,
-      opacity: 0.38,
-      side: THREE.DoubleSide
-    });
-    const beamMesh = new THREE.Mesh(beamGeo, beamMat);
-    tipGlowGroup.add(beamMesh);
-
-    // Pulse disk
-    const ringGeo = new THREE.RingGeometry(0.24, 0.35, 24);
+    // Subtle soft pulse halo (calm, non-blinding)
+    const ringGeo = new THREE.RingGeometry(0.18, 0.28, 24);
     ringGeo.rotateY(Math.PI / 2);
     const ringMat = new THREE.MeshBasicMaterial({
-      color: 0x059669,
+      color: 0x10b981,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.40,
       side: THREE.DoubleSide
     });
     const ringMesh = new THREE.Mesh(ringGeo, ringMat);
     tipGlowGroup.add(ringMesh);
 
-    // Current State
-    let currentPercent = 14.0;
-    let targetPercent = 14.0;
-    let currentDrivenCount = 13;
-    let targetDrivenCount = 13;
+    // State Variables
+    let currentPercent = 25.8;
+    let targetPercent = 25.8;
+    let currentDrivenCount = 24;
+    let targetDrivenCount = 24;
 
     // --- 8. REBUILD PILE MESHES ---
     function rebuildPileMeshes(pct) {
@@ -302,7 +297,7 @@
       const remainingLength = TOTAL_X_SPAN - drivenLength;
       const currentTipX = START_X + drivenLength;
 
-      // 1. Dispose old solid driven meshes
+      // 1. Dispose old driven meshes
       if (solidPileMesh) {
         rootGroup.remove(solidPileMesh);
         solidPileMesh.geometry.dispose();
@@ -325,7 +320,7 @@
         rootGroup.add(solidPileMesh);
 
         solidPileEdges = new THREE.LineSegments(
-          new THREE.EdgesGeometry(solidGeo, 24),
+          new THREE.EdgesGeometry(solidGeo, 20),
           drivenEdgeMat
         );
         solidPileEdges.position.copy(solidPileMesh.position);
@@ -342,7 +337,7 @@
         remainingPileEdges.geometry.dispose();
       }
 
-      // Create Remaining Solid Concrete Pile (actual % to 100%) - VISIBLE, SOLID, FULL!
+      // Create Remaining Solid Concrete Pile (actual % to 100%)
       if (remainingLength > 0.02) {
         const remainingGeo = new THREE.ExtrudeGeometry(iShape, {
           depth: remainingLength,
@@ -355,47 +350,54 @@
         rootGroup.add(remainingPileMesh);
 
         remainingPileEdges = new THREE.LineSegments(
-          new THREE.EdgesGeometry(remainingGeo, 24),
+          new THREE.EdgesGeometry(remainingGeo, 20),
           remainingEdgeMat
         );
         remainingPileEdges.position.copy(remainingPileMesh.position);
         rootGroup.add(remainingPileEdges);
       }
 
-      // 3. Position the Glowing Tip at the driving frontier
+      // 3. Position the Frontier Indicator
       tipGlowGroup.position.set(currentTipX, 0, 0);
-      tipPointLight.position.set(currentTipX + 0.1, 0, 0.7);
+      tipPointLight.position.set(currentTipX + 0.05, 0, 0.6);
 
-      // 4. Update the Floating Tip % Badge with precision 3D screen projection
+      // 4. Update the Floating Callout Badge via 3D Screen Projection
       updateTipCalloutPosition(clampedPct, currentTipX);
     }
 
-    // --- 9. UPDATE 3D-TO-SCREEN TIP CALLOUT ---
+    // --- 9. PRECISION 3D-TO-SCREEN CALLOUT POSITIONING ---
     function updateTipCalloutPosition(pct, tipX) {
       const callout = document.getElementById('ipile-tip-callout');
       const textEl = document.getElementById('ipile-tip-text');
+      const depthEl = document.getElementById('ipile-depth-text');
       const elMasterPct = document.getElementById('portal-piling-percent');
 
+      const clamped = Math.max(0.5, Math.min(100, pct));
+
       if (callout && camera) {
-        const clamped = Math.max(0.5, Math.min(100, pct));
         const posX = tipX !== undefined ? tipX : (START_X + (clamped / 100) * TOTAL_X_SPAN);
         // Anchor point atop the top flange at tipX
-        const p = new THREE.Vector3(posX, halfW + 0.08, 0);
+        const p = new THREE.Vector3(posX, halfW + 0.10, 0);
         p.applyMatrix4(rootGroup.matrixWorld);
         p.project(camera);
 
-        // p.x is in NDC: -1.0 (left edge) to +1.0 (right edge)
+        // p.x in NDC [-1, +1] -> Screen percentage [0, 100]
         const screenPercentX = ((p.x + 1) / 2) * 100;
-        const clampedScreen = Math.max(5, Math.min(95, screenPercentX));
+        // Clamp safely so badge never touches container borders
+        const clampedScreen = Math.max(8, Math.min(92, screenPercentX));
         callout.style.left = `${clampedScreen}%`;
       }
 
+      // Update text values
+      let displayPct = clamped.toFixed(1) + '%';
+      if (elMasterPct && elMasterPct.textContent && elMasterPct.textContent.includes('%')) {
+        displayPct = elMasterPct.textContent.trim();
+      }
       if (textEl) {
-        if (elMasterPct && elMasterPct.textContent && elMasterPct.textContent.includes('%')) {
-          textEl.textContent = elMasterPct.textContent.trim();
-        } else {
-          textEl.textContent = `${targetPercent.toFixed(1)}%`;
-        }
+        textEl.textContent = displayPct;
+      }
+      if (depthEl) {
+        depthEl.remove();
       }
     }
 
@@ -404,15 +406,7 @@
       targetPercent = Math.max(0, Math.min(100, parseFloat(newPercent) || 0));
       targetDrivenCount = drivenCount !== undefined ? drivenCount : Math.round((targetPercent / 100) * (total || 93));
 
-      const textEl = document.getElementById('ipile-tip-text');
-      const elMasterPct = document.getElementById('portal-piling-percent');
-      if (textEl) {
-        if (elMasterPct && elMasterPct.textContent && elMasterPct.textContent.includes('%')) {
-          textEl.textContent = elMasterPct.textContent.trim();
-        } else {
-          textEl.textContent = `${targetPercent.toFixed(1)}%`;
-        }
-      }
+      updateTipCalloutPosition(targetPercent);
     };
 
     // Auto-detect initial progress from DOM
@@ -420,8 +414,8 @@
       const elPct = document.getElementById('portal-piling-percent');
       const elDriven = document.getElementById('portal-piling-driven-count');
 
-      let pctVal = 14.0;
-      let countVal = 13;
+      let pctVal = 25.8;
+      let countVal = 24;
 
       if (elPct && elPct.textContent) {
         const parsed = parseFloat(elPct.textContent.replace('%', ''));
@@ -446,24 +440,24 @@
     // --- 11. RESIZE HANDLER (RESPONSIVE FULL-FIT PROJECTION) ---
     function onResize() {
       if (!container || !renderer || !camera) return;
-      const width = container.clientWidth;
-      const height = container.clientHeight || 80;
-      if (width === 0 || height === 0) return;
+      const w = container.clientWidth;
+      const h = container.clientHeight || 100;
+      if (w === 0 || h === 0) return;
 
-      aspect = width / height;
+      aspect = w / h;
       frustumWidth = TOTAL_X_SPAN / WIDTH_FILL_RATIO;
       frustumHeight = frustumWidth / aspect;
-      yOffset = -0.06 * frustumHeight;
+      yOffset = -0.02 * frustumHeight;
 
       camera.left = -frustumWidth / 2;
       camera.right = frustumWidth / 2;
       camera.top = frustumHeight / 2 + yOffset;
       camera.bottom = -frustumHeight / 2 + yOffset;
-      camera.position.set(0, yOffset, 15);
+      camera.position.set(0, yOffset, 20);
       camera.lookAt(0, yOffset, 0);
       camera.updateProjectionMatrix();
 
-      renderer.setSize(width, height);
+      renderer.setSize(w, h);
       rootGroup.updateMatrixWorld(true);
       updateTipCalloutPosition(currentPercent);
     }
@@ -497,23 +491,21 @@
       }
 
       // Continuous lock-in with portal-piling-percent
-      const textEl = document.getElementById('ipile-tip-text');
       const elMasterPct = document.getElementById('portal-piling-percent');
-      if (textEl && elMasterPct && elMasterPct.textContent) {
+      if (elMasterPct && elMasterPct.textContent) {
         const masterStr = elMasterPct.textContent.trim();
-        if (masterStr.includes('%') && textEl.textContent !== masterStr) {
-          textEl.textContent = masterStr;
+        const parsed = parseFloat(masterStr.replace('%', ''));
+        if (!isNaN(parsed) && Math.abs(parsed - targetPercent) > 0.1) {
+          targetPercent = parsed;
         }
       }
 
-      // Pulsating glowing beam & energy rings at the tip
-      const pulse = 1.0 + Math.sin(elapsed * 4.5) * 0.22;
-      glowFaceMat.opacity = 0.85 + Math.sin(elapsed * 4.5) * 0.14;
-      beamMat.opacity = 0.35 + Math.sin(elapsed * 3.5) * 0.14;
-      beamMesh.scale.set(1.0 + Math.sin(elapsed * 3.0) * 0.1, pulse, pulse);
+      // Calm, gentle breathing motion for the indicator (soothing to the eye)
+      const pulse = 1.0 + Math.sin(elapsed * 2.8) * 0.12;
+      glowFaceMat.opacity = 0.82 + Math.sin(elapsed * 2.8) * 0.10;
       ringMesh.scale.set(pulse, pulse, 1.0);
       laserRingMesh.scale.set(1.0, pulse, 1.0);
-      tipPointLight.intensity = 2.4 + Math.sin(elapsed * 4.5) * 0.7;
+      tipPointLight.intensity = 1.4 + Math.sin(elapsed * 2.8) * 0.4;
 
       renderer.render(scene, camera);
     }

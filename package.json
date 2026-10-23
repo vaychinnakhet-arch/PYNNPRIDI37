@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && node --input-type=module -e \"import fs from 'node:fs'; try { fs.copyFileSync('piling.html', 'dist/piling.html'); } catch(e){} try { fs.copyFileSync('footing.html', 'dist/footing.html'); } catch(e){} try { if(fs.existsSync('footings_metadata.json')) fs.copyFileSync('footings_metadata.json', 'dist/footings_metadata.json'); } catch(e){} try { if(fs.existsSync('html-to-image.min.js')) fs.copyFileSync('html-to-image.min.js', 'dist/html-to-image.min.js'); } catch(e){}\"",
+    "build": "vite build && node --input-type=module -e \"import fs from 'node:fs'; ['piling.html', 'footing.html', 'piling_embedded_data.js', 'manga_theme.css', 'ipile_3d.js', 'daily_report_studio.js', 'footings_metadata.json', 'badge_offsets.json', 'model.glb', 'chart.umd.js', 'three.min.js', 'html-to-image.min.js', 'nintendoIcons.js'].forEach(f => { try { if (fs.existsSync(f)) fs.copyFileSync(f, 'dist/' + f); } catch(e){} });\"",
     "start": "node --import tsx server.ts",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
