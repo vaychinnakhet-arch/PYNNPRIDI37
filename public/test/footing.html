@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PYNN PRIDI 37 — ผังฐานราก ค.ส.ล. 3 มิติ (3D Footing Progress Tracker)</title>
+
+    <!-- Google Fonts: DoodleWeb Typography (Fraunces Editorial Display + DM Sans / Prompt Body + Space Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,600;1,9..144,700;1,9..144,800;1,9..144,900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,600&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="doodle_theme.css">
+  <link rel="stylesheet" href="manga_theme.css">
+
+    <style>
+    :root {
+      --dw-cream: #FAF5EE;
+      --dw-paper: #FFFFFF;
+      --dw-navy: #1D2B45;
+      --dw-orange: #F26B2A;
+      --dw-gold: #F7B844;
+      --dw-teal: #40C4C4;
+      --dw-green: #10B981;
+      --dw-coral: #E64C3C;
+      --ink: #1D2B45;
+      --paper: #FFFFFF;
+      --border-comic: 2px solid #1D2B45;
+      --shadow-comic: 3px 3px 0px #1D2B45;
+      --shadow-comic-sm: 2px 2px 0px #1D2B45;
+      --shadow-comic-lg: 4.5px 4.5px 0px #1D2B45;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: var(--dw-cream);
+      color: var(--ink);
+      font-family: 'DM Sans', 'Prompt', 'Sarabun', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .font-display { font-family: 'Fraunces', Georgia, serif; }
+    .font-bangers { font-family: 'Fraunces', Georgia, serif; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
+    .font-prompt { font-family: 'Prompt', 'DM Sans', sans-serif; }
+
+    .comic-card {
+      background: var(--paper);
+      border: 2px solid var(--dw-navy);
+      border-radius: 1.25rem !important; /* rounded-2xl */
+      box-shadow: 4px 4px 0px var(--dw-navy);
+    }
+
+    .comic-btn {
+      background: #FFFFFF;
+      color: var(--ink);
+      border: 2px solid var(--dw-navy);
+      border-radius: 9999px !important; /* rounded-full */
+      box-shadow: 2px 2px 0px var(--dw-navy);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .comic-btn:hover {
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 3px 3px 0px var(--dw-orange);
+      background: #FAF5EE;
+    }
+    .comic-btn:active, .comic-btn.active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px var(--dw-navy);
+      background: var(--dw-orange);
+      color: #FFFFFF;
+      border-color: var(--dw-navy);
+    }
+
+    /* Tactile DoodleWeb Layer Toggle Cards */
+    .layer-card {
+      position: relative;
+      background: #FFFFFF;
+      border: 1.5px solid #E2D9CC;
+      border-radius: 0.875rem !important; /* rounded-xl */
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: none;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+    .layer-card:hover {
+      background: #FAF5EE;
+      border-color: var(--dw-navy);
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
+    }
+    .layer-card.active {
+      border: 2px solid var(--dw-navy);
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
+    }
+    .layer-card.active:hover {
+      box-shadow: 3.5px 3.5px 0px var(--dw-orange);
+    }
+    .layer-card.active.active-footing {
+      background: #F0F9FF;
+    }
+    .layer-card.active.active-pile {
+      background: #FFFDF7;
+    }
+    .layer-card.active.active-grid {
+      background: #F8FAFC;
+    }
+    .layer-card.active.active-boundary {
+      background: #FFF1F2;
+    }
+    .layer-card.active.active-badge {
+      background: #FAF5FF;
+    }
+    .layer-card.active.active-ground {
+      background: #F8FAFC;
+    }
+
+    /* Tactile Toggle Switch Pill */
+    .toggle-switch {
+      width: 38px;
+      height: 22px;
+      background: #E2D9CC;
+      border: 2px solid var(--dw-navy);
+      border-radius: 9999px !important;
+      position: relative;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+      cursor: pointer;
+      box-shadow: inset 0 1px 2px rgba(29, 43, 69, 0.08);
+    }
+    .toggle-knob {
+      width: 14px;
+      height: 14px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--dw-navy);
+      border-radius: 9999px !important;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 1px 1px 0px var(--dw-navy);
+    }
+    .layer-card.active .toggle-knob {
+      transform: translateX(16px);
+      border-color: var(--dw-navy);
+    }
+    .layer-card.active.active-footing .toggle-switch {
+      background: #0284C7;
+    }
+    .layer-card.active.active-pile .toggle-switch {
+      background: #10B981;
+    }
+    .layer-card.active.active-grid .toggle-switch {
+      background: #6366F1;
+    }
+    .layer-card.active.active-boundary .toggle-switch {
+      background: var(--dw-coral);
+    }
+    .layer-card.active.active-badge .toggle-switch {
+      background: #8B5CF6;
+    }
+    .layer-card.active.active-ground .toggle-switch {
+      background: #64748B;
+    }
+
+    /* Isolate Solo Button */
+    .btn-solo {
+      opacity: 0;
+      padding: 2px 7px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      background: #FFFFFF;
+      border: 1.5px solid var(--dw-navy);
+      border-radius: 9999px !important;
+      color: var(--dw-navy);
+      box-shadow: 1px 1px 0px var(--dw-navy);
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .layer-card:hover .btn-solo {
+      opacity: 1;
+    }
+    .btn-solo:hover {
+      background: var(--dw-navy);
+      color: #FFFFFF;
+      box-shadow: 1.5px 1.5px 0px var(--dw-orange);
+    }
+
+    #canvas-container {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Inspector Drawer */
+    #inspector-drawer {
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 40;
+    }
+    #inspector-drawer.closed {
+      transform: translateX(105%);
+      pointer-events: none;
+    }
+
+    /* Compact Footing Pill */
+    .footing-pill {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1.5px solid #0f172a;
+      border-radius: 6px;
+      box-shadow: 1.5px 1.5px 0px #0f172a;
+      padding: 2px 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 800;
+      color: #0f172a;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    /* Loading overlay */
+    #loading-overlay {
+      transition: opacity 0.4s ease;
+    }
+
+    /* Mobile responsive floating toolbar */
+    @media (max-width: 768px) {
+      #footing-toolbar {
+        top: 68px !important;
+        left: 8px !important;
+        max-height: calc(100vh - 130px);
+        overflow-y: auto;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+      }
+      #footing-toolbar.collapsed-mobile {
+        transform: translateX(-120%);
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  </style>
+
+  <!-- Importmap for Three.js & OrbitControls & GLTFLoader -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body class="w-screen h-screen overflow-hidden relative">
+
+  <!-- 3D WEBGL CANVAS CONTAINER -->
+  <div id="canvas-container"></div>
+
+  <!-- COMPACT FLOATING HTML PILL BADGES CONTAINER -->
+  <div id="badges-container" class="absolute inset-0 pointer-events-none z-10 overflow-hidden hidden"></div>
+
+  <!-- HOVER TOOLTIP -->
+  <div id="footing-hover-tooltip" class="absolute pointer-events-none hidden z-30 comic-card px-3 py-1.5 text-xs bg-white/95 backdrop-blur font-bold shadow-md flex items-center gap-2">
+    <div id="tooltip-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+    <div id="tooltip-text" class="text-slate-800"></div>
+  </div>
+
+    <!-- TOP HEADER & LIVE KPI BAR (DoodleWeb Edition) -->
+  <header class="absolute top-2 left-2 right-2 md:left-4 md:right-4 z-20 comic-card bg-white/95 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-between gap-2 shadow-[3.5px_3.5px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl pointer-events-auto flex-nowrap overflow-x-auto custom-scrollbar-none">
+    
+    <!-- 1. Left: Brand & Title -->
+    <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+      <a href="index.html" class="comic-btn px-2.5 sm:px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-[#FAF5EE]" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">หน้าแรก</span>
+      </a>
+      <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#1D2B45] font-display">
+        P37
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-xs sm:text-sm font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
+            Pynn <span class="text-[#F26B2A] italic">Pridi</span> 37
+          </h1>
+          <span class="hidden md:inline-flex bg-[#E0F2FE] text-[#0369A1] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#BAE6FD]">
+            🏗️ ผังฐานราก 21 ฐาน
+          </span>
+        </div>
+        <p class="text-[9.5px] text-[#3E4B69] font-medium mt-0.5 hidden sm:block">ผังฐานราก ค.ส.ล. • เสาเข็ม 93 ต้น • ระดับ TOP-BOT-PCO</p>
+      </div>
+    </div>
+
+    <!-- 2. Right: Primary Metrics & Action Controls -->
+    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <!-- Main KPI: เทคอนกรีตแล้ว -->
+      <div class="bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[1.5px_1.5px_0px_#1D2B45] px-3 py-1 flex items-center gap-1.5 text-xs font-bold shrink-0">
+        <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase hidden sm:inline">เทคอนกรีต:</span>
+        <span id="kpi-poured-count" class="font-mono font-black text-sm text-[#10B981]">0</span>
+        <span class="text-[11px] text-[#3E4B69] font-bold">/ 21 ฐาน</span>
+        <span id="kpi-poured-pct" class="text-[10px] font-mono font-bold text-[#065F46] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0] ml-0.5">(0%)</span>
+      </div>
+
+      <!-- Secondary Metrics (Large screen only) -->
+      <div class="hidden lg:flex items-center gap-2 bg-white border-2 border-[#1D2B45] rounded-full px-3 py-1 text-[11px] font-mono font-bold text-[#3E4B69] shadow-[1.5px_1.5px_0px_#1D2B45]">
+        <span>คอนกรีต <strong id="kpi-concrete-poured" class="text-[#1D2B45]">0.0</strong>/155.5 m³</span>
+        <span class="text-[#CBD5E1]">|</span>
+        <span>เหล็ก <strong>10.9</strong> ตัน</span>
+      </div>
+
+      <!-- Print Button -->
+      <button id="btn-print" class="comic-btn px-2.5 sm:px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] text-[#1D2B45] shrink-0" title="พิมพ์แบบแปลน">
+        <i data-lucide="printer" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+        <span class="hidden md:inline">พิมพ์แปลน</span>
+      </button>
+
+      <!-- Mobile Layers Drawer Toggle -->
+      <button id="toggle-footing-toolbar-mobile" class="md:hidden comic-btn px-2.5 py-1.5 text-xs font-bold flex items-center gap-1 bg-[#FAF5EE] hover:bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-full shadow-[1.5px_1.5px_0px_#1D2B45] shrink-0" title="เปิด/ปิด แผงเลเยอร์">
+        <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0284C7]"></i>
+        <span id="footing-toolbar-mobile-text" class="text-[11px]">เลเยอร์</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- LEFT FLOATING TOOLBAR (VIEWS & BOLDER LAYER CONTROLS) -->
+  <div id="footing-toolbar" class="absolute left-2 top-[72px] z-20 flex flex-col gap-2 pointer-events-auto w-[235px] max-w-[240px]">
+    <!-- 1. Views Card -->
+    <div class="comic-card p-2 bg-white/95 backdrop-blur flex flex-col gap-1.5">
+      <div class="flex items-center justify-between pb-1 border-b border-slate-200">
+        <span class="text-[10px] font-black uppercase text-slate-600 tracking-wider flex items-center gap-1">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-500"></i> มุมมอง (VIEWS)
+        </span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <button id="view-top-ortho" class="comic-btn py-1 px-2 text-xs flex items-center gap-2">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-slate-700"></i>
+          <span>แปลน Top View (2D)</span>
+        </button>
+        <button id="view-iso3d" class="comic-btn active py-1 px-2 text-xs flex items-center gap-2">
+          <i data-lucide="box" class="w-4 h-4 text-slate-700"></i>
+          <span>3D สามมิติ (Iso)</span>
+        </button>
+      </div>
+
+      <!-- Quick Camera Angles -->
+      <div class="grid grid-cols-4 gap-1 pt-1 border-t border-slate-200 text-[10px]">
+        <button id="btn-view-top" class="comic-btn py-0.5 text-center font-bold" title="มองจากด้านบน">บน (Top)</button>
+        <button id="btn-view-front" class="comic-btn py-0.5 text-center font-bold" title="มองจากทิศใต้">หน้า (S)</button>
+        <button id="btn-view-side" class="comic-btn py-0.5 text-center font-bold" title="มองจากทิศตะวันตก">ข้าง (W)</button>
+        <button id="btn-view-center" class="comic-btn py-0.5 text-center font-bold" title="เล็งกึ่งกลางไซต์">ไซต์</button>
+      </div>
+    </div>
+
+    <!-- 2. BOLDER BIM LAYER CONTROLS (ปุ่มเปิด-ปิดสวย เด่น มีสวิตช์ & SOLO MODE) -->
+    <div class="comic-card p-2.5 bg-white/95 backdrop-blur flex flex-col gap-2 text-xs shadow-md">
+      <!-- Section Header with Quick Actions -->
+      <div class="flex items-center justify-between pb-1 border-b-2 border-slate-800">
+        <span class="text-[11px] font-black uppercase text-slate-900 tracking-wider flex items-center gap-1.5">
+          <i data-lucide="layers" class="w-4 h-4 text-sky-600"></i> เลเยอร์งาน 3D
+        </span>
+        <div class="flex items-center gap-1">
+          <button id="btn-layers-all" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
+          <button id="btn-layers-reset" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300" title="รีเซ็ตค่าเริ่มต้น">รีเซ็ต</button>
+        </div>
+      </div>
+
+      <!-- Layer 1: ฐานราก ค.ส.ล. (21 ฐาน) -->
+      <div id="card-footings" class="layer-card active active-footing" data-layer="footings" title="คลิกเพื่อ เปิด/ปิด งานฐานราก">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-sky-500 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="box" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">ฐานราก ค.ส.ล.</div>
+            <div class="text-[10px] text-sky-800 font-bold font-mono">21 ฐาน</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="btn-solo" data-solo="footings" title="ดูเฉพาะฐานราก">SOLO</button>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+
+      <!-- Layer 2: งานเสาเข็ม (93 ต้น) -->
+      <div id="card-piles" class="layer-card active active-pile" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-amber-400 border border-slate-900 flex items-center justify-center text-slate-950 shadow-sm flex-shrink-0">
+            <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">งานเสาเข็ม I-beam</div>
+            <div class="text-[10px] text-amber-800 font-bold font-mono">93 ต้น</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+
+      <!-- Layer 3: กริด & มิติวัด (Grid Lines) -->
+      <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-slate-700 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">กริด & มิติ CAD</div>
+            <div class="text-[10px] text-slate-500 font-mono">1-10, A-E</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Layer 4: แนวเขตที่ดิน (Property Boundary) -->
+      <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-rose-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
+            <div class="text-[10px] text-rose-700 font-mono">4 ด้าน • หมุดแดง</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Layer 5: ป้ายระบุสเปกฐานราก (Scene 06) -->
+      <div id="card-badges" class="layer-card" data-layer="badges" title="คลิกเพื่อ เปิด/ปิด ป้ายชื่อสเปกฐานราก 3D">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-purple-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="tag" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-800 text-xs leading-none">ป้ายสเปกฐานราก</div>
+            <div class="text-[10px] text-slate-400 font-mono">Scene 06 Chips</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Layer 6: ระนาบดิน GL 0.00 (X-Ray) -->
+      <div id="card-ground" class="layer-card" data-layer="ground" title="คลิกเพื่อ เปิด/ปิด ระนาบดินอ้างอิง">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-slate-400 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="scan" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-800 text-xs leading-none">ระนาบดิน GL ±0.00</div>
+            <div class="text-[10px] text-slate-400 font-mono">X-Ray ใสมองทะลุ</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Tactile Opacity Control with Quick Presets -->
+      <div class="pt-2 border-t-2 border-slate-800 flex flex-col gap-1.5">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-black text-slate-900 flex items-center gap-1">
+            <i data-lucide="eye" class="w-3.5 h-3.5 text-sky-600"></i> ความทึบแสงฐานราก:
+          </span>
+          <span id="lbl-opacity" class="text-[11px] font-mono-code font-bold px-1.5 py-0.2 rounded bg-sky-100 text-sky-900 border border-sky-300">88%</span>
+        </div>
+        <input type="range" id="rng-footing-opacity" min="0.15" max="1.0" step="0.05" value="0.88" class="w-full cursor-pointer accent-sky-600">
+        <!-- Presets -->
+        <div class="grid grid-cols-3 gap-1 text-[9.5px]">
+          <button class="btn-opacity-preset px-1 py-0.5 rounded border border-slate-300 bg-slate-50 hover:bg-slate-200 text-slate-700 font-bold" data-val="0.35">X-Ray (35%)</button>
+          <button class="btn-opacity-preset px-1 py-0.5 rounded border border-slate-300 bg-sky-100 hover:bg-sky-200 text-sky-900 font-bold" data-val="0.88">สมดุล (88%)</button>
+          <button class="btn-opacity-preset px-1 py-0.5 rounded border border-slate-300 bg-slate-50 hover:bg-slate-200 text-slate-700 font-bold" data-val="1.0">ทึบ (100%)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Status Filter Buttons -->
+    <div class="comic-card p-2 bg-white/95 backdrop-blur flex flex-col gap-1 text-xs">
+      <div class="text-[10px] font-bold text-slate-500 uppercase mb-0.5">กรองสถานะฐานราก</div>
+      <div class="grid grid-cols-2 gap-1 text-[10.5px]">
+        <button class="filter-btn comic-btn py-0.5 px-1 active bg-slate-800 text-white" data-filter="all">ทั้งหมด (21)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-slate-700" data-filter="pending">รอเริ่ม (<span id="cnt-pending">21</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-amber-800" data-filter="excavated">ขุดดิน (<span id="cnt-excavated">0</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-yellow-800" data-filter="lean">เทลีน (<span id="cnt-lean">0</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-purple-800" data-filter="rebar">ผูกเหล็ก (<span id="cnt-rebar">0</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-emerald-800" data-filter="poured">เทเสร็จ (<span id="cnt-poured">0</span>)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION HINT (DESKTOP ONLY, LIFTED ABOVE FLOATING DOCK) -->
+  <div class="fixed bottom-14 left-1/2 -translate-x-1/2 z-30 comic-card px-4 py-1.5 bg-white/95 backdrop-blur text-[11px] text-slate-700 shadow-[2px_2px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-full hidden lg:flex items-center gap-2 pointer-events-auto">
+    <span id="nav-hint-text">🖱️ <strong>คลิกซ้ายลาก:</strong> หมุนมุมมอง | <strong>Shift+ซ้าย หรือขวาลาก:</strong> เลื่อน (Pan) | <strong>ล้อเลื่อน:</strong> ซูม | <strong>คลิกที่ฐานราก:</strong> เปิดข้อมูล & อัปเดต</span>
+  </div>
+
+  <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
+  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[3.5px_3.5px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
+    <a href="test/piling.html" id="dock-btn-piling" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] active:scale-95" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น">
+      <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+      <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
+    </a>
+    <span id="dock-btn-footing" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#0284C7] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังฐานราก ค.ส.ล. 21 ฐาน">
+      <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
+      <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
+    </span>
+  </nav>
+
+  <!-- RIGHT INSPECTOR DRAWER -->
+  <aside id="inspector-drawer" class="closed absolute top-0 right-0 h-full w-full sm:w-[420px] bg-white border-l-2 border-slate-800 shadow-2xl flex flex-col pointer-events-auto">
+    <!-- Header -->
+    <div class="p-3 bg-amber-300 border-b-2 border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-none bg-white border-2 border-slate-900 flex items-center justify-center font-black text-slate-900 shadow-[2px_2px_0px_#0f172a]">
+          <i data-lucide="layers" class="w-4 h-4 text-amber-600"></i>
+        </div>
+        <div>
+          <h2 id="drawer-title" class="font-bangers text-2xl text-slate-900 leading-none">F5: C3</h2>
+          <div id="drawer-subtitle" class="text-xs font-bold text-slate-800">Grid 5-A • ฐานราก 5 ต้น</div>
+        </div>
+      </div>
+      <button id="close-drawer-btn" class="w-8 h-8 rounded-none bg-white/90 hover:bg-white border-2 border-slate-900 flex items-center justify-center text-slate-900 shadow-[2px_2px_0px_#0f172a] cursor-pointer">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Body Scrollable -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 text-slate-800 text-sm">
+      <!-- Section 1: Levels & Dimensions -->
+      <div class="comic-card p-3 bg-slate-50 border border-slate-300 space-y-2">
+        <div class="text-[11px] font-black uppercase text-slate-500 tracking-wider flex items-center justify-between border-b border-slate-200 pb-1">
+          <span>ระดับความสูง & ขนาดมิติ</span>
+          <span class="font-mono text-slate-400">RL ±0.00 = GL</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-sky-50 border border-sky-200 rounded p-1.5">
+            <div class="text-[10px] text-sky-700 font-bold">TOP LEVEL</div>
+            <div id="drawer-top-level" class="font-mono-code font-bold text-sm text-sky-950">-0.90 m.</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded p-1.5">
+            <div class="text-[10px] text-amber-700 font-bold">PCO (ตัดหัวเข็ม)</div>
+            <div id="drawer-pco-level" class="font-mono-code font-bold text-sm text-amber-950">-1.725 m.</div>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 rounded p-1.5">
+            <div class="text-[10px] text-rose-700 font-bold">BOT LEVEL</div>
+            <div id="drawer-bot-level" class="font-mono-code font-bold text-sm text-rose-950">-1.80 m.</div>
+          </div>
+        </div>
+        <div class="text-xs text-slate-600 flex justify-between pt-1 border-t border-slate-200">
+          <span>ขนาดมิติ: <strong id="drawer-dim-note" class="text-slate-800">2.50 x 2.50 x 0.90 m</strong></span>
+          <span>ความหนา: <strong id="drawer-depth" class="text-slate-800">0.90 m</strong></span>
+        </div>
+      </div>
+
+      <!-- Section 2: BOQ Material Quantities -->
+      <div class="comic-card p-3 bg-white border border-slate-300 space-y-2">
+        <div class="text-[11px] font-black uppercase text-slate-500 tracking-wider flex items-center justify-between border-b border-slate-200 pb-1">
+          <span>ปริมาณวัสดุ (BOQ Estimator)</span>
+          <span id="drawer-ratio" class="text-[11px] font-mono-code font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-300">70.0 kg/m³</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-emerald-50 border border-emerald-200 rounded p-2 flex items-center gap-2">
+            <div class="p-1.5 bg-emerald-200 rounded text-emerald-800"><i data-lucide="layers" class="w-4 h-4"></i></div>
+            <div>
+              <div class="text-[10px] text-emerald-700 font-bold">คอนกรีต ค.ส.ล.</div>
+              <div class="flex items-baseline gap-1">
+                <span id="drawer-conc-vol" class="font-mono-code font-bold text-lg text-emerald-600">5.63</span>
+                <span class="text-xs text-emerald-800">m³</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-indigo-50 border border-indigo-200 rounded p-2 flex items-center gap-2">
+            <div class="p-1.5 bg-indigo-200 rounded text-indigo-800"><i data-lucide="hash" class="w-4 h-4"></i></div>
+            <div>
+              <div class="text-[10px] text-indigo-700 font-bold">เหล็กเสริมรวม</div>
+              <div class="flex items-baseline gap-1">
+                <span id="drawer-rebar-total" class="font-mono-code font-bold text-lg text-indigo-600">394.1</span>
+                <span class="text-xs text-indigo-800">kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Rebar breakdown bars -->
+        <div class="pt-1">
+          <div class="text-[10px] font-bold text-slate-500 mb-1">สัดส่วนขนาดเหล็กเสริม:</div>
+          <div id="drawer-rebar-breakdown" class="space-y-1 text-xs"></div>
+        </div>
+      </div>
+
+      <!-- Section 3: Associated Piles -->
+      <div class="comic-card p-3 bg-white border border-slate-300 space-y-2">
+        <div class="text-[11px] font-black uppercase text-slate-500 tracking-wider flex items-center justify-between border-b border-slate-200 pb-1">
+          <span class="flex items-center gap-1">
+            <i data-lucide="anchor" class="w-4 h-4 text-amber-600"></i> เสาเข็มรองรับฐานนี้ (<span id="drawer-piles-count">5</span> ต้น)
+          </span>
+          <span class="text-[10px] text-slate-400">I-0.40m L=21m</span>
+        </div>
+        <div id="drawer-piles-list" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <!-- Section 4: Progress Tracking Form -->
+      <div class="comic-card p-3 bg-amber-50/70 border border-amber-300 space-y-2.5">
+        <div class="text-[11px] font-black uppercase text-amber-900 tracking-wider flex items-center gap-1 border-b border-amber-200 pb-1">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-700"></i>
+          <span>บันทึกความคืบหน้าหน้างาน</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-1.5">
+          <button class="status-toggle-btn comic-btn py-1.5 text-xs text-left px-2 flex items-center gap-1.5" data-status="pending">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span> รอเริ่ม
+          </button>
+          <button class="status-toggle-btn comic-btn py-1.5 text-xs text-left px-2 flex items-center gap-1.5" data-status="excavated">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> ขุดดินแล้ว
+          </button>
+          <button class="status-toggle-btn comic-btn py-1.5 text-xs text-left px-2 flex items-center gap-1.5" data-status="lean">
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> เทลีนแล้ว
+          </button>
+          <button class="status-toggle-btn comic-btn py-1.5 text-xs text-left px-2 flex items-center gap-1.5" data-status="rebar">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> ผูกเหล็กแล้ว
+          </button>
+          <button class="status-toggle-btn comic-btn py-1.5 text-xs text-left px-2 flex items-center gap-1.5 col-span-2 bg-emerald-100 hover:bg-emerald-200" data-status="poured">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> เทคอนกรีตเสร็จสมบูรณ์
+          </button>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[11px] font-bold text-slate-700">วันที่ดำเนินการ:</label>
+          <input type="date" id="field-pour-date" class="w-full text-xs p-1.5 border border-slate-300 rounded bg-white font-mono">
+        </div>
+        <div class="space-y-1">
+          <label class="text-[11px] font-bold text-slate-700">หมายเหตุหน้างาน:</label>
+          <textarea id="field-pour-notes" rows="2" placeholder="เช่น เทคอนกรีต 240 ksc cube เก็บลูกปูน 3 ลูก..." class="w-full text-xs p-1.5 border border-slate-300 rounded bg-white"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-3 bg-slate-100 border-t-2 border-slate-800 flex items-center gap-2">
+      <button id="btn-save-drawer" class="comic-btn flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center gap-1.5 text-xs font-bold shadow-md">
+        <i data-lucide="save" class="w-4 h-4"></i>
+        <span>บันทึกความคืบหน้า</span>
+      </button>
+      <button id="btn-close-drawer" class="comic-btn px-4 py-2 bg-white text-slate-800 text-xs">
+        ปิด
+      </button>
+    </div>
+  </aside>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay" class="absolute inset-0 z-50 bg-slate-900/90 flex flex-col items-center justify-center gap-3 text-white">
+    <div class="w-12 h-12 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+    <div class="font-bangers text-2xl tracking-wider text-amber-400">กำลังโหลดแบบจำลอง 3D สไตล์ CAD...</div>
+    <div id="loading-text" class="text-xs text-slate-400 font-mono">กำลังประมวลผล Gridlines, Boundary & Footings 21 ฐาน</div>
+  </div>
+
+  <!-- EMBEDDED GLB BASE64 -->
+  <!-- EMBEDDED ZERO-CORS GLB DATA (SHARED) -->
+  <script src="piling_embedded_data.js"></script>
+
+  <!-- FOOTINGS DATA -->
+  <script id="footings-metadata-script">
+    window.__FOOTINGS_METADATA__ = {"project":"PYNN PRIDI 37","scene":"06_ฟุตติ้ง_เข็ม_เหล็กตอม่อ_TOP_BOT_PCO","generated_at":"2026-10-18 20:15:19","summary":{"total_footings":21,"total_concrete_m3":155.47,"total_rebar_kg":10901.3,"total_rebar_tons":10.9,"avg_rebar_ratio":70.1},"boundary":{"north":{"label":"39.15 m","length_m":39.15},"south":{"label":"41.91 m","length_m":41.91},"west":{"label":"19.77 m","length_m":19.77},"east":{"label":"18.25 m (SOI PRIDI 37)","length_m":18.25},"code":"n115816"},"gridlines":{"x_axes":[{"name":"1","x":0},{"name":"2","x":0.5},{"name":"3","x":5.7},{"name":"4","x":10.85},{"name":"5","x":12.2},{"name":"6","x":20},{"name":"7","x":27.5},{"name":"8","x":29.45},{"name":"9","x":32.7},{"name":"10","x":32.9}],"y_axes":[{"name":"A","y":12.4},{"name":"B","y":5.2},{"name":"C","y":3.5},{"name":"D","y":1.3},{"name":"E","y":0}]},"footings":[{"id":"F5_C3_5A","no":1,"name":"F5: C3 (Grid 5-A)","mark":"F5: C3","grid":"5-A","dim":{"w":2.5,"l":2.5,"h":0.9,"note":"2.50x2.50x0.90(H)"},"levels":{"top":-0.9,"bot":-1.8,"pco":-1.725},"center":[12.2,12.4,-1.35],"bounds":{"min_x":10.95,"max_x":13.45,"min_y":11.15,"max_y":13.65,"min_z":-1.8,"max_z":-0.9},"card_position":[11.75,13.645],"boq":{"concrete_m3":5.62,"rebar_kg":401,"ratio_kg_m3":71.4,"breakdown":{"DB25":392.5,"DB12":8.5}},"piles_count":5,"associated_piles":[{"no":10,"tag":"P10","grid":"4-A","pco":-1.726},{"no":11,"tag":"P11","grid":"5-A","pco":-1.726},{"no":12,"tag":"P12","grid":"5-A","pco":-1.726},{"no":13,"tag":"P13","grid":"4-A","pco":-1.726},{"no":14,"tag":"P14","grid":"5-A","pco":-1.726}]},{"id":"F6_C2_3A","no":2,"name":"F6: C2 (Grid 3-A)","mark":"F6: C2","grid":"3-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[5.7,12.4,-1],"bounds":{"min_x":4.7,"max_x":6.7,"min_y":10.8,"max_y":14,"min_z":-1.6,"max_z":-0.4},"card_position":[5.7,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":4,"tag":"P04","grid":"3-A","pco":-1.526},{"no":5,"tag":"P05","grid":"3-A","pco":-1.526},{"no":6,"tag":"P06","grid":"3-A","pco":-1.526},{"no":7,"tag":"P07","grid":"3-A","pco":-1.526},{"no":8,"tag":"P08","grid":"3-A","pco":-1.526},{"no":9,"tag":"P09","grid":"3-A","pco":-1.526}]},{"id":"F6_C4_1Mid","no":3,"name":"F6: C4 (Grid 1 / Mid)","mark":"F6: C4","grid":"1-Mid","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.7,"bot":-1.9,"pco":-1.825},"center":[0,3.95,-1.3],"bounds":{"min_x":-1,"max_x":1,"min_y":2.35,"max_y":5.55,"min_z":-1.9,"max_z":-0.7},"card_position":[-2.545,4.013],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":30,"tag":"P30","grid":"1-B","pco":-1.826},{"no":31,"tag":"P31","grid":"2-B","pco":-1.826},{"no":32,"tag":"P32","grid":"1-C","pco":-1.826},{"no":33,"tag":"P33","grid":"2-C","pco":-1.826},{"no":34,"tag":"P34","grid":"1-C","pco":-1.826},{"no":35,"tag":"P35","grid":"2-C","pco":-1.826}]},{"id":"F6_C3_6A","no":4,"name":"F6: C3 (Grid 6-A)","mark":"F6: C3","grid":"6-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.55,"bot":-1.75,"pco":-1.675},"center":[20,12.4,-1.15],"bounds":{"min_x":19,"max_x":21,"min_y":10.8,"max_y":14,"min_z":-1.75,"max_z":-0.55},"card_position":[20,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":15,"tag":"P15","grid":"6-A","pco":-1.676},{"no":16,"tag":"P16","grid":"6-A","pco":-1.676},{"no":17,"tag":"P17","grid":"6-A","pco":-1.676},{"no":18,"tag":"P18","grid":"6-A","pco":-1.676},{"no":19,"tag":"P19","grid":"6-A","pco":-1.676},{"no":20,"tag":"P20","grid":"6-A","pco":-1.676}]},{"id":"F6_C3A_7A","no":5,"name":"F6: C3A (Grid 7-A)","mark":"F6: C3A","grid":"7-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[27.5,12.4,-1],"bounds":{"min_x":26.5,"max_x":28.5,"min_y":10.8,"max_y":14,"min_z":-1.6,"max_z":-0.4},"card_position":[27.5,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":21,"tag":"P21","grid":"7-A","pco":-1.526},{"no":22,"tag":"P22","grid":"7-A","pco":-1.526},{"no":23,"tag":"P23","grid":"7-A","pco":-1.526},{"no":24,"tag":"P24","grid":"7-A","pco":-1.526},{"no":25,"tag":"P25","grid":"7-A","pco":-1.526},{"no":26,"tag":"P26","grid":"7-A","pco":-1.526}]},{"id":"F6A_C1A_8","no":6,"name":"F6A: C1A: C3 (Grid 8)","mark":"F6A: C1A: C3","grid":"8","dim":{"w":2,"l":3.25,"h":1.2,"note":"3.25x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[29.45,4,-1],"bounds":{"min_x":28.45,"max_x":30.45,"min_y":2.375,"max_y":5.625,"min_z":-1.6,"max_z":-0.4},"card_position":[31.445,5.08],"boq":{"concrete_m3":7.68,"rebar_kg":842.7,"ratio_kg_m3":109.7,"breakdown":{"DB25":825,"DB12":17.7}},"piles_count":6,"associated_piles":[{"no":81,"tag":"P81","grid":"8-B","pco":-1.526},{"no":82,"tag":"P82","grid":"8-B","pco":-1.526},{"no":83,"tag":"P83","grid":"8-C","pco":-1.526},{"no":84,"tag":"P84","grid":"8-C","pco":-1.526},{"no":85,"tag":"P85","grid":"8-C","pco":-1.526},{"no":86,"tag":"P86","grid":"8-C","pco":-1.526}]},{"id":"F3_C3_2A","no":7,"name":"F3: C3 (Grid 2-A)","mark":"F3: C3","grid":"2-A","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[0.5,12.23,-0.85],"bounds":{"min_x":-0.562,"max_x":1.562,"min_y":11.31,"max_y":13.15,"min_z":-1.3,"max_z":-0.4},"card_position":[0.5,13.86],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":1,"tag":"P01","grid":"1-A","pco":-1.226},{"no":2,"tag":"P02","grid":"2-A","pco":-1.226},{"no":3,"tag":"P03","grid":"2-A","pco":-1.226}]},{"id":"F3_C3_9A","no":8,"name":"F3: C3 (Grid 9-A)","mark":"F3: C3","grid":"9-A","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[32.7,12.23,-0.85],"bounds":{"min_x":31.638,"max_x":33.762,"min_y":11.31,"max_y":13.15,"min_z":-1.3,"max_z":-0.4},"card_position":[32.7,13.86],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":27,"tag":"P27","grid":"9-A","pco":-1.226},{"no":28,"tag":"P28","grid":"10-A","pco":-1.226},{"no":29,"tag":"P29","grid":"9-A","pco":-1.226}]},{"id":"F3_C3_10C","no":9,"name":"F3: C3 (Grid 10-C)","mark":"F3: C3","grid":"10-C","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[32.9,3.33,-0.85],"bounds":{"min_x":31.838,"max_x":33.962,"min_y":2.41,"max_y":4.25,"min_z":-1.3,"max_z":-0.4},"card_position":[34.695,3.143],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":87,"tag":"P87","grid":"9-C","pco":-1.226},{"no":88,"tag":"P88","grid":"10-C","pco":-1.226},{"no":89,"tag":"P89","grid":"10-C","pco":-1.226}]},{"id":"F2_C1C_1D","no":10,"name":"F2: C1C (Grid 1-D)","mark":"F2: C1C","grid":"1-D","dim":{"w":2,"l":0.9,"h":0.8,"note":"2.60x0.80x0.80(H)"},"levels":{"top":-0.7,"bot":-1.5,"pco":-1.425},"center":[0,1.3,-1.1],"bounds":{"min_x":-1,"max_x":1,"min_y":0.85,"max_y":1.75,"min_z":-1.5,"max_z":-0.7},"card_position":[-2.545,0.418],"boq":{"concrete_m3":1.44,"rebar_kg":103.8,"ratio_kg_m3":72.1,"breakdown":{"DB20":53.7,"DB16":45.2,"DB12":4.8}},"piles_count":2,"associated_piles":[{"no":36,"tag":"P36","grid":"1-D","pco":-1.426},{"no":37,"tag":"P37","grid":"2-D","pco":-1.426}]},{"id":"F2_C1_8E","no":11,"name":"F2: C1 (Grid 8-E)","mark":"F2: C1","grid":"8-E","dim":{"w":2,"l":0.8,"h":0.8,"note":"2.80x0.80x0.80(H)"},"levels":{"top":-0.9,"bot":-1.7,"pco":-1.625},"center":[29.7,0,-1.3],"bounds":{"min_x":28.7,"max_x":30.7,"min_y":-0.4,"max_y":0.4,"min_z":-1.7,"max_z":-0.9},"card_position":[29.7,-1.583],"boq":{"concrete_m3":1.28,"rebar_kg":101.5,"ratio_kg_m3":79.3,"breakdown":{"DB20":53.7,"DB16":43.2,"DB12":4.6}},"piles_count":2,"associated_piles":[{"no":90,"tag":"P90","grid":"8-E","pco":-1.626},{"no":91,"tag":"P91","grid":"8-E","pco":-1.626}]},{"id":"F2_C1_10E","no":12,"name":"F2: C1 (Grid 10-E)","mark":"F2: C1","grid":"10-E","dim":{"w":2,"l":0.8,"h":0.8,"note":"2.80x0.80x0.80(H)"},"levels":{"top":-0.9,"bot":-1.7,"pco":-1.625},"center":[32.9,0,-1.3],"bounds":{"min_x":31.9,"max_x":33.9,"min_y":-0.4,"max_y":0.4,"min_z":-1.7,"max_z":-0.9},"card_position":[34.845,-0.833],"boq":{"concrete_m3":1.28,"rebar_kg":101.5,"ratio_kg_m3":79.3,"breakdown":{"DB20":53.7,"DB16":43.2,"DB12":4.6}},"piles_count":2,"associated_piles":[{"no":92,"tag":"P92","grid":"9-E","pco":-1.626},{"no":93,"tag":"P93","grid":"10-E","pco":-1.626}]},{"id":"F1_3B","no":13,"name":"F1 (Grid 3-B)","mark":"F1","grid":"3-B","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-0.15,"bot":-0.85,"pco":-0.65},"center":[5.7,5.2,-0.5],"bounds":{"min_x":5.3,"max_x":6.1,"min_y":4.8,"max_y":5.6,"min_z":-0.85,"max_z":-0.15},"card_position":[4.005,5.013],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":38,"tag":"P38","grid":"3-B","pco":-0.651}]},{"id":"F1_3D","no":14,"name":"F1 (Grid 3-D)","mark":"F1","grid":"3-D","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-0.15,"bot":-0.85,"pco":-0.65},"center":[5.7,1.3,-0.5],"bounds":{"min_x":5.3,"max_x":6.1,"min_y":0.9,"max_y":1.7,"min_z":-0.85,"max_z":-0.15},"card_position":[4.005,1.113],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":39,"tag":"P39","grid":"3-D","pco":-0.651}]},{"id":"F1_C0_Top","no":15,"name":"F1: C0 (Water Tank บน)","mark":"F1: C0","grid":"Tank-Top","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,5.435,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":5.035,"max_y":5.835,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,5.253],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":78,"tag":"P78","grid":"7-B","pco":-3.251}]},{"id":"F1_C0_Mid","no":16,"name":"F1: C0 (Water Tank กลาง)","mark":"F1: C0","grid":"Tank-Mid","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,2.713,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":2.313,"max_y":3.113,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,2.523],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":79,"tag":"P79","grid":"7-C","pco":-3.251}]},{"id":"F1_C0_Bot","no":17,"name":"F1: C0 (Water Tank ล่าง)","mark":"F1: C0","grid":"Tank-Bot","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,-0.01,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":-0.41,"max_y":0.39,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,-0.197],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":80,"tag":"P80","grid":"7-E","pco":-3.251}]},{"id":"F20A_Core1A","no":18,"name":"F20A: CORE 1A (Grid 4-5)","mark":"F20A: CORE 1A","grid":"4-5","dim":{"w":5.2,"l":6.9,"h":1,"note":"5.20x6.90x1.00(H)"},"levels":{"top":-1.7,"bot":-2.7,"pco":-2.625},"center":[12.16,3.05,-2.2],"bounds":{"min_x":9.56,"max_x":14.76,"min_y":-0.4,"max_y":6.5,"min_z":-2.7,"max_z":-1.7},"card_position":[12.16,4.25],"boq":{"concrete_m3":35.88,"rebar_kg":2120.2,"ratio_kg_m3":59.1,"breakdown":{"DB20":2098.2,"DB12":22}},"piles_count":20,"associated_piles":[{"no":40,"tag":"P40","grid":"4-B","pco":-2.626},{"no":41,"tag":"P41","grid":"4-B","pco":-2.626},{"no":42,"tag":"P42","grid":"5-B","pco":-2.626},{"no":43,"tag":"P43","grid":"5-B","pco":-2.626},{"no":44,"tag":"P44","grid":"4-B","pco":-2.626},{"no":45,"tag":"P45","grid":"4-B","pco":-2.626},{"no":46,"tag":"P46","grid":"5-B","pco":-2.626},{"no":47,"tag":"P47","grid":"5-B","pco":-2.626},{"no":48,"tag":"P48","grid":"4-C","pco":-2.626},{"no":49,"tag":"P49","grid":"4-C","pco":-2.626},{"no":50,"tag":"P50","grid":"5-C","pco":-2.626},{"no":51,"tag":"P51","grid":"5-C","pco":-2.626},{"no":52,"tag":"P52","grid":"4-D","pco":-2.626},{"no":53,"tag":"P53","grid":"4-D","pco":-2.626},{"no":54,"tag":"P54","grid":"5-D","pco":-2.626},{"no":55,"tag":"P55","grid":"5-D","pco":-2.626},{"no":56,"tag":"P56","grid":"4-E","pco":-2.626},{"no":57,"tag":"P57","grid":"4-E","pco":-2.626},{"no":58,"tag":"P58","grid":"5-E","pco":-2.626},{"no":59,"tag":"P59","grid":"5-E","pco":-2.626}]},{"id":"F18A_Core2A","no":19,"name":"F18A: CORE 2A (Grid 6)","mark":"F18A: CORE 2A","grid":"6","dim":{"w":5.4,"l":6.8,"h":1.4,"note":"5.40x6.80x1.40(H)"},"levels":{"top":-3.5,"bot":-4.1,"pco":-4.125},"center":[19.165,2.975,-3.7],"bounds":{"min_x":16.465,"max_x":21.865,"min_y":-0.425,"max_y":6.375,"min_z":-4.4,"max_z":-3},"card_position":[19.165,4.175],"boq":{"concrete_m3":51.41,"rebar_kg":3833.1,"ratio_kg_m3":74.6,"breakdown":{"DB25":2202.1,"DB20":1586.7,"DB12":44.3}},"piles_count":18,"associated_piles":[{"no":60,"tag":"P60","grid":"6-B","pco":-4.326},{"no":61,"tag":"P61","grid":"6-B","pco":-4.326},{"no":62,"tag":"P62","grid":"6-B","pco":-4.326},{"no":63,"tag":"P63","grid":"6-B","pco":-4.326},{"no":64,"tag":"P64","grid":"6-B","pco":-4.326},{"no":65,"tag":"P65","grid":"6-C","pco":-4.326},{"no":66,"tag":"P66","grid":"6-C","pco":-4.326},{"no":67,"tag":"P67","grid":"6-C","pco":-4.326},{"no":68,"tag":"P68","grid":"6-C","pco":-4.326},{"no":69,"tag":"P69","grid":"6-C","pco":-4.326},{"no":70,"tag":"P70","grid":"6-D","pco":-4.326},{"no":71,"tag":"P71","grid":"6-D","pco":-4.326},{"no":72,"tag":"P72","grid":"6-D","pco":-4.326},{"no":73,"tag":"P73","grid":"6-D","pco":-4.326},{"no":74,"tag":"P74","grid":"6-D","pco":-4.326},{"no":75,"tag":"P75","grid":"6-E","pco":-4.326},{"no":76,"tag":"P76","grid":"6-E","pco":-4.326},{"no":77,"tag":"P77","grid":"6-E","pco":-4.326}]},{"id":"WWT_1","no":20,"name":"WWT 1","mark":"WWT 1","grid":"WWT-1","dim":{"w":10.95,"l":3.5,"h":0.25,"note":"10.95x3.50x0.25(H)"},"levels":{"top":-2.95,"bot":-3.2,"pco":-3.15},"center":[13.933,8.672,-3.075],"bounds":{"min_x":8.458,"max_x":19.408,"min_y":6.922,"max_y":10.422,"min_z":-3.2,"max_z":-2.95},"card_position":[15.5,10.945],"boq":{"concrete_m3":9.58,"rebar_kg":691.4,"ratio_kg_m3":72.2,"breakdown":{"DB12":691.4}},"piles_count":20,"associated_piles":[]},{"id":"WWT_2","no":21,"name":"WWT 2","mark":"WWT 2","grid":"WWT-2","dim":{"w":2.5,"l":2.5,"h":0.2,"note":"2.50x2.50x0.20(H)"},"levels":{"top":-2.9,"bot":-3.1,"pco":-3.05},"center":[21.836,8.672,-3],"bounds":{"min_x":20.586,"max_x":23.086,"min_y":7.422,"max_y":9.922,"min_z":-3.1,"max_z":-2.9},"card_position":[24.315,9.013],"boq":{"concrete_m3":1.25,"rebar_kg":108.6,"ratio_kg_m3":86.9,"breakdown":{"DB12":108.6}},"piles_count":4,"associated_piles":[]}]};
+  </script>
+
+  <!-- MAIN 3D APPLICATION SCRIPT -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ----------------------------------------------------
+    // INITIALIZATION & CONSTANTS
+    // ----------------------------------------------------
+    const container = document.getElementById('canvas-container');
+    const FOOTINGS_DATA = window.__FOOTINGS_METADATA__.footings || [];
+    let progressStore = {};
+
+    // Layer state management
+    const layerState = {
+      footings: true,
+      piles: true,
+      grid: true,
+      boundary: true,
+      badges: false,
+      ground: false
+    };
+
+    // Three.js Core Objects
+    let scene, renderer, activeCamera, perspCamera, orthoCamera, controlsPersp, controlsOrtho;
+    let currentModel = null;
+    let modelRoot = new THREE.Group();
+    let footingGroup = new THREE.Group();
+    let groundGroup = new THREE.Group();
+    let raycaster = new THREE.Raycaster();
+    let mouse = new THREE.Vector2();
+
+    // Maps for fast toggle and lookup
+    const footingMeshesMap = new Map();
+    const footingEdgesMap = new Map();
+    const pileMeshesList = [];
+    const pileEdgesList = [];
+    const gridBubbleObjects = [];
+    const gridDimensionObjects = [];
+    const boundaryObjects = [];
+    const cadLineObjects = [];
+
+    // State
+    let selectedFootingId = null;
+    let hoveredFootingId = null;
+    let currentFilter = 'all';
+
+    // Site Plan Center (Exact coordinate matching SketchUp/piling.html)
+    const PLAN_CENTER = new THREE.Vector3(16.5, 7.2, 0);
+
+    // Status Colors (Matching Construction Standards)
+    const STATUS_COLORS = {
+      pending: 0xcbd5e1,    // Clean concrete slate/silver
+      excavated: 0xf59e0b,  // Amber yellow
+      lean: 0xeab308,       // Golden yellow
+      rebar: 0x8b5cf6,      // Purple rebar
+      poured: 0x10b981      // Emerald green
+    };
+
+    function getFootingStatusColor(status) {
+      return STATUS_COLORS[status] || STATUS_COLORS.pending;
+    }
+
+    // ----------------------------------------------------
+    // SETUP THREE.JS SCENE & CAMERAS (Z-UP WORLD)
+    // ----------------------------------------------------
+    function init3D() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xffffff);
+
+      // 1. Perspective Camera for 3D Isometric View (South-West looking North-East)
+      perspCamera = new THREE.PerspectiveCamera(40, w / h, 0.1, 1000);
+      perspCamera.up.set(0, 0, 1); // Z is vertical UP!
+      perspCamera.position.set(PLAN_CENTER.x + 28, PLAN_CENTER.y - 36, 26);
+      perspCamera.lookAt(PLAN_CENTER.x, PLAN_CENTER.y, 0);
+
+      // 2. Orthographic Camera for 2D Top Blueprint View
+      const frustumHeight = 32;
+      const aspect = w / h;
+      orthoCamera = new THREE.OrthographicCamera(
+        -frustumHeight * aspect / 2,
+        frustumHeight * aspect / 2,
+        frustumHeight / 2,
+        -frustumHeight / 2,
+        0.1,
+        1000
+      );
+      orthoCamera.up.set(0, 1, 0); // Y is North on 2D Top View!
+      orthoCamera.position.set(PLAN_CENTER.x, PLAN_CENTER.y, 80);
+      orthoCamera.lookAt(PLAN_CENTER.x, PLAN_CENTER.y, 0);
+
+      activeCamera = perspCamera;
+
+      // 3. Renderer with ACES Tone Mapping
+      renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0xffffff, 1);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
+      container.appendChild(renderer.domElement);
+
+      // 4. OrbitControls
+      controlsPersp = new OrbitControls(perspCamera, renderer.domElement);
+      controlsPersp.enableRotate = true;
+      controlsPersp.enableDamping = true;
+      controlsPersp.dampingFactor = 0.08;
+      controlsPersp.rotateSpeed = 0.85;
+      controlsPersp.screenSpacePanning = true;
+      controlsPersp.maxPolarAngle = Math.PI / 2 - 0.04; // Ground stays DOWN!
+      controlsPersp.minPolarAngle = 0.05;
+      controlsPersp.mouseButtons = {
+        LEFT: THREE.MOUSE.ROTATE,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.PAN
+      };
+      controlsPersp.target.copy(PLAN_CENTER);
+
+      controlsOrtho = new OrbitControls(orthoCamera, renderer.domElement);
+      controlsOrtho.enableRotate = false;
+      controlsOrtho.screenSpacePanning = true;
+      controlsOrtho.mouseButtons = {
+        LEFT: THREE.MOUSE.PAN,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.PAN
+      };
+      controlsOrtho.target.copy(PLAN_CENTER);
+      controlsOrtho.enabled = false;
+
+      // Restore shared BIM camera viewpoint if navigating between piling and footing
+      restoreBimSharedCamera();
+
+      // 5. Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
+      scene.add(ambientLight);
+
+      const sunLight = new THREE.DirectionalLight(0xfffaed, 0.90);
+      sunLight.position.set(40, 50, 80);
+      scene.add(sunLight);
+
+      const fillLight = new THREE.DirectionalLight(0xe2e8f0, 0.45);
+      fillLight.position.set(-30, -40, 40);
+      scene.add(fillLight);
+
+      // 6. Subtle Floor Grid (Transparent, does NOT block footings!)
+      const grid = new THREE.GridHelper(100, 50, 0xd8e3e8, 0xf1f5f9);
+      grid.rotation.x = Math.PI / 2;
+      grid.position.z = -0.05;
+      grid.material.opacity = 0.35;
+      grid.material.transparent = true;
+      scene.add(grid);
+
+      // 7. Optional X-Ray Ground Plane (GL 0.00)
+      const groundGeo = new THREE.PlaneGeometry(90, 70);
+      const groundMat = new THREE.MeshBasicMaterial({
+        color: 0x94a3b8,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.15
+      });
+      const groundMesh = new THREE.Mesh(groundGeo, groundMat);
+      groundMesh.position.set(PLAN_CENTER.x, PLAN_CENTER.y, 0);
+      groundGroup.add(groundMesh);
+      groundGroup.visible = false;
+      scene.add(groundGroup);
+
+      // Groups
+      scene.add(modelRoot);
+      scene.add(footingGroup);
+
+      // Load 3D Model
+      loadGlbModel();
+
+      // Mount 21 Footings
+      createFootingMeshes();
+
+      // Animation Loop
+      animate();
+    }
+
+    // ----------------------------------------------------
+    // LOAD AUTHENTIC SKETCHUP MODEL (GRID, BUBBLES, DIMENSIONS, PILES)
+    // ----------------------------------------------------
+    function base64ToArrayBuffer(base64) {
+      const binaryString = window.atob(base64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      return bytes.buffer;
+    }
+
+    function loadGlbModel() {
+      const loader = new GLTFLoader();
+
+      const onModelLoaded = (gltf) => {
+        currentModel = gltf.scene;
+
+        // CRITICAL FIX: Rotate model around X by +90 deg to align North (+Y) UP and East (+X) RIGHT!
+        currentModel.rotation.x = Math.PI / 2;
+        modelRoot.add(currentModel);
+
+        currentModel.traverse((child) => {
+          const parentName = child.parent?.name || '';
+          const myName = child.name || '';
+          const nodeLayer = child.userData?.layer || child.parent?.userData?.layer || '';
+          const matName = child.material?.name || '';
+
+          // 1. I-BEAM PILES (Pile_1..93)
+          const beamMatch = (parentName + '_' + myName).match(/Pile_(d+)/i);
+          if (beamMatch) {
+            const pileNo = parseInt(beamMatch[1], 10);
+            child.userData.pileNo = pileNo;
+            child.userData.isPile = true;
+            pileMeshesList.push(child);
+
+            // Add crisp CAD black outline
+            try {
+              const edgeGeo = new THREE.EdgesGeometry(child.geometry, 25);
+              const edgeMat = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 1.5 });
+              const edgeLine = new THREE.LineSegments(edgeGeo, edgeMat);
+              child.add(edgeLine);
+              pileEdgesList.push(edgeLine);
+            } catch (_) {}
+            return;
+          }
+
+          // 2. PILE BADGE CIRCLE / TEXT
+          if (matName === 'Mat_Pile_Badge' || matName === 'Mat_Pile_Text') {
+            child.userData.isPile = true;
+            pileMeshesList.push(child);
+            return;
+          }
+
+          // 3. GRID BUBBLE BACKGROUND CIRCLES (Bubble_Bg_White / Grid Bubble 1..10, A..E)
+          if (matName === 'Bubble_Bg_White' || myName.includes('Grid Bubble')) {
+            child.material = new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              side: THREE.DoubleSide,
+              depthWrite: true
+            });
+            child.renderOrder = 8;
+            gridBubbleObjects.push(child);
+
+            // Add crisp circular outline border (เส้นขอบวงกลมสีดำ คมชัด)
+            try {
+              const edgeGeo = new THREE.EdgesGeometry(child.geometry, 15);
+              const edgeMat = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2.0 });
+              const edgeLine = new THREE.LineSegments(edgeGeo, edgeMat);
+              edgeLine.renderOrder = 9;
+              child.add(edgeLine);
+              gridBubbleObjects.push(edgeLine);
+            } catch (_) {}
+            return;
+          }
+
+          // 4. GRID BUBBLE TEXT (Bubble_Text_Mat - ตัวเลข/ตัวอักษร 1..10, A..E)
+          if (matName === 'Bubble_Text_Mat') {
+            child.material = new THREE.MeshBasicMaterial({
+              color: 0x000000,
+              side: THREE.DoubleSide,
+              depthWrite: true
+            });
+            child.material.polygonOffset = true;
+            child.material.polygonOffsetFactor = -2;
+            child.material.polygonOffsetUnits = -2;
+            child.renderOrder = 12;
+            gridBubbleObjects.push(child);
+            return;
+          }
+
+          // 5. CAD DIMENSION TEXT (Dim_Text_Green)
+          if (matName === 'Dim_Text_Green') {
+            child.material = new THREE.MeshBasicMaterial({
+              color: 0x059669,
+              side: THREE.DoubleSide
+            });
+            child.renderOrder = 10;
+            gridDimensionObjects.push(child);
+            return;
+          }
+
+          // 6. PROPERTY BOUNDARY & SURVEY PINS (Property_Line_Red, Survey_Pin_Red)
+          if (matName === 'Property_Line_Red' || matName === 'Survey_Pin_Red' || myName.includes('DIM_')) {
+            child.material = new THREE.MeshBasicMaterial({
+              color: 0xdc2626,
+              side: THREE.DoubleSide
+            });
+            child.renderOrder = 10;
+            boundaryObjects.push(child);
+            return;
+          }
+
+          // 7. LINE SEGMENTS & CAD OUTLINES
+          if (child.isLine || child.isLineSegments) {
+            // Check if Property Boundary line
+            if (myName.includes('BOUNDARY') || parentName.includes('BOUNDARY') || myName.includes('แนวเขตที่ดิน') || parentName.includes('แนวเขตที่ดิน')) {
+              child.material = new THREE.LineBasicMaterial({
+                color: 0xdc2626,
+                linewidth: 2.0
+              });
+              boundaryObjects.push(child);
+              return;
+            }
+
+            // Check if Grid Line
+            if (myName.includes('GRID') || parentName.includes('GRID')) {
+              child.material = new THREE.LineBasicMaterial({
+                color: 0x334155,
+                linewidth: 1.5
+              });
+              cadLineObjects.push(child);
+              return;
+            }
+
+            cadLineObjects.push(child);
+            if (child.material) {
+              child.material.color.setHex(0x334155);
+              child.material.transparent = false;
+              child.material.opacity = 1.0;
+            }
+          }
+        });
+
+        currentModel.updateMatrixWorld(true);
+
+        // Hide loading overlay
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+          overlay.classList.add('opacity-0');
+          setTimeout(() => overlay.remove(), 400);
+        }
+      };
+
+      // Check if base64 embedded string exists
+      if (window.__EMBEDDED_GLB_BASE64__ && window.__EMBEDDED_GLB_BASE64__.length > 1000) {
+        try {
+          const arrayBuffer = base64ToArrayBuffer(window.__EMBEDDED_GLB_BASE64__);
+          loader.parse(arrayBuffer, '', onModelLoaded, (err) => {
+            console.warn('Error parsing embedded GLB, attempting fetch:', err);
+            loader.load('model.glb', onModelLoaded, undefined, onFallbackError);
+          });
+          return;
+        } catch (e) {
+          console.warn('Exception parsing embedded GLB:', e);
+        }
+      }
+
+      // Fallback: Fetch model.glb directly
+      loader.load('model.glb', onModelLoaded, undefined, onFallbackError);
+    }
+
+    function onFallbackError(err) {
+      console.error('GLTF loading error:', err);
+      const lText = document.getElementById('loading-text');
+      if (lText) lText.textContent = "Error loading 3D model: " + (err?.message || err);
+      setTimeout(() => {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+          overlay.classList.add('opacity-0');
+          setTimeout(() => overlay.remove(), 400);
+        }
+      }, 1500);
+    }
+
+    // ----------------------------------------------------
+    // CREATE 21 3D RC FOOTINGS (ฐานราก ค.ส.ล.)
+    // ----------------------------------------------------
+    function createFootingMeshes() {
+      footingGroup.clear();
+      footingMeshesMap.clear();
+      footingEdgesMap.clear();
+
+      const badgesContainer = document.getElementById('badges-container');
+      badgesContainer.innerHTML = '';
+
+      FOOTINGS_DATA.forEach(f => {
+        const [cx, cy, cz] = f.center;
+        const { w, l, h } = f.dim;
+
+        const curStatus = progressStore[f.id]?.status || 'pending';
+        const color = getFootingStatusColor(curStatus);
+
+        // 1. Solid Footing Box Geometry
+        const geo = new THREE.BoxGeometry(w, l, h);
+        const mat = new THREE.MeshStandardMaterial({
+          color: color,
+          roughness: 0.35,
+          metalness: 0.1,
+          transparent: true,
+          opacity: 0.88,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(cx, cy, cz);
+
+        // 2. Crisp CAD Outline Edges
+        const edgeGeo = new THREE.EdgesGeometry(geo, 15);
+        const edgeMat = new THREE.LineBasicMaterial({ color: 0x0f172a, linewidth: 2 });
+        const edges = new THREE.LineSegments(edgeGeo, edgeMat);
+        mesh.add(edges);
+
+        mesh.userData = {
+          isFooting: true,
+          footingId: f.id,
+          mark: f.mark,
+          footing: f
+        };
+
+        footingGroup.add(mesh);
+        footingMeshesMap.set(f.id, mesh);
+        footingEdgesMap.set(f.id, edgeMat);
+
+        // 3. Compact Pill Badge (for Scene 06 mode)
+        const pill = document.createElement('div');
+        pill.className = 'footing-pill';
+        pill.id = 'pill-' + f.id;
+        pill.innerHTML = `<span>${f.mark}</span>`;
+        badgesContainer.appendChild(pill);
+      });
+
+      updatePillBadgePositions();
+    }
+
+    function updateFootingVisuals() {
+      FOOTINGS_DATA.forEach(f => {
+        const mesh = footingMeshesMap.get(f.id);
+        if (!mesh) return;
+
+        const curStatus = progressStore[f.id]?.status || 'pending';
+
+        // Filter Check
+        const matchFilter = (currentFilter === 'all') || (curStatus === currentFilter);
+        mesh.visible = matchFilter && layerState.footings;
+
+        // Color update
+        mesh.material.color.setHex(getFootingStatusColor(curStatus));
+
+        // Highlight if selected
+        const edgeMat = footingEdgesMap.get(f.id);
+        if (edgeMat) {
+          if (f.id === selectedFootingId) {
+            edgeMat.color.setHex(0x0284c7); // Vibrant sky blue selection
+            mesh.material.emissive.setHex(0x0369a1);
+            mesh.material.emissiveIntensity = 0.25;
+          } else if (f.id === hoveredFootingId) {
+            edgeMat.color.setHex(0xf59e0b); // Amber hover
+            mesh.material.emissive.setHex(0x000000);
+            mesh.material.emissiveIntensity = 0;
+          } else {
+            edgeMat.color.setHex(0x0f172a); // Clean CAD black
+            mesh.material.emissive.setHex(0x000000);
+            mesh.material.emissiveIntensity = 0;
+          }
+        }
+      });
+
+      updateKPIs();
+    }
+
+    function updatePillBadgePositions() {
+      if (!layerState.badges) return;
+      const wp = new THREE.Vector3();
+
+      FOOTINGS_DATA.forEach(f => {
+        const pill = document.getElementById('pill-' + f.id);
+        if (!pill) return;
+
+        const mesh = footingMeshesMap.get(f.id);
+        if (!mesh || !mesh.visible) {
+          pill.style.display = 'none';
+          return;
+        }
+
+        wp.set(f.center[0], f.center[1], f.levels.top + 0.3);
+        wp.project(activeCamera);
+
+        if (wp.z > 1) {
+          pill.style.display = 'none';
+          return;
+        }
+
+        const sx = (wp.x * 0.5 + 0.5) * window.innerWidth;
+        const sy = (-(wp.y * 0.5) + 0.5) * window.innerHeight;
+
+        pill.style.display = 'block';
+        pill.style.left = `${sx}px`;
+        pill.style.top = `${sy}px`;
+      });
+    }
+
+    // ----------------------------------------------------
+    // BOLDER LAYER STATE TOGGLING ENGINE
+    // ----------------------------------------------------
+    function setLayerVisible(layerName, visible) {
+      layerState[layerName] = visible;
+      const card = document.getElementById('card-' + layerName);
+
+      if (card) {
+        if (visible) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      }
+
+      // Apply to 3D Scene
+      if (layerName === 'footings') {
+        footingGroup.visible = visible;
+        updateFootingVisuals();
+      } else if (layerName === 'piles') {
+        pileMeshesList.forEach(m => m.visible = visible);
+        pileEdgesList.forEach(eLine => eLine.visible = visible);
+      } else if (layerName === 'grid') {
+        gridBubbleObjects.forEach(o => o.visible = visible);
+        gridDimensionObjects.forEach(o => o.visible = visible);
+        cadLineObjects.forEach(o => o.visible = visible);
+      } else if (layerName === 'boundary') {
+        boundaryObjects.forEach(o => o.visible = visible);
+      } else if (layerName === 'badges') {
+        const bCont = document.getElementById('badges-container');
+        if (visible) {
+          bCont.classList.remove('hidden');
+          updatePillBadgePositions();
+        } else {
+          bCont.classList.add('hidden');
+        }
+      } else if (layerName === 'ground') {
+        groundGroup.visible = visible;
+      }
+    }
+
+    function toggleLayer(layerName) {
+      setLayerVisible(layerName, !layerState[layerName]);
+    }
+
+    function isolateLayer(layerName) {
+      // Isolate: Turn this layer ON, turn other major structural layers OFF
+      const allLayers = ['footings', 'piles', 'grid', 'boundary', 'badges', 'ground'];
+      allLayers.forEach(l => {
+        if (l === layerName) {
+          setLayerVisible(l, true);
+        } else if (l === 'grid') {
+          // Keep grid on for spatial context
+          setLayerVisible('grid', true);
+        } else {
+          setLayerVisible(l, false);
+        }
+      });
+    }
+
+    // ----------------------------------------------------
+    // INTERACTIVITY: HOVER TOOLTIP & CLICK SELECTION
+    // ----------------------------------------------------
+    const tooltip = document.getElementById('footing-hover-tooltip');
+    const tooltipText = document.getElementById('tooltip-text');
+    const tooltipDot = document.getElementById('tooltip-dot');
+
+    container.addEventListener('pointermove', (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, activeCamera);
+      const hits = raycaster.intersectObjects(footingGroup.children, true);
+
+      let found = null;
+      for (const h of hits) {
+        let cur = h.object;
+        while (cur && cur !== footingGroup) {
+          if (cur.userData?.isFooting) {
+            found = cur.userData.footing;
+            break;
+          }
+          cur = cur.parent;
+        }
+        if (found) break;
+      }
+
+      if (found) {
+        container.style.cursor = 'pointer';
+        hoveredFootingId = found.id;
+        tooltip.classList.remove('hidden');
+        tooltip.style.left = `${e.clientX + 16}px`;
+        tooltip.style.top = `${e.clientY + 12}px`;
+
+        const curStatus = progressStore[found.id]?.status || 'pending';
+        const stLabels = {
+          pending: 'รอเริ่ม',
+          excavated: 'ขุดดินแล้ว',
+          lean: 'เทลีนแล้ว',
+          rebar: 'ผูกเหล็กแล้ว',
+          poured: 'เทคอนกรีตเสร็จ'
+        };
+        tooltipDot.style.backgroundColor = '#' + getFootingStatusColor(curStatus).toString(16).padStart(6, '0');
+        tooltipText.innerHTML = `<strong class="font-bangers text-base">${found.mark}</strong> (${found.grid}) • ${stLabels[curStatus] || 'รอเริ่ม'} • TOP: ${found.levels.top}m`;
+      } else {
+        container.style.cursor = 'default';
+        hoveredFootingId = null;
+        tooltip.classList.add('hidden');
+      }
+
+      updateFootingVisuals();
+    });
+
+    container.addEventListener('click', (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, activeCamera);
+      const hits = raycaster.intersectObjects(footingGroup.children, true);
+
+      let found = null;
+      for (const h of hits) {
+        let cur = h.object;
+        while (cur && cur !== footingGroup) {
+          if (cur.userData?.isFooting) {
+            found = cur.userData.footing;
+            break;
+          }
+          cur = cur.parent;
+        }
+        if (found) break;
+      }
+
+      if (found) {
+        selectFooting(found.id);
+      }
+    });
+
+    function selectFooting(id) {
+      selectedFootingId = id;
+      const f = FOOTINGS_DATA.find(item => item.id === id);
+      if (!f) return;
+
+      updateFootingVisuals();
+
+      // Populate Inspector Drawer
+      const drawer = document.getElementById('inspector-drawer');
+      drawer.classList.remove('closed');
+
+      document.getElementById('drawer-title').textContent = f.mark;
+      document.getElementById('drawer-subtitle').textContent = `Grid ${f.grid} • ฐานราก ${f.piles_count} ต้น`;
+      document.getElementById('drawer-top-level').textContent = `${f.levels.top.toFixed(2)} m.`;
+      document.getElementById('drawer-pco-level').textContent = `${f.levels.pco.toFixed(3)} m.`;
+      document.getElementById('drawer-bot-level').textContent = `${f.levels.bot.toFixed(2)} m.`;
+      document.getElementById('drawer-dim-note').textContent = f.dim.note || `${f.dim.w} x ${f.dim.l} x ${f.dim.h} m`;
+      document.getElementById('drawer-depth').textContent = `${f.dim.h.toFixed(2)} m`;
+
+      const boq = f.boq || {};
+      document.getElementById('drawer-conc-vol').textContent = boq.concrete_m3?.toFixed(2) || '0.00';
+      document.getElementById('drawer-rebar-total').textContent = boq.rebar_kg?.toFixed(1) || '0.0';
+      document.getElementById('drawer-ratio').textContent = `${boq.ratio_kg_m3 || 0} kg/m³`;
+
+      // Rebar breakdown
+      const bList = document.getElementById('drawer-rebar-breakdown');
+      bList.innerHTML = '';
+      if (boq.breakdown && Object.keys(boq.breakdown).length > 0) {
+        Object.entries(boq.breakdown).forEach(([size, wt]) => {
+          const pct = Math.round((wt / (boq.rebar_kg || 1)) * 100);
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between';
+          row.innerHTML = `
+            <div class="flex items-center gap-1.5 w-24">
+              <span class="font-bold text-slate-800">${size}</span>
+              <span class="text-slate-400 font-mono text-[11px]">${wt.toFixed(1)}kg</span>
+            </div>
+            <div class="flex-1 mx-2 bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="bg-indigo-600 h-full rounded-full" style="width: ${pct}%"></div>
+            </div>
+            <span class="text-slate-500 font-mono text-[11px] w-8 text-right">${pct}%</span>
+          `;
+          bList.appendChild(row);
+        });
+      } else {
+        bList.innerHTML = '<span class="text-slate-400 italic">ไม่มีข้อมูลแยกขนาดเหล็ก</span>';
+      }
+
+      // Associated Piles
+      const pList = document.getElementById('drawer-piles-list');
+      pList.innerHTML = '';
+      if (f.associated_piles && f.associated_piles.length > 0) {
+        document.getElementById('drawer-piles-count').textContent = f.associated_piles.length;
+        f.associated_piles.forEach(p => {
+          const pill = document.createElement('span');
+          pill.className = 'px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-300 font-mono text-xs flex items-center gap-1';
+          pill.innerHTML = `<strong>${p.tag}</strong> <span class="text-[10px] text-slate-500">(${p.grid})</span>`;
+          pList.appendChild(pill);
+        });
+      } else {
+        document.getElementById('drawer-piles-count').textContent = f.piles_count;
+        pList.innerHTML = `<span class="text-slate-400 italic">เสาเข็มกลุ่ม ${f.piles_count} ต้น</span>`;
+      }
+
+      // Current progress
+      const curProg = progressStore[f.id] || { status: 'pending', date: '', notes: '' };
+      updateStatusToggles(curProg.status);
+      document.getElementById('field-pour-date').value = curProg.date || new Date().toISOString().slice(0, 10);
+      document.getElementById('field-pour-notes').value = curProg.notes || '';
+    }
+
+    function updateStatusToggles(curStatus) {
+      document.querySelectorAll('.status-toggle-btn').forEach(btn => {
+        if (btn.dataset.status === curStatus) {
+          btn.classList.add('ring-2', 'ring-slate-800', 'font-extrabold', 'shadow-[2px_2px_0px_#1e293b]');
+        } else {
+          btn.classList.remove('ring-2', 'ring-slate-800', 'font-extrabold', 'shadow-[2px_2px_0px_#1e293b]');
+        }
+      });
+    }
+
+    // ----------------------------------------------------
+    // PROGRESS STORAGE & KPI RECALCULATION
+    // ----------------------------------------------------
+    function loadProgress() {
+      const local = localStorage.getItem('pridi37_footing_progress');
+      if (local) {
+        try { progressStore = JSON.parse(local); } catch(_) {}
+      }
+      updateFootingVisuals();
+    }
+
+    function saveProgress(id, status, date, notes) {
+      progressStore[id] = { status, date, notes };
+      localStorage.setItem('pridi37_footing_progress', JSON.stringify(progressStore));
+      updateFootingVisuals();
+
+      const btn = document.getElementById('btn-save-drawer');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> บันทึกแล้ว!';
+      btn.classList.replace('bg-emerald-500', 'bg-sky-600');
+      if (window.lucide) lucide.createIcons();
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.classList.replace('bg-sky-600', 'bg-emerald-500');
+        if (window.lucide) lucide.createIcons();
+      }, 1200);
+    }
+
+    function updateKPIs() {
+      const counts = { pending: 0, excavated: 0, lean: 0, rebar: 0, poured: 0 };
+      let pouredVol = 0;
+
+      FOOTINGS_DATA.forEach(f => {
+        const st = progressStore[f.id]?.status || 'pending';
+        if (counts[st] !== undefined) counts[st]++;
+        if (st === 'poured') {
+          pouredVol += (f.boq?.concrete_m3 || 0);
+        }
+      });
+
+      const total = FOOTINGS_DATA.length || 21;
+      const pouredCount = counts.poured;
+      const pct = Math.round((pouredCount / total) * 100);
+
+      document.getElementById('kpi-poured-count').textContent = pouredCount;
+      document.getElementById('kpi-poured-pct').textContent = `(${pct}%)`;
+      document.getElementById('kpi-concrete-poured').textContent = pouredVol.toFixed(1);
+
+      document.getElementById('cnt-pending').textContent = counts.pending;
+      document.getElementById('cnt-excavated').textContent = counts.excavated;
+      document.getElementById('cnt-lean').textContent = counts.lean;
+      document.getElementById('cnt-rebar').textContent = counts.rebar;
+      document.getElementById('cnt-poured').textContent = counts.poured;
+    }
+
+    // ----------------------------------------------------
+    // CAMERA VIEWS & NAVIGATION
+    // ----------------------------------------------------
+    function updateNavHints(mode) {
+      const hint = document.getElementById('nav-hint-text');
+      if (!hint) return;
+      if (mode === '3d') {
+        hint.innerHTML = '🖱️ <strong>คลิกซ้ายลาก:</strong> หมุนมุมมอง 3D | <strong>Shift+ซ้าย หรือขวาลาก:</strong> เลื่อน (Pan) | <strong>ล้อเลื่อน:</strong> ซูม | <strong>คลิกที่ฐานราก:</strong> เปิดข้อมูล';
+      } else {
+        hint.innerHTML = '🖱️ <strong>คลิกซ้ายลาก:</strong> เลื่อนแปลน (Pan) | <strong>ล้อเลื่อน:</strong> ย่อ/ขยายแปลน 2D | <strong>คลิกที่ฐานราก:</strong> ดูข้อมูลสเปก';
+      }
+    }
+
+    function resetTopView() {
+      activeCamera = orthoCamera;
+      controlsOrtho.enabled = true;
+      controlsPersp.enabled = false;
+
+      orthoCamera.position.set(PLAN_CENTER.x, PLAN_CENTER.y, 80);
+      orthoCamera.up.set(0, 1, 0);
+      orthoCamera.lookAt(PLAN_CENTER.x, PLAN_CENTER.y, 0);
+
+      controlsOrtho.target.copy(PLAN_CENTER);
+      controlsOrtho.update();
+
+      document.getElementById('view-top-ortho')?.classList.add('active');
+      document.getElementById('view-iso3d')?.classList.remove('active');
+      updateNavHints('ortho');
+      updatePillBadgePositions();
+    }
+
+    function resetIsoView() {
+      activeCamera = perspCamera;
+      controlsOrtho.enabled = false;
+      controlsPersp.enabled = true;
+
+      perspCamera.position.set(PLAN_CENTER.x + 28, PLAN_CENTER.y - 36, 26);
+      perspCamera.up.set(0, 0, 1);
+      perspCamera.lookAt(PLAN_CENTER.x, PLAN_CENTER.y, 0);
+
+      controlsPersp.target.copy(PLAN_CENTER);
+      controlsPersp.update();
+
+      document.getElementById('view-top-ortho')?.classList.remove('active');
+      document.getElementById('view-iso3d')?.classList.add('active');
+      updateNavHints('3d');
+      updatePillBadgePositions();
+    }
+
+    // ----------------------------------------------------
+    // SEAMLESS BIM CAMERA SYNC (SHARED ACROSS PILING & FOOTING)
+    // ----------------------------------------------------
+    function saveBimSharedCamera() {
+      try {
+        const isOrtho = (activeCamera === orthoCamera);
+        const cam = isOrtho ? orthoCamera : perspCamera;
+        const ctrl = isOrtho ? controlsOrtho : controlsPersp;
+        if (!cam || !ctrl) return;
+        const state = {
+          isOrtho: isOrtho,
+          camPos: { x: cam.position.x, y: cam.position.y, z: cam.position.z },
+          camUp: { x: cam.up.x, y: cam.up.y, z: cam.up.z },
+          target: { x: ctrl.target.x, y: ctrl.target.y, z: ctrl.target.z },
+          orthoZoom: orthoCamera ? orthoCamera.zoom : 1,
+          timestamp: Date.now()
+        };
+        sessionStorage.setItem('pynn_bim_shared_camera', JSON.stringify(state));
+      } catch (err) {
+        console.warn('saveBimSharedCamera error:', err);
+      }
+    }
+
+    function restoreBimSharedCamera() {
+      try {
+        const raw = sessionStorage.getItem('pynn_bim_shared_camera');
+        if (!raw) return false;
+        const state = JSON.parse(raw);
+        if (!state || !state.camPos || !state.target) return false;
+        if (Date.now() - (state.timestamp || 0) > 2 * 60 * 60 * 1000) return false;
+
+        if (state.isOrtho) {
+          activeCamera = orthoCamera;
+          if (controlsOrtho) controlsOrtho.enabled = true;
+          if (controlsPersp) controlsPersp.enabled = false;
+          orthoCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
+          if (state.camUp) orthoCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
+          if (controlsOrtho) {
+            controlsOrtho.target.set(state.target.x, state.target.y, state.target.z);
+            controlsOrtho.update();
+          }
+          if (state.orthoZoom && state.orthoZoom > 0.05 && state.orthoZoom < 50) {
+            orthoCamera.zoom = state.orthoZoom;
+            orthoCamera.updateProjectionMatrix();
+          }
+          document.getElementById('view-top-ortho')?.classList.add('active');
+          document.getElementById('view-iso3d')?.classList.remove('active');
+          updateNavHints('ortho');
+        } else {
+          activeCamera = perspCamera;
+          if (controlsOrtho) controlsOrtho.enabled = false;
+          if (controlsPersp) controlsPersp.enabled = true;
+          perspCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
+          if (state.camUp) perspCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
+          if (controlsPersp) {
+            controlsPersp.target.set(state.target.x, state.target.y, state.target.z);
+            controlsPersp.update();
+          }
+          document.getElementById('view-top-ortho')?.classList.remove('active');
+          document.getElementById('view-iso3d')?.classList.add('active');
+          updateNavHints('3d');
+        }
+        if (typeof updatePillBadgePositions === 'function') {
+          updatePillBadgePositions();
+        }
+        return true;
+      } catch (err) {
+        console.warn('restoreBimSharedCamera error:', err);
+        return false;
+      }
+    }
+
+    // ----------------------------------------------------
+    // EVENT LISTENERS & UI WIRING
+    // ----------------------------------------------------
+    function setupUI() {
+      // Save BIM Camera on switching modules or navigating away
+      window.addEventListener('beforeunload', saveBimSharedCamera);
+      document.getElementById('dock-btn-piling')?.addEventListener('click', saveBimSharedCamera);
+      // Views
+      document.getElementById('view-top-ortho').addEventListener('click', resetTopView);
+      document.getElementById('view-iso3d').addEventListener('click', resetIsoView);
+
+      // Quick Camera Angles
+      document.getElementById('btn-view-top').addEventListener('click', () => {
+        if (activeCamera === perspCamera) {
+          perspCamera.position.set(PLAN_CENTER.x, PLAN_CENTER.y - 0.001, 75);
+          perspCamera.up.set(0, 1, 0);
+          controlsPersp.target.copy(PLAN_CENTER);
+          controlsPersp.update();
+        } else {
+          resetTopView();
+        }
+      });
+
+      document.getElementById('btn-view-front').addEventListener('click', () => {
+        resetIsoView();
+        perspCamera.position.set(PLAN_CENTER.x, PLAN_CENTER.y - 45, 12);
+        perspCamera.up.set(0, 0, 1);
+        controlsPersp.target.copy(PLAN_CENTER);
+        controlsPersp.update();
+      });
+
+      document.getElementById('btn-view-side').addEventListener('click', () => {
+        resetIsoView();
+        perspCamera.position.set(PLAN_CENTER.x - 45, PLAN_CENTER.y, 12);
+        perspCamera.up.set(0, 0, 1);
+        controlsPersp.target.copy(PLAN_CENTER);
+        controlsPersp.update();
+      });
+
+      document.getElementById('btn-view-center').addEventListener('click', () => {
+        if (activeCamera === perspCamera) {
+          controlsPersp.target.copy(PLAN_CENTER);
+          controlsPersp.update();
+        } else {
+          controlsOrtho.target.copy(PLAN_CENTER);
+          controlsOrtho.update();
+        }
+      });
+
+      // BOLDER TACTILE LAYER CARDS WIRING
+      const layerKeys = ['footings', 'piles', 'grid', 'boundary', 'badges', 'ground'];
+      layerKeys.forEach(key => {
+        const card = document.getElementById('card-' + key);
+        if (!card) return;
+
+        card.addEventListener('click', (e) => {
+          // If clicked on solo button, don't trigger normal toggle
+          if (e.target.closest('.btn-solo')) return;
+          toggleLayer(key);
+        });
+      });
+
+      // Solo buttons wiring
+      document.querySelectorAll('.btn-solo').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const target = btn.dataset.solo;
+          isolateLayer(target);
+        });
+      });
+
+      // Quick Batch Buttons: All / Reset
+      document.getElementById('btn-layers-all')?.addEventListener('click', () => {
+        ['footings', 'piles', 'grid', 'boundary'].forEach(k => setLayerVisible(k, true));
+      });
+
+      document.getElementById('btn-layers-reset')?.addEventListener('click', () => {
+        setLayerVisible('footings', true);
+        setLayerVisible('piles', true);
+        setLayerVisible('grid', true);
+        setLayerVisible('boundary', true);
+        setLayerVisible('badges', false);
+        setLayerVisible('ground', false);
+      });
+
+      // Footing Opacity Slider & Presets
+      const opSlider = document.getElementById('rng-footing-opacity');
+      const opLabel = document.getElementById('lbl-opacity');
+
+      function setFootingOpacity(val) {
+        if (opSlider) opSlider.value = val;
+        if (opLabel) opLabel.textContent = Math.round(val * 100) + '%';
+        footingMeshesMap.forEach(mesh => {
+          mesh.material.opacity = val;
+          mesh.material.transparent = val < 1.0;
+        });
+      }
+
+      if (opSlider) {
+        opSlider.addEventListener('input', (e) => {
+          setFootingOpacity(parseFloat(e.target.value));
+        });
+      }
+
+      document.querySelectorAll('.btn-opacity-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = parseFloat(btn.dataset.val);
+          setFootingOpacity(val);
+        });
+      });
+
+      // Filter Buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.add('bg-white');
+          });
+          btn.classList.add('active', 'bg-slate-800', 'text-white');
+          btn.classList.remove('bg-white');
+          currentFilter = btn.dataset.filter;
+          updateFootingVisuals();
+          updatePillBadgePositions();
+        });
+      });
+
+      // Drawer Close
+      document.getElementById('close-drawer-btn').addEventListener('click', () => {
+        document.getElementById('inspector-drawer').classList.add('closed');
+        selectedFootingId = null;
+        updateFootingVisuals();
+      });
+      document.getElementById('btn-close-drawer').addEventListener('click', () => {
+        document.getElementById('inspector-drawer').classList.add('closed');
+        selectedFootingId = null;
+        updateFootingVisuals();
+      });
+
+      // Status buttons inside drawer
+      document.querySelectorAll('.status-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const st = btn.dataset.status;
+          updateStatusToggles(st);
+          if (selectedFootingId) {
+            const date = document.getElementById('field-pour-date').value;
+            const notes = document.getElementById('field-pour-notes').value;
+            saveProgress(selectedFootingId, st, date, notes);
+          }
+        });
+      });
+
+      // Drawer Save Button
+      document.getElementById('btn-save-drawer').addEventListener('click', () => {
+        if (!selectedFootingId) return;
+        const curStatus = document.querySelector('.status-toggle-btn.ring-2')?.dataset.status || 'pending';
+        const date = document.getElementById('field-pour-date').value;
+        const notes = document.getElementById('field-pour-notes').value;
+        saveProgress(selectedFootingId, curStatus, date, notes);
+      });
+
+      // Print Button
+      document.getElementById('btn-print').addEventListener('click', () => {
+        window.print();
+      });
+
+      // Mobile Toolbar Toggle
+      const tbBtn = document.getElementById('toggle-footing-toolbar-mobile');
+      const tb = document.getElementById('footing-toolbar');
+      if (tbBtn && tb) {
+        if (window.innerWidth <= 768) {
+          tb.classList.add('collapsed-mobile');
+        }
+        tbBtn.addEventListener('click', () => {
+          const isCollapsed = tb.classList.toggle('collapsed-mobile');
+          const txt = document.getElementById('footing-toolbar-mobile-text');
+          if (txt) txt.textContent = isCollapsed ? 'เลเยอร์ 3D' : 'ปิดเมนู';
+        });
+      }
+
+      // Window Resize
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function onWindowResize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Update Perspective
+      perspCamera.aspect = w / h;
+      perspCamera.updateProjectionMatrix();
+
+      // Update Ortho
+      const frustumHeight = 32;
+      const aspect = w / h;
+      orthoCamera.left = -frustumHeight * aspect / 2;
+      orthoCamera.right = frustumHeight * aspect / 2;
+      orthoCamera.top = frustumHeight / 2;
+      orthoCamera.bottom = -frustumHeight / 2;
+      orthoCamera.updateProjectionMatrix();
+
+      renderer.setSize(w, h);
+      updatePillBadgePositions();
+    }
+
+    // ----------------------------------------------------
+    // ANIMATION & RENDER LOOP
+    // ----------------------------------------------------
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (activeCamera === perspCamera) {
+        controlsPersp.update();
+      } else {
+        controlsOrtho.update();
+      }
+
+      if (layerState.badges) {
+        updatePillBadgePositions();
+      }
+
+      renderer.render(scene, activeCamera);
+    }
+
+    // ----------------------------------------------------
+    // BOOTSTRAP
+    // ----------------------------------------------------
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      init3D();
+      setupUI();
+      loadProgress();
+    });
+  </script>
+</body>
+</html>

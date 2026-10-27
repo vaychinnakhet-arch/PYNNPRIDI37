@@ -2,6 +2,8 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/piling", "destination": "/piling.html" },
-    { "source": "/footing", "destination": "/footing.html" }
+    { "source": "/footing", "destination": "/footing.html" },
+    { "source": "/test/piling", "destination": "/test/piling.html" },
+    { "source": "/test/footing", "destination": "/test/footing.html" }
   ]
 }
