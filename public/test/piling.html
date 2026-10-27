@@ -1710,21 +1710,36 @@
                 </div>
               </div>
 
-              <!-- Layer 2: ผังฐานราก ค.ส.ล. -->
-              <a href="test/footing.html" id="sidebar-card-footings" class="layer-card active active-footing flex items-center justify-between no-underline group" title="คลิกเพื่อสลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-6 h-6 rounded-md bg-[#E0F2FE] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7] shrink-0">
-                    <i data-lucide="box" class="w-3.5 h-3.5"></i>
+              <!-- Layer 2: ฐานราก ค.ส.ล. (21 ฐาน BIM Layer) -->
+              <div id="sidebar-card-footings" class="layer-card active active-footing flex flex-col gap-1" data-layer="footings" title="คลิกเพื่อ เปิด/ปิด ฐานราก ค.ส.ล. ทั้งหมด">
+                <div class="flex items-center justify-between w-full" id="trigger-sidebar-footings">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-6 h-6 rounded-md bg-[#E0F2FE] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7] shrink-0">
+                      <i data-lucide="box" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-footings">ผังฐานราก ค.ส.ล.</div>
+                      <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">21 ฐาน • คอนกรีต 3D</div>
+                    </div>
                   </div>
-                  <div class="min-w-0">
-                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ผังฐานราก ค.ส.ล.</div>
-                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">21 ฐาน • 3D BIM</div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" class="btn-solo" data-solo="footings" title="ดูเฉพาะฐานราก">SOLO</button>
+                    <div class="toggle-switch"><div class="toggle-knob"></div></div>
                   </div>
                 </div>
-                <span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-[#0284C7] text-white border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:bg-[#0369A1] transition-all shrink-0">
-                  เปิด 3D ↗
-                </span>
-              </a>
+                <!-- Subtoggles: Quick Opacity Presets -->
+                <div id="div-footing-subtoggles" class="flex items-center justify-between p-1 bg-[#FAF5EE] rounded-lg border border-[#E2D9CC] gap-1 w-full mt-0.5">
+                  <span class="text-[9px] font-bold text-[#3E4B69] flex items-center gap-1">
+                    <i data-lucide="eye" class="w-2.5 h-2.5 text-[#0284C7]"></i>
+                    <span>ความทึบแสง:</span>
+                  </span>
+                  <div class="flex items-center gap-1">
+                    <button type="button" class="btn-footing-op text-[8.5px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 cursor-pointer" data-val="0.35">X-Ray (35%)</button>
+                    <button type="button" class="btn-footing-op is-active text-[8.5px] font-black px-1.5 py-0.5 rounded-md bg-[#0284C7] text-white border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] cursor-pointer" data-val="0.85">สมดุล (85%)</button>
+                    <button type="button" class="btn-footing-op text-[8.5px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 cursor-pointer" data-val="1.0">ทึบ (100%)</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1960,10 +1975,10 @@
       <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
       <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
     </span>
-    <a href="test/footing.html" id="dock-btn-footing" class="px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#F26B2A] active:scale-95" title="สลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
-      <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
+    <button type="button" id="dock-btn-footing" class="px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#0284C7] active:scale-95 cursor-pointer" title="เปิด/ปิด เลเยอร์ผังฐานราก ค.ส.ล. 21 ฐาน">
+      <span id="dot-dock-footing" class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
       <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
-    </a>
+    </button>
   </nav>
 
   <!-- MOUSE NAVIGATION HINT (LIFTED & VISIBLE ONLY ON ULTRA-WIDE / DESKTOP SCREENS) -->
@@ -2241,6 +2256,91 @@
         </button>
         <button id="btn-card-toggle-cancel" class="pop-btn w-full py-1 text-xs text-[#b91c1c] hover:bg-rose-50 flex items-center justify-center gap-1 font-bold">
           <i data-lucide="rotate-ccw" class="w-3 h-3"></i> ยกเลิก (ตั้งเป็นยังไม่กด)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footing Inspector Card (ฐานราก ค.ส.ล. 21 ฐาน BIM Layer) -->
+  <div id="footing-card" class="fixed bottom-5 right-5 z-[70] w-88 max-w-[92vw] pop-card p-3.5 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden flex flex-col bg-white border-2.5 border-slate-900 rounded-2xl shadow-[4px_4px_0px_#0f172a]">
+    <!-- Drag Handle & Header -->
+    <div id="footing-card-header" class="flex items-center justify-between border-b-2 border-slate-900 pb-2 mb-2.5 cursor-grab active:cursor-grabbing select-none">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-[#E0F2FE] border-2 border-[#1D2B45] flex items-center justify-center text-[#0284C7] shadow-xs">
+          <i data-lucide="box" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h3 id="card-footing-mark" class="text-sm font-black text-slate-900 leading-tight">F5: C3</h3>
+            <span id="card-footing-grid" class="px-2 py-0.2 rounded-full bg-sky-100 text-[#0284c7] font-mono font-black text-[10px] border border-sky-300">5-A</span>
+          </div>
+          <div id="card-footing-name" class="text-[10px] font-bold text-slate-500">ฐานราก ค.ส.ล. • 5 เสาเข็ม</div>
+        </div>
+      </div>
+      <button id="btn-close-footing-card" type="button" class="w-7 h-7 rounded-lg border-1.5 border-slate-900 bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition-colors shadow-2xs cursor-pointer" title="ปิดหน้าต่าง">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Body Information -->
+    <div class="space-y-2 text-xs">
+      <!-- Section 1: Dimensions & Levels -->
+      <div class="p-2 rounded-xl bg-[#FAF5EE] border-1.5 border-slate-900 space-y-1.5 shadow-2xs">
+        <div class="flex items-center justify-between text-[11px] font-black text-slate-800 border-b border-slate-200 pb-1">
+          <span class="flex items-center gap-1"><i data-lucide="ruler" class="w-3.5 h-3.5 text-[#F26B2A]"></i> ขนาด & ระดับอ้างอิง</span>
+          <span id="card-footing-dim" class="font-mono text-[10.5px] text-slate-600 font-bold">2.50 x 2.50 x 0.90(H) m</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 text-center pt-0.5">
+          <div class="bg-sky-50 border border-sky-200 rounded-lg p-1">
+            <div class="text-[9px] text-sky-700 font-bold">TOP LEVEL</div>
+            <div id="card-footing-top" class="font-mono font-black text-xs text-sky-950">-0.900 m</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-lg p-1">
+            <div class="text-[9px] text-amber-700 font-bold">PCO ตัดหัวเข็ม</div>
+            <div id="card-footing-pco" class="font-mono font-black text-xs text-amber-950">-1.725 m</div>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 rounded-lg p-1">
+            <div class="text-[9px] text-rose-700 font-bold">BOT ก้นฐาน</div>
+            <div id="card-footing-bot" class="font-mono font-black text-xs text-rose-950">-1.800 m</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: BOQ Material -->
+      <div class="p-2 rounded-xl bg-white border-1.5 border-slate-900 space-y-1.5 shadow-2xs">
+        <div class="flex items-center justify-between text-[11px] font-black text-slate-800 border-b border-slate-100 pb-1">
+          <span class="flex items-center gap-1"><i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-600"></i> ปริมาณวัสดุ BOQ</span>
+          <span id="card-footing-ratio" class="font-mono text-[10px] text-slate-600 bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200">71.4 kg/m³</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-center">
+          <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-1.5 flex items-center justify-between px-2">
+            <span class="text-[10px] font-bold text-emerald-800">คอนกรีต:</span>
+            <span class="font-mono font-black text-xs text-emerald-700"><span id="card-footing-conc">5.62</span> m³</span>
+          </div>
+          <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-1.5 flex items-center justify-between px-2">
+            <span class="text-[10px] font-bold text-indigo-800">เหล็กเสริม:</span>
+            <span class="font-mono font-black text-xs text-indigo-700"><span id="card-footing-rebar">401.0</span> kg</span>
+          </div>
+        </div>
+        <div id="card-footing-rebar-pills" class="flex flex-wrap gap-1 text-[9.5px]"></div>
+      </div>
+
+      <!-- Section 3: Associated Piles -->
+      <div class="p-2 rounded-xl bg-amber-50/60 border-1.5 border-slate-900 space-y-1.5 shadow-2xs">
+        <div class="flex items-center justify-between text-[11px] font-black text-slate-800">
+          <span class="flex items-center gap-1"><i data-lucide="anchor" class="w-3.5 h-3.5 text-amber-700"></i> เสาเข็มในฐาน (<span id="card-footing-piles-count">5</span> ต้น):</span>
+          <span class="text-[9.5px] font-normal text-slate-500">คลิกที่เบอร์เข็มเพื่อเปิดดู/บันทึก</span>
+        </div>
+        <div id="card-footing-piles-list" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-1.5 pt-1">
+        <button id="btn-footing-focus" type="button" class="flex-1 py-1.5 px-2 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-black border-1.5 border-slate-900 shadow-xs flex items-center justify-center gap-1 cursor-pointer">
+          <i data-lucide="crosshair" class="w-3.5 h-3.5"></i> ซูมโฟกัสฐานรากนี้
+        </button>
+        <button id="btn-footing-isolate" type="button" class="py-1.5 px-2.5 rounded-xl bg-white hover:bg-[#FAF5EE] text-[#1D2B45] text-xs font-black border-1.5 border-slate-900 shadow-xs flex items-center justify-center gap-1 cursor-pointer" title="ดูเฉพาะฐานนี้และเข็มของฐานนี้">
+          <i data-lucide="scan" class="w-3.5 h-3.5"></i> Isolate
         </button>
       </div>
     </div>
@@ -3293,6 +3393,11 @@
   <!-- EMBEDDED ZERO-CORS GLB DATA & PILES DATABASE (EXTRACTED) -->
   <script src="piling_embedded_data.js"></script>
 
+  <!-- FOOTINGS DATA (21 RC BIM FOOTINGS) -->
+  <script id="footings-metadata-script">
+    window.__FOOTINGS_METADATA__ = {"project":"PYNN PRIDI 37","scene":"06_ฟุตติ้ง_เข็ม_เหล็กตอม่อ_TOP_BOT_PCO","generated_at":"2026-10-18 20:15:19","summary":{"total_footings":21,"total_concrete_m3":155.47,"total_rebar_kg":10901.3,"total_rebar_tons":10.9,"avg_rebar_ratio":70.1},"boundary":{"north":{"label":"39.15 m","length_m":39.15},"south":{"label":"41.91 m","length_m":41.91},"west":{"label":"19.77 m","length_m":19.77},"east":{"label":"18.25 m (SOI PRIDI 37)","length_m":18.25},"code":"n115816"},"gridlines":{"x_axes":[{"name":"1","x":0},{"name":"2","x":0.5},{"name":"3","x":5.7},{"name":"4","x":10.85},{"name":"5","x":12.2},{"name":"6","x":20},{"name":"7","x":27.5},{"name":"8","x":29.45},{"name":"9","x":32.7},{"name":"10","x":32.9}],"y_axes":[{"name":"A","y":12.4},{"name":"B","y":5.2},{"name":"C","y":3.5},{"name":"D","y":1.3},{"name":"E","y":0}]},"footings":[{"id":"F5_C3_5A","no":1,"name":"F5: C3 (Grid 5-A)","mark":"F5: C3","grid":"5-A","dim":{"w":2.5,"l":2.5,"h":0.9,"note":"2.50x2.50x0.90(H)"},"levels":{"top":-0.9,"bot":-1.8,"pco":-1.725},"center":[12.2,12.4,-1.35],"bounds":{"min_x":10.95,"max_x":13.45,"min_y":11.15,"max_y":13.65,"min_z":-1.8,"max_z":-0.9},"card_position":[11.75,13.645],"boq":{"concrete_m3":5.62,"rebar_kg":401,"ratio_kg_m3":71.4,"breakdown":{"DB25":392.5,"DB12":8.5}},"piles_count":5,"associated_piles":[{"no":10,"tag":"P10","grid":"4-A","pco":-1.726},{"no":11,"tag":"P11","grid":"5-A","pco":-1.726},{"no":12,"tag":"P12","grid":"5-A","pco":-1.726},{"no":13,"tag":"P13","grid":"4-A","pco":-1.726},{"no":14,"tag":"P14","grid":"5-A","pco":-1.726}]},{"id":"F6_C2_3A","no":2,"name":"F6: C2 (Grid 3-A)","mark":"F6: C2","grid":"3-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[5.7,12.4,-1],"bounds":{"min_x":4.7,"max_x":6.7,"min_y":10.8,"max_y":14,"min_z":-1.6,"max_z":-0.4},"card_position":[5.7,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":4,"tag":"P04","grid":"3-A","pco":-1.526},{"no":5,"tag":"P05","grid":"3-A","pco":-1.526},{"no":6,"tag":"P06","grid":"3-A","pco":-1.526},{"no":7,"tag":"P07","grid":"3-A","pco":-1.526},{"no":8,"tag":"P08","grid":"3-A","pco":-1.526},{"no":9,"tag":"P09","grid":"3-A","pco":-1.526}]},{"id":"F6_C4_1Mid","no":3,"name":"F6: C4 (Grid 1 / Mid)","mark":"F6: C4","grid":"1-Mid","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.7,"bot":-1.9,"pco":-1.825},"center":[0,3.95,-1.3],"bounds":{"min_x":-1,"max_x":1,"min_y":2.35,"max_y":5.55,"min_z":-1.9,"max_z":-0.7},"card_position":[-2.545,4.013],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":30,"tag":"P30","grid":"1-B","pco":-1.826},{"no":31,"tag":"P31","grid":"2-B","pco":-1.826},{"no":32,"tag":"P32","grid":"1-C","pco":-1.826},{"no":33,"tag":"P33","grid":"2-C","pco":-1.826},{"no":34,"tag":"P34","grid":"1-C","pco":-1.826},{"no":35,"tag":"P35","grid":"2-C","pco":-1.826}]},{"id":"F6_C3_6A","no":4,"name":"F6: C3 (Grid 6-A)","mark":"F6: C3","grid":"6-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.55,"bot":-1.75,"pco":-1.675},"center":[20,12.4,-1.15],"bounds":{"min_x":19,"max_x":21,"min_y":10.8,"max_y":14,"min_z":-1.75,"max_z":-0.55},"card_position":[20,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":15,"tag":"P15","grid":"6-A","pco":-1.676},{"no":16,"tag":"P16","grid":"6-A","pco":-1.676},{"no":17,"tag":"P17","grid":"6-A","pco":-1.676},{"no":18,"tag":"P18","grid":"6-A","pco":-1.676},{"no":19,"tag":"P19","grid":"6-A","pco":-1.676},{"no":20,"tag":"P20","grid":"6-A","pco":-1.676}]},{"id":"F6_C3A_7A","no":5,"name":"F6: C3A (Grid 7-A)","mark":"F6: C3A","grid":"7-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[27.5,12.4,-1],"bounds":{"min_x":26.5,"max_x":28.5,"min_y":10.8,"max_y":14,"min_z":-1.6,"max_z":-0.4},"card_position":[27.5,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":21,"tag":"P21","grid":"7-A","pco":-1.526},{"no":22,"tag":"P22","grid":"7-A","pco":-1.526},{"no":23,"tag":"P23","grid":"7-A","pco":-1.526},{"no":24,"tag":"P24","grid":"7-A","pco":-1.526},{"no":25,"tag":"P25","grid":"7-A","pco":-1.526},{"no":26,"tag":"P26","grid":"7-A","pco":-1.526}]},{"id":"F6A_C1A_8","no":6,"name":"F6A: C1A: C3 (Grid 8)","mark":"F6A: C1A: C3","grid":"8","dim":{"w":2,"l":3.25,"h":1.2,"note":"3.25x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[29.45,4,-1],"bounds":{"min_x":28.45,"max_x":30.45,"min_y":2.375,"max_y":5.625,"min_z":-1.6,"max_z":-0.4},"card_position":[31.445,5.08],"boq":{"concrete_m3":7.68,"rebar_kg":842.7,"ratio_kg_m3":109.7,"breakdown":{"DB25":825,"DB12":17.7}},"piles_count":6,"associated_piles":[{"no":81,"tag":"P81","grid":"8-B","pco":-1.526},{"no":82,"tag":"P82","grid":"8-B","pco":-1.526},{"no":83,"tag":"P83","grid":"8-C","pco":-1.526},{"no":84,"tag":"P84","grid":"8-C","pco":-1.526},{"no":85,"tag":"P85","grid":"8-C","pco":-1.526},{"no":86,"tag":"P86","grid":"8-C","pco":-1.526}]},{"id":"F3_C3_2A","no":7,"name":"F3: C3 (Grid 2-A)","mark":"F3: C3","grid":"2-A","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[0.5,12.23,-0.85],"bounds":{"min_x":-0.562,"max_x":1.562,"min_y":11.31,"max_y":13.15,"min_z":-1.3,"max_z":-0.4},"card_position":[0.5,13.86],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":1,"tag":"P01","grid":"1-A","pco":-1.226},{"no":2,"tag":"P02","grid":"2-A","pco":-1.226},{"no":3,"tag":"P03","grid":"2-A","pco":-1.226}]},{"id":"F3_C3_9A","no":8,"name":"F3: C3 (Grid 9-A)","mark":"F3: C3","grid":"9-A","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[32.7,12.23,-0.85],"bounds":{"min_x":31.638,"max_x":33.762,"min_y":11.31,"max_y":13.15,"min_z":-1.3,"max_z":-0.4},"card_position":[32.7,13.86],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":27,"tag":"P27","grid":"9-A","pco":-1.226},{"no":28,"tag":"P28","grid":"10-A","pco":-1.226},{"no":29,"tag":"P29","grid":"9-A","pco":-1.226}]},{"id":"F3_C3_10C","no":9,"name":"F3: C3 (Grid 10-C)","mark":"F3: C3","grid":"10-C","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[32.9,3.33,-0.85],"bounds":{"min_x":31.838,"max_x":33.962,"min_y":2.41,"max_y":4.25,"min_z":-1.3,"max_z":-0.4},"card_position":[34.695,3.143],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":87,"tag":"P87","grid":"9-C","pco":-1.226},{"no":88,"tag":"P88","grid":"10-C","pco":-1.226},{"no":89,"tag":"P89","grid":"10-C","pco":-1.226}]},{"id":"F2_C1C_1D","no":10,"name":"F2: C1C (Grid 1-D)","mark":"F2: C1C","grid":"1-D","dim":{"w":2,"l":0.9,"h":0.8,"note":"2.60x0.80x0.80(H)"},"levels":{"top":-0.7,"bot":-1.5,"pco":-1.425},"center":[0,1.3,-1.1],"bounds":{"min_x":-1,"max_x":1,"min_y":0.85,"max_y":1.75,"min_z":-1.5,"max_z":-0.7},"card_position":[-2.545,0.418],"boq":{"concrete_m3":1.44,"rebar_kg":103.8,"ratio_kg_m3":72.1,"breakdown":{"DB20":53.7,"DB16":45.2,"DB12":4.8}},"piles_count":2,"associated_piles":[{"no":36,"tag":"P36","grid":"1-D","pco":-1.426},{"no":37,"tag":"P37","grid":"2-D","pco":-1.426}]},{"id":"F2_C1_8E","no":11,"name":"F2: C1 (Grid 8-E)","mark":"F2: C1","grid":"8-E","dim":{"w":2,"l":0.8,"h":0.8,"note":"2.80x0.80x0.80(H)"},"levels":{"top":-0.9,"bot":-1.7,"pco":-1.625},"center":[29.7,0,-1.3],"bounds":{"min_x":28.7,"max_x":30.7,"min_y":-0.4,"max_y":0.4,"min_z":-1.7,"max_z":-0.9},"card_position":[29.7,-1.583],"boq":{"concrete_m3":1.28,"rebar_kg":101.5,"ratio_kg_m3":79.3,"breakdown":{"DB20":53.7,"DB16":43.2,"DB12":4.6}},"piles_count":2,"associated_piles":[{"no":90,"tag":"P90","grid":"8-E","pco":-1.626},{"no":91,"tag":"P91","grid":"8-E","pco":-1.626}]},{"id":"F2_C1_10E","no":12,"name":"F2: C1 (Grid 10-E)","mark":"F2: C1","grid":"10-E","dim":{"w":2,"l":0.8,"h":0.8,"note":"2.80x0.80x0.80(H)"},"levels":{"top":-0.9,"bot":-1.7,"pco":-1.625},"center":[32.9,0,-1.3],"bounds":{"min_x":31.9,"max_x":33.9,"min_y":-0.4,"max_y":0.4,"min_z":-1.7,"max_z":-0.9},"card_position":[34.845,-0.833],"boq":{"concrete_m3":1.28,"rebar_kg":101.5,"ratio_kg_m3":79.3,"breakdown":{"DB20":53.7,"DB16":43.2,"DB12":4.6}},"piles_count":2,"associated_piles":[{"no":92,"tag":"P92","grid":"9-E","pco":-1.626},{"no":93,"tag":"P93","grid":"10-E","pco":-1.626}]},{"id":"F1_3B","no":13,"name":"F1 (Grid 3-B)","mark":"F1","grid":"3-B","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-0.15,"bot":-0.85,"pco":-0.65},"center":[5.7,5.2,-0.5],"bounds":{"min_x":5.3,"max_x":6.1,"min_y":4.8,"max_y":5.6,"min_z":-0.85,"max_z":-0.15},"card_position":[4.005,5.013],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":38,"tag":"P38","grid":"3-B","pco":-0.651}]},{"id":"F1_3D","no":14,"name":"F1 (Grid 3-D)","mark":"F1","grid":"3-D","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-0.15,"bot":-0.85,"pco":-0.65},"center":[5.7,1.3,-0.5],"bounds":{"min_x":5.3,"max_x":6.1,"min_y":0.9,"max_y":1.7,"min_z":-0.85,"max_z":-0.15},"card_position":[4.005,1.113],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":39,"tag":"P39","grid":"3-D","pco":-0.651}]},{"id":"F1_C0_Top","no":15,"name":"F1: C0 (Water Tank บน)","mark":"F1: C0","grid":"Tank-Top","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,5.435,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":5.035,"max_y":5.835,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,5.253],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":78,"tag":"P78","grid":"7-B","pco":-3.251}]},{"id":"F1_C0_Mid","no":16,"name":"F1: C0 (Water Tank กลาง)","mark":"F1: C0","grid":"Tank-Mid","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,2.713,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":2.313,"max_y":3.113,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,2.523],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":79,"tag":"P79","grid":"7-C","pco":-3.251}]},{"id":"F1_C0_Bot","no":17,"name":"F1: C0 (Water Tank ล่าง)","mark":"F1: C0","grid":"Tank-Bot","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,-0.01,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":-0.41,"max_y":0.39,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,-0.197],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":80,"tag":"P80","grid":"7-E","pco":-3.251}]},{"id":"F20A_Core1A","no":18,"name":"F20A: CORE 1A (Grid 4-5)","mark":"F20A: CORE 1A","grid":"4-5","dim":{"w":5.2,"l":6.9,"h":1,"note":"5.20x6.90x1.00(H)"},"levels":{"top":-1.7,"bot":-2.7,"pco":-2.625},"center":[12.16,3.05,-2.2],"bounds":{"min_x":9.56,"max_x":14.76,"min_y":-0.4,"max_y":6.5,"min_z":-2.7,"max_z":-1.7},"card_position":[12.16,4.25],"boq":{"concrete_m3":35.88,"rebar_kg":2120.2,"ratio_kg_m3":59.1,"breakdown":{"DB20":2098.2,"DB12":22}},"piles_count":20,"associated_piles":[{"no":40,"tag":"P40","grid":"4-B","pco":-2.626},{"no":41,"tag":"P41","grid":"4-B","pco":-2.626},{"no":42,"tag":"P42","grid":"5-B","pco":-2.626},{"no":43,"tag":"P43","grid":"5-B","pco":-2.626},{"no":44,"tag":"P44","grid":"4-B","pco":-2.626},{"no":45,"tag":"P45","grid":"4-B","pco":-2.626},{"no":46,"tag":"P46","grid":"5-B","pco":-2.626},{"no":47,"tag":"P47","grid":"5-B","pco":-2.626},{"no":48,"tag":"P48","grid":"4-C","pco":-2.626},{"no":49,"tag":"P49","grid":"4-C","pco":-2.626},{"no":50,"tag":"P50","grid":"5-C","pco":-2.626},{"no":51,"tag":"P51","grid":"5-C","pco":-2.626},{"no":52,"tag":"P52","grid":"4-D","pco":-2.626},{"no":53,"tag":"P53","grid":"4-D","pco":-2.626},{"no":54,"tag":"P54","grid":"5-D","pco":-2.626},{"no":55,"tag":"P55","grid":"5-D","pco":-2.626},{"no":56,"tag":"P56","grid":"4-E","pco":-2.626},{"no":57,"tag":"P57","grid":"4-E","pco":-2.626},{"no":58,"tag":"P58","grid":"5-E","pco":-2.626},{"no":59,"tag":"P59","grid":"5-E","pco":-2.626}]},{"id":"F18A_Core2A","no":19,"name":"F18A: CORE 2A (Grid 6)","mark":"F18A: CORE 2A","grid":"6","dim":{"w":5.4,"l":6.8,"h":1.4,"note":"5.40x6.80x1.40(H)"},"levels":{"top":-3.5,"bot":-4.1,"pco":-4.125},"center":[19.165,2.975,-3.7],"bounds":{"min_x":16.465,"max_x":21.865,"min_y":-0.425,"max_y":6.375,"min_z":-4.4,"max_z":-3},"card_position":[19.165,4.175],"boq":{"concrete_m3":51.41,"rebar_kg":3833.1,"ratio_kg_m3":74.6,"breakdown":{"DB25":2202.1,"DB20":1586.7,"DB12":44.3}},"piles_count":18,"associated_piles":[{"no":60,"tag":"P60","grid":"6-B","pco":-4.326},{"no":61,"tag":"P61","grid":"6-B","pco":-4.326},{"no":62,"tag":"P62","grid":"6-B","pco":-4.326},{"no":63,"tag":"P63","grid":"6-B","pco":-4.326},{"no":64,"tag":"P64","grid":"6-B","pco":-4.326},{"no":65,"tag":"P65","grid":"6-C","pco":-4.326},{"no":66,"tag":"P66","grid":"6-C","pco":-4.326},{"no":67,"tag":"P67","grid":"6-C","pco":-4.326},{"no":68,"tag":"P68","grid":"6-C","pco":-4.326},{"no":69,"tag":"P69","grid":"6-C","pco":-4.326},{"no":70,"tag":"P70","grid":"6-D","pco":-4.326},{"no":71,"tag":"P71","grid":"6-D","pco":-4.326},{"no":72,"tag":"P72","grid":"6-D","pco":-4.326},{"no":73,"tag":"P73","grid":"6-D","pco":-4.326},{"no":74,"tag":"P74","grid":"6-D","pco":-4.326},{"no":75,"tag":"P75","grid":"6-E","pco":-4.326},{"no":76,"tag":"P76","grid":"6-E","pco":-4.326},{"no":77,"tag":"P77","grid":"6-E","pco":-4.326}]},{"id":"WWT_1","no":20,"name":"WWT 1","mark":"WWT 1","grid":"WWT-1","dim":{"w":10.95,"l":3.5,"h":0.25,"note":"10.95x3.50x0.25(H)"},"levels":{"top":-2.95,"bot":-3.2,"pco":-3.15},"center":[13.933,8.672,-3.075],"bounds":{"min_x":8.458,"max_x":19.408,"min_y":6.922,"max_y":10.422,"min_z":-3.2,"max_z":-2.95},"card_position":[15.5,10.945],"boq":{"concrete_m3":9.58,"rebar_kg":691.4,"ratio_kg_m3":72.2,"breakdown":{"DB12":691.4}},"piles_count":20,"associated_piles":[]},{"id":"WWT_2","no":21,"name":"WWT 2","mark":"WWT 2","grid":"WWT-2","dim":{"w":2.5,"l":2.5,"h":0.2,"note":"2.50x2.50x0.20(H)"},"levels":{"top":-2.9,"bot":-3.1,"pco":-3.05},"center":[21.836,8.672,-3],"bounds":{"min_x":20.586,"max_x":23.086,"min_y":7.422,"max_y":9.922,"min_z":-3.1,"max_z":-2.9},"card_position":[24.315,9.013],"boq":{"concrete_m3":1.25,"rebar_kg":108.6,"ratio_kg_m3":86.9,"breakdown":{"DB12":108.6}},"piles_count":4,"associated_piles":[]}]};
+  </script>
+
   <!-- Application Logic -->
   <script type="module">
     import * as THREE from 'three';
@@ -3319,6 +3424,15 @@
     window.hexPileObjects = [];
     let activeFilter = 'all';
     window.drainageObjects = [];
+
+    // 21 RC Footings (ฐานราก ค.ส.ล. BIM Layer)
+    const FOOTINGS_DATA = window.__FOOTINGS_METADATA__?.footings || [];
+    let footingGroup = new THREE.Group();
+    footingGroup.name = 'footingGroup';
+    let footingMeshesMap = new Map();
+    let footingEdgesMap = new Map();
+    let selectedFootingId = null;
+    let hoveredFootingId = null;
 
     // Supabase Configuration & Client Loader
     const SUPABASE_URL = "https://gyzrsrxzzturoqwhuiul.supabase.co";
@@ -4009,6 +4123,59 @@
     currentModel = null;
     let modelRoot = new THREE.Group();
     scene.add(modelRoot);
+    scene.add(footingGroup);
+
+    // ----------------------------------------------------
+    // CREATE 21 3D RC FOOTINGS (ฐานราก ค.ส.ล. BIM Layer)
+    // ----------------------------------------------------
+    function createFootingMeshes() {
+      footingGroup.clear();
+      footingMeshesMap.clear();
+      footingEdgesMap.clear();
+
+      const curOpacity = window.VISIBILITY_STATE?.footings?.opacity ?? 0.85;
+
+      FOOTINGS_DATA.forEach(f => {
+        const [cx, cy, cz] = f.center;
+        const { w, l, h } = f.dim;
+
+        // 1. Solid Footing Box Geometry
+        const geo = new THREE.BoxGeometry(w, l, h);
+        const mat = new THREE.MeshStandardMaterial({
+          color: 0x38bdf8, // Sky-400 / Architectural Cyan-Blue
+          roughness: 0.35,
+          metalness: 0.1,
+          transparent: true,
+          opacity: curOpacity,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(cx, cy, cz);
+
+        // 2. Crisp CAD Outline Edges (Navy #1D2B45)
+        const edgeGeo = new THREE.EdgesGeometry(geo, 15);
+        const edgeMat = new THREE.LineBasicMaterial({ color: 0x1D2B45, linewidth: 2 });
+        const edges = new THREE.LineSegments(edgeGeo, edgeMat);
+        mesh.add(edges);
+
+        mesh.userData = {
+          isFooting: true,
+          footingId: f.id,
+          mark: f.mark,
+          footing: f
+        };
+
+        footingGroup.add(mesh);
+        footingMeshesMap.set(f.id, mesh);
+        footingEdgesMap.set(f.id, edgeMat);
+      });
+
+      footingGroup.visible = window.VISIBILITY_STATE?.footings?.enabled ?? true;
+    }
+
+    createFootingMeshes();
 
     let drainageObjects = window.drainageObjects;
 
@@ -4815,6 +4982,37 @@
       return null;
     }
 
+    /**
+     * ค้นหาฐานราก ค.ส.ล. (21 ฐาน) ที่ตำแหน่งเคอร์เซอร์
+     */
+    function getFootingAtPointer(e) {
+      if (!window.VISIBILITY_STATE?.footings?.enabled) return null;
+      if (!renderer || !renderer.domElement || !activeCamera || !footingGroup) return null;
+
+      const rect = renderer.domElement.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      if (clickX < 0 || clickX > rect.width || clickY < 0 || clickY > rect.height) return null;
+
+      const normX = (clickX / rect.width) * 2 - 1;
+      const normY = -(clickY / rect.height) * 2 + 1;
+
+      mouse.set(normX, normY);
+      raycaster.setFromCamera(mouse, activeCamera);
+
+      const hits = raycaster.intersectObjects(footingGroup.children, true);
+      for (const h of hits) {
+        let cur = h.object;
+        while (cur && cur !== footingGroup) {
+          if (cur.userData?.isFooting && cur.userData.footing) {
+            return cur.userData.footing;
+          }
+          cur = cur.parent;
+        }
+      }
+      return null;
+    }
+
     // Raycast on pointerup ONLY if it was a quick stationary click (NOT a drag to rotate or pan!)
     window.addEventListener('pointerup', (e) => {
       if (e.target !== renderer.domElement) return;
@@ -4833,10 +5031,17 @@
         } else {
           openPileCard(hitPileNo);
         }
+        return;
+      }
+
+      // ตรวจสอบการคลิกที่ฐานราก ค.ส.ล.
+      const hitFooting = getFootingAtPointer(e);
+      if (hitFooting) {
+        openFootingCard(hitFooting);
       }
     });
 
-    // Double-click to Focus & Center rotation on clicked pile
+    // Double-click to Focus & Center rotation on clicked pile or footing
     window.addEventListener('dblclick', (e) => {
       if (e.target !== renderer.domElement) return;
       const hitPileNo = getPileAtPointer(e);
@@ -4851,6 +5056,19 @@
             controlsOrtho.target.set(pt.x, pt.y, 0);
             controlsOrtho.update();
           }
+        }
+        return;
+      }
+
+      const hitFooting = getFootingAtPointer(e);
+      if (hitFooting) {
+        const pt = new THREE.Vector3(hitFooting.center[0], hitFooting.center[1], hitFooting.center[2]);
+        if (activeCamera === perspCamera) {
+          controlsPersp.target.set(pt.x, pt.y, pt.z);
+          controlsPersp.update();
+        } else {
+          controlsOrtho.target.set(pt.x, pt.y, 0);
+          controlsOrtho.update();
         }
       }
     });
@@ -5805,6 +6023,10 @@
         showModel: true,
         showText: true
       },
+      footings: {
+        enabled: true,
+        opacity: 0.85
+      },
       drainage: {
         enabled: false,
         showModel: false,
@@ -5990,11 +6212,77 @@
       }
     }
 
+    function updateFootingsCardUI() {
+      const state = window.VISIBILITY_STATE.footings;
+      const card = document.getElementById('sidebar-card-footings');
+      const subtoggles = document.getElementById('div-footing-subtoggles');
+      const dotDock = document.getElementById('dot-dock-footing');
+
+      if (card) {
+        if (state.enabled) {
+          card.classList.add('active', 'active-footing');
+        } else {
+          card.classList.remove('active', 'active-footing');
+        }
+      }
+
+      if (subtoggles) {
+        subtoggles.classList.toggle('hidden', !state.enabled);
+      }
+
+      if (dotDock) {
+        dotDock.className = state.enabled
+          ? 'w-2 h-2 rounded-full bg-[#0284C7] animate-pulse'
+          : 'w-2 h-2 rounded-full bg-slate-300';
+      }
+
+      // Update opacity preset button states
+      document.querySelectorAll('.btn-footing-op').forEach(btn => {
+        const val = parseFloat(btn.getAttribute('data-val'));
+        const isActive = Math.abs(val - state.opacity) < 0.05;
+        if (isActive) {
+          btn.className = 'btn-footing-op is-active text-[8.5px] font-black px-1.5 py-0.5 rounded-md bg-[#0284C7] text-white border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] cursor-pointer';
+        } else {
+          btn.className = 'btn-footing-op text-[8.5px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 cursor-pointer';
+        }
+      });
+    }
+
+    function updateFootingsSceneVisuals() {
+      const state = window.VISIBILITY_STATE.footings;
+      footingGroup.visible = !!state.enabled;
+
+      if (!state.enabled) return;
+
+      FOOTINGS_DATA.forEach(f => {
+        const mesh = footingMeshesMap.get(f.id);
+        const edge = footingEdgesMap.get(f.id);
+        if (!mesh) return;
+
+        mesh.material.opacity = state.opacity;
+        mesh.material.transparent = state.opacity < 0.98;
+
+        if (f.id === selectedFootingId) {
+          mesh.material.color.setHex(0x0284c7); // Vibrant sky blue selection
+          mesh.material.emissive.setHex(0x0369a1);
+          mesh.material.emissiveIntensity = 0.35;
+          if (edge) edge.color.setHex(0x0284c7);
+        } else {
+          mesh.material.color.setHex(0x38bdf8); // Standard Sky-400
+          mesh.material.emissive.setHex(0x000000);
+          mesh.material.emissiveIntensity = 0;
+          if (edge) edge.color.setHex(0x1D2B45);
+        }
+      });
+    }
+
     function applyVisibilityChanges() {
       updatePilesCardUI();
+      updateFootingsCardUI();
       updateDrainageCardUI();
       updateOtherCardsUI();
       updatePileMeshVisuals();
+      updateFootingsSceneVisuals();
       updateDrainageSceneVisuals();
       if (typeof renderPlanSnapshotCanvas === 'function') renderPlanSnapshotCanvas();
     }
@@ -6028,6 +6316,16 @@
           window.VISIBILITY_STATE.piles.enabled = true;
           window.VISIBILITY_STATE.piles.showModel = true;
           window.VISIBILITY_STATE.piles.showText = true;
+          window.VISIBILITY_STATE.footings.enabled = false;
+          window.VISIBILITY_STATE.drainage.enabled = false;
+          window.VISIBILITY_STATE.drainage.showModel = false;
+          window.VISIBILITY_STATE.drainage.showText = false;
+          window.VISIBILITY_STATE.hex = false;
+        } else if (target === 'footings') {
+          window.VISIBILITY_STATE.footings.enabled = true;
+          window.VISIBILITY_STATE.piles.enabled = false;
+          window.VISIBILITY_STATE.piles.showModel = false;
+          window.VISIBILITY_STATE.piles.showText = false;
           window.VISIBILITY_STATE.drainage.enabled = false;
           window.VISIBILITY_STATE.drainage.showModel = false;
           window.VISIBILITY_STATE.drainage.showText = false;
@@ -6039,6 +6337,7 @@
           window.VISIBILITY_STATE.piles.enabled = false;
           window.VISIBILITY_STATE.piles.showModel = false;
           window.VISIBILITY_STATE.piles.showText = false;
+          window.VISIBILITY_STATE.footings.enabled = false;
           window.VISIBILITY_STATE.hex = false;
         }
         applyVisibilityChanges();
@@ -6056,6 +6355,7 @@
       window.VISIBILITY_STATE.piles.enabled = true;
       window.VISIBILITY_STATE.piles.showModel = true;
       window.VISIBILITY_STATE.piles.showText = true;
+      window.VISIBILITY_STATE.footings.enabled = true;
       window.VISIBILITY_STATE.drainage.enabled = true;
       window.VISIBILITY_STATE.drainage.showModel = true;
       window.VISIBILITY_STATE.drainage.showText = true;
@@ -6069,6 +6369,8 @@
       window.VISIBILITY_STATE.piles.enabled = true;
       window.VISIBILITY_STATE.piles.showModel = true;
       window.VISIBILITY_STATE.piles.showText = true;
+      window.VISIBILITY_STATE.footings.enabled = true;
+      window.VISIBILITY_STATE.footings.opacity = 0.85;
       window.VISIBILITY_STATE.drainage.enabled = false;
       window.VISIBILITY_STATE.drainage.showModel = false;
       window.VISIBILITY_STATE.drainage.showText = false;
@@ -6077,6 +6379,220 @@
       window.VISIBILITY_STATE.hex = false;
       applyVisibilityChanges();
     });
+
+    // Footings Layer Card & Opacity Controls
+    document.getElementById('sidebar-card-footings')?.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-footing-op') || e.target.closest('.btn-solo')) return;
+      window.VISIBILITY_STATE.footings.enabled = !window.VISIBILITY_STATE.footings.enabled;
+      applyVisibilityChanges();
+    });
+
+    document.querySelectorAll('.btn-footing-op').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = parseFloat(btn.getAttribute('data-val'));
+        if (!isNaN(val)) {
+          window.VISIBILITY_STATE.footings.opacity = val;
+          window.VISIBILITY_STATE.footings.enabled = true;
+          applyVisibilityChanges();
+        }
+      });
+    });
+
+    // Dock Button Footing Toggle
+    document.getElementById('dock-btn-footing')?.addEventListener('click', () => {
+      window.VISIBILITY_STATE.footings.enabled = !window.VISIBILITY_STATE.footings.enabled;
+      applyVisibilityChanges();
+      showSyncToast(
+        window.VISIBILITY_STATE.footings.enabled
+          ? '🏗️ เปิดเลเยอร์ฐานราก ค.ส.ล. (21 ฐาน)'
+          : '🏗️ ซ่อนเลเยอร์ฐานราก ค.ส.ล.'
+      );
+    });
+
+    // Close Footing Card Button
+    document.getElementById('btn-close-footing-card')?.addEventListener('click', closeFootingCard);
+
+    // Footing Card Modal Controller
+    function openFootingCard(f) {
+      if (!f) return;
+      selectedFootingId = f.id;
+      updateFootingsSceneVisuals();
+
+      const card = document.getElementById('footing-card');
+      if (!card) return;
+
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setTxt('card-footing-mark', f.mark);
+      setTxt('card-footing-grid', f.grid);
+      setTxt('card-footing-name', `${f.name} • ${f.piles_count} เสาเข็ม`);
+      setTxt('card-footing-dim', f.dim?.note || `${f.dim?.w} x ${f.dim?.l} x ${f.dim?.h} m`);
+      setTxt('card-footing-top', `${f.levels.top.toFixed(3)} m`);
+      setTxt('card-footing-pco', `${f.levels.pco.toFixed(3)} m`);
+      setTxt('card-footing-bot', `${f.levels.bot.toFixed(3)} m`);
+
+      const boq = f.boq || {};
+      setTxt('card-footing-conc', (boq.concrete_m3 || 0).toFixed(2));
+      setTxt('card-footing-rebar', (boq.rebar_kg || 0).toFixed(1));
+      setTxt('card-footing-ratio', `${boq.ratio_kg_m3 || 0} kg/m³`);
+
+      // Rebar breakdown pills
+      const rCont = document.getElementById('card-footing-rebar-pills');
+      if (rCont) {
+        rCont.innerHTML = '';
+        if (boq.breakdown && Object.keys(boq.breakdown).length > 0) {
+          Object.entries(boq.breakdown).forEach(([bar, wt]) => {
+            const pill = document.createElement('span');
+            pill.className = 'px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono font-bold border border-slate-200';
+            pill.textContent = `${bar}: ${wt.toFixed(1)}kg`;
+            rCont.appendChild(pill);
+          });
+        }
+      }
+
+      // Associated piles list
+      const pCont = document.getElementById('card-footing-piles-list');
+      if (pCont) {
+        pCont.innerHTML = '';
+        setTxt('card-footing-piles-count', f.associated_piles?.length || f.piles_count || 0);
+        if (f.associated_piles && f.associated_piles.length > 0) {
+          f.associated_piles.forEach(p => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'px-2 py-1 rounded-lg bg-white hover:bg-amber-100 text-amber-900 border-1.5 border-amber-300 font-mono font-bold text-xs flex items-center gap-1 shadow-2xs active:scale-95 transition-all cursor-pointer';
+            btn.innerHTML = `<strong>${p.tag}</strong> <span class="text-[10px] text-slate-500">(${p.grid})</span>`;
+            btn.title = `คลิกเพื่อเปิดข้อมูลเสาเข็ม ${p.tag} (เบอร์ ${p.no})`;
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openPileCard(p.no);
+            });
+            pCont.appendChild(btn);
+          });
+        } else {
+          pCont.innerHTML = `<span class="text-[10px] text-slate-400 italic">ไม่มีข้อมูลเสาเข็มรายต้น (${f.piles_count} ต้น)</span>`;
+        }
+      }
+
+      // Focus camera button
+      const btnFocus = document.getElementById('btn-footing-focus');
+      if (btnFocus) {
+        btnFocus.onclick = () => {
+          const pt = new THREE.Vector3(f.center[0], f.center[1], f.center[2]);
+          if (activeCamera === perspCamera) {
+            controlsPersp.target.set(pt.x, pt.y, pt.z);
+            controlsPersp.update();
+          } else {
+            controlsOrtho.target.set(pt.x, pt.y, 0);
+            controlsOrtho.update();
+          }
+        };
+      }
+
+      // Isolate button
+      const btnIsol = document.getElementById('btn-footing-isolate');
+      if (btnIsol) {
+        btnIsol.onclick = () => {
+          window.VISIBILITY_STATE.footings.enabled = true;
+          window.VISIBILITY_STATE.piles.enabled = true;
+          window.VISIBILITY_STATE.drainage.enabled = false;
+          // Hide all piles except associated piles
+          const assocNos = (f.associated_piles || []).map(p => p.no);
+          for (let pNo = 1; pNo <= 93; pNo++) {
+            const meshes = pileMeshesMap.get(pNo) || [];
+            const isAssoc = assocNos.includes(pNo);
+            meshes.forEach(m => m.visible = isAssoc);
+          }
+          applyVisibilityChanges();
+        };
+      }
+
+      card.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        card.classList.remove('translate-y-4', 'opacity-0');
+      });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeFootingCard() {
+      const card = document.getElementById('footing-card');
+      if (!card) return;
+      card.classList.add('translate-y-4', 'opacity-0');
+      setTimeout(() => {
+        card.classList.add('hidden');
+        selectedFootingId = null;
+        updateFootingsSceneVisuals();
+      }, 200);
+    }
+
+    function makeFootingCardDraggable() {
+      const card = document.getElementById('footing-card');
+      const header = document.getElementById('footing-card-header');
+      if (!card || !header) return;
+
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      function onPointerDown(e) {
+        if (e.target.closest('#btn-close-footing-card') || e.target.closest('button')) return;
+        isDragging = true;
+        const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+        startX = clientX;
+        startY = clientY;
+
+        const rect = card.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        card.style.setProperty('right', 'auto', 'important');
+        card.style.setProperty('bottom', 'auto', 'important');
+        card.style.setProperty('left', initialLeft + 'px', 'important');
+        card.style.setProperty('top', initialTop + 'px', 'important');
+        card.style.margin = '0';
+        header.style.cursor = 'grabbing';
+
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+        document.addEventListener('touchmove', onPointerMove, { passive: false });
+        document.addEventListener('touchend', onPointerUp);
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+        if (e.cancelable && e.type === 'touchmove') e.preventDefault();
+
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+        let newLeft = initialLeft + dx;
+        let newTop = initialTop + dy;
+
+        const pad = 8;
+        const maxLeft = window.innerWidth - card.offsetWidth - pad;
+        const maxTop = window.innerHeight - card.offsetHeight - pad;
+        newLeft = Math.max(pad, Math.min(newLeft, maxLeft));
+        newTop = Math.max(pad, Math.min(newTop, maxTop));
+
+        card.style.setProperty('left', Math.round(newLeft) + 'px', 'important');
+        card.style.setProperty('top', Math.round(newTop) + 'px', 'important');
+      }
+
+      function onPointerUp() {
+        if (!isDragging) return;
+        isDragging = false;
+        header.style.cursor = 'grab';
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', onPointerUp);
+        document.removeEventListener('touchmove', onPointerMove);
+        document.removeEventListener('touchend', onPointerUp);
+      }
+
+      header.addEventListener('pointerdown', onPointerDown);
+      header.addEventListener('touchstart', onPointerDown, { passive: true });
+    }
+
+    makeFootingCardDraggable();
 
     // Accordion Toggle for Engineering Disciplines
     document.querySelectorAll('.discipline-toggle-btn').forEach(btn => {
