@@ -545,11 +545,30 @@
         top: 72px !important;
       }
     }
+    /* Mobile Form Input Focus: Prevent iOS auto-zoom and jarring screen jump */
+    @media (max-width: 1024px) {
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      select,
+      textarea {
+        font-size: 16px !important;
+      }
+    }
+
+    /* Enforce hidden states reliably */
+    #pile-card.hidden,
+    #footing-card.hidden {
+      display: none !important;
+      pointer-events: none !important;
+    }
+
     .floating-hud.is-mobile-collapsed {
       display: none !important;
       pointer-events: none !important;
       opacity: 0 !important;
     }
+
     @media (max-width: 768px) {
       .floating-hud.is-mobile-collapsed {
         display: none !important;
@@ -567,26 +586,26 @@
         max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-        z-index: 85 !important;
+        z-index: 90 !important;
         border-radius: 1.5rem 1.5rem 0 0 !important;
+        box-shadow: 0 -8px 30px rgba(29, 43, 69, 0.35) !important;
       }
       #sidebar-main-console {
-        max-height: 75vh !important;
+        max-height: 80vh !important;
         border-radius: 1.5rem 1.5rem 0 0 !important;
         border-bottom: none !important;
         width: 100% !important;
       }
       #sidebar-tab-content {
-        max-height: calc(75vh - 110px) !important;
+        max-height: calc(80vh - 110px) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
-        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
       }
-    }
-    @media (max-width: 640px) {
-      /* Mobile Bottom Sheet for Pile & Footing Cards */
-      #pile-card,
-      #footing-card {
+
+      /* Mobile & Foldable Bottom Sheet for Pile & Footing Cards (<= 768px) */
+      #pile-card:not(.hidden),
+      #footing-card:not(.hidden) {
         position: fixed !important;
         left: 0 !important;
         right: 0 !important;
@@ -601,17 +620,17 @@
         border-right: 2px solid #1D2B45 !important;
         border-top: 2px solid #1D2B45 !important;
         border-bottom: none !important;
-        box-shadow: 0 -8px 28px rgba(29, 43, 69, 0.3) !important;
-        z-index: 90 !important;
+        box-shadow: 0 -8px 30px rgba(29, 43, 69, 0.35) !important;
+        z-index: 95 !important;
         margin: 0 !important;
-        padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px)) 1rem !important;
+        padding: 0.75rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px)) 1rem !important;
         display: flex !important;
         flex-direction: column !important;
       }
       #pile-card-header,
       #footing-card-header {
         position: relative;
-        padding-top: 6px;
+        padding-top: 4px;
         flex-shrink: 0;
         cursor: default !important;
       }
@@ -632,11 +651,13 @@
         max-height: calc(85vh - 120px) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
       }
       #footing-card .tab-footing-panel {
         max-height: calc(85vh - 140px) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
       }
       #btn-dock-toggle-card {
         display: none !important;
@@ -1753,8 +1774,8 @@
   </div>
 
   <!-- Mobile Backdrop Overlays for Bottom Sheets & Drawers -->
-  <div id="backdrop-hud-mobile" class="fixed inset-0 bg-[#1D2B45]/40 backdrop-blur-[2px] z-[70] hidden pointer-events-auto transition-opacity duration-200"></div>
-  <div id="backdrop-sheet-mobile" class="fixed inset-0 bg-[#1D2B45]/40 backdrop-blur-[2px] z-[80] hidden pointer-events-auto transition-opacity duration-200"></div>
+  <div id="backdrop-hud-mobile" class="fixed inset-0 bg-[#1D2B45]/40 backdrop-blur-[2px] z-[70] hidden pointer-events-none transition-opacity duration-200"></div>
+  <div id="backdrop-sheet-mobile" class="fixed inset-0 bg-[#1D2B45]/40 backdrop-blur-[2px] z-[80] hidden pointer-events-none transition-opacity duration-200"></div>
   <div id="backdrop-dropdown-mobile" class="fixed inset-0 bg-[#1D2B45]/30 backdrop-blur-[1px] z-[45] hidden pointer-events-auto transition-opacity duration-200"></div>
 
   <!-- Left Floating Toolbar: Views & Pile Filters (Distilled & Impeccable DoodleWeb Edition) -->
@@ -1774,8 +1795,11 @@
         <div class="flex items-center gap-1">
           <button id="btn-layers-all" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
           <button id="btn-layers-reset" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="รีเซ็ตค่าเริ่มต้น (เข็ม+กริด+เขต)">รีเซ็ต</button>
-          <button id="btn-toggle-hud" type="button" class="text-[9px] font-extrabold text-[#1D2B45] hover:text-[#F26B2A] bg-[#FAF5EE] hover:bg-[#F6E9D7] px-2 py-0.5 rounded-full border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="ย่อ / ขยาย แผงควบคุม">
+          <button id="btn-toggle-hud" type="button" class="text-[9px] font-extrabold text-[#1D2B45] hover:text-[#F26B2A] bg-[#FAF5EE] hover:bg-[#F6E9D7] px-2 py-0.5 rounded-full border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer hidden sm:inline-block" title="ย่อ / ขยาย แผงควบคุม">
             ย่อ
+          </button>
+          <button id="btn-close-hud" type="button" class="w-6 h-6 rounded-md bg-[#FAF5EE] hover:bg-[#FEE2E2] hover:text-[#E64C3C] text-[#1D2B45] border border-[#1D2B45] flex items-center justify-center transition-all cursor-pointer shadow-[0.5px_0.5px_0px_#1D2B45]" title="ปิดแผงควบคุม 3D">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
           </button>
         </div>
       </div>
@@ -2114,16 +2138,20 @@
   </footer>
 
   <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
-  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[4px_4px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
-    <span id="dock-btn-piling" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F26B2A] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังงานเสาเข็ม 93 ต้น">
+  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[4px_4px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body max-w-[calc(100vw-16px)] overflow-x-auto">
+    <button type="button" id="dock-btn-menu-3d" class="px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FFF3EB] hover:text-[#F26B2A] active:scale-95 cursor-pointer shrink-0" title="เปิด/ปิด เมนูควบคุมแบบและ 3D">
+      <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+      <span class="whitespace-nowrap font-bold">เมนู 3D</span>
+    </button>
+    <button type="button" id="dock-btn-piling" class="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F26B2A] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-pointer shrink-0 active:scale-95" title="ค้นหาและเลือกเสาเข็ม 93 ต้น">
       <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
       <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
-    </span>
-    <button type="button" id="dock-btn-footing" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#0284C7] active:scale-95 cursor-pointer" title="เปิด/ปิด เลเยอร์ผังฐานราก ค.ส.ล. 21 ฐาน">
+    </button>
+    <button type="button" id="dock-btn-footing" class="px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#0284C7] active:scale-95 cursor-pointer shrink-0" title="เปิด/ปิด เลเยอร์ผังฐานราก ค.ส.ล. 21 ฐาน">
       <span id="dot-dock-footing" class="w-2 h-2 rounded-full bg-slate-300"></span>
       <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
     </button>
-    <button type="button" id="dock-btn-center" class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#F26B2A] active:scale-95 cursor-pointer" title="จัดมุมมองกึ่งกลางไซต์โครงการ (Top View)">
+    <button type="button" id="dock-btn-center" class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#F26B2A] active:scale-95 cursor-pointer shrink-0" title="จัดมุมมองกึ่งกลางไซต์โครงการ (Top View)">
       <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
       <span class="whitespace-nowrap font-bold hidden sm:inline">กึ่งกลาง</span>
     </button>
@@ -5459,7 +5487,7 @@
       let initialLeft = 0, initialTop = 0;
 
       function onPointerDown(e) {
-        if (window.innerWidth < 640) return; // Mobile bottom sheet is anchored, not draggable
+        if (window.innerWidth <= 768 || ('ontouchstart' in window && !window.matchMedia('(pointer: fine)').matches)) return;
         if (e.target.closest('button') || e.target.closest('input') || e.target.closest('a')) return;
         isDragging = true;
         const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
@@ -5521,7 +5549,6 @@
       }
 
       header.addEventListener('pointerdown', onPointerDown);
-      header.addEventListener('touchstart', onPointerDown, { passive: true });
     }
 
     function openPileCard(pileNo, fromQuickSelect = false) {
@@ -5662,8 +5689,8 @@
       card.classList.remove('hidden');
       setTimeout(() => card.classList.remove('translate-y-4', 'opacity-0'), 10);
 
-      // Smart position check: On mobile, present as full bottom sheet with backdrop
-      if (window.innerWidth < 640) {
+      // Smart position check: On mobile and foldables (<= 768px), present as full bottom sheet
+      if (window.innerWidth <= 768) {
         card.classList.remove('dock-left', 'has-been-dragged');
         card.style.removeProperty('left');
         card.style.removeProperty('right');
@@ -5671,8 +5698,11 @@
         card.style.removeProperty('bottom');
         card.style.removeProperty('width');
         toggleMinimizePileCard(false); // Show full bottom sheet on mobile so user can see and edit
-        const backdrop = document.getElementById('backdrop-sheet-mobile');
-        if (backdrop) backdrop.classList.remove('hidden');
+        const body = document.getElementById('pile-card-body');
+        if (body) {
+          body.classList.remove('hidden');
+          body.style.display = 'flex';
+        }
       } else {
         if (!pileCardHasBeenDragged) {
           card.classList.remove('dock-left');
@@ -6281,9 +6311,9 @@
       const hud = document.getElementById('floating-hud');
       if (!header || !hud) return;
       if (window.innerWidth <= 768) {
-        hud.style.top = '';
-        hud.style.bottom = '58px';
-        hud.style.maxHeight = '60vh';
+        hud.style.removeProperty('top');
+        hud.style.removeProperty('bottom');
+        hud.style.removeProperty('max-height');
       } else {
         const rect = header.getBoundingClientRect();
         const topPos = Math.round(rect.bottom + 8);
@@ -6297,12 +6327,8 @@
     
     // Auto-collapse HUD on mobile on first load to preserve clean 3D viewport
     if (window.innerWidth <= 768) {
-      const body = document.getElementById('floating-hud-body');
       const hud = document.getElementById('floating-hud');
-      if (body && !body.classList.contains('hidden')) {
-        body.classList.add('hidden');
-        if (hud) hud.classList.add('collapsed');
-      }
+      if (hud) hud.classList.add('is-mobile-collapsed');
     }
     adjustFloatingHudPosition();
     setTimeout(adjustFloatingHudPosition, 100);
@@ -6752,16 +6778,14 @@
       const card = document.getElementById('footing-card');
       if (!card) return;
 
-      // Smart position check: On mobile, present as full bottom sheet with backdrop
-      if (window.innerWidth < 640) {
+      // Smart position check: On mobile and foldables (<= 768px), present as full bottom sheet
+      if (window.innerWidth <= 768) {
         card.classList.remove('has-been-dragged');
         card.style.removeProperty('left');
         card.style.removeProperty('right');
         card.style.removeProperty('top');
         card.style.removeProperty('bottom');
         card.style.removeProperty('width');
-        const backdrop = document.getElementById('backdrop-sheet-mobile');
-        if (backdrop) backdrop.classList.remove('hidden');
       } else {
         if (!footingCardHasBeenDragged) {
           card.style.setProperty('left', 'auto', 'important');
@@ -6951,7 +6975,7 @@
       let startX, startY, initialLeft, initialTop;
 
       function onPointerDown(e) {
-        if (window.innerWidth < 640) return; // Mobile bottom sheet is anchored, not draggable
+        if (window.innerWidth <= 768 || ('ontouchstart' in window && !window.matchMedia('(pointer: fine)').matches)) return;
         if (e.target.closest('#btn-close-footing-card') || e.target.closest('button')) return;
         isDragging = true;
         footingCardHasBeenDragged = true;
@@ -7009,7 +7033,6 @@
       }
 
       header.addEventListener('pointerdown', onPointerDown);
-      header.addEventListener('touchstart', onPointerDown, { passive: true });
     }
 
     makeFootingCardDraggable();
@@ -10797,10 +10820,6 @@
       document.getElementById('btn-quick-select')?.click();
     });
 
-    document.getElementById('btn-toggle-hud')?.addEventListener('click', () => {
-      const hudBody = document.getElementById('floating-hud-body');
-      if (hudBody) hudBody.classList.toggle('hidden');
-    });
 
     window.addEventListener('resize', () => {
       const asp = window.innerWidth / window.innerHeight;
@@ -11496,6 +11515,10 @@
       const tabContent = document.getElementById('sidebar-tab-content');
       const btnToggle = document.getElementById('btn-toggle-hud');
       if (hud) {
+        if (window.innerWidth <= 768) {
+          toggleMobileHud();
+          return;
+        }
         hud.classList.toggle('collapsed');
         const isCollapsed = hud.classList.contains('collapsed');
         if (hudBody) {
@@ -11512,30 +11535,35 @@
 
     document.getElementById('btn-toggle-hud')?.addEventListener('click', toggleHudState);
     document.getElementById('btn-thumb-menu')?.addEventListener('click', toggleHudState);
+    document.getElementById('btn-close-hud')?.addEventListener('click', () => {
+      const hud = document.getElementById('floating-hud');
+      if (window.innerWidth <= 768) {
+        if (hud) hud.classList.add('is-mobile-collapsed');
+      } else {
+        toggleHudState();
+      }
+    });
 
-    // Mobile HUD Toggle & Backdrop
+    // Mobile HUD Toggle & Controls
     const toggleMobileHud = () => {
       const hud = document.getElementById('floating-hud');
-      const backdrop = document.getElementById('backdrop-hud-mobile');
       if (hud) {
         hud.classList.toggle('is-mobile-collapsed');
-        const isCollapsed = hud.classList.contains('is-mobile-collapsed');
-        if (backdrop) {
-          if (isCollapsed) backdrop.classList.add('hidden');
-          else backdrop.classList.remove('hidden');
-        }
       }
     };
 
     document.getElementById('btn-header-hud-toggle')?.addEventListener('click', toggleMobileHud);
-    document.getElementById('backdrop-hud-mobile')?.addEventListener('click', toggleMobileHud);
-    document.getElementById('btn-toggle-hud-mobile')?.addEventListener('click', toggleMobileHud);
-
-    // Mobile Bottom Sheet Backdrop (closes pile/footing cards on tap)
-    document.getElementById('backdrop-sheet-mobile')?.addEventListener('click', () => {
-      document.getElementById('btn-close-card')?.click();
-      if (typeof closeFootingCard === 'function') closeFootingCard();
+    document.getElementById('dock-btn-menu-3d')?.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        toggleMobileHud();
+      } else {
+        toggleHudState();
+      }
     });
+    document.getElementById('dock-btn-piling')?.addEventListener('click', () => {
+      document.getElementById('btn-quick-select')?.click();
+    });
+    document.getElementById('btn-toggle-hud-mobile')?.addEventListener('click', toggleMobileHud);
 
     // Mobile Tables Dropdown Backdrop & Menu Actions
     const dropdownMenu = document.getElementById('menu-tables-dropdown');
