@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && node --input-type=module -e \"import fs from 'node:fs'; ['piling.html', 'footing.html', 'piling_embedded_data.js', 'manga_theme.css', 'ipile_3d.js', 'daily_report_studio.js', 'footings_metadata.json', 'badge_offsets.json', 'model.glb', 'chart.umd.js', 'three.min.js', 'html-to-image.min.js', 'nintendoIcons.js'].forEach(f => { try { if (fs.existsSync(f)) fs.copyFileSync(f, 'dist/' + f); } catch(e){} });\"",
+    "build": "vite build && node --input-type=module -e \"import fs from 'node:fs'; ['piling.html', 'footing.html', 'piling_embedded_data.js', 'manga_theme.css', 'doodle_theme.css', 'Dashboard_Warm_Craft_v0.html', 'ipile_3d.js', 'daily_report_studio.js', 'footings_metadata.json', 'badge_offsets.json', 'model.glb', 'chart.umd.js', 'three.min.js', 'html-to-image.min.js', 'nintendoIcons.js'].forEach(f => { try { if (fs.existsSync(f)) fs.copyFileSync(f, 'dist/' + f); } catch(e){} });\"",
     "start": "node --import tsx server.ts",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
