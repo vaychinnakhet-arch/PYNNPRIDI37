@@ -161,91 +161,98 @@
     }
 
     /* =========================================================================
-       MANGA 2D LAYER DESIGN SYSTEM (TECHNICAL BLUEPRINT EDITION - UNIFIED PALETTE)
+       DOODLEWEB DESIGN SYSTEM (WARM CRAFT EDITORIAL · DEEP NAVY INK & TANGERINE POP)
        ========================================================================= */
     .pop-card {
-      background: #ffffff !important;
-      border: 2px solid #1e293b !important;
-      border-radius: 8px !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
-      color: #0f172a !important;
+      background: #FFFFFF !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 1.25rem !important; /* rounded-2xl */
+      box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
+      color: var(--dw-navy, #1D2B45) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     .pop-header {
-      background: #ffffff !important;
-      border: 2px solid #1e293b !important;
-      border-radius: 12px !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
-      backdrop-filter: none !important;
+      background: rgba(255, 255, 255, 0.96) !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 1.25rem !important; /* rounded-2xl */
+      box-shadow: 3.5px 3.5px 0px var(--dw-navy, #1D2B45) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
     }
 
     .pop-btn {
-      background: #f8fafc;
-      color: #0f172a !important;
-      border: 1.5px solid #1e293b !important;
-      border-radius: 6px !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
-      font-family: 'Prompt', sans-serif !important;
+      background: #FFFFFF !important;
+      color: var(--dw-navy, #1D2B45) !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important; /* Pill Capsule */
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+      font-family: var(--font-body, 'Prompt', sans-serif) !important;
       font-weight: 700 !important;
-      transition: all 0.1s ease !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
       cursor: pointer !important;
+      user-select: none !important;
     }
     .pop-btn:hover {
-      background: #f8fafc !important;
+      background: var(--dw-cream, #FAF5EE) !important;
       transform: translate(-1.5px, -1.5px) !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
+      box-shadow: 3px 3px 0px var(--dw-orange, #F26B2A) !important;
     }
     .pop-btn:active {
-      transform: translate(1.5px, 1.5px) !important;
-      box-shadow: 0.5px 0.5px 0px #1e293b !important;
+      transform: translate(1px, 1px) !important;
+      box-shadow: 0.5px 0.5px 0px var(--dw-navy, #1D2B45) !important;
     }
     .pop-btn.active {
-      background: #fef3c7 !important;
-      border-color: #f59e0b !important;
-      color: #92400e !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
+      background: var(--dw-orange, #F26B2A) !important;
+      border-color: var(--dw-navy, #1D2B45) !important;
+      color: #FFFFFF !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+    }
+    .pop-btn.active:hover {
+      background: #E05A19 !important;
+      box-shadow: 3px 3px 0px var(--dw-navy, #1D2B45) !important;
     }
 
     .pop-btn-primary {
-      background: #0284c7 !important;
-      color: #ffffff !important;
-      border: 1.5px solid #1e293b !important;
-      border-radius: 6px !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
-      font-family: 'Prompt', sans-serif !important;
-      font-weight: 700 !important;
+      background: var(--dw-orange, #F26B2A) !important;
+      color: #FFFFFF !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+      font-family: var(--font-body, 'Prompt', sans-serif) !important;
+      font-weight: 800 !important;
       cursor: pointer !important;
-      transition: all 0.1s ease !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     .pop-btn-primary:hover {
-      background: #0369a1 !important;
+      background: #E05A19 !important;
       transform: translate(-1.5px, -1.5px) !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
+      box-shadow: 3.5px 3.5px 0px var(--dw-navy, #1D2B45) !important;
     }
     .pop-btn-primary:active {
-      transform: translate(1.5px, 1.5px) !important;
-      box-shadow: 0.5px 0.5px 0px #1e293b !important;
+      transform: translate(1px, 1px) !important;
+      box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
     }
 
     .pop-btn-green {
-      background: #10b981 !important;
-      color: #ffffff !important;
-      border: 1.5px solid #1e293b !important;
-      border-radius: 6px !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
-      font-family: 'Prompt', sans-serif !important;
+      background: var(--dw-green, #10B981) !important;
+      color: #FFFFFF !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+      font-family: var(--font-body, 'Prompt', sans-serif) !important;
       font-weight: 700 !important;
       cursor: pointer !important;
-      transition: all 0.1s ease !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     .pop-btn-green:hover {
       background: #059669 !important;
       transform: translate(-1.5px, -1.5px) !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
+      box-shadow: 3px 3px 0px var(--dw-navy, #1D2B45) !important;
     }
     .pop-btn-green:active {
-      transform: translate(1.5px, 1.5px) !important;
-      box-shadow: 0.5px 0.5px 0px #1e293b !important;
+      transform: translate(1px, 1px) !important;
+      box-shadow: 0.5px 0.5px 0px var(--dw-navy, #1D2B45) !important;
     }
 
     /* Header Toolbar Clusters & Segmented Controls */
@@ -983,116 +990,124 @@
     }
   
     /* =========================================================================
-       TACTILE BOLDER BIM LAYER TOGGLE CARDS (MATCHING FOOTING.HTML)
+       DOODLEWEB TACTILE BIM LAYER TOGGLE CARDS & SWITCHES
        ========================================================================= */
     .layer-card {
-      position: relative;
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 6px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      user-select: none;
+      position: relative !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid var(--dw-border-soft, #E2D9CC) !important;
+      border-radius: 0.875rem !important; /* rounded-xl */
+      padding: 8px 10px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 6px !important;
+      cursor: pointer !important;
+      box-shadow: none !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      user-select: none !important;
     }
     .layer-card:hover {
-      border-color: #0f172a;
-      transform: translateY(-1px);
-      box-shadow: 2px 2px 0px #0f172a;
+      background: var(--dw-cream, #FAF5EE) !important;
+      border-color: var(--dw-navy, #1D2B45) !important;
+      transform: translate(-1.5px, -1.5px) !important;
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
     }
     .layer-card.active {
-      border: 2px solid #0f172a;
-      box-shadow: 2px 2px 0px #0f172a;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+    }
+    .layer-card.active:hover {
+      box-shadow: 3.5px 3.5px 0px var(--dw-orange, #F26B2A) !important;
     }
     .layer-card.active.active-pile {
-      background: #fffbeb;
+      background: #FFFDF7 !important;
     }
     .layer-card.active.active-footing {
-      background: #f0f9ff;
+      background: #F0F9FF !important;
     }
     .layer-card.active.active-drainage {
-      background: #ecfeff;
+      background: #F0FDFA !important;
     }
     .layer-card.active.active-grid {
-      background: #f8fafc;
+      background: #F8FAFC !important;
     }
     .layer-card.active.active-boundary {
-      background: #fff1f2;
+      background: #FFF1F2 !important;
     }
     .layer-card.active.active-hex {
-      background: #fef3c7;
+      background: #FFFBEB !important;
     }
 
-    /* Tactile Toggle Switch Pill */
+    /* Tactile DoodleWeb Toggle Switch Pill */
     .toggle-switch {
-      width: 36px;
-      height: 20px;
-      background: #cbd5e1;
-      border: 1.5px solid #0f172a;
-      border-radius: 9999px;
-      position: relative;
-      transition: background 0.22s ease;
-      flex-shrink: 0;
+      width: 38px !important;
+      height: 22px !important;
+      background: #E2D9CC !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      position: relative !important;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      flex-shrink: 0 !important;
+      cursor: pointer !important;
+      box-shadow: inset 0 1px 2px rgba(29, 43, 69, 0.08) !important;
     }
     .toggle-knob {
-      width: 14px;
-      height: 14px;
-      background: #ffffff;
-      border: 1.5px solid #0f172a;
-      border-radius: 9999px;
-      position: absolute;
-      top: 1.5px;
-      left: 2px;
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+      width: 14px !important;
+      height: 14px !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      position: absolute !important;
+      top: 2px !important;
+      left: 2px !important;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
     }
     .layer-card.active .toggle-knob {
-      transform: translateX(16px);
-      background: #ffffff;
+      transform: translateX(16px) !important;
+      border-color: var(--dw-navy, #1D2B45) !important;
     }
     .layer-card.active.active-pile .toggle-switch {
-      background: #f59e0b;
+      background: var(--dw-green, #10B981) !important;
     }
     .layer-card.active.active-footing .toggle-switch {
-      background: #0284c7;
+      background: #0284C7 !important;
     }
     .layer-card.active.active-drainage .toggle-switch {
-      background: #06b6d4;
+      background: var(--dw-teal, #40C4C4) !important;
     }
     .layer-card.active.active-grid .toggle-switch {
-      background: #334155;
+      background: #6366F1 !important;
     }
     .layer-card.active.active-boundary .toggle-switch {
-      background: #e11d48;
+      background: var(--dw-coral, #E64C3C) !important;
     }
     .layer-card.active.active-hex .toggle-switch {
-      background: #d97706;
+      background: var(--dw-gold, #F7B844) !important;
     }
 
-    /* Isolate Solo Button */
+    /* Isolate Solo Pill Button */
     .btn-solo {
       opacity: 0;
-      padding: 1px 4px;
-      font-size: 9px;
-      font-weight: 800;
-      background: #f1f5f9;
-      border: 1px solid #94a3b8;
-      border-radius: 4px;
-      color: #334155;
-      transition: all 0.15s ease;
-      cursor: pointer;
+      padding: 1.5px 6px !important;
+      font-family: var(--font-mono, 'Space Mono', monospace) !important;
+      font-size: 8.5px !important;
+      font-weight: 700 !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      color: var(--dw-navy, #1D2B45) !important;
+      box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
+      transition: all 0.15s ease !important;
+      cursor: pointer !important;
     }
     .layer-card:hover .btn-solo {
       opacity: 1;
     }
     .btn-solo:hover {
-      background: #0f172a;
-      color: #ffffff;
-      border-color: #0f172a;
+      background: var(--dw-navy, #1D2B45) !important;
+      color: #FFFFFF !important;
+      box-shadow: 1.5px 1.5px 0px var(--dw-orange, #F26B2A) !important;
     }
 
         /* =========================================================================
@@ -1571,7 +1586,7 @@
           </div>
 
           <!-- Layer 1: เสาเข็ม I-beam -->
-          <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1.5" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam ทั้งหมด">
+          <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-2" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam ทั้งหมด">
             <div class="flex items-center justify-between w-full" id="trigger-sidebar-piles">
               <div class="flex items-center gap-2 min-w-0">
                 <div class="w-7 h-7 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#92400E] shadow-[1px_1px_0px_#1D2B45] shrink-0">
@@ -1587,37 +1602,39 @@
                 <div class="toggle-switch"><div class="toggle-knob"></div></div>
               </div>
             </div>
-            <!-- Subtoggles: Clean Micro-Pills -->
-            <div id="div-pile-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#FDE68A] text-[9.5px] w-full">
-              <button type="button" id="btn-toggle-pile-model" class="subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A]" title="เปิด/ปิด เฉพาะตัวโมเดล 3D เสาเข็ม">
-                <span id="dot-pile-model" class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
-                <span>โมเดล 3D</span>
+            <!-- Subtoggles: Clean Tactile Segmented Track -->
+            <div id="div-pile-subtoggles" class="flex items-center p-1 bg-[#FAF5EE] rounded-xl border border-[#1D2B45]/20 gap-1 w-full">
+              <button type="button" id="btn-toggle-pile-model" class="subtoggle-btn is-active flex-1 py-1 px-1 rounded-lg border-1.5 border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] text-[10px] flex items-center justify-center gap-1.5 select-none" title="เปิด/ปิด เฉพาะตัวโมเดล 3D เสาเข็ม">
+                <span id="dot-pile-model" class="w-2 h-2 rounded-full bg-[#10B981] shadow-xs"></span>
+                <span class="whitespace-nowrap">โมเดล 3D</span>
               </button>
-              <button type="button" id="btn-toggle-pile-text" class="subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A]" title="เปิด/ปิด เฉพาะข้อความ/ป้ายเบอร์เข็ม">
-                <span id="dot-pile-text" class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
-                <span>ข้อความ/ป้าย</span>
+              <button type="button" id="btn-toggle-pile-text" class="subtoggle-btn is-active flex-1 py-1 px-1 rounded-lg border-1.5 border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] text-[10px] flex items-center justify-center gap-1.5 select-none" title="เปิด/ปิด เฉพาะข้อความ/ป้ายเบอร์เข็ม">
+                <span id="dot-pile-text" class="w-2 h-2 rounded-full bg-[#10B981] shadow-xs"></span>
+                <span class="whitespace-nowrap">ข้อความ/ป้าย</span>
               </button>
             </div>
           </div>
 
           <!-- Layer 2: ผังฐานราก ค.ส.ล. -->
-          <a href="footing.html" id="sidebar-card-footings" class="layer-card active active-footing flex items-center justify-between group" title="คลิกเพื่อสลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#E0F2FE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#0369A1] shadow-[1px_1px_0px_#1D2B45] shrink-0 group-hover:scale-105 transition-transform">
-                <i data-lucide="box" class="w-3.5 h-3.5"></i>
+          <a href="test/footing.html" id="sidebar-card-footings" class="layer-card active active-footing flex flex-col gap-1.5 group no-underline" title="คลิกเพื่อสลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-lg bg-[#E0F2FE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#0369A1] shadow-[1px_1px_0px_#1D2B45] shrink-0 group-hover:scale-105 transition-transform">
+                  <i data-lucide="box" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ผังฐานราก ค.ส.ล.</div>
+                  <div class="text-[9.5px] text-[#0284C7] font-bold font-mono mt-0.5">21 ฐาน • 3D BIM</div>
+                </div>
               </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ผังฐานราก ค.ส.ล.</div>
-                <div class="text-[9.5px] text-[#0284C7] font-bold font-mono mt-0.5">21 ฐาน • โมเดล 3D</div>
-              </div>
+              <span class="text-[9.5px] font-black px-2.5 py-1 rounded-full bg-[#0284C7] text-white border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:bg-[#0369A1] group-hover:shadow-[1.5px_1.5px_0px_#F26B2A] transition-all shrink-0">
+                เปิด 3D ↗
+              </span>
             </div>
-            <span class="text-[9.5px] font-black px-2 py-0.5 rounded-full bg-[#0284C7] text-white border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:bg-[#0369A1] transition-colors shrink-0">
-              เปิด 3D ↗
-            </span>
           </a>
 
           <!-- Layer 3: ท่อ & บ่อพัก ค.ส.ล. -->
-          <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1.5" data-layer="drainage" title="คลิกเพื่อ เปิด/ปิด งานท่อระบายน้ำทั้งหมด">
+          <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-2" data-layer="drainage" title="คลิกเพื่อ เปิด/ปิด งานท่อระบายน้ำทั้งหมด">
             <div class="flex items-center justify-between w-full" id="trigger-sidebar-drainage">
               <div class="flex items-center gap-2 min-w-0">
                 <div class="w-7 h-7 rounded-lg bg-[#CFFAFE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#155E75] shadow-[1px_1px_0px_#1D2B45] shrink-0">
@@ -1633,59 +1650,65 @@
                 <div class="toggle-switch"><div class="toggle-knob"></div></div>
               </div>
             </div>
-            <!-- Subtoggles: Clean Micro-Pills -->
-            <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#E2D9CC] text-[9.5px] w-full">
-              <button type="button" id="btn-toggle-drain-model" class="subtoggle-btn flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] hover:bg-[#F1F5F9]" title="เปิด/ปิด เฉพาะตัวโมเดล 3D ท่อและบ่อพัก">
-                <span id="dot-drain-model" class="w-1.5 h-1.5 rounded-full bg-[#94A3B8]"></span>
-                <span>โมเดล 3D</span>
+            <!-- Subtoggles: Clean Tactile Segmented Track -->
+            <div id="div-drain-subtoggles" class="flex items-center p-1 bg-[#FAF5EE] rounded-xl border border-[#1D2B45]/20 gap-1 w-full">
+              <button type="button" id="btn-toggle-drain-model" class="subtoggle-btn is-inactive flex-1 py-1 px-1 rounded-lg border border-dashed border-[#1D2B45]/30 font-bold transition-all cursor-pointer bg-[#FAF5EE] text-[#64748B] text-[10px] flex items-center justify-center gap-1.5 select-none hover:border-[#1D2B45] hover:text-[#1D2B45]" title="เปิด/ปิด เฉพาะตัวโมเดล 3D ท่อและบ่อพัก">
+                <span id="dot-drain-model" class="w-2 h-2 rounded-full bg-[#CBD5E1]"></span>
+                <span class="whitespace-nowrap">โมเดล 3D</span>
               </button>
-              <button type="button" id="btn-toggle-drain-text" class="subtoggle-btn flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] hover:bg-[#F1F5F9]" title="เปิด/ปิด เฉพาะข้อความ/ระดับท่อระบายน้ำ">
-                <span id="dot-drain-text" class="w-1.5 h-1.5 rounded-full bg-[#94A3B8]"></span>
-                <span>ข้อความ/ระดับ</span>
+              <button type="button" id="btn-toggle-drain-text" class="subtoggle-btn is-inactive flex-1 py-1 px-1 rounded-lg border border-dashed border-[#1D2B45]/30 font-bold transition-all cursor-pointer bg-[#FAF5EE] text-[#64748B] text-[10px] flex items-center justify-center gap-1.5 select-none hover:border-[#1D2B45] hover:text-[#1D2B45]" title="เปิด/ปิด เฉพาะข้อความ/ระดับท่อระบายน้ำ">
+                <span id="dot-drain-text" class="w-2 h-2 rounded-full bg-[#CBD5E1]"></span>
+                <span class="whitespace-nowrap">ข้อความ/ระดับ</span>
               </button>
             </div>
           </div>
 
           <!-- Layer 4: กริด & มิติ CAD -->
-          <div id="card-grid" class="layer-card active active-grid flex items-center justify-between" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#EEF2FF] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#4338CA] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                <i data-lucide="grid" class="w-3.5 h-3.5 text-[#4F46E5]"></i>
+          <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-lg bg-[#EEF2FF] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#4338CA] shadow-[1px_1px_0px_#1D2B45] shrink-0">
+                  <i data-lucide="grid" class="w-3.5 h-3.5 text-[#4F46E5]"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-[#1D2B45] text-xs leading-none">กริด & มิติ CAD</div>
+                  <div class="text-[9.5px] text-[#4F46E5] font-mono font-bold mt-0.5">1-10, A-E</div>
+                </div>
               </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">กริด & มิติ CAD</div>
-                <div class="text-[9.5px] text-[#4F46E5] font-mono font-bold mt-0.5">1-10, A-E</div>
-              </div>
+              <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
             </div>
-            <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
           </div>
 
           <!-- Layer 5: แนวเขตที่ดิน & หมุด -->
-          <div id="card-boundary" class="layer-card active active-boundary flex items-center justify-between" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#FFE4E6] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#BE123C] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#BE123C]"></i>
+          <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-lg bg-[#FFE4E6] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#BE123C] shadow-[1px_1px_0px_#1D2B45] shrink-0">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#BE123C]"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-[#1D2B45] text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
+                  <div class="text-[9.5px] text-[#BE123C] font-mono font-bold mt-0.5">4 ด้าน • หมุดแดง</div>
+                </div>
               </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
-                <div class="text-[9.5px] text-[#BE123C] font-mono font-bold mt-0.5">4 ด้าน • หมุดแดง</div>
-              </div>
+              <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
             </div>
-            <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
           </div>
 
           <!-- Layer 6: ถังบำบัด & ผนัง -->
-          <div id="card-hex" class="layer-card flex items-center justify-between" data-layer="hex" title="คลิกเพื่อ เปิด/ปิด เสาเข็มกลุ่มหกเหลี่ยมถังบำบัดและแนวผนัง">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#B45309] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                <i data-lucide="layers" class="w-3.5 h-3.5 text-[#F7B844]"></i>
+          <div id="card-hex" class="layer-card" data-layer="hex" title="คลิกเพื่อ เปิด/ปิด เสาเข็มกลุ่มหกเหลี่ยมถังบำบัดและแนวผนัง">
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#B45309] shadow-[1px_1px_0px_#1D2B45] shrink-0">
+                  <i data-lucide="layers" class="w-3.5 h-3.5 text-[#F7B844]"></i>
+                </div>
+                <div class="truncate">
+                  <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ถังบำบัด & ผนัง</div>
+                  <div class="text-[9.5px] text-[#92400E] font-mono mt-0.5">137 ต้น (เข็มกลุ่ม)</div>
+                </div>
               </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ถังบำบัด & ผนัง</div>
-                <div class="text-[9.5px] text-[#92400E] font-mono mt-0.5">137 ต้น (เข็มกลุ่ม)</div>
-              </div>
+              <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
             </div>
-            <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
           </div>
 
           <button id="btn-sidebar-open-drainagetable" class="hidden"></button>
@@ -1797,12 +1820,12 @@
   </footer>
 
   <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
-  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[3.5px_3.5px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
-    <span id="dock-btn-piling" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F7B844] text-[#1D2B45] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังงานเสาเข็ม 93 ต้น">
-      <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[4px_4px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
+    <span id="dock-btn-piling" class="px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F26B2A] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังงานเสาเข็ม 93 ต้น">
+      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
       <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
     </span>
-    <a href="test/footing.html" id="dock-btn-footing" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] active:scale-95" title="สลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
+    <a href="test/footing.html" id="dock-btn-footing" class="px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#F26B2A] active:scale-95" title="สลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
       <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
       <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
     </a>
@@ -5696,14 +5719,14 @@
       }
       if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]";
 
-      const btnActive = "subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] select-none";
-      const btnInactive = "subtoggle-btn is-inactive flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] shadow-none hover:bg-[#F1F5F9] select-none";
+      const btnActive = "subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border-1.5 border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] select-none";
+      const btnInactive = "subtoggle-btn is-inactive flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-dashed border-[#1D2B45]/30 font-bold transition-all cursor-pointer bg-[#FAF5EE] text-[#64748B] shadow-none hover:border-[#1D2B45] hover:text-[#1D2B45] select-none";
 
       if (btnModel) btnModel.className = (state.enabled && state.showModel) ? btnActive : btnInactive;
-      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-2 h-2 rounded-full bg-[#10b981] shadow-xs" : "w-2 h-2 rounded-full bg-[#CBD5E1]";
 
       if (btnText) btnText.className = (state.enabled && state.showText) ? btnActive : btnInactive;
-      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-2 h-2 rounded-full bg-[#10b981] shadow-xs" : "w-2 h-2 rounded-full bg-[#CBD5E1]";
     }
 
     function updateDrainageCardUI() {
@@ -5740,14 +5763,14 @@
       }
       if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]";
 
-      const btnActive = "subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] select-none";
-      const btnInactive = "subtoggle-btn is-inactive flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] shadow-none hover:bg-[#F1F5F9] select-none";
+      const btnActiveDrain = "subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border-1.5 border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] select-none";
+      const btnInactiveDrain = "subtoggle-btn is-inactive flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-dashed border-[#1D2B45]/30 font-bold transition-all cursor-pointer bg-[#FAF5EE] text-[#64748B] shadow-none hover:border-[#1D2B45] hover:text-[#1D2B45] select-none";
 
-      if (btnModel) btnModel.className = (state.enabled && state.showModel) ? btnActive : btnInactive;
-      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (btnModel) btnModel.className = (state.enabled && state.showModel) ? btnActiveDrain : btnInactiveDrain;
+      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-2 h-2 rounded-full bg-[#40C4C4] shadow-xs" : "w-2 h-2 rounded-full bg-[#CBD5E1]";
 
-      if (btnText) btnText.className = (state.enabled && state.showText) ? btnActive : btnInactive;
-      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (btnText) btnText.className = (state.enabled && state.showText) ? btnActiveDrain : btnInactiveDrain;
+      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-2 h-2 rounded-full bg-[#40C4C4] shadow-xs" : "w-2 h-2 rounded-full bg-[#CBD5E1]";
     }
 
     function updateDrainageSceneVisuals() {

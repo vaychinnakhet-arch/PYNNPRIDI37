@@ -289,9 +289,9 @@
     
     <!-- 1. Left: Brand & Title -->
     <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-      <a href="index.html" class="comic-btn px-2.5 sm:px-3 py-1 text-xs font-bold flex items-center gap-1 hover:bg-[#FAF5EE]" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
+      <a href="index.html" class="comic-btn px-2.5 sm:px-3 py-1 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] border-2 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] transition-all" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-        <span class="hidden sm:inline">หน้าแรก</span>
+        <span class="hidden sm:inline font-bold">หน้าแรก</span>
       </a>
       <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#1D2B45] font-display">
         P37
@@ -328,7 +328,7 @@
       </div>
 
       <!-- Print Button -->
-      <button id="btn-print" class="comic-btn px-2.5 sm:px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] text-[#1D2B45] shrink-0" title="พิมพ์แบบแปลน">
+      <button id="btn-print" class="comic-btn px-2.5 sm:px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border-2 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] transition-all shrink-0" title="พิมพ์แบบแปลน">
         <i data-lucide="printer" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
         <span class="hidden md:inline">พิมพ์แปลน</span>
       </button>
@@ -511,13 +511,13 @@
   </div>
 
   <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
-  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[3.5px_3.5px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
-    <a href="test/piling.html" id="dock-btn-piling" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] active:scale-95" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น">
+  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[4px_4px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
+    <a href="test/piling.html" id="dock-btn-piling" class="px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#F26B2A] active:scale-95" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น">
       <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
       <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
     </a>
-    <span id="dock-btn-footing" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#0284C7] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังฐานราก ค.ส.ล. 21 ฐาน">
-      <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
+    <span id="dock-btn-footing" class="px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#0284C7] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังฐานราก ค.ส.ล. 21 ฐาน">
+      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
       <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
     </span>
   </nav>
