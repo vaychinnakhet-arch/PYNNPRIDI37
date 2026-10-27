@@ -131,28 +131,34 @@
 
     /* Discipline Grouping Containers */
     .discipline-group {
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: none !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .discipline-group:hover {
-      box-shadow: 3px 3px 0px var(--dw-navy);
-      transform: translate(-1px, -1px);
+      box-shadow: none !important;
+      transform: none !important;
     }
     .discipline-group.group-structural {
       background: #FFFDF7;
-      border: 1.5px solid #F59E0B;
+      border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
     }
     .discipline-group.group-site {
       background: #F8FAFF;
-      border: 1.5px solid #4F46E5;
+      border: 1.5px solid rgba(79, 70, 229, 0.45) !important;
     }
     .discipline-group.group-annot {
       background: #FAF5FF;
-      border: 1.5px solid #9333EA;
+      border: 1.5px solid rgba(147, 51, 234, 0.45) !important;
     }
 
     #footing-toolbar {
+      width: 272px;
+      max-width: 275px;
       max-height: calc(100vh - 86px);
       overflow-y: auto;
+      overflow-x: visible;
+      padding-right: 6px;
+      padding-bottom: 6px;
       scrollbar-width: thin;
     }
     #footing-toolbar::-webkit-scrollbar {
@@ -376,7 +382,7 @@
   </header>
 
   <!-- LEFT FLOATING TOOLBAR (CATEGORIZED ENGINEERING DISCIPLINES & VIEWS) -->
-  <div id="footing-toolbar" class="absolute left-2 top-[72px] z-20 flex flex-col gap-2.5 pointer-events-auto w-[245px] max-w-[245px]">
+  <div id="footing-toolbar" class="absolute left-2 top-[72px] z-20 flex flex-col gap-2.5 pointer-events-auto w-[272px] max-w-[275px]">
     
     <!-- 1. Views Card (โหมดมิติ & มุมมองกล้อง) -->
     <div class="comic-card p-2.5 bg-white/95 backdrop-blur flex flex-col gap-2 shadow-[3px_3px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl">
@@ -429,12 +435,12 @@
       </div>
 
       <!-- GROUP 1: 🏗️ หมวดงานโครงสร้างหลัก (Structure - Amber Theme) -->
-      <div class="discipline-group group-structural rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-1.5">
+      <div class="discipline-group group-structural rounded-2xl p-2 flex flex-col gap-1.5">
         <!-- Banner Header -->
         <div class="flex items-center justify-between px-2 py-1 rounded-xl bg-[#FEF3C7] border-1.5 border-[#F59E0B] text-[#92400E]">
           <div class="flex items-center gap-1.5 min-w-0">
             <span class="text-xs">🏗️</span>
-            <span class="text-[10.5px] font-black tracking-tight truncate">โครงสร้างหลัก (Structure)</span>
+            <span class="text-[10.5px] font-black tracking-tight">โครงสร้างหลัก (Structure)</span>
           </div>
           <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-full bg-white text-[#92400E] border border-[#F59E0B]/50 shrink-0">2 รายการ</span>
         </div>
@@ -445,8 +451,8 @@
             <div class="w-7 h-7 rounded-lg bg-[#E0F2FE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#0284C7] shadow-[1px_1px_0px_#1D2B45] shrink-0">
               <i data-lucide="box" class="w-3.5 h-3.5 text-[#0284C7]"></i>
             </div>
-            <div class="truncate">
-              <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ฐานราก ค.ส.ล.</div>
+            <div class="min-w-0">
+              <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">ฐานราก ค.ส.ล.</div>
               <div class="text-[9.5px] text-[#0284C7] font-bold font-mono mt-0.5">21 ฐาน • คอนกรีต</div>
             </div>
           </div>
@@ -462,8 +468,8 @@
             <div class="w-7 h-7 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#92400E] shadow-[1px_1px_0px_#1D2B45] shrink-0">
               <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#92400E]"></i>
             </div>
-            <div class="truncate">
-              <div class="font-extrabold text-[#1D2B45] text-xs leading-none">งานเสาเข็ม I-beam</div>
+            <div class="min-w-0">
+              <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">งานเสาเข็ม I-beam</div>
               <div class="text-[9.5px] text-[#B45309] font-bold font-mono mt-0.5">93 ต้น • เข็มหลัก</div>
             </div>
           </div>
@@ -475,12 +481,12 @@
       </div>
 
       <!-- GROUP 2: 📐 หมวดผังไซต์ & อ้างอิง CAD (Site & Survey Reference - Indigo Theme) -->
-      <div class="discipline-group group-site rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-1.5">
+      <div class="discipline-group group-site rounded-2xl p-2 flex flex-col gap-1.5">
         <!-- Banner Header -->
         <div class="flex items-center justify-between px-2 py-1 rounded-xl bg-[#EEF2FF] border-1.5 border-[#4F46E5] text-[#3730A3]">
           <div class="flex items-center gap-1.5 min-w-0">
             <span class="text-xs">📐</span>
-            <span class="text-[10.5px] font-black tracking-tight truncate">ผังไซต์ & อ้างอิง CAD</span>
+            <span class="text-[10.5px] font-black tracking-tight">ผังไซต์ & อ้างอิง CAD</span>
           </div>
           <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-full bg-white text-[#3730A3] border border-[#4F46E5]/40 shrink-0">2 รายการ</span>
         </div>
@@ -491,8 +497,8 @@
             <div class="w-7 h-7 rounded-lg bg-[#EEF2FF] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#4F46E5] shadow-[1px_1px_0px_#1D2B45] shrink-0">
               <i data-lucide="grid" class="w-3.5 h-3.5 text-[#4F46E5]"></i>
             </div>
-            <div class="truncate">
-              <div class="font-extrabold text-[#1D2B45] text-xs leading-none">กริด & มิติ CAD</div>
+            <div class="min-w-0">
+              <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">กริด & มิติ CAD</div>
               <div class="text-[9.5px] text-[#4F46E5] font-mono mt-0.5">1-10, A-E</div>
             </div>
           </div>
@@ -505,8 +511,8 @@
             <div class="w-7 h-7 rounded-lg bg-[#FFE4E6] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#E11D48] shadow-[1px_1px_0px_#1D2B45] shrink-0">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#E11D48]"></i>
             </div>
-            <div class="truncate">
-              <div class="font-extrabold text-[#1D2B45] text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
+            <div class="min-w-0">
+              <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">แนวเขตที่ดิน & หมุดสำรวจ</div>
               <div class="text-[9.5px] text-[#BE123C] font-mono mt-0.5">4 ด้าน • หมุดแดง</div>
             </div>
           </div>
@@ -515,12 +521,12 @@
       </div>
 
       <!-- GROUP 3: 🏷️ หมวดระดับ & ป้ายกำกับ 3D (Level & Annotations - Purple Theme) -->
-      <div class="discipline-group group-annot rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-1.5">
+      <div class="discipline-group group-annot rounded-2xl p-2 flex flex-col gap-1.5">
         <!-- Banner Header -->
         <div class="flex items-center justify-between px-2 py-1 rounded-xl bg-[#FAF5FF] border-1.5 border-[#9333EA] text-[#6B21A8]">
           <div class="flex items-center gap-1.5 min-w-0">
             <span class="text-xs">🏷️</span>
-            <span class="text-[10.5px] font-black tracking-tight truncate">ระดับ & ป้ายกำกับ 3D</span>
+            <span class="text-[10.5px] font-black tracking-tight">ระดับ & ป้ายกำกับ 3D</span>
           </div>
           <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-full bg-white text-[#6B21A8] border border-[#9333EA]/40 shrink-0">2 รายการ</span>
         </div>
@@ -531,8 +537,8 @@
             <div class="w-7 h-7 rounded-lg bg-[#F3E8FF] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#9333EA] shadow-[1px_1px_0px_#1D2B45] shrink-0">
               <i data-lucide="tag" class="w-3.5 h-3.5 text-[#9333EA]"></i>
             </div>
-            <div class="truncate">
-              <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ป้ายสเปกฐานราก</div>
+            <div class="min-w-0">
+              <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">ป้ายสเปกฐานราก 3D</div>
               <div class="text-[9.5px] text-[#7E22CE] font-mono mt-0.5">Scene 06 Chips</div>
             </div>
           </div>
@@ -545,8 +551,8 @@
             <div class="w-7 h-7 rounded-lg bg-[#F1F5F9] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#475569] shadow-[1px_1px_0px_#1D2B45] shrink-0">
               <i data-lucide="scan" class="w-3.5 h-3.5 text-[#475569]"></i>
             </div>
-            <div class="truncate">
-              <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ระนาบดิน GL ±0.00</div>
+            <div class="min-w-0">
+              <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">ระนาบดิน GL ±0.00</div>
               <div class="text-[9.5px] text-[#64748B] font-mono mt-0.5">X-Ray ใสมองทะลุ</div>
             </div>
           </div>

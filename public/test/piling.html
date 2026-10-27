@@ -530,21 +530,19 @@
     }
     /* Floating HUD Responsive Layout - Impeccable 4-Unit Rhythm */
     .floating-hud {
-      width: 245px;
-      max-width: 245px;
+      width: 275px;
+      max-width: 275px;
       top: 72px !important;
-      max-height: calc(100vh - 120px) !important;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: thin;
+      overflow: visible !important;
+      padding-right: 6px;
+      padding-bottom: 6px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @media (max-width: 1279px) {
       .floating-hud {
-        width: 245px;
-        max-width: 245px;
+        width: 275px;
+        max-width: 275px;
         top: 72px !important;
-        max-height: calc(100vh - 120px) !important;
       }
     }
     @media (max-width: 768px) {
@@ -554,17 +552,80 @@
         left: 8px;
         top: auto !important;
         bottom: 64px;
-        max-height: 52vh;
-        border-radius: 1rem;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+        border-radius: 1.25rem;
+        padding-right: 0;
+        padding-bottom: 0;
       }
     }
-    .floating-hud::-webkit-scrollbar {
+    #sidebar-main-console {
+      max-height: calc(100vh - 110px);
+      overflow: hidden;
+      border-radius: 1.25rem !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
+    }
+    @media (max-width: 768px) {
+      #sidebar-main-console {
+        max-height: 52vh;
+      }
+    }
+    #sidebar-tab-content {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      scrollbar-width: thin;
+    }
+    #sidebar-tab-content::-webkit-scrollbar {
       width: 4px;
     }
-    .floating-hud::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
+    #sidebar-tab-content::-webkit-scrollbar-track {
+      background: #FFFDF9;
+    }
+    #sidebar-tab-content::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
       border-radius: 4px;
+    }
+    #sidebar-tab-content::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
+    /* Refined Comic Border Hierarchy for HUD & Layers (DoodleWeb System) */
+    .discipline-group {
+      box-shadow: none !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .discipline-group.group-structural {
+      border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+      background: #FFFDF7;
+    }
+    .discipline-group.group-mep {
+      border: 1.5px solid rgba(13, 148, 136, 0.45) !important;
+      background: #F0FDFA;
+    }
+    .discipline-group.group-cad {
+      border: 1.5px solid rgba(79, 70, 229, 0.45) !important;
+      background: #F8FAFC;
+    }
+    .layer-card {
+      position: relative;
+      background: #FFFFFF;
+      border: 1.5px solid #E2D9CC;
+      border-radius: 0.875rem !important; /* rounded-xl */
+      padding: 7px 9px;
+      cursor: pointer;
+      box-shadow: none;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+    .layer-card:hover {
+      border-color: var(--dw-navy, #1D2B45);
+      transform: translateY(-1px);
+      box-shadow: 2px 2px 0px rgba(29, 43, 69, 0.15);
+    }
+    .layer-card.active {
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+      background: #FFFFFF;
     }
 
     /* ยืดตารางตามจำนวนต้น สูงสุด 5 ต้น แล้วค่อยเปิด scroll */
@@ -996,19 +1057,32 @@
        ========================================================================= */
     /* Discipline Grouping Containers */
     .discipline-group {
-      border-radius: 1.125rem !important; /* rounded-2xl */
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      border-radius: 1rem !important; /* rounded-xl */
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: none !important;
     }
     .discipline-group:hover {
-      box-shadow: 3.5px 3.5px 0px var(--dw-navy, #1D2B45) !important;
-      transform: translate(-1px, -1px);
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    .discipline-group.group-structural {
+      background: #FFFDF7 !important;
+      border: 1.5px solid #F59E0B !important;
+    }
+    .discipline-group.group-mep {
+      background: #F0FDFA !important;
+      border: 1.5px solid #0D9488 !important;
+    }
+    .discipline-group.group-cad {
+      background: #F5F7FF !important;
+      border: 1.5px solid #4F46E5 !important;
     }
 
     .layer-card {
       position: relative !important;
       background: #FFFFFF !important;
       border: 1.5px solid var(--dw-border-soft, #E2D9CC) !important;
-      border-radius: 0.875rem !important; /* rounded-xl */
+      border-radius: 0.75rem !important; /* rounded-xl */
       padding: 7px 9px !important;
       display: flex !important;
       flex-direction: column !important;
@@ -1029,7 +1103,7 @@
       box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
     }
     .layer-card.active:hover {
-      box-shadow: 3px 3px 0px var(--dw-orange, #F26B2A) !important;
+      box-shadow: 2.5px 2.5px 0px var(--dw-orange, #F26B2A) !important;
     }
     .layer-card.active.active-pile {
       background: #FFFDF7 !important;
@@ -1565,7 +1639,7 @@
   </div>
 
   <!-- Left Floating Toolbar: Views & Pile Filters (Distilled & Impeccable DoodleWeb Edition) -->
-  <div id="floating-hud" class="floating-hud is-mobile-collapsed absolute left-3 top-[72px] z-20 flex flex-col pointer-events-auto w-[245px] max-w-[245px] font-body">
+  <div id="floating-hud" class="floating-hud is-mobile-collapsed absolute left-3 top-[72px] z-20 flex flex-col pointer-events-auto w-[272px] max-w-[275px] font-body">
     
     <!-- Consolidated Single Console Card with Tabs -->
     <div id="sidebar-main-console" class="pop-card bg-white border-2 border-[#1D2B45] shadow-[4px_4px_0px_#1D2B45] rounded-2xl overflow-hidden flex flex-col">
@@ -1615,12 +1689,12 @@
           </div>
 
           <!-- GROUP 1: 🏗️ หมวดงานโครงสร้างหลัก (Primary Structure - Amber Theme) -->
-          <div class="discipline-group group-structural bg-[#FFFDF7] border-2 border-[#F59E0B]/70 rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-2">
+          <div class="discipline-group group-structural rounded-2xl p-2 flex flex-col gap-2">
             <!-- Category Banner Header -->
             <div class="flex items-center justify-between px-2.5 py-1 rounded-xl bg-[#FEF3C7] border-1.5 border-[#F59E0B] text-[#92400E]">
               <div class="flex items-center gap-1.5 min-w-0">
                 <span class="text-xs">🏗️</span>
-                <span class="text-[11px] font-black tracking-tight truncate">โครงสร้างหลัก (Structure)</span>
+                <span class="text-[11px] font-black tracking-tight">โครงสร้างหลัก (Structure)</span>
               </div>
               <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-full bg-white text-[#92400E] border border-[#F59E0B]/50 shrink-0">2 รายการ</span>
             </div>
@@ -1633,8 +1707,8 @@
                     <div class="w-7 h-7 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#92400E] shadow-[1px_1px_0px_#1D2B45] shrink-0">
                       <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
                     </div>
-                    <div class="truncate">
-                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-piles">งานเสาเข็ม I-beam</div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-tight" id="title-sidebar-piles">งานเสาเข็ม I-beam</div>
                       <div class="text-[9.5px] text-[#B45309] font-bold font-mono mt-0.5">93 ต้น • เข็มหลัก</div>
                     </div>
                   </div>
@@ -1663,8 +1737,8 @@
                     <div class="w-7 h-7 rounded-lg bg-[#E0F2FE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#0369A1] shadow-[1px_1px_0px_#1D2B45] shrink-0 group-hover:scale-105 transition-transform">
                       <i data-lucide="box" class="w-3.5 h-3.5"></i>
                     </div>
-                    <div class="truncate">
-                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ผังฐานราก ค.ส.ล.</div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">ผังฐานราก ค.ส.ล.</div>
                       <div class="text-[9.5px] text-[#0284C7] font-bold font-mono mt-0.5">21 ฐาน • 3D BIM</div>
                     </div>
                   </div>
@@ -1677,12 +1751,12 @@
           </div>
 
           <!-- GROUP 2: 💧 หมวดระบบสุขาภิบาล & ถัง (Sanitary & MEP - Teal Theme) -->
-          <div class="discipline-group group-mep bg-[#F0FDFA] border-2 border-[#0D9488]/70 rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-2">
+          <div class="discipline-group group-mep rounded-2xl p-2 flex flex-col gap-2">
             <!-- Category Banner Header -->
             <div class="flex items-center justify-between px-2.5 py-1 rounded-xl bg-[#CCFBF1] border-1.5 border-[#0D9488] text-[#0F766E]">
               <div class="flex items-center gap-1.5 min-w-0">
                 <span class="text-xs">💧</span>
-                <span class="text-[11px] font-black tracking-tight truncate">สุขาภิบาล & ถังบำบัด (MEP)</span>
+                <span class="text-[11px] font-black tracking-tight">สุขาภิบาล & ถังบำบัด (MEP)</span>
               </div>
               <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-full bg-white text-[#0F766E] border border-[#0D9488]/50 shrink-0">2 รายการ</span>
             </div>
@@ -1695,8 +1769,8 @@
                     <div class="w-7 h-7 rounded-lg bg-[#CFFAFE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#155E75] shadow-[1px_1px_0px_#1D2B45] shrink-0">
                       <i data-lucide="git-commit" class="w-3.5 h-3.5 text-[#0891B2]"></i>
                     </div>
-                    <div class="truncate">
-                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-drainage">ท่อ & บ่อพัก ค.ส.ล.</div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-tight" id="title-sidebar-drainage">ท่อ & บ่อพัก ค.ส.ล.</div>
                       <div class="text-[9.5px] text-[#0891B2] font-bold font-mono mt-0.5">12 บ่อ • 7 ท่อ</div>
                     </div>
                   </div>
@@ -1725,8 +1799,8 @@
                     <div class="w-7 h-7 rounded-lg bg-[#CCFBF1] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#0F766E] shadow-[1px_1px_0px_#1D2B45] shrink-0">
                       <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0D9488]"></i>
                     </div>
-                    <div class="truncate">
-                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ถังบำบัด & ผนัง</div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">ถังบำบัด & ผนังกันดิน</div>
                       <div class="text-[9.5px] text-[#0F766E] font-mono font-bold mt-0.5">137 ต้น • เข็มกลุ่ม</div>
                     </div>
                   </div>
@@ -1737,12 +1811,12 @@
           </div>
 
           <!-- GROUP 3: 📐 หมวดผังไซต์ & เส้นอ้างอิง CAD (Site & Survey Reference - Indigo Theme) -->
-          <div class="discipline-group group-cad bg-[#F8FAFC] border-2 border-[#4F46E5]/60 rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-2">
+          <div class="discipline-group group-cad rounded-2xl p-2 flex flex-col gap-2">
             <!-- Category Banner Header -->
             <div class="flex items-center justify-between px-2.5 py-1 rounded-xl bg-[#EEF2FF] border-1.5 border-[#4F46E5] text-[#3730A3]">
               <div class="flex items-center gap-1.5 min-w-0">
                 <span class="text-xs">📐</span>
-                <span class="text-[11px] font-black tracking-tight truncate">ผังไซต์ & อ้างอิง CAD</span>
+                <span class="text-[11px] font-black tracking-tight">ผังไซต์ & อ้างอิง CAD</span>
               </div>
               <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded-full bg-white text-[#3730A3] border border-[#4F46E5]/50 shrink-0">2 รายการ</span>
             </div>
@@ -1755,8 +1829,8 @@
                     <div class="w-7 h-7 rounded-lg bg-[#EEF2FF] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#4338CA] shadow-[1px_1px_0px_#1D2B45] shrink-0">
                       <i data-lucide="grid" class="w-3.5 h-3.5 text-[#4F46E5]"></i>
                     </div>
-                    <div class="truncate">
-                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none">กริด & มิติ CAD</div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">กริด & มิติ CAD</div>
                       <div class="text-[9.5px] text-[#4F46E5] font-mono font-bold mt-0.5">กริด 1-10, A-E</div>
                     </div>
                   </div>
@@ -1771,8 +1845,8 @@
                     <div class="w-7 h-7 rounded-lg bg-[#FFE4E6] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#BE123C] shadow-[1px_1px_0px_#1D2B45] shrink-0">
                       <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#BE123C]"></i>
                     </div>
-                    <div class="truncate">
-                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-tight">แนวเขตที่ดิน & หมุดสำรวจ</div>
                       <div class="text-[9.5px] text-[#BE123C] font-mono font-bold mt-0.5">4 ด้าน • หมุดแดง</div>
                     </div>
                   </div>
@@ -1788,7 +1862,7 @@
         <!-- Pane 2: มุมมองกล้อง (Views - Grouped into Projection & Standard Axes) -->
         <div id="pane-views" class="sidebar-tab-pane hidden flex flex-col gap-2.5">
           <!-- GROUP 1: โหมดมุมมองหลัก (Projections) -->
-          <div class="discipline-group bg-[#FFFDF7] border-2 border-[#F59E0B]/70 rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-2">
+          <div class="discipline-group rounded-2xl p-2 bg-[#FFFDF7] border-1.5 border-[#F59E0B]/50 flex flex-col gap-2">
             <div class="flex items-center justify-between px-2.5 py-1 rounded-xl bg-[#FEF3C7] border-1.5 border-[#F59E0B] text-[#92400E]">
               <div class="flex items-center gap-1.5 min-w-0">
                 <span class="text-xs">🌐</span>
@@ -1813,7 +1887,7 @@
           </div>
 
           <!-- GROUP 2: มุมมองแกนมาตรฐาน & จัดกึ่งกลาง -->
-          <div class="discipline-group bg-[#EEF2FF] border-2 border-[#4F46E5]/60 rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-2">
+          <div class="discipline-group rounded-2xl p-2 bg-[#EEF2FF] border-1.5 border-[#4F46E5]/40 flex flex-col gap-2">
             <div class="flex items-center justify-between px-2.5 py-1 rounded-xl bg-white border-1.5 border-[#4F46E5] text-[#3730A3]">
               <div class="flex items-center gap-1.5 min-w-0">
                 <span class="text-xs">📐</span>
@@ -1838,7 +1912,7 @@
         <!-- Pane 3: ตัวกรองสถานะ & เช็ครายต้น (Filter & Inspect) -->
         <div id="pane-filter" class="sidebar-tab-pane hidden flex flex-col gap-2.5">
           <!-- GROUP 1: กรองสถานะเสาเข็ม 93 ต้น -->
-          <div class="discipline-group bg-[#F0FDF4] border-2 border-[#10B981]/70 rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-2">
+          <div class="discipline-group rounded-2xl p-2 bg-[#F0FDF4] border-1.5 border-[#10B981]/50 flex flex-col gap-2">
             <div class="flex items-center justify-between px-2.5 py-1 rounded-xl bg-[#DCFCE7] border-1.5 border-[#10B981] text-[#065F46]">
               <div class="flex items-center gap-1.5 min-w-0">
                 <span class="text-xs">📊</span>
@@ -1869,7 +1943,7 @@
           </div>
 
           <!-- GROUP 2: เครื่องมือตรวจสอบพิกัด & PCO -->
-          <div class="discipline-group bg-[#FFF7ED] border-2 border-[#EA580C]/70 rounded-2xl p-2 shadow-[2px_2px_0px_#1D2B45] flex flex-col gap-2">
+          <div class="discipline-group rounded-2xl p-2 bg-[#FFF7ED] border-1.5 border-[#EA580C]/50 flex flex-col gap-2">
             <div class="flex items-center justify-between px-2.5 py-1 rounded-xl bg-[#FFEDD5] border-1.5 border-[#EA580C] text-[#C2410C]">
               <div class="flex items-center gap-1.5 min-w-0">
                 <span class="text-xs">🎯</span>
