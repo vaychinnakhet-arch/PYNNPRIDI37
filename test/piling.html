@@ -563,12 +563,6 @@
       pointer-events: none !important;
     }
 
-    .floating-hud.is-mobile-collapsed {
-      display: none !important;
-      pointer-events: none !important;
-      opacity: 0 !important;
-    }
-
     @media (max-width: 768px) {
       .floating-hud.is-mobile-collapsed {
         display: none !important;
@@ -1779,7 +1773,7 @@
   <div id="backdrop-dropdown-mobile" class="fixed inset-0 bg-[#1D2B45]/30 backdrop-blur-[1px] z-[45] hidden pointer-events-auto transition-opacity duration-200"></div>
 
   <!-- Left Floating Toolbar: Views & Pile Filters (Distilled & Impeccable DoodleWeb Edition) -->
-  <div id="floating-hud" class="floating-hud is-mobile-collapsed absolute left-3 top-[72px] z-20 flex flex-col pointer-events-auto w-[272px] max-w-[275px] font-body">
+  <div id="floating-hud" class="floating-hud absolute left-3 top-[72px] z-20 flex flex-col pointer-events-auto w-[272px] max-w-[275px] font-body">
     
     <!-- Consolidated Single Console Card with Tabs -->
     <div id="sidebar-main-console" class="pop-card bg-[#FFFDF9] border-2 border-[#1D2B45] shadow-[4px_4px_0px_#1D2B45] rounded-2xl overflow-hidden flex flex-col font-body">
@@ -6315,6 +6309,7 @@
         hud.style.removeProperty('bottom');
         hud.style.removeProperty('max-height');
       } else {
+        hud.classList.remove('is-mobile-collapsed');
         const rect = header.getBoundingClientRect();
         const topPos = Math.round(rect.bottom + 8);
         hud.style.top = topPos + 'px';
@@ -6329,6 +6324,9 @@
     if (window.innerWidth <= 768) {
       const hud = document.getElementById('floating-hud');
       if (hud) hud.classList.add('is-mobile-collapsed');
+    } else {
+      const hud = document.getElementById('floating-hud');
+      if (hud) hud.classList.remove('is-mobile-collapsed');
     }
     adjustFloatingHudPosition();
     setTimeout(adjustFloatingHudPosition, 100);
@@ -11519,16 +11517,24 @@
           toggleMobileHud();
           return;
         }
-        hud.classList.toggle('collapsed');
-        const isCollapsed = hud.classList.contains('collapsed');
-        if (hudBody) {
-          hudBody.style.display = isCollapsed ? 'none' : 'flex';
-        }
-        if (tabContent) {
-          tabContent.style.display = isCollapsed ? 'none' : 'flex';
-        }
-        if (btnToggle) {
-          btnToggle.textContent = isCollapsed ? 'ขยาย' : 'ย่อ';
+        hud.classList.remove('is-mobile-collapsed');
+        if (hud.classList.contains('hidden')) {
+          hud.classList.remove('hidden', 'collapsed');
+          if (hudBody) hudBody.style.display = 'flex';
+          if (tabContent) tabContent.style.display = 'flex';
+          if (btnToggle) btnToggle.textContent = 'ย่อ';
+        } else {
+          hud.classList.toggle('collapsed');
+          const isCollapsed = hud.classList.contains('collapsed');
+          if (hudBody) {
+            hudBody.style.display = isCollapsed ? 'none' : 'flex';
+          }
+          if (tabContent) {
+            tabContent.style.display = isCollapsed ? 'none' : 'flex';
+          }
+          if (btnToggle) {
+            btnToggle.textContent = isCollapsed ? 'ขยาย' : 'ย่อ';
+          }
         }
       }
     };
@@ -11540,7 +11546,15 @@
       if (window.innerWidth <= 768) {
         if (hud) hud.classList.add('is-mobile-collapsed');
       } else {
-        toggleHudState();
+        if (hud) {
+          hud.classList.add('collapsed');
+          const hudBody = document.getElementById('floating-hud-body');
+          const tabContent = document.getElementById('sidebar-tab-content');
+          if (hudBody) hudBody.style.display = 'none';
+          if (tabContent) tabContent.style.display = 'none';
+          const btnToggle = document.getElementById('btn-toggle-hud');
+          if (btnToggle) btnToggle.textContent = 'ขยาย';
+        }
       }
     });
 
@@ -11554,10 +11568,24 @@
 
     document.getElementById('btn-header-hud-toggle')?.addEventListener('click', toggleMobileHud);
     document.getElementById('dock-btn-menu-3d')?.addEventListener('click', () => {
+      const hud = document.getElementById('floating-hud');
       if (window.innerWidth <= 768) {
         toggleMobileHud();
       } else {
-        toggleHudState();
+        if (hud) {
+          hud.classList.remove('is-mobile-collapsed');
+          if (hud.classList.contains('hidden') || hud.classList.contains('collapsed')) {
+            hud.classList.remove('hidden', 'collapsed');
+            const hudBody = document.getElementById('floating-hud-body');
+            const tabContent = document.getElementById('sidebar-tab-content');
+            if (hudBody) hudBody.style.display = 'flex';
+            if (tabContent) tabContent.style.display = 'flex';
+            const btnToggle = document.getElementById('btn-toggle-hud');
+            if (btnToggle) btnToggle.textContent = 'ย่อ';
+          } else {
+            toggleHudState();
+          }
+        }
       }
     });
     document.getElementById('dock-btn-piling')?.addEventListener('click', () => {
