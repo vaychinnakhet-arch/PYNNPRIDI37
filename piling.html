@@ -1281,9 +1281,18 @@
           </div>
         </div>
 
-          <span class="hidden md:inline-flex bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#FDE68A]">
-            📍 ผังเสาเข็ม 93 ต้น
+        <!-- Symmetrical Module Switcher (📍 เสาเข็ม 93 ต้น vs 🏗️ ผังฐานราก 21 ฐาน) -->
+        <div class="inline-flex items-center p-0.5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] ml-1 select-none shrink-0 font-body">
+          <span id="piling-focus-badge" class="px-3 py-1 rounded-full bg-[#F7B844] border-1.5 border-[#1D2B45] text-[#1D2B45] font-black text-[11px] flex items-center gap-1.5 shadow-[1px_1px_0px_#1D2B45] cursor-default">
+            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+            <span>📍 เสาเข็ม (93)</span>
           </span>
+          <a href="footing.html" class="px-3 py-1 rounded-full text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white text-[11px] font-bold flex items-center gap-1 transition-all" title="สลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน (3D Footings & BOQ)">
+            <i data-lucide="box" class="w-3.5 h-3.5 text-[#0284C7]"></i>
+            <span class="hidden md:inline">ผังฐานราก (21)</span>
+            <span class="md:hidden">ฐานราก</span>
+            <span class="text-[9px] font-mono font-extrabold text-[#0284C7] bg-[#E0F2FE] px-1.5 py-0.2 rounded-full border border-[#BAE6FD]">3D ↗</span>
+          </a>
         </div>
       </div>
 
@@ -1795,18 +1804,6 @@
       </span>
     </div>
   </footer>
-
-  <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
-  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[3.5px_3.5px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
-    <span id="dock-btn-piling" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F7B844] text-[#1D2B45] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังงานเสาเข็ม 93 ต้น">
-      <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-      <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
-    </span>
-    <a href="footing.html" id="dock-btn-footing" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] active:scale-95" title="สลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
-      <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-      <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
-    </a>
-  </nav>
 
   <!-- ========================================================================= -->
   <!-- MODAL: QUICK PILE SELECTOR (การระบุต้นที่กด ของ่ายๆ 1-93) -->
@@ -3625,83 +3622,6 @@
       document.getElementById('sub-views-3d')?.classList.remove('hidden');
       updateNavHints('3d');
     }
-
-    // ----------------------------------------------------
-    // SEAMLESS BIM CAMERA SYNC (SHARED ACROSS PILING & FOOTING)
-    // ----------------------------------------------------
-    function saveBimSharedCamera() {
-      try {
-        const isOrtho = (activeCamera === orthoCamera);
-        const cam = isOrtho ? orthoCamera : perspCamera;
-        const ctrl = isOrtho ? controlsOrtho : controlsPersp;
-        if (!cam || !ctrl) return;
-        const state = {
-          isOrtho: isOrtho,
-          camPos: { x: cam.position.x, y: cam.position.y, z: cam.position.z },
-          camUp: { x: cam.up.x, y: cam.up.y, z: cam.up.z },
-          target: { x: ctrl.target.x, y: ctrl.target.y, z: ctrl.target.z },
-          orthoZoom: orthoCamera ? orthoCamera.zoom : 1,
-          timestamp: Date.now()
-        };
-        sessionStorage.setItem('pynn_bim_shared_camera', JSON.stringify(state));
-      } catch (err) {
-        console.warn('saveBimSharedCamera error:', err);
-      }
-    }
-
-    function restoreBimSharedCamera() {
-      try {
-        const raw = sessionStorage.getItem('pynn_bim_shared_camera');
-        if (!raw) return false;
-        const state = JSON.parse(raw);
-        if (!state || !state.camPos || !state.target) return false;
-        if (Date.now() - (state.timestamp || 0) > 2 * 60 * 60 * 1000) return false;
-
-        if (state.isOrtho) {
-          activeCamera = orthoCamera;
-          if (controlsOrtho) controlsOrtho.enabled = true;
-          if (controlsPersp) controlsPersp.enabled = false;
-          orthoCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
-          if (state.camUp) orthoCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
-          if (controlsOrtho) {
-            controlsOrtho.target.set(state.target.x, state.target.y, state.target.z);
-            controlsOrtho.update();
-          }
-          if (state.orthoZoom && state.orthoZoom > 0.05 && state.orthoZoom < 50) {
-            orthoCamera.zoom = state.orthoZoom;
-            orthoCamera.updateProjectionMatrix();
-          }
-          document.getElementById('view-top-ortho')?.classList.add('active');
-          document.getElementById('view-iso3d')?.classList.remove('active');
-          document.getElementById('sub-views-3d')?.classList.add('hidden');
-          updateNavHints('ortho');
-        } else {
-          activeCamera = perspCamera;
-          if (controlsOrtho) controlsOrtho.enabled = false;
-          if (controlsPersp) controlsPersp.enabled = true;
-          perspCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
-          if (state.camUp) perspCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
-          if (controlsPersp) {
-            controlsPersp.target.set(state.target.x, state.target.y, state.target.z);
-            controlsPersp.update();
-          }
-          document.getElementById('view-top-ortho')?.classList.remove('active');
-          document.getElementById('view-iso3d')?.classList.add('active');
-          document.getElementById('sub-views-3d')?.classList.remove('hidden');
-          updateNavHints('3d');
-        }
-        return true;
-      } catch (err) {
-        console.warn('restoreBimSharedCamera error:', err);
-        return false;
-      }
-    }
-
-    // Attempt restoring shared BIM camera on startup
-    restoreBimSharedCamera();
-
-    window.addEventListener('beforeunload', saveBimSharedCamera);
-    document.getElementById('dock-btn-footing')?.addEventListener('click', saveBimSharedCamera);
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
