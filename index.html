@@ -18,6 +18,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="manga_theme.css" />
+    <link rel="stylesheet" href="doodle_theme.css" />
 
     <script src="chart.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -233,10 +234,15 @@
          PILING DAILY & CUMULATIVE PROGRESS TABLE (LEDGER - 2 TIERS / 2 ROWS)
          ========================================================================= */
       .piling-daily-tier-block {
-        border: 2px solid #0f172a;
+        border: 2px solid #1D2B45;
         background-color: #ffffff;
-        box-shadow: 2.5px 2.5px 0px #0f172a;
-        border-radius: 0px !important;
+        box-shadow: 4px 4px 0px #1D2B45;
+        border-radius: 1rem !important;
+        overflow: hidden;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .piling-daily-tier-block:hover {
+        box-shadow: 5px 5px 0px #F26B2A;
       }
       .piling-daily-table {
         border-collapse: separate;
@@ -248,19 +254,19 @@
       }
       .piling-daily-table th,
       .piling-daily-table td {
-        border-right: 1px solid #cbd5e1;
-        border-bottom: 1px solid #cbd5e1;
-        padding: 5px 2px;
+        border-right: 1px solid #E2D9CC;
+        border-bottom: 1px solid #E2D9CC;
+        padding: 6px 3px;
         text-align: center;
         white-space: nowrap;
         box-sizing: border-box;
       }
       .piling-daily-table thead th {
-        background-color: #f1f5f9;
-        color: #0f172a;
-        font-weight: 800;
+        background-color: #FAF5EE;
+        color: #1D2B45;
+        font-weight: 700;
         font-size: 10.5px;
-        border-bottom: 2px solid #0f172a;
+        border-bottom: 2px solid #1D2B45;
       }
       .piling-daily-table th.sticky-col,
       .piling-daily-table td.sticky-col {
@@ -270,124 +276,125 @@
         width: 135px;
         max-width: 135px;
         text-align: left;
-        padding-left: 8px;
-        padding-right: 6px;
+        padding-left: 10px;
+        padding-right: 8px;
         box-sizing: border-box;
-        border-right: 2.5px solid #0f172a;
-        box-shadow: 3px 0 6px -2px rgba(15, 23, 42, 0.15);
+        border-right: 2px solid #1D2B45;
+        box-shadow: 3px 0 6px -2px rgba(29, 43, 69, 0.12);
       }
       .piling-daily-table th.sticky-col {
         z-index: 20;
-        background-color: #e2e8f0;
-        font-weight: 900;
-        color: #0f172a;
+        background-color: #F6E9D7;
+        font-weight: 800;
+        color: #1D2B45;
       }
       .piling-daily-table td.sticky-col {
         z-index: 10;
         background-color: #ffffff;
         font-weight: 700;
         font-size: 11px;
+        color: #1D2B45;
       }
 
       /* --- Group 1: Daily Piling Rates (Plan & Actual) --- */
       .piling-daily-table tr.row-plan td {
         background-color: #ffffff;
-        color: #475569;
+        color: #4F5D75;
       }
       .piling-daily-table tr.row-plan td.sticky-col {
-        background-color: #f8fafc;
-        color: #334155;
+        background-color: #FAF5EE;
+        color: #4F5D75;
       }
       .piling-daily-table tr.row-plan:hover td:not(.sticky-col):not(.active-col) {
-        background-color: #f1f5f9;
+        background-color: #F6E9D7;
       }
 
       .piling-daily-table tr.row-actual td {
-        background-color: #f8fafc;
-        color: #0f172a;
+        background-color: #ffffff;
+        color: #1D2B45;
         font-weight: 700;
       }
       .piling-daily-table tr.row-actual td.sticky-col {
-        background-color: #f1f5f9;
-        color: #0f172a;
+        background-color: #F6E9D7;
+        color: #1D2B45;
       }
       .piling-daily-table tr.row-actual:hover td:not(.sticky-col):not(.active-col) {
-        background-color: #f1f5f9;
+        background-color: #FFF3EB;
       }
 
       /* --- Group 2: Cumulative Progress (Acc. Plan & Acc. Actual) --- */
-      /* Strong Manga Divider Line between Daily and Cumulative */
+      /* Warm Navy Divider Line between Daily and Cumulative */
       .piling-daily-table tr.row-accum-plan td {
-        border-top: 2.5px solid #0f172a !important;
-        background-color: #f0f7ff;
-        color: #1e3a8a;
+        border-top: 2px solid #1D2B45 !important;
+        background-color: #EEF4FF;
+        color: #1E3A8A;
         font-weight: 700;
       }
       .piling-daily-table tr.row-accum-plan td.sticky-col {
-        border-top: 2.5px solid #0f172a !important;
-        background-color: #dbeafe !important;
-        color: #1e3a8a;
-        box-shadow: 2px 0 4px rgba(0,0,0,0.08);
+        border-top: 2px solid #1D2B45 !important;
+        background-color: #DBEAFE !important;
+        color: #1E3A8A;
+        box-shadow: 2px 0 4px rgba(29, 43, 69, 0.08);
       }
       .piling-daily-table tr.row-accum-plan:hover td:not(.sticky-col):not(.active-col) {
-        background-color: #e0edff;
+        background-color: #E0EDFF;
       }
 
       .piling-daily-table tr.row-accum-actual td {
-        background-color: #ecfdf5;
-        color: #064e3b;
-        font-weight: 900;
+        background-color: #E8F8F5;
+        color: #0E5E57;
+        font-weight: 800;
       }
       .piling-daily-table tr.row-accum-actual td.sticky-col {
-        background-color: #d1fae5 !important;
-        color: #064e3b;
-        box-shadow: 2px 0 4px rgba(0,0,0,0.08);
+        background-color: #D1FAE5 !important;
+        color: #0E5E57;
+        box-shadow: 2px 0 4px rgba(29, 43, 69, 0.08);
       }
       .piling-daily-table tr.row-accum-actual:hover td:not(.sticky-col):not(.active-col) {
-        background-color: #a7f3d0;
+        background-color: #A7F3D0;
       }
 
-      /* Amber highlight box for Active / Selected Reporting Date (Manga Highlight Frame) */
+      /* Tangerine Orange highlight box for Active / Selected Reporting Date */
       .piling-daily-table .active-col {
-        background-color: #fffbeb !important;
+        background-color: #FFF3EB !important;
         position: relative;
       }
       .piling-daily-table th.active-col {
-        border-top: 3.5px solid #d97706 !important;
-        border-left: 3.5px solid #d97706 !important;
-        border-right: 3.5px solid #d97706 !important;
-        border-bottom: 2px solid #b45309 !important;
-        background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%) !important;
-        color: #78350f !important;
-        font-weight: 900 !important;
-        box-shadow: inset 0 2px 0 #b45309;
+        border-top: 3px solid #F26B2A !important;
+        border-left: 2.5px solid #F26B2A !important;
+        border-right: 2.5px solid #F26B2A !important;
+        border-bottom: 2px solid #F26B2A !important;
+        background: linear-gradient(180deg, #FFE8D6 0%, #FFD6BA 100%) !important;
+        color: #1D2B45 !important;
+        font-weight: 800 !important;
+        box-shadow: inset 0 2px 0 #F26B2A;
       }
       .piling-daily-table td.active-col {
-        border-left: 3.5px solid #d97706 !important;
-        border-right: 3.5px solid #d97706 !important;
+        border-left: 2.5px solid #F26B2A !important;
+        border-right: 2.5px solid #F26B2A !important;
       }
       .piling-daily-table tr.row-plan td.active-col {
-        background-color: #fffbeb !important;
-        color: #92400e !important;
+        background-color: #FFF3EB !important;
+        color: #C2410C !important;
         font-weight: 700;
       }
       .piling-daily-table tr.row-actual td.active-col {
-        background-color: #fef3c7 !important;
-        color: #78350f !important;
-        font-weight: 900;
+        background-color: #FFE8D6 !important;
+        color: #1D2B45 !important;
+        font-weight: 800;
       }
       .piling-daily-table tr.row-accum-plan td.active-col {
-        border-top: 2.5px solid #0f172a !important;
-        background-color: #fed7aa !important;
-        color: #7c2d12 !important;
-        font-weight: 900;
+        border-top: 2px solid #1D2B45 !important;
+        background-color: #FFEDD5 !important;
+        color: #9A3412 !important;
+        font-weight: 800;
       }
       .piling-daily-table tr.row-accum-actual td.active-col {
-        background-color: #a7f3d0 !important;
-        color: #064e3b !important;
-        font-weight: 900;
-        border-bottom: 4px solid #d97706 !important;
-        box-shadow: inset 0 -3px 0 #b45309;
+        background-color: #A7F3D0 !important;
+        color: #064E3B !important;
+        font-weight: 800;
+        border-bottom: 3.5px solid #F26B2A !important;
+        box-shadow: inset 0 -3px 0 #F26B2A;
       }
 
       /* Executive Summary Dashboard Styles - Official Engineering Excel Ledger Standard */
@@ -7711,7 +7718,103 @@ body.manga-screentone-bg,
   display: none !important;
   content: none !important;
   background: none !important;
-  opacity: 0 !important;
+/* =========================================================================
+   WARM EDITORIAL CRAFT PILING COCKPIT & MOBILE ERGONOMICS (V0.5)
+   ========================================================================= */
+
+/* Action Deck & Mobile-First Buttons */
+.action-deck-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #1D2B45;
+  border-radius: 1rem;
+  background: #ffffff;
+  color: #1D2B45;
+  font-weight: 700;
+  box-shadow: 2.5px 2.5px 0px #1D2B45;
+  text-decoration: none;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  white-space: nowrap;
+  min-height: 52px;
+}
+.action-btn:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0px #F26B2A;
+}
+.action-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #1D2B45;
+}
+.action-btn-green:hover { box-shadow: 4px 4px 0px #10B981; }
+.action-btn-blue:hover { box-shadow: 4px 4px 0px #0284C7; }
+.action-btn-red { background: #FFF5F5; }
+.action-btn-red:hover { background: #FFE4E6; box-shadow: 4px 4px 0px #E64C3C; }
+
+/* Secondary Actions Grid: 2 columns on Mobile + Full-width QC */
+.secondary-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  width: 100%;
+}
+.qc-full-btn {
+  grid-column: span 2;
+}
+
+/* On Desktop (>= 1200px) */
+@media (min-width: 1200px) {
+  .secondary-actions-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .qc-full-btn {
+    grid-column: span 1 !important;
+  }
+}
+
+/* Piling Rig Animation */
+@keyframes hammerDrop {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(0); }
+  48% { transform: translateY(22px); }
+  50% { transform: translateY(22px); }
+  75% { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+@keyframes groundShock {
+  0%, 47% { transform: scale(1); opacity: 0; }
+  49% { transform: scale(1.1); opacity: 1; }
+  60% { transform: scale(1.35); opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes dustPuff {
+  0%, 48% { opacity: 0; transform: scale(0.5) translateY(0); }
+  50% { opacity: 0.85; transform: scale(1) translateY(-3px); }
+  70% { opacity: 0; transform: scale(1.4) translateY(-8px); }
+  100% { opacity: 0; }
+}
+
+.rig-hammer-animated {
+  animation: hammerDrop 2.2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+.ground-shockwave {
+  animation: groundShock 2.2s ease-out infinite;
+}
+.dust-puff {
+  animation: dustPuff 2.2s ease-out infinite;
+}
+.is-paused .rig-hammer-animated,
+.is-paused .ground-shockwave,
+.is-paused .dust-puff {
+  animation-play-state: paused !important;
 }
 
     </style>
@@ -7721,58 +7824,59 @@ body.manga-screentone-bg,
     <script defer src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   </head>
-  <body class="p-0 md:p-4 bg-white relative min-h-screen text-slate-900">
-    <!-- Splash Screen -->
+  <body class="p-2 sm:p-4 md:p-6 bg-[#FAF5EE] relative min-h-screen text-[#1D2B45] font-body selection:bg-[#F26B2A] selection:text-white">
+    <!-- Splash Screen (DoodleWeb Warm Craft Cockpit) -->
     <div
       id="splash-screen"
-      class="min-h-screen w-full flex flex-col justify-start px-3 py-4 sm:px-6 md:px-8 lg:px-10"
+      class="min-h-screen w-full flex flex-col justify-start px-2 py-3 sm:px-6 md:px-8 lg:px-10"
     >
       <div class="w-full max-w-[1540px] mx-auto splash-content">
         <!-- Splash Hero Header with Distilled Brand & Primary Actions -->
-        <div class="splash-hero-intro mb-5 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-slate-900 pb-4">
+        <div class="splash-hero-intro mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-[#1D2B45]/15 pb-5">
           <div>
-            <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-              <span class="manga-sticker sticker-green text-[11px] font-black tracking-wide">
-                <span class="w-2 h-2 rounded-full bg-emerald-800 border border-slate-950 inline-block mr-1"></span>
+            <div class="flex items-center gap-2 mb-2 flex-wrap">
+              <span class="doodle-pill doodle-pill-teal text-[11px] font-black tracking-wide shadow-2xs">
+                <span class="doodle-dot-live"></span>
                 ACTIVE PHASE · งานฐานรากและเสาเข็ม
               </span>
-              <span class="text-xs font-bold text-slate-600 font-mono hidden sm:inline">
-                สุขุมวิท 71 · พระโขนงเหนือ
+              <span class="doodle-pill bg-white text-[#3E4B69] font-mono text-[11px] font-bold shadow-2xs hidden sm:inline-flex">
+                📍 สุขุมวิท 71 · พระโขนงเหนือ
               </span>
             </div>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-wider uppercase leading-none" style="font-family: 'Bangers', cursive; text-shadow: 2px 2px 0px #f1f5f9;">
-              PYNN <span class="text-rose-600" style="color: #e11d48;">PRIDI 37</span>
+            <h1 class="font-display text-4xl sm:text-5xl md:text-6xl font-black text-[#1D2B45] tracking-tight leading-[1.05]">
+              PYNN <span class="text-[#F26B2A] italic" style="color: #F26B2A;">PRIDI 37</span>
             </h1>
-            <p class="text-xs sm:text-sm text-slate-700 font-bold mt-1" style="font-family: 'Sarabun', sans-serif;">
-              ระบบติดตามความคืบหน้างานก่อสร้าง (CONSTRUCTION TELEMETRY COCKPIT)
+            <p class="text-xs sm:text-sm text-[#3E4B69] font-medium mt-1.5 flex items-center gap-2" style="font-family: 'DM Sans', 'Prompt', sans-serif;">
+              <span>ระบบติดตามความคืบหน้างานก่อสร้าง (CONSTRUCTION TELEMETRY COCKPIT)</span>
+              <span class="doodle-annotation hidden sm:inline-flex text-xs text-[#F26B2A]">✦ Senior Engineering Edition</span>
             </p>
           </div>
 
-          <!-- Live System Status Chip (No duplicate buttons) -->
-          <div class="flex items-center gap-2 text-xs font-mono font-bold text-slate-700 bg-slate-50 px-3 py-1.5 rounded-lg border-2 border-slate-900 shadow-[1.5px_1.5px_0px_#11141a] shrink-0">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <!-- Live System Status Chip -->
+          <div class="doodle-pill doodle-pill-gold px-3.5 py-1.5 text-xs font-mono font-bold shadow-[2px_2px_0px_#1D2B45] shrink-0">
+            <span class="doodle-dot-live"></span>
             <span>SYSTEM ONLINE · 93 PILES READY</span>
           </div>
         </div>
 
-        <!-- Piling Dedicated Hero Portal Card (Manga Flat Layer Edition) -->
-        <div class="manga-panel-hero manga-hatch-pattern mb-8 p-5 md:p-7 relative bg-white">
+        <!-- Piling Dedicated Hero Portal Card (DoodleWeb Warm Craft Edition) -->
+        <div class="doodle-card-hero mb-8 p-5 sm:p-7 md:p-8 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45]">
           <!-- Consolidated Specification Bar (Single Row, Zero Clutter) -->
-          <div class="flex items-center justify-between flex-wrap gap-2.5 mb-5 pb-3 border-b-2 border-slate-100 relative z-10">
+          <div class="flex items-center justify-between flex-wrap gap-2.5 mb-6 pb-3.5 border-b-2 border-[#1D2B45]/15 relative z-10">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="manga-sticker sticker-ink text-[11px] font-mono font-black">
+              <span class="doodle-pill bg-[#1D2B45] text-white text-[10.5px] font-mono font-bold shadow-2xs">
                 SPECIFICATION
               </span>
-              <span class="text-xs font-bold text-slate-900 px-2.5 py-1 rounded bg-slate-100 border border-slate-900" style="font-family: 'Sarabun', sans-serif;">
+              <span class="doodle-pill bg-[#FAF5EE] text-[#1D2B45] text-xs font-bold border-[#1D2B45] shadow-2xs">
                 เสาเข็มคอนกรีตอัดแรงไอ 0.40 × 21.00 ม. (มอก. 396-2549)
               </span>
-              <span class="text-xs font-bold text-slate-700 hidden sm:inline px-2.5 py-1 rounded bg-slate-50 border border-slate-300 font-mono">
+              <span class="doodle-pill bg-[#FAF5EE] text-[#3E4B69] text-xs font-bold border-[#1D2B45]/40 font-mono hidden sm:inline-flex shadow-2xs">
                 แผนรวม 93 ต้น · อัตราเฉลี่ย 3 ต้น/วัน (31 วันทำการ)
               </span>
             </div>
-            <div class="flex items-center gap-2 text-xs font-mono font-bold text-slate-500">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>LIVE TELEMETRY</span>
+            <div class="flex items-center gap-2 text-xs font-mono font-bold text-[#3E4B69]">
+              <span class="doodle-dot-live"></span>
+              <span class="text-[#1D2B45]">LIVE TELEMETRY</span>
             </div>
           </div>
 
@@ -7782,18 +7886,18 @@ body.manga-screentone-bg,
             <!-- Left (Col 12 / Lg 7): S-Curve Progress Chart (Plan vs Actual) -->
             <div class="lg:col-span-7 flex flex-col">
               <div class="flex-1 flex flex-col min-h-0">
-                <div class="flex items-center justify-between flex-wrap gap-2 mb-2 shrink-0">
-                  <h2 class="text-lg md:text-xl font-black text-slate-950 tracking-tight leading-tight flex items-center gap-2" style="font-family: 'Sarabun', sans-serif;">
+                <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5 shrink-0">
+                  <h2 class="font-display text-lg md:text-xl font-black text-[#1D2B45] tracking-tight leading-tight flex items-center gap-2">
                     <span>กราฟเปรียบเทียบผลงานเสาเข็ม</span>
-                    <span class="manga-sticker sticker-ink text-[10px] font-mono">PLAN VS ACTUAL</span>
+                    <span class="doodle-pill bg-[#1D2B45] text-white text-[9.5px] font-mono">PLAN VS ACTUAL</span>
                   </h2>
                   <div class="flex items-center gap-2 text-xs font-bold">
-                    <span class="manga-sticker sticker-red text-[11px]">
-                      <span class="w-2.5 h-0.5 bg-rose-600 inline-block mr-1"></span>
+                    <span class="doodle-pill bg-[#FFF1F2] border-[#E64C3C] text-[#9F1239] text-[11px] shadow-2xs">
+                      <span class="w-2.5 h-0.5 bg-[#E64C3C] inline-block mr-1"></span>
                       แผนสะสม (3 ต้น/วัน)
                     </span>
-                    <span class="manga-sticker sticker-green text-[11px]">
-                      <span class="w-2 h-2 rounded-full bg-emerald-600 inline-block mr-1"></span>
+                    <span class="doodle-pill doodle-pill-teal text-[11px] shadow-2xs">
+                      <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1"></span>
                       ผลงานจริงสะสม
                     </span>
                   </div>
@@ -7801,7 +7905,7 @@ body.manga-screentone-bg,
 
                 <!-- Chart Canvas Box: Full Height S-Curve Monitor -->
                 <div 
-                  class="piling-chart-monitor relative w-full flex-1 h-[370px] sm:h-[390px] lg:h-[415px] p-2.5 sm:p-3 overflow-hidden bg-white border-2 border-slate-800 rounded-lg shadow-[3px_3px_0px_#1e293b]"
+                  class="doodle-chart-frame relative w-full flex-1 h-[370px] sm:h-[390px] lg:h-[415px] p-2.5 sm:p-3 overflow-hidden bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45]"
                 >
                   <canvas id="splashScurveCanvas" class="w-full h-full block"></canvas>
                 </div>
@@ -7809,246 +7913,271 @@ body.manga-screentone-bg,
             </div>
 
             <!-- Right (Col 12 / Lg 5): Metric Dashboard & Live Counters in High-Contrast Orderly Layer -->
-            <div class="lg:col-span-5 flex flex-col justify-between piling-telemetry-console p-4 sm:p-5 bg-white border-2 border-slate-900 shadow-[3.5px_3.5px_0px_#0f172a] overflow-hidden">
+            <div class="lg:col-span-5 flex flex-col justify-between doodle-card p-4 sm:p-5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] overflow-hidden">
               <div>
-                <!-- Console Top Header Ribbon: Deep Navy with Status LED & Big Bangers Counter -->
-                <div class="flex items-center justify-between p-3 bg-slate-950 text-white border-b-2 border-slate-900 mb-3 -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 shadow-xs">
+                <!-- Console Top Header Ribbon: Deep Navy with Status LED & Big Counter -->
+                <div class="flex items-center justify-between p-3.5 bg-[#1D2B45] text-white rounded-xl mb-3.5 shadow-[2px_2px_0px_#1D2B45]">
                   <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider">
-                      <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span>
+                    <span class="doodle-pill doodle-pill-teal text-[10px] font-black uppercase tracking-wider">
+                      <span class="doodle-dot-live"></span>
                       ACTIVE
                     </span>
-                    <span class="text-xs font-black tracking-wide text-slate-100 uppercase" style="font-family: 'Prompt', sans-serif;">
+                    <span class="text-xs font-bold tracking-wide text-white uppercase" style="font-family: 'DM Sans', 'Prompt', sans-serif;">
                       ความคืบหน้างานเสาเข็มรวม
                     </span>
                   </div>
                   <div class="flex items-baseline gap-1">
-                    <span id="portal-piling-percent" class="text-3xl sm:text-4xl font-black text-amber-300 font-mono tracking-tight" style="font-family: 'Bangers', cursive;">0%</span>
+                    <span id="portal-piling-percent" class="font-display text-3xl sm:text-4xl font-black text-[#F7B844] tracking-tight">0%</span>
                   </div>
                 </div>
                 
-                <!-- Manga Flat Progress Bar with crisp sharp border -->
-                <div class="w-full h-4 bg-slate-100 border-2 border-slate-900 overflow-hidden mb-3 p-0.5 shadow-inner">
-                  <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-700" style="width: 0%"></div>
+                <!-- Doodle Pill Progress Bar -->
+                <div class="w-full h-4 bg-white border-2 border-[#1D2B45] rounded-full overflow-hidden mb-3.5 p-0.5 shadow-inner">
+                  <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-[#10B981] to-[#40C4C4] rounded-full transition-all duration-700" style="width: 0%"></div>
                 </div>
 
-                <!-- 4-Stat Metric Grid in Rich Semantic 4-Tone Layer Cards -->
+                <!-- 4-Stat Metric Grid in Rich DoodleWeb Cards -->
                 <div class="grid grid-cols-2 gap-2.5 mb-2">
-                  <!-- Stat 1: Driven Cumulative (Vibrant Mint Emerald) -->
-                  <a href="piling.html?view=3d#completed" class="manga-card block p-3 bg-[#f0fdf4] hover:bg-emerald-100 transition-all border-2 border-emerald-600 shadow-[2.5px_2.5px_0px_#065f46] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none" title="คลิกเพื่อดูเสาเข็มที่กดเสร็จในโมเดล 3D">
+                  <!-- Stat 1: Driven Cumulative (Soft Mint Pastel) -->
+                  <a href="piling.html?view=3d#completed" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#10B981] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มที่กดเสร็จในโมเดล 3D">
                     <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-emerald-950 block">กดเสร็จสะสม</span>
-                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
-                    </div>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-driven-count" class="text-2xl sm:text-3xl font-black text-emerald-800" style="font-family: 'Bangers', cursive;">0</span>
-                      <span class="text-[11px] font-bold text-emerald-700 font-mono">/ 93 ต้น</span>
-                    </div>
-                  </a>
-
-                  <!-- Stat 2: Today Driven (Warm Sunbeam Amber) -->
-                  <a href="piling.html?view=report#today" class="manga-card block p-3 bg-[#fffbeb] hover:bg-amber-100 transition-all border-2 border-amber-500 shadow-[2.5px_2.5px_0px_#92400e] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none" title="คลิกเพื่อเปิดรายงานประจำวัน">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-amber-950 block">กดเสร็จวันนี้</span>
-                      <span class="px-1.5 py-0.2 bg-amber-400 border border-amber-600 text-slate-950 text-[9px] font-black">TODAY</span>
-                    </div>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-today" class="text-2xl sm:text-3xl font-black text-amber-600" style="font-family: 'Bangers', cursive;">0</span>
-                      <span class="text-[11px] font-bold text-amber-800">ต้น</span>
-                    </div>
-                  </a>
-
-                  <!-- Stat 3: Remaining Piles (Ice Cobalt Sky-Blue) -->
-                  <a href="piling.html?view=3d#remaining" class="manga-card block p-3 bg-[#f0f9ff] hover:bg-sky-100 transition-all border-2 border-sky-500 shadow-[2.5px_2.5px_0px_#0369a1] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none" title="คลิกเพื่อดูเสาเข็มคงเหลือในโมเดล 3D">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-sky-950 block">คงเหลือ</span>
-                      <i data-lucide="clock" class="w-4 h-4 text-sky-600"></i>
-                    </div>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-remain" class="text-2xl sm:text-3xl font-black text-sky-800" style="font-family: 'Bangers', cursive;">93</span>
-                      <span class="text-[11px] font-bold text-sky-700">ต้น</span>
-                    </div>
-                  </a>
-
-                  <!-- Stat 4: Schedule Variance (Soft Crimson Alert) -->
-                  <a href="piling.html?view=report#variance" id="portal-piling-variance-card" class="manga-card block p-3 bg-[#fef2f2] hover:bg-rose-100 transition-all border-2 border-rose-500 shadow-[2.5px_2.5px_0px_#991b1b] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none" title="คลิกเพื่อดูรายละเอียดผลงานเทียบแผน">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-rose-950 block">สถานะเทียบแผน</span>
-                      <span id="portal-piling-variance-badge" class="px-1.5 py-0.2 bg-rose-600 text-white border border-rose-800 text-[9px] font-black">ช้ากว่าแผน</span>
-                    </div>
-                    <div class="flex items-baseline gap-1 mt-0.5">
-                      <span id="portal-piling-variance-val" class="text-2xl sm:text-3xl font-black text-rose-600" style="font-family: 'Bangers', cursive;">-16</span>
-                      <span id="portal-piling-variance-unit" class="text-[11px] font-bold text-rose-700">ต้น</span>
-                    </div>
-                    <span id="portal-piling-variance-sub" class="text-[9.5px] text-rose-900 font-bold block truncate mt-0.5 font-mono">แผนสะสม 27 · จริง 11 ต้น</span>
-                  </a>
-                </div>
-
-                <!-- 3D Precast Concrete I-Pile Progress Bar (Anatomy Technical Spec Card) -->
-                <div class="mt-3 pt-3 border-t-2 border-slate-900">
-                  <!-- Technical Spec Header -->
-                  <div class="flex items-center justify-between mb-1.5 text-[10px] font-mono font-bold text-slate-700">
-                    <span class="flex items-center gap-1.5 text-slate-900">
-                      <span class="w-2 h-2 rounded-xs bg-emerald-500 border border-slate-900"></span>
-                      <span class="font-black tracking-tight">FIG. 01 · 3D PRECAST I-PILE PROGRESS</span>
-                    </span>
-                    <span class="text-[9.5px] font-mono flex items-center gap-1">
-                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span class="text-emerald-700 font-black">3D LIVE PROGRESS</span>
-                    </span>
-                  </div>
-
-                  <!-- 3D Container with Framing & Blueprint Drafting Grid -->
-                  <div id="ipile-3d-progress-container" class="relative w-full h-24 sm:h-28 select-none bg-[#f8fafc] border-2 border-slate-900 rounded-xs shadow-[2.5px_2.5px_0px_#0f172a] overflow-hidden">
-                    <!-- Subtle Technical Drafting Dot Grid -->
-                    <div class="absolute inset-0 pointer-events-none opacity-40 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:12px_12px]"></div>
-
-                    <!-- Three.js Canvas -->
-                    <canvas id="ipileProgressBarCanvas" class="w-full h-full block relative z-10"></canvas>
-
-                    <!-- Precision Floating Tip Badge (Positioned dynamically via 3D Screen Projection) -->
-                    <div id="ipile-tip-callout" class="absolute top-2 z-20 pointer-events-none flex flex-col items-center -translate-x-1/2 transition-[left] duration-150" style="left: 25.8%;">
-                      <div class="px-2.5 py-1 bg-slate-950 text-white text-[11px] font-mono font-black border-2 border-slate-900 rounded-xs flex items-center gap-1.5 whitespace-nowrap shadow-[2px_2px_0px_#0f172a]">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span id="ipile-tip-text" class="text-emerald-400 text-xs font-black tracking-wide">25.8%</span>
+                      <span class="text-[11px] font-black text-[#14532D] block">กดเสร็จสะสม</span>
+                      <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border border-[#1D2B45] flex items-center justify-center text-[#14532D] shadow-2xs">
+                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#10B981]"></i>
                       </div>
-                      <div class="w-0.5 h-1.5 bg-slate-900"></div>
                     </div>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-driven-count" class="font-display text-2xl sm:text-3xl font-extrabold text-[#14532D]">0</span>
+                      <span class="text-[11px] font-bold text-[#14532D] font-mono">/ 93 ต้น</span>
+                    </div>
+                    <div class="text-[9.5px] font-bold text-[#14532D]/80 truncate mt-0.5">28.0% ของงานทั้งหมด</div>
+                  </a>
 
-                    <!-- 3D Progress Percentage Scale (0% to 100%) at bottom of container -->
-                    <div class="absolute bottom-1 inset-x-0 z-20 pointer-events-none flex items-center justify-between px-3 text-[9px] font-mono text-slate-500 select-none">
-                      <span class="flex items-center gap-0.5 font-bold text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>0%</span>
-                      <span class="text-slate-400 font-medium">25%</span>
-                      <span class="text-slate-400 font-medium">50%</span>
-                      <span class="text-slate-400 font-medium">75%</span>
-                      <span class="flex items-center gap-0.5 text-slate-900 font-black">100%<span class="w-1.5 h-1.5 rounded-full bg-slate-900"></span></span>
+                  <!-- Stat 2: Today Driven (Soft Butter Pastel) - ACCURATELY ZERO UNTIL FILLED TODAY! -->
+                  <a href="piling.html?view=report#today" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#FEF9C3] hover:bg-[#FEF08A] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#F7B844] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อเปิดรายงานประจำวัน">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-black text-[#78350F] block">กดเสร็จวันนี้</span>
+                      <span class="doodle-pill bg-[#F7B844] border border-[#1D2B45] text-[#1D2B45] text-[9px] font-black">TODAY</span>
+                    </div>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-today" class="font-display text-2xl sm:text-3xl font-extrabold text-[#78350F]">0</span>
+                      <span class="text-[11px] font-bold text-[#78350F]">ต้น</span>
+                    </div>
+                    <div id="portal-piling-today-sub" class="text-[9.5px] font-bold text-[#78350F]/80 truncate mt-0.5">ยังไม่บันทึกวันนี้ · ล่าสุด 24 ต.ค. (2 ต้น)</div>
+                  </a>
+
+                  <!-- Stat 3: Remaining Piles (Soft Sky Pastel) -->
+                  <a href="piling.html?view=3d#remaining" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#E0F2FE] hover:bg-[#BAE6FD] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#0284C7] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มคงเหลือในโมเดล 3D">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-black text-[#075985] block">คงเหลือ</span>
+                      <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border border-[#1D2B45] flex items-center justify-center text-[#075985] shadow-2xs">
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-[#0284C7]"></i>
+                      </div>
+                    </div>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-remain" class="font-display text-2xl sm:text-3xl font-extrabold text-[#075985]">93</span>
+                      <span class="text-[11px] font-bold text-[#075985]">ต้น</span>
+                    </div>
+                    <div class="text-[9.5px] font-bold text-[#075985]/80 truncate mt-0.5">เป้าหมายเสร็จตามสัญญา</div>
+                  </a>
+
+                  <!-- Stat 4: Schedule Variance (Soft Blush/Rose Pastel) -->
+                  <a href="piling.html?view=report#variance" id="portal-piling-variance-card" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#FFE4E6] hover:bg-[#FECDD3] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#E64C3C] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูรายละเอียดผลงานเทียบแผน">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[11px] font-black text-[#9F1239] block">สถานะเทียบแผน</span>
+                      <span id="portal-piling-variance-badge" class="doodle-pill bg-[#E64C3C] text-white border border-[#1D2B45] text-[9px] font-black">ช้ากว่าแผน</span>
+                    </div>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-variance-val" class="font-display text-2xl sm:text-3xl font-extrabold text-[#9F1239]">-19</span>
+                      <span id="portal-piling-variance-unit" class="text-[11px] font-bold text-[#9F1239]">ต้น</span>
+                    </div>
+                    <span id="portal-piling-variance-sub" class="text-[9.5px] text-[#9F1239] font-bold block truncate mt-0.5 font-mono">แผนสะสม 45 · จริง 26 ต้น</span>
+                  </a>
+                </div>
+
+                <!-- ✦ CRAFT PILING RIG ANIMATION (CHARMING INTERACTIVE HYDRAULIC RIG) -->
+                <div class="mt-3 pt-3 border-t-2 border-[#1D2B45]/15">
+                  <div class="flex items-center justify-between mb-2 text-xs font-mono font-bold text-[#3E4B69] flex-wrap gap-1.5">
+                    <span class="flex items-center gap-1.5 text-[#1D2B45] font-body font-black text-xs sm:text-sm">
+                      <i data-lucide="activity" class="w-4 h-4 text-[#F26B2A]"></i>
+                      <span>✦ ปั้นจั่นตอกเสาเข็มไอ</span>
+                    </span>
+                    <div class="flex items-center gap-2">
+                      <button type="button" onclick="window.toggleRigAnimation()" id="btn-toggle-anim" class="px-3 py-1.5 rounded-full bg-white border-2 border-[#1D2B45] text-xs text-[#1D2B45] font-bold hover:bg-[#FAF5EE] active:translate-y-0.5 transition-all flex items-center gap-1.5 shadow-[1.5px_1.5px_0px_#1D2B45] cursor-pointer">
+                        <span id="anim-toggle-icon">⏸️</span>
+                        <span id="anim-toggle-text">พัก</span>
+                      </button>
+                      <button type="button" onclick="window.triggerRigImpact()" class="px-3.5 py-1.5 rounded-full bg-[#F26B2A] text-white text-xs font-bold hover:bg-[#E05615] active:translate-y-0.5 transition-all flex items-center gap-1.5 border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] cursor-pointer">
+                        <span>🔨 ตอกทันที!</span>
+                      </button>
                     </div>
                   </div>
 
-                  <!-- Technical Legend & Readout beneath figure -->
-                  <div class="flex items-center justify-between mt-1.5 px-0.5 text-[9.5px] font-mono text-slate-600">
-                    <div class="flex items-center gap-3">
-                      <span class="flex items-center gap-1">
-                        <span class="w-2.5 h-2 bg-emerald-500 border border-slate-800 rounded-2xs inline-block"></span>
-                        <span class="font-bold text-slate-800">ตอกเสร็จ (Driven)</span>
-                      </span>
-                      <span class="flex items-center gap-1">
-                        <span class="w-2.5 h-2 bg-slate-200 border border-slate-400 rounded-2xs inline-block"></span>
-                        <span>คงเหลือ (Remaining)</span>
-                      </span>
+                  <!-- Animated Piling Scene Container -->
+                  <div id="piling-rig-scene" class="relative w-full min-h-[86px] sm:min-h-[96px] bg-white border-2 border-[#1D2B45] rounded-xl overflow-hidden p-2.5 flex items-center gap-3 shadow-[3px_3px_0px_#1D2B45]">
+                    <!-- Clean Subtle Strata Bands (Zero distracting background text) -->
+                    <div class="absolute inset-y-0 right-0 w-1/2 pointer-events-none flex flex-col opacity-15">
+                      <div class="h-1/3 bg-[#F6E9D7]"></div>
+                      <div class="h-1/3 bg-[#E2D9CC]"></div>
+                      <div class="h-1/3 bg-[#CBD5E1]"></div>
                     </div>
-                    <div class="text-slate-700 font-bold flex items-center gap-1">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span>3D TELEMETRY</span>
+
+                    <!-- Animated Pile Rig Illustration (SVG Craft) -->
+                    <div class="relative z-10 w-12 sm:w-14 h-16 sm:h-20 shrink-0 flex items-end justify-center">
+                      <svg viewBox="0 0 70 95" class="w-full h-full overflow-visible">
+                        <rect x="5" y="85" width="60" height="7" rx="2" fill="#1D2B45" stroke="#1D2B45" stroke-width="1.5"/>
+                        <circle cx="15" cy="88" r="2" fill="#F7B844"/>
+                        <circle cx="55" cy="88" r="2" fill="#F7B844"/>
+                        <line x1="12" y1="85" x2="28" y2="12" stroke="#1D2B45" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="58" y1="85" x2="42" y2="12" stroke="#1D2B45" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="20" y1="65" x2="50" y2="65" stroke="#F26B2A" stroke-width="1.5"/>
+                        <line x1="25" y1="45" x2="45" y2="45" stroke="#F26B2A" stroke-width="1.5"/>
+                        <line x1="30" y1="25" x2="40" y2="25" stroke="#F26B2A" stroke-width="1.5"/>
+                        <circle cx="35" cy="12" r="6" fill="#F7B844" stroke="#1D2B45" stroke-width="2"/>
+                        <circle cx="35" cy="12" r="2" fill="#1D2B45"/>
+                        <line x1="35" y1="18" x2="35" y2="85" stroke="#3E4B69" stroke-width="1.5" stroke-dasharray="2 2"/>
+                        <g class="rig-hammer-animated" id="rig-hammer-group">
+                          <rect x="25" y="22" width="20" height="18" rx="3" fill="#F26B2A" stroke="#1D2B45" stroke-width="2"/>
+                          <rect x="28" y="32" width="14" height="6" fill="#E05615"/>
+                        </g>
+                        <rect x="27" y="55" width="16" height="8" rx="2" fill="#1D2B45"/>
+                        <rect x="30" y="63" width="10" height="24" rx="1" fill="#CBD5E1" stroke="#1D2B45" stroke-width="1.5"/>
+                        <ellipse cx="35" cy="87" rx="16" ry="3.5" fill="none" stroke="#F26B2A" stroke-width="2" class="ground-shockwave"/>
+                        <circle cx="28" cy="84" r="3" fill="#E2D9CC" class="dust-puff"/>
+                        <circle cx="42" cy="84" r="3.5" fill="#E2D9CC" class="dust-puff" style="animation-delay: 0.05s;"/>
+                      </svg>
                     </div>
+
+                    <!-- Clean Readout & Bar (No ellipses, fully readable) -->
+                    <div class="flex-1 min-w-0 z-10">
+                      <div class="flex items-center justify-between mb-1 gap-1">
+                        <span id="rig-driven-title" class="font-display font-black text-xs sm:text-sm text-[#1D2B45] whitespace-nowrap">
+                          ตอกสะสม 26 ต้น
+                        </span>
+                        <span id="rig-percent-pill" class="doodle-pill bg-[#FAF5EE] text-[#F26B2A] text-[9.5px] font-mono font-bold shrink-0">
+                          28.0%
+                        </span>
+                      </div>
+
+                      <!-- Pile Progress Bar -->
+                      <div class="w-full h-3 sm:h-3.5 bg-slate-100 border border-[#1D2B45] rounded-full overflow-hidden relative shadow-inner mb-1.5">
+                        <div id="rig-progress-fill" class="h-full bg-gradient-to-r from-[#10B981] via-[#40C4C4] to-[#F26B2A] rounded-full transition-all duration-500" style="width: 28.0%"></div>
+                      </div>
+
+                      <!-- Readable Telemetry Sentence (No truncated pills!) -->
+                      <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-[#3E4B69] whitespace-nowrap">
+                        <span class="font-medium">เป้าหมาย 93 ต้น</span>
+                        <span id="rig-remain-text" class="font-bold text-[#F26B2A]">คงเหลืออีก 67 ต้น</span>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Hero Command Deck (Balanced 2-Column Action Launchpad: Left Yellow Hero CTA | Right 3 Semantic Actions) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-3.5 items-stretch relative z-10">
-            <!-- Left (Lg 7): Primary Hero CTA: เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น -->
-            <div class="lg:col-span-7">
+          <!-- Hero Command Deck (DoodleWeb Action Launchpad: Mobile-First, Touch-Perfected) -->
+          <div class="action-deck-layout mt-5">
+            <!-- Primary Hero CTA: เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น (Full Width, Large Touch Target) -->
+            <a
+              href="piling.html?view=3d#3d"
+              class="hero-cta-btn w-full min-h-[60px] sm:min-h-[66px] flex items-center justify-between px-4 sm:px-6 py-3.5 cursor-pointer group bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] hover:shadow-[5px_5px_0px_#1D2B45] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+              title="คลิกเพื่อเข้าสู่แบบจำลอง 3D เสาเข็ม 93 ต้น และเริ่มงานทันที"
+            >
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div class="w-11 h-11 bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-xl flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#1D2B45] group-hover:rotate-6 transition-transform">
+                  <i data-lucide="box" class="w-6 h-6 text-[#F26B2A]"></i>
+                </div>
+                <div class="flex flex-col text-left leading-tight min-w-0">
+                  <span class="text-[9.5px] sm:text-[10px] font-mono font-bold uppercase tracking-wider text-white/90">
+                    ACTIVE 3D WORKSPACE · 93 PILES
+                  </span>
+                  <span class="font-display text-sm sm:text-base md:text-lg font-bold text-white tracking-tight whitespace-nowrap">
+                    ⚡ เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น
+                  </span>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-2 shrink-0 pl-2">
+                <span class="doodle-pill bg-white text-[#1D2B45] text-xs font-bold shadow-2xs hidden sm:inline-flex">เริ่มงาน</span>
+                <i data-lucide="arrow-right" class="w-5 h-5 text-white group-hover:translate-x-1.5 transition-transform"></i>
+              </div>
+            </a>
+
+            <!-- Secondary Quick Actions: 2 Columns on Mobile + Full-width QC (NEVER clipped!) -->
+            <div class="secondary-actions-grid">
+              <!-- Button 1: รายงาน S-Curve -->
               <a
-                href="piling.html?view=3d#3d"
-                class="w-full h-full min-h-[58px] flex items-center justify-between px-4 sm:px-6 py-3 cursor-pointer group bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 border-2.5 border-slate-950 shadow-[3.5px_3.5px_0px_#0f172a] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
-                title="คลิกเพื่อเข้าสู่แบบจำลอง 3D เสาเข็ม 93 ต้น และเริ่มงานทันที"
+                href="piling.html?view=report#report"
+                class="action-btn action-btn-green gap-2 px-3 py-3 text-xs sm:text-sm font-bold w-full"
+                title="เปิดรายงานผลงานเสาเข็มและบันทึกประจำวัน"
               >
-                <div class="flex items-center gap-3.5 min-w-0">
-                  <div class="w-10 h-10 bg-slate-950 text-amber-300 border-2 border-slate-950 flex items-center justify-center shrink-0 shadow-[1.5px_1.5px_0px_#0f172a] group-hover:rotate-6 transition-transform">
-                    <i data-lucide="box" class="w-5 h-5 text-amber-300"></i>
-                  </div>
-                  <div class="flex flex-col text-left leading-tight min-w-0">
-                    <span class="text-[10px] font-mono font-black uppercase tracking-wider text-amber-950">
-                      ACTIVE WORKSPACE · 93 PILES
-                    </span>
-                    <span class="text-sm sm:text-base font-black text-slate-950 tracking-tight" style="font-family: 'Prompt', sans-serif;">
-                      ⚡ เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น
-                    </span>
-                  </div>
-                </div>
-                
-                <div class="flex items-center gap-1.5 shrink-0 pl-2">
-                  <span class="text-xs font-black text-slate-950 hidden sm:inline px-2.5 py-1 bg-white border border-slate-900 rounded-xs shadow-2xs" style="font-family: 'Prompt', sans-serif;">เริ่มงานทันที</span>
-                  <i data-lucide="arrow-right" class="w-5 h-5 text-slate-950 group-hover:translate-x-1.5 transition-transform"></i>
-                </div>
+                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#10B981] shrink-0"></i>
+                <span>รายงาน S-Curve</span>
               </a>
-            </div>
 
-            <!-- Right (Lg 5): Secondary Quick Actions (Fills the Right Column Void under Telemetry Console) -->
-            <div class="lg:col-span-5">
-              <div class="grid grid-cols-3 gap-2 sm:gap-2.5 h-full min-h-[58px]">
-                <a
-                  href="piling.html?view=report#report"
-                  class="flex items-center justify-center gap-1.5 px-2 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border-2 border-emerald-800 shadow-[2.5px_2.5px_0px_#065f46] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-black shrink-0 text-center"
-                  title="เปิดรายงานผลงานเสาเข็มและบันทึกประจำวัน"
-                >
-                  <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-700 shrink-0"></i>
-                  <span class="truncate">รายงาน S-Curve</span>
-                </a>
+              <!-- Button 2: ผังฐานราก 3D -->
+              <a
+                href="footing.html"
+                class="action-btn action-btn-blue gap-2 px-3 py-3 text-xs sm:text-sm font-bold w-full"
+                title="เปิดผังแบบจำลอง 3D ฐานราก ค.ส.ล. 21 ฐาน"
+              >
+                <i data-lucide="box" class="w-4 h-4 text-[#0284C7] shrink-0"></i>
+                <span>ผังฐานราก 3D</span>
+              </a>
 
-                <a
-                  href="footing.html"
-                  class="flex items-center justify-center gap-1.5 px-2 py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-950 border-2 border-sky-800 shadow-[2.5px_2.5px_0px_#075985] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-black shrink-0 text-center"
-                  title="เปิดผังแบบจำลอง 3D ฐานราก ค.ส.ล. 21 ฐาน"
-                >
-                  <i data-lucide="box" class="w-4 h-4 text-sky-700 shrink-0"></i>
-                  <span class="truncate">ผังฐานราก 3D</span>
-                </a>
-
-                <button
-                  type="button"
-                  onclick="enterAppView('residential')"
-                  class="flex items-center justify-center gap-1.5 px-2 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-950 border-2 border-rose-800 shadow-[2.5px_2.5px_0px_#9f1239] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-black shrink-0 text-center cursor-pointer"
-                  title="เข้าสู่ระบบตรวจรับห้องพักและติดตาม Defect (QC System)"
-                >
-                  <i data-lucide="building-2" class="w-4 h-4 text-rose-700 shrink-0"></i>
-                  <span class="truncate">ตรวจห้องพัก QC</span>
-                </button>
-              </div>
+              <!-- Button 3: ตรวจห้อง QC (Spans 2 columns on Mobile, 3rd column on Desktop) -->
+              <button
+                type="button"
+                onclick="enterAppView('residential')"
+                class="action-btn action-btn-red qc-full-btn gap-2 px-4 py-3 text-xs sm:text-sm font-bold w-full cursor-pointer"
+                title="เข้าสู่ระบบตรวจรับห้องพักและติดตาม Defect (QC System)"
+              >
+                <i data-lucide="building-2" class="w-4 h-4 text-[#E64C3C] shrink-0"></i>
+                <span>ระบบตรวจห้องพัก QC Defect</span>
+              </button>
             </div>
           </div>
 
-          <!-- Piling Daily & Cumulative Progress Table (Excel Style Ledger: แผน 3 ต้น/วันทำการ vs จริงสะสม - 2 แถวไม่ต้องเลื่อน) -->
-          <div id="portal-piling-daily-table-wrapper" class="mt-4 pt-4 border-t-2 border-slate-900">
-            <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+          <!-- Piling Daily & Cumulative Progress Table (DoodleWeb Editorial Ledger) -->
+          <div id="portal-piling-daily-table-wrapper" class="mt-5 pt-5 border-t-2 border-[#1D2B45]/15">
+            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
               <div class="flex items-center gap-2">
-                <span class="manga-sticker sticker-ink text-[10px] font-mono font-black">LEDGER</span>
-                <h3 class="text-xs sm:text-sm font-black text-slate-900 tracking-tight" style="font-family: 'Prompt', 'Sarabun', sans-serif;">
+                <span class="doodle-pill bg-[#1D2B45] text-white text-[10px] font-mono font-black">LEDGER</span>
+                <h3 class="font-display text-sm sm:text-base font-bold text-[#1D2B45] tracking-tight">
                   ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วันทำการ vs Actual)
                 </h3>
               </div>
-              <div class="flex items-center gap-2 text-[11px] font-bold text-slate-700 flex-wrap">
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 border border-slate-300 rounded text-slate-700 font-bold">
-                  <span class="w-2.5 h-2.5 bg-white border border-slate-400 rounded-xs"></span>
+              <div class="flex items-center gap-2 text-[11px] font-bold text-[#3E4B69] flex-wrap">
+                <span class="doodle-pill bg-white text-[#1D2B45] text-[10.5px]">
+                  <span class="w-2.5 h-2.5 bg-white border border-[#1D2B45] rounded-xs"></span>
                   <span>กลุ่มรายวัน</span>
                 </span>
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 border border-emerald-400 rounded text-emerald-900 font-bold">
-                  <span class="w-2.5 h-2.5 bg-emerald-200 border border-emerald-500 rounded-xs"></span>
+                <span class="doodle-pill doodle-pill-teal text-[10.5px]">
+                  <span class="w-2.5 h-2.5 bg-[#A7F3D0] border border-[#10B981] rounded-xs"></span>
                   <span>กลุ่มสะสม</span>
                 </span>
-                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-amber-50 border-2 border-amber-600 rounded text-amber-900 font-black shadow-xs">
-                  <span class="w-3 h-3 bg-amber-400 border-2 border-amber-700 rounded-xs"></span>
+                <span class="doodle-pill doodle-pill-gold text-[10.5px] shadow-xs">
+                  <span class="w-2.5 h-2.5 bg-[#F7B844] border border-[#B45309] rounded-xs"></span>
                   <span>กรอบเน้น: วันนี้ (Active Day)</span>
                 </span>
-                <span class="text-slate-500 font-mono text-[10.5px] hidden lg:inline">· 2 แถว ครบ 31 วันทำการ</span>
+                <span class="text-[#3E4B69] font-mono text-[10.5px] hidden lg:inline">· 2 แถว ครบ 31 วันทำการ</span>
               </div>
             </div>
-            <div id="portal-piling-daily-table-container" class="space-y-2.5 max-w-full">
+            <div id="portal-piling-daily-table-container" class="space-y-3 max-w-full">
               <!-- Injected by JavaScript -->
             </div>
           </div>
         </div>
 
-        <!-- Mobile Sticky Action Bar for Piling (Manga Flat Layer) -->
-        <div id="piling-mobile-sticky-bar" class="piling-mobile-sticky-bar sm:hidden flex items-center justify-between gap-3 bg-white border-t-2 border-slate-800 shadow-[0_-3px_0px_#1e293b] px-3.5 py-2.5">
+        <!-- Mobile Sticky Action Bar for Piling (DoodleWeb Pill Bar) -->
+        <div id="piling-mobile-sticky-bar" class="piling-mobile-sticky-bar sm:hidden flex items-center justify-between gap-3 bg-[#FAF5EE]/95 backdrop-blur-md border-t-2 border-[#1D2B45] shadow-[0_-4px_0px_#1D2B45] px-4 py-2.5 z-40">
           <div class="flex items-center gap-2.5 min-w-0">
-            <span class="w-3 h-3 rounded-full bg-emerald-500 border border-slate-900 shrink-0"></span>
+            <span class="w-3 h-3 rounded-full bg-[#10B981] border border-[#1D2B45] shrink-0"></span>
             <div class="flex flex-col min-w-0">
-              <span class="text-[10px] text-slate-600 font-black uppercase tracking-wider truncate">เสาเข็ม 93 ต้น</span>
-              <span class="text-xs font-black text-slate-950 font-mono tracking-tight whitespace-nowrap">
+              <span class="text-[10px] text-[#4F5D75] font-bold uppercase tracking-wider truncate">เสาเข็ม 93 ต้น</span>
+              <span class="text-xs font-bold text-[#1D2B45] font-mono tracking-tight whitespace-nowrap">
                 <span id="portal-piling-mobile-driven">11</span>/93 (<span id="portal-piling-mobile-pct">11.8%</span>)
               </span>
             </div>
@@ -8056,14 +8185,14 @@ body.manga-screentone-bg,
           <div class="flex items-center gap-2 shrink-0">
             <a
               href="piling.html?view=report#report"
-              class="manga-btn px-3 py-1.5 text-xs font-black"
+              class="doodle-btn px-3 py-1.5 text-xs font-bold"
             >
-              <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-700"></i>
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#1D2B45]"></i>
               <span>รายงาน</span>
             </a>
             <a
               href="piling.html?view=3d#3d"
-              class="manga-btn manga-btn-green px-3.5 py-1.5 text-xs font-black"
+              class="doodle-btn doodle-btn-orange px-3.5 py-1.5 text-xs font-bold"
             >
               <i data-lucide="box" class="w-3.5 h-3.5"></i>
               <span>เปิดแบบ 3D</span>
@@ -14395,45 +14524,45 @@ if (typeof window !== "undefined") {
 
               var colClass = d.isToday ? 'active-col' : '';
               var headerInner = d.isToday
-                ? '<div class="flex flex-col items-center justify-center leading-tight py-0.5"><span class="inline-block bg-amber-500 border border-amber-800 text-slate-950 text-[7.5px] font-black px-1.5 py-0.2 rounded-xs uppercase tracking-tight shadow-2xs">TODAY</span><span class="font-black text-amber-950 text-xs mt-0.5">' + d.formattedDate + '</span></div>'
-                : '<div class="font-bold text-slate-800 text-xs py-0.5">' + d.formattedDate + '</div>';
+                ? '<div class="flex flex-col items-center justify-center leading-tight py-0.5"><span class="inline-block bg-[#F26B2A] text-white text-[7.5px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-tight shadow-xs">TODAY</span><span class="font-bold text-[#F26B2A] text-xs mt-0.5">' + d.formattedDate + '</span></div>'
+                : '<div class="font-bold text-[#1D2B45] text-xs py-0.5">' + d.formattedDate + '</div>';
 
-              headerCells += '<th class="p-1 sm:p-1.5 border border-slate-700 font-bold text-center select-none cursor-pointer transition-colors ' + colClass + '" data-date="' + d.date + '" title="คลิกเพื่อดูรายงานวันที่ ' + d.date + '">' + headerInner + '</th>';
-              planCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center text-slate-600 ' + colClass + '">' + d.dayPlan + '</td>';
+              headerCells += '<th class="p-1 sm:p-1.5 border border-[#E2D9CC] font-bold text-center select-none cursor-pointer transition-colors ' + colClass + '" data-date="' + d.date + '" title="คลิกเพื่อดูรายงานวันที่ ' + d.date + '">' + headerInner + '</th>';
+              planCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center text-[#4F5D75] ' + colClass + '">' + d.dayPlan + '</td>';
 
               var actualDisplay = d.isFuture ? '-' : d.dayActual;
-              actualCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center font-black text-slate-950 ' + colClass + '">' + actualDisplay + '</td>';
+              actualCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold text-[#1D2B45] ' + colClass + '">' + actualDisplay + '</td>';
 
-              cumPlanCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center text-blue-900 font-bold ' + colClass + '">' + d.planCum + '</td>';
+              cumPlanCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center text-[#1E3A8A] font-bold ' + colClass + '">' + d.planCum + '</td>';
 
               var cumActualDisplay = d.isFuture ? '-' : d.actualCum;
-              cumActualCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center font-black text-emerald-950 ' + colClass + '">' + cumActualDisplay + '</td>';
+              cumActualCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold text-[#0E5E57] ' + colClass + '">' + cumActualDisplay + '</td>';
             }
 
             if (hasTotalCol) {
-              headerCells += '<th class="p-1 sm:p-1.5 border border-slate-700 bg-slate-950 text-amber-300 font-black text-center whitespace-nowrap min-w-[65px]"><div class="leading-tight py-0.5"><span class="text-xs font-black text-amber-300 block">รวม</span><span class="text-[9px] font-mono font-bold text-amber-400/80 block">TOTAL</span></div></th>';
-              planCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center font-bold bg-slate-100 text-slate-800">93</td>';
-              actualCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center font-black bg-slate-200 text-slate-950">' + totalActualDriven + '</td>';
-              cumPlanCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center font-black bg-blue-100 text-blue-950">93</td>';
-              cumActualCells += '<td class="p-1 sm:p-1.5 border border-slate-700 font-mono text-center font-black bg-emerald-200 text-emerald-950">' + totalActualDriven + '</td>';
+              headerCells += '<th class="p-1 sm:p-1.5 border border-[#1D2B45] bg-[#1D2B45] text-[#F7B844] font-bold text-center whitespace-nowrap min-w-[65px]"><div class="leading-tight py-0.5"><span class="text-xs font-bold text-[#F7B844] block">รวม</span><span class="text-[9px] font-mono font-semibold text-[#F7B844]/80 block">TOTAL</span></div></th>';
+              planCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#FAF5EE] text-[#4F5D75]">93</td>';
+              actualCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#F6E9D7] text-[#1D2B45]">' + totalActualDriven + '</td>';
+              cumPlanCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#EEF4FF] text-[#1E3A8A]">93</td>';
+              cumActualCells += '<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#D1FAE5] text-[#0E5E57]">' + totalActualDriven + '</td>';
             }
 
-            return '<div class="piling-daily-tier-block border-2 border-slate-900 shadow-[2.5px_2.5px_0px_#0f172a] bg-white overflow-hidden rounded-xs">' +
-              '<div class="px-3 py-1.5 bg-slate-100 border-b border-slate-900 flex items-center justify-between text-xs font-bold">' +
+            return '<div class="piling-daily-tier-block border-2 border-[#1D2B45] shadow-[4px_4px_0px_#1D2B45] bg-white overflow-hidden rounded-2xl">' +
+              '<div class="px-3.5 py-2 bg-[#FAF5EE] border-b-2 border-[#1D2B45] flex items-center justify-between text-xs font-bold">' +
                 '<div class="flex items-center gap-2">' +
-                  '<span class="manga-sticker sticker-ink text-[9.5px] px-1.5 py-0.5">' + tierNum + '</span>' +
-                  '<span class="text-slate-900 font-black">' + tierDateRange + '</span>' +
+                  '<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#1D2B45] text-white text-[10px] font-bold tracking-wide">' + tierNum + '</span>' +
+                  '<span class="text-[#1D2B45] font-bold text-xs">' + tierDateRange + '</span>' +
                 '</div>' +
-                '<span class="text-[10.5px] text-slate-600 font-mono hidden sm:inline">' + (hasTotalCol ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น') + '</span>' +
+                '<span class="text-[10.5px] text-[#4F5D75] font-mono font-medium hidden sm:inline px-2 py-0.5 rounded-full bg-white border border-[#1D2B45]/20">' + (hasTotalCol ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น') + '</span>' +
               '</div>' +
               '<div class="overflow-x-auto custom-scrollbar">' +
                 '<table class="piling-daily-table w-full text-center border-collapse text-xs">' +
                   '<thead>' +
                     '<tr>' +
-                      '<th class="p-1.5 sm:p-2 border border-slate-700 sticky-col font-black text-left text-slate-900">' +
+                      '<th class="p-1.5 sm:p-2 border border-[#E2D9CC] sticky-col font-bold text-left text-[#1D2B45]">' +
                         '<div class="leading-tight py-0.5">' +
-                          '<span class="text-xs font-black text-slate-950 block">วันที่</span>' +
-                          '<span class="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-wider block">DATE</span>' +
+                          '<span class="text-xs font-bold text-[#1D2B45] block">วันที่</span>' +
+                          '<span class="text-[9px] font-mono font-semibold text-[#8C9AA8] uppercase tracking-wider block">DATE</span>' +
                         '</div>' +
                       '</th>' +
                       headerCells +
@@ -14441,37 +14570,37 @@ if (typeof window !== "undefined") {
                   '</thead>' +
                   '<tbody>' +
                     '<tr class="row-plan">' +
-                      '<td class="p-1.5 sm:p-2 border border-slate-700 sticky-col text-left">' +
+                      '<td class="p-1.5 sm:p-2 border border-[#E2D9CC] sticky-col text-left">' +
                         '<div class="leading-tight py-0.5">' +
-                          '<div class="font-bold text-slate-700 text-xs">แผนรายวัน</div>' +
-                          '<div class="text-[9px] font-mono font-bold text-slate-500">PLAN (3/วัน)</div>' +
+                          '<div class="font-bold text-[#4F5D75] text-xs">แผนรายวัน</div>' +
+                          '<div class="text-[9px] font-mono font-semibold text-[#8C9AA8]">PLAN (3/วัน)</div>' +
                         '</div>' +
                       '</td>' +
                       planCells +
                     '</tr>' +
                     '<tr class="row-actual">' +
-                      '<td class="p-1.5 sm:p-2 border border-slate-700 sticky-col text-left">' +
+                      '<td class="p-1.5 sm:p-2 border border-[#E2D9CC] sticky-col text-left">' +
                         '<div class="leading-tight py-0.5">' +
-                          '<div class="font-black text-slate-950 text-xs">ผลงานจริง</div>' +
-                          '<div class="text-[9px] font-mono font-bold text-slate-600">ACTUAL</div>' +
+                          '<div class="font-bold text-[#1D2B45] text-xs">ผลงานจริง</div>' +
+                          '<div class="text-[9px] font-mono font-semibold text-[#8C9AA8]">ACTUAL</div>' +
                         '</div>' +
                       '</td>' +
                       actualCells +
                     '</tr>' +
                     '<tr class="row-accum-plan">' +
-                      '<td class="p-1.5 sm:p-2 border border-slate-700 sticky-col text-left">' +
+                      '<td class="p-1.5 sm:p-2 border border-[#E2D9CC] sticky-col text-left">' +
                         '<div class="leading-tight py-0.5">' +
-                          '<div class="font-extrabold text-blue-950 text-xs">แผนสะสม</div>' +
-                          '<div class="text-[9px] font-mono font-bold text-blue-700">ACC. PLAN</div>' +
+                          '<div class="font-bold text-[#1E3A8A] text-xs">แผนสะสม</div>' +
+                          '<div class="text-[9px] font-mono font-semibold text-[#3B82F6]">ACC. PLAN</div>' +
                         '</div>' +
                       '</td>' +
                       cumPlanCells +
                     '</tr>' +
                     '<tr class="row-accum-actual">' +
-                      '<td class="p-1.5 sm:p-2 border border-slate-700 sticky-col text-left">' +
+                      '<td class="p-1.5 sm:p-2 border border-[#E2D9CC] sticky-col text-left">' +
                         '<div class="leading-tight py-0.5">' +
-                          '<div class="font-black text-emerald-950 text-xs">ผลงานสะสม</div>' +
-                          '<div class="text-[9px] font-mono font-bold text-emerald-700">ACC. ACTUAL</div>' +
+                          '<div class="font-bold text-[#0E5E57] text-xs">ผลงานสะสม</div>' +
+                          '<div class="text-[9px] font-mono font-semibold text-[#10B981]">ACC. ACTUAL</div>' +
                         '</div>' +
                       '</td>' +
                       cumActualCells +
@@ -15216,6 +15345,25 @@ if (typeof window !== "undefined") {
           return `<span class="${className} nintendo-work-icon work-symbol-${catKey} ${isSelected ? "is-selected" : ""}" aria-hidden="true">${iconSvg}</span>`;
         }
 
+        window.toggleRigAnimation = function() {
+          const scene = document.getElementById('piling-rig-scene');
+          if (!scene) return;
+          const isPaused = scene.classList.toggle('is-paused');
+          const icon = document.getElementById('anim-toggle-icon');
+          const txt = document.getElementById('anim-toggle-text');
+          if (icon) icon.textContent = isPaused ? '▶️' : '⏸️';
+          if (txt) txt.textContent = isPaused ? 'เล่น' : 'พัก';
+        };
+
+        window.triggerRigImpact = function() {
+          const hammer = document.getElementById('rig-hammer-group');
+          if (!hammer) return;
+          hammer.style.animation = 'none';
+          hammer.offsetHeight; // trigger reflow
+          hammer.style.animation = 'hammerDrop 0.5s cubic-bezier(0.77, 0, 0.175, 1)';
+          setTimeout(() => { hammer.style.animation = ''; }, 600);
+        };
+
         function renderSplashScreen() {
           const summary = calculateProjectSummary();
           const progressCircle = document.querySelector(
@@ -15241,17 +15389,26 @@ if (typeof window !== "undefined") {
             let drivenPiles = 0;
             let todayPiles = 0;
             const todayStr = new Date().toISOString().slice(0, 10);
+            let latestDrivenDate = '2026-10-24';
+            let latestDrivenCount = 0;
             if (rawPiles) {
               const parsed = typeof rawPiles === 'string' ? JSON.parse(rawPiles) : rawPiles;
               const values = Object.values(parsed);
-              drivenPiles = values.filter(v => v && (v.status === 'driven' || v.status === 'done')).length;
-              todayPiles = values.filter(v => v && (v.status === 'driven' || v.status === 'done') && v.date === todayStr).length;
+              const drivenValues = values.filter(v => v && (v.status === 'driven' || v.status === 'done'));
+              drivenPiles = drivenValues.length;
+              todayPiles = drivenValues.filter(v => v.date === todayStr).length;
+              const drivenDates = drivenValues.map(v => v.date).filter(Boolean).sort();
+              if (drivenDates.length > 0) {
+                latestDrivenDate = drivenDates[drivenDates.length - 1];
+                latestDrivenCount = drivenValues.filter(v => v.date === latestDrivenDate).length;
+              }
             }
             const pct = ((drivenPiles / 93) * 100).toFixed(1);
             
             const elDriven = document.getElementById("portal-piling-driven-count");
             const elPct = document.getElementById("portal-piling-percent");
             const elToday = document.getElementById("portal-piling-today");
+            const elTodaySub = document.getElementById("portal-piling-today-sub");
             const elRemain = document.getElementById("portal-piling-remain");
             const elBar = document.getElementById("portal-piling-progress-bar");
             const elSplashCount = document.getElementById("splash-piling-count-text");
@@ -15259,6 +15416,14 @@ if (typeof window !== "undefined") {
             if (elDriven) elDriven.textContent = drivenPiles;
             if (elPct) elPct.textContent = `${pct}%`;
             if (elToday) elToday.textContent = todayPiles;
+            if (elTodaySub) {
+              if (todayPiles > 0) {
+                elTodaySub.textContent = `ตอกเสร็จวันนี้ ${todayPiles} ต้น`;
+              } else {
+                const fDate = typeof formatThaiShortDate === 'function' ? formatThaiShortDate(latestDrivenDate) : latestDrivenDate;
+                elTodaySub.textContent = `ยังไม่บันทึกวันนี้ · ล่าสุด ${fDate} (${latestDrivenCount} ต้น)`;
+              }
+            }
             if (elRemain) elRemain.textContent = (93 - drivenPiles);
             if (elBar) elBar.style.width = `${pct}%`;
             if (elSplashCount) elSplashCount.textContent = `${drivenPiles} / 93 ต้น`;
@@ -15269,10 +15434,15 @@ if (typeof window !== "undefined") {
             if (elMobileDriven) elMobileDriven.textContent = drivenPiles;
             if (elMobilePct) elMobilePct.textContent = `${pct}%`;
 
-            // Update 3D Precast Concrete I-Pile Progress Bar Engine
-            if (typeof window.update3DIPileProgress === 'function') {
-              window.update3DIPileProgress(parseFloat(pct) || 0, drivenPiles, 93);
-            }
+            // Update Piling Rig SVG telemetry readouts
+            const elRigDriven = document.getElementById("rig-driven-title");
+            const elRigPct = document.getElementById("rig-percent-pill");
+            const elRigFill = document.getElementById("rig-progress-fill");
+            const elRigRemain = document.getElementById("rig-remain-text");
+            if (elRigDriven) elRigDriven.textContent = `ตอกสะสม ${drivenPiles} ต้น`;
+            if (elRigPct) elRigPct.textContent = `${pct}%`;
+            if (elRigFill) elRigFill.style.width = `${pct}%`;
+            if (elRigRemain) elRigRemain.textContent = `คงเหลืออีก ${93 - drivenPiles} ต้น`;
 
             // Delight: Trigger Count-Up Animations for Numbers
             if (typeof animateCountUp === 'function') {

@@ -1,0 +1,603 @@
+/* ==========================================================================
+   DOODLEWEB DESIGN SYSTEM FOR PYNN PRIDI 37
+   Aesthetic: Warm Craft Editorial · Tactile Paper & Deep Navy Ink · Hard Drop Shadows
+   Directly modeled on https://doodleweb.io
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,600;1,9..144,700;1,9..144,800;1,9..144,900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,600&family=Prompt:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Sarabun:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  /* --- DoodleWeb Core Colors --- */
+  --dw-cream: #FAF5EE;            /* Warm Paper Cream Background */
+  --dw-cream-deep: #F6E9D7;       /* Richer Craft Cream for hover / secondary bars */
+  --dw-paper: #FFFFFF;            /* Pure Crisp White Card Surface */
+  --dw-navy: #1D2B45;             /* Deep Navy Ink - replaces harsh pure black */
+  --dw-navy-soft: #3E4B69;        /* Medium Ink for secondary text */
+  --dw-navy-muted: #64748B;       /* Muted technical captions */
+  --dw-navy-10: rgba(29, 43, 69, 0.1);
+  --dw-navy-20: rgba(29, 43, 69, 0.2);
+
+  /* --- Vibrant Accents --- */
+  --dw-orange: #F26B2A;           /* Signature Tangerine Orange */
+  --dw-orange-soft: #FF7A59;      /* Coral Orange Glow */
+  --dw-gold: #F7B844;             /* Marigold Gold */
+  --dw-teal: #40C4C4;             /* Vintage Teal for Live / Online status */
+  --dw-green: #10B981;            /* Mint Green for Done / Actuals */
+  --dw-coral: #E64C3C;            /* Coral Red for Alerts / Defect */
+
+  /* --- Typography Stacks --- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'DM Sans', 'Prompt', 'Sarabun', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-hand: 'Prompt', cursive, sans-serif;
+
+  /* --- Tactile Shadows & Physics --- */
+  --shadow-doodle-xs: 2px 2px 0px var(--dw-navy);
+  --shadow-doodle-sm: 3px 3px 0px var(--dw-navy);
+  --shadow-doodle-md: 4.5px 4.5px 0px var(--dw-navy);
+  --shadow-doodle-lg: 6px 6px 0px var(--dw-navy);
+  --shadow-pop-orange: 6px 6px 0px var(--dw-orange);
+  --shadow-pop-gold: 6px 6px 0px var(--dw-gold);
+  --shadow-pop-teal: 6px 6px 0px var(--dw-teal);
+}
+
+/* Base Canvas */
+body {
+  background-color: var(--dw-cream) !important;
+  color: var(--dw-navy) !important;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-display {
+  font-family: var(--font-display) !important;
+}
+
+.font-body {
+  font-family: var(--font-body) !important;
+}
+
+.font-mono-code {
+  font-family: var(--font-mono) !important;
+}
+
+/* DoodleWeb Card Surface */
+.doodle-card {
+  background-color: var(--dw-paper);
+  border: 2px solid var(--dw-navy);
+  border-radius: 1.25rem; /* rounded-2xl */
+  box-shadow: var(--shadow-doodle-md);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.doodle-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-pop-orange);
+}
+
+.doodle-card-hero {
+  background-color: var(--dw-paper);
+  border: 2.5px solid var(--dw-navy);
+  border-radius: 1.75rem; /* rounded-3xl */
+  box-shadow: 6px 6px 0px var(--dw-navy);
+}
+
+/* DoodleWeb Buttons */
+.doodle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px; /* Pill Shape */
+  border: 2px solid var(--dw-navy);
+  background-color: var(--dw-paper);
+  color: var(--dw-navy);
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  box-shadow: var(--shadow-doodle-xs);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.doodle-btn:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: var(--shadow-pop-orange);
+  color: var(--dw-navy);
+}
+
+.doodle-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--dw-navy);
+}
+
+/* Primary Orange Hero Button */
+.doodle-btn-orange {
+  background-color: var(--dw-orange);
+  color: #FFFFFF !important;
+  box-shadow: 4px 4px 0px var(--dw-navy);
+}
+
+.doodle-btn-orange:hover {
+  background-color: #E05615;
+  box-shadow: 6px 6px 0px var(--dw-navy);
+  transform: translate(-1.5px, -1.5px);
+}
+
+/* Pill Badges & Chips */
+.doodle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--dw-navy);
+  background-color: var(--dw-paper);
+  color: var(--dw-navy);
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 1.5px 1.5px 0px var(--dw-navy);
+}
+
+.doodle-pill-orange {
+  background-color: #FFF2EB;
+  color: #C2410C;
+  border-color: var(--dw-orange);
+}
+
+.doodle-pill-teal {
+  background-color: #E6FAF8;
+  color: #0F766E;
+  border-color: var(--dw-teal);
+}
+
+.doodle-pill-gold {
+  background-color: #FEF9C3;
+  color: #854D0E;
+  border-color: var(--dw-gold);
+}
+
+/* Status Pulsing Dot */
+.doodle-dot-live {
+  position: relative;
+  display: inline-flex;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--dw-teal);
+}
+
+.doodle-dot-live::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  background-color: var(--dw-teal);
+  opacity: 0.5;
+  animation: doodle-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes doodle-ping {
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Technical Metric Tile (Squircle with 2px ink border & shadow) */
+.doodle-metric-tile {
+  background-color: var(--dw-paper);
+  border: 2px solid var(--dw-navy);
+  border-radius: 1rem; /* rounded-2xl */
+  padding: 0.875rem 1rem;
+  box-shadow: var(--shadow-doodle-xs);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+  text-decoration: none;
+}
+
+.doodle-metric-tile:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-pop-orange);
+}
+
+/* S-Curve Canvas Frame */
+.doodle-chart-frame {
+  background-color: #FFFFFF;
+  border: 2px solid var(--dw-navy);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-doodle-sm);
+  padding: 1rem;
+  position: relative;
+}
+
+/* Hand-drawn doodle annotation font */
+.doodle-annotation {
+  font-family: var(--font-hand);
+  color: var(--dw-orange);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ==========================================================================
+   DROPDOWN MENU: REPORTS & DATA TABLES (ศูนย์รวมเอกสาร & รายงาน DoodleWeb)
+   ========================================================================== */
+#menu-tables-dropdown {
+  background-color: #FFFFFF !important;
+  border: 2px solid var(--dw-navy, #1D2B45) !important;
+  border-radius: 1.25rem !important; /* rounded-2xl */
+  box-shadow: 5px 5px 0px var(--dw-navy, #1D2B45) !important;
+  font-family: var(--font-body, 'DM Sans', 'Prompt', sans-serif) !important;
+}
+
+#menu-tables-dropdown .menu-report-item {
+  background-color: #FFFFFF !important;
+  border: 1.5px solid #F1ECE4 !important;
+  border-radius: 0.875rem !important; /* rounded-xl */
+  color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#menu-tables-dropdown .menu-report-item:hover {
+  background-color: #FAF5EE !important;
+  border-color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+  transform: translate(-1.5px, -1.5px) !important;
+}
+
+#menu-tables-dropdown .menu-report-item:active {
+  background-color: #F6E9D7 !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 0.5px 0.5px 0px var(--dw-navy, #1D2B45) !important;
+}
+
+#menu-tables-dropdown #btn-pco-inspector {
+  background-color: #FFFDF9 !important;
+  border-color: #FED7AA !important;
+}
+
+#menu-tables-dropdown #btn-pco-inspector:hover {
+  background-color: #FFF3EB !important;
+  border-color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: 2.5px 2.5px 0px var(--dw-orange, #F26B2A) !important;
+  transform: translate(-1.5px, -1.5px) !important;
+}
+
+/* ==========================================================================
+   DOODLEWEB HUD & 3D CONSOLE DESIGN SYSTEM
+   Modeled directly after https://doodleweb.io
+   Warm Craft, Tactile Paper & Deep Navy Ink, Zero-blur Hard Block Shadows
+   ========================================================================== */
+
+/* --- Top Responsive Executive Navbar --- */
+.pop-header {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 2px solid var(--dw-navy, #1D2B45) !important;
+  border-radius: 1.25rem !important; /* rounded-2xl (20px) */
+  box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
+  font-family: var(--font-body, 'DM Sans', 'Prompt', sans-serif) !important;
+}
+
+/* Center Key Metrics Capsule */
+.pop-header-metrics {
+  background-color: #FFFFFF !important;
+  border: 2px solid var(--dw-navy, #1D2B45) !important;
+  border-radius: 9999px !important; /* rounded-full */
+  box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+  font-family: var(--font-body, 'DM Sans', 'Prompt', sans-serif) !important;
+}
+
+/* Numeric counters inside the capsule - Space Mono for telemetry */
+#stat-driven-count,
+#stat-today-count,
+#stat-remain-count {
+  font-family: var(--font-mono, 'Space Mono', monospace) !important;
+  font-weight: 800 !important;
+}
+
+/* --- Left Floating HUD Console --- */
+#floating-hud {
+  font-family: var(--font-body, 'DM Sans', 'Prompt', sans-serif) !important;
+}
+
+#floating-hud .pop-card,
+#sidebar-main-console {
+  background-color: #FFFFFF !important;
+  border: 2px solid var(--dw-navy, #1D2B45) !important;
+  border-radius: 1.25rem !important; /* rounded-2xl (20px) */
+  box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
+  overflow: hidden !important;
+}
+
+/* Tab Track */
+.sidebar-tab-track {
+  background-color: var(--dw-cream-deep, #F6E9D7) !important;
+  border-bottom: 2px solid var(--dw-navy, #1D2B45) !important;
+  padding: 4px !important;
+  gap: 4px !important;
+}
+
+/* Segmented Tab Buttons (เลเยอร์, มุมมอง, ตัวกรอง) */
+.sidebar-tab-btn {
+  font-family: var(--font-body, 'DM Sans', 'Prompt', sans-serif) !important;
+  border-radius: 9999px !important; /* Pill capsule */
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 5px 8px !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  border: 1.5px solid transparent !important;
+  background: transparent !important;
+  color: var(--dw-navy, #1D2B45) !important;
+}
+
+.sidebar-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(29, 43, 69, 0.25) !important;
+  color: var(--dw-navy, #1D2B45) !important;
+}
+
+/* Active Segmented Tab - Signature Tangerine Pop! */
+.sidebar-tab-btn.is-active,
+.sidebar-tab-btn.active {
+  background-color: var(--dw-orange, #F26B2A) !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+  box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+  font-weight: 800 !important;
+}
+
+.sidebar-tab-btn.is-active:hover,
+.sidebar-tab-btn.active:hover {
+  background-color: #E05A19 !important;
+  box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+}
+
+.sidebar-tab-btn.is-inactive {
+  background: #FFFFFF !important;
+  color: var(--dw-navy, #1D2B45) !important;
+  border: 1.5px solid #E2D9CC !important;
+  box-shadow: none !important;
+}
+
+.sidebar-tab-btn.is-inactive:hover {
+  background: #FAF5EE !important;
+  border-color: var(--dw-navy, #1D2B45) !important;
+}
+
+/* --- Layer Cards (ชิ้นส่วนโมเดล 3D) --- */
+.layer-card {
+  position: relative !important;
+  background-color: #FFFFFF !important;
+  border: 1.5px solid var(--dw-border-soft, #E2D9CC) !important;
+  border-radius: 0.875rem !important; /* rounded-xl (14px) */
+  padding: 8px 10px !important;
+  box-shadow: none !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  user-select: none !important;
+  cursor: pointer !important;
+}
+
+.layer-card:hover {
+  background-color: var(--dw-cream, #FAF5EE) !important;
+  border-color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+  transform: translate(-1.5px, -1.5px) !important;
+}
+
+.layer-card.active {
+  border: 2px solid var(--dw-navy, #1D2B45) !important;
+  box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+}
+
+.layer-card.active:hover {
+  box-shadow: 3.5px 3.5px 0px var(--dw-orange, #F26B2A) !important;
+}
+
+/* Layer card color tints when active */
+.layer-card.active.active-pile {
+  background-color: #FFFDF7 !important;
+}
+.layer-card.active.active-footing {
+  background-color: #F0F9FF !important;
+}
+.layer-card.active.active-drainage {
+  background-color: #F0FDFA !important;
+}
+.layer-card.active.active-grid {
+  background-color: #F8FAFC !important;
+}
+.layer-card.active.active-boundary {
+  background-color: #FFF1F2 !important;
+}
+.layer-card.active.active-hex {
+  background-color: #FFFBEB !important;
+}
+
+/* --- Tactile Pill Toggle Switch --- */
+.toggle-switch {
+  width: 38px !important;
+  height: 22px !important;
+  background: #E2D9CC !important;
+  border: 2px solid var(--dw-navy, #1D2B45) !important;
+  border-radius: 9999px !important;
+  position: relative !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 1px 2px rgba(29, 43, 69, 0.08) !important;
+}
+
+.toggle-knob {
+  width: 14px !important;
+  height: 14px !important;
+  background: #FFFFFF !important;
+  border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+  border-radius: 9999px !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 2px !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
+}
+
+.layer-card.active .toggle-knob {
+  transform: translateX(16px) !important;
+  border-color: var(--dw-navy, #1D2B45) !important;
+}
+
+.layer-card.active.active-pile .toggle-switch {
+  background: var(--dw-green, #10B981) !important;
+}
+.layer-card.active.active-footing .toggle-switch {
+  background: #0284C7 !important;
+}
+.layer-card.active.active-drainage .toggle-switch {
+  background: var(--dw-teal, #40C4C4) !important;
+}
+.layer-card.active.active-grid .toggle-switch {
+  background: #6366F1 !important;
+}
+.layer-card.active.active-boundary .toggle-switch {
+  background: var(--dw-coral, #E64C3C) !important;
+}
+.layer-card.active.active-hex .toggle-switch {
+  background: var(--dw-gold, #F7B844) !important;
+}
+
+/* --- Floating HUD Console Placement & Tactile Physics --- */
+.floating-hud {
+  width: 235px !important;
+  max-width: 240px !important;
+  top: 68px !important;
+  left: 12px !important;
+  z-index: 25 !important;
+  font-family: var(--font-body, 'DM Sans', 'Prompt', sans-serif) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.floating-hud.collapsed {
+  max-height: 48px !important;
+  overflow: hidden !important;
+}
+
+.floating-hud.collapsed #floating-hud-body,
+.floating-hud.collapsed #sidebar-tab-content {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .floating-hud {
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+    left: 10px !important;
+    top: auto !important;
+    bottom: 60px !important;
+    max-height: 55vh !important;
+  }
+  .floating-hud.is-mobile-collapsed {
+    display: none !important;
+  }
+}
+
+/* Sub-toggle buttons (Micro-pills) */
+.subtoggle-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  padding: 3px 6px !important;
+  border-radius: 9999px !important; /* Pill capsule */
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  border: 1px solid var(--dw-navy, #1D2B45) !important;
+  background-color: #FFFFFF !important;
+  color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: all 0.15s ease !important;
+}
+
+.subtoggle-btn:hover {
+  transform: translateY(-0.5px) !important;
+  box-shadow: 1.5px 1.5px 0px var(--dw-orange, #F26B2A) !important;
+}
+
+.subtoggle-btn.is-active {
+  background-color: #FFFFFF !important;
+  border-color: var(--dw-navy, #1D2B45) !important;
+  color: var(--dw-navy, #1D2B45) !important;
+  font-weight: 800 !important;
+}
+
+.subtoggle-btn.is-inactive {
+  background-color: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #94A3B8 !important;
+  box-shadow: none !important;
+}
+
+/* Solo button */
+.btn-solo {
+  padding: 1.5px 6px !important;
+  font-family: var(--font-mono, 'Space Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  background: #FFFFFF !important;
+  border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+  border-radius: 9999px !important;
+  color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.btn-solo:hover {
+  background: var(--dw-navy, #1D2B45) !important;
+  color: #FFFFFF !important;
+  box-shadow: 1.5px 1.5px 0px var(--dw-orange, #F26B2A) !important;
+}
+
+/* General View & Filter Buttons in HUD */
+.sidebar-tab-pane .pop-btn {
+  border-radius: 9999px !important; /* Capsule pill */
+  border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+  background-color: #FFFFFF !important;
+  color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+  font-family: var(--font-body, 'DM Sans', 'Prompt', sans-serif) !important;
+  font-weight: 700 !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.sidebar-tab-pane .pop-btn:hover {
+  background-color: var(--dw-cream, #FAF5EE) !important;
+  box-shadow: 3px 3px 0px var(--dw-orange, #F26B2A) !important;
+  transform: translate(-1px, -1px) !important;
+}
+
+.sidebar-tab-pane .pop-btn.active {
+  background-color: var(--dw-orange, #F26B2A) !important;
+  color: #FFFFFF !important;
+  border-color: var(--dw-navy, #1D2B45) !important;
+  box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+}
+
+
+

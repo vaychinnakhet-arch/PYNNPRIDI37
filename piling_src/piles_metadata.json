@@ -446,7 +446,7 @@
     "length_m": 21,
     "northing": 1518673.2929,
     "easting": 672383.2132,
-    "footing": "F8",
+    "footing": "F6",
     "pco_level": -1.826
   },
   {
@@ -1166,7 +1166,7 @@
     "length_m": 21,
     "northing": 1518646.9416,
     "easting": 672383.1676,
-    "footing": "F3",
+    "footing": "F1",
     "pco_level": -3.251
   },
   {
@@ -1181,7 +1181,7 @@
     "length_m": 21,
     "northing": 1518646.9757,
     "easting": 672380.4453,
-    "footing": "F3",
+    "footing": "F1",
     "pco_level": -3.251
   },
   {
@@ -1196,7 +1196,7 @@
     "length_m": 21,
     "northing": 1518647.0099,
     "easting": 672377.7231,
-    "footing": "F3",
+    "footing": "F1",
     "pco_level": -3.251
   },
   {

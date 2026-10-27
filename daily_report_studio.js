@@ -77,33 +77,94 @@
     return y + '-' + m + '-' + day;
   }
 
-  function isThaiWorkingDay(dateStr) {
+  const FIXED_THAI_HOLIDAYS_MAP = {
+    '01-01': 'วันขึ้นปีใหม่',
+    '04-06': 'วันจักรี',
+    '04-13': 'วันสงกรานต์',
+    '04-14': 'วันสงกรานต์',
+    '04-15': 'วันสงกรานต์',
+    '05-01': 'วันแรงงานแห่งชาติ',
+    '05-04': 'วันฉัตรมงคล',
+    '06-03': 'วันเฉลิมฯ พระบรมราชินี',
+    '07-28': 'วันเฉลิมฯ ร.10',
+    '08-12': 'วันแม่แห่งชาติ',
+    '10-13': 'วันนวมินทรมหาราช (ร.9)',
+    '10-23': 'วันปิยมหาราช',
+    '12-05': 'วันพ่อแห่งชาติ',
+    '12-10': 'วันรัฐธรรมนูญ',
+    '12-31': 'วันสิ้นปี'
+  };
+
+  function getHolidayInfo(dateStr) {
+    if (!dateStr) return null;
+    const d = parseDateLocal(dateStr);
+    if (d.getDay() === 0) {
+      return { isNonWorking: true, type: 'sunday', name: 'วันอาทิตย์' };
+    }
+    if (THAI_PUBLIC_HOLIDAYS[dateStr]) {
+      return { isNonWorking: true, type: 'holiday', name: THAI_PUBLIC_HOLIDAYS[dateStr] };
+    }
+    const mmdd = dateStr.slice(5);
+    if (FIXED_THAI_HOLIDAYS_MAP[mmdd]) {
+      return { isNonWorking: true, type: 'holiday', name: FIXED_THAI_HOLIDAYS_MAP[mmdd] };
+    }
+    return null;
+  }
+
+  function getActualDrivenDatesMap(customDates) {
+    const dateMap = {};
+    if (Array.isArray(customDates)) {
+      customDates.forEach(d => { if (d) dateMap[d] = true; });
+      return dateMap;
+    }
+    if (customDates && typeof customDates === 'object') {
+      return customDates;
+    }
+    try {
+      const recs = (typeof getProgressRecords === 'function' ? getProgressRecords() : null) ||
+                   (window.progressRecords || null);
+      if (recs && typeof recs === 'object') {
+        Object.values(recs).forEach(r => {
+          if (r && r.status === 'driven' && r.date) {
+            dateMap[r.date] = true;
+          }
+        });
+      }
+    } catch (_) {}
+    return dateMap;
+  }
+
+  function isThaiWorkingDay(dateStr, actualDates = null) {
     if (!dateStr) return false;
+    const actualMap = actualDates || getActualDrivenDatesMap();
+    if (actualMap && (actualMap[dateStr] || (Array.isArray(actualMap) && actualMap.includes(dateStr)))) {
+      return true;
+    }
     const d = parseDateLocal(dateStr);
     if (d.getDay() === 0) return false;
     if (THAI_PUBLIC_HOLIDAYS[dateStr]) return false;
     const mmdd = dateStr.slice(5);
-    const fixedHolidays = ['01-01', '04-06', '04-13', '04-14', '04-15', '05-01', '05-04', '06-03', '07-28', '08-12', '10-13', '10-23', '12-05', '12-10', '12-31'];
-    if (fixedHolidays.includes(mmdd)) return false;
+    if (FIXED_THAI_HOLIDAYS_MAP[mmdd]) return false;
     return true;
   }
 
-  function getWorkingDaysSchedule(startDateStr, totalWorkingDays = 31) {
+  function getWorkingDaysSchedule(startDateStr, totalWorkingDays = 31, actualDates = null) {
     if (typeof window.getWorkingDaysSchedule === 'function' && window.getWorkingDaysSchedule !== getWorkingDaysSchedule) {
       try {
-        const sched = window.getWorkingDaysSchedule(startDateStr, totalWorkingDays);
+        const sched = window.getWorkingDaysSchedule(startDateStr, totalWorkingDays, actualDates);
         if (sched && sched.length >= totalWorkingDays) return sched;
       } catch (e) {}
     }
 
     const schedule = [];
+    const actualMap = getActualDrivenDatesMap(actualDates);
     let cur = parseDateLocal(startDateStr || '2026-10-06');
-    while (!isThaiWorkingDay(formatDateLocal(cur)) && schedule.length === 0) {
+    while (!isThaiWorkingDay(formatDateLocal(cur), actualMap) && schedule.length === 0) {
       cur.setDate(cur.getDate() + 1);
     }
     while (schedule.length < totalWorkingDays) {
       const s = formatDateLocal(cur);
-      if (isThaiWorkingDay(s)) {
+      if (isThaiWorkingDay(s, actualMap)) {
         schedule.push(s);
       }
       cur.setDate(cur.getDate() + 1);
@@ -155,11 +216,14 @@
   const DailyReportState = {
     date: '',
     projectName: 'PYNN PRIDI 37',
+    toCompany: 'บริษัท แสนสิริ จำกัด (มหาชน)',
     recipient: 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล',
+    authorCompany: 'บริษัท แสนสิริ จำกัด (มหาชน)',
     authorSignatureImg: null,
     reviewerSignatureImg: null,
     author: 'นายนิวัฒน์ เวียงชัย',
     authorRole: 'ผู้จัดการส่วนก่อสร้าง',
+    reviewerCompany: 'บริษัท แสนสิริ จำกัด (มหาชน)',
     reviewer: 'นายสุวิทย์ สุขศรี',
     reviewerRole: 'ผู้ช่วยผู้จัดการฝ่ายพัฒนาโครงการแนวสูง',
     weather: 'clear',
@@ -171,6 +235,7 @@
     duration: '8 ชั่วโมง',
     attachmentPages: 3,
     activeTab: 'all',
+    tasksRemarks: [],
     
     // Manpower defaults matching exact user specification
     manpower: {
@@ -274,21 +339,36 @@
   // =========================================================================
   window.saveDailyReportConfigToSupabase = async function (silent = false) {
     const config = {
+      projectName: DailyReportState.projectName,
+      toCompany: DailyReportState.toCompany,
       recipient: DailyReportState.recipient,
+      authorCompany: DailyReportState.authorCompany,
       authorSignatureImg: DailyReportState.authorSignatureImg,
       reviewerSignatureImg: DailyReportState.reviewerSignatureImg,
       author: DailyReportState.author,
       authorRole: DailyReportState.authorRole,
+      reviewerCompany: DailyReportState.reviewerCompany,
       reviewer: DailyReportState.reviewer,
       reviewerRole: DailyReportState.reviewerRole,
+      weather: DailyReportState.weather,
+      weatherOther: DailyReportState.weatherOther,
+      workPermit: DailyReportState.workPermit,
+      workPermitOther: DailyReportState.workPermitOther,
+      startTime: DailyReportState.startTime,
+      endTime: DailyReportState.endTime,
+      duration: DailyReportState.duration,
+      attachmentPages: DailyReportState.attachmentPages,
       manpower: DailyReportState.manpower,
       materials: DailyReportState.materials,
       machinery: DailyReportState.manpower.machinery,
       obstacles: DailyReportState.obstacles,
       solutions: DailyReportState.solutions,
-      startTime: DailyReportState.startTime,
-      endTime: DailyReportState.endTime,
-      duration: DailyReportState.duration
+      tasks: (DailyReportState.tasks || []).map(t => ({
+        no: t.no,
+        title: t.title,
+        location: t.location,
+        remarks: t.remarks || ''
+      }))
     };
 
     // Save locally immediately
@@ -372,80 +452,52 @@
 
   function applyDailyReportConfig(cfg) {
     if (!cfg) return;
+    if (cfg.projectName) DailyReportState.projectName = cfg.projectName;
+    if (cfg.toCompany) DailyReportState.toCompany = cfg.toCompany;
     if (cfg.recipient) DailyReportState.recipient = cfg.recipient;
-    if (cfg.authorSignatureImg) DailyReportState.authorSignatureImg = cfg.authorSignatureImg;
-    if (cfg.reviewerSignatureImg) DailyReportState.reviewerSignatureImg = cfg.reviewerSignatureImg;
+    if (cfg.authorCompany) DailyReportState.authorCompany = cfg.authorCompany;
+    if (cfg.authorSignatureImg !== undefined) DailyReportState.authorSignatureImg = cfg.authorSignatureImg;
+    if (cfg.reviewerSignatureImg !== undefined) DailyReportState.reviewerSignatureImg = cfg.reviewerSignatureImg;
     if (cfg.author) DailyReportState.author = cfg.author;
     if (cfg.authorRole) DailyReportState.authorRole = cfg.authorRole;
+    if (cfg.reviewerCompany) DailyReportState.reviewerCompany = cfg.reviewerCompany;
     if (cfg.reviewer) DailyReportState.reviewer = cfg.reviewer;
     if (cfg.reviewerRole) DailyReportState.reviewerRole = cfg.reviewerRole;
-    if (cfg.manpower) {
-      if (cfg.manpower.mgmt) {
-        let staffCount = 1;
-        const filteredMgmt = [];
-        cfg.manpower.mgmt.forEach(m => {
-          if (!m || !m.label) return;
-          if (m.label.includes('Staff')) {
-            staffCount = m.count || 1;
-            return;
-          }
-          if (m.label.includes('วิศวกร') && m.label.includes('โฟร์แมน')) {
-            filteredMgmt.push({ label: 'วิศวกรโครงการ', count: m.count || 0 });
-            filteredMgmt.push({ label: 'โฟร์แมน', count: 0 });
-            return;
-          }
-          filteredMgmt.push(m);
-        });
-        DailyReportState.manpower.mgmt = filteredMgmt;
+    if (cfg.weather) DailyReportState.weather = cfg.weather;
+    if (cfg.weatherOther !== undefined) DailyReportState.weatherOther = cfg.weatherOther;
+    if (cfg.workPermit) DailyReportState.workPermit = cfg.workPermit;
+    if (cfg.workPermitOther !== undefined) DailyReportState.workPermitOther = cfg.workPermitOther;
+    if (cfg.startTime) DailyReportState.startTime = cfg.startTime;
+    if (cfg.endTime) DailyReportState.endTime = cfg.endTime;
+    if (cfg.duration) DailyReportState.duration = cfg.duration;
+    if (cfg.attachmentPages !== undefined) DailyReportState.attachmentPages = cfg.attachmentPages;
+    if (cfg.obstacles !== undefined) DailyReportState.obstacles = cfg.obstacles;
+    if (cfg.solutions !== undefined) DailyReportState.solutions = cfg.solutions;
 
-        if (cfg.manpower.workers) {
-          const hasStaff = cfg.manpower.workers.some(w => w && w.label && w.label.includes('Staff'));
-          if (!hasStaff) {
-            cfg.manpower.workers.unshift({ label: 'Staff ควบคุมงานกดเข็ม', count: staffCount });
-          }
-          const hasMobileDriver = cfg.manpower.workers.some(w => w && w.label && w.label.includes('คนขับโมบาย'));
-          if (!hasMobileDriver) {
-            const pileWorkerIdx = cfg.manpower.workers.findIndex(w => w && w.label && w.label.includes('คนงานกดเข็ม'));
-            if (pileWorkerIdx >= 0) {
-              cfg.manpower.workers.splice(pileWorkerIdx + 1, 0, { label: 'คนขับโมบาย', count: 1 });
-            } else {
-              cfg.manpower.workers.push({ label: 'คนขับโมบาย', count: 1 });
-            }
-          }
-          DailyReportState.manpower.workers = cfg.manpower.workers;
-        }
-      } else if (cfg.manpower.workers) {
-        const hasMobileDriver = cfg.manpower.workers.some(w => w && w.label && w.label.includes('คนขับโมบาย'));
-        if (!hasMobileDriver) {
-          const pileWorkerIdx = cfg.manpower.workers.findIndex(w => w && w.label && w.label.includes('คนงานกดเข็ม'));
-          if (pileWorkerIdx >= 0) {
-            cfg.manpower.workers.splice(pileWorkerIdx + 1, 0, { label: 'คนขับโมบาย', count: 1 });
-          } else {
-            cfg.manpower.workers.push({ label: 'คนขับโมบาย', count: 1 });
-          }
-        }
-        DailyReportState.manpower.workers = cfg.manpower.workers;
-      }
+    if (cfg.manpower) {
+      if (cfg.manpower.mgmt) DailyReportState.manpower.mgmt = cfg.manpower.mgmt;
+      if (cfg.manpower.workers) DailyReportState.manpower.workers = cfg.manpower.workers;
       if (cfg.manpower.machinery) DailyReportState.manpower.machinery = cfg.manpower.machinery;
       else if (cfg.machinery) DailyReportState.manpower.machinery = cfg.machinery;
     }
     if (cfg.materials) {
-      const has6m = cfg.materials.some(m => m && m.label && (m.label.includes('6 เมตร') || m.label.includes('6m') || m.label.includes('6 ม.')));
-      if (!has6m) {
-        const idx7m = cfg.materials.findIndex(m => m && m.label && (m.label.includes('7 เมตร') || m.label.includes('7m')));
-        if (idx7m >= 0) {
-          cfg.materials.splice(idx7m + 1, 0, { label: 'เข็ม I-0.40m ยาว 6 เมตร', count: 0, unit: 'ต้น' });
-        } else {
-          cfg.materials.unshift({ label: 'เข็ม I-0.40m ยาว 6 เมตร', count: 0, unit: 'ต้น' });
-        }
-      }
       DailyReportState.materials = cfg.materials;
     }
-    if (cfg.obstacles) DailyReportState.obstacles = cfg.obstacles;
-    if (cfg.solutions) DailyReportState.solutions = cfg.solutions;
-    if (cfg.startTime) DailyReportState.startTime = cfg.startTime;
-    if (cfg.endTime) DailyReportState.endTime = cfg.endTime;
-    if (cfg.duration) DailyReportState.duration = cfg.duration;
+    if (Array.isArray(cfg.tasks) && Array.isArray(DailyReportState.tasks)) {
+      cfg.tasks.forEach(t => {
+        if (!t) return;
+        const loc = (t.location || '').toUpperCase();
+        const tit = (t.title || '').toUpperCase();
+        const matched = DailyReportState.tasks.find(cur => {
+          const curLoc = (cur.location || '').toUpperCase();
+          const curTit = (cur.title || '').toUpperCase();
+          return (loc && curLoc === loc) || (tit && curTit === tit);
+        });
+        if (matched && t.remarks !== undefined) {
+          matched.remarks = t.remarks;
+        }
+      });
+    }
   }
 
   // =========================================================================
@@ -455,8 +507,8 @@
     const pilesDb = window.__PILES_DB__ || [];
     const progressRecs = getProgressRecords();
 
-    // 8 Official Footing Groups of PYNN PRIDI 37
-    const footingsOrder = ['F20A', 'F18A', 'F6', 'F3', 'F2', 'F5', 'F1', 'F8'];
+    // 7 Official Footing Groups of PYNN PRIDI 37 (Image 3: F20A, F18A, F6, F3, F2, F5, F1)
+    const footingsOrder = ['F20A', 'F18A', 'F6', 'F3', 'F2', 'F5', 'F1'];
     const existingSet = new Set(footingsOrder.map(f => f.toUpperCase()));
 
     pilesDb.forEach(p => {
@@ -468,7 +520,7 @@
 
     const tasks = [];
 
-    footingsOrder.forEach((f, idx) => {
+    footingsOrder.forEach((f) => {
       const groupPiles = pilesDb.filter(p => (p.footing || '').toUpperCase() === f.toUpperCase());
       const totalInGroup = groupPiles.length;
       if (totalInGroup === 0) return;
@@ -502,14 +554,16 @@
         remarks = `รอดำเนินการ (${totalInGroup} ต้น)`;
       }
 
+      // Preserve custom user remarks if previously edited for this footing group
+      const existingTask = (DailyReportState.tasks && DailyReportState.tasks.find(t => (t.location && t.location.toUpperCase().includes(f.toUpperCase())) || (t.title && t.title.toUpperCase().includes(f.toUpperCase())))) || {};
       tasks.push({
-        no: idx + 1,
+        no: tasks.length + 1,
         title: `เข็มกลุ่ม ${f}`,
         location: `ฐานราก ${f}`,
         qty: `${totalInGroup} ต้น`,
         drivenQty: `${drivenCum} ต้น`,
         pct: pctStr,
-        remarks: '' // หมายเหตุเว้นว่างตามสั่ง
+        remarks: existingTask.remarks !== undefined ? existingTask.remarks : remarks
       });
     });
 
@@ -628,17 +682,17 @@
       <div id="modal-daily-report" class="fixed inset-0 z-[9999] bg-slate-900/80 backdrop-blur-md overflow-y-auto flex flex-col hidden">
         
         <!-- Sticky Top Control Toolbar (Hidden in Print) -->
-        <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b-2 border-slate-900 px-4 py-2.5 shadow-md daily-no-print flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <header class="sticky top-0 z-50 bg-white border-b-2 border-slate-900 px-4 py-2.5 shadow-[3px_3px_0px_#0f172a] daily-no-print flex flex-wrap items-center justify-between gap-3 shrink-0">
           
           <!-- Left: Title & Project Badge -->
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#ffc45b] border-2 border-slate-900 flex items-center justify-center font-black text-slate-900 shadow-sm shrink-0">
+            <div class="w-10 h-10 rounded-none bg-[#ffc45b] border-2 border-slate-900 flex items-center justify-center font-black text-slate-900 shadow-[2px_2px_0px_#0f172a] shrink-0">
               <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-slate-900 text-white">SANSIRI STANDARD</span>
-                <span class="text-xs text-slate-500 font-bold">โครงการ PYNN PRIDI 37</span>
+                <span class="px-2 py-0.5 rounded-none text-[10px] font-black bg-slate-900 text-white shadow-[1px_1px_0px_#0f172a]">SANSIRI STANDARD</span>
+                <span class="text-xs text-slate-600 font-bold">โครงการ PYNN PRIDI 37</span>
               </div>
               <h2 class="text-base sm:text-lg font-black text-slate-900 leading-tight">
                 ระบบจัดทำ Daily Report & รายงานเสาเข็ม (PDF 3 หน้าตรงมาตรฐาน A4)
@@ -647,17 +701,17 @@
           </div>
 
           <!-- Center: Tab Switcher -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-300 gap-1 text-xs font-bold">
-            <button id="dr-tab-all" onclick="switchDailyReportTab('all')" class="dr-nav-tab px-3 py-1.5 rounded-lg bg-[#1e293b] text-white shadow-sm transition-all cursor-pointer">
+          <div class="flex items-center bg-slate-100 p-1 rounded-none border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] gap-1 text-xs font-bold">
+            <button id="dr-tab-all" onclick="switchDailyReportTab('all')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-slate-900 bg-[#1e293b] text-white shadow-[1px_1px_0px_#0f172a] transition-all cursor-pointer">
               📑 ดูทั้ง 3 หน้า (PDF All)
             </button>
-            <button id="dr-tab-p1" onclick="switchDailyReportTab('p1')" class="dr-nav-tab px-3 py-1.5 rounded-lg bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
+            <button id="dr-tab-p1" onclick="switchDailyReportTab('p1')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
               หน้า 1: รายงานประจำวัน
             </button>
-            <button id="dr-tab-p2" onclick="switchDailyReportTab('p2')" class="dr-nav-tab px-3 py-1.5 rounded-lg bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
+            <button id="dr-tab-p2" onclick="switchDailyReportTab('p2')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
               หน้า 2: รายงานเข็ม (Ledger)
             </button>
-            <button id="dr-tab-p3" onclick="switchDailyReportTab('p3')" class="dr-nav-tab px-3 py-1.5 rounded-lg bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
+            <button id="dr-tab-p3" onclick="switchDailyReportTab('p3')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
               หน้า 3: ภาพถ่ายหน้างาน
             </button>
           </div>
@@ -666,27 +720,27 @@
           <div class="flex items-center gap-2">
             <input type="file" id="dr-file-input" multiple accept="image/*" class="hidden" onchange="handleTemporaryPhotoSelect(event)">
             
-            <button type="button" id="btn-dr-save-supabase" onclick="saveDailyReportConfigToSupabase(false)" class="px-3 py-1.5 rounded-xl border-2 border-slate-900 bg-[#3b82f6] text-white font-black text-xs shadow-xs hover:bg-blue-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="บันทึกการตั้งค่า (ชื่อ, กำลังคน, วัสดุ, เครื่องจักร) ขึ้น Supabase เพื่อใช้วันถัดไปโดยไม่ต้องกรอกใหม่">
+            <button type="button" id="btn-dr-save-supabase" onclick="saveDailyReportConfigToSupabase(false)" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#3b82f6] text-white font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-blue-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="บันทึกการตั้งค่า (ชื่อ, กำลังคน, วัสดุ, เครื่องจักร) ขึ้น Supabase เพื่อใช้วันถัดไปโดยไม่ต้องกรอกใหม่">
               <i data-lucide="cloud-upload" class="w-4 h-4"></i>
               <span id="lbl-dr-save-supabase">☁️ บันทึกลง Supabase</span>
             </button>
 
-            <button type="button" onclick="document.getElementById('dr-file-input').click()" class="px-3 py-1.5 rounded-xl border-2 border-slate-900 bg-[#e0f2fe] text-[#0369a1] font-black text-xs shadow-xs hover:bg-sky-100 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="อัพโหลดรูปภาพชั่วคราวเพื่อนำไปจัดลงหน้า 3 (ไม่เปลืองพื้นที่เซิร์ฟเวอร์)">
+            <button type="button" onclick="document.getElementById('dr-file-input').click()" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#e0f2fe] text-[#0369a1] font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-sky-100 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="อัพโหลดรูปภาพชั่วคราวเพื่อนำไปจัดลงหน้า 3 (ไม่เปลืองพื้นที่เซิร์ฟเวอร์)">
               <i data-lucide="camera" class="w-4 h-4"></i>
               <span>📸 อัพโหลดรูปชั่วคราว</span>
             </button>
 
-            <button type="button" onclick="printDailyReportPDF()" class="px-3 py-1.5 rounded-xl border-2 border-slate-900 bg-[#ffc45b] text-slate-900 font-black text-xs shadow-xs hover:brightness-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="พิมพ์หรือบันทึกเป็น PDF ขนาด A4 เวกเตอร์ความคมชัดสูงสุด">
+            <button type="button" onclick="printDailyReportPDF()" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#ffc45b] text-slate-900 font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:brightness-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="พิมพ์หรือบันทึกเป็น PDF ขนาด A4 เวกเตอร์ความคมชัดสูงสุด">
               <i data-lucide="printer" class="w-4 h-4"></i>
               <span>🖨️ พิมพ์ / บันทึก PDF (A4)</span>
             </button>
 
-            <button type="button" onclick="downloadDailyReportPDF()" class="px-3 py-1.5 rounded-xl border-2 border-slate-900 bg-[#10b981] text-white font-black text-xs shadow-xs hover:bg-emerald-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="ดาวน์โหลดไฟล์ PDF ทันที">
+            <button type="button" onclick="downloadDailyReportPDF()" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#10b981] text-white font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-emerald-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="ดาวน์โหลดไฟล์ PDF ทันที">
               <i data-lucide="download" class="w-4 h-4"></i>
               <span>📥 ดาวน์โหลด PDF ทันที</span>
             </button>
 
-            <button type="button" onclick="closeDailyReportModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-rose-100 border border-slate-300 text-slate-600 hover:text-rose-600 flex items-center justify-center cursor-pointer transition-all ml-1" title="ปิดหน้าต่าง">
+            <button type="button" onclick="closeDailyReportModal()" class="w-8 h-8 rounded-none bg-slate-100 hover:bg-rose-100 border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] text-slate-700 hover:text-rose-600 flex items-center justify-center cursor-pointer transition-all ml-1" title="ปิดหน้าต่าง">
               <i data-lucide="x" class="w-4 h-4"></i>
             </button>
           </div>
@@ -777,12 +831,12 @@
       tasksRows += `
         <tr style="height: 22px;">
           <td class="text-center font-mono py-0.5 text-xs">${t.title ? (i + 1) : ''}</td>
-          <td class="py-0.5 px-1.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-slate-900 text-xs font-bold" value="${escapeHtml(t.title)}" onchange="updateDrTask(${i}, 'title', this.value)"></td>
-          <td class="text-center py-0.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-slate-800 text-xs" value="${escapeHtml(t.location)}" onchange="updateDrTask(${i}, 'location', this.value)"></td>
-          <td class="text-center py-0.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-slate-800 text-xs font-mono" value="${escapeHtml(t.qty)}" onchange="updateDrTask(${i}, 'qty', this.value)"></td>
-          <td class="text-center py-0.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-slate-900 text-xs font-mono font-bold" value="${escapeHtml(t.drivenQty || '')}" onchange="updateDrTask(${i}, 'drivenQty', this.value)"></td>
-          <td class="text-center font-mono font-black py-0.5 ${t.pct === '100%' ? 'text-emerald-700 bg-emerald-50/50' : 'text-slate-800'}"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-xs font-mono font-black" value="${escapeHtml(t.pct)}" onchange="updateDrTask(${i}, 'pct', this.value)"></td>
-          <td class="py-0.5 px-1.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-slate-800 text-[11px]" value="${escapeHtml(t.remarks || '')}" onchange="updateDrTask(${i}, 'remarks', this.value)"></td>
+          <td class="py-0.5 px-1.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-slate-900 text-xs font-bold" value="${escapeHtml(t.title)}" oninput="updateDrTask(${i}, 'title', this.value)"></td>
+          <td class="text-center py-0.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-slate-800 text-xs" value="${escapeHtml(t.location)}" oninput="updateDrTask(${i}, 'location', this.value)"></td>
+          <td class="text-center py-0.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-slate-800 text-xs font-mono" value="${escapeHtml(t.qty)}" oninput="updateDrTask(${i}, 'qty', this.value)"></td>
+          <td class="text-center py-0.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-slate-900 text-xs font-mono font-bold" value="${escapeHtml(t.drivenQty || '')}" oninput="updateDrTask(${i}, 'drivenQty', this.value)"></td>
+          <td class="text-center font-mono font-black py-0.5 ${t.pct === '100%' ? 'text-emerald-700 bg-emerald-50/50' : 'text-slate-800'}"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-xs font-mono font-black" value="${escapeHtml(t.pct)}" oninput="updateDrTask(${i}, 'pct', this.value)"></td>
+          <td class="py-0.5 px-1.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-slate-800 text-[11px]" value="${escapeHtml(t.remarks || '')}" oninput="updateDrTask(${i}, 'remarks', this.value)"></td>
         </tr>
       `;
     }
@@ -791,9 +845,12 @@
 
     let mgmtRows = DailyReportState.manpower.mgmt.map((m, idx) => `
       <div class="flex items-center justify-between py-0.25 border-b border-slate-200">
-        <span class="truncate pr-1 text-[10px] text-slate-800">${idx + 1}. ${m.label}</span>
+        <div class="flex items-center gap-0.5 overflow-hidden flex-1 mr-1">
+          <span class="text-[10px] text-slate-500 shrink-0">${idx + 1}.</span>
+          <input type="text" value="${escapeHtml(m.label)}" oninput="updateManpowerLabel('mgmt', ${idx}, this.value)" class="w-full bg-transparent border-0 outline-none p-0 text-[10px] text-slate-800 hover:bg-slate-50 focus:bg-amber-50 rounded px-0.5 truncate">
+        </div>
         <div class="flex items-center gap-1 shrink-0">
-          <input type="number" min="0" value="${m.count}" onchange="updateManpower('mgmt', ${idx}, this.value)" class="w-7 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
+          <input type="number" min="0" value="${m.count}" oninput="updateManpower('mgmt', ${idx}, this.value)" class="w-7 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
           <span class="text-[9px] text-slate-500">คน</span>
         </div>
       </div>
@@ -801,9 +858,12 @@
 
     let workersRows = DailyReportState.manpower.workers.map((w, idx) => `
       <div class="flex items-center justify-between py-0.25 border-b border-slate-200">
-        <span class="truncate pr-1 text-[10px] text-slate-800">${idx + 1}. ${w.label}</span>
+        <div class="flex items-center gap-0.5 overflow-hidden flex-1 mr-1">
+          <span class="text-[10px] text-slate-500 shrink-0">${idx + 1}.</span>
+          <input type="text" value="${escapeHtml(w.label)}" oninput="updateManpowerLabel('workers', ${idx}, this.value)" class="w-full bg-transparent border-0 outline-none p-0 text-[10px] text-slate-800 hover:bg-slate-50 focus:bg-amber-50 rounded px-0.5 truncate">
+        </div>
         <div class="flex items-center gap-1 shrink-0">
-          <input type="number" min="0" value="${w.count}" onchange="updateManpower('workers', ${idx}, this.value)" class="w-7 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
+          <input type="number" min="0" value="${w.count}" oninput="updateManpower('workers', ${idx}, this.value)" class="w-7 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
           <span class="text-[9px] text-slate-500">คน</span>
         </div>
       </div>
@@ -811,20 +871,26 @@
 
     let machineryRows = DailyReportState.manpower.machinery.map((m, idx) => `
       <div class="flex items-center justify-between py-0.25 border-b border-slate-200">
-        <span class="truncate pr-1 text-[10px] text-slate-800">${idx + 1}. ${m.label}</span>
+        <div class="flex items-center gap-0.5 overflow-hidden flex-1 mr-1">
+          <span class="text-[10px] text-slate-500 shrink-0">${idx + 1}.</span>
+          <input type="text" value="${escapeHtml(m.label)}" oninput="updateManpowerLabel('machinery', ${idx}, this.value)" class="w-full bg-transparent border-0 outline-none p-0 text-[10px] text-slate-800 hover:bg-slate-50 focus:bg-amber-50 rounded px-0.5 truncate">
+        </div>
         <div class="flex items-center gap-1 shrink-0">
-          <input type="number" min="0" value="${m.count}" onchange="updateManpower('machinery', ${idx}, this.value)" class="w-7 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
-          <span class="text-[9px] text-slate-500">${m.unit || 'คัน'}</span>
+          <input type="number" min="0" value="${m.count}" oninput="updateManpower('machinery', ${idx}, this.value)" class="w-7 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
+          <input type="text" value="${escapeHtml(m.unit || 'คัน')}" oninput="updateMachineryUnit(${idx}, this.value)" class="w-6 text-center text-[9px] text-slate-500 bg-transparent border-0 outline-none hover:bg-slate-50 focus:bg-amber-50 p-0">
         </div>
       </div>
     `).join('');
 
     let materialsRows = DailyReportState.materials.map((mat, idx) => `
       <div class="flex items-center justify-between py-0.25 border-b border-slate-200 text-[10px]">
-        <span class="truncate pr-1 text-slate-800 font-medium">${idx + 1}. ${mat.label}</span>
+        <div class="flex items-center gap-0.5 overflow-hidden flex-1 mr-1">
+          <span class="text-[10px] text-slate-500 shrink-0">${idx + 1}.</span>
+          <input type="text" value="${escapeHtml(mat.label)}" oninput="updateMaterialLabel(${idx}, this.value)" class="w-full bg-transparent border-0 outline-none p-0 text-[10px] text-slate-800 font-medium hover:bg-slate-50 focus:bg-amber-50 rounded px-0.5 truncate">
+        </div>
         <div class="flex items-center gap-1 shrink-0">
-          <input type="number" min="0" value="${mat.count}" onchange="updateMaterialCount(${idx}, this.value)" class="w-8 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
-          <span class="text-[9px] text-slate-500 font-bold">${mat.unit}</span>
+          <input type="number" min="0" value="${mat.count}" oninput="updateMaterialCount(${idx}, this.value)" class="w-8 text-right font-mono font-black text-slate-900 bg-transparent border-0 outline-none p-0 pr-0.5 hover:bg-slate-100/60 focus:bg-amber-50 text-[11px]">
+          <input type="text" value="${escapeHtml(mat.unit || 'ต้น')}" oninput="updateMaterialUnit(${idx}, this.value)" class="w-6 text-center text-[9px] text-slate-500 font-bold bg-transparent border-0 outline-none hover:bg-slate-50 focus:bg-amber-50 p-0">
         </div>
       </div>
     `).join('');
@@ -837,7 +903,7 @@
         </div>
         <div class="flex items-center justify-center gap-1 text-xs font-bold text-slate-900">
           <span>โครงการ</span>
-          <input type="text" class="border-b border-dashed border-slate-400 font-black text-center px-1 text-slate-900 bg-transparent outline-none" value="${escapeHtml(DailyReportState.projectName)}" onchange="DailyReportState.projectName=this.value; renderDailyReportAll();">
+          <input type="text" class="border-b border-dashed border-slate-400 font-black text-center px-1 text-slate-900 bg-transparent outline-none" value="${escapeHtml(DailyReportState.projectName)}" oninput="DailyReportState.projectName=this.value; autoDebouncedSaveSupabase();" onchange="DailyReportState.projectName=this.value; renderDailyReportAll(); autoDebouncedSaveSupabase();">
         </div>
         <div class="w-full max-w-sm mt-0.5 border-2 border-slate-900 rounded-md py-0.5 px-3 text-center bg-white shadow-2xs">
           <h1 class="text-sm font-bold text-slate-900" style="font-family: 'Sarabun', 'Prompt', sans-serif !important; font-weight: 700; letter-spacing: 0;">รายงานการทำงานประจำวัน</h1>
@@ -847,7 +913,10 @@
       <!-- Top Information Strip -->
       <div class="border border-slate-900 text-[11px] p-2 mb-1.5 bg-white space-y-1.5 leading-normal">
         <div class="flex justify-between items-center">
-          <div><span class="font-bold">ถึง :</span> บริษัท แสนสิริ จำกัด (มหาชน)</div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold shrink-0">ถึง :</span>
+            <input type="text" class="border-b border-slate-300 hover:border-slate-400 font-bold px-1 text-slate-900 bg-transparent outline-none w-64 text-[11px]" value="${escapeHtml(DailyReportState.toCompany || 'บริษัท แสนสิริ จำกัด (มหาชน)')}" oninput="DailyReportState.toCompany=this.value; autoDebouncedSaveSupabase();">
+          </div>
           <div class="flex items-center gap-1">
             <span class="font-bold">วันที่ทำงาน :</span>
             <input type="text" class="border-b border-slate-400 font-bold px-1 text-center bg-transparent outline-none w-36" value="${escapeHtml(thaiDate)}" onchange="handleManualDateChange(this.value)">
@@ -857,7 +926,7 @@
         <div class="flex justify-between items-center pt-1 mt-0.5">
           <div class="flex items-center gap-1.5">
             <span class="font-bold text-[11.5px] shrink-0">เรียน :</span>
-            <span contenteditable="true" tabindex="0" role="textbox" id="dr-recipient-input" class="border-b border-slate-400 font-bold px-1.5 text-slate-900 bg-transparent outline-none w-80 text-[12px] inline-block align-middle cursor-text" style="font-family: 'Sarabun', 'Prompt', sans-serif; line-height: 1.8; min-height: 28px; padding-top: 1px; padding-bottom: 1px;" onblur="DailyReportState.recipient=(this.innerText||'').trim() || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล'; autoDebouncedSaveSupabase();" onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}" oninput="DailyReportState.recipient=(this.innerText||'').trim();">${escapeHtml(DailyReportState.recipient || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล')}</span>
+            <span contenteditable="true" tabindex="0" role="textbox" id="dr-recipient-input" class="border-b border-slate-400 font-bold px-1.5 text-slate-900 bg-transparent outline-none w-80 text-[12px] inline-block align-middle cursor-text" style="font-family: 'Sarabun', 'Prompt', sans-serif; line-height: 1.8; min-height: 28px; padding-top: 1px; padding-bottom: 1px;" onblur="DailyReportState.recipient=(this.innerText||'').trim() || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล'; autoDebouncedSaveSupabase();" onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}" oninput="DailyReportState.recipient=(this.innerText||'').trim(); autoDebouncedSaveSupabase();">${escapeHtml(DailyReportState.recipient || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล')}</span>
           </div>
         </div>
 
@@ -866,11 +935,11 @@
           <span class="font-bold shrink-0">อากาศ :</span>
           ${weatherItems.map(w => `
             <label class="inline-flex items-center gap-1 cursor-pointer select-none">
-              <input type="checkbox" ${DailyReportState.weather === w.key ? 'checked' : ''} onchange="DailyReportState.weather='${w.key}'; renderDailyReportPage1();" class="rounded border-slate-900 text-slate-900 focus:ring-0">
+              <input type="checkbox" ${DailyReportState.weather === w.key ? 'checked' : ''} onchange="DailyReportState.weather='${w.key}'; renderDailyReportPage1(); autoDebouncedSaveSupabase();" class="rounded border-slate-900 text-slate-900 focus:ring-0">
               <span>${w.label}</span>
             </label>
           `).join('')}
-          <input type="text" placeholder="ระบุเพิ่มเติม..." class="border-b border-slate-300 text-[11px] px-1 outline-none w-28 bg-transparent" value="${escapeHtml(DailyReportState.weatherOther)}" onchange="DailyReportState.weatherOther=this.value">
+          <input type="text" placeholder="ระบุเพิ่มเติม..." class="border-b border-slate-300 text-[11px] px-1 outline-none w-28 bg-transparent" value="${escapeHtml(DailyReportState.weatherOther || '')}" oninput="DailyReportState.weatherOther=this.value; autoDebouncedSaveSupabase();">
         </div>
 
         <!-- Permit Restrictions Checkboxes -->
@@ -878,23 +947,23 @@
           <span class="font-bold shrink-0">การระงับการทำงาน :</span>
           ${permitItems.map(p => `
             <label class="inline-flex items-center gap-1 cursor-pointer select-none">
-              <input type="checkbox" ${DailyReportState.workPermit === p.key ? 'checked' : ''} onchange="DailyReportState.workPermit='${p.key}'; renderDailyReportPage1();" class="rounded border-slate-900 text-slate-900 focus:ring-0">
+              <input type="checkbox" ${DailyReportState.workPermit === p.key ? 'checked' : ''} onchange="DailyReportState.workPermit='${p.key}'; renderDailyReportPage1(); autoDebouncedSaveSupabase();" class="rounded border-slate-900 text-slate-900 focus:ring-0">
               <span>${p.label}</span>
             </label>
           `).join('')}
-          <input type="text" placeholder="ระบุ..." class="border-b border-slate-300 text-[11px] px-1 outline-none w-24 bg-transparent" value="${escapeHtml(DailyReportState.workPermitOther)}" onchange="DailyReportState.workPermitOther=this.value">
+          <input type="text" placeholder="ระบุ..." class="border-b border-slate-300 text-[11px] px-1 outline-none w-24 bg-transparent" value="${escapeHtml(DailyReportState.workPermitOther || '')}" oninput="DailyReportState.workPermitOther=this.value; autoDebouncedSaveSupabase();">
         </div>
 
         <!-- Work Time & Attachments -->
         <div class="flex items-center justify-between text-[11px] pt-0.5 border-t border-slate-200">
           <div class="flex items-center gap-4">
-            <div><span class="font-bold">เวลาเริ่มทำงาน :</span> <input type="text" id="dr-input-start-time" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.startTime}" onchange="handleWorkTimeChange('start', this.value)"></div>
-            <div><span class="font-bold">เวลาเลิกงาน :</span> <input type="text" id="dr-input-end-time" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.endTime}" onchange="handleWorkTimeChange('end', this.value)"></div>
-            <div><span class="font-bold">ระยะเวลาทำงาน :</span> <input type="text" id="dr-input-duration" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.duration}" onchange="DailyReportState.duration=this.value; autoDebouncedSaveSupabase();"></div>
+            <div><span class="font-bold">เวลาเริ่มทำงาน :</span> <input type="text" id="dr-input-start-time" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.startTime}" oninput="handleWorkTimeChange('start', this.value)" onchange="handleWorkTimeChange('start', this.value)"></div>
+            <div><span class="font-bold">เวลาเลิกงาน :</span> <input type="text" id="dr-input-end-time" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.endTime}" oninput="handleWorkTimeChange('end', this.value)" onchange="handleWorkTimeChange('end', this.value)"></div>
+            <div><span class="font-bold">ระยะเวลาทำงาน :</span> <input type="text" id="dr-input-duration" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.duration}" oninput="DailyReportState.duration=this.value; autoDebouncedSaveSupabase();"></div>
           </div>
           <div>
             <span class="font-bold">เอกสารแนบจำนวน :</span>
-            <input type="number" min="1" class="border-b border-slate-400 text-center w-10 font-bold outline-none" value="${DailyReportState.attachmentPages}" onchange="DailyReportState.attachmentPages=this.value">
+            <input type="number" min="1" class="border-b border-slate-400 text-center w-10 font-bold outline-none" value="${DailyReportState.attachmentPages}" oninput="DailyReportState.attachmentPages=this.value; autoDebouncedSaveSupabase();">
             <span>แผ่น</span>
           </div>
         </div>
@@ -985,11 +1054,11 @@
         <div class="border-r border-slate-300 pr-1.5 flex flex-col justify-between">
           <div class="mb-1">
             <span class="font-bold block mb-0.5 text-slate-900">ปัญหาและอุปสรรค :</span>
-            <textarea class="w-full h-8 border border-slate-400 bg-white p-1 text-[10.5px] leading-tight outline-none resize-none font-medium" style="overflow: hidden; scrollbar-width: none; -ms-overflow-style: none;" onchange="DailyReportState.obstacles=this.value; autoDebouncedSaveSupabase();">${escapeHtml(DailyReportState.obstacles)}</textarea>
+            <textarea class="w-full h-8 border border-slate-400 bg-white p-1 text-[10.5px] leading-tight outline-none resize-none font-medium" style="overflow: hidden; scrollbar-width: none; -ms-overflow-style: none;" oninput="DailyReportState.obstacles=this.value; autoDebouncedSaveSupabase();">${escapeHtml(DailyReportState.obstacles)}</textarea>
           </div>
           <div>
             <span class="font-bold block mb-0.5 text-slate-900">วิธีการแก้ไข :</span>
-            <textarea class="w-full h-8 border border-slate-400 bg-white p-1 text-[10.5px] leading-tight outline-none resize-none font-medium" style="overflow: hidden; scrollbar-width: none; -ms-overflow-style: none;" onchange="DailyReportState.solutions=this.value; autoDebouncedSaveSupabase();">${escapeHtml(DailyReportState.solutions)}</textarea>
+            <textarea class="w-full h-8 border border-slate-400 bg-white p-1 text-[10.5px] leading-tight outline-none resize-none font-medium" style="overflow: hidden; scrollbar-width: none; -ms-overflow-style: none;" oninput="DailyReportState.solutions=this.value; autoDebouncedSaveSupabase();">${escapeHtml(DailyReportState.solutions)}</textarea>
           </div>
         </div>
 
@@ -1006,7 +1075,10 @@
       <div class="grid grid-cols-2 border border-slate-900 text-[10.5px] p-1.5 bg-white">
         <!-- Left Signature: รายงานโดย -->
         <div class="border-r border-slate-900 pr-2 space-y-0.5">
-          <div><span class="font-bold">รายงานโดย :</span> บริษัท แสนสิริ จำกัด (มหาชน)</div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold shrink-0">รายงานโดย :</span>
+            <input type="text" class="border-b border-transparent hover:border-slate-300 focus:border-slate-400 font-normal px-1 text-slate-900 bg-transparent outline-none w-56 text-[10.5px]" value="${escapeHtml(DailyReportState.authorCompany || 'บริษัท แสนสิริ จำกัด (มหาชน)')}" oninput="DailyReportState.authorCompany=this.value; autoDebouncedSaveSupabase();">
+          </div>
           <div class="pt-0.5 flex items-center justify-between gap-1">
             <div class="flex items-center gap-2 flex-1">
               <span class="font-bold shrink-0">ลายเซ็น :</span>
@@ -1028,14 +1100,23 @@
               ` : ''}
             </div>
           </div>
-          <div><span class="font-bold">ชื่อ :</span> ${DailyReportState.author}</div>
-          <div><span class="font-bold">ตำแหน่ง :</span> ${DailyReportState.authorRole}</div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold shrink-0">ชื่อ :</span>
+            <input type="text" class="border-b border-transparent hover:border-slate-300 focus:border-slate-400 font-bold px-1 text-slate-900 bg-transparent outline-none w-52 text-[10.5px]" value="${escapeHtml(DailyReportState.author)}" oninput="DailyReportState.author=this.value; autoDebouncedSaveSupabase();">
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold shrink-0">ตำแหน่ง :</span>
+            <input type="text" class="border-b border-transparent hover:border-slate-300 focus:border-slate-400 font-normal px-1 text-slate-800 bg-transparent outline-none w-52 text-[10.5px]" value="${escapeHtml(DailyReportState.authorRole)}" oninput="DailyReportState.authorRole=this.value; autoDebouncedSaveSupabase();">
+          </div>
           <div><span class="font-bold">วันที่ :</span> ${thaiDate}</div>
         </div>
 
         <!-- Right Signature: ทบทวนโดย -->
         <div class="pl-2 space-y-0.5">
-          <div><span class="font-bold">ทบทวนโดย :</span> บริษัท แสนสิริ จำกัด (มหาชน)</div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold shrink-0">ทบทวนโดย :</span>
+            <input type="text" class="border-b border-transparent hover:border-slate-300 focus:border-slate-400 font-normal px-1 text-slate-900 bg-transparent outline-none w-56 text-[10.5px]" value="${escapeHtml(DailyReportState.reviewerCompany || 'บริษัท แสนสิริ จำกัด (มหาชน)')}" oninput="DailyReportState.reviewerCompany=this.value; autoDebouncedSaveSupabase();">
+          </div>
           <div class="pt-0.5 flex items-center justify-between gap-1">
             <div class="flex items-center gap-2 flex-1">
               <span class="font-bold shrink-0">ลายเซ็น :</span>
@@ -1057,8 +1138,14 @@
               ` : ''}
             </div>
           </div>
-          <div><span class="font-bold">ชื่อ :</span> ${DailyReportState.reviewer}</div>
-          <div><span class="font-bold">ตำแหน่ง :</span> ${DailyReportState.reviewerRole}</div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold shrink-0">ชื่อ :</span>
+            <input type="text" class="border-b border-transparent hover:border-slate-300 focus:border-slate-400 font-bold px-1 text-slate-900 bg-transparent outline-none w-52 text-[10.5px]" value="${escapeHtml(DailyReportState.reviewer)}" oninput="DailyReportState.reviewer=this.value; autoDebouncedSaveSupabase();">
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="font-bold shrink-0">ตำแหน่ง :</span>
+            <input type="text" class="border-b border-transparent hover:border-slate-300 focus:border-slate-400 font-normal px-1 text-slate-800 bg-transparent outline-none w-52 text-[10.5px]" value="${escapeHtml(DailyReportState.reviewerRole)}" oninput="DailyReportState.reviewerRole=this.value; autoDebouncedSaveSupabase();">
+          </div>
           <div><span class="font-bold">วันที่ :</span> ${thaiDate}</div>
         </div>
       </div>
@@ -1111,80 +1198,210 @@
     const pct = ((drivenCount / 93) * 100).toFixed(1);
 
     // =========================================================================
-    // BUILD IMAGE 2 COMPARISON TABLE (LEDGER - Plan 3 ต้น/วันทำการ vs Actual)
+    // DYNAMIC HEIGHT SCALING FOR PERFECT FIT ON A4 (Especially with 3 piles)
     // =========================================================================
-    const activeIdx = workingDaysSchedule.indexOf(curDate);
-    const targetIdx = (activeIdx >= 0) ? activeIdx : 12;
+    const effectivePilesCount = Math.max(0, todayCount);
+    let planContainerH = 175;
+    let chartContainerH = 165;
+    let planCanvasH = 350;
+    let chartCanvasH = 330;
 
-    // Window of 18 days (e.g. 10 ต.ค. to 2 พ.ย. when active is 21 ต.ค.)
-    const numCols = 18;
-    const startIdx = Math.max(0, Math.min(targetIdx - 8, workingDaysSchedule.length - numCols));
-    const visibleDays = workingDaysSchedule.slice(startIdx, startIdx + numCols);
+    if (effectivePilesCount >= 3) {
+      // 3 or more piles: scale down canvas containers to make room for all log rows
+      const extra = effectivePilesCount - 2;
+      planContainerH = Math.max(130, 155 - (extra * 10));
+      chartContainerH = Math.max(120, 145 - (extra * 10));
+      planCanvasH = planContainerH * 2;
+      chartCanvasH = chartContainerH * 2;
+    } else if (effectivePilesCount === 2) {
+      planContainerH = 168;
+      chartContainerH = 158;
+      planCanvasH = 336;
+      chartCanvasH = 316;
+    }
 
-    let dateHeaders = '';
-    let planRow = '';
-    let actualRow = '';
-    let cumPlanRow = '';
-    let cumActualRow = '';
+    // =========================================================================
+    // BUILD 2-TIER COMPARISON TABLE (เหมือนหน้ารายงาน แยก 2 แถว ครบ 31 วัน)
+    // =========================================================================
+    const totalDays = 31;
+    const allDays = [];
+    let runningPlanCum = 0;
 
-    visibleDays.forEach((schedDate, relIdx) => {
-      const isCur = (schedDate === curDate);
-      const isFuture = (schedDate > curDate);
-      const fullDayIdx = startIdx + relIdx;
+    for (let i = 0; i < totalDays; i++) {
+      const schedDate = workingDaysSchedule[i] || '';
+      const isTodayOrSelected = (schedDate === curDate);
+      const isFuture = schedDate ? (schedDate > curDate) : true;
+      const holidayInfo = getHolidayInfo(schedDate);
+      const isHolidayWork = Boolean(holidayInfo);
+
       const dayPlan = 3;
-      const runningPlanCum = Math.min(93, (fullDayIdx + 1) * 3);
+      runningPlanCum = Math.min(93, (i + 1) * 3);
 
       const dayActual = drivenRecords.filter(r => r.date === schedDate).length;
       const cumActual = drivenRecords.filter(r => r.date && r.date <= schedDate).length;
 
-      const dateFormatted = formatThaiDayMonth(schedDate);
-      const colClass = isCur ? 'active-col' : '';
+      allDays.push({
+        index: i,
+        date: schedDate,
+        formattedDate: schedDate ? formatThaiDayMonth(schedDate) : ('D' + (i + 1)),
+        isToday: isTodayOrSelected,
+        isFuture: isFuture,
+        isHolidayWork: isHolidayWork,
+        holidayName: holidayInfo ? holidayInfo.name : '',
+        dayPlan: dayPlan,
+        planCum: runningPlanCum,
+        dayActual: dayActual,
+        actualCum: cumActual
+      });
+    }
 
-      dateHeaders += `
-        <th class="p-1 border border-slate-700 font-bold text-center select-none ${colClass}" title="วันที่ ${schedDate}">
-          ${dateFormatted}
-        </th>
-      `;
+    function buildDrTierBlock(tierNum, tierTitle, startIdx, endIdx, hasTotalCol) {
+      let headerCells = '';
+      let planCells = '';
+      let actualCells = '';
+      let cumPlanCells = '';
+      let cumActualCells = '';
 
-      planRow += `
-        <td class="p-1 border border-slate-700 font-mono text-center text-slate-800 ${colClass}">
-          ${dayPlan} <span class="text-[8px] font-sans text-slate-500">ต้น</span>
-        </td>
-      `;
+      for (let i = startIdx; i < endIdx; i++) {
+        const d = allDays[i];
+        if (!d) continue;
 
-      if (isFuture) {
-        actualRow += `<td class="p-1 border border-slate-700 ${colClass}"></td>`;
-      } else {
-        actualRow += `
-          <td class="p-1 border border-slate-700 font-mono text-center font-bold text-slate-900 ${colClass}">
-            ${dayActual} <span class="text-[8px] font-sans text-slate-500">ต้น</span>
+        const isAct = d.isToday;
+        let colClass = isAct ? 'bg-[#ffedd5] font-black border-2 border-[#ea580c]' : '';
+        if (d.isHolidayWork && !isAct) {
+          colClass += ' bg-amber-50/50';
+        }
+
+        let headerInner = '';
+        if (isAct) {
+          headerInner = `<span class="font-black text-amber-950">${d.formattedDate}</span>`;
+          if (d.isHolidayWork) {
+            headerInner += `<span class="block text-[7.5px] text-amber-900 font-extrabold leading-tight">วันหยุด</span>`;
+          }
+        } else if (d.isHolidayWork) {
+          headerInner = `<span class="font-black text-rose-700">${d.formattedDate}</span><span class="block text-[7.5px] text-rose-600 font-extrabold leading-tight">วันหยุด</span>`;
+        } else {
+          headerInner = `<span class="font-bold text-slate-800">${d.formattedDate}</span>`;
+        }
+
+        const holidayTooltip = d.isHolidayWork ? ` (${d.holidayName || 'ทำงานวันหยุด'})` : '';
+        headerCells += `
+          <th class="p-0.5 border border-slate-700 text-center select-none cursor-pointer transition-colors ${colClass}" title="คลิกเพื่อดูรายงานวันที่ ${d.date}${holidayTooltip}" onclick="handleDrDateSelect('${d.date}')" style="width: 5.88%;">
+            ${headerInner}
+          </th>
+        `;
+
+        planCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center text-slate-700 ${colClass}">
+            ${d.dayPlan}
+          </td>
+        `;
+
+        const actDisplay = d.isFuture ? '' : d.dayActual;
+        actualCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-bold text-slate-900 ${colClass}">
+            ${actDisplay}
+          </td>
+        `;
+
+        cumPlanCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-semibold text-slate-800 ${colClass}">
+            ${d.planCum}
+          </td>
+        `;
+
+        const cumActDisplay = d.isFuture ? '' : d.actualCum;
+        cumActualCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-black text-emerald-900 ${colClass}">
+            ${cumActDisplay}
           </td>
         `;
       }
 
-      cumPlanRow += `
-        <td class="p-1 border border-slate-700 font-mono text-center font-bold text-slate-800 ${colClass}">
-          ${runningPlanCum} <span class="text-[8px] font-sans text-slate-500">ต้น</span>
-        </td>
-      `;
-
-      if (isFuture) {
-        cumActualRow += `<td class="p-1 border border-slate-700 ${colClass}"></td>`;
-      } else {
-        cumActualRow += `
-          <td class="p-1 border border-slate-700 font-mono text-center font-black text-emerald-800 ${colClass}">
-            ${cumActual} <span class="text-[8px] font-sans text-emerald-700 font-semibold">ต้น</span>
+      if (hasTotalCol) {
+        headerCells += `
+          <th class="p-0.5 border border-slate-700 bg-slate-900 text-amber-300 font-black text-center whitespace-nowrap text-[8.5px]" style="width: 5.88%;">
+            รวม
+          </th>
+        `;
+        planCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-bold bg-slate-100 text-slate-800">
+            93
+          </td>
+        `;
+        actualCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-black bg-slate-200 text-slate-900">
+            ${drivenCount}
+          </td>
+        `;
+        cumPlanCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-black bg-blue-100 text-blue-950">
+            93
+          </td>
+        `;
+        cumActualCells += `
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-black bg-emerald-200 text-emerald-950">
+            ${drivenCount}
           </td>
         `;
       }
-    });
+
+      return `
+        <div class="border-2 border-slate-900 bg-white overflow-hidden rounded-none shadow-[2.5px_2.5px_0px_#0f172a]">
+          <div class="px-2 py-0.5 bg-slate-100 border-b-2 border-slate-900 flex items-center justify-between text-[9px] font-bold">
+            <div class="flex items-center gap-1.5">
+              <span class="px-1.5 py-0.2 bg-slate-900 text-white rounded-none text-[8px] font-black shadow-[1px_1px_0px_#0f172a]">${tierNum}</span>
+              <span class="text-slate-900 font-black">${tierTitle}</span>
+            </div>
+            <span class="text-[8.5px] text-slate-600 font-bold">${hasTotalCol ? 'เป้าหมายเสาเข็มครบ 93 ต้น' : 'เป้าหมายงวดนี้ 48 ต้น'}</span>
+          </div>
+          <table class="w-full text-center border-collapse text-[8px] sm:text-[8.5px] leading-tight table-fixed">
+            <thead>
+              <tr class="bg-[#fceee7] border-b border-slate-700">
+                <th class="p-0.5 border border-slate-700 font-black text-left text-slate-900 whitespace-nowrap pl-1 text-[8px]" style="width: 62px;">DATE / วันที่</th>
+                ${headerCells}
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bg-white">
+                <td class="p-0.5 border border-slate-700 text-left font-bold text-slate-700 whitespace-nowrap pl-1 text-[8px]">PLAN (แผน)</td>
+                ${planCells}
+              </tr>
+              <tr class="bg-[#f8fafc]">
+                <td class="p-0.5 border border-slate-700 text-left font-bold text-slate-900 whitespace-nowrap pl-1 text-[8px]">ACTUAL (จริง)</td>
+                ${actualCells}
+              </tr>
+              <tr class="bg-[#e2e8f0]">
+                <td class="p-0.5 border border-slate-700 text-left font-bold text-slate-800 whitespace-nowrap pl-1 text-[8px]">Acc. PLAN</td>
+                ${cumPlanCells}
+              </tr>
+              <tr class="bg-[#ecfdf5]">
+                <td class="p-0.5 border border-slate-700 text-left font-black text-emerald-950 whitespace-nowrap pl-1 text-[8px]">Acc. ACTUAL</td>
+                ${cumActualCells}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    const startD1 = workingDaysSchedule[0] ? formatThaiDayMonth(workingDaysSchedule[0]) : 'D1';
+    const endD1 = workingDaysSchedule[15] ? formatThaiDayMonth(workingDaysSchedule[15]) : 'D16';
+    const tier1Range = `วันทำการที่ 1 – 16 (${startD1} – ${endD1})`;
+
+    const startD2 = workingDaysSchedule[16] ? formatThaiDayMonth(workingDaysSchedule[16]) : 'D17';
+    const endD2 = workingDaysSchedule[30] ? formatThaiDayMonth(workingDaysSchedule[30]) : 'D31';
+    const tier2Range = `วันทำการที่ 17 – 31 (${startD2} – ${endD2})`;
+
+    const tier1Html = buildDrTierBlock('แถวที่ 1', tier1Range, 0, 16, false);
+    const tier2Html = buildDrTierBlock('แถวที่ 2', tier2Range, 16, 31, true);
 
     // Build Today's Pressed Piles Log Rows
     let pilesLogRows = '';
     if (todayPilesList.length === 0) {
       pilesLogRows = `
-        <tr>
-          <td colspan="12" class="p-2 text-center text-slate-500 italic border border-slate-700 text-[10px]">
+        <tr style="height: 20px;">
+          <td colspan="12" class="p-1 text-center text-slate-500 italic border border-slate-700 text-[9px]">
             ไม่มีรายการเสาเข็มที่กดในวันที่รายงาน (${curDate})
           </td>
         </tr>
@@ -1241,19 +1458,19 @@
         }
 
         pilesLogRows += `
-          <tr class="text-[9.5px]">
-            <td class="border border-slate-700 p-1 text-center font-mono">${idx + 1}</td>
-            <td class="border border-slate-700 p-1 font-bold text-center text-slate-900">${pileId}</td>
-            <td class="border border-slate-700 p-1 text-center">${p.footing || '-'}</td>
-            <td class="border border-slate-700 p-1 text-center font-mono">${p.grid || '-'}</td>
-            <td class="border border-slate-700 p-1 text-right font-mono text-[9px]">${targetCoStr}</td>
-            <td class="border border-slate-700 p-1 text-right font-mono text-[9px] font-bold text-emerald-800">${actualCoStr}</td>
-            <td class="border border-slate-700 p-1 text-center font-mono text-[9px]">${diffCoStr}</td>
-            <td class="border border-slate-700 p-1 text-right font-mono">${pco}</td>
-            <td class="border border-slate-700 p-1 text-right font-mono font-bold">${actualTop}</td>
-            <td class="border border-slate-700 p-1 text-center font-mono">${diffTop}</td>
-            <td class="border border-slate-700 p-1 text-center text-[9px]">${p.type || 'I-0.40m'}</td>
-            <td class="border border-slate-700 p-1 text-center font-mono text-[9px]">${r.date || curDate}</td>
+          <tr class="text-[8.5px] sm:text-[9px]" style="height: 18px;">
+            <td class="border border-slate-700 p-0.5 text-center font-mono">${idx + 1}</td>
+            <td class="border border-slate-700 p-0.5 font-bold text-center text-slate-900">${pileId}</td>
+            <td class="border border-slate-700 p-0.5 text-center">${p.footing || '-'}</td>
+            <td class="border border-slate-700 p-0.5 text-center font-mono">${p.grid || '-'}</td>
+            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px]">${targetCoStr}</td>
+            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px] font-bold text-emerald-800">${actualCoStr}</td>
+            <td class="border border-slate-700 p-0.5 text-center font-mono text-[8px] sm:text-[8.5px]">${diffCoStr}</td>
+            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px]">${pco}</td>
+            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px] font-bold">${actualTop}</td>
+            <td class="border border-slate-700 p-0.5 text-center font-mono text-[8px] sm:text-[8.5px]">${diffTop}</td>
+            <td class="border border-slate-700 p-0.5 text-center text-[8px] sm:text-[8.5px]">${p.type || 'I-0.40m'}</td>
+            <td class="border border-slate-700 p-0.5 text-center font-mono text-[8px] sm:text-[8.5px]">${r.date || curDate}</td>
           </tr>
         `;
       });
@@ -1261,145 +1478,127 @@
 
     container.innerHTML = `
       <!-- Header: Clean Rectangular Frame (Monochrome) -->
-      <div class="border-2 border-black p-2 mb-2 bg-white">
+      <div class="border-2 border-black p-1.5 mb-1 bg-white">
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-[11px] font-bold text-slate-800">โครงการ PYNN PRIDI 37 (ซอยปรีดี พนมยงค์ 37)</div>
-            <h2 class="text-sm font-black text-black">รายงานความคืบหน้างานเสาเข็ม (Piling Progress Report)</h2>
+            <div class="text-[10px] font-bold text-slate-800">โครงการ PYNN PRIDI 37 (ซอยปรีดี พนมยงค์ 37)</div>
+            <h2 class="text-xs sm:text-sm font-black text-black">รายงานความคืบหน้างานเสาเข็ม (Piling Progress Report)</h2>
           </div>
           <div class="text-right">
-            <div class="text-xs font-bold text-slate-800">วันที่รายงาน : <span class="font-mono font-black">${curDate}</span></div>
-            <div class="text-[10px] text-slate-600 font-mono">เสาเข็มไอไมโครไพล์ รวม 93 ต้น</div>
+            <div class="text-[11px] font-bold text-slate-800">วันที่รายงาน : <span class="font-mono font-black">${curDate}</span></div>
+            <div class="text-[9.5px] text-slate-600 font-mono">เสาเข็มไอไมโครไพล์ รวม 93 ต้น</div>
           </div>
         </div>
       </div>
 
       <!-- KPI Summary Table: Simple Rectangular B&W Grid -->
-      <table class="w-full border-collapse border border-black text-[11px] text-center font-bold mb-2 bg-white">
+      <table class="w-full border-collapse border border-black text-[10px] text-center font-bold mb-1 bg-white">
         <thead>
           <tr class="bg-slate-100">
-            <th class="border border-black p-1 w-1/4">แผนวันนี้ / กดแล้ว</th>
-            <th class="border border-black p-1 w-1/4">แผนสะสม (${elapsedDays}/31 วัน)</th>
-            <th class="border border-black p-1 w-1/4">กดจริงสะสม</th>
-            <th class="border border-black p-1 w-1/4">สถานะเทียบแผนงาน</th>
+            <th class="border border-black p-0.5 w-1/4">แผนวันนี้ / กดแล้ว</th>
+            <th class="border border-black p-0.5 w-1/4">แผนสะสม (${elapsedDays}/31 วัน)</th>
+            <th class="border border-black p-0.5 w-1/4">กดจริงสะสม</th>
+            <th class="border border-black p-0.5 w-1/4">สถานะเทียบแผนงาน</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="border border-black p-1.5 font-mono text-xs">
+            <td class="border border-black p-1 font-mono text-[11px]">
               แผน 3 ต้น | <span class="font-black text-black">กดแล้ว ${todayCount} ต้น</span>
             </td>
-            <td class="border border-black p-1.5 font-mono text-xs">
+            <td class="border border-black p-1 font-mono text-[11px]">
               <span class="font-black text-black">${planCumCount}</span> ต้น
             </td>
-            <td class="border border-black p-1.5 font-mono text-xs">
+            <td class="border border-black p-1 font-mono text-[11px]">
               <span class="font-black text-black">${drivenCount}/93</span> (${pct}%)
             </td>
-            <td class="border border-black p-1.5 font-mono text-xs font-black">
+            <td class="border border-black p-1 font-mono text-[11px] font-black">
               ${varianceText}
             </td>
           </tr>
         </tbody>
       </table>
 
-      <!-- Piling Progress Plan Snapshot (Crisp Architectural Blueprint - Image 2) -->
-      <div class="border border-black mb-1.5 bg-white">
-        <div class="bg-slate-100 border-b border-black px-2.5 py-0.5 flex items-center justify-between text-[11px] font-black">
+      <!-- Piling Progress Plan Snapshot (Dynamic Height Auto-Fit) -->
+      <div class="border border-black mb-1 bg-white">
+        <div class="bg-slate-100 border-b border-black px-2 py-0.5 flex items-center justify-between text-[10px] font-black">
           <span>แผนผังความคืบหน้างานเสาเข็ม (Piling Progress Plan)</span>
-          <div class="flex items-center gap-4 text-[10.5px]">
-            <span class="inline-flex items-center gap-1.5 font-bold text-sky-700">
-              <svg class="w-3 h-3 inline-block shrink-0" viewBox="0 0 12 12" width="12" height="12" style="display:inline-block; vertical-align:middle;">
+          <div class="flex items-center gap-3 text-[9.5px]">
+            <span class="inline-flex items-center gap-1 font-bold text-sky-700">
+              <svg class="w-2.5 h-2.5 inline-block shrink-0" viewBox="0 0 12 12" width="10" height="10">
                 <circle cx="6" cy="6" r="5" fill="#0284c7" stroke="#0369a1" stroke-width="1.2" />
               </svg>
               <span>กดวันนี้</span>
             </span>
-            <span class="inline-flex items-center gap-1.5 font-bold text-emerald-800">
-              <svg class="w-3 h-3 inline-block shrink-0" viewBox="0 0 12 12" width="12" height="12" style="display:inline-block; vertical-align:middle;">
+            <span class="inline-flex items-center gap-1 font-bold text-emerald-800">
+              <svg class="w-2.5 h-2.5 inline-block shrink-0" viewBox="0 0 12 12" width="10" height="10">
                 <circle cx="6" cy="6" r="5" fill="#10b981" stroke="#047857" stroke-width="1.2" />
               </svg>
               <span>กดแล้ว</span>
             </span>
-            <span class="inline-flex items-center gap-1.5 font-bold text-slate-800">
-              <svg class="w-3 h-3 inline-block shrink-0" viewBox="0 0 12 12" width="12" height="12" style="display:inline-block; vertical-align:middle;">
+            <span class="inline-flex items-center gap-1 font-bold text-slate-800">
+              <svg class="w-2.5 h-2.5 inline-block shrink-0" viewBox="0 0 12 12" width="10" height="10">
                 <circle cx="6" cy="6" r="5" fill="#ffffff" stroke="#1e293b" stroke-width="1.2" />
               </svg>
               <span>รอกด</span>
             </span>
           </div>
         </div>
-        <div class="p-1 flex items-center justify-center bg-white" style="height: 245px;">
-          <canvas id="drPlanCanvas" class="w-full h-[240px] block object-contain" width="1200" height="490"></canvas>
+        <div class="p-0.5 flex items-center justify-center bg-white" style="height: ${planContainerH}px;">
+          <canvas id="drPlanCanvas" class="w-full h-full block object-contain" width="1200" height="${planCanvasH}"></canvas>
         </div>
       </div>
 
-      <!-- S-Curve Progress Graph (กราฟความคืบหน้าสะสม Plan vs Actual) -->
-      <div class="border border-slate-700 rounded-lg overflow-hidden mb-1.5 bg-white shadow-xs">
-        <div class="bg-slate-100 border-b border-slate-700 px-2.5 py-0.5 flex items-center justify-between text-[11px] font-black">
+      <!-- S-Curve Progress Graph (Dynamic Height Auto-Fit) -->
+      <div class="border border-slate-700 rounded-sm overflow-hidden mb-1 bg-white shadow-xs">
+        <div class="bg-slate-100 border-b border-slate-700 px-2 py-0.5 flex items-center justify-between text-[10px] font-black">
           <span class="text-slate-900">กราฟความคืบหน้าสะสมงานเสาเข็ม (Accumulated Progress S-Curve: Plan vs Actual)</span>
-          <span class="text-[10px] text-slate-600 font-normal">เกณฑ์แผนงาน 3 ต้น/วันทำการ (รวม 93 ต้น)</span>
+          <span class="text-[9px] text-slate-600 font-normal">เกณฑ์แผนงาน 3 ต้น/วันทำการ (รวม 93 ต้น)</span>
         </div>
-        <div class="p-1.5 flex items-center justify-center bg-white" style="height: 240px;">
-          <canvas id="drProgressChartCanvas" class="w-full h-full block" width="1160" height="460"></canvas>
+        <div class="p-0.5 flex items-center justify-center bg-white" style="height: ${chartContainerH}px;">
+          <canvas id="drProgressChartCanvas" class="w-full h-full block" width="1160" height="${chartCanvasH}"></canvas>
         </div>
       </div>
 
-      <!-- EXACT IMAGE 2 COMPARISON TABLE: Plan 3 ต้น/วันทำการ vs Actual (ภาพที่ 3: ไม่ใส่ LEDGER, วันที่ปัจจุบัน, เลื่อนตาราง) -->
-      <div class="border border-slate-700 rounded-lg overflow-hidden mb-1.5 bg-white shadow-xs">
-        <div class="bg-white px-2.5 py-1 border-b border-slate-700 flex items-center justify-between">
-          <h3 class="text-xs font-black text-slate-900">ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วันทำการ vs Actual)</h3>
+      <!-- 2-TIER COMPARISON TABLE: Plan 3 ต้น/วันทำการ vs Actual (เหมือนหน้ารายงาน แยก 2 แถว ครบ 31 วัน) -->
+      <div class="border-2 border-slate-900 rounded-none overflow-hidden mb-1.5 bg-white shadow-[3px_3px_0px_#0f172a]">
+        <div class="bg-white px-2 py-0.5 border-b-2 border-slate-900 flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="w-4 h-4 rounded-none bg-[#ea580c] text-white flex items-center justify-center text-[8px] font-black shadow-[1px_1px_0px_#0f172a]">
+              <i data-lucide="table" class="w-2.5 h-2.5"></i>
+            </span>
+            <h3 class="text-[10px] font-black text-slate-900">ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วันทำการ vs Actual)</h3>
+          </div>
+          <span class="text-[9px] font-mono text-slate-500">· 2 แถว ครบ 31 วันทำการ</span>
         </div>
-        <div class="overflow-x-auto">
-          <table class="piling-daily-table w-full text-center border-collapse text-[10px]">
-            <thead>
-              <tr>
-                <th class="p-1 border border-slate-700 sticky-col font-black tracking-wider text-center text-slate-900 bg-[#fceee7]">DATE</th>
-                ${dateHeaders}
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="row-plan">
-                <td class="p-1 border border-slate-700 sticky-col font-bold text-slate-900 bg-white">PLAN</td>
-                ${planRow}
-              </tr>
-              <tr class="row-actual">
-                <td class="p-1 border border-slate-700 sticky-col font-bold text-slate-900 bg-[#f8fafc]">ACTUAL</td>
-                ${actualRow}
-              </tr>
-              <tr class="row-accum-plan">
-                <td class="p-1 border border-slate-700 sticky-col font-black text-slate-900 bg-[#e2e8f0]">Accumulated PLAN</td>
-                ${cumPlanRow}
-              </tr>
-              <tr class="row-accum-actual">
-                <td class="p-1 border border-slate-700 sticky-col font-black text-emerald-950 bg-[#d1fae5]">Accumulated ACTUAL</td>
-                ${cumActualRow}
-              </tr>
-            </tbody>
-          </table>
+        <div class="p-1 space-y-1.5">
+          ${tier1Html}
+          ${tier2Html}
         </div>
       </div>
 
       <!-- Today's Pressed Piles Log Table -->
-      <div class="border border-slate-700 rounded-lg overflow-hidden bg-white shadow-xs">
-        <div class="bg-slate-100 border-b border-slate-700 px-2.5 py-1 text-xs font-bold flex justify-between items-center">
-          <span class="text-slate-900">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
-          <span class="font-mono font-black text-slate-800">${todayCount} ต้น</span>
+      <div class="border-2 border-slate-900 rounded-none overflow-hidden bg-white shadow-[3px_3px_0px_#0f172a]">
+        <div class="bg-slate-100 border-b-2 border-slate-900 px-2 py-0.5 text-[10px] font-bold flex justify-between items-center">
+          <span class="text-slate-900 font-black">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
+          <span class="font-mono font-black text-slate-900 bg-white px-2 py-0.5 border border-slate-900 shadow-[1px_1px_0px_#0f172a]">${todayCount} ต้น</span>
         </div>
         <div class="overflow-x-auto">
-          <table class="dr-piling-table">
+          <table class="dr-piling-table w-full text-center border-collapse">
             <thead>
-              <tr class="bg-slate-50 text-[9.5px]">
-                <th class="w-7">No.</th>
-                <th>รหัสเข็ม (ID)</th>
-                <th>ฐานราก</th>
-                <th>ตำแหน่งกริด</th>
-                <th>Co (N, E) แบบ (m)</th>
-                <th>Co (n,e) หลังกด (m)</th>
-                <th>ผลต่าง (Δn, Δe)</th>
-                <th>ระดับ PCO (แบบ)</th>
-                <th>ระดับ TOP จริง (m)</th>
-                <th>ผลต่าง (ม.)</th>
-                <th>ชนิดเข็ม</th>
-                <th>วันที่กด</th>
+              <tr class="bg-slate-50 text-[9px]">
+                <th class="w-6 py-0.5">No.</th>
+                <th class="py-0.5">รหัสเข็ม (ID)</th>
+                <th class="py-0.5">ฐานราก</th>
+                <th class="py-0.5">ตำแหน่งกริด</th>
+                <th class="py-0.5">Co (N, E) แบบ (m)</th>
+                <th class="py-0.5">Co (n,e) หลังกด (m)</th>
+                <th class="py-0.5">ผลต่าง (Δn, Δe)</th>
+                <th class="py-0.5">ระดับ PCO (แบบ)</th>
+                <th class="py-0.5">ระดับ TOP จริง (m)</th>
+                <th class="py-0.5">ผลต่าง (ม.)</th>
+                <th class="py-0.5">ชนิดเข็ม</th>
+                <th class="py-0.5">วันที่กด</th>
               </tr>
             </thead>
             <tbody>
@@ -1413,10 +1612,23 @@
     setTimeout(() => {
       renderDailyPilingPlanMonochrome();
       renderDailyProgressChart();
+      if (window.lucide) window.lucide.createIcons();
     }, 60);
   }
 
   
+  // Handle Date Selection from 2-Tier Comparison Table or elsewhere
+  window.handleDrDateSelect = function (dateStr) {
+    if (!dateStr) return;
+    DailyReportState.date = dateStr;
+    const dateInput = document.getElementById('inp-report-date') || document.getElementById('report-date-picker') || document.getElementById('date-picker');
+    if (dateInput) dateInput.value = dateStr;
+    DailyReportState.tasks = generateAutomaticTasksList(dateStr);
+    renderDailyReportPage1();
+    renderDailyReportPage2();
+    showDrToast('📅 สลับดูรายงานวันที่ ' + formatThaiDayMonth(dateStr) + ' (' + dateStr + ')', 'info');
+  };
+
   // Render S-Curve Progress Chart onto drProgressChartCanvas (มีเส้นและมีจุดเหมือนในเว็บ ขยายขนาดเต็มพื้นที่)
   function renderDailyProgressChart() {
     const canvas = document.getElementById('drProgressChartCanvas');
@@ -1428,7 +1640,10 @@
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, w, h);
 
-    const padL = 55, padR = 25, padT = 36, padB = 40;
+    const padL = 55, padR = 25;
+    const padT = h < 320 ? 28 : 36;
+    const padB = h < 320 ? 32 : 40;
+    const legY = h < 320 ? 12 : 14;
     const plotW = w - padL - padR;
     const plotH = h - padT - padB;
     const maxY = 95;
@@ -1489,7 +1704,7 @@
         ctx.stroke();
 
         ctx.fillStyle = '#64748b';
-        ctx.fillText('D' + (idx + 1), px, padT + plotH + 5);
+        ctx.fillText('D' + (idx + 1), px, padT + plotH + (h < 320 ? 4 : 5));
 
         // วันที่แบบย่อ
         const sDate = schedule[idx];
@@ -1497,7 +1712,7 @@
         if (sParts.length === 3) {
           ctx.fillStyle = '#94a3b8';
           ctx.font = '9px Montserrat, Sarabun, sans-serif';
-          ctx.fillText(parseInt(sParts[2], 10) + '/' + parseInt(sParts[1], 10), px, padT + plotH + 18);
+          ctx.fillText(parseInt(sParts[2], 10) + '/' + parseInt(sParts[1], 10), px, padT + plotH + (h < 320 ? 16 : 18));
           ctx.font = 'bold 10px Montserrat, Sarabun, sans-serif';
         }
       }
@@ -1588,7 +1803,8 @@
       const badgeW = ctx.measureText(labelText).width + 12;
       const badgeH = 18;
       const badgeX = curPx - badgeW / 2;
-      const badgeY = curPy - 24;
+      let badgeY = curPy - 24;
+      if (badgeY < (padT - 6)) badgeY = curPy + 10;
 
       ctx.fillStyle = '#0f172a';
       ctx.beginPath();
@@ -1611,47 +1827,47 @@
     ctx.lineWidth = 2.6;
     ctx.setLineDash([5, 3]);
     ctx.beginPath();
-    ctx.moveTo(padL + 15, 14);
-    ctx.lineTo(padL + 35, 14);
+    ctx.moveTo(padL + 15, legY);
+    ctx.lineTo(padL + 35, legY);
     ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle = '#ed6845';
     ctx.beginPath();
-    ctx.arc(padL + 25, 14, 3, 0, Math.PI * 2);
+    ctx.arc(padL + 25, legY, 3, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = '#334155';
-    ctx.fillText('แผนงานสะสม (3 ต้น/วันทำการ)', padL + 42, 14);
+    ctx.fillText('แผนงานสะสม (3 ต้น/วันทำการ)', padL + 42, legY);
 
     // 2. Actual Legend (เส้นทึบเขียว + จุดเขียว)
     ctx.strokeStyle = '#10b981';
     ctx.lineWidth = 3.2;
     ctx.beginPath();
-    ctx.moveTo(padL + 220, 14);
-    ctx.lineTo(padL + 245, 14);
+    ctx.moveTo(padL + 220, legY);
+    ctx.lineTo(padL + 245, legY);
     ctx.stroke();
     ctx.fillStyle = '#10b981';
     ctx.beginPath();
-    ctx.arc(padL + 232, 14, 4, 0, Math.PI * 2);
+    ctx.arc(padL + 232, legY, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = '#064e3b';
     ctx.lineWidth = 1.4;
     ctx.stroke();
 
     ctx.fillStyle = '#334155';
-    ctx.fillText('ผลงานจริงสะสม (Actual)', padL + 252, 14);
+    ctx.fillText('ผลงานจริงสะสม (Actual)', padL + 252, legY);
 
     // 3. Current Day Legend (จุดฟ้า)
     ctx.fillStyle = '#0284c7';
     ctx.beginPath();
-    ctx.arc(padL + 415, 14, 5, 0, Math.PI * 2);
+    ctx.arc(padL + 415, legY, 5, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     ctx.fillStyle = '#0369a1';
-    ctx.fillText('วันที่รายงานปัจจุบัน', padL + 426, 14);
+    ctx.fillText('วันที่รายงานปัจจุบัน', padL + 426, legY);
   }
 
   // Draw Architectural Plan onto drPlanCanvas (Exactly matches Image 2)
@@ -2247,11 +2463,13 @@
     const totalSheets = 2 + Math.max(1, Math.ceil(DailyReportState.photos.length / 6));
     DailyReportState.attachmentPages = totalSheets;
     renderDailyReportPhotoPages();
+    autoDebouncedSaveSupabase();
   };
 
   window.updateDrPhotoCaption = function (index, newCaption) {
     if (DailyReportState.photos && DailyReportState.photos[index]) {
       DailyReportState.photos[index].caption = newCaption || 'ภาพถ่ายงานกดเสาเข็ม';
+      autoDebouncedSaveSupabase();
     }
   };
 
@@ -2260,6 +2478,7 @@
       DailyReportState.tasks[index] = { no: index + 1, title: '', location: '', qty: '', drivenQty: '', pct: '', remarks: '' };
     }
     DailyReportState.tasks[index][field] = value;
+    autoDebouncedSaveSupabase();
   };
 
   window.DailyReportState = DailyReportState;
@@ -2267,9 +2486,11 @@
   let autoSaveTimeout = null;
   function autoDebouncedSaveSupabase() {
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
+    const lbl = document.getElementById('lbl-dr-save-supabase');
+    if (lbl) lbl.textContent = '⏳ กำลังบันทึก...';
     autoSaveTimeout = setTimeout(() => {
       saveDailyReportConfigToSupabase(true);
-    }, 1200);
+    }, 800);
   }
   window.autoDebouncedSaveSupabase = autoDebouncedSaveSupabase;
 
@@ -2337,10 +2558,38 @@
     }
   };
 
+  window.updateManpowerLabel = function (type, index, value) {
+    if (DailyReportState.manpower[type] && DailyReportState.manpower[type][index]) {
+      DailyReportState.manpower[type][index].label = value;
+      autoDebouncedSaveSupabase();
+    }
+  };
+
+  window.updateMachineryUnit = function (index, value) {
+    if (DailyReportState.manpower.machinery && DailyReportState.manpower.machinery[index]) {
+      DailyReportState.manpower.machinery[index].unit = value;
+      autoDebouncedSaveSupabase();
+    }
+  };
+
   window.updateMaterialCount = function (index, value) {
     if (DailyReportState.materials[index]) {
       DailyReportState.materials[index].count = parseInt(value, 10) || 0;
       renderDailyReportPage1();
+      autoDebouncedSaveSupabase();
+    }
+  };
+
+  window.updateMaterialLabel = function (index, value) {
+    if (DailyReportState.materials[index]) {
+      DailyReportState.materials[index].label = value;
+      autoDebouncedSaveSupabase();
+    }
+  };
+
+  window.updateMaterialUnit = function (index, value) {
+    if (DailyReportState.materials[index]) {
+      DailyReportState.materials[index].unit = value;
       autoDebouncedSaveSupabase();
     }
   };
@@ -2441,8 +2690,9 @@
         margin-right: auto;
         background: #ffffff;
         color: #000000;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        border: 1px solid #cbd5e1;
+        box-shadow: 4px 4px 0px #0f172a;
+        border: 2px solid #0f172a;
+        border-radius: 0px !important;
         padding: 7mm 8mm 6mm 8mm;
         box-sizing: border-box;
         position: relative;

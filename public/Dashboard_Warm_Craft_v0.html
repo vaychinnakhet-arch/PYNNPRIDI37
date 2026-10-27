@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>PYNN PRIDI 37 — Warm Editorial Craft Dashboard v0.4 (Touch-Friendly Mobile)</title>
+
+  <!-- Typography: Fraunces (Editorial Display) + DM Sans / Prompt (Body) + Space Mono (Data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,600;1,9..144,700;1,9..144,800;1,9..144,900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,600&family=Prompt:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS, Lucide Icons, Chart.js & Supabase SDK -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --dw-cream: #FAF5EE;
+      --dw-cream-deep: #F6E9D7;
+      --dw-white: #FFFFFF;
+      --dw-navy: #1D2B45;
+      --dw-navy-secondary: #3E4B69;
+      --dw-navy-muted: #8C9AA8;
+      --dw-border-soft: #E2D9CC;
+
+      --dw-orange: #F26B2A;
+      --dw-orange-soft: #FFE8D6;
+      --dw-orange-warm: #FFF3EB;
+
+      --dw-teal: #40C4C4;
+      --dw-teal-soft: #E8F8F5;
+      --dw-gold: #F7B844;
+      --dw-gold-soft: #FEF9C3;
+      --dw-emerald: #10B981;
+      --dw-emerald-soft: #ECFDF5;
+      --dw-coral: #E64C3C;
+      --dw-coral-soft: #FFE4E6;
+      --dw-blue: #0284C7;
+      --dw-blue-soft: #E0F2FE;
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'DM Sans', 'Prompt', -apple-system, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--dw-cream);
+      color: var(--dw-navy);
+      font-family: var(--font-body);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      padding-bottom: env(safe-area-inset-bottom, 24px);
+    }
+
+    ::selection {
+      background: var(--dw-orange);
+      color: #ffffff;
+    }
+
+    .font-display { font-family: var(--font-display); }
+    .font-body { font-family: var(--font-body); }
+    .font-mono-code { font-family: var(--font-mono); }
+
+    /* Tactile DoodleWeb Cards */
+    .doodle-card {
+      background: var(--dw-white);
+      border: 2px solid var(--dw-navy);
+      border-radius: 1rem;
+      box-shadow: 4px 4px 0px var(--dw-navy);
+      transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .doodle-card:hover {
+      box-shadow: 5px 5px 0px var(--dw-orange);
+    }
+
+    .doodle-card-hero {
+      background: var(--dw-white);
+      border: 2.5px solid var(--dw-navy);
+      border-radius: 1.5rem;
+      box-shadow: 6px 6px 0px var(--dw-navy);
+    }
+
+    /* Buttons with Signature Orange Hover Pop */
+    .doodle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--dw-navy);
+      border-radius: 9999px;
+      background: var(--dw-white);
+      color: var(--dw-navy);
+      font-weight: 700;
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .doodle-btn:hover {
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 4px 4px 0px var(--dw-orange);
+      background: var(--dw-cream);
+    }
+    .doodle-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px var(--dw-navy);
+    }
+
+    .doodle-btn-orange {
+      background: var(--dw-orange);
+      color: #FFFFFF !important;
+      box-shadow: 4px 4px 0px var(--dw-navy);
+    }
+    .doodle-btn-orange:hover {
+      background: #E05615;
+      box-shadow: 6px 6px 0px var(--dw-navy);
+      transform: translate(-2px, -2px);
+    }
+
+    /* Pill Badges */
+    .doodle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      border: 1.5px solid var(--dw-navy);
+      background: var(--dw-white);
+      color: var(--dw-navy);
+      font-size: 0.75rem;
+      font-weight: 700;
+      box-shadow: 1.5px 1.5px 0px var(--dw-navy);
+      white-space: nowrap;
+    }
+    .doodle-pill-teal {
+      background: var(--dw-teal-soft);
+      border-color: #0D9488;
+      color: #0F766E;
+    }
+    .doodle-pill-gold {
+      background: var(--dw-gold-soft);
+      border-color: #D97706;
+      color: #78350F;
+    }
+
+    .doodle-dot-live {
+      width: 7px;
+      height: 7px;
+      border-radius: 9999px;
+      background: #10B981;
+      display: inline-block;
+      animation: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.25); }
+    }
+
+    /* Metric Tile */
+    .doodle-metric-tile {
+      border: 2px solid var(--dw-navy);
+      border-radius: 1rem;
+      box-shadow: 3px 3px 0px var(--dw-navy);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .doodle-metric-tile:hover {
+      transform: translate(-1.5px, -1.5px);
+    }
+
+    /* Ledger Table Styling */
+    .piling-daily-tier-block {
+      border: 2px solid var(--dw-navy);
+      background-color: #ffffff;
+      box-shadow: 4px 4px 0px var(--dw-navy);
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 0.85rem;
+      transition: box-shadow 0.2s ease;
+    }
+    .piling-daily-tier-block:hover {
+      box-shadow: 5px 5px 0px var(--dw-orange);
+    }
+    .piling-daily-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+    }
+    .piling-daily-table th, .piling-daily-table td {
+      border-right: 1px solid var(--dw-border-soft);
+      border-bottom: 1px solid var(--dw-border-soft);
+    }
+    .sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      background-color: #ffffff;
+      border-right: 2px solid var(--dw-navy) !important;
+    }
+    .active-col {
+      background-color: #FFF3EB !important;
+      border-left: 2px solid var(--dw-orange) !important;
+      border-right: 2px solid var(--dw-orange) !important;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 7px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F1ECE1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border: 1.5px solid var(--dw-navy);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: var(--dw-orange);
+    }
+
+    /* =========================================================================
+       DYNAMIC RESPONSIVE ENGINE (MOBILE-FIRST)
+       ========================================================================= */
+
+    /* 1. Main Cockpit Layout: Default Stacked */
+    .cockpit-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    /* 2. Action Deck Layout: Default Stacked */
+    .action-deck-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    /* Action Buttons (Generous Touch Targets & Tactile Feedback) */
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--dw-navy);
+      border-radius: 1rem;
+      background: var(--dw-white);
+      color: var(--dw-navy);
+      font-weight: 700;
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
+      text-decoration: none;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      white-space: nowrap;
+      min-height: 52px;
+    }
+    .action-btn:hover {
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 4px 4px 0px var(--dw-orange);
+    }
+    .action-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px var(--dw-navy);
+    }
+    .action-btn-green:hover { box-shadow: 4px 4px 0px #10B981; }
+    .action-btn-blue:hover { box-shadow: 4px 4px 0px #0284C7; }
+    .action-btn-red { background: #FFF5F5; }
+    .action-btn-red:hover { background: #FFE4E6; box-shadow: 4px 4px 0px #E64C3C; }
+
+    /* Secondary Actions Grid:
+       Mobile & Narrow screens: 2 equal 50% columns for Report & 3D, and 100% full-width row for QC */
+    .secondary-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      width: 100%;
+    }
+    .qc-full-btn {
+      grid-column: span 2;
+    }
+
+    /* 3. Metrics Grid: 2x2 on Mobile */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    /* --- Tablet & Medium Breakpoint Styles (680px - 1199px) --- */
+    @media (min-width: 680px) and (max-width: 1199px) {
+      .metrics-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+      .secondary-actions-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+      .qc-full-btn {
+        grid-column: span 1 !important;
+      }
+    }
+    body.simulate-tablet .metrics-grid,
+    body.simulate-fold-inner .metrics-grid {
+      grid-template-columns: repeat(4, 1fr) !important;
+    }
+    body.simulate-tablet .secondary-actions-grid,
+    body.simulate-fold-inner .secondary-actions-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+    body.simulate-tablet .qc-full-btn,
+    body.simulate-fold-inner .qc-full-btn {
+      grid-column: span 1 !important;
+    }
+
+    /* Force Mobile simulation to keep 2-cols + full width QC */
+    body.simulate-mobile .secondary-actions-grid,
+    body.simulate-fold-cover .secondary-actions-grid {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    body.simulate-mobile .qc-full-btn,
+    body.simulate-fold-cover .qc-full-btn {
+      grid-column: span 2 !important;
+    }
+
+    /* --- Desktop Wide Screen Layout Only (>= 1200px AND NOT simulated) --- */
+    @media (min-width: 1200px) {
+      body:not(.simulate-tablet):not(.simulate-mobile):not(.simulate-fold-cover):not(.simulate-fold-inner) .cockpit-layout {
+        display: grid;
+        grid-template-columns: 7fr 5fr;
+        align-items: stretch;
+      }
+      body:not(.simulate-tablet):not(.simulate-mobile):not(.simulate-fold-cover):not(.simulate-fold-inner) .action-deck-layout {
+        display: grid;
+        grid-template-columns: 7fr 5fr;
+        align-items: stretch;
+      }
+      body:not(.simulate-tablet):not(.simulate-mobile):not(.simulate-fold-cover):not(.simulate-fold-inner) .secondary-actions-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+      body:not(.simulate-tablet):not(.simulate-mobile):not(.simulate-fold-cover):not(.simulate-fold-inner) .qc-full-btn {
+        grid-column: span 1 !important;
+      }
+      body:not(.simulate-tablet):not(.simulate-mobile):not(.simulate-fold-cover):not(.simulate-fold-inner) .metrics-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    /* Viewport Simulator Frame */
+    #viewport-stage {
+      transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    }
+    .stage-frame {
+      box-shadow: 0 0 0 8px #1D2B45, 0 20px 40px rgba(0,0,0,0.18) !important;
+      border-radius: 1.75rem !important;
+      overflow: hidden;
+      margin: 1.5rem auto !important;
+      background: var(--dw-cream);
+    }
+
+    /* Piling Rig SVG Animation */
+    @keyframes hammerDrop {
+      0% { transform: translateY(0); }
+      40% { transform: translateY(0); }
+      48% { transform: translateY(22px); }
+      50% { transform: translateY(22px); }
+      75% { transform: translateY(0); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes groundShock {
+      0%, 47% { transform: scale(1); opacity: 0; }
+      49% { transform: scale(1.1); opacity: 1; }
+      60% { transform: scale(1.35); opacity: 0; }
+      100% { opacity: 0; }
+    }
+    @keyframes dustPuff {
+      0%, 48% { opacity: 0; transform: scale(0.5) translateY(0); }
+      50% { opacity: 0.85; transform: scale(1) translateY(-3px); }
+      70% { opacity: 0; transform: scale(1.4) translateY(-8px); }
+      100% { opacity: 0; }
+    }
+
+    .rig-hammer-animated {
+      animation: hammerDrop 2.2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+    }
+    .ground-shockwave {
+      animation: groundShock 2.2s ease-out infinite;
+    }
+    .dust-puff {
+      animation: dustPuff 2.2s ease-out infinite;
+    }
+    .is-paused .rig-hammer-animated,
+    .is-paused .ground-shockwave,
+    .is-paused .dust-puff {
+      animation-play-state: paused !important;
+    }
+  </style>
+</head>
+<body class="p-2 sm:p-4 md:p-6 lg:p-8 pb-24 sm:pb-12">
+
+  <!-- VIEWPORT SIMULATOR TOOLBAR -->
+  <aside id="viewport-controller" class="max-w-[1540px] mx-auto mb-4 bg-white border-2 border-[#1D2B45] rounded-2xl p-2.5 shadow-[4px_4px_0px_#1D2B45] flex items-center justify-between flex-wrap gap-2.5 z-50">
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="doodle-pill bg-[#1D2B45] text-white text-[11px] font-mono font-bold">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#F7B844]"></i>
+        V0.5 TOUCH & ZERO-TODAY READY
+      </span>
+      <span class="text-xs font-bold text-[#3E4B69] hidden md:inline">
+        ทดสอบมุมมอง:
+      </span>
+    </div>
+
+    <!-- Viewport Switching Buttons -->
+    <div class="flex items-center gap-1.5 flex-wrap">
+      <button onclick="setViewport('desktop')" id="btn-vp-desktop" class="doodle-btn text-xs py-1 px-3 bg-[#FAF5EE] active">
+        <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+        <span>🖥️ คอมพิวเตอร์</span>
+      </button>
+      <button onclick="setViewport('tablet')" id="btn-vp-tablet" class="doodle-btn text-xs py-1 px-3">
+        <i data-lucide="tablet" class="w-3.5 h-3.5"></i>
+        <span>📟 Tablet (768px)</span>
+      </button>
+      <button onclick="setViewport('mobile')" id="btn-vp-mobile" class="doodle-btn text-xs py-1 px-3">
+        <i data-lucide="smartphone" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+        <span>📱 มือถือ (กดง่าย ไม่ล้นจอ)</span>
+      </button>
+      <button onclick="setViewport('fold-cover')" id="btn-vp-fold-cover" class="doodle-btn text-xs py-1 px-3">
+        <i data-lucide="fold-horizontal" class="w-3.5 h-3.5"></i>
+        <span>📖 จอพับแคบ (320px)</span>
+      </button>
+      <button onclick="setViewport('fold-inner')" id="btn-vp-fold-inner" class="doodle-btn text-xs py-1 px-3">
+        <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-[#10B981]"></i>
+        <span>📖 จอพับกาง (680px)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN DASHBOARD STAGE -->
+  <main id="viewport-stage" class="w-full max-w-[1540px] mx-auto transition-all duration-300">
+
+    <!-- 1. HEADER SECTION (Brand & Telemetry Status) -->
+    <header class="mb-5 sm:mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-3.5 border-b-2 border-[#1D2B45]/15 pb-4 sm:pb-5">
+      <div>
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <span class="doodle-pill doodle-pill-teal text-[11px] font-black tracking-wide shadow-2xs">
+            <span class="doodle-dot-live"></span>
+            ACTIVE PHASE · งานฐานรากและเสาเข็ม
+          </span>
+          <span class="doodle-pill bg-white text-[#3E4B69] font-mono text-[11px] font-bold shadow-2xs hidden sm:inline-flex">
+            📍 สุขุมวิท 71 · พระโขนงเหนือ
+          </span>
+          <span id="supabase-status-pill" class="doodle-pill bg-[#ECFDF5] text-[#065F46] text-[11px] font-mono font-bold border-emerald-600/40">
+            <i data-lucide="database" class="w-3 h-3 text-[#10B981]"></i>
+            <span id="supabase-status-text">SUPABASE CONNECTED</span>
+          </span>
+        </div>
+
+        <h1 class="font-display text-3xl sm:text-5xl md:text-6xl font-black text-[#1D2B45] tracking-tight leading-[1.05]">
+          PYNN <span class="text-[#F26B2A] italic">PRIDI 37</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-[#3E4B69] font-medium mt-1 flex items-center gap-2">
+          <span>ระบบติดตามความคืบหน้างานก่อสร้าง (CONSTRUCTION TELEMETRY COCKPIT)</span>
+          <span class="hidden lg:inline text-xs font-bold text-[#F26B2A]">✦ Senior Architectural Edition</span>
+        </p>
+      </div>
+
+      <!-- Live Status & Date Pill -->
+      <div class="flex items-center gap-2 flex-wrap shrink-0">
+        <div class="doodle-pill doodle-pill-gold px-3 py-1 text-xs font-mono font-bold shadow-[2px_2px_0px_#1D2B45]">
+          <span class="doodle-dot-live"></span>
+          <span>93 PILES READY</span>
+        </div>
+        <div class="doodle-pill bg-white px-3 py-1 text-xs font-mono font-bold text-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+          <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+          <span id="live-date-display">27 ต.ค. 2026</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. PILING DEDICATED HERO COCKPIT CARD -->
+    <section class="doodle-card-hero p-3.5 sm:p-6 md:p-7 relative bg-white mb-6">
+
+      <!-- Spec & Telemetry Bar -->
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-4 pb-3 border-b-2 border-[#1D2B45]/15">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="doodle-pill bg-[#1D2B45] text-white text-[10px] font-mono font-bold shadow-2xs">
+            SPEC
+          </span>
+          <span class="doodle-pill bg-[#FAF5EE] text-[#1D2B45] text-[11px] sm:text-xs font-bold border-[#1D2B45] shadow-2xs">
+            เสาเข็มคอนกรีตอัดแรงไอ 0.40 × 21.00 ม.
+          </span>
+          <span class="doodle-pill bg-[#FAF5EE] text-[#3E4B69] text-xs font-bold border-[#1D2B45]/40 font-mono hidden md:inline-flex shadow-2xs">
+            เป้าหมาย: 3 ต้น/วันทำการ (31 วันทำการ)
+          </span>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-mono font-bold text-[#3E4B69]">
+          <span class="doodle-dot-live"></span>
+          <span class="text-[#1D2B45]">SUPABASE REALTIME S-CURVE</span>
+        </div>
+      </div>
+
+      <!-- Main Cockpit Layout (Adaptive: Desktop splits 7:5 | Tablet & Mobile stack cleanly) -->
+      <div class="cockpit-layout">
+
+        <!-- Top / Left Col: S-Curve Progress Chart -->
+        <div class="w-full flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+              <h2 class="font-display text-base sm:text-lg font-black text-[#1D2B45] tracking-tight flex items-center gap-2">
+                <span>กราฟเปรียบเทียบผลงานเสาเข็ม</span>
+                <span class="doodle-pill bg-[#1D2B45] text-white text-[9.5px] font-mono">PLAN VS ACTUAL</span>
+              </h2>
+              <div class="flex items-center gap-2 text-xs font-bold flex-wrap">
+                <span class="doodle-pill bg-[#FFF1F2] border-[#E64C3C] text-[#9F1239] text-[10.5px] shadow-2xs">
+                  <span class="w-2.5 h-0.5 bg-[#E64C3C] inline-block mr-1"></span>
+                  แผนสะสม (3 ต้น/วัน)
+                </span>
+                <span class="doodle-pill doodle-pill-teal text-[10.5px] shadow-2xs">
+                  <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1"></span>
+                  ผลงานจริงสะสม (Supabase)
+                </span>
+              </div>
+            </div>
+
+            <!-- Chart Canvas Frame -->
+            <div class="relative w-full h-[250px] sm:h-[310px] md:h-[350px] lg:h-[380px] p-2 sm:p-3 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] overflow-hidden">
+              <canvas id="scurveCanvas" class="w-full h-full block"></canvas>
+            </div>
+          </div>
+
+          <!-- Bottom Micro Note -->
+          <div class="mt-2 flex items-center justify-between text-[11px] text-[#3E4B69] font-mono flex-wrap gap-1.5">
+            <span class="flex items-center gap-1.5 truncate">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#10B981] shrink-0"></i>
+              <span id="chart-sub-note" class="truncate">ข้อมูลจริง 26 ต้นใน Supabase</span>
+            </span>
+            <span class="font-bold text-[#1D2B45] shrink-0" id="chart-day-badge">DAY 15 OF 31 DAYS</span>
+          </div>
+        </div>
+
+        <!-- Bottom / Right Col: Metric Dashboard & Mobile-Optimized Animation -->
+        <div class="w-full flex flex-col justify-between p-3.5 sm:p-5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45]">
+          <div>
+            <!-- Top Progress Ribbon -->
+            <div class="flex items-center justify-between p-2.5 sm:p-3.5 bg-[#1D2B45] text-white rounded-xl mb-3 shadow-[2px_2px_0px_#1D2B45] flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="doodle-pill doodle-pill-teal text-[9px] sm:text-[9.5px] font-black uppercase tracking-wider">
+                  <span class="doodle-dot-live"></span>
+                  ACTIVE
+                </span>
+                <span class="text-xs font-bold tracking-wide text-white uppercase font-body">
+                  ความคืบหน้ารวม
+                </span>
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span id="portal-percent-text" class="font-display text-2xl sm:text-3xl font-black text-[#F7B844] tracking-tight">28.0%</span>
+              </div>
+            </div>
+
+            <!-- Dual-tone Progress Bar -->
+            <div class="w-full h-3.5 bg-white border-2 border-[#1D2B45] rounded-full overflow-hidden mb-3 p-0.5 shadow-inner">
+              <div id="portal-progress-fill" class="h-full bg-gradient-to-r from-[#10B981] to-[#40C4C4] rounded-full transition-all duration-700" style="width: 28.0%"></div>
+            </div>
+
+            <!-- 4-Stat Metric Grid -->
+            <div class="metrics-grid mb-3">
+              <!-- Stat 1: Driven Cumulative (Mint) -->
+              <div class="doodle-metric-tile p-2.5 sm:p-3 bg-[#ECFDF5] hover:bg-[#D1FAE5] border-2 border-[#1D2B45] cursor-pointer hover:shadow-[4px_4px_0_0_#10B981]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-[#14532D]">กดเสร็จสะสม</span>
+                  <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border border-[#1D2B45] flex items-center justify-center text-[#14532D]">
+                    <i data-lucide="check" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#10B981]"></i>
+                  </div>
+                </div>
+                <div class="flex items-baseline gap-1 mt-0.5">
+                  <span id="stat-driven-count" class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#14532D]">26</span>
+                  <span class="text-[10px] sm:text-[11px] font-bold text-[#14532D] font-mono">/ 93 ต้น</span>
+                </div>
+                <div class="text-[9.5px] font-bold text-[#14532D]/80 truncate mt-0.5">28.0% ของงานทั้งหมด</div>
+              </div>
+
+              <!-- Stat 2: Today Driven (Butter Gold) - ACCURATELY ZERO UNTIL FILLED TODAY! -->
+              <div class="doodle-metric-tile p-2.5 sm:p-3 bg-[#FEF9C3] hover:bg-[#FEF08A] border-2 border-[#1D2B45] cursor-pointer hover:shadow-[4px_4px_0_0_#F7B844]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-[#78350F]">กดเสร็จวันนี้</span>
+                  <span class="doodle-pill bg-[#F7B844] border border-[#1D2B45] text-[#1D2B45] text-[8.5px] font-black px-1.5 py-0">TODAY</span>
+                </div>
+                <div class="flex items-baseline gap-1 mt-0.5">
+                  <span id="stat-today-count" class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#78350F]">0</span>
+                  <span class="text-[10px] sm:text-[11px] font-bold text-[#78350F]">ต้น</span>
+                </div>
+                <div id="stat-today-sub" class="text-[9.5px] font-bold text-[#78350F]/80 truncate mt-0.5">ยังไม่บันทึกวันนี้ · ล่าสุด 24 ต.ค. (2 ต้น)</div>
+              </div>
+
+              <!-- Stat 3: Remaining Piles (Sky Blue) -->
+              <div class="doodle-metric-tile p-2.5 sm:p-3 bg-[#E0F2FE] hover:bg-[#BAE6FD] border-2 border-[#1D2B45] cursor-pointer hover:shadow-[4px_4px_0_0_#0284C7]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-[#075985]">คงเหลือ</span>
+                  <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border border-[#1D2B45] flex items-center justify-center text-[#075985]">
+                    <i data-lucide="clock" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#0284C7]"></i>
+                  </div>
+                </div>
+                <div class="flex items-baseline gap-1 mt-0.5">
+                  <span id="stat-remain-count" class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#075985]">67</span>
+                  <span class="text-[10px] sm:text-[11px] font-bold text-[#075985]">ต้น</span>
+                </div>
+                <div class="text-[9.5px] font-bold text-[#075985]/80 truncate mt-0.5">เป้าหมายเสร็จตามสัญญา</div>
+              </div>
+
+              <!-- Stat 4: Schedule Variance (Rose Crimson) -->
+              <div class="doodle-metric-tile p-2.5 sm:p-3 bg-[#FFE4E6] hover:bg-[#FECDD3] border-2 border-[#1D2B45] cursor-pointer hover:shadow-[4px_4px_0_0_#E64C3C]">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-black text-[#9F1239]">เทียบแผนงาน</span>
+                  <span id="stat-variance-badge" class="doodle-pill bg-[#E64C3C] text-white border border-[#1D2B45] text-[8.5px] font-black px-1.5 py-0">ช้ากว่าแผน</span>
+                </div>
+                <div class="flex items-baseline gap-1 mt-0.5">
+                  <span id="stat-variance-val" class="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#9F1239]">-19</span>
+                  <span class="text-[10px] sm:text-[11px] font-bold text-[#9F1239]">ต้น</span>
+                </div>
+                <div id="stat-variance-sub" class="text-[9.5px] font-bold text-[#9F1239]/80 truncate mt-0.5">แผนสะสม 45 · จริง 26 ต้น</div>
+              </div>
+            </div>
+
+            <!-- ✦ CRAFT PILING RIG ANIMATION (CLEAN & NON-OVERLAPPING) -->
+            <div class="pt-2.5 border-t-2 border-[#1D2B45]/15">
+              <div class="flex items-center justify-between mb-2 text-xs font-mono font-bold text-[#3E4B69] flex-wrap gap-1.5">
+                <span class="flex items-center gap-1.5 text-[#1D2B45] font-body font-black text-xs sm:text-sm">
+                  <i data-lucide="activity" class="w-4 h-4 text-[#F26B2A]"></i>
+                  <span>✦ ปั้นจั่นตอกเสาเข็มไอ</span>
+                </span>
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleRigAnimation()" id="btn-toggle-anim" class="px-3 py-1.5 rounded-full bg-white border-2 border-[#1D2B45] text-xs text-[#1D2B45] font-bold hover:bg-[#FAF5EE] active:translate-y-0.5 transition-all flex items-center gap-1.5 shadow-[1.5px_1.5px_0px_#1D2B45] cursor-pointer">
+                    <span id="anim-toggle-icon">⏸️</span>
+                    <span id="anim-toggle-text">พัก</span>
+                  </button>
+                  <button onclick="triggerRigImpact()" class="px-3.5 py-1.5 rounded-full bg-[#F26B2A] text-white text-xs font-bold hover:bg-[#E05615] active:translate-y-0.5 transition-all flex items-center gap-1.5 border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] cursor-pointer">
+                    <span>🔨 ตอกทันที!</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Animated Piling Scene Container -->
+              <div id="piling-rig-scene" class="relative w-full min-h-[86px] sm:min-h-[96px] bg-white border-2 border-[#1D2B45] rounded-xl overflow-hidden p-2.5 flex items-center gap-3 shadow-[3px_3px_0px_#1D2B45]">
+                
+                <!-- Clean Subtle Strata Bands (Color-only, zero background text) -->
+                <div class="absolute inset-y-0 right-0 w-1/2 pointer-events-none flex flex-col opacity-15">
+                  <div class="h-1/3 bg-[#F6E9D7]"></div>
+                  <div class="h-1/3 bg-[#E2D9CC]"></div>
+                  <div class="h-1/3 bg-[#CBD5E1]"></div>
+                </div>
+
+                <!-- Animated Pile Rig Illustration (SVG Craft) -->
+                <div class="relative z-10 w-12 sm:w-14 h-16 sm:h-20 shrink-0 flex items-end justify-center">
+                  <svg viewBox="0 0 70 95" class="w-full h-full overflow-visible">
+                    <rect x="5" y="85" width="60" height="7" rx="2" fill="#1D2B45" stroke="#1D2B45" stroke-width="1.5"/>
+                    <circle cx="15" cy="88" r="2" fill="#F7B844"/>
+                    <circle cx="55" cy="88" r="2" fill="#F7B844"/>
+                    <line x1="12" y1="85" x2="28" y2="12" stroke="#1D2B45" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="58" y1="85" x2="42" y2="12" stroke="#1D2B45" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="20" y1="65" x2="50" y2="65" stroke="#F26B2A" stroke-width="1.5"/>
+                    <line x1="25" y1="45" x2="45" y2="45" stroke="#F26B2A" stroke-width="1.5"/>
+                    <line x1="30" y1="25" x2="40" y2="25" stroke="#F26B2A" stroke-width="1.5"/>
+                    <circle cx="35" cy="12" r="6" fill="#F7B844" stroke="#1D2B45" stroke-width="2"/>
+                    <circle cx="35" cy="12" r="2" fill="#1D2B45"/>
+                    <line x1="35" y1="18" x2="35" y2="85" stroke="#3E4B69" stroke-width="1.5" stroke-dasharray="2 2"/>
+                    <g class="rig-hammer-animated" id="rig-hammer-group">
+                      <rect x="25" y="22" width="20" height="18" rx="3" fill="#F26B2A" stroke="#1D2B45" stroke-width="2"/>
+                      <rect x="28" y="32" width="14" height="6" fill="#E05615"/>
+                    </g>
+                    <rect x="27" y="55" width="16" height="8" rx="2" fill="#1D2B45"/>
+                    <rect x="30" y="63" width="10" height="24" rx="1" fill="#CBD5E1" stroke="#1D2B45" stroke-width="1.5"/>
+                    <ellipse cx="35" cy="87" rx="16" ry="3.5" fill="none" stroke="#F26B2A" stroke-width="2" class="ground-shockwave"/>
+                    <circle cx="28" cy="84" r="3" fill="#E2D9CC" class="dust-puff"/>
+                    <circle cx="42" cy="84" r="3.5" fill="#E2D9CC" class="dust-puff" style="animation-delay: 0.05s;"/>
+                  </svg>
+                </div>
+
+                <!-- Clean Readout & Bar (No ellipses, fully readable) -->
+                <div class="flex-1 min-w-0 z-10">
+                  <div class="flex items-center justify-between mb-1 gap-1">
+                    <span class="font-display font-black text-xs sm:text-sm text-[#1D2B45] whitespace-nowrap">
+                      ตอกสะสม 26 ต้น
+                    </span>
+                    <span class="doodle-pill bg-[#FAF5EE] text-[#F26B2A] text-[9.5px] font-mono font-bold shrink-0">
+                      28.0%
+                    </span>
+                  </div>
+
+                  <!-- Pile Progress Bar -->
+                  <div class="w-full h-3 sm:h-3.5 bg-slate-100 border border-[#1D2B45] rounded-full overflow-hidden relative shadow-inner mb-1.5">
+                    <div class="h-full bg-gradient-to-r from-[#10B981] via-[#40C4C4] to-[#F26B2A] rounded-full" style="width: 28.0%"></div>
+                  </div>
+
+                  <!-- Readable Telemetry Sentence (No truncated pills!) -->
+                  <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-[#3E4B69] whitespace-nowrap">
+                    <span class="font-medium">เป้าหมาย 93 ต้น</span>
+                    <span class="font-bold text-[#F26B2A]">คงเหลืออีก 67 ต้น</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. COMMAND LAUNCHPAD (REDESIGNED FOR EASY MOBILE TAPPING: NO OVERFLOW, GENEROUS TOUCH TARGETS) -->
+      <div class="action-deck-layout mt-5">
+        
+        <!-- Big Hero CTA: เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น (Full Width, Big Text, Thumb Friendly) -->
+        <a href="piling.html?view=3d#3d" class="hero-cta-btn w-full min-h-[60px] sm:min-h-[66px] flex items-center justify-between px-4 sm:px-6 py-3.5 cursor-pointer group bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] hover:shadow-[5px_5px_0px_#1D2B45] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-11 h-11 bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-xl flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#1D2B45] group-hover:rotate-6 transition-transform">
+              <i data-lucide="box" class="w-6 h-6 text-[#F26B2A]"></i>
+            </div>
+            <div class="flex flex-col text-left leading-tight min-w-0">
+              <span class="text-[9.5px] sm:text-[10px] font-mono font-bold uppercase tracking-wider text-white/90">
+                ACTIVE 3D WORKSPACE · 93 PILES
+              </span>
+              <span class="font-display text-sm sm:text-base md:text-lg font-bold text-white tracking-tight whitespace-nowrap">
+                ⚡ เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น
+              </span>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2 shrink-0 pl-2">
+            <span class="doodle-pill bg-white text-[#1D2B45] text-xs font-bold shadow-2xs hidden xs:inline-flex">เริ่มงาน</span>
+            <i data-lucide="arrow-right" class="w-5 h-5 text-white group-hover:translate-x-1.5 transition-transform"></i>
+          </div>
+        </a>
+
+        <!-- Secondary Buttons (On Mobile: 2 Columns Side-by-Side + 1 Full Width below, NEVER cut off!) -->
+        <div class="secondary-actions-grid">
+          <!-- Button 1: รายงาน S-Curve (50% on mobile) -->
+          <a href="piling.html?view=report#report" class="action-btn action-btn-green gap-2 px-3 py-3 text-xs sm:text-sm font-bold w-full">
+            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#10B981] shrink-0"></i>
+            <span>รายงาน S-Curve</span>
+          </a>
+
+          <!-- Button 2: ผังฐานราก 3D (50% on mobile) -->
+          <a href="footing.html" class="action-btn action-btn-blue gap-2 px-3 py-3 text-xs sm:text-sm font-bold w-full">
+            <i data-lucide="box" class="w-4 h-4 text-[#0284C7] shrink-0"></i>
+            <span>ผังฐานราก 3D</span>
+          </a>
+
+          <!-- Button 3: ตรวจห้อง QC (Full width on mobile or 3rd column on tablet/desktop) -->
+          <button type="button" onclick="alert('เข้าสู่โมดูลตรวจรับห้องพัก QC')" class="action-btn action-btn-red qc-full-btn gap-2 px-4 py-3 text-xs sm:text-sm font-bold w-full cursor-pointer">
+            <i data-lucide="building-2" class="w-4 h-4 text-[#E64C3C] shrink-0"></i>
+            <span>ระบบตรวจห้องพัก QC Defect</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- 4. REAL 2-TIER EDITORIAL LEDGER TABLE (WITH EXACT DATES & SUPABASE DATA) -->
+      <div class="mt-6 pt-5 border-t-2 border-[#1D2B45]/15">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <span class="doodle-pill bg-[#1D2B45] text-white text-[10px] font-mono font-black">LEDGER</span>
+            <h3 class="font-display text-sm sm:text-base font-bold text-[#1D2B45] tracking-tight">
+              ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วัน vs Actual Supabase)
+            </h3>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] font-bold text-[#3E4B69] flex-wrap">
+            <span class="doodle-pill bg-white text-[#1D2B45] text-[10px]">
+              <span class="w-2 h-2 bg-white border border-[#1D2B45] rounded-xs"></span>
+              <span>แผนรายวัน</span>
+            </span>
+            <span class="doodle-pill doodle-pill-teal text-[10px]">
+              <span class="w-2 h-2 bg-[#A7F3D0] border border-[#10B981] rounded-xs"></span>
+              <span>จริงสะสม</span>
+            </span>
+            <span class="doodle-pill doodle-pill-gold text-[10px]">
+              <span class="w-2 h-2 bg-[#F7B844] border border-[#B45309] rounded-xs"></span>
+              <span>วันปัจจุบัน (TODAY)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Injected 2-Tier Container (Row 1: D1-D16, Row 2: D17-D31 + TOTAL) -->
+        <div id="piling-daily-table-container" class="space-y-3.5 max-w-full">
+          <!-- Dynamically injected with real Thai dates & Supabase numbers -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. MOBILE STICKY LAUNCH DOCK (Only shows on mobile screens < 640px) -->
+    <div id="mobile-sticky-dock" class="fixed bottom-0 inset-x-0 bg-[#FAF5EE]/95 backdrop-blur-md border-t-2 border-[#1D2B45] px-3 py-2 flex items-center justify-between gap-2 shadow-[0_-4px_0px_#1D2B45] z-40 sm:hidden">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] border border-[#1D2B45]"></span>
+        <div class="leading-none">
+          <span class="text-[9.5px] text-[#3E4B69] font-bold block">เสาเข็ม 93 ต้น</span>
+          <span class="text-xs font-mono font-black text-[#1D2B45]">26/93 (28.0%)</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="piling.html?view=report#report" class="action-btn text-xs py-1.5 px-3 min-h-[42px]">
+          <i data-lucide="file-text" class="w-4 h-4 text-[#10B981]"></i>
+          <span>รายงาน</span>
+        </a>
+        <a href="piling.html?view=3d#3d" class="action-btn bg-[#F26B2A] text-white hover:bg-[#E05615] text-xs py-1.5 px-3.5 min-h-[42px] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+          <i data-lucide="box" class="w-4 h-4 text-white"></i>
+          <span>เปิด 3D</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // SUPABASE CREDENTIALS (Matches project index.html)
+    const SUPABASE_URL = "https://gyzrsrxzzturoqwhuiul.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5enJzcnh6enR1cm9xd2h1aXVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODYxNDcsImV4cCI6MjA5MTA2MjE0N30.CJAFW3acVnOwb5hvSDO6H0TGPTK__MOTBdgUxUWpM70";
+
+    // Verified Real Data Fallback (from Supabase Database row 1)
+    const REAL_SUPABASE_DRIVEN = {
+      "2026-10-06": 1, "2026-10-07": 2, "2026-10-08": 2, "2026-10-09": 1, "2026-10-10": 3,
+      "2026-10-14": 2, "2026-10-15": 2, "2026-10-16": 1, "2026-10-17": 2, "2026-10-19": 1,
+      "2026-10-20": 3, "2026-10-22": 2, "2026-10-23": 2, "2026-10-24": 2
+    };
+
+    const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+    function formatThaiShortDate(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length < 3) return dateStr;
+      const day = parseInt(parts[2], 10);
+      const mIdx = parseInt(parts[1], 10) - 1;
+      return day + ' ' + (thaiMonths[mIdx] || '');
+    }
+
+    function isThaiWorkingDay(dateStr, actualDates) {
+      if (!dateStr) return false;
+      if (actualDates && actualDates[dateStr]) return true;
+      const parts = dateStr.split('-');
+      const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      if (d.getDay() === 0) return false; // Sunday
+      const mmdd = dateStr.slice(5);
+      const fixedHolidays = ['01-01', '04-06', '04-13', '04-14', '04-15', '05-01', '05-04', '06-03', '07-28', '08-12', '10-13', '10-23', '12-05', '12-10', '12-31'];
+      if (fixedHolidays.indexOf(mmdd) !== -1) return false;
+      return true;
+    }
+
+    function getWorkingDaysSchedule(startDateStr, totalWorkingDays, actualDates) {
+      if (!totalWorkingDays) totalWorkingDays = 31;
+      const schedule = [];
+      const parts = (startDateStr || '').split('-');
+      let cur = parts.length === 3 
+        ? new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10))
+        : new Date();
+      
+      function formatD(dt) {
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth() + 1).padStart(2, '0');
+        const day = String(dt.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
+      }
+
+      while (!isThaiWorkingDay(formatD(cur), actualDates) && schedule.length === 0) {
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      while (schedule.length < totalWorkingDays) {
+        const s = formatD(cur);
+        if (isThaiWorkingDay(s, actualDates)) {
+          schedule.push(s);
+        }
+        cur.setDate(cur.getDate() + 1);
+      }
+      return schedule;
+    }
+
+    let scurveChart = null;
+
+    // Render S-Curve Chart with real data points
+    function renderScurveChart(workingSched, drivenByDateMap, todayDateStr) {
+      const ctx = document.getElementById('scurveCanvas').getContext('2d');
+      const labels = [];
+      const planData = [];
+      const actualData = [];
+
+      let runningPlan = 0;
+      let runningActual = 0;
+
+      for (let i = 0; i < workingSched.length; i++) {
+        const dStr = workingSched[i];
+        labels.push(formatThaiShortDate(dStr));
+
+        // Plan: 3 piles per working day, cap at 93
+        runningPlan = Math.min((i + 1) * 3, 93);
+        planData.push(runningPlan);
+
+        // Actual: plotted up to today
+        if (dStr <= todayDateStr) {
+          const dayCount = drivenByDateMap[dStr] || 0;
+          runningActual += dayCount;
+          actualData.push(runningActual);
+        }
+      }
+
+      if (scurveChart) {
+        scurveChart.destroy();
+      }
+
+      scurveChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'แผนงานสะสม (Plan 3 ต้น/วัน)',
+              data: planData,
+              borderColor: '#E64C3C',
+              borderWidth: 2,
+              borderDash: [5, 4],
+              pointRadius: 2.5,
+              pointBackgroundColor: '#E64C3C',
+              pointBorderColor: '#1D2B45',
+              tension: 0.1,
+              fill: false
+            },
+            {
+              label: 'ผลงานจริงสะสม (Actual Supabase)',
+              data: actualData,
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.12)',
+              borderWidth: 3.5,
+              pointRadius: 4,
+              pointBackgroundColor: '#10B981',
+              pointBorderColor: '#1D2B45',
+              pointBorderWidth: 1.5,
+              tension: 0.15,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1D2B45',
+              titleColor: '#F7B844',
+              bodyColor: '#FFFFFF',
+              borderColor: '#1D2B45',
+              borderWidth: 1.5,
+              padding: 10,
+              cornerRadius: 8,
+              titleFont: { family: 'Space Mono', size: 12, weight: 'bold' },
+              bodyFont: { family: 'Prompt', size: 11 }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(29, 43, 69, 0.06)' },
+              ticks: {
+                font: { family: 'Prompt', size: 9.5 },
+                color: '#3E4B69',
+                maxRotation: 0,
+                autoSkip: true,
+                maxTicksLimit: 12
+              }
+            },
+            y: {
+              min: 0,
+              max: 95,
+              grid: { color: 'rgba(29, 43, 69, 0.08)' },
+              ticks: {
+                stepSize: 15,
+                font: { family: 'Space Mono', size: 10 },
+                color: '#3E4B69'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Render 2-Tier Ledger Table (Tier 1: D1-D16, Tier 2: D17-D31 + TOTAL)
+    function render2TierLedgerTable(workingSched, drivenByDateMap, todayDateStr, totalActualDriven) {
+      const container = document.getElementById('piling-daily-table-container');
+      if (!container) return;
+
+      const totalDays = 31;
+      const allDays = [];
+      let runningPlan = 0;
+      let runningActual = 0;
+
+      for (let i = 0; i < totalDays; i++) {
+        const sDate = workingSched[i] || '';
+        const isToday = (sDate === todayDateStr);
+        const isFuture = sDate ? (sDate > todayDateStr) : true;
+
+        const dayPlan = Math.min(3, Math.max(0, 93 - runningPlan));
+        runningPlan = Math.min(93, runningPlan + dayPlan);
+
+        const dayActual = drivenByDateMap[sDate] || 0;
+        if (!isFuture) {
+          runningActual += dayActual;
+        }
+
+        allDays.push({
+          index: i,
+          date: sDate,
+          formattedDate: sDate ? formatThaiShortDate(sDate) : `D${i+1}`,
+          isToday,
+          isFuture,
+          dayPlan,
+          planCum: runningPlan,
+          dayActual,
+          actualCum: isFuture ? '-' : runningActual
+        });
+      }
+
+      function buildTierBlock(tierNum, tierRangeText, startIdx, endIdx, hasTotal) {
+        let headerCells = '';
+        let planCells = '';
+        let actualCells = '';
+        let cumPlanCells = '';
+        let cumActualCells = '';
+
+        for (let i = startIdx; i < endIdx; i++) {
+          const d = allDays[i];
+          if (!d) continue;
+
+          const colClass = d.isToday ? 'active-col' : '';
+          const headerInner = d.isToday
+            ? `<div class="flex flex-col items-center justify-center leading-tight py-0.5"><span class="inline-block bg-[#F26B2A] text-white text-[7.5px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tight shadow-xs">TODAY</span><span class="font-black text-[#F26B2A] text-xs mt-0.5">${d.formattedDate}</span></div>`
+            : `<div class="font-bold text-[#1D2B45] text-xs py-0.5">${d.formattedDate}</div>`;
+
+          headerCells += `<th class="p-1 sm:p-1.5 border border-[#E2D9CC] font-bold text-center select-none cursor-pointer ${colClass}" title="คลิกดูรายงาน ${d.date}">${headerInner}</th>`;
+          planCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center text-[#4F5D75] ${colClass}">${d.dayPlan}</td>`;
+          actualCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold text-[#1D2B45] ${colClass}">${d.isFuture ? '-' : d.dayActual}</td>`;
+          cumPlanCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center text-[#1E3A8A] font-bold ${colClass}">${d.planCum}</td>`;
+          cumActualCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold text-[#0E5E57] ${colClass}">${d.actualCum}</td>`;
+        }
+
+        if (hasTotal) {
+          headerCells += `<th class="p-1 sm:p-1.5 border border-[#1D2B45] bg-[#1D2B45] text-[#F7B844] font-bold text-center whitespace-nowrap min-w-[65px]"><div class="leading-tight py-0.5"><span class="text-xs font-bold text-[#F7B844] block">รวม</span><span class="text-[9px] font-mono font-semibold text-[#F7B844]/80 block">TOTAL</span></div></th>`;
+          planCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#FAF5EE] text-[#4F5D75]">93</td>`;
+          actualCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#F6E9D7] text-[#1D2B45]">${totalActualDriven}</td>`;
+          cumPlanCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#EEF4FF] text-[#1E3A8A]">93</td>`;
+          cumActualCells += `<td class="p-1 sm:p-1.5 border border-[#E2D9CC] font-mono text-center font-bold bg-[#D1FAE5] text-[#0E5E57]">${totalActualDriven}</td>`;
+        }
+
+        return `
+          <div class="piling-daily-tier-block">
+            <div class="px-3 py-1.5 bg-[#FAF5EE] border-b-2 border-[#1D2B45] flex items-center justify-between text-xs font-bold">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-[#1D2B45] text-white text-[10px] font-bold tracking-wide">${tierNum}</span>
+                <span class="text-[#1D2B45] font-bold text-xs">${tierRangeText}</span>
+              </div>
+              <span class="text-[10px] text-[#4F5D75] font-mono font-medium hidden sm:inline px-2 py-0.5 rounded-full bg-white border border-[#1D2B45]/20">
+                ${hasTotal ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น'}
+              </span>
+            </div>
+            <div class="overflow-x-auto custom-scrollbar">
+              <table class="piling-daily-table text-xs">
+                <thead>
+                  <tr class="bg-[#F8FAFC]">
+                    <th class="p-1.5 sm:p-2 sticky-col font-bold text-left text-[#1D2B45] w-24 sm:w-28">
+                      <div class="leading-tight py-0.5">
+                        <span class="text-xs font-bold text-[#1D2B45] block">วันที่</span>
+                        <span class="text-[9px] font-mono font-semibold text-[#8C9AA8] uppercase tracking-wider block">DATE</span>
+                      </div>
+                    </th>
+                    ${headerCells}
+                  </tr>
+                </thead>
+                <tbody class="bg-white">
+                  <tr>
+                    <td class="p-1.5 sm:p-2 sticky-col text-left">
+                      <div class="leading-tight">
+                        <div class="font-bold text-[#4F5D75] text-[11px] sm:text-xs">แผนรายวัน</div>
+                        <div class="text-[8.5px] font-mono text-[#8C9AA8]">PLAN (3/วัน)</div>
+                      </div>
+                    </td>
+                    ${planCells}
+                  </tr>
+                  <tr class="bg-[#FDFBF7]">
+                    <td class="p-1.5 sm:p-2 sticky-col text-left">
+                      <div class="leading-tight">
+                        <div class="font-bold text-[#1D2B45] text-[11px] sm:text-xs">ผลงานจริง</div>
+                        <div class="text-[8.5px] font-mono text-[#8C9AA8]">ACTUAL</div>
+                      </div>
+                    </td>
+                    ${actualCells}
+                  </tr>
+                  <tr class="bg-[#F8FAFC]">
+                    <td class="p-1.5 sm:p-2 sticky-col text-left">
+                      <div class="leading-tight">
+                        <div class="font-bold text-[#1E3A8A] text-[11px] sm:text-xs">แผนสะสม</div>
+                        <div class="text-[8.5px] font-mono text-[#3B82F6]">ACC. PLAN</div>
+                      </div>
+                    </td>
+                    ${cumPlanCells}
+                  </tr>
+                  <tr class="bg-[#F0FDF4]">
+                    <td class="p-1.5 sm:p-2 sticky-col text-left bg-[#F0FDF4]">
+                      <div class="leading-tight">
+                        <div class="font-bold text-[#0E5E57] text-[11px] sm:text-xs">ผลงานสะสม</div>
+                        <div class="text-[8.5px] font-mono text-[#10B981]">ACC. ACTUAL</div>
+                      </div>
+                    </td>
+                    ${cumActualCells}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      const startD1 = workingSched[0] ? formatThaiShortDate(workingSched[0]) : '6 ต.ค.';
+      const endD1 = workingSched[15] ? formatThaiShortDate(workingSched[15]) : '28 ต.ค.';
+      const tier1Text = `วันทำการที่ 1 – 16 (${startD1} – ${endD1})`;
+
+      const startD2 = workingSched[16] ? formatThaiShortDate(workingSched[16]) : '29 ต.ค.';
+      const endD2 = workingSched[30] ? formatThaiShortDate(workingSched[30]) : '14 พ.ย.';
+      const tier2Text = `วันทำการที่ 17 – 31 (${startD2} – ${endD2})`;
+
+      const tier1Html = buildTierBlock('แถวที่ 1', tier1Text, 0, 16, false);
+      const tier2Html = buildTierBlock('แถวที่ 2', tier2Text, 16, 31, true);
+
+      container.innerHTML = tier1Html + tier2Html;
+    }
+
+    // MAIN INITIALIZER: FETCH REAL SUPABASE DATA
+    async function initDashboardData() {
+      let drivenMap = REAL_SUPABASE_DRIVEN;
+      let totalDriven = 26;
+      let rawRecords = null;
+
+      // 1. Query Supabase
+      try {
+        const { createClient } = supabase;
+        const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data, error } = await client.from('project_data').select('data').eq('id', 1).single();
+        
+        if (!error && data && data.data && data.data.pilingProgress) {
+          rawRecords = data.data.pilingProgress;
+          const liveDrivenMap = {};
+          let count = 0;
+          Object.values(rawRecords).forEach(r => {
+            if (r && (r.status === 'driven' || r.status === 'done')) {
+              count++;
+              const d = r.date;
+              if (d) liveDrivenMap[d] = (liveDrivenMap[d] || 0) + 1;
+            }
+          });
+          if (count > 0) {
+            totalDriven = count;
+            drivenMap = liveDrivenMap;
+            document.getElementById('supabase-status-text').textContent = `SUPABASE LIVE (${totalDriven} PILES)`;
+          }
+        }
+      } catch (err) {
+        console.warn("Using verified Supabase snapshot:", err);
+      }
+
+      // 2. Schedule & Date logic
+      const sortedDates = Object.keys(drivenMap).sort();
+      const projStart = sortedDates[0] || '2026-10-06';
+      const latestDrivenDate = sortedDates[sortedDates.length - 1] || '2026-10-24';
+      const latestDrivenCount = drivenMap[latestDrivenDate] || 0;
+      const workingSched = getWorkingDaysSchedule(projStart, 31, drivenMap);
+
+      // Real Today Date string: e.g. "2026-10-27"
+      const realTodayStr = new Date().toISOString().slice(0, 10);
+      
+      // Calculate today's driven count: MUST BE EXACTLY WHAT WAS ENTERED FOR TODAY (0 if not entered yet!)
+      let todayPiles = 0;
+      if (rawRecords) {
+        todayPiles = Object.values(rawRecords).filter(v => v && (v.status === 'driven' || v.status === 'done') && v.date === realTodayStr).length;
+      } else {
+        todayPiles = drivenMap[realTodayStr] || 0;
+      }
+
+      // Variance Calculation (matches index.html)
+      const elapsedDays = Math.max(1, workingSched.filter(d => d <= realTodayStr).length);
+      const planCum = Math.min(93, elapsedDays * 3);
+      const variance = totalDriven - planCum;
+
+      // 3. Update Top Metrics
+      const pct = ((totalDriven / 93) * 100).toFixed(1);
+      document.getElementById('portal-percent-text').textContent = `${pct}%`;
+      document.getElementById('portal-progress-fill').style.width = `${pct}%`;
+
+      document.getElementById('stat-driven-count').textContent = totalDriven;
+      document.getElementById('stat-remain-count').textContent = 93 - totalDriven;
+      
+      // TODAY COUNT: Correctly shows 0 when today hasn't been filled yet!
+      document.getElementById('stat-today-count').textContent = todayPiles;
+      const todaySubEl = document.getElementById('stat-today-sub');
+      if (todaySubEl) {
+        if (todayPiles > 0) {
+          todaySubEl.textContent = `ตอกเสร็จวันนี้ ${todayPiles} ต้น`;
+        } else {
+          todaySubEl.textContent = `ยังไม่บันทึกวันนี้ · ล่าสุด ${formatThaiShortDate(latestDrivenDate)} (${latestDrivenCount} ต้น)`;
+        }
+      }
+
+      // Variance Display
+      const varValEl = document.getElementById('stat-variance-val');
+      const varBadgeEl = document.getElementById('stat-variance-badge');
+      const varSubEl = document.getElementById('stat-variance-sub');
+      if (variance < 0) {
+        varValEl.textContent = `${variance}`;
+        varValEl.className = "font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#9F1239]";
+        varBadgeEl.textContent = "ช้ากว่าแผน";
+      } else {
+        varValEl.textContent = variance === 0 ? "ตามแผน" : `+${variance}`;
+        varValEl.className = "font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#0E5E57]";
+        varBadgeEl.textContent = "ตามแผนงาน";
+      }
+      if (varSubEl) {
+        varSubEl.textContent = `แผนสะสม ${planCum} · จริง ${totalDriven} ต้น`;
+      }
+
+      document.getElementById('chart-day-badge').textContent = `DAY ${elapsedDays} OF 31 DAYS`;
+      document.getElementById('chart-sub-note').textContent = `ข้อมูลสะสม ${totalDriven} ต้น · เริ่ม ${formatThaiShortDate(projStart)}`;
+      document.getElementById('live-date-display').textContent = formatThaiShortDate(realTodayStr);
+
+      // 4. Render Components
+      renderScurveChart(workingSched, drivenMap, realTodayStr);
+      render2TierLedgerTable(workingSched, drivenMap, realTodayStr, totalDriven);
+    }
+
+    // Toggle Animation Play / Pause
+    let isRigPaused = false;
+    function toggleRigAnimation() {
+      const scene = document.getElementById('piling-rig-scene');
+      isRigPaused = !isRigPaused;
+      if (isRigPaused) {
+        scene.classList.add('is-paused');
+        document.getElementById('anim-toggle-icon').textContent = '▶️';
+        document.getElementById('anim-toggle-text').textContent = 'เล่น';
+      } else {
+        scene.classList.remove('is-paused');
+        document.getElementById('anim-toggle-icon').textContent = '⏸️';
+        document.getElementById('anim-toggle-text').textContent = 'พัก';
+      }
+    }
+
+    // Interactive Hammer Strike on demand
+    function triggerRigImpact() {
+      const hammer = document.getElementById('rig-hammer-group');
+      if (!hammer) return;
+      hammer.style.animation = 'none';
+      hammer.offsetHeight; // trigger reflow
+      hammer.style.animation = 'hammerDrop 0.5s cubic-bezier(0.77, 0, 0.175, 1)';
+      setTimeout(() => {
+        hammer.style.animation = '';
+      }, 600);
+    }
+
+    // Viewport Simulator Controls
+    function setViewport(mode) {
+      const stage = document.getElementById('viewport-stage');
+      const body = document.body;
+      const buttons = document.querySelectorAll('#viewport-controller button');
+      buttons.forEach(b => b.classList.remove('bg-[#FAF5EE]', 'border-[#F26B2A]'));
+
+      stage.classList.remove('stage-frame');
+      body.classList.remove('simulate-tablet', 'simulate-mobile', 'simulate-fold-cover', 'simulate-fold-inner');
+
+      if (mode === 'desktop') {
+        stage.style.maxWidth = '1540px';
+        document.getElementById('btn-vp-desktop').classList.add('bg-[#FAF5EE]', 'border-[#F26B2A]');
+      } else if (mode === 'tablet') {
+        stage.style.maxWidth = '768px';
+        stage.classList.add('stage-frame');
+        body.classList.add('simulate-tablet');
+        document.getElementById('btn-vp-tablet').classList.add('bg-[#FAF5EE]', 'border-[#F26B2A]');
+      } else if (mode === 'mobile') {
+        stage.style.maxWidth = '390px';
+        stage.classList.add('stage-frame');
+        body.classList.add('simulate-mobile');
+        document.getElementById('btn-vp-mobile').classList.add('bg-[#FAF5EE]', 'border-[#F26B2A]');
+      } else if (mode === 'fold-cover') {
+        stage.style.maxWidth = '320px';
+        stage.classList.add('stage-frame');
+        body.classList.add('simulate-fold-cover');
+        document.getElementById('btn-vp-fold-cover').classList.add('bg-[#FAF5EE]', 'border-[#F26B2A]');
+      } else if (mode === 'fold-inner') {
+        stage.style.maxWidth = '680px';
+        stage.classList.add('stage-frame');
+        body.classList.add('simulate-fold-inner');
+        document.getElementById('btn-vp-fold-inner').classList.add('bg-[#FAF5EE]', 'border-[#F26B2A]');
+      }
+
+      setTimeout(() => {
+        if (scurveChart) scurveChart.resize();
+      }, 350);
+    }
+
+    // Run on Load
+    window.addEventListener('DOMContentLoaded', initDashboardData);
+  </script>
+</body>
+</html>

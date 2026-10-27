@@ -8,48 +8,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Prompt:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,700&display=swap');
 
 :root {
-  /* --- 1. Manga Comic Ink & Canvas (สถาปัตยกรรมกระดาษไข หมึกดำเข้มคม) --- */
-  --manga-ink: #0f172a;           /* Deep Charcoal Slate Ink - คมชัด หนักแน่น ไม่จืด */
+  /* --- 1. Manga Comic Ink & Canvas (สไตล์ 2D Manga หมึกคมชัด สบายตา) --- */
+  --manga-ink: #0f172a;           /* Deep Slate Ink - เส้นหมึกคมชัด 2D ไม่จืด */
   --manga-ink-dark: #020617;
   --manga-paper: #ffffff;
-  --manga-canvas-bg: #f8fafc;     /* Soft Drafting Off-White สบายตา ไม่สว่างโร่ */
+  --manga-canvas-bg: #f8fafc;     /* Soft Drafting Off-White สบายตา */
   --manga-ink-subtle: #475569;    /* Technical Slate Subtitle */
   --manga-ink-muted: #64748b;     /* Technical Muted Caption */
 
-  /* --- 2. Architectural Manga Semantic Pairs (ชุดคู่สีที่สบายตาลงตัว ไม่แย่งสายตา) --- */
+  /* --- 2. 2D MANGA PASTEL HARMONIC PALETTE (ชุดคู่สี Pastel สบายตาลงตัว คมด้วยเส้นหมึก 2D) --- */
   
-  /* Green Harmonic (เสร็จสิ้น / ปกติ / ผ่านเกณฑ์ QA / เสาเข็มที่กดแล้ว) */
-  --manga-green: #059669;         /* Emerald 600 - มรกตลึก สบายตา */
-  --manga-emerald: #059669;
-  --manga-green-ink: #064e3b;     /* Deep Forest Ink */
-  --manga-green-soft: #f0fdf4;    /* Mint Vellum Tint */
-  --manga-green-border: #10b981;  /* Emerald Line */
-  --manga-green-bold: #047857;
+  /* Mint Harmonic (เสร็จสิ้น / ปกติ / เสาเข็มที่กดแล้ว / ผ่านเกณฑ์) */
+  --manga-green: #10b981;         /* Pastel Emerald Green */
+  --manga-emerald: #10b981;
+  --manga-green-ink: #14532d;     /* Dark Forest Ink for high legibility */
+  --manga-green-soft: #dcfce7;    /* Pastel Mint Tint */
+  --manga-green-border: #86efac;
+  --manga-green-bold: #059669;
 
-  /* Amber Harmonic (กำลังดำเนินการ / รอดำเนินการ / ค่า PCO ในแบบ / Daily Report) */
-  --manga-amber: #d97706;         /* Honey Ochre Amber - นุ่มตา ไม่แสบตา */
-  --manga-yellow: #d97706;
-  --manga-yellow-ink: #78350f;    /* Warm Umber Ink */
-  --manga-yellow-soft: #fffbeb;   /* Warm Linen Tint */
-  --manga-yellow-border: #f59e0b; /* Amber Line */
+  /* Butter / Amber Harmonic (กำลังดำเนินการ / รอดำเนินการ / สถิติสำคัญ) */
+  --manga-amber: #f59e0b;         /* Pastel Golden Amber */
+  --manga-yellow: #f59e0b;
+  --manga-yellow-ink: #78350f;    /* Dark Warm Umber Ink */
+  --manga-yellow-soft: #fef9c3;   /* Pastel Butter Tint */
+  --manga-yellow-border: #fde047;
 
-  /* Red Harmonic (คลาดเคลื่อนเกินระยะยอมรับ / จุดบกพร่อง Defect / แจ้งเตือนด่วน) */
-  --manga-red: #dc2626;           /* Persimmon Crimson - หนักแน่น ชัดเจน */
-  --manga-rose-ink: #991b1b;      /* Deep Wine Ink */
-  --manga-rose-soft: #fef2f2;     /* Soft Blush Tint */
-  --manga-rose-border: #ef4444;   /* Crimson Line */
+  /* Blush / Rose Harmonic (แจ้งเตือน / เกินระยะยอมรับ / Defect / เขตที่ดิน) */
+  --manga-red: #f43f5e;           /* Pastel Coral Rose */
+  --manga-rose-ink: #9f1239;      /* Dark Wine Ink */
+  --manga-rose-soft: #ffe4e6;     /* Pastel Blush Tint */
+  --manga-rose-border: #fecdd3;
 
-  /* Blue / Cyan Harmonic (ข้อมูลแบบ 3D / พิกัด N,E / เลเยอร์ / มุมมองกล้อง) */
-  --manga-blue: #2563eb;          /* Blueprint Cobalt */
-  --manga-cyan: #0284c7;          /* Sky Technical Accent */
-  --manga-blue-ink: #1e3a8a;      /* Deep Navy Ink */
-  --manga-blue-soft: #eff6ff;     /* Ice Blueprint Tint */
-  --manga-blue-border: #3b82f6;   /* Cobalt Line */
+  /* Sky / Blue Harmonic (แบบ 3D / พิกัด N,E / เลเยอร์ / มุมมองกล้อง) */
+  --manga-blue: #0284c7;          /* Pastel Blueprint Sky */
+  --manga-cyan: #06b6d4;
+  --manga-blue-ink: #075985;      /* Dark Navy Ink */
+  --manga-blue-soft: #e0f2fe;     /* Pastel Ice Sky Tint */
+  --manga-blue-border: #93c5fd;
 
-  --manga-coral: #ea580c;         /* Milestone Coral Accent */
-  --manga-purple: #7c3aed;
+  /* Peach / Coral Harmonic (ท่อ & บ่อพัก ค.ส.ล. / Milestone) */
+  --manga-peach: #ea580c;
+  --manga-peach-ink: #7c2d12;     /* Dark Terracotta Ink */
+  --manga-peach-soft: #ffedd5;    /* Pastel Peach Tint */
+  --manga-peach-border: #fed7aa;
+  --manga-coral: #ea580c;
 
-  /* --- 3. 2D Layer Borders & Zero-Blur Block Shadows (เส้นหมึก 2px & เงาบล็อกคมกริบ) --- */
+  /* Lavender Harmonic (ตัวกรองสถานะ / เลเยอร์พิเศษ) */
+  --manga-purple: #9333ea;
+  --manga-purple-ink: #581c87;
+  --manga-purple-soft: #f3e8ff;   /* Pastel Lavender Tint */
+  --manga-purple-border: #d8b4fe;
+
+  /* Slate Harmonic (กริด & มิติ CAD) */
+  --manga-slate-soft: #f1f5f9;
+  --manga-slate-border: #cbd5e1;
+  --manga-slate-ink: #1e293b;
+
+  /* --- 3. 2D Layer Borders & Zero-Blur Block Shadows (เส้นหมึก 2px & เงาบล็อก 2D คมกริบ) --- */
   --border-comic-xs: 1.5px solid var(--manga-ink);
   --border-comic-sm: 2px solid var(--manga-ink);
   --border-comic: 2px solid var(--manga-ink);
@@ -57,12 +72,12 @@
 
   --shadow-comic-xs: 1.5px 1.5px 0px var(--manga-ink);
   --shadow-comic-sm: 2px 2px 0px var(--manga-ink);
-  --shadow-comic: 3px 3px 0px var(--manga-ink);
-  --shadow-comic-lg: 4.5px 4.5px 0px var(--manga-ink);
-  --shadow-comic-xl: 6px 6px 0px var(--manga-ink);
+  --shadow-comic: 2.5px 2.5px 0px var(--manga-ink);
+  --shadow-comic-lg: 4px 4px 0px var(--manga-ink);
+  --shadow-comic-xl: 5.5px 5.5px 0px var(--manga-ink);
   --shadow-comic-2xl: 8px 8px 0px var(--manga-ink);
 
-  /* --- 4. SHARP RECTILINEAR GEOMETRY (เหลี่ยม 100% ไร้ความโค้งมน) --- */
+  /* --- 4. 2D MANGA POP RADIUS (เหลี่ยมคม 100% สไตล์ 2D Manga Blueprint ไม่โค้งมน) --- */
   --radius-comic-xs: 0px;
   --radius-comic-sm: 0px;
   --radius-comic: 0px;
@@ -70,13 +85,11 @@
   --radius-comic-xl: 0px;
 
   /* --- 5. Typography Stacks --- */
-  /* ฟอนต์มีหัว Sarabun: สำหรับเครื่องมือ, เมนูควบคุม, ตาราง, และหน้ารายงาน อ่านสบายตา */
   --font-formal-body: 'Sarabun', 'TH Sarabun New', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
-  /* ฟอนต์ดิสเพลย์ Bangers: สำหรับตัวเลข KPI มังงะตัวใหญ่ สติกเกอร์ และข้อความเสียง */
   --font-manga-display: 'Bangers', cursive, 'Prompt', sans-serif;
   --font-manga-mono: 'Space Mono', 'JetBrains Mono', ui-monospace, monospace;
 
-  /* --- 6. Flat Pop Compatibility Bridge (Sync across piling.html and index.html) --- */
+  /* --- 6. Flat Pop Compatibility Bridge --- */
   --fp-paper: var(--manga-paper);
   --fp-bg: var(--manga-canvas-bg);
   --fp-ink: var(--manga-ink);
@@ -107,74 +120,212 @@
   --fp-yellow-border: var(--manga-yellow-border);
 
   --fp-coral: var(--manga-coral);
-  --fp-coral-ink: #9a3412;
+  --fp-coral-ink: var(--manga-peach-ink);
 }
 
 /* ==========================================================================
-   GLOBAL RECTILINEAR OVERRIDE (ปรับ MANGA แบบเหลี่ยม 100% ไม่โค้งมน)
+   2D MANGA ARCHITECTURAL RECTILINEAR SYSTEM (/impeccable)
+   100% Sharp 90° Corners · Zero Border Radius · Hard Layered Offset Shadows
+   Eye-Comfortable Harmonious Pastel Palette matching 2-Tier Daily Table
    ========================================================================== */
-.manga-card,
-.pop-card,
-.piling-focus-hero-card,
-.piling-telemetry-console,
-.piling-metric-tile,
-.manga-roadmap-card,
-.workflow-card,
-.hdr-btn,
-.hdr-btn-icon,
-.hdr-cluster,
-.pop-btn,
-.pop-btn-primary,
-.pop-btn-green,
-.pop-btn-yellow,
-.pop-btn-blue,
-.pop-btn-rose,
-.manga-btn,
-.manga-sticker,
-.manga-chip,
-.manga-chip-badge,
-.hero-cta-btn,
-.floating-hud,
-#sidebar-main-console,
-.sidebar-tab-btn,
-.sidebar-tab-pane,
-#pile-card,
-#inspector-drawer,
-#mobile-thumb-bar,
-.mobile-thumb-bar,
-.modal-card,
-.comic-card,
-.comic-btn,
-#main-app-container,
-#report-page-card,
-#report-header-bar,
-#rep-header-logo,
-#rep-header-tag,
-#rep-today-table,
-#menu-tables-dropdown,
-button:not(.keep-circle),
-input,
-select,
-textarea,
-dialog,
-.rounded,
+
+/* 1. Universal Sharp Geometry Rule: Eliminates all rounded pill/corner aesthetics */
+*,
+*::before,
+*::after,
+.rounded-none,
+.rounded-2xs,
+.rounded-xs,
 .rounded-sm,
+.rounded,
 .rounded-md,
 .rounded-lg,
 .rounded-xl,
 .rounded-2xl,
 .rounded-3xl,
-.rounded-full:not(.status-led):not(.led-pulse) {
+.rounded-full,
+.rounded-t-xl,
+.rounded-b-xl,
+.rounded-t-lg,
+.rounded-b-lg,
+.rounded-t-md,
+.rounded-b-md,
+.rounded-t-[10px],
+.rounded-t-[11px],
+header,
+nav,
+button,
+input,
+select,
+textarea,
+table,
+th,
+td,
+.manga-card,
+.pop-card,
+.comic-card,
+.layer-card,
+.modal-card,
+.piling-focus-hero-card,
+.piling-telemetry-console,
+.piling-metric-tile,
+.manga-roadmap-card,
+.workflow-card,
+#sidebar-main-console,
+#report-page-card,
+#report-header-bar,
+#report-sec-plan,
+#report-sec-plan-head,
+#report-sec-scurve,
+#report-sec-scurve-head,
+#report-sec-table,
+#report-sec-table-head,
+#pile-card,
+.piling-daily-tier-block {
   border-radius: 0px !important;
 }
 
-/* Exception: Small micro status pulse dots stay as circular LEDs */
-.status-led,
-.led-pulse,
-span[class*="animate-pulse"].w-1\.5,
-span[class*="animate-pulse"].w-2 {
-  border-radius: 9999px !important;
+/* 2. Hard Layered Block Shadows: Zero blur solid slate ink shadows */
+.shadow-2xs,
+.shadow-xs {
+  box-shadow: 1.5px 1.5px 0px var(--manga-ink, #0f172a) !important;
 }
+
+.shadow-sm {
+  box-shadow: 2px 2px 0px var(--manga-ink, #0f172a) !important;
+}
+
+.shadow,
+.shadow-md {
+  box-shadow: 2.5px 2.5px 0px var(--manga-ink, #0f172a) !important;
+}
+
+.shadow-lg {
+  box-shadow: 3.5px 3.5px 0px var(--manga-ink, #0f172a) !important;
+}
+
+.shadow-xl,
+.shadow-2xl {
+  box-shadow: 4.5px 4.5px 0px var(--manga-ink, #0f172a) !important;
+}
+
+/* 3. Surface Borders & Cards */
+.manga-card,
+.pop-card,
+.comic-card,
+.layer-card,
+.modal-card,
+.piling-daily-tier-block,
+#sidebar-main-console,
+#report-page-card,
+#report-header-bar,
+#report-sec-plan,
+#report-sec-scurve,
+#report-sec-table,
+#pile-card {
+  border-radius: 0px !important;
+  border: 2px solid var(--manga-ink, #0f172a) !important;
+  box-shadow: 2.5px 2.5px 0px var(--manga-ink, #0f172a) !important;
+  background-color: #ffffff;
+}
+
+/* Floating Modals Elevation */
+.modal-card,
+#modal-quick-select > div,
+#modal-cotable > div,
+#modal-pile-lengths > div,
+#modal-pile-summary-report > div,
+#modal-export-image > div,
+#modal-pco-inspector > div {
+  border-radius: 0px !important;
+  border: 2.5px solid var(--manga-ink, #0f172a) !important;
+  box-shadow: 5px 5px 0px var(--manga-ink, #0f172a) !important;
+}
+
+/* 4. Tactile Buttons Physics (Hover pops up, Active depresses with solid click) */
+.manga-btn,
+.pop-btn,
+.comic-btn,
+.hdr-btn,
+.action-btn,
+.btn-solo,
+.sidebar-tab-btn {
+  border-radius: 0px !important;
+  border: 2px solid var(--manga-ink, #0f172a) !important;
+  box-shadow: 2px 2px 0px var(--manga-ink, #0f172a) !important;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.manga-btn:hover,
+.pop-btn:hover,
+.comic-btn:hover,
+.hdr-btn:hover,
+.action-btn:hover {
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 3px 3px 0px var(--manga-ink, #0f172a) !important;
+}
+
+.manga-btn:active,
+.pop-btn:active,
+.comic-btn:active,
+.hdr-btn:active,
+.action-btn:active,
+.manga-btn.active,
+.pop-btn.active,
+.comic-btn.active {
+  transform: translate(1px, 1px) !important;
+  box-shadow: 0.5px 0.5px 0px var(--manga-ink, #0f172a) !important;
+}
+
+/* 5. Sharp Stickers, Chips & Status Indicators */
+.manga-sticker,
+.manga-chip,
+.manga-chip-badge,
+.hdr-btn-icon {
+  border-radius: 0px !important;
+  border: 1.5px solid var(--manga-ink, #0f172a) !important;
+  box-shadow: 1.5px 1.5px 0px var(--manga-ink, #0f172a) !important;
+}
+
+.sticker-ink {
+  background-color: var(--manga-ink, #0f172a) !important;
+  color: #ffffff !important;
+}
+
+.toggle-switch,
+.toggle-knob,
+.status-led,
+.led-pulse {
+  border-radius: 0px !important;
+}
+
+/* Accordion Layer Components */
+.layer-accordion-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, margin-top 0.2s ease;
+  pointer-events: none;
+}
+
+.layer-card.is-expanded .layer-accordion-body {
+  max-height: 220px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.layer-chevron {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.layer-card.is-expanded .layer-chevron {
+  transform: rotate(180deg);
+}
+
+
+
 
 /* ==========================================================================
    GLOBAL MANGA CANVAS & 2D LAYER STYLES
@@ -635,14 +786,6 @@ label {
 #btn-supabase-sync:hover {
   background: #dbeafe !important;
 }
-#btn-open-report {
-  background: #ffffff !important;
-  color: var(--manga-ink) !important;
-  border-color: var(--manga-ink) !important;
-}
-#btn-open-report:hover {
-  background: #f1f5f9 !important;
-}
 #btn-open-export {
   background: var(--manga-rose-soft) !important;
   color: var(--manga-rose-ink) !important;
@@ -650,22 +793,6 @@ label {
 }
 #btn-open-export:hover {
   background: #fee2e2 !important;
-}
-#btn-pco-inspector {
-  background: var(--manga-yellow-soft) !important;
-  color: var(--manga-yellow-ink) !important;
-  border-color: var(--manga-ink) !important;
-}
-#btn-pco-inspector:hover {
-  background: #fef08a !important;
-}
-#btn-open-cotable {
-  background: var(--manga-green-soft) !important;
-  color: var(--manga-green-ink) !important;
-  border-color: var(--manga-ink) !important;
-}
-#btn-open-cotable:hover {
-  background: #dcfce7 !important;
 }
 #btn-reset-view, #btn-fullscreen {
   background: #ffffff !important;
@@ -1020,7 +1147,7 @@ label {
     max-height: 72vh !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    border-radius: 16px 16px 0 0 !important;
+    border-radius: 0px !important;
     border-top: 3px solid #0f172a !important;
     border-left: none !important;
     border-right: none !important;
@@ -1032,14 +1159,15 @@ label {
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
-  /* Sheet drag handle indicator */
+  /* Sheet drag handle indicator (Sharp Rectangular Bar) */
   #pile-card::before {
     content: '';
     display: block;
     width: 44px;
     height: 5px;
     background-color: #cbd5e1;
-    border-radius: 9999px;
+    border-radius: 0px;
+    border: 1px solid #0f172a;
     margin: -6px auto 12px auto;
   }
 
@@ -1071,9 +1199,10 @@ label {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     border: 2px solid #0f172a;
-    border-radius: 9999px;
+    border-radius: 0px !important;
     box-shadow: 3px 3px 0px #0f172a;
     pointer-events: auto;
   }
 }
+
 

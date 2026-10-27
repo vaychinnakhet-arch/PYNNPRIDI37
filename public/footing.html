@@ -5,177 +5,199 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>PYNN PRIDI 37 — ผังฐานราก ค.ส.ล. 3 มิติ (3D Footing Progress Tracker)</title>
 
-  <!-- Google Fonts -->
+    <!-- Google Fonts: DoodleWeb Typography (Fraunces Editorial Display + DM Sans / Prompt Body + Space Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Prompt:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,600;1,9..144,700;1,9..144,800;1,9..144,900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,600&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="doodle_theme.css">
   <link rel="stylesheet" href="manga_theme.css">
 
-  <style>
+    <style>
     :root {
-      --ink: #0f172a;
-      --paper: #ffffff;
-      --border-comic: 2px solid #0f172a;
-      --shadow-comic: 2.5px 2.5px 0px #0f172a;
-      --shadow-comic-sm: 1.5px 1.5px 0px #0f172a;
-      --shadow-comic-lg: 3.5px 3.5px 0px #0f172a;
+      --dw-cream: #FAF5EE;
+      --dw-paper: #FFFFFF;
+      --dw-navy: #1D2B45;
+      --dw-orange: #F26B2A;
+      --dw-gold: #F7B844;
+      --dw-teal: #40C4C4;
+      --dw-green: #10B981;
+      --dw-coral: #E64C3C;
+      --ink: #1D2B45;
+      --paper: #FFFFFF;
+      --border-comic: 2px solid #1D2B45;
+      --shadow-comic: 3px 3px 0px #1D2B45;
+      --shadow-comic-sm: 2px 2px 0px #1D2B45;
+      --shadow-comic-lg: 4.5px 4.5px 0px #1D2B45;
     }
 
     body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: #ffffff;
+      background: var(--dw-cream);
       color: var(--ink);
-      font-family: 'Sarabun', sans-serif;
+      font-family: 'DM Sans', 'Prompt', 'Sarabun', sans-serif;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    .font-bangers { font-family: 'Bangers', cursive, sans-serif; }
+    .font-display { font-family: 'Fraunces', Georgia, serif; }
+    .font-bangers { font-family: 'Fraunces', Georgia, serif; }
     .font-mono-code { font-family: 'Space Mono', monospace; }
-    .font-prompt { font-family: 'Prompt', sans-serif; }
+    .font-prompt { font-family: 'Prompt', 'DM Sans', sans-serif; }
 
     .comic-card {
       background: var(--paper);
-      border: var(--border-comic);
-      border-radius: 0px;
-      box-shadow: var(--shadow-comic);
+      border: 2px solid var(--dw-navy);
+      border-radius: 1.25rem !important; /* rounded-2xl */
+      box-shadow: 4px 4px 0px var(--dw-navy);
     }
 
     .comic-btn {
-      background: #ffffff;
+      background: #FFFFFF;
       color: var(--ink);
-      border: var(--border-comic);
-      border-radius: 0px;
-      box-shadow: 2px 2px 0px #0f172a;
+      border: 2px solid var(--dw-navy);
+      border-radius: 9999px !important; /* rounded-full */
+      box-shadow: 2px 2px 0px var(--dw-navy);
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .comic-btn:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: 3px 3px 0px #0f172a;
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 3px 3px 0px var(--dw-orange);
+      background: #FAF5EE;
     }
     .comic-btn:active, .comic-btn.active {
       transform: translate(1px, 1px);
-      box-shadow: 1px 1px 0px #0f172a;
-      background: #fef08a;
-      color: #0f172a;
+      box-shadow: 1px 1px 0px var(--dw-navy);
+      background: var(--dw-orange);
+      color: #FFFFFF;
+      border-color: var(--dw-navy);
     }
 
-    /* Tactile Bolder Layer Toggle Cards */
+    /* Tactile DoodleWeb Layer Toggle Cards */
     .layer-card {
       position: relative;
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 0px;
-      padding: 6px 8px;
+      background: #FFFFFF;
+      border: 1.5px solid #E2D9CC;
+      border-radius: 0.875rem !important; /* rounded-xl */
+      padding: 8px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 6px;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: none;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
     }
     .layer-card:hover {
-      border-color: #0f172a;
-      transform: translateY(-1px);
-      box-shadow: 2px 2px 0px #0f172a;
+      background: #FAF5EE;
+      border-color: var(--dw-navy);
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
     }
     .layer-card.active {
-      border: 2px solid #0f172a;
-      box-shadow: 2px 2px 0px #0f172a;
+      border: 2px solid var(--dw-navy);
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
+    }
+    .layer-card.active:hover {
+      box-shadow: 3.5px 3.5px 0px var(--dw-orange);
     }
     .layer-card.active.active-footing {
-      background: #f0f9ff;
+      background: #F0F9FF;
     }
     .layer-card.active.active-pile {
-      background: #fffbeb;
+      background: #FFFDF7;
     }
     .layer-card.active.active-grid {
-      background: #f8fafc;
+      background: #F8FAFC;
     }
     .layer-card.active.active-boundary {
-      background: #fff1f2;
+      background: #FFF1F2;
     }
     .layer-card.active.active-badge {
-      background: #f5f3ff;
+      background: #FAF5FF;
     }
     .layer-card.active.active-ground {
-      background: #f1f5f9;
+      background: #F8FAFC;
     }
 
     /* Tactile Toggle Switch Pill */
     .toggle-switch {
-      width: 36px;
-      height: 20px;
-      background: #cbd5e1;
-      border: 1.5px solid #0f172a;
-      border-radius: 9999px;
+      width: 38px;
+      height: 22px;
+      background: #E2D9CC;
+      border: 2px solid var(--dw-navy);
+      border-radius: 9999px !important;
       position: relative;
-      transition: background 0.22s ease;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       flex-shrink: 0;
+      cursor: pointer;
+      box-shadow: inset 0 1px 2px rgba(29, 43, 69, 0.08);
     }
     .toggle-knob {
       width: 14px;
       height: 14px;
-      background: #ffffff;
-      border: 1.5px solid #0f172a;
-      border-radius: 9999px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--dw-navy);
+      border-radius: 9999px !important;
       position: absolute;
-      top: 1.5px;
+      top: 2px;
       left: 2px;
       transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+      box-shadow: 1px 1px 0px var(--dw-navy);
     }
     .layer-card.active .toggle-knob {
       transform: translateX(16px);
-      background: #ffffff;
+      border-color: var(--dw-navy);
     }
     .layer-card.active.active-footing .toggle-switch {
-      background: #0284c7;
+      background: #0284C7;
     }
     .layer-card.active.active-pile .toggle-switch {
-      background: #f59e0b;
+      background: #10B981;
     }
     .layer-card.active.active-grid .toggle-switch {
-      background: #334155;
+      background: #6366F1;
     }
     .layer-card.active.active-boundary .toggle-switch {
-      background: #e11d48;
+      background: var(--dw-coral);
     }
     .layer-card.active.active-badge .toggle-switch {
-      background: #7c3aed;
+      background: #8B5CF6;
     }
     .layer-card.active.active-ground .toggle-switch {
-      background: #64748b;
+      background: #64748B;
     }
 
     /* Isolate Solo Button */
     .btn-solo {
       opacity: 0;
-      padding: 1px 4px;
+      padding: 2px 7px;
+      font-family: 'Space Mono', monospace;
       font-size: 9px;
-      font-weight: 800;
-      background: #f1f5f9;
-      border: 1px solid #94a3b8;
-      border-radius: 4px;
-      color: #334155;
+      font-weight: 700;
+      background: #FFFFFF;
+      border: 1.5px solid var(--dw-navy);
+      border-radius: 9999px !important;
+      color: var(--dw-navy);
+      box-shadow: 1px 1px 0px var(--dw-navy);
       transition: all 0.15s ease;
+      cursor: pointer;
     }
     .layer-card:hover .btn-solo {
       opacity: 1;
     }
     .btn-solo:hover {
-      background: #0f172a;
-      color: #ffffff;
-      border-color: #0f172a;
+      background: var(--dw-navy);
+      color: #FFFFFF;
+      box-shadow: 1.5px 1.5px 0px var(--dw-orange);
     }
 
     #canvas-container {
@@ -261,76 +283,78 @@
     <div id="tooltip-text" class="text-slate-800"></div>
   </div>
 
-  <!-- TOP HEADER & LIVE KPI BAR -->
-  <header class="absolute top-2 left-2 right-2 md:left-4 md:right-4 z-20 comic-card bg-white/95 backdrop-blur px-3 py-2 flex flex-wrap items-center justify-between gap-2 shadow-sm pointer-events-auto">
+    <!-- TOP HEADER & LIVE KPI BAR (DoodleWeb Edition) -->
+  <header class="absolute top-2 left-2 right-2 md:left-4 md:right-4 z-20 comic-card bg-white/95 backdrop-blur-md px-4 py-2 flex flex-wrap items-center justify-between gap-2.5 shadow-sm border-2 border-[#1D2B45] rounded-2xl pointer-events-auto">
     <div class="flex items-center gap-2 sm:gap-3">
-      <a href="index.html" class="comic-btn px-2.5 py-1 text-xs font-black flex items-center gap-1 hover:bg-slate-100" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
+      <a href="index.html" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 hover:bg-[#FAF5EE]" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">หน้าแรก</span>
       </a>
-      <div class="bg-[#fef3c7] border-2 border-slate-900 p-1.5 shadow-[2px_2px_0px_#0f172a]">
-        <i data-lucide="box" class="w-5 h-5 text-slate-950"></i>
+      <div class="w-8 h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_#1D2B45] font-display">
+        P37
       </div>
       <div>
         <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-          <span class="font-bangers text-2xl tracking-wide text-slate-900">PYNN PRIDI 37</span>
+          <h1 class="text-sm font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
+            Pynn <span class="text-[#F26B2A] italic">Pridi</span> 37
+          </h1>
           
           <!-- Symmetrical Module Switcher (📍 เสาเข็ม 93 ต้น vs 🏗️ ผังฐานราก 21 ฐาน) -->
-          <div class="inline-flex items-center p-0.5 bg-slate-100 border-1.5 border-slate-900 rounded-lg shadow-2xs select-none">
-            <a href="piling.html" class="px-2 py-1 rounded-md text-slate-700 hover:text-slate-950 hover:bg-white text-[11px] font-bold flex items-center gap-1 transition-all" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น (3D Piling Tracker)">
-              <i data-lucide="anchor" class="w-3.5 h-3.5 text-amber-600"></i>
+          <div class="inline-flex items-center p-0.5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] select-none">
+            <a href="piling.html" class="px-3 py-1 rounded-full text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white text-[11px] font-bold flex items-center gap-1 transition-all" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น (3D Piling Tracker)">
+              <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#10B981]"></i>
               <span>เสาเข็ม (93)</span>
-              <span class="text-[9px] font-mono font-extrabold text-amber-700 bg-amber-100 px-1 rounded border border-amber-300">↗</span>
+              <span class="text-[9px] font-mono font-extrabold text-[#10B981] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0]">↗</span>
             </a>
-            <span class="px-2.5 py-1 rounded-md bg-sky-500 border border-slate-900 text-white font-black text-[11px] flex items-center gap-1.5 shadow-2xs cursor-default">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="px-3 py-1 rounded-full bg-[#0284C7] border-1.5 border-[#1D2B45] text-white font-black text-[11px] flex items-center gap-1.5 shadow-[1px_1px_0px_#1D2B45] cursor-default">
+              <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
               <span>🏗️ ผังฐานราก (21)</span>
             </span>
           </div>
 
-          <span id="sync-badge" class="bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2 py-0.5 rounded border border-emerald-400 hidden lg:flex items-center gap-1 shadow-sm">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> 3D BIM สไตล์ CAD คมชัด
+          <span id="sync-badge" class="bg-[#E6FAF8] text-[#0F766E] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#40C4C4] hidden lg:flex items-center gap-1 shadow-[1px_1px_0px_#1D2B45]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#40C4C4] animate-pulse"></span> 3D BIM โมเดล ค.ส.ล. คมชัด
           </span>
         </div>
-        <p class="text-xs text-slate-500 font-medium">ผังฐานราก ค.ส.ล. 21 ฐาน • เสาเข็ม 93 ต้น • ระดับความสูง TOP-BOT-PCO</p>
+        <p class="text-[10px] text-[#3E4B69] font-medium mt-0.5">ผังฐานราก ค.ส.ล. 21 ฐาน • เสาเข็ม 93 ต้น • ระดับความสูง TOP-BOT-PCO</p>
       </div>
     </div>
 
     <!-- KPI STATS -->
     <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto">
-      <div class="bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1">
-        <div class="text-[9.5px] text-slate-500 font-bold uppercase">ความคืบหน้าเทคอนกรีต</div>
+      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 flex items-center gap-2">
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">เทคอนกรีต:</span>
         <div class="flex items-baseline gap-1">
-          <span id="kpi-poured-count" class="font-bangers text-xl text-emerald-600">0</span>
-          <span class="text-xs text-slate-400 font-bold">/ 21 ฐาน</span>
-          <span id="kpi-poured-pct" class="text-xs font-bold text-emerald-700 bg-emerald-100 px-1 rounded ml-1">(0%)</span>
+          <span id="kpi-poured-count" class="font-mono font-black text-sm text-[#10B981]">0</span>
+          <span class="text-[11px] text-[#3E4B69] font-bold">/ 21 ฐาน</span>
+          <span id="kpi-poured-pct" class="text-[10px] font-mono font-bold text-[#065F46] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0] ml-1">(0%)</span>
         </div>
       </div>
 
-      <div class="bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1 hidden sm:block">
-        <div class="text-[9.5px] text-slate-500 font-bold uppercase">คอนกรีตเทแล้ว / รวม</div>
+      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 hidden sm:flex items-center gap-2">
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">คอนกรีต:</span>
         <div class="flex items-baseline gap-1">
-          <span id="kpi-concrete-poured" class="font-mono-code font-bold text-slate-900 text-sm">0.0</span>
-          <span class="text-xs text-slate-400">/ 155.5 m³</span>
+          <span id="kpi-concrete-poured" class="font-mono font-bold text-[#1D2B45] text-xs">0.0</span>
+          <span class="text-[11px] text-[#3E4B69]">/ 155.5 m³</span>
         </div>
       </div>
 
-      <div class="bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1 hidden md:block">
-        <div class="text-[9.5px] text-slate-500 font-bold uppercase">เหล็กเสริมรวม</div>
+      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 hidden md:flex items-center gap-2">
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">เหล็กเสริม:</span>
         <div class="flex items-baseline gap-1">
-          <span class="font-mono-code font-bold text-slate-900 text-sm">10.9</span>
-          <span class="text-xs text-slate-500">ตัน (10,901 kg)</span>
+          <span class="font-mono font-bold text-[#1D2B45] text-xs">10.9</span>
+          <span class="text-[11px] text-[#3E4B69]">ตัน (10,901 kg)</span>
         </div>
       </div>
 
       <!-- Quick Links -->
       <div class="flex items-center gap-1.5">
-        <a href="piling.html" class="comic-btn px-2.5 py-1.5 text-xs flex items-center gap-1 bg-amber-100 hover:bg-amber-200 text-slate-900" title="ไปดูแปลนเสาเข็ม 93 ต้น">
-          <i data-lucide="anchor" class="w-3.5 h-3.5 text-amber-700"></i>
+        <a href="piling.html" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E]" title="ไปดูแปลนเสาเข็ม 93 ต้น">
+          <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#B45309]"></i>
           <span class="hidden sm:inline">แปลนเสาเข็ม 93 ต้น</span>
         </a>
-        <button id="btn-print" class="comic-btn px-2.5 py-1.5 text-xs flex items-center gap-1 bg-sky-50 text-sky-900 hover:bg-sky-100">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+        <button id="btn-print" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] text-[#1D2B45]">
+          <i data-lucide="printer" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
           <span class="hidden sm:inline">พิมพ์แปลน</span>
         </button>
       </div>
@@ -517,7 +541,7 @@
     <!-- Header -->
     <div class="p-3 bg-amber-300 border-b-2 border-slate-800 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-white border border-slate-800 flex items-center justify-center font-black text-slate-900 shadow-[1px_1px_0px_#1e293b]">
+        <div class="w-8 h-8 rounded-none bg-white border-2 border-slate-900 flex items-center justify-center font-black text-slate-900 shadow-[2px_2px_0px_#0f172a]">
           <i data-lucide="layers" class="w-4 h-4 text-amber-600"></i>
         </div>
         <div>
@@ -525,7 +549,7 @@
           <div id="drawer-subtitle" class="text-xs font-bold text-slate-800">Grid 5-A • ฐานราก 5 ต้น</div>
         </div>
       </div>
-      <button id="close-drawer-btn" class="w-8 h-8 rounded-lg bg-white/80 hover:bg-white border border-slate-800 flex items-center justify-center text-slate-700 shadow-[1px_1px_0px_#1e293b]">
+      <button id="close-drawer-btn" class="w-8 h-8 rounded-none bg-white/90 hover:bg-white border-2 border-slate-900 flex items-center justify-center text-slate-900 shadow-[2px_2px_0px_#0f172a] cursor-pointer">
         <i data-lucide="x" class="w-4 h-4"></i>
       </button>
     </div>
