@@ -545,16 +545,132 @@
         top: 72px !important;
       }
     }
+    .floating-hud.is-mobile-collapsed {
+      display: none !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
+    }
     @media (max-width: 768px) {
-      .floating-hud {
-        width: calc(100vw - 16px);
-        max-width: calc(100vw - 16px);
-        left: 8px;
+      .floating-hud.is-mobile-collapsed {
+        display: none !important;
+        pointer-events: none !important;
+        opacity: 0 !important;
+      }
+      .floating-hud:not(.is-mobile-collapsed) {
+        display: flex !important;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
         top: auto !important;
-        bottom: 64px;
-        border-radius: 1.25rem;
-        padding-right: 0;
-        padding-bottom: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 85 !important;
+        border-radius: 1.5rem 1.5rem 0 0 !important;
+      }
+      #sidebar-main-console {
+        max-height: 75vh !important;
+        border-radius: 1.5rem 1.5rem 0 0 !important;
+        border-bottom: none !important;
+        width: 100% !important;
+      }
+      #sidebar-tab-content {
+        max-height: calc(75vh - 110px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+      }
+    }
+    @media (max-width: 640px) {
+      /* Mobile Bottom Sheet for Pile & Footing Cards */
+      #pile-card,
+      #footing-card {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 85vh !important;
+        height: auto !important;
+        border-radius: 1.5rem 1.5rem 0 0 !important;
+        border-left: 2px solid #1D2B45 !important;
+        border-right: 2px solid #1D2B45 !important;
+        border-top: 2px solid #1D2B45 !important;
+        border-bottom: none !important;
+        box-shadow: 0 -8px 28px rgba(29, 43, 69, 0.3) !important;
+        z-index: 90 !important;
+        margin: 0 !important;
+        padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px)) 1rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      #pile-card-header,
+      #footing-card-header {
+        position: relative;
+        padding-top: 6px;
+        flex-shrink: 0;
+        cursor: default !important;
+      }
+      #pile-card-header::before,
+      #footing-card-header::before {
+        content: '';
+        display: block;
+        width: 36px;
+        height: 4px;
+        background-color: #CBD5E1;
+        border-radius: 9999px;
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #pile-card-body {
+        max-height: calc(85vh - 120px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      #footing-card .tab-footing-panel {
+        max-height: calc(85vh - 140px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      #btn-dock-toggle-card {
+        display: none !important;
+      }
+      /* Center Dropdown as Mobile Bottom Sheet */
+      #menu-tables-dropdown {
+        position: fixed !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+        top: auto !important;
+        width: auto !important;
+        max-width: 440px !important;
+        margin: 0 auto !important;
+        max-height: 82vh !important;
+        z-index: 95 !important;
+        box-shadow: 0 10px 30px rgba(29, 43, 69, 0.4), 0 0 0 100vmax rgba(29, 43, 69, 0.45) !important;
+        border-radius: 1.5rem !important;
+      }
+      /* Compass Widget: Shift up on narrow mobile so it doesn't overlap center dock */
+      footer {
+        bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+        left: 10px !important;
+      }
+      #bim-floating-dock {
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+      .modal-backdrop {
+        padding: 0.5rem !important;
+      }
+      .modal-backdrop > .pop-card {
+        max-height: 94vh !important;
+        border-radius: 1.25rem !important;
+        padding: 0.85rem !important;
       }
     }
     #sidebar-main-console {
@@ -563,11 +679,6 @@
       border-radius: 1.25rem !important;
       border: 2px solid var(--dw-navy, #1D2B45) !important;
       box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
-    }
-    @media (max-width: 768px) {
-      #sidebar-main-console {
-        max-height: 52vh;
-      }
     }
     #sidebar-tab-content {
       max-height: calc(100vh - 200px);
@@ -1572,17 +1683,53 @@
                 </div>
               </button>
             </div>
+
+            <!-- GROUP 4: 🛠️ เครื่องมือ & บันทึก (System & Quick Actions for Mobile) -->
+            <div class="bg-white border-1.5 border-[#1D2B45]/20 rounded-xl p-2 shadow-xs flex flex-col gap-1.5 md:hidden">
+              <div class="flex items-center justify-between px-1 pb-1 border-b border-[#1D2B45]/10">
+                <div class="flex items-center gap-1.5 text-[#1D2B45]">
+                  <span class="text-xs">🛠️</span>
+                  <span class="text-[10.5px] font-black uppercase tracking-wider">เครื่องมือ & ระบบ</span>
+                </div>
+                <span class="text-[9px] font-mono font-bold text-[#64748B]">SYSTEM</span>
+              </div>
+              <div class="grid grid-cols-2 gap-1.5">
+                <button id="btn-menu-sync" type="button" class="p-2 rounded-lg bg-[#E8F8F5] text-[#0E5E57] border border-[#0E5E57]/30 text-xs font-bold flex items-center gap-1.5 justify-center shadow-2xs hover:bg-[#d5f3ec] transition-all cursor-pointer">
+                  <i data-lucide="cloud" class="w-3.5 h-3.5"></i>
+                  <span>ซิงค์ Supabase</span>
+                </button>
+                <button id="btn-menu-export" type="button" class="p-2 rounded-lg bg-[#FEF2F2] text-[#E64C3C] border border-[#E64C3C]/30 text-xs font-bold flex items-center gap-1.5 justify-center shadow-2xs hover:bg-[#fee2e2] transition-all cursor-pointer">
+                  <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                  <span>ส่งออก PNG</span>
+                </button>
+                <button id="btn-menu-reset-view" type="button" class="p-2 rounded-lg bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 text-xs font-bold flex items-center gap-1.5 justify-center shadow-2xs hover:bg-white transition-all cursor-pointer">
+                  <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                  <span>Top View</span>
+                </button>
+                <button id="btn-menu-fullscreen" type="button" class="p-2 rounded-lg bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 text-xs font-bold flex items-center gap-1.5 justify-center shadow-2xs hover:bg-white transition-all cursor-pointer">
+                  <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
+                  <span>เต็มจอ</span>
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- Action 3: Cloud Sync Pill -->
-        <button id="btn-supabase-sync" class="doodle-btn px-2.5 py-1.5 text-xs font-bold rounded-full bg-[#E8F8F5] text-[#0E5E57] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0px_#F26B2A] flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
+        <!-- Action: Mobile 3D Layer Toggle (Instant Access on Small Screens) -->
+        <button id="btn-header-hud-toggle" type="button" class="md:hidden doodle-btn px-2.5 py-1.5 text-xs font-bold rounded-full bg-[#FAF5EE] text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] hover:bg-white flex items-center gap-1 shrink-0 cursor-pointer" title="เปิด/ปิด ควบคุมแบบ 3D">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+          <span class="font-extrabold text-[11px]" id="txt-header-hud-btn">3D</span>
+        </button>
+
+        <!-- Action 3: Cloud Sync Pill (Desktop only in header, Mobile in Dropdown) -->
+        <button id="btn-supabase-sync" class="hidden md:inline-flex doodle-btn px-2.5 py-1.5 text-xs font-bold rounded-full bg-[#E8F8F5] text-[#0E5E57] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0px_#F26B2A] items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
           <i data-lucide="cloud" class="w-3.5 h-3.5 text-[#0E5E57]"></i>
           <span id="lbl-supabase-top-btn" class="hidden xl:inline whitespace-nowrap">บันทึกแล้ว</span>
         </button>
 
-        <!-- Action 4: Utility Dock (Camera, Reset, Fullscreen) -->
-        <div class="inline-flex items-center p-0.5 bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] gap-0.5 shrink-0">
+        <!-- Action 4: Utility Dock (Camera, Reset, Fullscreen - Desktop only in header) -->
+        <div class="hidden md:inline-flex items-center p-0.5 bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] gap-0.5 shrink-0">
           <button id="btn-open-export" class="w-7 h-7 rounded-full hover:bg-[#FEE2E2] text-[#E64C3C] flex items-center justify-center transition-all cursor-pointer" title="ส่งออกภาพรายงาน PNG">
             <i data-lucide="camera" class="w-3.5 h-3.5"></i>
           </button>
@@ -1605,23 +1752,10 @@
     <button id="btn-close-pco-toast" class="ml-1 px-2.5 py-0.5 rounded-full bg-white border-1.5 border-[#1D2B45] text-[10px] font-bold text-[#1D2B45] hover:bg-[#FAF5EE] shadow-xs cursor-pointer shrink-0">ปิด</button>
   </div>
 
-  <!-- Mobile Toggle Button for HUD (Visible on screens <= 768px) -->
-  <button id="btn-toggle-hud-mobile" class="md:hidden fixed top-16 left-2 z-30 px-3 py-1.5 text-xs font-black rounded-full bg-[#F7B844] text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1.5 pointer-events-auto font-body" title="เปิด/ปิด เมนูเครื่องมือ 3D">
-    <i data-lucide="layers" class="w-4 h-4"></i>
-    <span id="txt-hud-mobile">เมนู 3D</span>
-  </button>
-
-  <!-- Mobile Bottom Thumb Bar (1-Hand Site Operations) -->
-  <div id="mobile-bottom-bar" class="md:hidden font-body">
-    <button id="btn-mobile-center" type="button" class="px-3.5 py-1.5 rounded-full bg-[#1D2B45] text-white font-black text-xs flex items-center gap-1 shadow-xs active:scale-95 transition-transform" title="จัดมุมมองกึ่งกลางไซต์">
-      <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#F7B844]"></i>
-      <span>⌖ กึ่งกลาง</span>
-    </button>
-    <button id="btn-mobile-quick" type="button" class="px-3.5 py-1.5 rounded-full bg-[#10B981] text-white font-black text-xs flex items-center gap-1 shadow-xs active:scale-95 transition-transform" title="เปิดแผงเลือกเสาเข็ม 93 ต้น">
-      <i data-lucide="grid" class="w-3.5 h-3.5"></i>
-      <span>⊞ 93 ต้น</span>
-    </button>
-  </div>
+  <!-- Mobile Backdrop Overlays for Bottom Sheets & Drawers -->
+  <div id="backdrop-hud-mobile" class="fixed inset-0 bg-[#1D2B45]/40 backdrop-blur-[2px] z-[70] hidden pointer-events-auto transition-opacity duration-200"></div>
+  <div id="backdrop-sheet-mobile" class="fixed inset-0 bg-[#1D2B45]/40 backdrop-blur-[2px] z-[80] hidden pointer-events-auto transition-opacity duration-200"></div>
+  <div id="backdrop-dropdown-mobile" class="fixed inset-0 bg-[#1D2B45]/30 backdrop-blur-[1px] z-[45] hidden pointer-events-auto transition-opacity duration-200"></div>
 
   <!-- Left Floating Toolbar: Views & Pile Filters (Distilled & Impeccable DoodleWeb Edition) -->
   <div id="floating-hud" class="floating-hud is-mobile-collapsed absolute left-3 top-[72px] z-20 flex flex-col pointer-events-auto w-[272px] max-w-[275px] font-body">
@@ -1981,13 +2115,17 @@
 
   <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
   <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[4px_4px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
-    <span id="dock-btn-piling" class="px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F26B2A] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังงานเสาเข็ม 93 ต้น">
+    <span id="dock-btn-piling" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F26B2A] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังงานเสาเข็ม 93 ต้น">
       <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
       <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
     </span>
-    <button type="button" id="dock-btn-footing" class="px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#0284C7] active:scale-95 cursor-pointer" title="เปิด/ปิด เลเยอร์ผังฐานราก ค.ส.ล. 21 ฐาน">
+    <button type="button" id="dock-btn-footing" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#0284C7] active:scale-95 cursor-pointer" title="เปิด/ปิด เลเยอร์ผังฐานราก ค.ส.ล. 21 ฐาน">
       <span id="dot-dock-footing" class="w-2 h-2 rounded-full bg-slate-300"></span>
       <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
+    </button>
+    <button type="button" id="dock-btn-center" class="px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#F26B2A] active:scale-95 cursor-pointer" title="จัดมุมมองกึ่งกลางไซต์โครงการ (Top View)">
+      <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+      <span class="whitespace-nowrap font-bold hidden sm:inline">กึ่งกลาง</span>
     </button>
   </nav>
 
@@ -2406,21 +2544,6 @@
     </div>
   </div>
 
-  <!-- Mobile Thumb Bar (Quick 1-hand site controls on mobile) -->
-  <div id="mobile-thumb-bar" class="mobile-thumb-bar">
-    <button id="btn-thumb-center" type="button" class="flex items-center gap-1 px-3 py-1.5 bg-white text-slate-800 text-xs font-bold border-2 border-slate-900 shadow-xs hover:bg-slate-100 active:scale-95 cursor-pointer" title="จัดกึ่งกลางมุมมอง">
-      <i data-lucide="crosshair" class="w-3.5 h-3.5 text-amber-600"></i>
-      <span>กึ่งกลาง</span>
-    </button>
-    <button id="btn-thumb-quick-select" type="button" class="flex items-center gap-1 px-3.5 py-1.5 bg-[#fef3c7] text-[#78350f] text-xs font-black border-2 border-slate-900 shadow-xs hover:bg-amber-300 active:scale-95 cursor-pointer" title="เลือกเสาเข็มจาก 93 ต้น">
-      <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#78350f]"></i>
-      <span>ค้นหา 93 ต้น</span>
-    </button>
-    <button id="btn-thumb-menu" type="button" class="flex items-center gap-1 px-3 py-1.5 bg-white text-slate-800 text-xs font-bold border-2 border-slate-900 shadow-xs hover:bg-slate-100 active:scale-95 cursor-pointer" title="เปิด/ปิด เมนูควบคุม 3D">
-      <i data-lucide="menu" class="w-3.5 h-3.5 text-blue-600"></i>
-      <span>เมนู 3D</span>
-    </button>
-  </div>
 
   <!-- ========================================================================= -->
   <!-- ========================================================================= -->
@@ -5336,6 +5459,7 @@
       let initialLeft = 0, initialTop = 0;
 
       function onPointerDown(e) {
+        if (window.innerWidth < 640) return; // Mobile bottom sheet is anchored, not draggable
         if (e.target.closest('button') || e.target.closest('input') || e.target.closest('a')) return;
         isDragging = true;
         const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
@@ -5538,17 +5662,19 @@
       card.classList.remove('hidden');
       setTimeout(() => card.classList.remove('translate-y-4', 'opacity-0'), 10);
 
-      // Smart position check: If not dragged by user, position appropriately
-      if (!pileCardHasBeenDragged) {
-        if (window.innerWidth < 640) {
-          card.classList.remove('dock-left');
-          card.style.setProperty('left', '8px', 'important');
-          card.style.setProperty('right', '8px', 'important');
-          card.style.setProperty('bottom', '8px', 'important');
-          card.style.setProperty('top', 'auto', 'important');
-          card.style.setProperty('width', 'calc(100vw - 16px)', 'important');
-          toggleMinimizePileCard(true); // Auto-minimize on mobile to prevent blocking tools!
-        } else {
+      // Smart position check: On mobile, present as full bottom sheet with backdrop
+      if (window.innerWidth < 640) {
+        card.classList.remove('dock-left', 'has-been-dragged');
+        card.style.removeProperty('left');
+        card.style.removeProperty('right');
+        card.style.removeProperty('top');
+        card.style.removeProperty('bottom');
+        card.style.removeProperty('width');
+        toggleMinimizePileCard(false); // Show full bottom sheet on mobile so user can see and edit
+        const backdrop = document.getElementById('backdrop-sheet-mobile');
+        if (backdrop) backdrop.classList.remove('hidden');
+      } else {
+        if (!pileCardHasBeenDragged) {
           card.classList.remove('dock-left');
           card.style.setProperty('left', 'auto', 'important');
           card.style.setProperty('top', 'auto', 'important');
@@ -5556,8 +5682,8 @@
           card.style.setProperty('bottom', '20px', 'important');
           card.style.setProperty('width', '320px', 'important');
         }
+        makePileCardDraggable();
       }
-      makePileCardDraggable();
       if (window.lucide) lucide.createIcons();
     }
 
@@ -5660,6 +5786,7 @@
       card.classList.add('translate-y-4', 'opacity-0');
       setTimeout(() => card.classList.add('hidden'), 200);
       selectedCardPileNo = null;
+      document.getElementById('backdrop-sheet-mobile')?.classList.add('hidden');
     });
 
     // Quick Date: Today
@@ -6625,21 +6752,25 @@
       const card = document.getElementById('footing-card');
       if (!card) return;
 
-      // Smart position check: กำหนดให้อยู่มุมล่างขวา กว้าง 350px ไม่ลอยขึ้นบนหรือบีบกว้างเต็มจอ
-      if (!footingCardHasBeenDragged) {
-        if (window.innerWidth < 640) {
-          card.style.setProperty('left', '8px', 'important');
-          card.style.setProperty('right', '8px', 'important');
-          card.style.setProperty('bottom', '8px', 'important');
-          card.style.setProperty('top', 'auto', 'important');
-          card.style.setProperty('width', 'calc(100vw - 16px)', 'important');
-        } else {
+      // Smart position check: On mobile, present as full bottom sheet with backdrop
+      if (window.innerWidth < 640) {
+        card.classList.remove('has-been-dragged');
+        card.style.removeProperty('left');
+        card.style.removeProperty('right');
+        card.style.removeProperty('top');
+        card.style.removeProperty('bottom');
+        card.style.removeProperty('width');
+        const backdrop = document.getElementById('backdrop-sheet-mobile');
+        if (backdrop) backdrop.classList.remove('hidden');
+      } else {
+        if (!footingCardHasBeenDragged) {
           card.style.setProperty('left', 'auto', 'important');
           card.style.setProperty('top', 'auto', 'important');
           card.style.setProperty('right', '20px', 'important');
           card.style.setProperty('bottom', '20px', 'important');
           card.style.setProperty('width', '350px', 'important');
         }
+        makeFootingCardDraggable();
       }
 
       // รีเซ็ตแท็บเริ่มต้นเป็นแท็บ 1: ขนาดและระดับ
@@ -6808,6 +6939,7 @@
         footingCardHasBeenDragged = false;
         updateFootingsSceneVisuals();
       }, 200);
+      document.getElementById('backdrop-sheet-mobile')?.classList.add('hidden');
     }
 
     function makeFootingCardDraggable() {
@@ -6819,6 +6951,7 @@
       let startX, startY, initialLeft, initialTop;
 
       function onPointerDown(e) {
+        if (window.innerWidth < 640) return; // Mobile bottom sheet is anchored, not draggable
         if (e.target.closest('#btn-close-footing-card') || e.target.closest('button')) return;
         isDragging = true;
         footingCardHasBeenDragged = true;
@@ -11380,20 +11513,77 @@
     document.getElementById('btn-toggle-hud')?.addEventListener('click', toggleHudState);
     document.getElementById('btn-thumb-menu')?.addEventListener('click', toggleHudState);
 
-    // Mobile HUD Toggle
-    const btnToggleMobile = document.getElementById('btn-toggle-hud-mobile');
-    if (btnToggleMobile) {
-      btnToggleMobile.addEventListener('click', () => {
-        const hud = document.getElementById('floating-hud');
-        if (hud) {
-          hud.classList.toggle('is-mobile-collapsed');
-          const isCollapsed = hud.classList.contains('is-mobile-collapsed');
-          const txt = document.getElementById('txt-hud-mobile');
-          if (txt) txt.textContent = isCollapsed ? '☰ เมนู 3D' : '✕ ปิดเมนู';
+    // Mobile HUD Toggle & Backdrop
+    const toggleMobileHud = () => {
+      const hud = document.getElementById('floating-hud');
+      const backdrop = document.getElementById('backdrop-hud-mobile');
+      if (hud) {
+        hud.classList.toggle('is-mobile-collapsed');
+        const isCollapsed = hud.classList.contains('is-mobile-collapsed');
+        if (backdrop) {
+          if (isCollapsed) backdrop.classList.add('hidden');
+          else backdrop.classList.remove('hidden');
         }
+      }
+    };
+
+    document.getElementById('btn-header-hud-toggle')?.addEventListener('click', toggleMobileHud);
+    document.getElementById('backdrop-hud-mobile')?.addEventListener('click', toggleMobileHud);
+    document.getElementById('btn-toggle-hud-mobile')?.addEventListener('click', toggleMobileHud);
+
+    // Mobile Bottom Sheet Backdrop (closes pile/footing cards on tap)
+    document.getElementById('backdrop-sheet-mobile')?.addEventListener('click', () => {
+      document.getElementById('btn-close-card')?.click();
+      if (typeof closeFootingCard === 'function') closeFootingCard();
+    });
+
+    // Mobile Tables Dropdown Backdrop & Menu Actions
+    const dropdownMenu = document.getElementById('menu-tables-dropdown');
+    const dropdownToggle = document.getElementById('btn-tables-dropdown-toggle');
+    const dropdownBackdrop = document.getElementById('backdrop-dropdown-mobile');
+    if (dropdownToggle && dropdownMenu) {
+      dropdownToggle.addEventListener('click', () => {
+        setTimeout(() => {
+          const isVisible = !dropdownMenu.classList.contains('hidden');
+          if (dropdownBackdrop) {
+            if (isVisible && window.innerWidth < 640) dropdownBackdrop.classList.remove('hidden');
+            else dropdownBackdrop.classList.add('hidden');
+          }
+        }, 10);
       });
     }
 
+    const closeDropdownMenu = () => {
+      dropdownMenu?.classList.add('hidden');
+      dropdownBackdrop?.classList.add('hidden');
+    };
+
+    dropdownBackdrop?.addEventListener('click', closeDropdownMenu);
+
+    document.getElementById('btn-menu-sync')?.addEventListener('click', () => {
+      closeDropdownMenu();
+      document.getElementById('btn-supabase-sync')?.click();
+    });
+    document.getElementById('btn-menu-export')?.addEventListener('click', () => {
+      closeDropdownMenu();
+      document.getElementById('btn-open-export')?.click();
+    });
+    document.getElementById('btn-menu-reset-view')?.addEventListener('click', () => {
+      closeDropdownMenu();
+      document.getElementById('btn-reset-view')?.click();
+    });
+    document.getElementById('btn-menu-fullscreen')?.addEventListener('click', () => {
+      closeDropdownMenu();
+      document.getElementById('btn-fullscreen')?.click();
+    });
+
+    document.querySelectorAll('.menu-report-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.innerWidth < 640) closeDropdownMenu();
+      });
+    });
+
+    // Center Action (3D site / plan center)
     const handleCenterAction = () => {
       if (typeof activeCamera !== 'undefined' && typeof orthoCamera !== 'undefined' && activeCamera === orthoCamera) {
         if (typeof resetTopView === 'function') resetTopView();
@@ -11405,6 +11595,7 @@
       }
     };
 
+    document.getElementById('dock-btn-center')?.addEventListener('click', handleCenterAction);
     document.getElementById('btn-thumb-center')?.addEventListener('click', handleCenterAction);
     document.getElementById('btn-mobile-center')?.addEventListener('click', handleCenterAction);
 
