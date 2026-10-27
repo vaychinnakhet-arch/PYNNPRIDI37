@@ -283,89 +283,61 @@
     <div id="tooltip-text" class="text-slate-800"></div>
   </div>
 
-    <!-- TOP HEADER & LIVE KPI BAR (DoodleWeb Edition) -->
-  <header class="absolute top-2 left-2 right-2 md:left-4 md:right-4 z-20 comic-card bg-white/95 backdrop-blur-md px-4 py-2 flex flex-wrap items-center justify-between gap-2.5 shadow-sm border-2 border-[#1D2B45] rounded-2xl pointer-events-auto">
-    <div class="flex items-center gap-2 sm:gap-3">
-      <a href="index.html" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 hover:bg-[#FAF5EE]" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
+    <!-- TOP HEADER & LIVE KPI BAR (Clean & Streamlined DoodleWeb Edition) -->
+  <header class="absolute top-2 left-2 right-2 md:left-4 md:right-4 z-20 comic-card bg-white/95 backdrop-blur-md px-3 sm:px-4 py-2 flex items-center justify-between gap-2 shadow-[3px_3px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl pointer-events-auto">
+    <!-- 1. Left: Brand & Navigation -->
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      <a href="index.html" class="comic-btn px-2.5 sm:px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 hover:bg-[#FAF5EE]" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">หน้าแรก</span>
       </a>
-      <div class="w-8 h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_#1D2B45] font-display">
+      <div class="w-8 h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#1D2B45] font-display shrink-0">
         P37
       </div>
       <div>
-        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-          <h1 class="text-sm font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
+        <div class="flex items-center gap-2">
+          <h1 class="text-xs sm:text-sm font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
             Pynn <span class="text-[#F26B2A] italic">Pridi</span> 37
           </h1>
-          
-          <!-- Symmetrical Module Switcher (📍 เสาเข็ม 93 ต้น vs 🏗️ ผังฐานราก 21 ฐาน) -->
-          <div class="inline-flex items-center p-0.5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] select-none">
-            <a href="piling.html" class="px-3 py-1 rounded-full text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white text-[11px] font-bold flex items-center gap-1 transition-all" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น (3D Piling Tracker)">
-              <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#10B981]"></i>
-              <span>เสาเข็ม (93)</span>
-              <span class="text-[9px] font-mono font-extrabold text-[#10B981] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0]">↗</span>
-            </a>
-            <span class="px-3 py-1 rounded-full bg-[#0284C7] border-1.5 border-[#1D2B45] text-white font-black text-[11px] flex items-center gap-1.5 shadow-[1px_1px_0px_#1D2B45] cursor-default">
-              <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
-              <span>🏗️ ผังฐานราก (21)</span>
-            </span>
-          </div>
-
-          <span id="sync-badge" class="bg-[#E6FAF8] text-[#0F766E] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#40C4C4] hidden lg:flex items-center gap-1 shadow-[1px_1px_0px_#1D2B45]">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#40C4C4] animate-pulse"></span> 3D BIM โมเดล ค.ส.ล. คมชัด
+          <span class="hidden md:inline-flex bg-[#E0F2FE] text-[#0369A1] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#BAE6FD]">
+            🏗️ ผังฐานราก 21 ฐาน
           </span>
         </div>
-        <p class="text-[10px] text-[#3E4B69] font-medium mt-0.5">ผังฐานราก ค.ส.ล. 21 ฐาน • เสาเข็ม 93 ต้น • ระดับความสูง TOP-BOT-PCO</p>
+        <p class="text-[9.5px] text-[#3E4B69] font-medium mt-0.5 hidden sm:block">ผังฐานราก ค.ส.ล. • เสาเข็ม 93 ต้น • ระดับ TOP-BOT-PCO</p>
       </div>
     </div>
 
-    <!-- KPI STATS -->
-    <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto">
-      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 flex items-center gap-2">
-        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">เทคอนกรีต:</span>
-        <div class="flex items-baseline gap-1">
-          <span id="kpi-poured-count" class="font-mono font-black text-sm text-[#10B981]">0</span>
-          <span class="text-[11px] text-[#3E4B69] font-bold">/ 21 ฐาน</span>
-          <span id="kpi-poured-pct" class="text-[10px] font-mono font-bold text-[#065F46] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0] ml-1">(0%)</span>
-        </div>
+    <!-- 2. Right: Primary Metrics & Action Controls -->
+    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <!-- Main KPI: เทคอนกรีตแล้ว -->
+      <div class="bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[1.5px_1.5px_0px_#1D2B45] px-3 py-1 flex items-center gap-1.5 text-xs font-bold shrink-0">
+        <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase hidden sm:inline">เทคอนกรีต:</span>
+        <span id="kpi-poured-count" class="font-mono font-black text-sm text-[#10B981]">0</span>
+        <span class="text-[11px] text-[#3E4B69] font-bold">/ 21 ฐาน</span>
+        <span id="kpi-poured-pct" class="text-[10px] font-mono font-bold text-[#065F46] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0] ml-0.5">(0%)</span>
       </div>
 
-      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 hidden sm:flex items-center gap-2">
-        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">คอนกรีต:</span>
-        <div class="flex items-baseline gap-1">
-          <span id="kpi-concrete-poured" class="font-mono font-bold text-[#1D2B45] text-xs">0.0</span>
-          <span class="text-[11px] text-[#3E4B69]">/ 155.5 m³</span>
-        </div>
+      <!-- Secondary Metrics (Large screen only) -->
+      <div class="hidden lg:flex items-center gap-2 bg-white border-2 border-[#1D2B45] rounded-full px-3 py-1 text-[11px] font-mono font-bold text-[#3E4B69] shadow-[1.5px_1.5px_0px_#1D2B45]">
+        <span>คอนกรีต <strong id="kpi-concrete-poured" class="text-[#1D2B45]">0.0</strong>/155.5 m³</span>
+        <span class="text-[#CBD5E1]">|</span>
+        <span>เหล็ก <strong>10.9</strong> ตัน</span>
       </div>
 
-      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 hidden md:flex items-center gap-2">
-        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">เหล็กเสริม:</span>
-        <div class="flex items-baseline gap-1">
-          <span class="font-mono font-bold text-[#1D2B45] text-xs">10.9</span>
-          <span class="text-[11px] text-[#3E4B69]">ตัน (10,901 kg)</span>
-        </div>
-      </div>
+      <!-- Print Button -->
+      <button id="btn-print" class="comic-btn px-2.5 sm:px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] text-[#1D2B45] shrink-0" title="พิมพ์แบบแปลน">
+        <i data-lucide="printer" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+        <span class="hidden md:inline">พิมพ์แปลน</span>
+      </button>
 
-      <!-- Quick Links -->
-      <div class="flex items-center gap-1.5">
-        <a href="piling.html" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E]" title="ไปดูแปลนเสาเข็ม 93 ต้น">
-          <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#B45309]"></i>
-          <span class="hidden sm:inline">แปลนเสาเข็ม 93 ต้น</span>
-        </a>
-        <button id="btn-print" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] text-[#1D2B45]">
-          <i data-lucide="printer" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
-          <span class="hidden sm:inline">พิมพ์แปลน</span>
-        </button>
-      </div>
+      <!-- Mobile Layers Drawer Toggle (Integrated cleanly in header) -->
+      <button id="toggle-footing-toolbar-mobile" class="md:hidden comic-btn px-2.5 py-1.5 text-xs font-bold flex items-center gap-1 bg-[#FAF5EE] hover:bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-full shadow-[1.5px_1.5px_0px_#1D2B45] shrink-0" title="เปิด/ปิด แผงเลเยอร์">
+        <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0284C7]"></i>
+        <span id="footing-toolbar-mobile-text" class="text-[11px]">เลเยอร์</span>
+      </button>
     </div>
   </header>
-
-  <!-- Mobile Toggle Button for Toolbar -->
-  <button id="toggle-footing-toolbar-mobile" class="md:hidden fixed top-20 left-2 z-30 comic-btn px-2.5 py-1.5 text-xs font-black flex items-center gap-1.5 bg-amber-400 text-slate-950 shadow-[2px_2px_0px_#0f172a]">
-    <i data-lucide="layers" class="w-4 h-4"></i>
-    <span id="footing-toolbar-mobile-text">เลเยอร์ 3D</span>
-  </button>
 
   <!-- LEFT FLOATING TOOLBAR (VIEWS & BOLDER LAYER CONTROLS) -->
   <div id="footing-toolbar" class="absolute left-2 top-20 z-20 flex flex-col gap-2 pointer-events-auto w-[235px] max-w-[240px]">
@@ -531,10 +503,22 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION HINT -->
-  <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 comic-card px-4 py-1.5 bg-white/95 backdrop-blur text-xs text-slate-700 shadow-md hidden sm:flex items-center gap-2 pointer-events-auto">
-    <span id="nav-hint-text">🖱️ <strong>คลิกซ้ายลาก:</strong> หมุนมุมมอง (ไม่กลับหัว) | <strong>Shift+ซ้าย หรือขวาลาก:</strong> เลื่อน (Pan) | <strong>ล้อเลื่อน:</strong> ซูม | <strong>คลิกที่ฐานราก:</strong> เปิดข้อมูล & อัปเดตสถานะ</span>
+  <!-- BOTTOM NAVIGATION HINT (DESKTOP ONLY, LIFTED ABOVE FLOATING DOCK) -->
+  <div class="fixed bottom-14 left-1/2 -translate-x-1/2 z-30 comic-card px-4 py-1.5 bg-white/95 backdrop-blur text-[11px] text-slate-700 shadow-[2px_2px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-full hidden lg:flex items-center gap-2 pointer-events-auto">
+    <span id="nav-hint-text">🖱️ <strong>คลิกซ้ายลาก:</strong> หมุนมุมมอง | <strong>Shift+ซ้าย หรือขวาลาก:</strong> เลื่อน (Pan) | <strong>ล้อเลื่อน:</strong> ซูม | <strong>คลิกที่ฐานราก:</strong> เปิดข้อมูล & อัปเดต</span>
   </div>
+
+  <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
+  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[3.5px_3.5px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
+    <a href="piling.html" id="dock-btn-piling" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] active:scale-95" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น">
+      <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+      <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
+    </a>
+    <span id="dock-btn-footing" class="px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#0284C7] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังฐานราก ค.ส.ล. 21 ฐาน">
+      <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
+      <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
+    </span>
+  </nav>
 
   <!-- RIGHT INSPECTOR DRAWER -->
   <aside id="inspector-drawer" class="closed absolute top-0 right-0 h-full w-full sm:w-[420px] bg-white border-l-2 border-slate-800 shadow-2xl flex flex-col pointer-events-auto">
@@ -825,6 +809,9 @@
       };
       controlsOrtho.target.copy(PLAN_CENTER);
       controlsOrtho.enabled = false;
+
+      // Restore shared BIM camera viewpoint if navigating between piling and footing
+      restoreBimSharedCamera();
 
       // 5. Lighting
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
@@ -1512,9 +1499,84 @@
     }
 
     // ----------------------------------------------------
+    // SEAMLESS BIM CAMERA SYNC (SHARED ACROSS PILING & FOOTING)
+    // ----------------------------------------------------
+    function saveBimSharedCamera() {
+      try {
+        const isOrtho = (activeCamera === orthoCamera);
+        const cam = isOrtho ? orthoCamera : perspCamera;
+        const ctrl = isOrtho ? controlsOrtho : controlsPersp;
+        if (!cam || !ctrl) return;
+        const state = {
+          isOrtho: isOrtho,
+          camPos: { x: cam.position.x, y: cam.position.y, z: cam.position.z },
+          camUp: { x: cam.up.x, y: cam.up.y, z: cam.up.z },
+          target: { x: ctrl.target.x, y: ctrl.target.y, z: ctrl.target.z },
+          orthoZoom: orthoCamera ? orthoCamera.zoom : 1,
+          timestamp: Date.now()
+        };
+        sessionStorage.setItem('pynn_bim_shared_camera', JSON.stringify(state));
+      } catch (err) {
+        console.warn('saveBimSharedCamera error:', err);
+      }
+    }
+
+    function restoreBimSharedCamera() {
+      try {
+        const raw = sessionStorage.getItem('pynn_bim_shared_camera');
+        if (!raw) return false;
+        const state = JSON.parse(raw);
+        if (!state || !state.camPos || !state.target) return false;
+        if (Date.now() - (state.timestamp || 0) > 2 * 60 * 60 * 1000) return false;
+
+        if (state.isOrtho) {
+          activeCamera = orthoCamera;
+          if (controlsOrtho) controlsOrtho.enabled = true;
+          if (controlsPersp) controlsPersp.enabled = false;
+          orthoCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
+          if (state.camUp) orthoCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
+          if (controlsOrtho) {
+            controlsOrtho.target.set(state.target.x, state.target.y, state.target.z);
+            controlsOrtho.update();
+          }
+          if (state.orthoZoom && state.orthoZoom > 0.05 && state.orthoZoom < 50) {
+            orthoCamera.zoom = state.orthoZoom;
+            orthoCamera.updateProjectionMatrix();
+          }
+          document.getElementById('view-top-ortho')?.classList.add('active');
+          document.getElementById('view-iso3d')?.classList.remove('active');
+          updateNavHints('ortho');
+        } else {
+          activeCamera = perspCamera;
+          if (controlsOrtho) controlsOrtho.enabled = false;
+          if (controlsPersp) controlsPersp.enabled = true;
+          perspCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
+          if (state.camUp) perspCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
+          if (controlsPersp) {
+            controlsPersp.target.set(state.target.x, state.target.y, state.target.z);
+            controlsPersp.update();
+          }
+          document.getElementById('view-top-ortho')?.classList.remove('active');
+          document.getElementById('view-iso3d')?.classList.add('active');
+          updateNavHints('3d');
+        }
+        if (typeof updatePillBadgePositions === 'function') {
+          updatePillBadgePositions();
+        }
+        return true;
+      } catch (err) {
+        console.warn('restoreBimSharedCamera error:', err);
+        return false;
+      }
+    }
+
+    // ----------------------------------------------------
     // EVENT LISTENERS & UI WIRING
     // ----------------------------------------------------
     function setupUI() {
+      // Save BIM Camera on switching modules or navigating away
+      window.addEventListener('beforeunload', saveBimSharedCamera);
+      document.getElementById('dock-btn-piling')?.addEventListener('click', saveBimSharedCamera);
       // Views
       document.getElementById('view-top-ortho').addEventListener('click', resetTopView);
       document.getElementById('view-iso3d').addEventListener('click', resetIsoView);
