@@ -2,6 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
+  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Pynn pridi 37 - ติดตามงานเสาเข็ม 93 ต้น & รายงาน (3D WebGL & Plan)</title>
   
@@ -160,91 +161,98 @@
     }
 
     /* =========================================================================
-       MANGA 2D LAYER DESIGN SYSTEM (TECHNICAL BLUEPRINT EDITION - UNIFIED PALETTE)
+       DOODLEWEB DESIGN SYSTEM (WARM CRAFT EDITORIAL · DEEP NAVY INK & TANGERINE POP)
        ========================================================================= */
     .pop-card {
-      background: #ffffff !important;
-      border: 2px solid #1e293b !important;
-      border-radius: 8px !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
-      color: #0f172a !important;
+      background: #FFFFFF !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 1.25rem !important; /* rounded-2xl */
+      box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
+      color: var(--dw-navy, #1D2B45) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     .pop-header {
-      background: #ffffff !important;
-      border: 2px solid #1e293b !important;
-      border-radius: 12px !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
-      backdrop-filter: none !important;
+      background: rgba(255, 255, 255, 0.96) !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 1.25rem !important; /* rounded-2xl */
+      box-shadow: 3.5px 3.5px 0px var(--dw-navy, #1D2B45) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
     }
 
     .pop-btn {
-      background: #f8fafc;
-      color: #0f172a !important;
-      border: 1.5px solid #1e293b !important;
-      border-radius: 6px !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
-      font-family: 'Prompt', sans-serif !important;
+      background: #FFFFFF !important;
+      color: var(--dw-navy, #1D2B45) !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important; /* Pill Capsule */
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+      font-family: var(--font-body, 'Prompt', sans-serif) !important;
       font-weight: 700 !important;
-      transition: all 0.1s ease !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
       cursor: pointer !important;
+      user-select: none !important;
     }
     .pop-btn:hover {
-      background: #f8fafc !important;
+      background: var(--dw-cream, #FAF5EE) !important;
       transform: translate(-1.5px, -1.5px) !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
+      box-shadow: 3px 3px 0px var(--dw-orange, #F26B2A) !important;
     }
     .pop-btn:active {
-      transform: translate(1.5px, 1.5px) !important;
-      box-shadow: 0.5px 0.5px 0px #1e293b !important;
+      transform: translate(1px, 1px) !important;
+      box-shadow: 0.5px 0.5px 0px var(--dw-navy, #1D2B45) !important;
     }
     .pop-btn.active {
-      background: #fef3c7 !important;
-      border-color: #f59e0b !important;
-      color: #92400e !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
+      background: var(--dw-orange, #F26B2A) !important;
+      border-color: var(--dw-navy, #1D2B45) !important;
+      color: #FFFFFF !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+    }
+    .pop-btn.active:hover {
+      background: #E05A19 !important;
+      box-shadow: 3px 3px 0px var(--dw-navy, #1D2B45) !important;
     }
 
     .pop-btn-primary {
-      background: #0284c7 !important;
-      color: #ffffff !important;
-      border: 1.5px solid #1e293b !important;
-      border-radius: 6px !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
-      font-family: 'Prompt', sans-serif !important;
-      font-weight: 700 !important;
+      background: var(--dw-orange, #F26B2A) !important;
+      color: #FFFFFF !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy, #1D2B45) !important;
+      font-family: var(--font-body, 'Prompt', sans-serif) !important;
+      font-weight: 800 !important;
       cursor: pointer !important;
-      transition: all 0.1s ease !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     .pop-btn-primary:hover {
-      background: #0369a1 !important;
+      background: #E05A19 !important;
       transform: translate(-1.5px, -1.5px) !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
+      box-shadow: 3.5px 3.5px 0px var(--dw-navy, #1D2B45) !important;
     }
     .pop-btn-primary:active {
-      transform: translate(1.5px, 1.5px) !important;
-      box-shadow: 0.5px 0.5px 0px #1e293b !important;
+      transform: translate(1px, 1px) !important;
+      box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
     }
 
     .pop-btn-green {
-      background: #10b981 !important;
-      color: #ffffff !important;
-      border: 1.5px solid #1e293b !important;
-      border-radius: 6px !important;
-      box-shadow: 2px 2px 0px #1e293b !important;
-      font-family: 'Prompt', sans-serif !important;
+      background: var(--dw-green, #10B981) !important;
+      color: #FFFFFF !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+      font-family: var(--font-body, 'Prompt', sans-serif) !important;
       font-weight: 700 !important;
       cursor: pointer !important;
-      transition: all 0.1s ease !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     .pop-btn-green:hover {
       background: #059669 !important;
       transform: translate(-1.5px, -1.5px) !important;
-      box-shadow: 3px 3px 0px #1e293b !important;
+      box-shadow: 3px 3px 0px var(--dw-navy, #1D2B45) !important;
     }
     .pop-btn-green:active {
-      transform: translate(1.5px, 1.5px) !important;
-      box-shadow: 0.5px 0.5px 0px #1e293b !important;
+      transform: translate(1px, 1px) !important;
+      box-shadow: 0.5px 0.5px 0px var(--dw-navy, #1D2B45) !important;
     }
 
     /* Header Toolbar Clusters & Segmented Controls */
@@ -522,19 +530,19 @@
     }
     /* Floating HUD Responsive Layout - Impeccable 4-Unit Rhythm */
     .floating-hud {
-      width: 215px;
-      max-width: 215px;
-      top: calc(56px * var(--p-density, 1));
-      max-height: calc(100vh - 75px);
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: thin;
+      width: 275px;
+      max-width: 275px;
+      top: 72px !important;
+      overflow: visible !important;
+      padding-right: 6px;
+      padding-bottom: 6px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @media (max-width: 1279px) {
       .floating-hud {
-        top: calc(64px * var(--p-density, 1));
-        max-height: calc(100vh - 80px);
+        width: 275px;
+        max-width: 275px;
+        top: 72px !important;
       }
     }
     @media (max-width: 768px) {
@@ -542,19 +550,82 @@
         width: calc(100vw - 16px);
         max-width: calc(100vw - 16px);
         left: 8px;
-        top: auto;
-        bottom: 56px;
-        max-height: 52vh;
-        border-radius: 1rem;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+        top: auto !important;
+        bottom: 64px;
+        border-radius: 1.25rem;
+        padding-right: 0;
+        padding-bottom: 0;
       }
     }
-    .floating-hud::-webkit-scrollbar {
+    #sidebar-main-console {
+      max-height: calc(100vh - 110px);
+      overflow: hidden;
+      border-radius: 1.25rem !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
+    }
+    @media (max-width: 768px) {
+      #sidebar-main-console {
+        max-height: 52vh;
+      }
+    }
+    #sidebar-tab-content {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      scrollbar-width: thin;
+    }
+    #sidebar-tab-content::-webkit-scrollbar {
       width: 4px;
     }
-    .floating-hud::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
+    #sidebar-tab-content::-webkit-scrollbar-track {
+      background: #FFFDF9;
+    }
+    #sidebar-tab-content::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
       border-radius: 4px;
+    }
+    #sidebar-tab-content::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
+    /* Refined Comic Border Hierarchy for HUD & Layers (DoodleWeb Unified System) */
+    .discipline-group {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .discipline-toggle-btn {
+      transition: all 0.16s ease;
+    }
+    .discipline-toggle-btn:hover {
+      background: #F4EADA !important;
+    }
+    .layer-card {
+      position: relative;
+      background: #FFFFFF !important;
+      border: 1.5px solid #E2D9CC !important;
+      border-radius: 0.75rem !important; /* rounded-xl */
+      padding: 6px 8px;
+      cursor: pointer;
+      box-shadow: none !important;
+      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+    .layer-card:hover {
+      border-color: var(--dw-navy, #1D2B45) !important;
+      transform: translateY(-1px);
+      box-shadow: 1.5px 1.5px 0px rgba(29, 43, 69, 0.15) !important;
+    }
+    .layer-card.active {
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+      background: #FFFFFF !important;
+    }
+    .layer-card:not(.active) {
+      opacity: 0.82;
+      background: #FAF8F5 !important;
     }
 
     /* ยืดตารางตามจำนวนต้น สูงสุด 5 ต้น แล้วค่อยเปิด scroll */
@@ -982,116 +1053,132 @@
     }
   
     /* =========================================================================
-       TACTILE BOLDER BIM LAYER TOGGLE CARDS (MATCHING FOOTING.HTML)
+       DOODLEWEB TACTILE BIM LAYER TOGGLE CARDS & SWITCHES
        ========================================================================= */
+    /* Discipline Grouping Containers */
+    .discipline-group {
+      border-radius: 1rem !important; /* rounded-xl */
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: none !important;
+    }
+    .discipline-group:hover {
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    .discipline-group.group-structural {
+      background: #FFFDF7 !important;
+      border: 1.5px solid #F59E0B !important;
+    }
+    .discipline-group.group-mep {
+      background: #F0FDFA !important;
+      border: 1.5px solid #0D9488 !important;
+    }
+    .discipline-group.group-cad {
+      background: #F5F7FF !important;
+      border: 1.5px solid #4F46E5 !important;
+    }
+
     .layer-card {
-      position: relative;
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 6px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      user-select: none;
+      position: relative !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid var(--dw-border-soft, #E2D9CC) !important;
+      border-radius: 0.75rem !important; /* rounded-xl */
+      padding: 7px 9px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 5px !important;
+      cursor: pointer !important;
+      box-shadow: none !important;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      user-select: none !important;
     }
     .layer-card:hover {
-      border-color: #0f172a;
-      transform: translateY(-1px);
-      box-shadow: 2px 2px 0px #0f172a;
+      background: var(--dw-cream, #FAF5EE) !important;
+      border-color: var(--dw-navy, #1D2B45) !important;
+      transform: translate(-1px, -1px) !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
     }
     .layer-card.active {
-      border: 2px solid #0f172a;
-      box-shadow: 2px 2px 0px #0f172a;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      box-shadow: 2px 2px 0px var(--dw-navy, #1D2B45) !important;
+    }
+    .layer-card.active:hover {
+      box-shadow: 2.5px 2.5px 0px var(--dw-orange, #F26B2A) !important;
     }
     .layer-card.active.active-pile {
-      background: #fffbeb;
+      background: #FFFDF7 !important;
     }
     .layer-card.active.active-footing {
-      background: #f0f9ff;
+      background: #F0F9FF !important;
     }
     .layer-card.active.active-drainage {
-      background: #ecfeff;
+      background: #F0FDFA !important;
     }
     .layer-card.active.active-grid {
-      background: #f8fafc;
+      background: #EEF2FF !important;
     }
     .layer-card.active.active-boundary {
-      background: #fff1f2;
+      background: #FFF1F2 !important;
     }
     .layer-card.active.active-hex {
-      background: #fef3c7;
+      background: #F0FDFA !important;
     }
 
-    /* Tactile Toggle Switch Pill */
+    /* Unified Compact Tactile Toggle Switch Pill */
     .toggle-switch {
-      width: 36px;
-      height: 20px;
-      background: #cbd5e1;
-      border: 1.5px solid #0f172a;
-      border-radius: 9999px;
-      position: relative;
-      transition: background 0.22s ease;
-      flex-shrink: 0;
+      width: 32px !important;
+      height: 18px !important;
+      background: #CBD5E1 !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      position: relative !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      flex-shrink: 0 !important;
+      cursor: pointer !important;
+      box-shadow: inset 0 1px 2px rgba(29, 43, 69, 0.08) !important;
     }
     .toggle-knob {
-      width: 14px;
-      height: 14px;
-      background: #ffffff;
-      border: 1.5px solid #0f172a;
-      border-radius: 9999px;
-      position: absolute;
-      top: 1.5px;
-      left: 2px;
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+      width: 12px !important;
+      height: 12px !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      position: absolute !important;
+      top: 1.5px !important;
+      left: 1.5px !important;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: 0.5px 0.5px 0px var(--dw-navy, #1D2B45) !important;
     }
     .layer-card.active .toggle-knob {
-      transform: translateX(16px);
-      background: #ffffff;
+      transform: translateX(14px) !important;
+      border-color: var(--dw-navy, #1D2B45) !important;
     }
-    .layer-card.active.active-pile .toggle-switch {
-      background: #f59e0b;
-    }
-    .layer-card.active.active-footing .toggle-switch {
-      background: #0284c7;
-    }
-    .layer-card.active.active-drainage .toggle-switch {
-      background: #06b6d4;
-    }
-    .layer-card.active.active-grid .toggle-switch {
-      background: #334155;
-    }
-    .layer-card.active.active-boundary .toggle-switch {
-      background: #e11d48;
-    }
-    .layer-card.active.active-hex .toggle-switch {
-      background: #d97706;
+    .layer-card.active .toggle-switch {
+      background: #10B981 !important; /* Unified Calm Emerald Active for all layers */
     }
 
-    /* Isolate Solo Button */
+    /* Isolate Solo Pill Button */
     .btn-solo {
       opacity: 0;
-      padding: 1px 4px;
-      font-size: 9px;
-      font-weight: 800;
-      background: #f1f5f9;
-      border: 1px solid #94a3b8;
-      border-radius: 4px;
-      color: #334155;
-      transition: all 0.15s ease;
-      cursor: pointer;
+      padding: 1.5px 6px !important;
+      font-family: var(--font-mono, 'Space Mono', monospace) !important;
+      font-size: 8.5px !important;
+      font-weight: 700 !important;
+      background: #FFFFFF !important;
+      border: 1.5px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 9999px !important;
+      color: var(--dw-navy, #1D2B45) !important;
+      box-shadow: 1px 1px 0px var(--dw-navy, #1D2B45) !important;
+      transition: all 0.15s ease !important;
+      cursor: pointer !important;
     }
     .layer-card:hover .btn-solo {
       opacity: 1;
     }
     .btn-solo:hover {
-      background: #0f172a;
-      color: #ffffff;
-      border-color: #0f172a;
+      background: var(--dw-navy, #1D2B45) !important;
+      color: #FFFFFF !important;
+      box-shadow: 1.5px 1.5px 0px var(--dw-orange, #F26B2A) !important;
     }
 
         /* =========================================================================
@@ -1260,46 +1347,37 @@
 
   <!-- Top Bar: Single Unified Responsive Executive Navbar (DoodleWeb Edition) -->
   <header class="absolute top-2 left-2 right-2 z-30 pointer-events-none">
-    <div class="pop-header px-4 py-2 pointer-events-auto flex items-center justify-between gap-3 shadow-[4px_4px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl bg-white/95 backdrop-blur-md">
+    <div class="pop-header px-3 sm:px-4 py-1.5 sm:py-2 pointer-events-auto flex items-center justify-between gap-2 sm:gap-3 flex-nowrap shadow-[3.5px_3.5px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl bg-white/95 backdrop-blur-md overflow-visible relative">
       
-      <!-- 1. Left: Brand & Navigation Module Switcher -->
-      <div class="flex items-center gap-2.5 shrink-0">
-        <a href="index.html" class="doodle-btn px-3 py-1.5 rounded-full bg-white hover:bg-[#FAF5EE] border-2 border-[#1D2B45] text-[#1D2B45] font-bold text-xs flex items-center gap-1.5 shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
+      <!-- 1. Left: Brand & Page Badge -->
+      <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        <a href="index.html" class="doodle-btn px-2.5 sm:px-3 py-1 rounded-full bg-white hover:bg-[#FAF5EE] border-2 border-[#1D2B45] text-[#1D2B45] font-bold text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
           <span class="hidden md:inline font-bold">หน้าแรก</span>
         </a>
         
         <div class="flex items-center gap-2 shrink-0">
-          <div class="w-8 h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_#1D2B45] font-display">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#1D2B45] font-display">
             P37
           </div>
-          <div class="hidden sm:block">
+          <div>
             <h1 class="text-xs font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
               Pynn <span class="text-[#F26B2A] italic">Pridi</span> 37
             </h1>
-            <p class="text-[9px] text-[#3E4B69] font-medium leading-none mt-0.5 font-body">แผนงานโครงสร้างใต้ดิน</p>
+            <p class="text-[9px] text-[#3E4B69] font-medium leading-none mt-0.5 font-body hidden sm:block">แผนงานโครงสร้างใต้ดิน</p>
           </div>
         </div>
 
-        <!-- Symmetrical Module Switcher (📍 เสาเข็ม 93 ต้น vs 🏗️ ผังฐานราก 21 ฐาน) -->
-        <div class="inline-flex items-center p-0.5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] ml-1 select-none shrink-0 font-body">
-          <span id="piling-focus-badge" class="px-3 py-1 rounded-full bg-[#F7B844] border-1.5 border-[#1D2B45] text-[#1D2B45] font-black text-[11px] flex items-center gap-1.5 shadow-[1px_1px_0px_#1D2B45] cursor-default">
-            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-            <span>📍 เสาเข็ม (93)</span>
-          </span>
-          <a href="footing.html" class="px-3 py-1 rounded-full text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white text-[11px] font-bold flex items-center gap-1 transition-all" title="สลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน (3D Footings & BOQ)">
-            <i data-lucide="box" class="w-3.5 h-3.5 text-[#0284C7]"></i>
-            <span class="hidden md:inline">ผังฐานราก (21)</span>
-            <span class="md:hidden">ฐานราก</span>
-            <span class="text-[9px] font-mono font-extrabold text-[#0284C7] bg-[#E0F2FE] px-1.5 py-0.2 rounded-full border border-[#BAE6FD]">3D ↗</span>
-          </a>
-        </div>
+        <!-- Clean Status Badge (Replaces clunky top switcher) -->
+        <span class="hidden md:inline-flex bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#FDE68A] shrink-0">
+          📍 ผังเสาเข็ม 93 ต้น
+        </span>
       </div>
 
       <!-- 2. Center: Key Metrics & Date Selector (DoodleWeb Capsule) -->
-      <div class="pop-header-metrics hidden lg:flex items-center gap-2.5 text-xs bg-white px-4 py-1.5 rounded-full border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] shrink-0 font-body">
+      <div class="pop-header-metrics hidden md:flex items-center gap-2 text-xs bg-white px-3 sm:px-4 py-1 rounded-full border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] shrink-0 font-body flex-nowrap">
         <!-- Cumulative Metric -->
-        <div class="flex items-center gap-1.5 pr-2.5 border-r border-[#E2D9CC]">
+        <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
           <span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>
           <span class="text-[11px] text-[#3E4B69] font-bold">กดแล้ว:</span>
           <span class="text-xs font-black text-[#1D2B45]">
@@ -1308,8 +1386,8 @@
           </span>
         </div>
 
-        <!-- Date & Today's Metric -->
-        <div class="flex items-center gap-2 pr-2.5 border-r border-[#E2D9CC]">
+        <!-- Date & Today's Metric (Visible on large screens) -->
+        <div class="hidden xl:flex items-center gap-2 pr-2 border-r border-[#E2D9CC]">
           <input id="inp-report-date" type="date" class="text-[11px] bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-full px-2 py-0.5 font-bold text-[#1D2B45] font-mono focus:outline-none focus:ring-1 focus:ring-[#F26B2A] cursor-pointer">
           <span class="text-[11px] text-[#3E4B69] font-bold">วันนี้:</span>
           <span class="text-xs font-black text-[#1D2B45]">
@@ -1324,6 +1402,8 @@
           <span>ต้น</span>
         </div>
       </div>
+
+
 
       <!-- 3. Right: Action Toolbars (DoodleWeb Single Unified Menu & Actions) -->
       <div class="pop-header-actions flex items-center gap-2 shrink-0">
@@ -1343,138 +1423,155 @@
             <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#3E4B69] transition-transform duration-200" id="arrow-tables-dropdown"></i>
           </button>
           
-          <div id="menu-tables-dropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[5px_5px_0px_#1D2B45] p-2.5 z-50 flex flex-col gap-1 max-h-[85vh] overflow-y-auto custom-scrollbar font-body">
+          <div id="menu-tables-dropdown" class="hidden absolute right-0 top-full mt-2 w-84 sm:w-92 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[5px_5px_0px_#1D2B45] p-2.5 z-50 flex flex-col gap-2 max-h-[85vh] overflow-y-auto custom-scrollbar font-body">
             
-            <!-- Menu Header Badge -->
-            <div class="px-2 py-1.5 pb-2 border-b-2 border-[#1D2B45] mb-1 flex items-center justify-between">
+            <!-- Master Dropdown Header -->
+            <div class="px-2.5 py-1.5 bg-white border-2 border-[#1D2B45] rounded-xl flex items-center justify-between shadow-[1.5px_1.5px_0px_#1D2B45]">
               <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-lg bg-[#FFF3EB] border border-[#FDBA74] flex items-center justify-center text-[#F26B2A] shadow-xs">
+                <div class="w-6 h-6 rounded-lg bg-[#F7B844] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#1D2B45] shadow-xs">
                   <i data-lucide="folder-kanban" class="w-3.5 h-3.5"></i>
                 </div>
-                <span class="text-xs font-black text-[#1D2B45] tracking-wide">เอกสาร & ตารางรายงาน</span>
+                <span class="text-xs font-black text-[#1D2B45] tracking-wide">เอกสาร & รายงานโครงการ</span>
               </div>
-              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#FAF5EE] text-[#3E4B69] border border-[#1D2B45]/30">7 รายการ</span>
+              <span class="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#F59E0B]">7 รายการ</span>
             </div>
 
-            <!-- Section 1: เอกสารส่งมอบ & รายงานผล -->
-            <div class="px-2 pt-1 pb-0.5 flex items-center justify-between text-[10px] font-black text-[#8C9AA8] uppercase tracking-wider font-body">
-              <span>เอกสารส่งมอบ & รายงานผล</span>
-              <span class="text-[9px] font-mono text-[#8C9AA8]">REPORTS</span>
-            </div>
-
-            <!-- 1. Daily Report (PDF แสนสิริ) -->
-            <button id="btn-open-daily-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl text-xs font-bold text-[#1D2B45] flex items-center justify-between transition-all cursor-pointer group" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#B45309] flex items-center justify-center shrink-0 border border-[#FDE68A] shadow-xs group-hover:scale-105 transition-transform">
-                  <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#B45309]"></i>
+            <!-- GROUP 1: 📊 รายงานทางการ & ส่งมอบ (Official Reports - Amber Theme) -->
+            <div class="bg-[#FFFDF5] border-1.5 border-[#F59E0B] rounded-xl p-2 shadow-xs flex flex-col gap-1.5">
+              <div class="flex items-center justify-between px-1 pb-1 border-b border-[#F59E0B]/30">
+                <div class="flex items-center gap-1.5 text-[#92400E]">
+                  <span class="text-xs">📊</span>
+                  <span class="text-[10.5px] font-black uppercase tracking-wider">รายงานส่งมอบ & ผู้บริหาร</span>
                 </div>
-                <div class="truncate">
-                  <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">Daily Report (PDF แสนสิริ)</div>
-                  <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">3 หน้า: ฟอร์มส่งมอบ + ภาพถ่ายหน้างาน</div>
-                </div>
+                <span class="text-[9px] font-mono font-bold text-[#B45309]">REPORTS (2)</span>
               </div>
-              <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] shrink-0">PDF</span>
-            </button>
 
-            <!-- 2. หน้ารายงาน S-Curve -->
-            <button id="btn-open-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl text-xs font-bold text-[#1D2B45] flex items-center justify-between transition-all cursor-pointer group" title="หน้ารายงานความคืบหน้า S-Curve & สรุปภาพรวม">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-[#EEF4FF] text-[#1D4ED8] flex items-center justify-center shrink-0 border border-[#BFDBFE] shadow-xs group-hover:scale-105 transition-transform">
-                  <i data-lucide="line-chart" class="w-4 h-4 text-[#1D4ED8]"></i>
-                </div>
-                <div class="truncate">
-                  <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">รายงานภาพรวม & S-Curve</div>
-                  <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">กราฟความคืบหน้าสะสม vs แผนงาน</div>
-                </div>
-              </div>
-              <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#EEF4FF] text-[#1D4ED8] border border-[#BFDBFE] shrink-0">CHART</span>
-            </button>
-
-            <div class="border-t border-[#E2D9CC] my-1"></div>
-
-            <!-- Section 2: ตารางข้อมูลวิศวกรรม & สเปก -->
-            <div class="px-2 pt-1 pb-0.5 flex items-center justify-between text-[10px] font-black text-[#8C9AA8] uppercase tracking-wider font-body">
-              <span>ตารางข้อมูลวิศวกรรม & สเปก</span>
-              <span class="text-[9px] font-mono text-[#8C9AA8]">DATA & SPECS</span>
-            </div>
-
-            <!-- 3. ความยาวเสาเข็ม -->
-            <button id="btn-open-pile-lengths" type="button" class="menu-report-item w-full text-left p-2 rounded-xl text-xs font-bold text-[#1D2B45] flex items-center justify-between transition-all cursor-pointer group" title="กรอกระบุความยาวเสาเข็ม (ท่อนล่าง, ท่อนกลาง, ท่อนบน, ความสูง TOP)">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-[#E0F2FE] text-[#0369A1] flex items-center justify-center shrink-0 border border-[#BAE6FD] shadow-xs group-hover:scale-105 transition-transform">
-                  <i data-lucide="ruler" class="w-4 h-4 text-[#0369A1]"></i>
-                </div>
-                <div class="truncate">
-                  <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ความยาวเสาเข็ม (3 ท่อน)</div>
-                  <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ท่อนล่าง / กลาง / บน / ระดับ TOP</div>
-                </div>
-              </div>
-              <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD] shrink-0">SPECS</span>
-            </button>
-
-            <!-- 4. สรุปข้อมูลเข็ม & ค่าโค -->
-            <button id="btn-open-pile-summary-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl text-xs font-bold text-[#1D2B45] flex items-center justify-between transition-all cursor-pointer group" title="หน้าตารางรายงานสรุปงานเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-[#D1FAE5] text-[#065F46] flex items-center justify-center shrink-0 border border-[#A7F3D0] shadow-xs group-hover:scale-105 transition-transform">
-                  <i data-lucide="layers" class="w-4 h-4 text-[#065F46]"></i>
-                </div>
-                <div class="truncate">
-                  <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">สรุปข้อมูลเข็ม & ค่าโค</div>
-                  <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ค่าโค & ความยาวรวม 93 ต้น</div>
-                </div>
-              </div>
-              <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#D1FAE5] text-[#065F46] border border-[#A7F3D0] shrink-0">93 ต้น</span>
-            </button>
-
-            <!-- 5. ตารางรวมพิกัด PCO -->
-            <button id="btn-open-cotable" type="button" class="menu-report-item w-full text-left p-2 rounded-xl text-xs font-bold text-[#1D2B45] flex items-center justify-between transition-all cursor-pointer group" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO รวมทั้งหมด 93 ต้น">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#92400E] flex items-center justify-center shrink-0 border border-[#FDE68A] shadow-xs group-hover:scale-105 transition-transform">
-                  <i data-lucide="table-2" class="w-4 h-4 text-[#92400E]"></i>
-                </div>
-                <div class="truncate">
-                  <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ตารางรวมพิกัด PCO</div>
-                  <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ระดับตัดหัวเข็ม & พิกัดแบบ 93 ต้น</div>
-                </div>
-              </div>
-              <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] shrink-0">PCO</span>
-            </button>
-
-            <!-- 6. ตารางท่อระบายน้ำ & บ่อพัก -->
-            <button id="btn-menu-drainage-table" type="button" class="menu-report-item w-full text-left p-2 rounded-xl text-xs font-bold text-[#1D2B45] flex items-center justify-between transition-all cursor-pointer group" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-[#CFFAFE] text-[#155E75] flex items-center justify-center shrink-0 border border-[#A5F3FC] shadow-xs group-hover:scale-105 transition-transform">
-                  <i data-lucide="git-commit" class="w-4 h-4 text-[#155E75]"></i>
-                </div>
-                <div class="truncate">
-                  <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ตารางท่อระบายน้ำ & บ่อพัก</div>
-                  <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">12 บ่อ • 7 ท่อระบายน้ำ ค.ส.ล.</div>
-                </div>
-              </div>
-              <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#CFFAFE] text-[#155E75] border border-[#A5F3FC] shrink-0">DRAIN</span>
-            </button>
-
-            <div class="border-t border-[#E2D9CC] my-1"></div>
-
-            <!-- 7. โหมดเช็ค PCO รายต้น (3D) -->
-            <button id="btn-pco-inspector" type="button" class="menu-report-item w-full text-left p-2 rounded-xl text-xs font-bold text-[#1D2B45] flex items-center justify-between transition-all cursor-pointer group" title="โหมดคลิกเพื่อดูข้อมูล PCO รายต้นใน 3D">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-[#FFEDD5] text-[#EA580C] flex items-center justify-center shrink-0 border border-[#FDBA74] shadow-xs group-hover:scale-105 transition-transform">
-                  <i data-lucide="crosshair" class="w-4 h-4 text-[#EA580C]"></i>
-                </div>
-                <div class="truncate">
-                  <div class="text-xs font-black text-[#C2410C] leading-tight flex items-center gap-1.5" id="lbl-pco-inspector-header">
-                    <span>โหมดเช็ค PCO รายต้น (3D)</span>
-                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#EA580C]"></span>
+              <!-- 1. Daily Report (PDF แสนสิริ) -->
+              <button id="btn-open-daily-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#FEF3C7] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#F59E0B] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย) พร้อมส่งออก PDF">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#B45309] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#B45309]"></i>
                   </div>
-                  <div class="text-[9.5px] text-[#9A3412] font-normal truncate">คลิกต้นใดในจอ 3D เพื่อดูพิกัด</div>
+                  <div class="truncate">
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">Daily Report (PDF แสนสิริ)</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">3 หน้า: ฟอร์มส่งมอบ + ภาพถ่ายหน้างาน</div>
+                  </div>
                 </div>
+                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] shrink-0">PDF 3 หน้า</span>
+              </button>
+
+              <!-- 2. หน้ารายงาน S-Curve -->
+              <button id="btn-open-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#FEF3C7] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#F59E0B] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="หน้ารายงานความคืบหน้า S-Curve & สรุปภาพรวม">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#EEF4FF] text-[#1D4ED8] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="line-chart" class="w-4 h-4 text-[#1D4ED8]"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">รายงานภาพรวม & S-Curve</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">กราฟความคืบหน้าสะสม vs แผน 3 ต้น/วัน</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#EEF4FF] text-[#1D4ED8] border border-[#BFDBFE] shrink-0">S-CURVE</span>
+              </button>
+            </div>
+
+            <!-- GROUP 2: 📐 ตารางสเปก & พิกัดวิศวกรรม (Specs & Co - Sky Blue Theme) -->
+            <div class="bg-[#F0F9FF] border-1.5 border-[#0284C7] rounded-xl p-2 shadow-xs flex flex-col gap-1.5">
+              <div class="flex items-center justify-between px-1 pb-1 border-b border-[#0284C7]/30">
+                <div class="flex items-center gap-1.5 text-[#0369A1]">
+                  <span class="text-xs">📐</span>
+                  <span class="text-[10.5px] font-black uppercase tracking-wider">ตารางสเปก & พิกัดวิศวกรรม</span>
+                </div>
+                <span class="text-[9px] font-mono font-bold text-[#0284C7]">SPECS & CO (4)</span>
               </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <span id="badge-pco-inspect-mode" class="hidden px-2 py-0.5 rounded-full text-[9px] font-black bg-[#10B981] text-white shadow-xs">ON</span>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-[#FDBA74] group-hover:text-[#EA580C] group-hover:translate-x-0.5 transition-all"></i>
+
+              <!-- 3. ความยาวเสาเข็ม -->
+              <button id="btn-open-pile-lengths" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#E0F2FE] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#0284C7] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="กรอกระบุความยาวเสาเข็ม (ท่อนล่าง, ท่อนกลาง, ท่อนบน, ความสูง TOP)">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#E0F2FE] text-[#0369A1] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="ruler" class="w-4 h-4 text-[#0369A1]"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ความยาวเสาเข็ม (3 ท่อน)</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ท่อนล่าง / กลาง / บน / ระดับ TOP</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD] shrink-0">SPECS</span>
+              </button>
+
+              <!-- 4. สรุปข้อมูลเข็ม & ค่าโค -->
+              <button id="btn-open-pile-summary-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#E0F2FE] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#0284C7] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="หน้าตารางรายงานสรุปงานเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#D1FAE5] text-[#065F46] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="layers" class="w-4 h-4 text-[#065F46]"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">สรุปข้อมูลเข็ม & ค่าโค</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ค่าโค & ความยาวรวม 93 ต้น</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#D1FAE5] text-[#065F46] border border-[#A7F3D0] shrink-0">93 ต้น</span>
+              </button>
+
+              <!-- 5. ตารางรวมพิกัด PCO -->
+              <button id="btn-open-cotable" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#E0F2FE] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#0284C7] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="ตารางสรุปพิกัดและระดับตัดหัวเข็มตามแบบ PCO รวมทั้งหมด 93 ต้น">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#92400E] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="table-2" class="w-4 h-4 text-[#92400E]"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ตารางรวมพิกัด PCO</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ระดับตัดหัวเข็ม & พิกัดแบบ 93 ต้น</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] shrink-0">PCO</span>
+              </button>
+
+              <!-- 6. ตารางท่อระบายน้ำ & บ่อพัก -->
+              <button id="btn-menu-drainage-table" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#E0F2FE] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#0284C7] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="ตารางสรุปบ่อพักและท่อระบายน้ำ คสล.">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#CFFAFE] text-[#155E75] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="git-commit" class="w-4 h-4 text-[#155E75]"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ตารางท่อระบายน้ำ & บ่อพัก</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">12 บ่อ • 7 ท่อระบายน้ำ ค.ส.ล.</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#CFFAFE] text-[#155E75] border border-[#A5F3FC] shrink-0">DRAIN</span>
+              </button>
+            </div>
+
+            <!-- GROUP 3: 🎯 เครื่องมือตรวจสอบ 3D (Interactive - Tangerine Theme) -->
+            <div class="bg-[#FFF7ED] border-1.5 border-[#EA580C] rounded-xl p-2 shadow-xs flex flex-col gap-1.5">
+              <div class="flex items-center justify-between px-1 pb-1 border-b border-[#EA580C]/30">
+                <div class="flex items-center gap-1.5 text-[#C2410C]">
+                  <span class="text-xs">🎯</span>
+                  <span class="text-[10.5px] font-black uppercase tracking-wider">เครื่องมือตรวจสอบ 3D</span>
+                </div>
+                <span class="text-[9px] font-mono font-bold text-[#EA580C]">INTERACTIVE</span>
               </div>
-            </button>
+
+              <!-- 7. โหมดเช็ค PCO รายต้น (3D) -->
+              <button id="btn-pco-inspector" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#FFEDD5] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#EA580C] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="โหมดคลิกเพื่อดูข้อมูล PCO รายต้นใน 3D">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-[#FFEDD5] text-[#EA580C] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="crosshair" class="w-4 h-4 text-[#EA580C]"></i>
+                  </div>
+                  <div class="truncate">
+                    <div class="text-xs font-black text-[#C2410C] leading-tight flex items-center gap-1.5" id="lbl-pco-inspector-header">
+                      <span>โหมดเช็ค PCO รายต้น (3D)</span>
+                      <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#EA580C]"></span>
+                    </div>
+                    <div class="text-[9.5px] text-[#9A3412] font-normal truncate">คลิกต้นใดในจอ 3D เพื่อดูพิกัด & ค่าโค</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span id="badge-pco-inspect-mode" class="hidden px-2 py-0.5 rounded-full text-[9px] font-black bg-[#10B981] text-white shadow-xs">ON</span>
+                  <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-[#FDBA74] group-hover:text-[#EA580C] group-hover:translate-x-0.5 transition-all"></i>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1527,243 +1624,323 @@
   </div>
 
   <!-- Left Floating Toolbar: Views & Pile Filters (Distilled & Impeccable DoodleWeb Edition) -->
-  <div id="floating-hud" class="floating-hud is-mobile-collapsed absolute left-3 top-16 z-20 flex flex-col pointer-events-auto w-[235px] max-w-[240px] font-body">
+  <div id="floating-hud" class="floating-hud is-mobile-collapsed absolute left-3 top-[72px] z-20 flex flex-col pointer-events-auto w-[272px] max-w-[275px] font-body">
     
     <!-- Consolidated Single Console Card with Tabs -->
-    <div id="sidebar-main-console" class="pop-card bg-white border-2 border-[#1D2B45] shadow-[4px_4px_0px_#1D2B45] rounded-2xl overflow-hidden flex flex-col">
+    <div id="sidebar-main-console" class="pop-card bg-[#FFFDF9] border-2 border-[#1D2B45] shadow-[4px_4px_0px_#1D2B45] rounded-2xl overflow-hidden flex flex-col font-body">
       
-      <!-- Console Header Bar with Title & Collapse Button -->
-      <div class="flex items-center justify-between px-3 py-2 bg-[#FFFDF9] border-b-2 border-[#1D2B45]">
-        <div class="flex items-center gap-2">
-          <div class="w-6 h-6 rounded-lg bg-[#FFF3EB] border border-[#FDBA74] flex items-center justify-center text-[#F26B2A] shadow-xs">
-            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+      <!-- Console Header Bar with Title & Compact Actions -->
+      <div class="flex items-center justify-between px-3 py-1.5 bg-[#FFFDF9] border-b-2 border-[#1D2B45]">
+        <div class="flex items-center gap-1.5">
+          <div class="w-5 h-5 rounded-md bg-[#FFF3EB] border border-[#FDBA74] flex items-center justify-center text-[#F26B2A]">
+            <i data-lucide="sliders-horizontal" class="w-3 h-3"></i>
           </div>
           <span class="text-xs font-black text-[#1D2B45] tracking-wide">ควบคุมแบบ / 3D</span>
         </div>
-        <button id="btn-toggle-hud" type="button" class="text-[10px] font-extrabold text-[#1D2B45] hover:text-[#F26B2A] bg-[#FAF5EE] hover:bg-[#F6E9D7] px-2.5 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="ย่อ / ขยาย แผงควบคุม">
-          ย่อ/ขยาย
-        </button>
+        <div class="flex items-center gap-1">
+          <button id="btn-layers-all" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
+          <button id="btn-layers-reset" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="รีเซ็ตค่าเริ่มต้น (เข็ม+กริด+เขต)">รีเซ็ต</button>
+          <button id="btn-toggle-hud" type="button" class="text-[9px] font-extrabold text-[#1D2B45] hover:text-[#F26B2A] bg-[#FAF5EE] hover:bg-[#F6E9D7] px-2 py-0.5 rounded-full border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="ย่อ / ขยาย แผงควบคุม">
+            ย่อ
+          </button>
+        </div>
       </div>
 
-      <!-- Segmented Tab Header (Pills on Warm Cream Track) -->
-      <div class="flex items-center p-1.5 bg-[#F6E9D7] border-b-2 border-[#1D2B45] gap-1 select-none" id="floating-hud-body">
-        <button type="button" class="sidebar-tab-btn is-active flex-1 py-1.5 px-1.5 rounded-full text-[11px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer border border-[#1D2B45] bg-[#F26B2A] text-white shadow-[1.5px_1.5px_0px_#1D2B45]" data-tab="layers" id="tab-btn-layers" title="เลเยอร์และชิ้นส่วน 3D">
-          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+      <!-- Segmented Tab Header (Compact Pills on Warm Cream Track) -->
+      <div class="flex items-center p-1 bg-[#FAF5EE] border-b-2 border-[#1D2B45] gap-1 select-none" id="floating-hud-body">
+        <button type="button" class="sidebar-tab-btn is-active flex-1 py-1 px-1 rounded-full text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer border border-[#1D2B45] bg-[#F26B2A] text-white shadow-[1px_1px_0px_#1D2B45]" data-tab="layers" id="tab-btn-layers" title="เลเยอร์และชิ้นส่วน 3D">
+          <i data-lucide="layers" class="w-3 h-3"></i>
           <span>เลเยอร์</span>
         </button>
-        <button type="button" class="sidebar-tab-btn is-inactive flex-1 py-1.5 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-[#E2D9CC] bg-white text-[#1D2B45] hover:bg-[#FAF5EE]" data-tab="views" id="tab-btn-views" title="มุมมองกล้อง 2D/3D">
-          <i data-lucide="compass" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+        <button type="button" class="sidebar-tab-btn is-inactive flex-1 py-1 px-1 rounded-full text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-transparent bg-transparent text-[#3E4B69] hover:bg-white" data-tab="views" id="tab-btn-views" title="มุมมองกล้อง 2D/3D">
+          <i data-lucide="compass" class="w-3 h-3 text-[#F26B2A]"></i>
           <span>มุมมอง</span>
         </button>
-        <button type="button" class="sidebar-tab-btn is-inactive flex-1 py-1.5 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-[#E2D9CC] bg-white text-[#1D2B45] hover:bg-[#FAF5EE]" data-tab="filter" id="tab-btn-filter" title="ตัวกรองสถานะเสาเข็ม">
-          <i data-lucide="filter" class="w-3.5 h-3.5 text-[#10B981]"></i>
+        <button type="button" class="sidebar-tab-btn is-inactive flex-1 py-1 px-1 rounded-full text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-transparent bg-transparent text-[#3E4B69] hover:bg-white" data-tab="filter" id="tab-btn-filter" title="ตัวกรองสถานะเสาเข็ม">
+          <i data-lucide="filter" class="w-3 h-3 text-[#10B981]"></i>
           <span>ตัวกรอง</span>
         </button>
       </div>
 
       <!-- Tab Content Area with Smooth Scroll -->
-      <div id="sidebar-tab-content" class="p-2 overflow-y-auto max-h-[calc(100vh-215px)] custom-scrollbar flex flex-col gap-2 bg-[#FFFDF9]">
+      <div id="sidebar-tab-content" class="p-2 overflow-y-auto max-h-[calc(100vh-180px)] custom-scrollbar flex flex-col gap-2.5 bg-[#FFFDF9]">
 
-        <!-- Pane 1: เลเยอร์ 3D (Default Tab) -->
-        <div id="pane-layers" class="sidebar-tab-pane flex flex-col gap-1.5">
-          <div class="flex items-center justify-between pb-1 px-0.5 border-b border-[#E2D9CC]">
-            <span class="text-[10px] font-black text-[#8C9AA8] uppercase tracking-wider flex items-center gap-1 font-body">
-              <i data-lucide="box" class="w-3 h-3 text-[#F26B2A]"></i> ชิ้นส่วนโมเดล
-            </span>
-            <div class="flex items-center gap-1">
-              <button id="btn-layers-all" type="button" class="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] transition-all cursor-pointer" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
-              <button id="btn-layers-reset" type="button" class="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] transition-all cursor-pointer" title="รีเซ็ตค่าเริ่มต้น (เข็ม+กริด+เขต)">รีเซ็ต</button>
-            </div>
-          </div>
+        <!-- Pane 1: เลเยอร์ 3D (Default Tab - Grouped by 3 Disciplines with Accordion) -->
+        <div id="pane-layers" class="sidebar-tab-pane flex flex-col gap-2">
 
-          <!-- Layer 1: เสาเข็ม I-beam -->
-          <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1.5" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam ทั้งหมด">
-            <div class="flex items-center justify-between w-full" id="trigger-sidebar-piles">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-7 h-7 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#92400E] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                  <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+          <!-- GROUP 1: 🏗️ หมวดงานโครงสร้างหลัก -->
+          <div class="discipline-group flex flex-col gap-1.5" data-discipline="structural">
+            <!-- Accordion Header -->
+            <button type="button" class="discipline-toggle-btn flex items-center justify-between w-full px-2 py-1 rounded-lg bg-[#FAF5EE] hover:bg-[#F2EAE0] border border-[#E2D9CC] transition-all cursor-pointer select-none" data-target="group-structural-items">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="chevron-down" class="discipline-chevron w-3.5 h-3.5 text-[#1D2B45] transition-transform duration-200" id="chevron-structural"></i>
+                <span class="text-[11px] font-black text-[#1D2B45] tracking-tight">🏗️ โครงสร้างหลัก</span>
+              </div>
+              <span class="text-[9px] font-mono font-bold text-[#64748B] bg-white px-1.5 py-0.2 rounded border border-[#E2D9CC]">2 รายการ</span>
+            </button>
+
+            <div id="group-structural-items" class="flex flex-col gap-1.5">
+              <!-- Layer 1: เสาเข็ม I-beam -->
+              <div id="sidebar-card-piles" class="layer-card active active-pile flex flex-col gap-1" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam ทั้งหมด">
+                <div class="flex items-center justify-between w-full" id="trigger-sidebar-piles">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-6 h-6 rounded-md bg-[#FFF3EB] border border-[#FDBA74] flex items-center justify-center text-[#F26B2A] shrink-0">
+                      <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-piles">งานเสาเข็ม I-beam</div>
+                      <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">93 ต้น • เข็มหลัก</div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
+                    <div class="toggle-switch"><div class="toggle-knob"></div></div>
+                  </div>
                 </div>
-                <div class="truncate">
-                  <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-piles">งานเสาเข็ม I-beam</div>
-                  <div class="text-[9.5px] text-[#B45309] font-bold font-mono mt-0.5">93 ต้น • เข็มหลัก</div>
-                </div>
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button type="button" class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
-                <div class="toggle-switch"><div class="toggle-knob"></div></div>
-              </div>
-            </div>
-            <!-- Subtoggles: Clean Micro-Pills -->
-            <div id="div-pile-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#FDE68A] text-[9.5px] w-full">
-              <button type="button" id="btn-toggle-pile-model" class="subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A]" title="เปิด/ปิด เฉพาะตัวโมเดล 3D เสาเข็ม">
-                <span id="dot-pile-model" class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
-                <span>โมเดล 3D</span>
-              </button>
-              <button type="button" id="btn-toggle-pile-text" class="subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A]" title="เปิด/ปิด เฉพาะข้อความ/ป้ายเบอร์เข็ม">
-                <span id="dot-pile-text" class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
-                <span>ข้อความ/ป้าย</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Layer 2: ผังฐานราก ค.ส.ล. -->
-          <a href="footing.html" id="sidebar-card-footings" class="layer-card active active-footing flex items-center justify-between group" title="คลิกเพื่อสลับไปหน้าผังฐานราก ค.ส.ล. 21 ฐาน">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#E0F2FE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#0369A1] shadow-[1px_1px_0px_#1D2B45] shrink-0 group-hover:scale-105 transition-transform">
-                <i data-lucide="box" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ผังฐานราก ค.ส.ล.</div>
-                <div class="text-[9.5px] text-[#0284C7] font-bold font-mono mt-0.5">21 ฐาน • โมเดล 3D</div>
-              </div>
-            </div>
-            <span class="text-[9.5px] font-black px-2 py-0.5 rounded-full bg-[#0284C7] text-white border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:bg-[#0369A1] transition-colors shrink-0">
-              เปิด 3D ↗
-            </span>
-          </a>
-
-          <!-- Layer 3: ท่อ & บ่อพัก ค.ส.ล. -->
-          <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1.5" data-layer="drainage" title="คลิกเพื่อ เปิด/ปิด งานท่อระบายน้ำทั้งหมด">
-            <div class="flex items-center justify-between w-full" id="trigger-sidebar-drainage">
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-7 h-7 rounded-lg bg-[#CFFAFE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#155E75] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                  <i data-lucide="git-commit" class="w-3.5 h-3.5 text-[#0891B2]"></i>
-                </div>
-                <div class="truncate">
-                  <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-drainage">ท่อ & บ่อพัก ค.ส.ล.</div>
-                  <div class="text-[9.5px] text-[#0891B2] font-bold font-mono mt-0.5">12 บ่อ • 7 ท่อ</div>
+                <!-- Subtoggles: Compact Inline Pill Track -->
+                <div id="div-pile-subtoggles" class="flex items-center p-0.5 bg-[#FAF5EE] rounded-lg border border-[#E2D9CC] gap-1 w-full mt-0.5">
+                  <button type="button" id="btn-toggle-pile-model" class="subtoggle-btn is-active flex-1 py-0.5 px-1 rounded-md border border-[#1D2B45] font-black text-[9.5px] flex items-center justify-center gap-1 bg-white text-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45]" title="เปิด/ปิด โมเดล 3D เสาเข็ม">
+                    <span id="dot-pile-model" class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+                    <span>โมเดล 3D</span>
+                  </button>
+                  <button type="button" id="btn-toggle-pile-text" class="subtoggle-btn is-active flex-1 py-0.5 px-1 rounded-md border border-[#1D2B45] font-black text-[9.5px] flex items-center justify-center gap-1 bg-white text-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45]" title="เปิด/ปิด ป้ายเบอร์เข็ม">
+                    <span id="dot-pile-text" class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+                    <span>ป้ายเบอร์</span>
+                  </button>
                 </div>
               </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button type="button" class="btn-solo" data-solo="drainage" title="ดูเฉพาะท่อระบายน้ำ">SOLO</button>
-                <div class="toggle-switch"><div class="toggle-knob"></div></div>
+
+              <!-- Layer 2: ฐานราก ค.ส.ล. (21 ฐาน BIM Layer) -->
+              <div id="sidebar-card-footings" class="layer-card flex flex-col gap-1" data-layer="footings" title="คลิกเพื่อ เปิด/ปิด ฐานราก ค.ส.ล. ทั้งหมด">
+                <div class="flex items-center justify-between w-full" id="trigger-sidebar-footings">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-6 h-6 rounded-md bg-[#E0F2FE] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7] shrink-0">
+                      <i data-lucide="box" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-footings">ผังฐานราก ค.ส.ล.</div>
+                      <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">21 ฐาน • คอนกรีต 3D</div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" class="btn-solo" data-solo="footings" title="ดูเฉพาะฐานราก">SOLO</button>
+                    <div class="toggle-switch"><div class="toggle-knob"></div></div>
+                  </div>
+                </div>
+                <!-- Subtoggles: Quick Opacity Presets & Click Shield Info -->
+                <div id="div-footing-subtoggles" class="hidden flex flex-col p-1.5 bg-[#FAF5EE] rounded-lg border border-[#E2D9CC] gap-1.5 w-full mt-0.5">
+                  <div class="flex items-center justify-between w-full">
+                    <span class="text-[9px] font-bold text-[#3E4B69] flex items-center gap-1">
+                      <i data-lucide="eye" class="w-2.5 h-2.5 text-[#0284C7]"></i>
+                      <span>ความทึบแสง:</span>
+                    </span>
+                    <div class="flex items-center gap-1">
+                      <button type="button" class="btn-footing-op text-[8.5px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 cursor-pointer" data-val="0.35">X-Ray (35%)</button>
+                      <button type="button" class="btn-footing-op is-active text-[8.5px] font-black px-1.5 py-0.5 rounded-md bg-[#0284C7] text-white border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] cursor-pointer" data-val="0.85">สมดุล (85%)</button>
+                      <button type="button" class="btn-footing-op text-[8.5px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 cursor-pointer" data-val="1.0">ทึบ (100%)</button>
+                    </div>
+                  </div>
+                  <!-- Mode Info Pill: Click Shield Active -->
+                  <div class="flex items-center justify-between px-1.5 py-0.5 rounded bg-sky-50 border border-sky-200 text-[8.5px]">
+                    <span class="font-bold text-[#0369A1] flex items-center gap-1">
+                      <i data-lucide="shield-check" class="w-2.5 h-2.5 text-[#0284C7]"></i>
+                      <span>คลิกเพื่อดูฐานราก (ล็อกไม่ให้โดนเข็ม)</span>
+                    </span>
+                    <span class="font-mono font-black text-[#0284C7] bg-white px-1 rounded border border-sky-200">AUTO</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <!-- Subtoggles: Clean Micro-Pills -->
-            <div id="div-drain-subtoggles" class="grid grid-cols-2 gap-1.5 pt-1.5 border-t border-[#E2D9CC] text-[9.5px] w-full">
-              <button type="button" id="btn-toggle-drain-model" class="subtoggle-btn flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] hover:bg-[#F1F5F9]" title="เปิด/ปิด เฉพาะตัวโมเดล 3D ท่อและบ่อพัก">
-                <span id="dot-drain-model" class="w-1.5 h-1.5 rounded-full bg-[#94A3B8]"></span>
-                <span>โมเดล 3D</span>
-              </button>
-              <button type="button" id="btn-toggle-drain-text" class="subtoggle-btn flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] hover:bg-[#F1F5F9]" title="เปิด/ปิด เฉพาะข้อความ/ระดับท่อระบายน้ำ">
-                <span id="dot-drain-text" class="w-1.5 h-1.5 rounded-full bg-[#94A3B8]"></span>
-                <span>ข้อความ/ระดับ</span>
-              </button>
             </div>
           </div>
 
-          <!-- Layer 4: กริด & มิติ CAD -->
-          <div id="card-grid" class="layer-card active active-grid flex items-center justify-between" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#EEF2FF] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#4338CA] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                <i data-lucide="grid" class="w-3.5 h-3.5 text-[#4F46E5]"></i>
+          <!-- GROUP 2: 💧 หมวดระบบสุขาภิบาล & ถัง -->
+          <div class="discipline-group flex flex-col gap-1.5" data-discipline="mep">
+            <!-- Accordion Header -->
+            <button type="button" class="discipline-toggle-btn flex items-center justify-between w-full px-2 py-1 rounded-lg bg-[#FAF5EE] hover:bg-[#F2EAE0] border border-[#E2D9CC] transition-all cursor-pointer select-none" data-target="group-mep-items">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="chevron-down" class="discipline-chevron w-3.5 h-3.5 text-[#1D2B45] transition-transform duration-200" id="chevron-mep"></i>
+                <span class="text-[11px] font-black text-[#1D2B45] tracking-tight">💧 สุขาภิบาล & ถังบำบัด</span>
               </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">กริด & มิติ CAD</div>
-                <div class="text-[9.5px] text-[#4F46E5] font-mono font-bold mt-0.5">1-10, A-E</div>
+              <span class="text-[9px] font-mono font-bold text-[#64748B] bg-white px-1.5 py-0.2 rounded border border-[#E2D9CC]">2 รายการ</span>
+            </button>
+
+            <div id="group-mep-items" class="flex flex-col gap-1.5">
+              <!-- Layer 3: ท่อ & บ่อพัก ค.ส.ล. -->
+              <div id="sidebar-card-drainage" class="layer-card flex flex-col gap-1" data-layer="drainage" title="คลิกเพื่อ เปิด/ปิด งานท่อระบายน้ำทั้งหมด">
+                <div class="flex items-center justify-between w-full" id="trigger-sidebar-drainage">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-6 h-6 rounded-md bg-[#CFFAFE] border border-[#A5F3FC] flex items-center justify-center text-[#0891B2] shrink-0">
+                      <i data-lucide="git-commit" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="font-extrabold text-[#1D2B45] text-xs leading-none" id="title-sidebar-drainage">ท่อ & บ่อพัก ค.ส.ล.</div>
+                      <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">12 บ่อ • 7 ท่อ</div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" class="btn-solo" data-solo="drainage" title="ดูเฉพาะท่อระบายน้ำ">SOLO</button>
+                    <div class="toggle-switch"><div class="toggle-knob"></div></div>
+                  </div>
+                </div>
+                <!-- Subtoggles -->
+                <div id="div-drain-subtoggles" class="flex items-center p-0.5 bg-[#FAF5EE] rounded-lg border border-[#E2D9CC] gap-1 w-full mt-0.5">
+                  <button type="button" id="btn-toggle-drain-model" class="subtoggle-btn is-inactive flex-1 py-0.5 px-1 rounded-md border border-dashed border-[#1D2B45]/30 font-bold text-[9.5px] flex items-center justify-center gap-1 bg-[#FAF5EE] text-[#64748B]" title="เปิด/ปิด โมเดล 3D ท่อและบ่อพัก">
+                    <span id="dot-drain-model" class="w-1.5 h-1.5 rounded-full bg-[#CBD5E1]"></span>
+                    <span>โมเดล 3D</span>
+                  </button>
+                  <button type="button" id="btn-toggle-drain-text" class="subtoggle-btn is-inactive flex-1 py-0.5 px-1 rounded-md border border-dashed border-[#1D2B45]/30 font-bold text-[9.5px] flex items-center justify-center gap-1 bg-[#FAF5EE] text-[#64748B]" title="เปิด/ปิด ข้อความ/ระดับท่อระบายน้ำ">
+                    <span id="dot-drain-text" class="w-1.5 h-1.5 rounded-full bg-[#CBD5E1]"></span>
+                    <span>ข้อความ</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Layer 4: ถังบำบัด & ผนังกันดิน -->
+              <div id="card-hex" class="layer-card flex items-center justify-between" data-layer="hex" title="คลิกเพื่อ เปิด/ปิด เสาเข็มกลุ่มหกเหลี่ยมถังบำบัดและแนวผนัง">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-6 h-6 rounded-md bg-[#CCFBF1] border border-[#99F6E4] flex items-center justify-center text-[#0D9488] shrink-0">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ถังบำบัด & ผนังกันดิน</div>
+                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">137 ต้น • เข็มกลุ่ม</div>
+                  </div>
+                </div>
+                <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
               </div>
             </div>
-            <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
           </div>
 
-          <!-- Layer 5: แนวเขตที่ดิน & หมุด -->
-          <div id="card-boundary" class="layer-card active active-boundary flex items-center justify-between" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#FFE4E6] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#BE123C] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#BE123C]"></i>
+          <!-- GROUP 3: 📐 หมวดผังไซต์ & เส้นอ้างอิง CAD -->
+          <div class="discipline-group flex flex-col gap-1.5" data-discipline="cad">
+            <!-- Accordion Header -->
+            <button type="button" class="discipline-toggle-btn flex items-center justify-between w-full px-2 py-1 rounded-lg bg-[#FAF5EE] hover:bg-[#F2EAE0] border border-[#E2D9CC] transition-all cursor-pointer select-none" data-target="group-cad-items">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="chevron-down" class="discipline-chevron w-3.5 h-3.5 text-[#1D2B45] transition-transform duration-200" id="chevron-cad"></i>
+                <span class="text-[11px] font-black text-[#1D2B45] tracking-tight">📐 ผังไซต์ & CAD</span>
               </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
-                <div class="text-[9.5px] text-[#BE123C] font-mono font-bold mt-0.5">4 ด้าน • หมุดแดง</div>
-              </div>
-            </div>
-            <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
-          </div>
+              <span class="text-[9px] font-mono font-bold text-[#64748B] bg-white px-1.5 py-0.2 rounded border border-[#E2D9CC]">2 รายการ</span>
+            </button>
 
-          <!-- Layer 6: ถังบำบัด & ผนัง -->
-          <div id="card-hex" class="layer-card flex items-center justify-between" data-layer="hex" title="คลิกเพื่อ เปิด/ปิด เสาเข็มกลุ่มหกเหลี่ยมถังบำบัดและแนวผนัง">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#B45309] shadow-[1px_1px_0px_#1D2B45] shrink-0">
-                <i data-lucide="layers" class="w-3.5 h-3.5 text-[#F7B844]"></i>
+            <div id="group-cad-items" class="flex flex-col gap-1.5">
+              <!-- Layer 5: กริด & มิติ CAD -->
+              <div id="card-grid" class="layer-card active active-grid flex items-center justify-between" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-6 h-6 rounded-md bg-[#EEF2FF] border border-[#C7D2FE] flex items-center justify-center text-[#4F46E5] shrink-0">
+                    <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">กริด & มิติ CAD</div>
+                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">กริด 1-10, A-E</div>
+                  </div>
+                </div>
+                <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
               </div>
-              <div class="truncate">
-                <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ถังบำบัด & ผนัง</div>
-                <div class="text-[9.5px] text-[#92400E] font-mono mt-0.5">137 ต้น (เข็มกลุ่ม)</div>
+
+              <!-- Layer 6: แนวเขตที่ดิน & หมุดสำรวจ -->
+              <div id="card-boundary" class="layer-card active active-boundary flex items-center justify-between" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-6 h-6 rounded-md bg-[#FFE4E6] border border-[#FECDD3] flex items-center justify-center text-[#BE123C] shrink-0">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">แนวเขตที่ดิน & หมุดสำรวจ</div>
+                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">4 ด้าน • หมุดแดง</div>
+                  </div>
+                </div>
+                <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
               </div>
             </div>
-            <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
           </div>
 
           <button id="btn-sidebar-open-drainagetable" class="hidden"></button>
         </div>
 
-        <!-- Pane 2: มุมมองกล้อง (Views) -->
+        <!-- Pane 2: มุมมองกล้อง (Views - Compact & Unified) -->
         <div id="pane-views" class="sidebar-tab-pane hidden flex flex-col gap-2">
-          <div class="flex flex-col gap-1.5">
-            <span class="text-[10px] font-black text-[#8C9AA8] uppercase tracking-wider pb-1 border-b border-[#E2D9CC]">โหมดมุมมองหลัก</span>
-            <button id="view-top-ortho" type="button" class="pop-btn py-1.5 px-3 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer">
-              <i data-lucide="layout-grid" class="w-4 h-4 text-[#F26B2A]"></i>
-              <span>แปลน Top View (2D)</span>
-            </button>
-            <button id="view-iso3d" type="button" class="pop-btn active py-1.5 px-3 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer">
-              <i data-lucide="box" class="w-4 h-4 text-white"></i>
-              <span>3D สามมิติ (Iso)</span>
-            </button>
-            <a href="footing.html" class="pop-btn py-1.5 px-3 text-xs font-bold flex items-center gap-2 transition-all bg-[#E0F2FE] text-[#0369A1] border-[#1D2B45] hover:bg-[#BAE6FD]" title="ไปดูผังความคืบหน้าฐานราก ค.ส.ล.">
-              <i data-lucide="layers" class="w-4 h-4 text-[#0284C7]"></i>
-              <span>ผังฐานราก ค.ส.ล. (21)</span>
+          <!-- GROUP 1: โหมดมุมมองหลัก (Projections) -->
+          <div class="flex flex-col gap-1.5 p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC]">
+            <div class="flex items-center justify-between">
+              <span class="text-[10.5px] font-black text-[#1D2B45] flex items-center gap-1">🌐 โหมดมิติหลัก</span>
+              <span class="text-[9px] font-mono font-bold text-[#F26B2A]">2D / 3D</span>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button id="view-top-ortho" type="button" class="pop-btn py-1.5 px-2 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+                <span>แปลน 2D</span>
+              </button>
+              <button id="view-iso3d" type="button" class="pop-btn active py-1.5 px-2 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                <i data-lucide="box" class="w-3.5 h-3.5 text-white"></i>
+                <span>3D สามมิติ</span>
+              </button>
+            </div>
+            <a href="footing.html" class="pop-btn py-1 px-2.5 text-[10.5px] font-bold flex items-center justify-center gap-1.5 transition-all bg-[#E0F2FE] text-[#0369A1] border-[#1D2B45] hover:bg-[#BAE6FD]" title="ไปดูผังความคืบหน้าฐานราก ค.ส.ล.">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0284C7]"></i>
+              <span>ผังฐานราก ค.ส.ล. (21) ↗</span>
             </a>
           </div>
 
-          <!-- Sub-views for 3D View Angles -->
-          <div id="sub-views-3d" class="flex flex-col gap-1.5 pt-1.5 border-t border-[#E2D9CC]">
-            <span class="text-[9.5px] font-bold text-[#8C9AA8]">มุมมองแกนมาตรฐาน</span>
-            <div class="grid grid-cols-3 gap-1 text-[10px]">
-              <button id="btn-view-top-3d" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านบน">บน</button>
-              <button id="btn-view-front" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านหน้า ทิศใต้">หน้า</button>
-              <button id="btn-view-side" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านข้าง ทิศตะวันตก">ข้าง</button>
+          <!-- GROUP 2: มุมมองแกนมาตรฐาน & จัดกึ่งกลาง -->
+          <div class="flex flex-col gap-1.5 p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC]">
+            <div class="flex items-center justify-between">
+              <span class="text-[10.5px] font-black text-[#1D2B45] flex items-center gap-1">📐 แกนมุมมองมาตรฐาน</span>
+              <span class="text-[9px] font-mono font-bold text-[#4F46E5]">AXES</span>
             </div>
-            <button id="btn-view-focus-center" type="button" class="pop-btn w-full py-2 text-[11px] flex items-center justify-center gap-1.5 font-bold mt-1 bg-[#FEF3C7] text-[#92400E] border-1.5 border-[#1D2B45] hover:bg-[#FDE68A] cursor-pointer" title="เล็งกล้องไปที่กึ่งกลางไซต์โครงการ">
-              <span class="text-sm">🎯</span>
-              <span>เล็งกึ่งกลางไซต์</span>
+            <div class="grid grid-cols-3 gap-1 text-[10px]">
+              <button id="btn-view-top-3d" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านบน">บน (Top)</button>
+              <button id="btn-view-front" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านหน้า ทิศใต้">หน้า (Front)</button>
+              <button id="btn-view-side" type="button" class="pop-btn py-1 text-center font-bold" title="มองจากด้านข้าง ทิศตะวันตก">ข้าง (Side)</button>
+            </div>
+            <button id="btn-view-focus-center" type="button" class="pop-btn w-full py-1.5 text-[10.5px] flex items-center justify-center gap-1 font-bold bg-[#FEF3C7] text-[#92400E] border border-[#1D2B45] hover:bg-[#FDE68A] cursor-pointer" title="เล็งกล้องไปที่กึ่งกลางไซต์โครงการ">
+              <span>🎯 เล็งกึ่งกลางไซต์</span>
             </button>
           </div>
         </div>
 
         <!-- Pane 3: ตัวกรองสถานะ & เช็ครายต้น (Filter & Inspect) -->
         <div id="pane-filter" class="sidebar-tab-pane hidden flex flex-col gap-2">
-          <div id="card-pile-filter" class="flex flex-col gap-1.5">
-            <span class="text-[10px] font-black text-[#8C9AA8] uppercase tracking-wider pb-1 border-b border-[#E2D9CC] flex items-center gap-1">
-              <i data-lucide="filter" class="w-3 h-3 text-[#10B981]"></i> กรองแสดงสถานะเข็ม
-            </span>
-            <button id="filter-all" type="button" class="pop-btn active px-3 py-1.5 text-xs flex items-center justify-between gap-1 cursor-pointer">
-              <span class="flex items-center gap-1.5 font-bold text-white">
-                <i data-lucide="layers" class="w-3.5 h-3.5"></i> ทั้งหมด
-              </span>
-              <span class="font-black font-mono px-2 py-0.5 rounded-full bg-white text-[#1D2B45] border border-[#1D2B45] text-[10px]">93</span>
-            </button>
-            <button id="filter-driven" type="button" class="pop-btn px-3 py-1.5 text-xs flex items-center justify-between gap-1 bg-[#D1FAE5] text-[#065F46] hover:bg-[#A7F3D0] cursor-pointer">
-              <span class="flex items-center gap-1.5 font-bold">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] border border-[#064E3B]"></span> กดแล้ว
-              </span>
-              <span id="badge-driven" class="font-black font-mono px-2 py-0.5 rounded-full bg-white text-[#065F46] border border-[#1D2B45] text-[10px]">0</span>
-            </button>
-            <button id="filter-pending" type="button" class="pop-btn px-3 py-1.5 text-xs flex items-center justify-between gap-1 cursor-pointer">
-              <span class="flex items-center gap-1.5 font-bold">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#CBD5E1] border border-[#1D2B45]"></span> ยังไม่กด
-              </span>
-              <span id="badge-pending" class="font-black font-mono px-2 py-0.5 rounded-full bg-white text-[#1D2B45] border border-[#1D2B45] text-[10px]">93</span>
-            </button>
+          <!-- GROUP 1: กรองสถานะเสาเข็ม 93 ต้น -->
+          <div class="flex flex-col gap-1.5 p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC]">
+            <div class="flex items-center justify-between">
+              <span class="text-[10.5px] font-black text-[#1D2B45] flex items-center gap-1">📊 สถานะเข็ม 93 ต้น</span>
+              <span class="text-[9px] font-mono font-bold text-[#065F46]">STATUS</span>
+            </div>
+            <div id="card-pile-filter" class="flex flex-col gap-1">
+              <button id="filter-all" type="button" class="pop-btn active px-2.5 py-1 text-[11px] flex items-center justify-between gap-1 cursor-pointer">
+                <span class="flex items-center gap-1.5 font-bold text-white">
+                  <i data-lucide="layers" class="w-3 h-3"></i> ทั้งหมด
+                </span>
+                <span class="font-black font-mono px-1.5 py-0.2 rounded-full bg-white text-[#1D2B45] border border-[#1D2B45] text-[9.5px]">93</span>
+              </button>
+              <button id="filter-driven" type="button" class="pop-btn px-2.5 py-1 text-[11px] flex items-center justify-between gap-1 bg-[#D1FAE5] text-[#065F46] hover:bg-[#A7F3D0] cursor-pointer">
+                <span class="flex items-center gap-1.5 font-bold">
+                  <span class="w-2 h-2 rounded-full bg-[#10B981] border border-[#064E3B]"></span> กดแล้ว
+                </span>
+                <span id="badge-driven" class="font-black font-mono px-1.5 py-0.2 rounded-full bg-white text-[#065F46] border border-[#1D2B45] text-[9.5px]">0</span>
+              </button>
+              <button id="filter-pending" type="button" class="pop-btn px-2.5 py-1 text-[11px] flex items-center justify-between gap-1 cursor-pointer">
+                <span class="flex items-center gap-1.5 font-bold">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#CBD5E1] border border-[#1D2B45]"></span> ยังไม่กด
+                </span>
+                <span id="badge-pending" class="font-black font-mono px-2 py-0.5 rounded-full bg-white text-[#1D2B45] border border-[#1D2B45] text-[9.5px]">93</span>
+              </button>
+            </div>
           </div>
 
-          <!-- เครื่องมือเช็คข้อมูลรายต้น -->
-          <div id="card-pco-inspector-tool" class="flex flex-col gap-1 pt-2 border-t border-[#E2D9CC]">
-            <button id="btn-sidebar-toggle-inspector" type="button" class="doodle-btn w-full py-2 px-2.5 text-xs font-black rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0px_#F26B2A] bg-[#FEF3C7] text-[#92400E] border-2 border-[#1D2B45] hover:bg-[#FDE68A] active:translate-x-0.5 active:translate-y-0.5" title="คลิกเปิดโหมดเช็ค แล้วไปคลิกที่เสาเข็มใน 3D">
-              <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#EA580C]"></i>
-              <span id="lbl-sidebar-toggle-inspector">คลิกเช็ค PCO รายต้น</span>
-              <span id="badge-sidebar-inspect-active" class="hidden px-2 py-0.5 rounded-full text-[9px] font-black bg-[#10B981] text-white animate-pulse shadow-xs">ON</span>
-            </button>
-            <button id="btn-sidebar-open-cotable" type="button" class="hidden"></button>
+          <!-- GROUP 2: เครื่องมือตรวจสอบพิกัด & PCO -->
+          <div class="flex flex-col gap-1.5 p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC]">
+            <div class="flex items-center justify-between">
+              <span class="text-[10.5px] font-black text-[#1D2B45] flex items-center gap-1">🎯 ตรวจสอบพิกัดรายต้น</span>
+              <span class="text-[9px] font-mono font-bold text-[#EA580C]">INSPECTOR</span>
+            </div>
+            <div id="card-pco-inspector-tool" class="flex flex-col gap-1">
+              <button id="btn-sidebar-toggle-inspector" type="button" class="doodle-btn w-full py-1.5 px-2 text-[11px] font-black rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] bg-white text-[#C2410C] border border-[#1D2B45] hover:bg-[#FFEDD5] active:translate-x-0.5 active:translate-y-0.5" title="คลิกเปิดโหมดเช็ค แล้วไปคลิกที่เสาเข็มใน 3D">
+                <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#EA580C]"></i>
+                <span id="lbl-sidebar-toggle-inspector">คลิกเช็ค PCO รายต้น</span>
+                <span id="badge-sidebar-inspect-active" class="hidden px-1.5 py-0.2 rounded-full text-[8.5px] font-black bg-[#10B981] text-white animate-pulse shadow-xs">ON</span>
+              </button>
+              <button id="btn-sidebar-open-cotable" type="button" class="hidden"></button>
+            </div>
           </div>
         </div>
 
@@ -1785,25 +1962,39 @@
       </div>
     </div>
 
-    <!-- Status Legend Capsule Bar -->
-    <div class="hidden sm:flex px-4 py-1.5 text-xs font-bold items-center gap-3 pointer-events-auto bg-white border-2 border-[#1D2B45] rounded-full shadow-[2.5px_2.5px_0px_#1D2B45]">
+    <!-- Status Legend Capsule Bar (COMPACT & SEPARATED FROM CENTER DOCK) -->
+    <div class="hidden sm:flex px-3 py-1.5 text-xs font-bold items-center gap-2.5 pointer-events-auto bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45]">
       <span class="flex items-center gap-1.5">
         <span class="w-2.5 h-2.5 rounded-full bg-[#0284C7] border border-[#1D2B45]"></span>
-        <span class="font-extrabold text-[#0369A1]">กดวันนี้</span>
+        <span class="font-bold text-[#0369A1] text-[11px]">กดวันนี้</span>
       </span>
       <span class="flex items-center gap-1.5">
         <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] border border-[#1D2B45]"></span>
-        <span class="font-bold text-[#065F46]">กดวันก่อน</span>
+        <span class="font-bold text-[#065F46] text-[11px]">กดวันก่อน</span>
       </span>
       <span class="flex items-center gap-1.5">
         <span class="w-2.5 h-2.5 rounded-full bg-white border-1.5 border-[#1D2B45]"></span>
-        <span class="text-[#64748B]">ยังไม่กด</span>
-      </span>
-      <span id="nav-hint-text" class="text-[#8C9AA8] border-l border-[#E2D9CC] pl-3 text-[10.5px] font-medium hidden md:inline">
-        🖱️ <strong>ลาก:</strong> หมุน | <strong>Shift+ลาก:</strong> เลื่อน | <strong>ล้อ:</strong> ซูม | <strong>ดับเบิ้ลคลิก:</strong> ดูพิกัด
+        <span class="text-[#64748B] text-[11px]">ยังไม่กด</span>
       </span>
     </div>
   </footer>
+
+  <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
+  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[4px_4px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
+    <span id="dock-btn-piling" class="px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#F26B2A] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังงานเสาเข็ม 93 ต้น">
+      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+      <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
+    </span>
+    <button type="button" id="dock-btn-footing" class="px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#0284C7] active:scale-95 cursor-pointer" title="เปิด/ปิด เลเยอร์ผังฐานราก ค.ส.ล. 21 ฐาน">
+      <span id="dot-dock-footing" class="w-2 h-2 rounded-full bg-slate-300"></span>
+      <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
+    </button>
+  </nav>
+
+  <!-- MOUSE NAVIGATION HINT (LIFTED & VISIBLE ONLY ON ULTRA-WIDE / DESKTOP SCREENS) -->
+  <div class="fixed bottom-14 left-1/2 -translate-x-1/2 z-30 px-3 py-1 bg-white/90 backdrop-blur-sm text-[10.5px] text-[#3E4B69] border border-[#1D2B45]/40 rounded-full shadow-xs hidden 2xl:flex items-center gap-2 pointer-events-none">
+    <span id="nav-hint-text">🖱️ <strong>ลาก:</strong> หมุน | <strong>Shift+ลาก:</strong> เลื่อน | <strong>ล้อ:</strong> ซูม | <strong>ดับเบิ้ลคลิก:</strong> ดูพิกัด</span>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- MODAL: QUICK PILE SELECTOR (การระบุต้นที่กด ของ่ายๆ 1-93) -->
@@ -1895,188 +2086,323 @@
   </div>
 
   <!-- Pile Mini Quick Card (Direct 1-Click Action & Date Adjuster) -->
-  <div id="pile-card" class="fixed bottom-5 right-5 z-[70] w-84 max-w-[92vw] pop-card p-3 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden flex flex-col bg-white border-2.5 border-slate-900 rounded-2xl shadow-[4px_4px_0px_#0f172a]">
+  <div id="pile-card" class="fixed bottom-5 right-5 z-[70] w-[340px] max-w-[94vw] pop-card p-3 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden flex flex-col bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] font-body">
     
     <!-- Header with Drag Handle & Actions -->
-    <div id="pile-card-header" class="flex items-center justify-between border-b-2 border-slate-900 pb-2 mb-2 cursor-grab active:cursor-grabbing select-none" title="ลากเพื่อย้ายตำแหน่งแผงนี้">
+    <div id="pile-card-header" class="flex items-center justify-between border-b-2 border-[#1D2B45] pb-2 mb-2 cursor-grab active:cursor-grabbing select-none" title="ลากเพื่อย้ายตำแหน่งแผงนี้">
       <div class="flex items-center gap-2 min-w-0">
-        <div class="w-8 h-8 rounded-xl bg-amber-400 border-2 border-slate-900 flex items-center justify-center text-slate-950 shrink-0 shadow-[1.5px_1.5px_0px_#0f172a]">
+        <div class="w-8 h-8 rounded-xl bg-[#FFF3EB] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#F26B2A] shrink-0 shadow-[1px_1px_0px_#1D2B45]">
           <i data-lucide="hammer" class="w-4 h-4"></i>
         </div>
         <div class="truncate">
           <div class="flex items-center gap-1.5">
-            <span class="text-[9.5px] font-black text-amber-700 uppercase tracking-wider">ข้อมูลเสาเข็ม</span>
-            <span id="card-pile-status-text" class="text-[9.5px] font-black px-1.5 py-0.2 rounded-full border border-slate-400 text-slate-600 bg-slate-100">ยังไม่ได้กด</span>
+            <span class="text-[9.5px] font-black text-[#F26B2A] uppercase tracking-wider">ข้อมูลเสาเข็ม</span>
+            <span id="card-pile-status-text" class="text-[9px] font-black px-1.5 py-0.2 rounded-full border border-slate-300 text-slate-600 bg-[#FAF5EE]">ยังไม่ได้กด</span>
           </div>
-          <h3 id="card-pile-tag" class="text-base font-black text-slate-950 truncate leading-tight tracking-wide" style="font-family: 'Bangers', cursive;">P01 (Grid 1-A)</h3>
+          <h3 id="card-pile-tag" class="text-sm font-black text-[#1D2B45] truncate leading-tight font-display tracking-tight">P01 (Grid 1-A)</h3>
         </div>
       </div>
       <div class="flex items-center gap-1 shrink-0">
         <!-- Dock Left/Right Toggle Button -->
-        <button id="btn-dock-toggle-card" type="button" class="text-slate-600 hover:text-slate-950 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer" title="สลับฝั่ง ซ้าย-ขวา">
-          <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+        <button id="btn-dock-toggle-card" type="button" class="w-7 h-7 rounded-lg text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] border border-transparent hover:border-[#1D2B45]/20 flex items-center justify-center transition-all cursor-pointer" title="สลับฝั่ง ซ้าย-ขวา">
+          <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
         </button>
         <!-- Minimize / Expand Toggle Button -->
-        <button id="btn-minimize-card" type="button" class="text-slate-600 hover:text-slate-950 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer" title="ย่อ / ขยาย แผงกรอกข้อมูล">
-          <i data-lucide="minimize-2" id="icon-minimize-card" class="w-4 h-4"></i>
+        <button id="btn-minimize-card" type="button" class="w-7 h-7 rounded-lg text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] border border-transparent hover:border-[#1D2B45]/20 flex items-center justify-center transition-all cursor-pointer" title="ย่อ / ขยาย แผงกรอกข้อมูล">
+          <i data-lucide="minimize-2" id="icon-minimize-card" class="w-3.5 h-3.5"></i>
         </button>
         <!-- Close Button -->
-        <button id="btn-close-card" type="button" class="text-slate-500 hover:text-rose-600 p-1 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer" title="ปิดหน้าต่าง">
-          <i data-lucide="x" class="w-4 h-4"></i>
+        <button id="btn-close-card" type="button" class="w-7 h-7 rounded-lg border-1.5 border-[#1D2B45] bg-[#FAF5EE] hover:bg-[#FEE2E2] hover:text-[#E64C3C] text-[#1D2B45] flex items-center justify-center transition-colors shadow-2xs cursor-pointer" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
         </button>
       </div>
     </div>
 
     <!-- Return to Quick Select Button (Shown only when opened from Quick Select Modal) -->
-    <button id="btn-card-back-to-quick-select" type="button" class="w-full py-1 px-2 mb-2 text-[10.5px] font-bold rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-800 border-1.5 border-sky-300 flex items-center justify-center gap-1.5 shadow-xs transition-colors hidden cursor-pointer">
-      <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-sky-600"></i>
+    <button id="btn-card-back-to-quick-select" type="button" class="w-full py-1 px-2 mb-2 text-[10.5px] font-bold rounded-lg bg-sky-50 hover:bg-sky-100 text-[#0284C7] border border-sky-300 flex items-center justify-center gap-1.5 shadow-xs transition-colors hidden cursor-pointer">
+      <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#0284C7]"></i>
       <span>กลับไปยังแผงระบุเข็ม (Quick Selector 93 ต้น)</span>
     </button>
 
     <!-- Minimized Bar (Shown only when minimized) -->
     <div id="pile-card-minibar" class="hidden flex items-center justify-between gap-1.5 pt-0.5 pb-0.5">
-      <span id="minibar-status-badge" class="px-2 py-0.5 rounded text-[10px] font-black bg-slate-100 text-slate-700 border border-slate-300 truncate">ยังไม่กด</span>
-      <button id="btn-minibar-quick-drive" type="button" class="px-2.5 py-1 text-[10.5px] font-black rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1 shadow-xs cursor-pointer">
+      <span id="minibar-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#FAF5EE] text-[#1D2B45] border border-[#E2D9CC] truncate">ยังไม่กด</span>
+      <button id="btn-minibar-quick-drive" type="button" class="px-2.5 py-1 text-[10.5px] font-black rounded-lg bg-[#10B981] hover:bg-[#059669] text-white flex items-center gap-1 shadow-xs cursor-pointer">
         <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-200"></i>
         <span>บันทึกกด</span>
       </button>
-      <button id="btn-minibar-expand" type="button" class="px-2 py-1 text-[10.5px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 flex items-center gap-1 cursor-pointer">
+      <button id="btn-minibar-expand" type="button" class="px-2 py-1 text-[10.5px] font-bold rounded-lg bg-[#FAF5EE] hover:bg-[#F6E9D7] text-[#1D2B45] border border-[#1D2B45] flex items-center gap-1 cursor-pointer">
         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
         <span>ขยาย</span>
       </button>
     </div>
 
     <!-- Scrollable Detailed Body (Collapsed when minimized) -->
-    <div id="pile-card-body" class="flex flex-col gap-2 overflow-y-auto max-h-[72vh] pr-0.5">
+    <div id="pile-card-body" class="flex flex-col gap-2 overflow-y-auto max-h-[72vh] pr-0.5 custom-scrollbar">
       
-      <!-- Sleek Specifications 2x2 Grid (แทนแถบตารางยาวเดิม ลดความแออัด) -->
-      <div class="grid grid-cols-2 gap-1.5 p-2 bg-slate-50 border-1.5 border-slate-900 rounded-xl text-[11px] shadow-2xs">
-        <div class="flex items-center justify-between pr-1">
-          <span class="text-slate-500 font-bold">ฐานราก:</span>
-          <span id="card-pile-footing" class="font-black text-slate-900">F1</span>
+      <!-- Sleek Specifications Capsule (Warm Cream Minimal 2x2) -->
+      <div class="p-2 bg-[#FAF5EE] border border-[#E2D9CC] rounded-xl text-[10.5px] shadow-2xs space-y-1">
+        <div class="flex items-center justify-between">
+          <span class="text-[#3E4B69] font-medium">ฐานราก: <b id="card-pile-footing" class="font-black text-[#1D2B45]">F1</b></span>
+          <span class="text-[#3E4B69] font-medium">ขนาด: <b id="card-pile-type" class="font-bold text-[#1D2B45]">I-0.40m</b></span>
         </div>
-        <div class="flex items-center justify-between pl-1 border-l border-slate-300">
-          <span class="text-slate-500 font-bold">ขนาด:</span>
-          <span id="card-pile-type" class="font-bold text-slate-800">I-0.40m</span>
-        </div>
-        <div class="flex items-center justify-between pr-1 border-t border-slate-200 pt-1">
-          <span class="text-slate-500 font-bold">PCO แบบ:</span>
-          <span id="card-pile-co" class="font-mono font-black text-rose-600">-1.226 ม.</span>
-        </div>
-        <div class="flex items-center justify-between pl-1 border-l border-t border-slate-200 pt-1">
-          <span class="text-slate-500 font-bold">พิกัดแบบ:</span>
-          <span class="font-mono text-[9.5px] text-slate-700 truncate" title="พิกัด N, E">
-            <span id="card-pile-northing">-</span>, <span id="card-pile-easting">-</span>
+        <div class="flex items-center justify-between pt-1 border-t border-[#E2D9CC]/70">
+          <span class="text-[#3E4B69] font-medium">PCO แบบ: <b id="card-pile-co" class="font-mono font-black text-[#E64C3C]">-1.226 ม.</b></span>
+          <span class="text-[#8C9AA8] font-mono text-[9px] truncate max-w-[150px]" title="พิกัด N, E">
+            พิกัด: <span id="card-pile-northing">-</span>, <span id="card-pile-easting">-</span>
           </span>
         </div>
       </div>
 
-      <!-- Field 1: วันที่กดเสร็จ & ระดับ TOP เข็มจริง (ข้อมูลสำคัญประจำวัน รวมอยู่ด้วยกัน) -->
-      <div class="p-2.5 rounded-xl bg-blue-50/70 border-1.5 border-slate-900 space-y-1.5 shadow-2xs">
-        <div class="flex items-center justify-between text-[11px]">
-          <span class="font-black text-blue-900 flex items-center gap-1">
-            <i data-lucide="calendar" class="w-3.5 h-3.5 text-blue-600"></i> วันที่กดเสร็จ:
-          </span>
-          <span id="card-pile-date-badge" class="font-mono font-bold text-slate-600 text-[10px]"></span>
-        </div>
-        <div class="flex items-center gap-1.5">
-          <input type="date" id="card-pile-date-input" class="flex-1 px-2 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <button id="btn-card-date-yesterday" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border-1.5 border-slate-900 hover:bg-slate-100 shadow-2xs shrink-0 cursor-pointer">เมื่อวาน</button>
-          <button id="btn-card-date-today" type="button" class="px-2 py-1 text-[10.5px] font-black rounded-lg bg-white border-1.5 border-slate-900 hover:bg-slate-100 shadow-2xs shrink-0 cursor-pointer">วันนี้</button>
+      <!-- Section 1: ข้อมูลบันทึกประจำวัน (วันที่ & ระดับ TOP - สะอาดตา ชัดเจน) -->
+      <div class="p-2.5 rounded-xl bg-white border border-[#E2D9CC] space-y-2 shadow-2xs">
+        
+        <!-- วันที่กดเสร็จ -->
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45]">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#F26B2A]"></i> วันที่กดเสร็จ:
+            </span>
+            <span id="card-pile-date-badge" class="font-mono font-bold text-[#8C9AA8] text-[9.5px]"></span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <input type="date" id="card-pile-date-input" class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#F26B2A]">
+            <button id="btn-card-date-yesterday" type="button" class="px-2.5 py-1.5 text-[10px] font-bold rounded-xl bg-[#FAF5EE] hover:bg-[#F6E9D7] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:scale-95 transition-all cursor-pointer shrink-0">เมื่อวาน</button>
+            <button id="btn-card-date-today" type="button" class="px-2.5 py-1.5 text-[10px] font-black rounded-xl bg-[#F26B2A] hover:bg-[#EA580C] text-white border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] active:scale-95 transition-all cursor-pointer shrink-0">วันนี้</button>
+          </div>
         </div>
 
         <!-- ระดับ TOP เข็มจริง -->
-        <div class="pt-1 border-t border-blue-200/80">
-          <div class="flex items-center justify-between text-[11px] mb-1">
-            <span class="font-black text-blue-900 flex items-center gap-1">
-              <i data-lucide="ruler" class="w-3.5 h-3.5 text-blue-600"></i> ระดับ TOP เข็มจริง (ม.):
+        <div class="space-y-1 pt-2 border-t border-[#E2D9CC]">
+          <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45]">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="ruler" class="w-3.5 h-3.5 text-[#0284C7]"></i> ระดับ TOP เข็มจริง (ม.):
             </span>
-            <span id="card-pile-diff-badge" class="font-mono font-bold text-[10px]"></span>
+            <span id="card-pile-diff-badge" class="font-mono font-bold text-[9.5px]"></span>
           </div>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.001" id="card-pile-actual-top" placeholder="เช่น -1.250" class="flex-1 px-2.5 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" title="กรอกระดับ TOP เข็มที่กดได้จริง (ม.)">
-            <button id="btn-card-copy-pco" type="button" class="px-2.5 py-1 text-[10.5px] font-black rounded-lg bg-white border-1.5 border-slate-900 hover:bg-blue-100 shadow-2xs shrink-0 text-slate-800 cursor-pointer" title="ใส่ค่าตามระดับ PCO ในแบบ">ตามแบบ PCO</button>
+            <input type="number" step="0.001" id="card-pile-actual-top" placeholder="เช่น -1.250" class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0284C7]" title="กรอกระดับ TOP เข็มที่กดได้จริง (ม.)">
+            <button id="btn-card-copy-pco" type="button" class="px-2.5 py-1.5 text-[10px] font-black rounded-xl bg-sky-50 hover:bg-sky-100 text-[#0284C7] border border-[#0284C7] shadow-xs active:scale-95 transition-all cursor-pointer shrink-0" title="ใส่ค่าตามระดับ PCO ในแบบ">ตามแบบ PCO</button>
           </div>
-          <div class="text-[9.5px] text-blue-800 font-medium pt-1 flex items-center justify-between">
-            <span>แบบ PCO: <b id="card-pile-pco-hint" class="font-mono text-rose-700">-</b></span>
+          <div class="text-[9.5px] text-[#3E4B69] font-medium flex items-center justify-between pt-0.5">
+            <span>แบบ PCO: <b id="card-pile-pco-hint" class="font-mono text-[#E64C3C] font-bold">-</b></span>
             <span id="card-pile-diff-text" class="font-mono font-bold"></span>
           </div>
         </div>
       </div>
 
-      <!-- Field 2: ระบุความยาวท่อนเข็ม 3 ท่อน (ล่าง, กลาง, บน) -->
-      <div class="p-2.5 rounded-xl bg-amber-50/70 border-1.5 border-slate-900 space-y-1.5 shadow-2xs">
-        <div class="flex items-center justify-between text-[11px]">
-          <span class="font-black text-amber-900 flex items-center gap-1">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-600"></i> ความยาวท่อนเข็ม (ม.):
-          </span>
-          <span id="card-pile-eff-len-badge" class="font-mono font-black text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-900 border border-emerald-400">รวม 21.00 ม.</span>
-        </div>
-        <div class="grid grid-cols-3 gap-1.5 pt-0.5 text-[10px]">
-          <div>
-            <label class="font-bold text-slate-700 block text-center mb-0.5">ท่อนล่าง</label>
-            <input type="number" step="0.01" id="card-pile-seg-bottom" placeholder="7.00" class="w-full text-center px-1.5 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
+      <!-- Section 2: ข้อมูลละเอียดเพิ่มเติม (Collapsible: ความยาว 3 ท่อน & พิกัด N, E - ออกแบบให้รู้ทันทีว่าต้องกดขยาย) -->
+      <div class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-[#FFFDF9] shadow-[1.5px_1.5px_0px_#1D2B45]">
+        <button id="btn-toggle-pile-details" type="button" class="group w-full p-2 flex items-center justify-between gap-2 text-left bg-gradient-to-r from-[#FFF8EE] to-[#FFF3EB] hover:from-[#FFE8D6] hover:to-[#FFEDD5] transition-all cursor-pointer select-none">
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="w-7 h-7 rounded-lg bg-[#F26B2A] text-white flex items-center justify-center shrink-0 border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+            </div>
+            <div class="truncate">
+              <div class="text-[11px] font-black text-[#1D2B45] leading-tight flex items-center gap-1.5">
+                <span>ความยาว 3 ท่อน & พิกัดจริง</span>
+                <span id="card-pile-eff-len-badge" class="font-mono font-bold text-[9px] px-1.5 py-0.2 rounded-md bg-white border border-[#E2D9CC] text-emerald-800 shrink-0">รวม 21.00 ม.</span>
+              </div>
+              <div class="text-[9.5px] font-black text-[#F26B2A] flex items-center gap-1 mt-0.5">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#F26B2A] animate-ping"></span>
+                <span id="hint-toggle-expand">คลิกเพื่อเปิดกรอกข้อมูลเพิ่มเติม</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label class="font-bold text-slate-700 block text-center mb-0.5">ท่อนกลาง</label>
-            <input type="number" step="0.01" id="card-pile-seg-middle" placeholder="7.00" class="w-full text-center px-1.5 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
+          <div class="flex items-center gap-1 shrink-0">
+            <span class="px-2 py-1 rounded-lg bg-white text-[#1D2B45] border border-[#1D2B45] text-[10px] font-black flex items-center gap-1 shadow-[1px_1px_0px_#1D2B45] group-hover:bg-[#F26B2A] group-hover:text-white transition-all">
+              <span id="lbl-toggle-expand-text">คลิกขยาย</span>
+              <i data-lucide="chevron-down" id="arrow-pile-details" class="w-3 h-3 transition-transform duration-200"></i>
+            </span>
           </div>
-          <div>
-            <label class="font-bold text-slate-700 block text-center mb-0.5">ท่อนบน</label>
-            <input type="number" step="0.01" id="card-pile-seg-top" placeholder="7.00" class="w-full text-center px-1.5 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none">
+        </button>
+
+        <div id="panel-pile-details" class="hidden p-2.5 pt-2 border-t-2 border-[#1D2B45] space-y-2.5 bg-white text-[10px]">
+          <!-- Header Inside Panel -->
+          <div class="flex items-center justify-between pb-1 border-b border-[#E2D9CC] text-[#3E4B69]">
+            <span class="text-[10px] font-black text-[#1D2B45] flex items-center gap-1">
+              <i data-lucide="ruler" class="w-3 h-3 text-[#F26B2A]"></i> ระบุความยาวแต่ละท่อน (ม.)
+            </span>
+            <button id="btn-card-open-len-modal" type="button" class="text-[9.5px] font-bold text-[#F26B2A] hover:underline flex items-center gap-1 cursor-pointer">
+              <i data-lucide="external-link" class="w-2.5 h-2.5"></i> ฟอร์มเต็ม & คัดลอกทั้งฐาน
+            </button>
           </div>
-        </div>
-        <div class="bg-white/90 px-2 py-1 rounded-lg border border-amber-300 text-[10px] flex items-center justify-between font-bold">
-          <div class="text-slate-600">
-            สุทธิหัก TOP: <span id="card-pile-top-net-text" class="font-mono text-blue-700 font-black">7.00 ม.</span>
+
+          <!-- ความยาว 3 ท่อน -->
+          <div class="space-y-1">
+            <div class="grid grid-cols-3 gap-1.5">
+              <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
+                <span class="text-[9px] font-bold text-slate-600 block mb-0.5">ท่อนล่าง</span>
+                <input type="number" step="0.01" id="card-pile-seg-bottom" placeholder="7.00" class="w-full text-center px-1 py-1 text-xs font-mono font-black border border-[#1D2B45] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#F26B2A]">
+              </div>
+              <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
+                <span class="text-[9px] font-bold text-slate-600 block mb-0.5">ท่อนกลาง</span>
+                <input type="number" step="0.01" id="card-pile-seg-middle" placeholder="7.00" class="w-full text-center px-1 py-1 text-xs font-mono font-black border border-[#1D2B45] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#F26B2A]">
+              </div>
+              <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
+                <span class="text-[9px] font-bold text-slate-600 block mb-0.5">ท่อนบน</span>
+                <input type="number" step="0.01" id="card-pile-seg-top" placeholder="7.00" class="w-full text-center px-1 py-1 text-xs font-mono font-black border border-[#1D2B45] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#F26B2A]">
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-[10px] px-1 pt-0.5 text-slate-600 font-mono font-bold bg-[#FAF5EE] rounded-lg p-1.5 border border-[#E2D9CC]">
+              <span>สุทธิหัก TOP: <b id="card-pile-top-net-text" class="text-blue-700 font-black">7.00 ม.</b></span>
+              <span>รวมใช้งาน: <b id="card-pile-eff-len-text" class="text-emerald-700 font-black">21.00 ม.</b></span>
+            </div>
           </div>
-          <div class="text-emerald-800">
-            รวมใช้งาน: <span id="card-pile-eff-len-text" class="font-mono text-emerald-700 font-black">21.00 ม.</span>
+
+          <!-- พิกัดกดจริง (N, E) -->
+          <div class="space-y-1.5 pt-1.5 border-t border-[#E2D9CC]">
+            <div class="flex items-center justify-between">
+              <span class="font-black text-[#1D2B45] flex items-center gap-1">
+                <i data-lucide="crosshair" class="w-3 h-3 text-[#10B981]"></i> พิกัดกดจริง (N, E):
+              </span>
+              <button id="btn-card-copy-coords" type="button" class="px-2 py-0.5 text-[9.5px] font-bold rounded-md bg-[#FAF5EE] hover:bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs cursor-pointer">
+                🎯 ตามแบบ
+              </button>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5">
+              <div>
+                <label class="text-[9px] font-bold text-slate-500 block mb-0.5">พิกัดจริง N</label>
+                <input type="number" step="0.0001" id="card-pile-actual-n" placeholder="Northing (N)" class="w-full px-2 py-1 text-xs font-mono font-bold border border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[#10B981]">
+                <span class="hidden" id="card-pile-design-n-hint">-</span>
+              </div>
+              <div>
+                <label class="text-[9px] font-bold text-slate-500 block mb-0.5">พิกัดจริง E</label>
+                <input type="number" step="0.0001" id="card-pile-actual-e" placeholder="Easting (E)" class="w-full px-2 py-1 text-xs font-mono font-bold border border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[#10B981]">
+                <span class="hidden" id="card-pile-design-e-hint">-</span>
+              </div>
+            </div>
+            <div id="card-pile-coord-diff-text" class="text-[9.5px] font-mono text-right text-slate-600 font-bold"></div>
+            <span id="card-pile-coord-diff-badge" class="hidden"></span>
           </div>
-        </div>
-        <div class="flex justify-end pt-0.5">
-          <button id="btn-card-open-len-modal" type="button" class="text-[9.5px] font-bold text-amber-800 hover:text-amber-950 underline flex items-center gap-1 cursor-pointer">
-            <i data-lucide="external-link" class="w-3 h-3"></i> เปิดฟอร์มเต็ม & คัดลอกทั้งฐานราก
-          </button>
         </div>
       </div>
 
-      <!-- Field 3: พิกัดกดจริง (N, E) -->
-      <div class="p-2.5 rounded-xl bg-emerald-50/70 border-1.5 border-slate-900 space-y-1.5 shadow-2xs">
-        <div class="flex items-center justify-between text-[11px]">
-          <span class="font-black text-emerald-900 flex items-center gap-1">
-            <i data-lucide="crosshair" class="w-3.5 h-3.5 text-emerald-600"></i> พิกัดกดจริง (N, E):
-          </span>
-          <button id="btn-card-copy-coords" type="button" class="px-2 py-0.5 text-[9.5px] font-bold rounded-md bg-white border border-emerald-400 hover:bg-emerald-100 text-emerald-800 shadow-2xs cursor-pointer" title="คัดลอกค่าพิกัด N, E จากแบบ">
-            🎯 ตามแบบ
-          </button>
-        </div>
-        <div class="grid grid-cols-2 gap-1.5 text-[10px]">
-          <div>
-            <label class="text-[9px] font-bold text-slate-600 block mb-0.5">พิกัดจริง N</label>
-            <input type="number" step="0.0001" id="card-pile-actual-n" placeholder="เช่น 1518672.698" class="w-full px-2 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Northing (N)">
-            <span class="hidden" id="card-pile-design-n-hint">-</span>
-          </div>
-          <div>
-            <label class="text-[9px] font-bold text-slate-600 block mb-0.5">พิกัดจริง E</label>
-            <input type="number" step="0.0001" id="card-pile-actual-e" placeholder="เช่น 672390.806" class="w-full px-2 py-1 text-xs font-mono font-bold border-1.5 border-slate-900 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500" title="กรอกพิกัดจริง Easting (E)">
-            <span class="hidden" id="card-pile-design-e-hint">-</span>
-          </div>
-        </div>
-        <div id="card-pile-coord-diff-text" class="text-[9.5px] font-mono text-right text-slate-600 font-bold"></div>
-        <span id="card-pile-coord-diff-badge" class="hidden"></span>
-      </div>
-
-      <!-- Consolidated 1-Click Action Button (Single Unified Action) -->
+      <!-- Action Buttons -->
       <div class="space-y-1.5 pt-1">
-        <button id="btn-card-save-date" type="button" class="w-full py-2.5 text-xs sm:text-sm flex items-center justify-center gap-2 font-black rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
+        <button id="btn-card-save-date" type="button" class="w-full py-2.5 px-3 text-xs flex items-center justify-center gap-2 font-black rounded-xl bg-[#10B981] hover:bg-[#059669] text-white border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[3.5px_3.5px_0px_#F26B2A] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
           <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-200"></i>
-          <span id="btn-card-save-date-lbl">✓ บันทึกกดเสาเข็ม (บันทึกออนไลน์ Supabase)</span>
+          <span id="btn-card-save-date-lbl">✓ บันทึกข้อมูลเสาเข็มต้นนี้</span>
         </button>
-        <button id="btn-card-toggle-cancel" class="pop-btn w-full py-1 text-xs text-[#b91c1c] hover:bg-rose-50 flex items-center justify-center gap-1 font-bold">
-          <i data-lucide="rotate-ccw" class="w-3 h-3"></i> ยกเลิก (ตั้งเป็นยังไม่กด)
+        <button id="btn-card-toggle-cancel" class="w-full py-1 text-[11px] text-[#E64C3C] hover:bg-rose-50 rounded-lg flex items-center justify-center gap-1 font-bold transition-colors cursor-pointer">
+          <i data-lucide="rotate-ccw" class="w-3 h-3"></i> ยกเลิกสถานะ (ตั้งเป็นยังไม่ได้กด)
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Footing Inspector Card (ฐานราก ค.ส.ล. 21 ฐาน BIM Layer - ปรับปรุงกะทัดรัด ไม่บีบ ไม่ลอยบน) -->
+  <div id="footing-card" class="fixed bottom-5 right-5 z-[75] w-[350px] max-w-[94vw] pop-card p-3 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden flex flex-col bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] font-body">
+    <!-- Drag Handle & Header -->
+    <div id="footing-card-header" class="flex items-center justify-between border-b-2 border-[#1D2B45] pb-2 mb-2 cursor-grab active:cursor-grabbing select-none" title="ลากเพื่อย้ายตำแหน่งแผงนี้">
+      <div class="flex items-center gap-2 min-w-0">
+        <div class="w-8 h-8 rounded-xl bg-[#E0F2FE] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#0284C7] shadow-[1px_1px_0px_#1D2B45] shrink-0">
+          <i data-lucide="box" class="w-4 h-4"></i>
+        </div>
+        <div class="truncate">
+          <div class="flex items-center gap-1.5">
+            <h3 id="card-footing-mark" class="text-sm font-black text-[#1D2B45] leading-tight font-display">F5: C3</h3>
+            <span id="card-footing-grid" class="px-2 py-0.2 rounded-full bg-sky-100 text-[#0284C7] font-mono font-black text-[10px] border border-sky-300">5-A</span>
+            <span class="px-1.5 py-0.2 rounded-full bg-emerald-100 text-[#065F46] font-mono font-bold text-[9px] border border-emerald-300">BIM 3D</span>
+          </div>
+          <div id="card-footing-name" class="text-[10px] font-bold text-[#3E4B69] truncate">ฐานราก ค.ส.ล. • 5 เสาเข็ม</div>
+        </div>
+      </div>
+      <button id="btn-close-footing-card" type="button" class="w-7 h-7 rounded-lg border-1.5 border-[#1D2B45] bg-[#FAF5EE] hover:bg-slate-200 flex items-center justify-center text-[#1D2B45] transition-colors shadow-2xs cursor-pointer shrink-0" title="ปิดหน้าต่าง">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Segmented Tab Navigation: จัดหมวดหมู่ 3 แท็บ สะอาดตา คมชัด -->
+    <div class="flex items-center gap-1 p-1 bg-[#FAF5EE] rounded-xl border border-[#E2D9CC] mb-2 select-none">
+      <button type="button" class="tab-footing-btn is-active flex-1 py-1 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 bg-white text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] cursor-pointer" data-tab="tab-footing-levels">
+        <i data-lucide="ruler" class="w-3 h-3 text-[#F26B2A]"></i> ขนาด/ระดับ
+      </button>
+      <button type="button" class="tab-footing-btn flex-1 py-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 text-slate-600 hover:text-[#1D2B45] cursor-pointer" data-tab="tab-footing-boq">
+        <i data-lucide="layers" class="w-3 h-3 text-emerald-600"></i> BOQ วัสดุ
+      </button>
+      <button type="button" class="tab-footing-btn flex-1 py-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 text-slate-600 hover:text-[#1D2B45] cursor-pointer" data-tab="tab-footing-piles">
+        <i data-lucide="anchor" class="w-3 h-3 text-[#0284C7]"></i> เสาเข็ม (<span id="tab-piles-count-badge">5</span>)
+      </button>
+    </div>
+
+    <!-- Tab 1: ขนาดและระดับอ้างอิง -->
+    <div id="tab-footing-levels" class="tab-footing-panel space-y-2 text-xs">
+      <div class="p-2.5 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC] space-y-2">
+        <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45] border-b border-[#E2D9CC] pb-1">
+          <span class="flex items-center gap-1">📐 มิติฐานราก:</span>
+          <span id="card-footing-dim" class="font-mono text-[10.5px] text-[#1D2B45] font-black">2.50 x 2.50 x 0.90(H) m</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 text-center">
+          <div class="bg-sky-50 border border-sky-300 rounded-lg p-1.5">
+            <div class="text-[9px] text-sky-800 font-bold">TOP หลังฐาน</div>
+            <div id="card-footing-top" class="font-mono font-black text-xs text-sky-950">-0.900 m</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-300 rounded-lg p-1.5">
+            <div class="text-[9px] text-amber-800 font-bold">PCO ตัดหัวเข็ม</div>
+            <div id="card-footing-pco" class="font-mono font-black text-xs text-amber-950">-1.725 m</div>
+          </div>
+          <div class="bg-rose-50 border border-rose-300 rounded-lg p-1.5">
+            <div class="text-[9px] text-rose-800 font-bold">BOT ก้นฐาน</div>
+            <div id="card-footing-bot" class="font-mono font-black text-xs text-rose-950">-1.800 m</div>
+          </div>
+        </div>
+        <div class="bg-white px-2.5 py-1.5 rounded-lg border border-[#E2D9CC] text-[10px] flex items-center justify-between font-bold text-[#3E4B69]">
+          <span>ความหนาคอนกรีต: <b id="card-footing-depth" class="font-mono text-[#1D2B45] font-black">0.90 ม.</b></span>
+          <span class="text-emerald-700">ฝังหัวเข็ม: <b id="card-footing-embed" class="font-mono text-emerald-800 font-black">0.075 ม. (7.5 ซม.)</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: ปริมาณ BOQ วัสดุ -->
+    <div id="tab-footing-boq" class="tab-footing-panel space-y-2 text-xs hidden">
+      <div class="p-2.5 rounded-xl bg-white border border-[#E2D9CC] space-y-2">
+        <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45] border-b border-[#E2D9CC] pb-1">
+          <span class="flex items-center gap-1"><i data-lucide="layers" class="w-3.5 h-3.5 text-emerald-600"></i> ปริมาณวัสดุ BOQ</span>
+          <span id="card-footing-ratio" class="font-mono text-[10px] text-[#1D2B45] bg-[#FAF5EE] px-1.5 py-0.2 rounded border border-[#E2D9CC] font-bold">71.4 kg/m³</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-center">
+          <div class="bg-emerald-50 border border-emerald-300 rounded-lg p-2 flex items-center justify-between px-2.5">
+            <span class="text-[10px] font-bold text-emerald-800">คอนกรีต ค.ส.ล.:</span>
+            <span class="font-mono font-black text-sm text-emerald-700"><span id="card-footing-conc">5.62</span> m³</span>
+          </div>
+          <div class="bg-indigo-50 border border-indigo-300 rounded-lg p-2 flex items-center justify-between px-2.5">
+            <span class="text-[10px] font-bold text-indigo-800">เหล็กเสริมรวม:</span>
+            <span class="font-mono font-black text-sm text-indigo-700"><span id="card-footing-rebar">401.0</span> kg</span>
+          </div>
+        </div>
+        <div class="space-y-1">
+          <div class="text-[10px] font-bold text-[#3E4B69]">สัดส่วนขนาดเหล็กเสริม:</div>
+          <div id="card-footing-rebar-pills" class="space-y-1 max-h-32 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: เสาเข็มในฐาน -->
+    <div id="tab-footing-piles" class="tab-footing-panel space-y-2 text-xs hidden">
+      <div class="p-2.5 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC] space-y-1.5">
+        <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45] border-b border-[#E2D9CC] pb-1">
+          <span class="flex items-center gap-1">
+            <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#0284C7]"></i>
+            เสาเข็มรองรับ (<span id="card-footing-piles-count">5</span> ต้น):
+          </span>
+          <span class="text-[9.5px] text-[#8C9AA8]">คลิกเพื่อบันทึก</span>
+        </div>
+        <div class="text-[9.5px] text-[#3E4B69] font-medium">
+          💡 คลิกที่เบอร์เข็มด้านล่างเพื่อเปิดดูข้อมูลและบันทึกผลงานเข็มต้นนั้นทันที
+        </div>
+        <div id="card-footing-piles-list" class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pt-0.5"></div>
+      </div>
+    </div>
+
+    <!-- Footer Actions Bar -->
+    <div class="flex items-center gap-1.5 pt-2 border-t border-[#E2D9CC] mt-1">
+      <button id="btn-footing-focus" type="button" class="flex-1 py-1.5 px-2 rounded-xl bg-[#0284C7] hover:bg-[#0369A1] text-white text-xs font-black border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] flex items-center justify-center gap-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
+        <i data-lucide="crosshair" class="w-3.5 h-3.5"></i> ซูมโฟกัสฐานราก
+      </button>
+      <button id="btn-footing-isolate" type="button" class="py-1.5 px-2.5 rounded-xl bg-[#FAF5EE] hover:bg-[#F2EAE0] text-[#1D2B45] text-xs font-black border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] flex items-center justify-center gap-1 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer" title="ดูเฉพาะฐานนี้และเข็มของฐานนี้">
+        <i data-lucide="scan" class="w-3.5 h-3.5"></i> Isolate
+      </button>
     </div>
   </div>
 
@@ -3127,6 +3453,11 @@
   <!-- EMBEDDED ZERO-CORS GLB DATA & PILES DATABASE (EXTRACTED) -->
   <script src="piling_embedded_data.js"></script>
 
+  <!-- FOOTINGS DATA (21 RC BIM FOOTINGS) -->
+  <script id="footings-metadata-script">
+    window.__FOOTINGS_METADATA__ = {"project":"PYNN PRIDI 37","scene":"06_ฟุตติ้ง_เข็ม_เหล็กตอม่อ_TOP_BOT_PCO","generated_at":"2026-10-18 20:15:19","summary":{"total_footings":21,"total_concrete_m3":155.47,"total_rebar_kg":10901.3,"total_rebar_tons":10.9,"avg_rebar_ratio":70.1},"boundary":{"north":{"label":"39.15 m","length_m":39.15},"south":{"label":"41.91 m","length_m":41.91},"west":{"label":"19.77 m","length_m":19.77},"east":{"label":"18.25 m (SOI PRIDI 37)","length_m":18.25},"code":"n115816"},"gridlines":{"x_axes":[{"name":"1","x":0},{"name":"2","x":0.5},{"name":"3","x":5.7},{"name":"4","x":10.85},{"name":"5","x":12.2},{"name":"6","x":20},{"name":"7","x":27.5},{"name":"8","x":29.45},{"name":"9","x":32.7},{"name":"10","x":32.9}],"y_axes":[{"name":"A","y":12.4},{"name":"B","y":5.2},{"name":"C","y":3.5},{"name":"D","y":1.3},{"name":"E","y":0}]},"footings":[{"id":"F5_C3_5A","no":1,"name":"F5: C3 (Grid 5-A)","mark":"F5: C3","grid":"5-A","dim":{"w":2.5,"l":2.5,"h":0.9,"note":"2.50x2.50x0.90(H)"},"levels":{"top":-0.9,"bot":-1.8,"pco":-1.725},"center":[12.2,12.4,-1.35],"bounds":{"min_x":10.95,"max_x":13.45,"min_y":11.15,"max_y":13.65,"min_z":-1.8,"max_z":-0.9},"card_position":[11.75,13.645],"boq":{"concrete_m3":5.62,"rebar_kg":401,"ratio_kg_m3":71.4,"breakdown":{"DB25":392.5,"DB12":8.5}},"piles_count":5,"associated_piles":[{"no":10,"tag":"P10","grid":"4-A","pco":-1.726},{"no":11,"tag":"P11","grid":"5-A","pco":-1.726},{"no":12,"tag":"P12","grid":"5-A","pco":-1.726},{"no":13,"tag":"P13","grid":"4-A","pco":-1.726},{"no":14,"tag":"P14","grid":"5-A","pco":-1.726}]},{"id":"F6_C2_3A","no":2,"name":"F6: C2 (Grid 3-A)","mark":"F6: C2","grid":"3-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[5.7,12.4,-1],"bounds":{"min_x":4.7,"max_x":6.7,"min_y":10.8,"max_y":14,"min_z":-1.6,"max_z":-0.4},"card_position":[5.7,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":4,"tag":"P04","grid":"3-A","pco":-1.526},{"no":5,"tag":"P05","grid":"3-A","pco":-1.526},{"no":6,"tag":"P06","grid":"3-A","pco":-1.526},{"no":7,"tag":"P07","grid":"3-A","pco":-1.526},{"no":8,"tag":"P08","grid":"3-A","pco":-1.526},{"no":9,"tag":"P09","grid":"3-A","pco":-1.526}]},{"id":"F6_C4_1Mid","no":3,"name":"F6: C4 (Grid 1 / Mid)","mark":"F6: C4","grid":"1-Mid","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.7,"bot":-1.9,"pco":-1.825},"center":[0,3.95,-1.3],"bounds":{"min_x":-1,"max_x":1,"min_y":2.35,"max_y":5.55,"min_z":-1.9,"max_z":-0.7},"card_position":[-2.545,4.013],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":30,"tag":"P30","grid":"1-B","pco":-1.826},{"no":31,"tag":"P31","grid":"2-B","pco":-1.826},{"no":32,"tag":"P32","grid":"1-C","pco":-1.826},{"no":33,"tag":"P33","grid":"2-C","pco":-1.826},{"no":34,"tag":"P34","grid":"1-C","pco":-1.826},{"no":35,"tag":"P35","grid":"2-C","pco":-1.826}]},{"id":"F6_C3_6A","no":4,"name":"F6: C3 (Grid 6-A)","mark":"F6: C3","grid":"6-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.55,"bot":-1.75,"pco":-1.675},"center":[20,12.4,-1.15],"bounds":{"min_x":19,"max_x":21,"min_y":10.8,"max_y":14,"min_z":-1.75,"max_z":-0.55},"card_position":[20,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":15,"tag":"P15","grid":"6-A","pco":-1.676},{"no":16,"tag":"P16","grid":"6-A","pco":-1.676},{"no":17,"tag":"P17","grid":"6-A","pco":-1.676},{"no":18,"tag":"P18","grid":"6-A","pco":-1.676},{"no":19,"tag":"P19","grid":"6-A","pco":-1.676},{"no":20,"tag":"P20","grid":"6-A","pco":-1.676}]},{"id":"F6_C3A_7A","no":5,"name":"F6: C3A (Grid 7-A)","mark":"F6: C3A","grid":"7-A","dim":{"w":2,"l":3.2,"h":1.2,"note":"3.20x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[27.5,12.4,-1],"bounds":{"min_x":26.5,"max_x":28.5,"min_y":10.8,"max_y":14,"min_z":-1.6,"max_z":-0.4},"card_position":[27.5,14.045],"boq":{"concrete_m3":7.68,"rebar_kg":459.4,"ratio_kg_m3":59.8,"breakdown":{"DB25":450.1,"DB12":9.3}},"piles_count":6,"associated_piles":[{"no":21,"tag":"P21","grid":"7-A","pco":-1.526},{"no":22,"tag":"P22","grid":"7-A","pco":-1.526},{"no":23,"tag":"P23","grid":"7-A","pco":-1.526},{"no":24,"tag":"P24","grid":"7-A","pco":-1.526},{"no":25,"tag":"P25","grid":"7-A","pco":-1.526},{"no":26,"tag":"P26","grid":"7-A","pco":-1.526}]},{"id":"F6A_C1A_8","no":6,"name":"F6A: C1A: C3 (Grid 8)","mark":"F6A: C1A: C3","grid":"8","dim":{"w":2,"l":3.25,"h":1.2,"note":"3.25x2.00x1.20(H)"},"levels":{"top":-0.4,"bot":-1.6,"pco":-1.525},"center":[29.45,4,-1],"bounds":{"min_x":28.45,"max_x":30.45,"min_y":2.375,"max_y":5.625,"min_z":-1.6,"max_z":-0.4},"card_position":[31.445,5.08],"boq":{"concrete_m3":7.68,"rebar_kg":842.7,"ratio_kg_m3":109.7,"breakdown":{"DB25":825,"DB12":17.7}},"piles_count":6,"associated_piles":[{"no":81,"tag":"P81","grid":"8-B","pco":-1.526},{"no":82,"tag":"P82","grid":"8-B","pco":-1.526},{"no":83,"tag":"P83","grid":"8-C","pco":-1.526},{"no":84,"tag":"P84","grid":"8-C","pco":-1.526},{"no":85,"tag":"P85","grid":"8-C","pco":-1.526},{"no":86,"tag":"P86","grid":"8-C","pco":-1.526}]},{"id":"F3_C3_2A","no":7,"name":"F3: C3 (Grid 2-A)","mark":"F3: C3","grid":"2-A","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[0.5,12.23,-0.85],"bounds":{"min_x":-0.562,"max_x":1.562,"min_y":11.31,"max_y":13.15,"min_z":-1.3,"max_z":-0.4},"card_position":[0.5,13.86],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":1,"tag":"P01","grid":"1-A","pco":-1.226},{"no":2,"tag":"P02","grid":"2-A","pco":-1.226},{"no":3,"tag":"P03","grid":"2-A","pco":-1.226}]},{"id":"F3_C3_9A","no":8,"name":"F3: C3 (Grid 9-A)","mark":"F3: C3","grid":"9-A","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[32.7,12.23,-0.85],"bounds":{"min_x":31.638,"max_x":33.762,"min_y":11.31,"max_y":13.15,"min_z":-1.3,"max_z":-0.4},"card_position":[32.7,13.86],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":27,"tag":"P27","grid":"9-A","pco":-1.226},{"no":28,"tag":"P28","grid":"10-A","pco":-1.226},{"no":29,"tag":"P29","grid":"9-A","pco":-1.226}]},{"id":"F3_C3_10C","no":9,"name":"F3: C3 (Grid 10-C)","mark":"F3: C3","grid":"10-C","dim":{"w":2.12,"l":1.84,"h":0.9,"note":"SEE DETAIL 0.90(H)"},"levels":{"top":-0.4,"bot":-1.3,"pco":-1.225},"center":[32.9,3.33,-0.85],"bounds":{"min_x":31.838,"max_x":33.962,"min_y":2.41,"max_y":4.25,"min_z":-1.3,"max_z":-0.4},"card_position":[34.695,3.143],"boq":{"concrete_m3":2.36,"rebar_kg":166.8,"ratio_kg_m3":70.7,"breakdown":{"DB20":161.4,"DB12":5.4}},"piles_count":3,"associated_piles":[{"no":87,"tag":"P87","grid":"9-C","pco":-1.226},{"no":88,"tag":"P88","grid":"10-C","pco":-1.226},{"no":89,"tag":"P89","grid":"10-C","pco":-1.226}]},{"id":"F2_C1C_1D","no":10,"name":"F2: C1C (Grid 1-D)","mark":"F2: C1C","grid":"1-D","dim":{"w":2,"l":0.9,"h":0.8,"note":"2.60x0.80x0.80(H)"},"levels":{"top":-0.7,"bot":-1.5,"pco":-1.425},"center":[0,1.3,-1.1],"bounds":{"min_x":-1,"max_x":1,"min_y":0.85,"max_y":1.75,"min_z":-1.5,"max_z":-0.7},"card_position":[-2.545,0.418],"boq":{"concrete_m3":1.44,"rebar_kg":103.8,"ratio_kg_m3":72.1,"breakdown":{"DB20":53.7,"DB16":45.2,"DB12":4.8}},"piles_count":2,"associated_piles":[{"no":36,"tag":"P36","grid":"1-D","pco":-1.426},{"no":37,"tag":"P37","grid":"2-D","pco":-1.426}]},{"id":"F2_C1_8E","no":11,"name":"F2: C1 (Grid 8-E)","mark":"F2: C1","grid":"8-E","dim":{"w":2,"l":0.8,"h":0.8,"note":"2.80x0.80x0.80(H)"},"levels":{"top":-0.9,"bot":-1.7,"pco":-1.625},"center":[29.7,0,-1.3],"bounds":{"min_x":28.7,"max_x":30.7,"min_y":-0.4,"max_y":0.4,"min_z":-1.7,"max_z":-0.9},"card_position":[29.7,-1.583],"boq":{"concrete_m3":1.28,"rebar_kg":101.5,"ratio_kg_m3":79.3,"breakdown":{"DB20":53.7,"DB16":43.2,"DB12":4.6}},"piles_count":2,"associated_piles":[{"no":90,"tag":"P90","grid":"8-E","pco":-1.626},{"no":91,"tag":"P91","grid":"8-E","pco":-1.626}]},{"id":"F2_C1_10E","no":12,"name":"F2: C1 (Grid 10-E)","mark":"F2: C1","grid":"10-E","dim":{"w":2,"l":0.8,"h":0.8,"note":"2.80x0.80x0.80(H)"},"levels":{"top":-0.9,"bot":-1.7,"pco":-1.625},"center":[32.9,0,-1.3],"bounds":{"min_x":31.9,"max_x":33.9,"min_y":-0.4,"max_y":0.4,"min_z":-1.7,"max_z":-0.9},"card_position":[34.845,-0.833],"boq":{"concrete_m3":1.28,"rebar_kg":101.5,"ratio_kg_m3":79.3,"breakdown":{"DB20":53.7,"DB16":43.2,"DB12":4.6}},"piles_count":2,"associated_piles":[{"no":92,"tag":"P92","grid":"9-E","pco":-1.626},{"no":93,"tag":"P93","grid":"10-E","pco":-1.626}]},{"id":"F1_3B","no":13,"name":"F1 (Grid 3-B)","mark":"F1","grid":"3-B","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-0.15,"bot":-0.85,"pco":-0.65},"center":[5.7,5.2,-0.5],"bounds":{"min_x":5.3,"max_x":6.1,"min_y":4.8,"max_y":5.6,"min_z":-0.85,"max_z":-0.15},"card_position":[4.005,5.013],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":38,"tag":"P38","grid":"3-B","pco":-0.651}]},{"id":"F1_3D","no":14,"name":"F1 (Grid 3-D)","mark":"F1","grid":"3-D","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-0.15,"bot":-0.85,"pco":-0.65},"center":[5.7,1.3,-0.5],"bounds":{"min_x":5.3,"max_x":6.1,"min_y":0.9,"max_y":1.7,"min_z":-0.85,"max_z":-0.15},"card_position":[4.005,1.113],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":39,"tag":"P39","grid":"3-D","pco":-0.651}]},{"id":"F1_C0_Top","no":15,"name":"F1: C0 (Water Tank บน)","mark":"F1: C0","grid":"Tank-Top","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,5.435,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":5.035,"max_y":5.835,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,5.253],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":78,"tag":"P78","grid":"7-B","pco":-3.251}]},{"id":"F1_C0_Mid","no":16,"name":"F1: C0 (Water Tank กลาง)","mark":"F1: C0","grid":"Tank-Mid","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,2.713,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":2.313,"max_y":3.113,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,2.523],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":79,"tag":"P79","grid":"7-C","pco":-3.251}]},{"id":"F1_C0_Bot","no":17,"name":"F1: C0 (Water Tank ล่าง)","mark":"F1: C0","grid":"Tank-Bot","dim":{"w":0.8,"l":0.8,"h":0.7,"note":"0.80x0.80x0.70(H)"},"levels":{"top":-2.75,"bot":-3.45,"pco":-3.25},"center":[25.75,-0.01,-3.1],"bounds":{"min_x":25.35,"max_x":26.15,"min_y":-0.41,"max_y":0.39,"min_z":-3.45,"max_z":-2.75},"card_position":[23.83,-0.197],"boq":{"concrete_m3":0.45,"rebar_kg":51.9,"ratio_kg_m3":115.3,"breakdown":{"DB16":44.4,"DB12":7.6}},"piles_count":1,"associated_piles":[{"no":80,"tag":"P80","grid":"7-E","pco":-3.251}]},{"id":"F20A_Core1A","no":18,"name":"F20A: CORE 1A (Grid 4-5)","mark":"F20A: CORE 1A","grid":"4-5","dim":{"w":5.2,"l":6.9,"h":1,"note":"5.20x6.90x1.00(H)"},"levels":{"top":-1.7,"bot":-2.7,"pco":-2.625},"center":[12.16,3.05,-2.2],"bounds":{"min_x":9.56,"max_x":14.76,"min_y":-0.4,"max_y":6.5,"min_z":-2.7,"max_z":-1.7},"card_position":[12.16,4.25],"boq":{"concrete_m3":35.88,"rebar_kg":2120.2,"ratio_kg_m3":59.1,"breakdown":{"DB20":2098.2,"DB12":22}},"piles_count":20,"associated_piles":[{"no":40,"tag":"P40","grid":"4-B","pco":-2.626},{"no":41,"tag":"P41","grid":"4-B","pco":-2.626},{"no":42,"tag":"P42","grid":"5-B","pco":-2.626},{"no":43,"tag":"P43","grid":"5-B","pco":-2.626},{"no":44,"tag":"P44","grid":"4-B","pco":-2.626},{"no":45,"tag":"P45","grid":"4-B","pco":-2.626},{"no":46,"tag":"P46","grid":"5-B","pco":-2.626},{"no":47,"tag":"P47","grid":"5-B","pco":-2.626},{"no":48,"tag":"P48","grid":"4-C","pco":-2.626},{"no":49,"tag":"P49","grid":"4-C","pco":-2.626},{"no":50,"tag":"P50","grid":"5-C","pco":-2.626},{"no":51,"tag":"P51","grid":"5-C","pco":-2.626},{"no":52,"tag":"P52","grid":"4-D","pco":-2.626},{"no":53,"tag":"P53","grid":"4-D","pco":-2.626},{"no":54,"tag":"P54","grid":"5-D","pco":-2.626},{"no":55,"tag":"P55","grid":"5-D","pco":-2.626},{"no":56,"tag":"P56","grid":"4-E","pco":-2.626},{"no":57,"tag":"P57","grid":"4-E","pco":-2.626},{"no":58,"tag":"P58","grid":"5-E","pco":-2.626},{"no":59,"tag":"P59","grid":"5-E","pco":-2.626}]},{"id":"F18A_Core2A","no":19,"name":"F18A: CORE 2A (Grid 6)","mark":"F18A: CORE 2A","grid":"6","dim":{"w":5.4,"l":6.8,"h":1.4,"note":"5.40x6.80x1.40(H)"},"levels":{"top":-3.5,"bot":-4.1,"pco":-4.125},"center":[19.165,2.975,-3.7],"bounds":{"min_x":16.465,"max_x":21.865,"min_y":-0.425,"max_y":6.375,"min_z":-4.4,"max_z":-3},"card_position":[19.165,4.175],"boq":{"concrete_m3":51.41,"rebar_kg":3833.1,"ratio_kg_m3":74.6,"breakdown":{"DB25":2202.1,"DB20":1586.7,"DB12":44.3}},"piles_count":18,"associated_piles":[{"no":60,"tag":"P60","grid":"6-B","pco":-4.326},{"no":61,"tag":"P61","grid":"6-B","pco":-4.326},{"no":62,"tag":"P62","grid":"6-B","pco":-4.326},{"no":63,"tag":"P63","grid":"6-B","pco":-4.326},{"no":64,"tag":"P64","grid":"6-B","pco":-4.326},{"no":65,"tag":"P65","grid":"6-C","pco":-4.326},{"no":66,"tag":"P66","grid":"6-C","pco":-4.326},{"no":67,"tag":"P67","grid":"6-C","pco":-4.326},{"no":68,"tag":"P68","grid":"6-C","pco":-4.326},{"no":69,"tag":"P69","grid":"6-C","pco":-4.326},{"no":70,"tag":"P70","grid":"6-D","pco":-4.326},{"no":71,"tag":"P71","grid":"6-D","pco":-4.326},{"no":72,"tag":"P72","grid":"6-D","pco":-4.326},{"no":73,"tag":"P73","grid":"6-D","pco":-4.326},{"no":74,"tag":"P74","grid":"6-D","pco":-4.326},{"no":75,"tag":"P75","grid":"6-E","pco":-4.326},{"no":76,"tag":"P76","grid":"6-E","pco":-4.326},{"no":77,"tag":"P77","grid":"6-E","pco":-4.326}]},{"id":"WWT_1","no":20,"name":"WWT 1","mark":"WWT 1","grid":"WWT-1","dim":{"w":10.95,"l":3.5,"h":0.25,"note":"10.95x3.50x0.25(H)"},"levels":{"top":-2.95,"bot":-3.2,"pco":-3.15},"center":[13.933,8.672,-3.075],"bounds":{"min_x":8.458,"max_x":19.408,"min_y":6.922,"max_y":10.422,"min_z":-3.2,"max_z":-2.95},"card_position":[15.5,10.945],"boq":{"concrete_m3":9.58,"rebar_kg":691.4,"ratio_kg_m3":72.2,"breakdown":{"DB12":691.4}},"piles_count":20,"associated_piles":[]},{"id":"WWT_2","no":21,"name":"WWT 2","mark":"WWT 2","grid":"WWT-2","dim":{"w":2.5,"l":2.5,"h":0.2,"note":"2.50x2.50x0.20(H)"},"levels":{"top":-2.9,"bot":-3.1,"pco":-3.05},"center":[21.836,8.672,-3],"bounds":{"min_x":20.586,"max_x":23.086,"min_y":7.422,"max_y":9.922,"min_z":-3.1,"max_z":-2.9},"card_position":[24.315,9.013],"boq":{"concrete_m3":1.25,"rebar_kg":108.6,"ratio_kg_m3":86.9,"breakdown":{"DB12":108.6}},"piles_count":4,"associated_piles":[]}]};
+  </script>
+
   <!-- Application Logic -->
   <script type="module">
     import * as THREE from 'three';
@@ -3153,6 +3484,15 @@
     window.hexPileObjects = [];
     let activeFilter = 'all';
     window.drainageObjects = [];
+
+    // 21 RC Footings (ฐานราก ค.ส.ล. BIM Layer)
+    const FOOTINGS_DATA = window.__FOOTINGS_METADATA__?.footings || [];
+    let footingGroup = new THREE.Group();
+    footingGroup.name = 'footingGroup';
+    let footingMeshesMap = new Map();
+    let footingEdgesMap = new Map();
+    let selectedFootingId = null;
+    let hoveredFootingId = null;
 
     // Supabase Configuration & Client Loader
     const SUPABASE_URL = "https://gyzrsrxzzturoqwhuiul.supabase.co";
@@ -3623,6 +3963,83 @@
       updateNavHints('3d');
     }
 
+    // ----------------------------------------------------
+    // SEAMLESS BIM CAMERA SYNC (SHARED ACROSS PILING & FOOTING)
+    // ----------------------------------------------------
+    function saveBimSharedCamera() {
+      try {
+        const isOrtho = (activeCamera === orthoCamera);
+        const cam = isOrtho ? orthoCamera : perspCamera;
+        const ctrl = isOrtho ? controlsOrtho : controlsPersp;
+        if (!cam || !ctrl) return;
+        const state = {
+          isOrtho: isOrtho,
+          camPos: { x: cam.position.x, y: cam.position.y, z: cam.position.z },
+          camUp: { x: cam.up.x, y: cam.up.y, z: cam.up.z },
+          target: { x: ctrl.target.x, y: ctrl.target.y, z: ctrl.target.z },
+          orthoZoom: orthoCamera ? orthoCamera.zoom : 1,
+          timestamp: Date.now()
+        };
+        sessionStorage.setItem('pynn_bim_shared_camera', JSON.stringify(state));
+      } catch (err) {
+        console.warn('saveBimSharedCamera error:', err);
+      }
+    }
+
+    function restoreBimSharedCamera() {
+      try {
+        const raw = sessionStorage.getItem('pynn_bim_shared_camera');
+        if (!raw) return false;
+        const state = JSON.parse(raw);
+        if (!state || !state.camPos || !state.target) return false;
+        if (Date.now() - (state.timestamp || 0) > 2 * 60 * 60 * 1000) return false;
+
+        if (state.isOrtho) {
+          activeCamera = orthoCamera;
+          if (controlsOrtho) controlsOrtho.enabled = true;
+          if (controlsPersp) controlsPersp.enabled = false;
+          orthoCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
+          if (state.camUp) orthoCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
+          if (controlsOrtho) {
+            controlsOrtho.target.set(state.target.x, state.target.y, state.target.z);
+            controlsOrtho.update();
+          }
+          if (state.orthoZoom && state.orthoZoom > 0.05 && state.orthoZoom < 50) {
+            orthoCamera.zoom = state.orthoZoom;
+            orthoCamera.updateProjectionMatrix();
+          }
+          document.getElementById('view-top-ortho')?.classList.add('active');
+          document.getElementById('view-iso3d')?.classList.remove('active');
+          document.getElementById('sub-views-3d')?.classList.add('hidden');
+          updateNavHints('ortho');
+        } else {
+          activeCamera = perspCamera;
+          if (controlsOrtho) controlsOrtho.enabled = false;
+          if (controlsPersp) controlsPersp.enabled = true;
+          perspCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
+          if (state.camUp) perspCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
+          if (controlsPersp) {
+            controlsPersp.target.set(state.target.x, state.target.y, state.target.z);
+            controlsPersp.update();
+          }
+          document.getElementById('view-top-ortho')?.classList.remove('active');
+          document.getElementById('view-iso3d')?.classList.add('active');
+          document.getElementById('sub-views-3d')?.classList.remove('hidden');
+          updateNavHints('3d');
+        }
+        return true;
+      } catch (err) {
+        console.warn('restoreBimSharedCamera error:', err);
+        return false;
+      }
+    }
+
+    // Attempt restoring shared BIM camera on startup
+    restoreBimSharedCamera();
+
+    window.addEventListener('beforeunload', saveBimSharedCamera);
+    document.getElementById('dock-btn-footing')?.addEventListener('click', saveBimSharedCamera);
+
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
     scene.add(ambientLight);
@@ -3766,6 +4183,59 @@
     currentModel = null;
     let modelRoot = new THREE.Group();
     scene.add(modelRoot);
+    scene.add(footingGroup);
+
+    // ----------------------------------------------------
+    // CREATE 21 3D RC FOOTINGS (ฐานราก ค.ส.ล. BIM Layer)
+    // ----------------------------------------------------
+    function createFootingMeshes() {
+      footingGroup.clear();
+      footingMeshesMap.clear();
+      footingEdgesMap.clear();
+
+      const curOpacity = window.VISIBILITY_STATE?.footings?.opacity ?? 0.85;
+
+      FOOTINGS_DATA.forEach(f => {
+        const [cx, cy, cz] = f.center;
+        const { w, l, h } = f.dim;
+
+        // 1. Solid Footing Box Geometry
+        const geo = new THREE.BoxGeometry(w, l, h);
+        const mat = new THREE.MeshStandardMaterial({
+          color: 0x38bdf8, // Sky-400 / Architectural Cyan-Blue
+          roughness: 0.35,
+          metalness: 0.1,
+          transparent: true,
+          opacity: curOpacity,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(cx, cy, cz);
+
+        // 2. Crisp CAD Outline Edges (Navy #1D2B45)
+        const edgeGeo = new THREE.EdgesGeometry(geo, 15);
+        const edgeMat = new THREE.LineBasicMaterial({ color: 0x1D2B45, linewidth: 2 });
+        const edges = new THREE.LineSegments(edgeGeo, edgeMat);
+        mesh.add(edges);
+
+        mesh.userData = {
+          isFooting: true,
+          footingId: f.id,
+          mark: f.mark,
+          footing: f
+        };
+
+        footingGroup.add(mesh);
+        footingMeshesMap.set(f.id, mesh);
+        footingEdgesMap.set(f.id, edgeMat);
+      });
+
+      footingGroup.visible = window.VISIBILITY_STATE?.footings?.enabled ?? false;
+    }
+
+    createFootingMeshes();
 
     let drainageObjects = window.drainageObjects;
 
@@ -4572,6 +5042,37 @@
       return null;
     }
 
+    /**
+     * ค้นหาฐานราก ค.ส.ล. (21 ฐาน) ที่ตำแหน่งเคอร์เซอร์
+     */
+    function getFootingAtPointer(e) {
+      if (!window.VISIBILITY_STATE?.footings?.enabled) return null;
+      if (!renderer || !renderer.domElement || !activeCamera || !footingGroup) return null;
+
+      const rect = renderer.domElement.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      if (clickX < 0 || clickX > rect.width || clickY < 0 || clickY > rect.height) return null;
+
+      const normX = (clickX / rect.width) * 2 - 1;
+      const normY = -(clickY / rect.height) * 2 + 1;
+
+      mouse.set(normX, normY);
+      raycaster.setFromCamera(mouse, activeCamera);
+
+      const hits = raycaster.intersectObjects(footingGroup.children, true);
+      for (const h of hits) {
+        let cur = h.object;
+        while (cur && cur !== footingGroup) {
+          if (cur.userData?.isFooting && cur.userData.footing) {
+            return cur.userData.footing;
+          }
+          cur = cur.parent;
+        }
+      }
+      return null;
+    }
+
     // Raycast on pointerup ONLY if it was a quick stationary click (NOT a drag to rotate or pan!)
     window.addEventListener('pointerup', (e) => {
       if (e.target !== renderer.domElement) return;
@@ -4583,6 +5084,16 @@
       // If user dragged more than 8px or held longer than 400ms, they were rotating or panning!
       if (dist > 8 || dt > 400) return;
 
+      // 1. หัวใจสำคัญ: เมื่อเปิดเลเยอร์ฐานรากอยู่ -> ปิดการกดโดนเข็มอัตโนมัติ เพื่อให้คลิกดูฐานรากได้ 100% ไม่ชนเข็ม!
+      if (window.VISIBILITY_STATE?.footings?.enabled) {
+        const hitFooting = getFootingAtPointer(e);
+        if (hitFooting) {
+          openFootingCard(hitFooting);
+        }
+        return; // ป้องกันไม่ให้ทะลุไปคลิกโดนเข็มที่อยู่ด้านล่าง/ด้านในฐานราก
+      }
+
+      // 2. เมื่อปิดเลเยอร์ฐานราก (โหมดงานเสาเข็มปกติ) -> คลิกเลือกเสาเข็ม
       const hitPileNo = getPileAtPointer(e);
       if (hitPileNo) {
         if (isPcoInspectMode) {
@@ -4590,12 +5101,29 @@
         } else {
           openPileCard(hitPileNo);
         }
+        return;
       }
     });
 
-    // Double-click to Focus & Center rotation on clicked pile
+    // Double-click to Focus & Center rotation on clicked pile or footing
     window.addEventListener('dblclick', (e) => {
       if (e.target !== renderer.domElement) return;
+
+      if (window.VISIBILITY_STATE?.footings?.enabled) {
+        const hitFooting = getFootingAtPointer(e);
+        if (hitFooting) {
+          const pt = new THREE.Vector3(hitFooting.center[0], hitFooting.center[1], hitFooting.center[2]);
+          if (activeCamera === perspCamera) {
+            controlsPersp.target.set(pt.x, pt.y, pt.z);
+            controlsPersp.update();
+          } else {
+            controlsOrtho.target.set(pt.x, pt.y, 0);
+            controlsOrtho.update();
+          }
+        }
+        return;
+      }
+
       const hitPileNo = getPileAtPointer(e);
       if (hitPileNo) {
         const p = PILES_DATABASE.find(item => item.no === hitPileNo);
@@ -4608,6 +5136,51 @@
             controlsOrtho.target.set(pt.x, pt.y, 0);
             controlsOrtho.update();
           }
+        }
+        return;
+      }
+    });
+
+    // Hover glow effect on 3D footings & cursor pointer when footings layer is active
+    let lastHoveredFootingId = null;
+    window.addEventListener('pointermove', (e) => {
+      if (e.target !== renderer.domElement) return;
+      if (!window.VISIBILITY_STATE?.footings?.enabled) {
+        if (lastHoveredFootingId) {
+          lastHoveredFootingId = null;
+          updateFootingsSceneVisuals();
+          renderer.domElement.style.cursor = 'default';
+        }
+        return;
+      }
+
+      const hf = getFootingAtPointer(e);
+      if (hf) {
+        renderer.domElement.style.cursor = 'pointer';
+        if (lastHoveredFootingId !== hf.id) {
+          lastHoveredFootingId = hf.id;
+          FOOTINGS_DATA.forEach(f => {
+            const edge = footingEdgesMap.get(f.id);
+            const mesh = footingMeshesMap.get(f.id);
+            if (!edge || !mesh) return;
+            if (f.id === selectedFootingId) {
+              edge.color.setHex(0x0284c7);
+            } else if (f.id === lastHoveredFootingId) {
+              edge.color.setHex(0xf59e0b); // Amber CAD highlight
+              mesh.material.emissive.setHex(0xf59e0b);
+              mesh.material.emissiveIntensity = 0.25;
+            } else {
+              edge.color.setHex(0x1D2B45);
+              mesh.material.emissive.setHex(0x000000);
+              mesh.material.emissiveIntensity = 0;
+            }
+          });
+        }
+      } else {
+        if (lastHoveredFootingId) {
+          lastHoveredFootingId = null;
+          renderer.domElement.style.cursor = 'default';
+          updateFootingsSceneVisuals();
         }
       }
     });
@@ -4795,6 +5368,12 @@
     }
 
     function openPileCard(pileNo, fromQuickSelect = false) {
+      // ปิด Footing Card หากเปิดค้างอยู่ เพื่อป้องกันการซ้อนทับกัน
+      const fc = document.getElementById('footing-card');
+      if (fc && !fc.classList.contains('hidden')) {
+        closeFootingCard();
+      }
+
       selectedCardPileNo = pileNo;
       const pileData = PILES_DATABASE.find(p => p.no === pileNo);
       if (!pileData) return;
@@ -4865,24 +5444,34 @@
       const cancelBtn = document.getElementById('btn-card-toggle-cancel');
 
       if (isDriven) {
-        statusText.textContent = `✓ กดแล้ว (บันทึกวันที่: ${rec.date || curSelectedDate})`;
-        statusText.className = 'font-black text-[#10b981]';
+        statusText.textContent = `✓ กดแล้ว (${rec.date || curSelectedDate})`;
+        statusText.className = 'text-[9.5px] font-black px-2 py-0.5 rounded-full border border-emerald-300 text-emerald-800 bg-emerald-100';
         if (dateBadge) {
           dateBadge.textContent = rec.date ? `ข้อมูลเดิม: ${rec.date}` : 'วันนี้';
-          dateBadge.className = 'font-mono font-black text-emerald-700 text-[10.5px] bg-emerald-100 px-1.5 py-0.5 rounded';
+          dateBadge.className = 'font-mono font-bold text-emerald-700 text-[9.5px] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200';
         }
-        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกแก้ไขข้อมูล (บันทึกออนไลน์ Supabase)';
+        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกแก้ไขข้อมูล';
         if (cancelBtn) cancelBtn.classList.remove('hidden');
       } else {
         statusText.textContent = 'ยังไม่ได้กด';
-        statusText.className = 'font-bold text-[#667277]';
+        statusText.className = 'text-[9.5px] font-black px-2 py-0.5 rounded-full border border-slate-300 text-slate-600 bg-[#FAF5EE]';
         if (dateBadge) {
           dateBadge.textContent = 'ยังไม่ระบุ';
-          dateBadge.className = 'font-mono font-bold text-slate-500 text-[10.5px]';
+          dateBadge.className = 'font-mono font-bold text-[#8C9AA8] text-[9.5px]';
         }
-        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกกดเสาเข็มต้นนี้ (บันทึกออนไลน์ Supabase)';
+        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกข้อมูลเสาเข็มต้นนี้';
         if (cancelBtn) cancelBtn.classList.add('hidden');
       }
+
+      // รีเซ็ตแผงรายละเอียดให้ยุบเก็บไว้เริ่มต้น เพื่อให้หน้าต่างสะอาด ไม่รกตา
+      const detailsPanel = document.getElementById('panel-pile-details');
+      const detailsArrow = document.getElementById('arrow-pile-details');
+      const detailsBtnLbl = document.getElementById('lbl-toggle-expand-text');
+      const detailsHint = document.getElementById('hint-toggle-expand');
+      if (detailsPanel) detailsPanel.classList.add('hidden');
+      if (detailsArrow) detailsArrow.style.transform = 'rotate(0deg)';
+      if (detailsBtnLbl) detailsBtnLbl.textContent = 'คลิกขยาย';
+      if (detailsHint) detailsHint.textContent = 'คลิกเพื่อเปิดกรอกข้อมูลเพิ่มเติม';
 
             // Minibar and Back to Quick Select wiring
       const backBtn = document.getElementById('btn-card-back-to-quick-select');
@@ -5053,6 +5642,21 @@
       d.setDate(d.getDate() - 1);
       const yStr = d.toISOString().split('T')[0];
       if (inp) inp.value = yStr;
+    });
+
+    // Collapsible Details Section Toggle in Pile Card
+    document.getElementById('btn-toggle-pile-details')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const panel = document.getElementById('panel-pile-details');
+      const arrow = document.getElementById('arrow-pile-details');
+      const lbl = document.getElementById('lbl-toggle-expand-text');
+      const hint = document.getElementById('hint-toggle-expand');
+      if (panel) {
+        const isHidden = panel.classList.toggle('hidden');
+        if (arrow) arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+        if (lbl) lbl.textContent = isHidden ? 'คลิกขยาย' : 'ยุบเก็บ';
+        if (hint) hint.textContent = isHidden ? 'คลิกเพื่อเปิดกรอกข้อมูลเพิ่มเติม' : 'กำลังเปิดกรอกข้อมูลความยาว & พิกัด';
+      }
     });
 
     // Consolidated Single Action Button: Save Pile (Driven status + Date + Actual Top + Coordinates + Segments)
@@ -5499,15 +6103,7 @@
       resetIsoView();
     });
 
-    // Mobile / Z Fold HUD Toggle & Dynamic Positioning
-    document.getElementById('btn-toggle-hud')?.addEventListener('click', () => {
-      const body = document.getElementById('floating-hud-body');
-      const hud = document.getElementById('floating-hud');
-      if (body) {
-        body.classList.toggle('hidden');
-        if (hud) hud.classList.toggle('collapsed', body.classList.contains('hidden'));
-      }
-    });
+    // Dynamic Positioning helper
 
     // Mobile Thumb Bar Controls
     document.getElementById('btn-thumb-center')?.addEventListener('click', () => {
@@ -5570,11 +6166,18 @@
         showModel: true,
         showText: true
       },
+      footings: {
+        enabled: false,
+        opacity: 0.85
+      },
       drainage: {
         enabled: false,
         showModel: false,
         showText: false
-      }
+      },
+      grid: true,
+      boundary: true,
+      hex: false
     };
 
     function updatePilesCardUI() {
@@ -5609,16 +6212,18 @@
         sideBadge.className = state.enabled ? "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-[#10b981] text-white" : "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-slate-300 text-slate-600";
         sideBadge.textContent = state.enabled ? "เปิด" : "ปิด";
       }
-      if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]";
+      if (sideDivider) {
+        sideDivider.classList.toggle('hidden', !state.enabled);
+      }
 
-      const btnActive = "subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] select-none";
-      const btnInactive = "subtoggle-btn is-inactive flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] shadow-none hover:bg-[#F1F5F9] select-none";
+      const btnActive = "subtoggle-btn is-active flex-1 py-0.5 px-1 rounded-md border border-[#1D2B45] font-black text-[9.5px] flex items-center justify-center gap-1 bg-white text-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45]";
+      const btnInactive = "subtoggle-btn is-inactive flex-1 py-0.5 px-1 rounded-md border border-dashed border-[#1D2B45]/30 font-bold text-[9.5px] flex items-center justify-center gap-1 bg-[#FAF5EE] text-[#64748B]";
 
       if (btnModel) btnModel.className = (state.enabled && state.showModel) ? btnActive : btnInactive;
-      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-1.5 h-1.5 rounded-full bg-[#10b981]" : "w-1.5 h-1.5 rounded-full bg-[#CBD5E1]";
 
       if (btnText) btnText.className = (state.enabled && state.showText) ? btnActive : btnInactive;
-      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-1.5 h-1.5 rounded-full bg-[#10b981]" : "w-1.5 h-1.5 rounded-full bg-[#CBD5E1]";
     }
 
     function updateDrainageCardUI() {
@@ -5653,16 +6258,52 @@
         sideBadge.className = state.enabled ? "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-[#10b981] text-white" : "text-[8.5px] font-black px-2 py-0.5 rounded-full bg-slate-300 text-slate-600";
         sideBadge.textContent = state.enabled ? "เปิด" : "ปิด";
       }
-      if (sideDivider) sideDivider.className = state.enabled ? "grid grid-cols-2 gap-1.5 pt-1.5 border-t border-emerald-200/80 text-[10px]" : "grid grid-cols-2 gap-1.5 pt-1.5 border-t-1.5 border-slate-900 text-[10px]";
+      if (sideDivider) {
+        sideDivider.classList.toggle('hidden', !state.enabled);
+      }
 
-      const btnActive = "subtoggle-btn is-active flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#1D2B45] font-black transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] hover:shadow-[1.5px_1.5px_0px_#F26B2A] select-none";
-      const btnInactive = "subtoggle-btn is-inactive flex items-center justify-center gap-1 py-1 px-1 rounded-full border border-[#CBD5E1] font-bold transition-all cursor-pointer bg-[#F8FAFC] text-[#94A3B8] shadow-none hover:bg-[#F1F5F9] select-none";
+      const btnActiveDrain = "subtoggle-btn is-active flex-1 py-0.5 px-1 rounded-md border border-[#1D2B45] font-black text-[9.5px] flex items-center justify-center gap-1 bg-white text-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45]";
+      const btnInactiveDrain = "subtoggle-btn is-inactive flex-1 py-0.5 px-1 rounded-md border border-dashed border-[#1D2B45]/30 font-bold text-[9.5px] flex items-center justify-center gap-1 bg-[#FAF5EE] text-[#64748B]";
 
-      if (btnModel) btnModel.className = (state.enabled && state.showModel) ? btnActive : btnInactive;
-      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (btnModel) btnModel.className = (state.enabled && state.showModel) ? btnActiveDrain : btnInactiveDrain;
+      if (dotModel) dotModel.className = (state.enabled && state.showModel) ? "w-1.5 h-1.5 rounded-full bg-[#10b981]" : "w-1.5 h-1.5 rounded-full bg-[#CBD5E1]";
 
-      if (btnText) btnText.className = (state.enabled && state.showText) ? btnActive : btnInactive;
-      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-2 h-2 rounded-full bg-[#10b981]" : "w-2 h-2 rounded-full bg-slate-300";
+      if (btnText) btnText.className = (state.enabled && state.showText) ? btnActiveDrain : btnInactiveDrain;
+      if (dotText) dotText.className = (state.enabled && state.showText) ? "w-1.5 h-1.5 rounded-full bg-[#10b981]" : "w-1.5 h-1.5 rounded-full bg-[#CBD5E1]";
+    }
+
+    function updateOtherCardsUI() {
+      const cardGrid = document.getElementById('card-grid');
+      if (cardGrid) {
+        if (window.VISIBILITY_STATE.grid) {
+          cardGrid.classList.add('active', 'active-grid');
+        } else {
+          cardGrid.classList.remove('active', 'active-grid');
+        }
+      }
+      const cardBoundary = document.getElementById('card-boundary');
+      if (cardBoundary) {
+        if (window.VISIBILITY_STATE.boundary) {
+          cardBoundary.classList.add('active', 'active-boundary');
+        } else {
+          cardBoundary.classList.remove('active', 'active-boundary');
+        }
+      }
+      const cardHex = document.getElementById('card-hex');
+      if (cardHex) {
+        if (window.VISIBILITY_STATE.hex) {
+          cardHex.classList.add('active', 'active-hex');
+        } else {
+          cardHex.classList.remove('active', 'active-hex');
+        }
+      }
+      if (currentModel) {
+        currentModel.traverse(c => {
+          if (c.userData?.isHexPile) {
+            c.visible = !!window.VISIBILITY_STATE.hex;
+          }
+        });
+      }
     }
 
     function updateDrainageSceneVisuals() {
@@ -5714,10 +6355,77 @@
       }
     }
 
+    function updateFootingsCardUI() {
+      const state = window.VISIBILITY_STATE.footings;
+      const card = document.getElementById('sidebar-card-footings');
+      const subtoggles = document.getElementById('div-footing-subtoggles');
+      const dotDock = document.getElementById('dot-dock-footing');
+
+      if (card) {
+        if (state.enabled) {
+          card.classList.add('active', 'active-footing');
+        } else {
+          card.classList.remove('active', 'active-footing');
+        }
+      }
+
+      if (subtoggles) {
+        subtoggles.classList.toggle('hidden', !state.enabled);
+      }
+
+      if (dotDock) {
+        dotDock.className = state.enabled
+          ? 'w-2 h-2 rounded-full bg-[#0284C7] animate-pulse'
+          : 'w-2 h-2 rounded-full bg-slate-300';
+      }
+
+      // Update opacity preset button states
+      document.querySelectorAll('.btn-footing-op').forEach(btn => {
+        const val = parseFloat(btn.getAttribute('data-val'));
+        const isActive = Math.abs(val - state.opacity) < 0.05;
+        if (isActive) {
+          btn.className = 'btn-footing-op is-active text-[8.5px] font-black px-1.5 py-0.5 rounded-md bg-[#0284C7] text-white border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] cursor-pointer';
+        } else {
+          btn.className = 'btn-footing-op text-[8.5px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45]/30 cursor-pointer';
+        }
+      });
+    }
+
+    function updateFootingsSceneVisuals() {
+      const state = window.VISIBILITY_STATE.footings;
+      footingGroup.visible = !!state.enabled;
+
+      if (!state.enabled) return;
+
+      FOOTINGS_DATA.forEach(f => {
+        const mesh = footingMeshesMap.get(f.id);
+        const edge = footingEdgesMap.get(f.id);
+        if (!mesh) return;
+
+        mesh.material.opacity = state.opacity;
+        mesh.material.transparent = state.opacity < 0.98;
+
+        if (f.id === selectedFootingId) {
+          mesh.material.color.setHex(0x0284c7); // Vibrant sky blue selection
+          mesh.material.emissive.setHex(0x0369a1);
+          mesh.material.emissiveIntensity = 0.35;
+          if (edge) edge.color.setHex(0x0284c7);
+        } else {
+          mesh.material.color.setHex(0x38bdf8); // Standard Sky-400
+          mesh.material.emissive.setHex(0x000000);
+          mesh.material.emissiveIntensity = 0;
+          if (edge) edge.color.setHex(0x1D2B45);
+        }
+      });
+    }
+
     function applyVisibilityChanges() {
       updatePilesCardUI();
+      updateFootingsCardUI();
       updateDrainageCardUI();
+      updateOtherCardsUI();
       updatePileMeshVisuals();
+      updateFootingsSceneVisuals();
       updateDrainageSceneVisuals();
       if (typeof renderPlanSnapshotCanvas === 'function') renderPlanSnapshotCanvas();
     }
@@ -5751,6 +6459,16 @@
           window.VISIBILITY_STATE.piles.enabled = true;
           window.VISIBILITY_STATE.piles.showModel = true;
           window.VISIBILITY_STATE.piles.showText = true;
+          window.VISIBILITY_STATE.footings.enabled = false;
+          window.VISIBILITY_STATE.drainage.enabled = false;
+          window.VISIBILITY_STATE.drainage.showModel = false;
+          window.VISIBILITY_STATE.drainage.showText = false;
+          window.VISIBILITY_STATE.hex = false;
+        } else if (target === 'footings') {
+          window.VISIBILITY_STATE.footings.enabled = true;
+          window.VISIBILITY_STATE.piles.enabled = false;
+          window.VISIBILITY_STATE.piles.showModel = false;
+          window.VISIBILITY_STATE.piles.showText = false;
           window.VISIBILITY_STATE.drainage.enabled = false;
           window.VISIBILITY_STATE.drainage.showModel = false;
           window.VISIBILITY_STATE.drainage.showText = false;
@@ -5762,6 +6480,7 @@
           window.VISIBILITY_STATE.piles.enabled = false;
           window.VISIBILITY_STATE.piles.showModel = false;
           window.VISIBILITY_STATE.piles.showText = false;
+          window.VISIBILITY_STATE.footings.enabled = false;
           window.VISIBILITY_STATE.hex = false;
         }
         applyVisibilityChanges();
@@ -5770,9 +6489,16 @@
 
     // Batch Buttons
     document.getElementById('btn-layers-all')?.addEventListener('click', () => {
+      document.querySelectorAll('#group-structural-items, #group-mep-items, #group-cad-items').forEach(el => {
+        el.classList.remove('hidden');
+      });
+      document.querySelectorAll('.discipline-chevron').forEach(ch => {
+        ch.style.transform = 'rotate(0deg)';
+      });
       window.VISIBILITY_STATE.piles.enabled = true;
       window.VISIBILITY_STATE.piles.showModel = true;
       window.VISIBILITY_STATE.piles.showText = true;
+      window.VISIBILITY_STATE.footings.enabled = true;
       window.VISIBILITY_STATE.drainage.enabled = true;
       window.VISIBILITY_STATE.drainage.showModel = true;
       window.VISIBILITY_STATE.drainage.showText = true;
@@ -5786,6 +6512,8 @@
       window.VISIBILITY_STATE.piles.enabled = true;
       window.VISIBILITY_STATE.piles.showModel = true;
       window.VISIBILITY_STATE.piles.showText = true;
+      window.VISIBILITY_STATE.footings.enabled = false;
+      window.VISIBILITY_STATE.footings.opacity = 0.85;
       window.VISIBILITY_STATE.drainage.enabled = false;
       window.VISIBILITY_STATE.drainage.showModel = false;
       window.VISIBILITY_STATE.drainage.showText = false;
@@ -5793,6 +6521,347 @@
       window.VISIBILITY_STATE.boundary = true;
       window.VISIBILITY_STATE.hex = false;
       applyVisibilityChanges();
+    });
+
+    // Footings Layer Card & Opacity Controls
+    document.getElementById('sidebar-card-footings')?.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-footing-op') || e.target.closest('.btn-solo')) return;
+      window.VISIBILITY_STATE.footings.enabled = !window.VISIBILITY_STATE.footings.enabled;
+      applyVisibilityChanges();
+    });
+
+    document.querySelectorAll('.btn-footing-op').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = parseFloat(btn.getAttribute('data-val'));
+        if (!isNaN(val)) {
+          window.VISIBILITY_STATE.footings.opacity = val;
+          window.VISIBILITY_STATE.footings.enabled = true;
+          applyVisibilityChanges();
+        }
+      });
+    });
+
+    // Dock Button Footing Toggle
+    document.getElementById('dock-btn-footing')?.addEventListener('click', () => {
+      window.VISIBILITY_STATE.footings.enabled = !window.VISIBILITY_STATE.footings.enabled;
+      applyVisibilityChanges();
+      showSyncToast(
+        window.VISIBILITY_STATE.footings.enabled
+          ? '🏗️ เปิดเลเยอร์ฐานราก ค.ส.ล. (21 ฐาน)'
+          : '🏗️ ซ่อนเลเยอร์ฐานราก ค.ส.ล.'
+      );
+    });
+
+    // Close Footing Card Button
+    document.getElementById('btn-close-footing-card')?.addEventListener('click', closeFootingCard);
+
+    // Tab Navigation for Footing Card (3 Segments: ขนาด/ระดับ, BOQ วัสดุ, เสาเข็มในฐาน)
+    document.querySelectorAll('.tab-footing-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetTab = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-footing-btn').forEach(b => {
+          const isActive = b === btn;
+          b.classList.toggle('is-active', isActive);
+          if (isActive) {
+            b.className = 'tab-footing-btn is-active flex-1 py-1 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 bg-white text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] cursor-pointer';
+          } else {
+            b.className = 'tab-footing-btn flex-1 py-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 text-slate-600 hover:text-[#1D2B45] cursor-pointer';
+          }
+        });
+        document.querySelectorAll('.tab-footing-panel').forEach(p => {
+          p.classList.toggle('hidden', p.id !== targetTab);
+        });
+      });
+    });
+
+    // Footing Card Modal Controller
+    function openFootingCard(f) {
+      if (!f) return;
+      selectedFootingId = f.id;
+      updateFootingsSceneVisuals();
+
+      // ปิด Pile Card หากเปิดอยู่ เพื่อไม่ให้หน้าต่างซ้อนทับกัน
+      const pileCard = document.getElementById('pile-card');
+      if (pileCard && !pileCard.classList.contains('hidden')) {
+        pileCard.classList.add('hidden', 'opacity-0');
+        selectedCardPileNo = null;
+      }
+
+      const card = document.getElementById('footing-card');
+      if (!card) return;
+
+      // Smart position check: กำหนดให้อยู่มุมล่างขวา กว้าง 350px ไม่ลอยขึ้นบนหรือบีบกว้างเต็มจอ
+      if (!footingCardHasBeenDragged) {
+        if (window.innerWidth < 640) {
+          card.style.setProperty('left', '8px', 'important');
+          card.style.setProperty('right', '8px', 'important');
+          card.style.setProperty('bottom', '8px', 'important');
+          card.style.setProperty('top', 'auto', 'important');
+          card.style.setProperty('width', 'calc(100vw - 16px)', 'important');
+        } else {
+          card.style.setProperty('left', 'auto', 'important');
+          card.style.setProperty('top', 'auto', 'important');
+          card.style.setProperty('right', '20px', 'important');
+          card.style.setProperty('bottom', '20px', 'important');
+          card.style.setProperty('width', '350px', 'important');
+        }
+      }
+
+      // รีเซ็ตแท็บเริ่มต้นเป็นแท็บ 1: ขนาดและระดับ
+      document.querySelectorAll('.tab-footing-btn').forEach(b => {
+        const isFirst = b.getAttribute('data-tab') === 'tab-footing-levels';
+        b.classList.toggle('is-active', isFirst);
+        if (isFirst) {
+          b.className = 'tab-footing-btn is-active flex-1 py-1 rounded-lg text-[10px] font-black flex items-center justify-center gap-1 bg-white text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] cursor-pointer';
+        } else {
+          b.className = 'tab-footing-btn flex-1 py-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 text-slate-600 hover:text-[#1D2B45] cursor-pointer';
+        }
+      });
+      document.querySelectorAll('.tab-footing-panel').forEach(p => {
+        p.classList.toggle('hidden', p.id !== 'tab-footing-levels');
+      });
+
+      const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      setTxt('card-footing-mark', f.mark);
+      setTxt('card-footing-grid', f.grid);
+      setTxt('card-footing-name', `${f.name} • ${f.piles_count} เสาเข็ม`);
+      setTxt('card-footing-dim', f.dim?.note || `${f.dim?.w} x ${f.dim?.l} x ${f.dim?.h} m`);
+      setTxt('card-footing-top', `${f.levels.top.toFixed(3)} m`);
+      setTxt('card-footing-pco', `${f.levels.pco.toFixed(3)} m`);
+      setTxt('card-footing-bot', `${f.levels.bot.toFixed(3)} m`);
+
+      // คำนวณระยะฝังหัวเข็ม และความหนาคอนกรีต
+      const embedM = Math.max(0, f.levels.pco - f.levels.bot);
+      const embedCm = Math.round(embedM * 100 * 10) / 10;
+      const depthM = f.dim?.h || (f.levels.top - f.levels.bot);
+      setTxt('card-footing-depth', `${depthM.toFixed(2)} ม.`);
+      setTxt('card-footing-embed', `${embedM.toFixed(3)} ม. (${embedCm} ซม.)`);
+
+      const boq = f.boq || {};
+      setTxt('card-footing-conc', (boq.concrete_m3 || 0).toFixed(2));
+      setTxt('card-footing-rebar', (boq.rebar_kg || 0).toFixed(1));
+      setTxt('card-footing-ratio', `${boq.ratio_kg_m3 || 0} kg/m³`);
+
+      // Rebar breakdown with progress bars
+      const rCont = document.getElementById('card-footing-rebar-pills');
+      if (rCont) {
+        rCont.innerHTML = '';
+        const totalRebar = boq.rebar_kg || 1;
+        if (boq.breakdown && Object.keys(boq.breakdown).length > 0) {
+          Object.entries(boq.breakdown).forEach(([bar, wt]) => {
+            const pct = Math.min(100, Math.round((wt / totalRebar) * 100));
+            const row = document.createElement('div');
+            row.className = 'space-y-0.5';
+            row.innerHTML = `
+              <div class="flex items-center justify-between text-[10px]">
+                <span class="font-mono font-black text-[#1D2B45] flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> ${bar}
+                </span>
+                <span class="font-mono text-slate-600 font-bold">${wt.toFixed(1)} kg <span class="text-slate-400 text-[9px]">(${pct}%)</span></span>
+              </div>
+              <div class="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                <div class="h-full bg-gradient-to-r from-indigo-500 to-sky-500 rounded-full" style="width: ${pct}%"></div>
+              </div>
+            `;
+            rCont.appendChild(row);
+          });
+        } else {
+          rCont.innerHTML = `<span class="text-[10px] text-slate-400 italic">ไม่มีข้อมูลเหล็กเสริม</span>`;
+        }
+      }
+
+      // Associated piles list with status indicators
+      const pCont = document.getElementById('card-footing-piles-list');
+      if (pCont) {
+        pCont.innerHTML = '';
+        const pileCount = f.associated_piles?.length || f.piles_count || 0;
+        setTxt('card-footing-piles-count', pileCount);
+        const tabBadge = document.getElementById('tab-piles-count-badge');
+        if (tabBadge) tabBadge.textContent = pileCount;
+
+        if (f.associated_piles && f.associated_piles.length > 0) {
+          const curDate = datePicker?.value || todayStr;
+          f.associated_piles.forEach(p => {
+            const rec = progressRecords[p.no];
+            const isDriven = rec && rec.status === 'driven';
+            const isToday = isDriven && rec.date === curDate;
+
+            let statusDot = 'bg-slate-300';
+            let statusLabel = 'ยังไม่กด';
+            let statusColor = 'text-slate-400';
+            if (isToday) {
+              statusDot = 'bg-[#0284C7] ring-2 ring-sky-300 animate-pulse';
+              statusLabel = 'กดวันนี้';
+              statusColor = 'text-sky-700 font-black';
+            } else if (isDriven) {
+              statusDot = 'bg-[#10B981]';
+              statusLabel = `กดแล้ว (${rec.date || ''})`;
+              statusColor = 'text-emerald-700 font-bold';
+            }
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'px-2.5 py-1.5 rounded-xl bg-white hover:bg-sky-50 text-[#1D2B45] border-1.5 border-[#1D2B45] font-mono font-bold text-xs flex items-center justify-between gap-2 shadow-[1px_1px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer flex-1 min-w-[130px]';
+            btn.innerHTML = `
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full ${statusDot}"></span>
+                <strong class="text-xs">${p.tag}</strong>
+                <span class="text-[9.5px] text-slate-500 font-normal">(${p.grid})</span>
+              </div>
+              <span class="text-[9px] ${statusColor}">${statusLabel}</span>
+            `;
+            btn.title = `คลิกเพื่อเปิดข้อมูลและบันทึกเสาเข็ม ${p.tag} (เบอร์ ${p.no})`;
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openPileCard(p.no);
+            });
+            pCont.appendChild(btn);
+          });
+        } else {
+          pCont.innerHTML = `<span class="text-[10px] text-slate-400 italic">ไม่มีข้อมูลเสาเข็มรายต้น (${f.piles_count} ต้น)</span>`;
+        }
+      }
+
+      // Focus camera button
+      const btnFocus = document.getElementById('btn-footing-focus');
+      if (btnFocus) {
+        btnFocus.onclick = () => {
+          const pt = new THREE.Vector3(f.center[0], f.center[1], f.center[2]);
+          if (activeCamera === perspCamera) {
+            controlsPersp.target.set(pt.x, pt.y, pt.z);
+            controlsPersp.update();
+          } else {
+            controlsOrtho.target.set(pt.x, pt.y, 0);
+            controlsOrtho.update();
+          }
+        };
+      }
+
+      // Isolate button
+      const btnIsol = document.getElementById('btn-footing-isolate');
+      if (btnIsol) {
+        btnIsol.onclick = () => {
+          window.VISIBILITY_STATE.footings.enabled = true;
+          window.VISIBILITY_STATE.piles.enabled = true;
+          window.VISIBILITY_STATE.drainage.enabled = false;
+          // Hide all piles except associated piles
+          const assocNos = (f.associated_piles || []).map(p => p.no);
+          for (let pNo = 1; pNo <= 93; pNo++) {
+            const meshes = pileMeshesMap.get(pNo) || [];
+            const isAssoc = assocNos.includes(pNo);
+            meshes.forEach(m => m.visible = isAssoc);
+          }
+          applyVisibilityChanges();
+        };
+      }
+
+      card.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        card.classList.remove('translate-y-4', 'opacity-0');
+      });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    let footingCardHasBeenDragged = false;
+    function closeFootingCard() {
+      const card = document.getElementById('footing-card');
+      if (!card) return;
+      card.classList.add('translate-y-4', 'opacity-0');
+      setTimeout(() => {
+        card.classList.add('hidden');
+        selectedFootingId = null;
+        footingCardHasBeenDragged = false;
+        updateFootingsSceneVisuals();
+      }, 200);
+    }
+
+    function makeFootingCardDraggable() {
+      const card = document.getElementById('footing-card');
+      const header = document.getElementById('footing-card-header');
+      if (!card || !header) return;
+
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      function onPointerDown(e) {
+        if (e.target.closest('#btn-close-footing-card') || e.target.closest('button')) return;
+        isDragging = true;
+        footingCardHasBeenDragged = true;
+        const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+        startX = clientX;
+        startY = clientY;
+
+        const rect = card.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        card.style.setProperty('right', 'auto', 'important');
+        card.style.setProperty('bottom', 'auto', 'important');
+        card.style.setProperty('left', initialLeft + 'px', 'important');
+        card.style.setProperty('top', initialTop + 'px', 'important');
+        card.style.margin = '0';
+        header.style.cursor = 'grabbing';
+
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+        document.addEventListener('touchmove', onPointerMove, { passive: false });
+        document.addEventListener('touchend', onPointerUp);
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+        if (e.cancelable && e.type === 'touchmove') e.preventDefault();
+
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+        let newLeft = initialLeft + dx;
+        let newTop = initialTop + dy;
+
+        const pad = 8;
+        const maxLeft = window.innerWidth - card.offsetWidth - pad;
+        const maxTop = window.innerHeight - card.offsetHeight - pad;
+        newLeft = Math.max(pad, Math.min(newLeft, maxLeft));
+        newTop = Math.max(pad, Math.min(newTop, maxTop));
+
+        card.style.setProperty('left', Math.round(newLeft) + 'px', 'important');
+        card.style.setProperty('top', Math.round(newTop) + 'px', 'important');
+      }
+
+      function onPointerUp() {
+        if (!isDragging) return;
+        isDragging = false;
+        header.style.cursor = 'grab';
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', onPointerUp);
+        document.removeEventListener('touchmove', onPointerMove);
+        document.removeEventListener('touchend', onPointerUp);
+      }
+
+      header.addEventListener('pointerdown', onPointerDown);
+      header.addEventListener('touchstart', onPointerDown, { passive: true });
+    }
+
+    makeFootingCardDraggable();
+
+    // Accordion Toggle for Engineering Disciplines
+    document.querySelectorAll('.discipline-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-target');
+        const container = document.getElementById(targetId);
+        const chevron = btn.querySelector('.discipline-chevron');
+        if (container) {
+          const isHidden = container.classList.toggle('hidden');
+          if (chevron) {
+            chevron.style.transform = isHidden ? 'rotate(-90deg)' : 'rotate(0deg)';
+          }
+        }
+      });
     });
 
     // 1. งานเสาเข็ม: กดตรงไหนก็ได้ของการ์ดเพื่อเปิด/ปิดทั้งหมด
@@ -9478,6 +10547,7 @@
     const tblArrow = document.getElementById('arrow-tables-dropdown');
     if (tblToggle && tblMenu) {
       tblToggle.addEventListener('click', (e) => {
+        e.preventDefault();
         e.stopPropagation();
         const isHidden = tblMenu.classList.contains('hidden');
         if (isHidden) {
@@ -9497,7 +10567,7 @@
       });
       // Close when clicking outside
       document.addEventListener('click', (e) => {
-        if (!tblMenu.contains(e.target) && e.target !== tblToggle) {
+        if (!tblMenu.contains(e.target) && !tblToggle.contains(e.target)) {
           tblMenu.classList.add('hidden');
           if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
         }
@@ -10257,11 +11327,19 @@
     const toggleHudState = () => {
       const hud = document.getElementById('floating-hud');
       const hudBody = document.getElementById('floating-hud-body');
+      const tabContent = document.getElementById('sidebar-tab-content');
+      const btnToggle = document.getElementById('btn-toggle-hud');
       if (hud) {
         hud.classList.toggle('collapsed');
         const isCollapsed = hud.classList.contains('collapsed');
         if (hudBody) {
           hudBody.style.display = isCollapsed ? 'none' : 'flex';
+        }
+        if (tabContent) {
+          tabContent.style.display = isCollapsed ? 'none' : 'flex';
+        }
+        if (btnToggle) {
+          btnToggle.textContent = isCollapsed ? 'ขยาย' : 'ย่อ';
         }
       }
     };
