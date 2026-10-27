@@ -2704,76 +2704,77 @@
         <span class="text-slate-400 text-xs px-2">+</span>
       </div>
 
-      <!-- 4 KPI Summary Cards (สไตล์ DoodleWeb แท้ ทรงพลัง สะอาดตา เป็นทางการ) -->
+      <!-- 4 KPI Summary Cards (สไตล์ DoodleWeb แท้ ทรงพลัง สะอาดตา เป็นทางการ จัดวาง 2 แถวไม่มีข้อความทับกัน 100%) -->
       <div id="rep-kpi-summary-box" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 mb-4 font-body">
+        
         <!-- Card 1: แผนวันนี้ 3 ต้น / กดแล้ว X ต้น -->
-        <div id="rep-kpi-1" class="bg-[#F0F9FF] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] min-h-[64px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap transition-all hover:translate-y-[-1px]">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="w-8 h-8 rounded-xl bg-[#0284C7] text-white flex items-center justify-center border-1.5 border-[#1D2B45] shrink-0 shadow-[1px_1px_0px_#1D2B45]">
-              <i data-lucide="hammer" class="w-4 h-4"></i>
+        <div id="rep-kpi-1" class="bg-[#F0F9FF] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]">
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="text-[10.5px] font-extrabold text-[#64748B] uppercase tracking-wider">งานประจำวัน</span>
+            <span class="w-7 h-7 rounded-lg bg-[#E0F2FE] text-[#0284C7] flex items-center justify-center border border-[#0284C7]/30 shadow-xs shrink-0">
+              <i data-lucide="hammer" class="w-3.5 h-3.5"></i>
             </span>
-            <div>
-              <span class="text-[10px] font-black text-[#8C9AA8] block uppercase leading-none">งานประจำวัน</span>
-              <span class="text-xs sm:text-sm font-black text-[#0369A1] whitespace-nowrap">แผนวันนี้ 3 ต้น</span>
-            </div>
           </div>
-          <div class="flex items-baseline gap-1.5 shrink-0 font-bold whitespace-nowrap text-right">
-            <span class="text-xs text-slate-500 whitespace-nowrap shrink-0 inline-block">กดแล้ว</span>
-            <span id="rep-today-count" class="text-xl sm:text-2xl font-black font-mono text-[#0284C7] leading-none">0</span>
-            <span class="text-xs text-[#1D2B45]">ต้น</span>
+          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
+            <div class="flex items-baseline gap-1 min-w-0">
+              <span class="text-[11px] text-slate-500 font-bold shrink-0">กดแล้ว</span>
+              <span id="rep-today-count" class="text-2xl sm:text-3xl font-black font-mono text-[#0284C7] leading-none">0</span>
+              <span class="text-xs font-bold text-[#1D2B45] shrink-0">ต้น</span>
+            </div>
+            <span class="text-[11px] font-bold text-[#0369A1] bg-white border border-[#BAE6FD] px-2 py-0.5 rounded-full shrink-0 shadow-xs whitespace-nowrap">แผน 3 ต้น</span>
             <span id="rep-today-sub" class="hidden">0</span>
           </div>
         </div>
 
         <!-- Card 2: แผนกดสะสม .... ต้น -->
-        <div id="rep-kpi-2" class="bg-[#FFF7ED] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] min-h-[64px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap transition-all hover:translate-y-[-1px]" title="แผนสะสมตามวันทำการ (ไม่นับวันอาทิตย์และวันหยุดราชการ)">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="w-8 h-8 rounded-xl bg-[#F26B2A] text-white flex items-center justify-center border-1.5 border-[#1D2B45] shrink-0 shadow-[1px_1px_0px_#1D2B45]">
-              <i data-lucide="calendar" class="w-4 h-4"></i>
+        <div id="rep-kpi-2" class="bg-[#FFF7ED] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]" title="แผนสะสมตามวันทำการ (ไม่นับวันอาทิตย์และวันหยุดราชการ)">
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="text-[10.5px] font-extrabold text-[#8C9AA8] uppercase tracking-wider">เป้าหมายสะสม</span>
+            <span class="w-7 h-7 rounded-lg bg-[#FFEDD5] text-[#F26B2A] flex items-center justify-center border border-[#F26B2A]/30 shadow-xs shrink-0">
+              <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
             </span>
-            <div>
-              <span class="text-[10px] font-black text-[#8C9AA8] block uppercase leading-none">เป้าหมายสะสม</span>
-              <span class="text-xs sm:text-sm font-black text-[#C2410C] whitespace-nowrap">แผนสะสม (<span id="rep-elapsed-days" class="font-mono">0</span>/31 วัน)</span>
-            </div>
           </div>
-          <div class="flex items-baseline gap-1.5 shrink-0 font-bold whitespace-nowrap ml-auto text-right">
-            <span id="rep-plan-cum-count" class="text-xl sm:text-2xl font-black font-mono text-[#F26B2A] leading-none">0</span>
-            <span class="text-xs font-bold text-[#1D2B45] shrink-0">ต้น</span>
+          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
+            <div class="flex items-baseline gap-1 min-w-0">
+              <span class="text-[11px] text-slate-500 font-bold shrink-0">แผน</span>
+              <span id="rep-plan-cum-count" class="text-2xl sm:text-3xl font-black font-mono text-[#F26B2A] leading-none">0</span>
+              <span class="text-xs font-bold text-[#1D2B45] shrink-0">ต้น</span>
+            </div>
+            <span class="text-[11px] font-bold text-[#C2410C] bg-white border border-[#FED7AA] px-2 py-0.5 rounded-full shrink-0 shadow-xs whitespace-nowrap">
+              <span id="rep-elapsed-days" class="font-mono font-bold">0</span>/31 วัน
+            </span>
           </div>
         </div>
 
         <!-- Card 3: กดสะสมจริง .... ต้น -->
-        <div id="rep-kpi-3" class="bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] min-h-[64px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap transition-all hover:translate-y-[-1px]">
-          <div class="flex items-center gap-2 min-w-0 shrink-0">
-            <span class="w-8 h-8 rounded-xl bg-[#10B981] text-white flex items-center justify-center border-1.5 border-[#1D2B45] shrink-0 shadow-[1px_1px_0px_#1D2B45]">
-              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+        <div id="rep-kpi-3" class="bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]">
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="text-[10.5px] font-extrabold text-[#8C9AA8] uppercase tracking-wider">ผลงานจริงสะสม</span>
+            <span class="w-7 h-7 rounded-lg bg-[#D1FAE5] text-[#10B981] flex items-center justify-center border border-[#10B981]/30 shadow-xs shrink-0">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
             </span>
-            <div>
-              <span class="text-[10px] font-black text-[#8C9AA8] block uppercase leading-none">ผลงานจริง</span>
-              <span class="text-xs sm:text-sm font-black text-[#064E3B] whitespace-nowrap">กดจริงสะสม</span>
-            </div>
           </div>
-          <div class="flex items-center gap-2 shrink-0 font-bold whitespace-nowrap">
-            <span class="text-xl sm:text-2xl font-black font-mono text-[#10B981] leading-none"><span id="rep-cum-count">0</span><span class="text-xs text-[#8C9AA8]">/93</span></span>
-            <span id="rep-cum-pct" class="px-2 py-0.5 rounded-full text-[11px] font-black bg-white border-1.5 border-[#1D2B45] text-[#10B981] leading-none shadow-[1px_1px_0px_#1D2B45]">0%</span>
+          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
+            <div class="flex items-baseline gap-1 min-w-0">
+              <span id="rep-cum-count" class="text-2xl sm:text-3xl font-black font-mono text-[#10B981] leading-none">0</span>
+              <span class="text-xs font-bold text-[#8C9AA8] shrink-0">/ 93 ต้น</span>
+            </div>
+            <span id="rep-cum-pct" class="text-[11px] font-black text-[#047857] bg-white border border-[#6EE7B7] px-2.5 py-0.5 rounded-full shadow-xs shrink-0 whitespace-nowrap">0%</span>
             <div class="hidden"><div id="rep-cum-bar" style="width:0%"></div></div>
           </div>
         </div>
 
         <!-- Card 4: สถานะเทียบแผนงาน -->
-        <div id="rep-variance-card" class="bg-[#FEF2F2] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] min-h-[64px] flex items-center justify-between gap-2 overflow-hidden whitespace-nowrap transition-all hover:translate-y-[-1px]">
-          <div class="flex items-center gap-2 min-w-0 shrink-0">
-            <span class="w-8 h-8 rounded-xl bg-[#E64C3C] text-white flex items-center justify-center border-1.5 border-[#1D2B45] shrink-0 shadow-[1px_1px_0px_#1D2B45]">
-              <i data-lucide="activity" class="w-4 h-4"></i>
+        <div id="rep-variance-card" class="bg-[#FEF2F2] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]">
+          <div class="flex items-center justify-between gap-1.5">
+            <span class="text-[10.5px] font-extrabold text-[#8C9AA8] uppercase tracking-wider">วิเคราะห์เทียบแผน</span>
+            <span class="w-7 h-7 rounded-lg bg-[#FEE2E2] text-[#E64C3C] flex items-center justify-center border border-[#E64C3C]/30 shadow-xs shrink-0">
+              <i data-lucide="activity" class="w-3.5 h-3.5"></i>
             </span>
-            <div>
-              <span class="text-[10px] font-black text-[#8C9AA8] block uppercase leading-none">วิเคราะห์เปรียบเทียบ</span>
-              <span class="text-xs sm:text-sm font-black text-[#991B1B] whitespace-nowrap">เทียบแผนงาน</span>
-            </div>
           </div>
-          <div class="flex items-center gap-1.5 shrink-0 font-bold whitespace-nowrap">
-            <span id="rep-variance-display" class="font-black text-xs sm:text-sm text-[#E64C3C] leading-none whitespace-nowrap shrink-0">ช้ากว่าแผน 0 ต้น</span>
-            <span id="rep-variance-badge" class="hidden">ตามแผน</span>
+          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
+            <span id="rep-variance-display" class="font-black text-base sm:text-lg text-[#E64C3C] leading-none truncate">ช้ากว่าแผน 0 ต้น</span>
+            <span id="rep-variance-badge" class="text-[10.5px] font-black text-[#E64C3C] bg-white border border-[#FECACA] px-2 py-0.5 rounded-full shadow-xs shrink-0 hidden">ตามแผน</span>
             <span id="rep-plan-sub" class="hidden">0</span>
             <span id="rep-cum-sub" class="hidden">0</span>
           </div>
@@ -3000,23 +3001,23 @@
         <div class="flex items-center gap-2">
           <span class="font-black text-[#34383b]">สัดส่วนภาพ:</span>
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button data-ratio="fit" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📑 พอดีเอกสาร (Auto Fit)
-            </button>
-            <button data-ratio="3:4" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs">
-              📱 แนวตั้ง 4:3 (Portrait Fit)
+            <button data-ratio="fit" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs">
+              📑 พอดีเต็มอัตราส่วน (Auto Fit 100%)
             </button>
             <button data-ratio="4:3" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📐 แนวนอน 4:3 (Landscape)
+              📐 4:3 แนวนอน (Landscape 4:3)
+            </button>
+            <button data-ratio="3:4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
+              📱 3:4 แนวตั้ง (Portrait 3:4)
             </button>
             <button data-ratio="16:9" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              🔲 แนวนอน 16:9 (Slide)
+              🔲 16:9 สไลด์ (Landscape 16:9)
             </button>
             <button data-ratio="a4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📄 A4 แนวตั้ง (Portrait)
+              📄 A4 มาตรฐาน (Portrait A4)
             </button>
             <button data-ratio="1:1" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📱 จัตุรัส 1:1 (Square)
+              📱 1:1 จัตุรัส (Square)
             </button>
           </div>
         </div>
@@ -8327,9 +8328,9 @@
         if (formulaBar) formulaBar.classList.remove('hidden');
         if (sheetTabs) sheetTabs.classList.remove('hidden');
 
-        if (kpi1) kpi1.className = 'bg-[#f0f7ff] border border-blue-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap';
-        if (kpi2) kpi2.className = 'bg-[#fefce8] border border-amber-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap';
-        if (kpi3) kpi3.className = 'bg-[#f0fdf4] border border-emerald-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap';
+        if (kpi1) kpi1.className = 'bg-[#f0f7ff] border border-blue-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs';
+        if (kpi2) kpi2.className = 'bg-[#fefce8] border border-amber-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs';
+        if (kpi3) kpi3.className = 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs';
 
         if (secPlan) secPlan.className = 'border-1.5 border-slate-900 rounded-lg overflow-hidden bg-white h-full flex flex-col shadow-xs';
         if (secPlanHead) secPlanHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2';
@@ -8386,9 +8387,9 @@
         if (formulaBar) formulaBar.classList.add('hidden');
         if (sheetTabs) sheetTabs.classList.add('hidden');
 
-        if (kpi1) kpi1.className = 'bg-[#F0F9FF] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] flex items-center justify-between gap-2 overflow-hidden min-h-[64px] whitespace-nowrap transition-all hover:translate-y-[-1px]';
-        if (kpi2) kpi2.className = 'bg-[#FFF7ED] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] flex items-center justify-between gap-2 overflow-hidden min-h-[64px] whitespace-nowrap transition-all hover:translate-y-[-1px]';
-        if (kpi3) kpi3.className = 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] flex items-center justify-between gap-2 overflow-hidden min-h-[64px] whitespace-nowrap transition-all hover:translate-y-[-1px]';
+        if (kpi1) kpi1.className = 'bg-[#F0F9FF] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
+        if (kpi2) kpi2.className = 'bg-[#FFF7ED] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
+        if (kpi3) kpi3.className = 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
 
         if (secPlan) secPlan.className = 'border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white h-full flex flex-col';
         if (secPlanHead) secPlanHead.className = 'bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 rounded-t-[14px]';
@@ -8552,45 +8553,45 @@
           varDisplay.textContent = `ช้ากว่าแผน ${delayedCount} ต้น`;
           varDisplay.className = currentReportTheme === 'excel'
             ? 'font-bold text-xs sm:text-sm text-rose-700 leading-none font-mono whitespace-nowrap shrink-0'
-            : 'font-black text-xs sm:text-sm text-[#e11d48] leading-none whitespace-nowrap shrink-0';
+            : 'font-black text-base sm:text-lg text-[#e11d48] leading-none whitespace-nowrap shrink-0';
         }
         if (varBadge) {
           varBadge.className = 'hidden';
         }
         if (varCard) {
           varCard.className = currentReportTheme === 'excel'
-            ? 'bg-[#fef2f2] border border-rose-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap'
-            : 'bg-[#FEF2F2] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] flex items-center justify-between gap-2 overflow-hidden min-h-[64px] whitespace-nowrap transition-all hover:translate-y-[-1px]';
+            ? 'bg-[#fef2f2] border border-rose-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs'
+            : 'bg-[#FEF2F2] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
         }
       } else if (variance > 0) {
         if (varDisplay) {
           varDisplay.textContent = `เร็วกว่าแผน +${variance} ต้น`;
           varDisplay.className = currentReportTheme === 'excel'
             ? 'font-bold text-xs sm:text-sm text-emerald-700 leading-none font-mono whitespace-nowrap shrink-0'
-            : 'font-black text-xs sm:text-sm text-[#10B981] leading-none whitespace-nowrap shrink-0';
+            : 'font-black text-base sm:text-lg text-[#10B981] leading-none whitespace-nowrap shrink-0';
         }
         if (varBadge) {
           varBadge.className = 'hidden';
         }
         if (varCard) {
           varCard.className = currentReportTheme === 'excel'
-            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap'
-            : 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] flex items-center justify-between gap-2 overflow-hidden min-h-[64px] whitespace-nowrap transition-all hover:translate-y-[-1px]';
+            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs'
+            : 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
         }
       } else {
         if (varDisplay) {
           varDisplay.textContent = currentReportTheme === 'excel' ? 'ตามแผน (0 ต้น)' : 'ตามแผนงาน';
           varDisplay.className = currentReportTheme === 'excel'
             ? 'font-bold text-xs sm:text-sm text-emerald-700 leading-none font-mono whitespace-nowrap shrink-0'
-            : 'font-black text-xs sm:text-sm text-[#064E3B] leading-none whitespace-nowrap shrink-0';
+            : 'font-black text-base sm:text-lg text-[#064E3B] leading-none whitespace-nowrap shrink-0';
         }
         if (varBadge) {
           varBadge.className = 'hidden';
         }
         if (varCard) {
           varCard.className = currentReportTheme === 'excel'
-            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg px-3.5 py-3 flex items-center justify-between gap-2 overflow-hidden text-xs min-h-[58px] whitespace-nowrap'
-            : 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl px-3.5 py-3 shadow-[2.5px_2.5px_0px_#1D2B45] flex items-center justify-between gap-2 overflow-hidden min-h-[64px] whitespace-nowrap transition-all hover:translate-y-[-1px]';
+            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs'
+            : 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
         }
       }
 
@@ -9222,7 +9223,7 @@
 
       if (isReportOpen) {
         currentExportMode = 'report';
-        currentExportRatio = '3:4';
+        currentExportRatio = 'fit';
         if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
         if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       } else {
@@ -9258,13 +9259,13 @@
     // Switch Export Mode Tabs
     document.getElementById('exp-tab-report')?.addEventListener('click', () => {
       currentExportMode = 'report';
-      currentExportRatio = '3:4';
+      currentExportRatio = 'fit';
       const bRep = document.getElementById('exp-tab-report');
       const b3d = document.getElementById('exp-tab-3d');
       if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
       if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       document.querySelectorAll('.exp-ratio-btn').forEach(b => {
-        b.className = b.getAttribute('data-ratio') === '3:4'
+        b.className = b.getAttribute('data-ratio') === 'fit'
           ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs'
           : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
       });
@@ -9371,12 +9372,23 @@
 
             // Target export width for full table layout (Dynamic aspect-fit to eliminate side white bars)
             let exportTargetW = isPortraitLayout ? 1200 : 1380;
-            if (isPortraitLayout && (currentExportRatio === '3:4' || currentExportRatio === 'a4')) {
+            if (currentExportRatio === '3:4' || currentExportRatio === 'a4') {
               const targetAspect = (currentExportRatio === '3:4') ? (3 / 4) : (1 / 1.414);
               reportCard.style.setProperty('box-sizing', 'border-box', 'important');
-              reportCard.style.setProperty('width', '1200px', 'important');
-              reportCard.style.setProperty('max-width', '1200px', 'important');
-              reportCard.style.setProperty('min-width', '1200px', 'important');
+              reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
+              reportCard.style.setProperty('max-width', `${exportTargetW}px`, 'important');
+              reportCard.style.setProperty('min-width', `${exportTargetW}px`, 'important');
+              const initialH = Math.max(reportCard.offsetHeight, reportCard.scrollHeight);
+              const idealW = Math.round(initialH * targetAspect);
+              if (idealW > exportTargetW) {
+                exportTargetW = idealW;
+              }
+            } else if (currentExportRatio === '4:3' || currentExportRatio === '16:9') {
+              const targetAspect = (currentExportRatio === '4:3') ? (4 / 3) : (16 / 9);
+              reportCard.style.setProperty('box-sizing', 'border-box', 'important');
+              reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
+              reportCard.style.setProperty('max-width', `${exportTargetW}px`, 'important');
+              reportCard.style.setProperty('min-width', `${exportTargetW}px`, 'important');
               const initialH = Math.max(reportCard.offsetHeight, reportCard.scrollHeight);
               const idealW = Math.round(initialH * targetAspect);
               if (idealW > exportTargetW) {
