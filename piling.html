@@ -3789,6 +3789,7 @@
     let queuedSyncRequest = false;
     let syncRetryTimer = null;
     let supabaseSyncTimeout = null;
+    let hasInitialSupabasePullCompleted = false;
 
     async function syncPilingToSupabase(silent = false) {
       if (isSyncInProgress) {
@@ -3830,6 +3831,12 @@
               .maybeSingle();
 
             if (row && row.data) {
+              // Safety guard: never wipe out existing Supabase records if local state has not finished pulling yet
+              const remotePiles = (row.data.pilingProgress && typeof row.data.pilingProgress === 'object') ? row.data.pilingProgress : {};
+              if (!hasInitialSupabasePullCompleted || (Object.keys(remotePiles).length > 5 && Object.keys(progressRecords).length <= 2)) {
+                progressRecords = { ...remotePiles, ...progressRecords };
+                window.progressRecords = progressRecords;
+              }
               row.data.pilingProgress = progressRecords;
               row.data.pilingProgressLastUpdated = new Date().toISOString();
               const { error: updErr } = await sb
@@ -3913,8 +3920,11 @@
         }
       }
 
+      hasInitialSupabasePullCompleted = true;
+
       if (fetched && Object.keys(fetched).length > 0) {
         progressRecords = fetched;
+        window.progressRecords = progressRecords;
         const jsonStr = JSON.stringify(progressRecords);
         localStorage.setItem(STORAGE_KEY, jsonStr);
         localStorage.setItem('PYNN37_PILING_PROGRESS_LIVE_v3', jsonStr);
