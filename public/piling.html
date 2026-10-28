@@ -366,14 +366,38 @@
       bottom: 20px !important;
       left: auto !important;
       top: auto !important;
-      width: 320px !important;
+      width: 336px !important;
       max-width: calc(100vw - 32px) !important;
+      max-height: calc(100vh - 88px) !important;
       background: #ffffff !important;
       border: 2px solid #1e293b !important;
-      border-radius: 12px !important;
+      border-radius: 16px !important;
       box-shadow: 5px 5px 0px #1e293b !important;
       z-index: 100 !important;
-      transition: box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+      transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+    }
+    @media (min-width: 769px) {
+      #pile-card.is-details-expanded:not(.is-minimized) {
+        width: min(650px, calc(100vw - 32px)) !important;
+      }
+      #pile-card.is-details-expanded:not(.is-minimized) #pile-card-grid {
+        display: grid !important;
+        grid-template-columns: minmax(260px, 0.95fr) minmax(310px, 1.15fr) !important;
+        gap: 0.65rem !important;
+        align-items: start !important;
+      }
+    }
+    #pile-card-body {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+    }
+    #pile-card-body > *,
+    #pile-card-grid > *,
+    #pile-card-col-primary > *,
+    #pile-card-col-details > * {
+      flex-shrink: 0 !important;
     }
     #pile-card.has-been-dragged {
       right: auto !important;
@@ -2245,11 +2269,11 @@
     </div>
   </div>
 
-  <!-- Pile Mini Quick Card (Direct 1-Click Action & Date Adjuster) -->
-  <div id="pile-card" class="fixed bottom-5 right-5 z-[70] w-[340px] max-w-[94vw] pop-card p-3 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden flex flex-col bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] font-body">
+  <!-- Pile Mini Quick Card (Direct 1-Click Action & Date Adjuster + Wide-Screen Side-by-Side Drawer) -->
+  <div id="pile-card" class="fixed bottom-5 right-5 z-[70] w-[336px] max-w-[94vw] pop-card p-3 transition-all duration-200 transform translate-y-4 opacity-0 pointer-events-auto hidden flex flex-col bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] font-body">
     
-    <!-- Header with Drag Handle & Actions -->
-    <div id="pile-card-header" class="flex items-center justify-between border-b-2 border-[#1D2B45] pb-2 mb-2 cursor-grab active:cursor-grabbing select-none" title="ลากเพื่อย้ายตำแหน่งแผงนี้">
+    <!-- Header with Drag Handle, Prev/Next Pile Switcher & Actions -->
+    <div id="pile-card-header" class="flex items-center justify-between border-b-2 border-[#1D2B45] pb-2 mb-2 cursor-grab active:cursor-grabbing select-none shrink-0 gap-1.5" title="ลากเพื่อย้ายตำแหน่งแผงนี้">
       <div class="flex items-center gap-2 min-w-0">
         <div class="w-8 h-8 rounded-xl bg-[#FFF3EB] border-1.5 border-[#1D2B45] flex items-center justify-center text-[#F26B2A] shrink-0 shadow-[1px_1px_0px_#1D2B45]">
           <i data-lucide="hammer" class="w-4 h-4"></i>
@@ -2263,6 +2287,15 @@
         </div>
       </div>
       <div class="flex items-center gap-1 shrink-0">
+        <!-- Quick Prev / Next Pile Switcher -->
+        <div class="flex items-center bg-[#FAF5EE] border border-[#1D2B45]/40 rounded-lg p-0.5 mr-0.5">
+          <button id="btn-card-prev-pile" type="button" class="w-6 h-6 rounded-md text-[#1D2B45] hover:bg-[#F26B2A] hover:text-white flex items-center justify-center text-[10px] font-black transition-colors cursor-pointer" title="เสาเข็มต้นก่อนหน้า (Alt + ←)">
+            ◀
+          </button>
+          <button id="btn-card-next-pile" type="button" class="w-6 h-6 rounded-md text-[#1D2B45] hover:bg-[#F26B2A] hover:text-white flex items-center justify-center text-[10px] font-black transition-colors cursor-pointer" title="เสาเข็มต้นถัดไป (Alt + →)">
+            ▶
+          </button>
+        </div>
         <!-- Dock Left/Right Toggle Button -->
         <button id="btn-dock-toggle-card" type="button" class="w-7 h-7 rounded-lg text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] border border-transparent hover:border-[#1D2B45]/20 flex items-center justify-center transition-all cursor-pointer" title="สลับฝั่ง ซ้าย-ขวา">
           <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
@@ -2279,13 +2312,13 @@
     </div>
 
     <!-- Return to Quick Select Button (Shown only when opened from Quick Select Modal) -->
-    <button id="btn-card-back-to-quick-select" type="button" class="w-full py-1 px-2 mb-2 text-[10.5px] font-bold rounded-lg bg-sky-50 hover:bg-sky-100 text-[#0284C7] border border-sky-300 flex items-center justify-center gap-1.5 shadow-xs transition-colors hidden cursor-pointer">
+    <button id="btn-card-back-to-quick-select" type="button" class="w-full py-1 px-2 mb-2 text-[10.5px] font-bold rounded-lg bg-sky-50 hover:bg-sky-100 text-[#0284C7] border border-sky-300 flex items-center justify-center gap-1.5 shadow-xs transition-colors hidden cursor-pointer shrink-0">
       <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#0284C7]"></i>
       <span>กลับไปยังแผงระบุเข็ม (Quick Selector 93 ต้น)</span>
     </button>
 
     <!-- Minimized Bar (Shown only when minimized) -->
-    <div id="pile-card-minibar" class="hidden flex items-center justify-between gap-1.5 pt-0.5 pb-0.5">
+    <div id="pile-card-minibar" class="hidden flex items-center justify-between gap-1.5 pt-0.5 pb-0.5 shrink-0">
       <span id="minibar-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#FAF5EE] text-[#1D2B45] border border-[#E2D9CC] truncate">ยังไม่กด</span>
       <button id="btn-minibar-quick-drive" type="button" class="px-2.5 py-1 text-[10.5px] font-black rounded-lg bg-[#10B981] hover:bg-[#059669] text-white flex items-center gap-1 shadow-xs cursor-pointer">
         <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-200"></i>
@@ -2298,156 +2331,170 @@
     </div>
 
     <!-- Scrollable Detailed Body (Collapsed when minimized) -->
-    <div id="pile-card-body" class="flex flex-col gap-2 overflow-y-auto max-h-[72vh] pr-0.5 custom-scrollbar">
-      
-      <!-- Sleek Specifications Capsule (Warm Cream Minimal 2x2) -->
-      <div class="p-2 bg-[#FAF5EE] border border-[#E2D9CC] rounded-xl text-[10.5px] shadow-2xs space-y-1">
-        <div class="flex items-center justify-between">
-          <span class="text-[#3E4B69] font-medium">ฐานราก: <b id="card-pile-footing" class="font-black text-[#1D2B45]">F1</b></span>
-          <span class="text-[#3E4B69] font-medium">ขนาด: <b id="card-pile-type" class="font-bold text-[#1D2B45]">I-0.40m</b></span>
-        </div>
-        <div class="flex items-center justify-between pt-1 border-t border-[#E2D9CC]/70">
-          <span class="text-[#3E4B69] font-medium">PCO แบบ: <b id="card-pile-co" class="font-mono font-black text-[#E64C3C]">-1.226 ม.</b></span>
-          <span class="text-[#8C9AA8] font-mono text-[9px] truncate max-w-[150px]" title="พิกัด N, E">
-            พิกัด: <span id="card-pile-northing">-</span>, <span id="card-pile-easting">-</span>
-          </span>
-        </div>
-      </div>
+    <div id="pile-card-body" class="flex flex-col gap-2 overflow-y-auto pr-0.5 custom-scrollbar">
+      <div id="pile-card-grid" class="flex flex-col gap-2">
 
-      <!-- Section 1: ข้อมูลบันทึกประจำวัน (วันที่ & ระดับ TOP - สะอาดตา ชัดเจน) -->
-      <div class="p-2.5 rounded-xl bg-white border border-[#E2D9CC] space-y-2 shadow-2xs">
-        
-        <!-- วันที่กดเสร็จ -->
-        <div class="space-y-1">
-          <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45]">
-            <span class="flex items-center gap-1.5">
-              <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#F26B2A]"></i> วันที่กดเสร็จ:
-            </span>
-            <span id="card-pile-date-badge" class="font-mono font-bold text-[#8C9AA8] text-[9.5px]"></span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <input type="date" id="card-pile-date-input" class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#F26B2A]">
-            <button id="btn-card-date-yesterday" type="button" class="px-2.5 py-1.5 text-[10px] font-bold rounded-xl bg-[#FAF5EE] hover:bg-[#F6E9D7] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:scale-95 transition-all cursor-pointer shrink-0">เมื่อวาน</button>
-            <button id="btn-card-date-today" type="button" class="px-2.5 py-1.5 text-[10px] font-black rounded-xl bg-[#F26B2A] hover:bg-[#EA580C] text-white border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] active:scale-95 transition-all cursor-pointer shrink-0">วันนี้</button>
-          </div>
-        </div>
-
-        <!-- ระดับ TOP เข็มจริง -->
-        <div class="space-y-1 pt-2 border-t border-[#E2D9CC]">
-          <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45]">
-            <span class="flex items-center gap-1.5">
-              <i data-lucide="ruler" class="w-3.5 h-3.5 text-[#0284C7]"></i> ระดับ TOP เข็มจริง (ม.):
-            </span>
-            <span id="card-pile-diff-badge" class="font-mono font-bold text-[9.5px]"></span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <input type="number" step="0.001" id="card-pile-actual-top" placeholder="เช่น -1.250" class="flex-1 px-2.5 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0284C7]" title="กรอกระดับ TOP เข็มที่กดได้จริง (ม.)">
-            <button id="btn-card-copy-pco" type="button" class="px-2.5 py-1.5 text-[10px] font-black rounded-xl bg-sky-50 hover:bg-sky-100 text-[#0284C7] border border-[#0284C7] shadow-xs active:scale-95 transition-all cursor-pointer shrink-0" title="ใส่ค่าตามระดับ PCO ในแบบ">ตามแบบ PCO</button>
-          </div>
-          <div class="text-[9.5px] text-[#3E4B69] font-medium flex items-center justify-between pt-0.5">
-            <span>แบบ PCO: <b id="card-pile-pco-hint" class="font-mono text-[#E64C3C] font-bold">-</b></span>
-            <span id="card-pile-diff-text" class="font-mono font-bold"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 2: ข้อมูลละเอียดเพิ่มเติม (Collapsible: ความยาว 3 ท่อน & พิกัด N, E - ออกแบบให้รู้ทันทีว่าต้องกดขยาย) -->
-      <div class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-[#FFFDF9] shadow-[1.5px_1.5px_0px_#1D2B45]">
-        <button id="btn-toggle-pile-details" type="button" class="group w-full p-2 flex items-center justify-between gap-2 text-left bg-gradient-to-r from-[#FFF8EE] to-[#FFF3EB] hover:from-[#FFE8D6] hover:to-[#FFEDD5] transition-all cursor-pointer select-none">
-          <div class="flex items-center gap-2 min-w-0">
-            <div class="w-7 h-7 rounded-lg bg-[#F26B2A] text-white flex items-center justify-center shrink-0 border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
-              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-            </div>
-            <div class="truncate">
-              <div class="text-[11px] font-black text-[#1D2B45] leading-tight flex items-center gap-1.5">
-                <span>ความยาว 3 ท่อน & พิกัดจริง</span>
-                <span id="card-pile-eff-len-badge" class="font-mono font-bold text-[9px] px-1.5 py-0.2 rounded-md bg-white border border-[#E2D9CC] text-emerald-800 shrink-0">รวม 21.00 ม.</span>
-              </div>
-              <div class="text-[9.5px] font-black text-[#F26B2A] flex items-center gap-1 mt-0.5">
-                <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#F26B2A] animate-ping"></span>
-                <span id="hint-toggle-expand">คลิกเพื่อเปิดกรอกข้อมูลเพิ่มเติม</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1 shrink-0">
-            <span class="px-2 py-1 rounded-lg bg-white text-[#1D2B45] border border-[#1D2B45] text-[10px] font-black flex items-center gap-1 shadow-[1px_1px_0px_#1D2B45] group-hover:bg-[#F26B2A] group-hover:text-white transition-all">
-              <span id="lbl-toggle-expand-text">คลิกขยาย</span>
-              <i data-lucide="chevron-down" id="arrow-pile-details" class="w-3 h-3 transition-transform duration-200"></i>
-            </span>
-          </div>
-        </button>
-
-        <div id="panel-pile-details" class="hidden p-2.5 pt-2 border-t-2 border-[#1D2B45] space-y-2.5 bg-white text-[10px]">
-          <!-- Header Inside Panel -->
-          <div class="flex items-center justify-between pb-1 border-b border-[#E2D9CC] text-[#3E4B69]">
-            <span class="text-[10px] font-black text-[#1D2B45] flex items-center gap-1">
-              <i data-lucide="ruler" class="w-3 h-3 text-[#F26B2A]"></i> ระบุความยาวแต่ละท่อน (ม.)
-            </span>
-            <button id="btn-card-open-len-modal" type="button" class="text-[9.5px] font-bold text-[#F26B2A] hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="external-link" class="w-2.5 h-2.5"></i> ฟอร์มเต็ม & คัดลอกทั้งฐาน
-            </button>
-          </div>
-
-          <!-- ความยาว 3 ท่อน -->
-          <div class="space-y-1">
-            <div class="grid grid-cols-3 gap-1.5">
-              <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
-                <span class="text-[9px] font-bold text-slate-600 block mb-0.5">ท่อนล่าง</span>
-                <input type="number" step="0.01" id="card-pile-seg-bottom" placeholder="7.00" class="w-full text-center px-1 py-1 text-xs font-mono font-black border border-[#1D2B45] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#F26B2A]">
-              </div>
-              <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
-                <span class="text-[9px] font-bold text-slate-600 block mb-0.5">ท่อนกลาง</span>
-                <input type="number" step="0.01" id="card-pile-seg-middle" placeholder="7.00" class="w-full text-center px-1 py-1 text-xs font-mono font-black border border-[#1D2B45] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#F26B2A]">
-              </div>
-              <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
-                <span class="text-[9px] font-bold text-slate-600 block mb-0.5">ท่อนบน</span>
-                <input type="number" step="0.01" id="card-pile-seg-top" placeholder="7.00" class="w-full text-center px-1 py-1 text-xs font-mono font-black border border-[#1D2B45] rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-[#F26B2A]">
-              </div>
-            </div>
-            <div class="flex items-center justify-between text-[10px] px-1 pt-0.5 text-slate-600 font-mono font-bold bg-[#FAF5EE] rounded-lg p-1.5 border border-[#E2D9CC]">
-              <span>สุทธิหัก TOP: <b id="card-pile-top-net-text" class="text-blue-700 font-black">7.00 ม.</b></span>
-              <span>รวมใช้งาน: <b id="card-pile-eff-len-text" class="text-emerald-700 font-black">21.00 ม.</b></span>
-            </div>
-          </div>
-
-          <!-- พิกัดกดจริง (N, E) -->
-          <div class="space-y-1.5 pt-1.5 border-t border-[#E2D9CC]">
+        <!-- COLUMN 1 (Primary Daily Info: Spec Capsule + Date + Actual TOP) -->
+        <div id="pile-card-col-primary" class="flex flex-col gap-2 shrink-0">
+          <!-- Sleek Specifications Capsule (Warm Cream Minimal 2x2) -->
+          <div class="p-2 bg-[#FAF5EE] border border-[#E2D9CC] rounded-xl text-[10.5px] shadow-2xs space-y-1 shrink-0">
             <div class="flex items-center justify-between">
-              <span class="font-black text-[#1D2B45] flex items-center gap-1">
-                <i data-lucide="crosshair" class="w-3 h-3 text-[#10B981]"></i> พิกัดกดจริง (N, E):
+              <span class="text-[#3E4B69] font-medium">ฐานราก: <b id="card-pile-footing" class="font-black text-[#1D2B45]">F1</b></span>
+              <span class="text-[#3E4B69] font-medium">ขนาด: <b id="card-pile-type" class="font-bold text-[#1D2B45]">I-0.40m</b></span>
+            </div>
+            <div class="flex items-center justify-between pt-1 border-t border-[#E2D9CC]/70">
+              <span class="text-[#3E4B69] font-medium">PCO แบบ: <b id="card-pile-co" class="font-mono font-black text-[#E64C3C]">-1.226 ม.</b></span>
+              <span class="text-[#8C9AA8] font-mono text-[9px] truncate max-w-[155px]" title="พิกัด N, E">
+                พิกัด: <span id="card-pile-northing">-</span>, <span id="card-pile-easting">-</span>
               </span>
-              <button id="btn-card-copy-coords" type="button" class="px-2 py-0.5 text-[9.5px] font-bold rounded-md bg-[#FAF5EE] hover:bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs cursor-pointer">
-                🎯 ตามแบบ
-              </button>
             </div>
-            <div class="grid grid-cols-2 gap-1.5">
-              <div>
-                <label class="text-[9px] font-bold text-slate-500 block mb-0.5">พิกัดจริง N</label>
-                <input type="number" step="0.0001" id="card-pile-actual-n" placeholder="Northing (N)" class="w-full px-2 py-1 text-xs font-mono font-bold border border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[#10B981]">
-                <span class="hidden" id="card-pile-design-n-hint">-</span>
+          </div>
+
+          <!-- Section 1: ข้อมูลบันทึกประจำวัน (วันที่ & ระดับ TOP - สะอาดตา ชัดเจน) -->
+          <div class="p-2.5 rounded-xl bg-white border border-[#E2D9CC] space-y-2 shadow-2xs shrink-0">
+            
+            <!-- วันที่กดเสร็จ -->
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45]">
+                <span class="flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#F26B2A]"></i> วันที่กดเสร็จ:
+                </span>
+                <span id="card-pile-date-badge" class="font-mono font-bold text-[#8C9AA8] text-[9.5px]"></span>
               </div>
-              <div>
-                <label class="text-[9px] font-bold text-slate-500 block mb-0.5">พิกัดจริง E</label>
-                <input type="number" step="0.0001" id="card-pile-actual-e" placeholder="Easting (E)" class="w-full px-2 py-1 text-xs font-mono font-bold border border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[#10B981]">
-                <span class="hidden" id="card-pile-design-e-hint">-</span>
+              <div class="flex items-center gap-1.5">
+                <input type="date" id="card-pile-date-input" class="flex-1 min-w-0 px-2 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#F26B2A]">
+                <button id="btn-card-date-yesterday" type="button" class="px-2 py-1.5 text-[10px] font-bold rounded-xl bg-[#FAF5EE] hover:bg-[#F6E9D7] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:scale-95 transition-all cursor-pointer shrink-0">เมื่อวาน</button>
+                <button id="btn-card-date-today" type="button" class="px-2 py-1.5 text-[10px] font-black rounded-xl bg-[#F26B2A] hover:bg-[#EA580C] text-white border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] active:scale-95 transition-all cursor-pointer shrink-0">วันนี้</button>
               </div>
             </div>
-            <div id="card-pile-coord-diff-text" class="text-[9.5px] font-mono text-right text-slate-600 font-bold"></div>
-            <span id="card-pile-coord-diff-badge" class="hidden"></span>
+
+            <!-- ระดับ TOP เข็มจริง -->
+            <div class="space-y-1 pt-2 border-t border-[#E2D9CC]">
+              <div class="flex items-center justify-between text-[11px] font-black text-[#1D2B45]">
+                <span class="flex items-center gap-1.5">
+                  <i data-lucide="ruler" class="w-3.5 h-3.5 text-[#0284C7]"></i> ระดับ TOP เข็มจริง (ม.):
+                </span>
+                <span id="card-pile-diff-badge" class="font-mono font-bold text-[9.5px]"></span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <input type="number" step="0.001" id="card-pile-actual-top" placeholder="เช่น -1.250" class="flex-1 min-w-0 px-2.5 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#0284C7]" title="กรอกระดับ TOP เข็มที่กดได้จริง (ม.)">
+                <button id="btn-card-copy-pco" type="button" class="px-2.5 py-1.5 text-[10px] font-black rounded-xl bg-sky-50 hover:bg-sky-100 text-[#0284C7] border border-[#0284C7] shadow-xs active:scale-95 transition-all cursor-pointer shrink-0" title="ใส่ค่าตามระดับ PCO ในแบบ">ตามแบบ PCO</button>
+              </div>
+              <div class="text-[9.5px] text-[#3E4B69] font-medium flex items-center justify-between pt-0.5">
+                <span>แบบ PCO: <b id="card-pile-pco-hint" class="font-mono text-[#E64C3C] font-bold">-</b></span>
+                <span id="card-pile-diff-text" class="font-mono font-bold"></span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="space-y-1.5 pt-1">
-        <button id="btn-card-save-date" type="button" class="w-full py-2.5 px-3 text-xs flex items-center justify-center gap-2 font-black rounded-xl bg-[#10B981] hover:bg-[#059669] text-white border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[3.5px_3.5px_0px_#F26B2A] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
-          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-200"></i>
-          <span id="btn-card-save-date-lbl">✓ บันทึกข้อมูลเสาเข็มต้นนี้</span>
+        <!-- COLUMN 2 (Section 2: ความยาว 3 ท่อน & พิกัด N, E - กางออกด้านข้างอัตโนมัติบนจอ Wide ไม่บีบ ไม่บังช่องกรอก) -->
+        <div id="pile-card-col-details" class="flex flex-col gap-2 shrink-0">
+          <div id="section-pile-details" class="border-2 border-[#1D2B45] rounded-xl bg-[#FFFDF9] shadow-[1.5px_1.5px_0px_#1D2B45] shrink-0">
+            <button id="btn-toggle-pile-details" type="button" class="group w-full p-2 rounded-[10px] flex items-center justify-between gap-2 text-left bg-gradient-to-r from-[#FFF8EE] to-[#FFF3EB] hover:from-[#FFE8D6] hover:to-[#FFEDD5] transition-all cursor-pointer select-none">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-lg bg-[#F26B2A] text-white flex items-center justify-center shrink-0 border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                </div>
+                <div class="truncate">
+                  <div class="text-[11px] font-black text-[#1D2B45] leading-tight flex items-center gap-1.5">
+                    <span>ความยาว 3 ท่อน & พิกัดจริง</span>
+                    <span id="card-pile-eff-len-badge" class="font-mono font-bold text-[9px] px-1.5 py-0.2 rounded-md bg-white border border-[#E2D9CC] text-emerald-800 shrink-0">รวม 21.00 ม.</span>
+                  </div>
+                  <div class="text-[9.5px] font-black text-[#F26B2A] flex items-center gap-1 mt-0.5">
+                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#F26B2A] animate-ping"></span>
+                    <span id="hint-toggle-expand">คลิกเพื่อกางแผงกรอกด้านข้าง</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1 shrink-0">
+                <span class="px-2 py-1 rounded-lg bg-white text-[#1D2B45] border border-[#1D2B45] text-[10px] font-black flex items-center gap-1 shadow-[1px_1px_0px_#1D2B45] group-hover:bg-[#F26B2A] group-hover:text-white transition-all">
+                  <span id="lbl-toggle-expand-text">คลิกขยาย</span>
+                  <i data-lucide="chevron-down" id="arrow-pile-details" class="w-3 h-3 transition-transform duration-200"></i>
+                </span>
+              </div>
+            </button>
+
+            <div id="panel-pile-details" class="hidden p-2.5 pt-2 border-t-2 border-[#1D2B45] rounded-b-[10px] space-y-2.5 bg-white text-[10px]">
+              <!-- Header Inside Panel -->
+              <div class="flex items-center justify-between pb-1 border-b border-[#E2D9CC] text-[#3E4B69] gap-1 flex-wrap">
+                <span class="text-[10px] font-black text-[#1D2B45] flex items-center gap-1">
+                  <i data-lucide="ruler" class="w-3 h-3 text-[#F26B2A]"></i> ระบุความยาวแต่ละท่อน (ม.)
+                </span>
+                <button id="btn-card-open-len-modal" type="button" class="text-[9.5px] font-bold text-[#F26B2A] hover:underline flex items-center gap-1 cursor-pointer">
+                  <i data-lucide="external-link" class="w-2.5 h-2.5"></i> ฟอร์มเต็ม & คัดลอกทั้งฐาน
+                </button>
+              </div>
+
+              <!-- ความยาว 3 ท่อน -->
+              <div class="space-y-1.5">
+                <div class="grid grid-cols-3 gap-1.5">
+                  <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
+                    <label for="card-pile-seg-bottom" class="text-[9.5px] font-black text-[#1D2B45] block mb-1 cursor-pointer">1. ท่อนล่าง</label>
+                    <input type="number" step="0.01" id="card-pile-seg-bottom" placeholder="7.00" class="w-full text-center px-1 py-1.5 text-xs font-mono font-black border-1.5 border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#F26B2A]">
+                  </div>
+                  <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
+                    <label for="card-pile-seg-middle" class="text-[9.5px] font-black text-[#1D2B45] block mb-1 cursor-pointer">2. ท่อนกลาง</label>
+                    <input type="number" step="0.01" id="card-pile-seg-middle" placeholder="7.00" class="w-full text-center px-1 py-1.5 text-xs font-mono font-black border-1.5 border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#F26B2A]">
+                  </div>
+                  <div class="bg-[#FAF5EE] p-1.5 rounded-lg border border-[#E2D9CC] text-center">
+                    <label for="card-pile-seg-top" class="text-[9.5px] font-black text-[#1D2B45] block mb-1 cursor-pointer">3. ท่อนบน</label>
+                    <input type="number" step="0.01" id="card-pile-seg-top" placeholder="7.00" class="w-full text-center px-1 py-1.5 text-xs font-mono font-black border-1.5 border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#F26B2A]">
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-[10px] px-2 py-1 text-slate-700 font-mono font-bold bg-[#FAF5EE] rounded-lg border border-[#E2D9CC]">
+                  <span>สุทธิหัก TOP: <b id="card-pile-top-net-text" class="text-blue-700 font-black">7.00 ม.</b></span>
+                  <span>รวมใช้งาน: <b id="card-pile-eff-len-text" class="text-emerald-700 font-black">21.00 ม.</b></span>
+                </div>
+              </div>
+
+              <!-- พิกัดกดจริง (N, E) -->
+              <div class="space-y-1.5 pt-1.5 border-t border-[#E2D9CC]">
+                <div class="flex items-center justify-between">
+                  <span class="font-black text-[#1D2B45] flex items-center gap-1">
+                    <i data-lucide="crosshair" class="w-3 h-3 text-[#10B981]"></i> พิกัดกดจริง (N, E):
+                  </span>
+                  <button id="btn-card-copy-coords" type="button" class="px-2 py-0.5 text-[9.5px] font-bold rounded-md bg-[#FAF5EE] hover:bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs cursor-pointer">
+                    🎯 ตามแบบ
+                  </button>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <div>
+                    <label for="card-pile-actual-n" class="text-[9px] font-bold text-slate-600 block mb-0.5 cursor-pointer">พิกัดจริง N</label>
+                    <input type="number" step="0.0001" id="card-pile-actual-n" placeholder="Northing (N)" class="w-full px-2 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#10B981]">
+                    <span class="hidden" id="card-pile-design-n-hint">-</span>
+                  </div>
+                  <div>
+                    <label for="card-pile-actual-e" class="text-[9px] font-bold text-slate-600 block mb-0.5 cursor-pointer">พิกัดจริง E</label>
+                    <input type="number" step="0.0001" id="card-pile-actual-e" placeholder="Easting (E)" class="w-full px-2 py-1.5 text-xs font-mono font-bold border-1.5 border-[#1D2B45] rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#10B981]">
+                    <span class="hidden" id="card-pile-design-e-hint">-</span>
+                  </div>
+                </div>
+                <div id="card-pile-coord-diff-text" class="text-[9.5px] font-mono text-right text-slate-600 font-bold"></div>
+                <span id="card-pile-coord-diff-badge" class="hidden"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Pinned Action Footer (Always visible at bottom, never covers inputs) -->
+    <div id="pile-card-footer" class="space-y-1.5 pt-2 mt-1.5 border-t border-[#E2D9CC] bg-white shrink-0">
+      <div class="flex items-center gap-1.5">
+        <button id="btn-card-save-date" type="button" class="flex-1 py-2 px-2.5 text-xs flex items-center justify-center gap-1.5 font-black rounded-xl bg-[#10B981] hover:bg-[#059669] text-white border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[3.5px_3.5px_0px_#F26B2A] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-200 shrink-0"></i>
+          <span id="btn-card-save-date-lbl" class="truncate">✓ บันทึกข้อมูลเสาเข็มต้นนี้</span>
         </button>
-        <button id="btn-card-toggle-cancel" class="w-full py-1 text-[11px] text-[#E64C3C] hover:bg-rose-50 rounded-lg flex items-center justify-center gap-1 font-bold transition-colors cursor-pointer">
-          <i data-lucide="rotate-ccw" class="w-3 h-3"></i> ยกเลิกสถานะ (ตั้งเป็นยังไม่ได้กด)
+        <button id="btn-card-save-next" type="button" class="py-2 px-2.5 text-[11px] flex items-center justify-center gap-1 font-black rounded-xl bg-[#FAF5EE] hover:bg-[#FFF3EB] text-[#1D2B45] hover:text-[#F26B2A] border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer shrink-0" title="บันทึกต้นนี้และเปิดเสาเข็มต้นถัดไปทันที">
+          <span>บันทึก & ถัดไป</span>
+          <span>▶</span>
         </button>
       </div>
+      <button id="btn-card-toggle-cancel" class="w-full py-1 text-[11px] text-[#E64C3C] hover:bg-rose-50 rounded-lg flex items-center justify-center gap-1 font-bold transition-colors cursor-pointer">
+        <i data-lucide="rotate-ccw" class="w-3 h-3"></i> ยกเลิกสถานะ (ตั้งเป็นยังไม่ได้กด)
+      </button>
     </div>
   </div>
 
@@ -5441,12 +5488,76 @@
       }
     }
 
-        let isPileCardMinimized = false;
+    let isPileCardMinimized = false;
     let pileCardHasBeenDragged = false;
+    let isPileDetailsExpanded = false;
+
+    function clampPileCardToViewport() {
+      const card = document.getElementById('pile-card');
+      if (!card || card.classList.contains('hidden') || window.innerWidth <= 768) return;
+      if (!card.classList.contains('has-been-dragged')) return;
+      const pad = 12;
+      const rect = card.getBoundingClientRect();
+      const maxLeft = Math.max(pad, window.innerWidth - rect.width - pad);
+      const maxTop = Math.max(pad, window.innerHeight - rect.height - pad);
+      const clampedLeft = Math.max(pad, Math.min(rect.left, maxLeft));
+      const clampedTop = Math.max(pad, Math.min(rect.top, maxTop));
+      card.style.setProperty('left', Math.round(clampedLeft) + 'px', 'important');
+      card.style.setProperty('top', Math.round(clampedTop) + 'px', 'important');
+    }
+
+    function setPileDetailsExpanded(expanded) {
+      isPileDetailsExpanded = !!expanded;
+      const card = document.getElementById('pile-card');
+      const panel = document.getElementById('panel-pile-details');
+      const toggleBtn = document.getElementById('btn-toggle-pile-details');
+      const arrow = document.getElementById('arrow-pile-details');
+      const lbl = document.getElementById('lbl-toggle-expand-text');
+      const hint = document.getElementById('hint-toggle-expand');
+
+      if (card) {
+        card.classList.toggle('is-details-expanded', isPileDetailsExpanded);
+        card.style.removeProperty('width');
+      }
+      if (panel) {
+        panel.classList.toggle('hidden', !isPileDetailsExpanded);
+      }
+      if (toggleBtn) {
+        toggleBtn.classList.toggle('rounded-[10px]', !isPileDetailsExpanded);
+        toggleBtn.classList.toggle('rounded-t-[10px]', isPileDetailsExpanded);
+      }
+      if (arrow) {
+        arrow.style.transform = isPileDetailsExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+      }
+      if (lbl) {
+        lbl.textContent = isPileDetailsExpanded ? 'ยุบเก็บ' : 'คลิกขยาย';
+      }
+      if (hint) {
+        hint.textContent = isPileDetailsExpanded
+          ? 'กำลังเปิดกรอกข้อมูลความยาว 3 ท่อน & พิกัดจริง'
+          : (window.innerWidth > 768 ? 'คลิกเพื่อกางแผงกรอกด้านข้าง' : 'คลิกเพื่อเปิดกรอกข้อมูลเพิ่มเติม');
+      }
+
+      if (isPileDetailsExpanded) {
+        setTimeout(() => {
+          clampPileCardToViewport();
+          if (window.innerWidth <= 768) {
+            const body = document.getElementById('pile-card-body');
+            const sec = document.getElementById('section-pile-details');
+            if (body && sec) {
+              body.scrollTo({ top: sec.offsetTop - 8, behavior: 'smooth' });
+            }
+          }
+        }, 40);
+      } else {
+        setTimeout(clampPileCardToViewport, 40);
+      }
+    }
 
     function toggleMinimizePileCard(force) {
       const card = document.getElementById('pile-card');
       const body = document.getElementById('pile-card-body');
+      const footer = document.getElementById('pile-card-footer');
       const miniBar = document.getElementById('pile-card-minibar');
       const minIcon = document.getElementById('icon-minimize-card');
       if (!card || !body) return;
@@ -5460,11 +5571,13 @@
       if (isPileCardMinimized) {
         card.classList.add('is-minimized');
         body.classList.add('hidden');
+        if (footer) footer.classList.add('hidden');
         if (miniBar) miniBar.classList.remove('hidden');
         if (minIcon) minIcon.setAttribute('data-lucide', 'maximize-2');
       } else {
         card.classList.remove('is-minimized');
         body.classList.remove('hidden');
+        if (footer) footer.classList.remove('hidden');
         if (miniBar) miniBar.classList.add('hidden');
         if (minIcon) minIcon.setAttribute('data-lucide', 'minimize-2');
       }
@@ -5546,12 +5659,15 @@
       header.addEventListener('pointerdown', onPointerDown);
     }
 
-    function openPileCard(pileNo, fromQuickSelect = false) {
+    function openPileCard(pileNo, fromQuickSelect = false, preserveExpanded = false) {
       // ปิด Footing Card หากเปิดค้างอยู่ เพื่อป้องกันการซ้อนทับกัน
       const fc = document.getElementById('footing-card');
       if (fc && !fc.classList.contains('hidden')) {
         closeFootingCard();
       }
+
+      const card = document.getElementById('pile-card');
+      const wasAlreadyOpen = card && !card.classList.contains('hidden');
 
       selectedCardPileNo = pileNo;
       const pileData = PILES_DATABASE.find(p => p.no === pileNo);
@@ -5638,21 +5754,18 @@
           dateBadge.textContent = 'ยังไม่ระบุ';
           dateBadge.className = 'font-mono font-bold text-[#8C9AA8] text-[9.5px]';
         }
-        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกข้อมูลเสาเข็มต้นนี้';
+        if (saveBtnLbl) saveBtnLbl.textContent = '✓ บันทึกข้อมูลเสาเข็ม';
         if (cancelBtn) cancelBtn.classList.add('hidden');
       }
 
-      // รีเซ็ตแผงรายละเอียดให้ยุบเก็บไว้เริ่มต้น เพื่อให้หน้าต่างสะอาด ไม่รกตา
-      const detailsPanel = document.getElementById('panel-pile-details');
-      const detailsArrow = document.getElementById('arrow-pile-details');
-      const detailsBtnLbl = document.getElementById('lbl-toggle-expand-text');
-      const detailsHint = document.getElementById('hint-toggle-expand');
-      if (detailsPanel) detailsPanel.classList.add('hidden');
-      if (detailsArrow) detailsArrow.style.transform = 'rotate(0deg)';
-      if (detailsBtnLbl) detailsBtnLbl.textContent = 'คลิกขยาย';
-      if (detailsHint) detailsHint.textContent = 'คลิกเพื่อเปิดกรอกข้อมูลเพิ่มเติม';
+      // หากเปิดค้างอยู่หรือสลับต้น (◀ / ▶) ให้จำสถานะกางแผงความยาว 3 ท่อนไว้เพื่อกรอกต่อเนื่องได้ทันที
+      if (preserveExpanded || wasAlreadyOpen) {
+        setPileDetailsExpanded(isPileDetailsExpanded);
+      } else {
+        setPileDetailsExpanded(false);
+      }
 
-            // Minibar and Back to Quick Select wiring
+      // Minibar and Back to Quick Select wiring
       const backBtn = document.getElementById('btn-card-back-to-quick-select');
       if (backBtn) {
         if (fromQuickSelect) {
@@ -5680,7 +5793,6 @@
         }
       }
 
-      const card = document.getElementById('pile-card');
       card.classList.remove('hidden');
       setTimeout(() => card.classList.remove('translate-y-4', 'opacity-0'), 10);
 
@@ -5692,7 +5804,7 @@
         card.style.removeProperty('top');
         card.style.removeProperty('bottom');
         card.style.removeProperty('width');
-        toggleMinimizePileCard(false); // Show full bottom sheet on mobile so user can see and edit
+        toggleMinimizePileCard(false);
         const body = document.getElementById('pile-card-body');
         if (body) {
           body.classList.remove('hidden');
@@ -5705,7 +5817,9 @@
           card.style.setProperty('top', 'auto', 'important');
           card.style.setProperty('right', '20px', 'important');
           card.style.setProperty('bottom', '20px', 'important');
-          card.style.setProperty('width', '320px', 'important');
+          card.style.removeProperty('width');
+        } else {
+          clampPileCardToViewport();
         }
         makePileCardDraggable();
       }
@@ -5767,11 +5881,40 @@
       updatePileCardCoordDiff(p.northing, p.easting, p.northing, p.easting);
     });
 
-        document.getElementById('btn-dock-toggle-card')?.addEventListener('click', () => {
+    // Quick Prev / Next Pile buttons in Card Header
+    document.getElementById('btn-card-prev-pile')?.addEventListener('click', () => {
+      if (!selectedCardPileNo) return;
+      let prevNo = selectedCardPileNo - 1;
+      if (prevNo < 1) prevNo = 93;
+      openPileCard(prevNo, false, true);
+    });
+
+    document.getElementById('btn-card-next-pile')?.addEventListener('click', () => {
+      if (!selectedCardPileNo) return;
+      let nextNo = selectedCardPileNo + 1;
+      if (nextNo > 93) nextNo = 1;
+      openPileCard(nextNo, false, true);
+    });
+
+    // Alt + ArrowLeft / ArrowRight shortcut when #pile-card is open
+    document.addEventListener('keydown', (e) => {
+      if (!e.altKey || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+      const card = document.getElementById('pile-card');
+      if (!card || card.classList.contains('hidden')) return;
+      e.preventDefault();
+      if (e.key === 'ArrowLeft') {
+        document.getElementById('btn-card-prev-pile')?.click();
+      } else {
+        document.getElementById('btn-card-next-pile')?.click();
+      }
+    });
+
+    document.getElementById('btn-dock-toggle-card')?.addEventListener('click', () => {
       const card = document.getElementById('pile-card');
       if (!card) return;
       pileCardHasBeenDragged = false;
       card.classList.remove('has-been-dragged');
+      card.style.removeProperty('width');
       if (card.classList.contains('dock-left')) {
         card.classList.remove('dock-left');
         card.style.setProperty('left', 'auto', 'important');
@@ -5829,25 +5972,17 @@
       if (inp) inp.value = yStr;
     });
 
-    // Collapsible Details Section Toggle in Pile Card
+    // Collapsible Details Section Toggle in Pile Card (Side-by-Side Drawer on Wide Screens)
     document.getElementById('btn-toggle-pile-details')?.addEventListener('click', (e) => {
       e.preventDefault();
-      const panel = document.getElementById('panel-pile-details');
-      const arrow = document.getElementById('arrow-pile-details');
-      const lbl = document.getElementById('lbl-toggle-expand-text');
-      const hint = document.getElementById('hint-toggle-expand');
-      if (panel) {
-        const isHidden = panel.classList.toggle('hidden');
-        if (arrow) arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
-        if (lbl) lbl.textContent = isHidden ? 'คลิกขยาย' : 'ยุบเก็บ';
-        if (hint) hint.textContent = isHidden ? 'คลิกเพื่อเปิดกรอกข้อมูลเพิ่มเติม' : 'กำลังเปิดกรอกข้อมูลความยาว & พิกัด';
-      }
+      setPileDetailsExpanded(!isPileDetailsExpanded);
     });
 
-    // Consolidated Single Action Button: Save Pile (Driven status + Date + Actual Top + Coordinates + Segments)
-    document.getElementById('btn-card-save-date')?.addEventListener('click', () => {
+    // Shared Save Helper for both "Save" and "Save & Next Pile"
+    function persistCurrentPileCard(goToNextAfterSave = false) {
       if (!selectedCardPileNo) return;
-      const pileData = PILES_DATABASE.find(p => p.no === selectedCardPileNo);
+      const savedPileNo = selectedCardPileNo;
+      const pileData = PILES_DATABASE.find(p => p.no === savedPileNo);
       const defTop = (pileData && pileData.pco_level !== undefined) ? pileData.pco_level : (pileData ? pileData.co_level : 0);
 
       const dateInp = document.getElementById('card-pile-date-input');
@@ -5862,7 +5997,7 @@
       const actualEInp = document.getElementById('card-pile-actual-e');
       const rawE = actualEInp ? actualEInp.value.trim() : '';
       
-      const existing = progressRecords[selectedCardPileNo] || {};
+      const existing = progressRecords[savedPileNo] || {};
       const record = {
         ...existing,
         status: 'driven',
@@ -5913,7 +6048,7 @@
         try {
           let raw = localStorage.getItem('PYNN37_PILE_LENGTHS');
           let map = raw ? JSON.parse(raw) : {};
-          map[selectedCardPileNo] = {
+          map[savedPileNo] = {
             seg_bottom: b, seg_middle: m, seg_top: t, top_cutoff: c,
             seg_top_net: netTop, total_length: effTotal
           };
@@ -5921,7 +6056,7 @@
         } catch(e) {}
       }
       
-      progressRecords[selectedCardPileNo] = record;
+      progressRecords[savedPileNo] = record;
       saveProgress();
       if (typeof syncPilingToSupabase === 'function') {
         syncPilingToSupabase(false);
@@ -5929,7 +6064,25 @@
       if (typeof renderPileSummaryReportTable === 'function') {
         renderPileSummaryReportTable();
       }
-      document.getElementById('btn-close-card')?.click();
+
+      if (goToNextAfterSave) {
+        let nextNo = savedPileNo + 1;
+        if (nextNo > 93) nextNo = 1;
+        if (typeof showSyncToast === 'function') {
+          showSyncToast(`✓ บันทึก P${String(savedPileNo).padStart(2, '0')} แล้ว ➔ เปิด P${String(nextNo).padStart(2, '0')}`);
+        }
+        openPileCard(nextNo, false, true);
+      } else {
+        document.getElementById('btn-close-card')?.click();
+      }
+    }
+
+    document.getElementById('btn-card-save-date')?.addEventListener('click', () => {
+      persistCurrentPileCard(false);
+    });
+
+    document.getElementById('btn-card-save-next')?.addEventListener('click', () => {
+      persistCurrentPileCard(true);
     });
 
     // 1-Click Button: Mark as pending / cancel (preserves customized lengths)
