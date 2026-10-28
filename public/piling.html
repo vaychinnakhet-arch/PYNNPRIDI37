@@ -885,7 +885,7 @@
     }
     #rep-today-table th {
       border: none !important;
-      border-right: 1px solid #E2D9CC !important;
+      border-right: 1px solid #1D2B45 !important;
       border-bottom: 1.5px solid #1D2B45 !important;
       box-sizing: border-box !important;
     }
@@ -894,8 +894,8 @@
     }
     #rep-today-table td {
       border: none !important;
-      border-right: 1px solid #E2D9CC !important;
-      border-bottom: 1px solid #E2D9CC !important;
+      border-right: 1px solid #1D2B45 !important;
+      border-bottom: 1px solid #1D2B45 !important;
       vertical-align: middle !important;
       box-sizing: border-box !important;
     }
@@ -1288,7 +1288,7 @@
     }
     .is-export-capturing #rep-today-table th {
       border: none !important;
-      border-right: 1px solid #CBD5E1 !important;
+      border-right: 1px solid #1D2B45 !important;
       border-bottom: 1.5px solid #1D2B45 !important;
       box-sizing: border-box !important;
       padding: 6px 4px !important;
@@ -1299,8 +1299,8 @@
     }
     .is-export-capturing #rep-today-table td {
       border: none !important;
-      border-right: 1px solid #CBD5E1 !important;
-      border-bottom: 1px solid #CBD5E1 !important;
+      border-right: 1px solid #1D2B45 !important;
+      border-bottom: 1px solid #1D2B45 !important;
       box-sizing: border-box !important;
       padding: 6px 4px !important;
       vertical-align: middle !important;
@@ -1522,106 +1522,113 @@
        PILING DAILY & CUMULATIVE PROGRESS TABLE (LEDGER - แผน 3 ต้น/วันทำการ)
        ========================================================================= */
     .piling-daily-tier-block {
-      border: 2px solid #1D2B45;
-      background-color: #ffffff;
-      box-shadow: 2px 2px 0px #1D2B45;
-      border-radius: 12px;
-      overflow: hidden;
+      border: 2px solid #1D2B45 !important;
+      background-color: #ffffff !important;
+      box-shadow: 2px 2px 0px #1D2B45 !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
     }
     .piling-daily-tier-head {
-      border-bottom: none !important;
+      background-color: #F6E9D7 !important;
+      border-bottom: 1px solid #D5C7B2 !important;
     }
     .piling-daily-table {
-      border-collapse: collapse;
-      border-spacing: 0;
-      width: 100%;
+      border-collapse: collapse !important;
+      border-spacing: 0 !important;
+      width: 100% !important;
       min-width: 720px;
-      font-size: 11px;
-      table-layout: fixed;
+      font-size: 11px !important;
+      table-layout: fixed !important;
     }
     .piling-daily-table th,
     .piling-daily-table td {
-      border-right: 1px solid #CBD5E1;
-      border-bottom: 1px solid #CBD5E1;
-      padding: 4.5px 2px;
+      border-right: 1px solid #CBD5E1 !important;
+      border-bottom: 1px solid #CBD5E1 !important;
+      padding: 4.5px 2px !important;
       text-align: center;
-      white-space: nowrap;
-      box-sizing: border-box;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
     }
     .piling-daily-table th:last-child,
     .piling-daily-table td:last-child {
-      border-right: none;
+      border-right: none !important;
     }
     .piling-daily-table tbody tr:last-child td {
-      border-bottom: none;
+      border-bottom: none !important;
     }
     .piling-daily-table thead th {
-      background-color: #F6E9D7;
-      color: #1D2B45;
-      font-weight: 800;
-      font-size: 10.5px;
-      border-top: 1.5px solid #1D2B45 !important;
-      border-bottom: 1.5px solid #1D2B45 !important;
+      background-color: #FAF5EE !important;
+      color: #1D2B45 !important;
+      font-weight: 800 !important;
+      font-size: 10.5px !important;
+      border-top: none !important;
+      border-bottom: 1px solid #CBD5E1 !important;
     }
     .piling-daily-table th.sticky-col,
     .piling-daily-table td.sticky-col {
       position: sticky;
       left: 0;
-      min-width: 92px;
-      width: 92px;
-      max-width: 92px;
-      text-align: left;
-      padding-left: 8px;
-      padding-right: 6px;
-      box-sizing: border-box;
-      border-right: 2px solid #1D2B45;
+      min-width: 96px !important;
+      width: 96px !important;
+      max-width: 96px !important;
+      text-align: left !important;
+      padding-left: 10px !important;
+      padding-right: 6px !important;
+      box-sizing: border-box !important;
+      border-right: 1px solid #CBD5E1 !important;
+      box-shadow: none !important;
     }
     .piling-daily-table th.sticky-col {
       z-index: 20;
-      background-color: #F6E9D7;
-      text-align: left;
+      background-color: #FAF5EE !important;
+      text-align: left !important;
     }
     .piling-daily-table td.sticky-col {
       z-index: 10;
-      background-color: #ffffff;
+      background-color: #ffffff !important;
     }
 
     /* --- Daily Rows (Rows 1 & 2) --- */
     .piling-daily-table tr.row-plan td {
-      background-color: #ffffff;
+      background-color: #ffffff !important;
     }
     .piling-daily-table tr.row-actual td {
-      background-color: #FAF5EE;
+      background-color: #FAF5EE !important;
+    }
+    .piling-daily-table tr.row-actual td.sticky-col {
+      background-color: #FAF5EE !important;
     }
     .piling-daily-table tr.row-plan:hover td:not(.sticky-col):not(.active-col),
     .piling-daily-table tr.row-actual:hover td:not(.sticky-col):not(.active-col) {
-      background-color: #FFF3EB;
+      background-color: #FFF3EB !important;
     }
 
     /* --- Accumulated Rows (Rows 3 & 4) Distinct Styling --- */
-    /* Bold divider separating Daily from Cumulative */
+    /* Subtle divider separating Daily from Cumulative (without overpowering table header) */
     .piling-daily-table tr.row-accum-plan td {
-      border-top: 2px solid #1D2B45 !important;
-      background-color: #F1F5F9;
-      color: #1D2B45;
+      border-top: 1px solid #CBD5E1 !important;
+      background-color: #F1F5F9 !important;
+      color: #1D2B45 !important;
     }
     .piling-daily-table tr.row-accum-plan td.sticky-col {
-      border-top: 2px solid #1D2B45 !important;
-      background-color: #E2E8F0;
+      border-top: 1px solid #CBD5E1 !important;
+      background-color: #E2E8F0 !important;
+      box-shadow: none !important;
     }
     .piling-daily-table tr.row-accum-plan:hover td:not(.sticky-col):not(.active-col) {
-      background-color: #E2E8F0;
+      background-color: #E2E8F0 !important;
     }
 
     .piling-daily-table tr.row-accum-actual td {
-      background-color: #ECFDF5;
-      color: #064E3B;
+      background-color: #ECFDF5 !important;
+      color: #064E3B !important;
     }
     .piling-daily-table tr.row-accum-actual td.sticky-col {
-      background-color: #D1FAE5;
+      background-color: #D1FAE5 !important;
+      box-shadow: none !important;
     }
     .piling-daily-table tr.row-accum-actual:hover td:not(.sticky-col):not(.active-col) {
-      background-color: #D1FAE5;
+      background-color: #D1FAE5 !important;
     }
 
     /* Tangerine outline box for Active / Selected Reporting Date */
@@ -1632,27 +1639,35 @@
       border-top: 2px solid #F26B2A !important;
       border-left: 2px solid #F26B2A !important;
       border-right: 2px solid #F26B2A !important;
-      background-color: #FFEDD5 !important;
+      border-bottom: 1px solid #FDBA74 !important;
+      border-radius: 0 !important;
+      background: #FFEDD5 !important;
       color: #9A3412 !important;
-      font-weight: 900;
+      font-weight: 900 !important;
+      box-shadow: none !important;
     }
     .piling-daily-table td.active-col {
       border-left: 2px solid #F26B2A !important;
       border-right: 2px solid #F26B2A !important;
+      box-shadow: none !important;
     }
     /* Highlighted accumulate cells for active date */
     .piling-daily-table tr.row-accum-plan td.active-col {
       background-color: #FED7AA !important;
       color: #9A3412 !important;
-      font-weight: 900;
+      font-weight: 900 !important;
     }
     .piling-daily-table tr.row-accum-actual td.active-col {
       background-color: #A7F3D0 !important;
       color: #064E3B !important;
-      font-weight: 900;
+      font-weight: 900 !important;
+      border-bottom: 2px solid #F26B2A !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
     }
     .piling-daily-table tr:last-child td.active-col {
       border-bottom: 2px solid #F26B2A !important;
+      box-shadow: none !important;
     }
   </style>
 
@@ -3202,17 +3217,17 @@
             <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
               <thead id="rep-today-table-head" class="bg-[#FAF5EE] text-[#1D2B45] border-b-2 border-[#1D2B45] font-black text-[11px]">
                 <tr>
-                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">ลำดับ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">No.</div></th>
-                  <th class="py-2 px-2 border-r border-[#E2D9CC] whitespace-nowrap">รหัสเข็ม<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Pile ID</div></th>
-                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">ฐานราก<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Footing</div></th>
-                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">กริด<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Grid</div></th>
-                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] whitespace-nowrap" title="พิกัดสำรวจตามแบบ (Northing, Easting)">พิกัดตามแบบ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Co (N, E) m</div></th>
-                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] text-[#047857] whitespace-nowrap" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">พิกัดหลังกด<div class="font-mono text-[9.5px] font-bold text-[#047857]">Co (n, e) m</div></th>
-                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] text-[#047857] whitespace-nowrap" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E)">ค่าเยื้องศูนย์<div class="font-mono text-[9.5px] font-bold text-[#047857]">Δn, Δe (mm)</div></th>
-                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] text-[#E64C3C] whitespace-nowrap" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับตัดเข็ม<div class="font-mono text-[9.5px] font-bold text-[#E64C3C]">PCO (m)</div></th>
-                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] text-[#0284C7] whitespace-nowrap" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับหัวเข็มจริง<div class="font-mono text-[9.5px] font-bold text-[#0284C7]">TOP (m)</div></th>
-                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่างระดับ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Diff PCO (m)</div></th>
-                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">ชนิดเข็ม<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Pile Type</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#1D2B45] whitespace-nowrap">ลำดับ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">No.</div></th>
+                  <th class="py-2 px-2 border-r border-[#1D2B45] whitespace-nowrap">รหัสเข็ม<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Pile ID</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#1D2B45] whitespace-nowrap">ฐานราก<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Footing</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#1D2B45] whitespace-nowrap">กริด<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Grid</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#1D2B45] whitespace-nowrap" title="พิกัดสำรวจตามแบบ (Northing, Easting)">พิกัดตามแบบ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Co (N, E) m</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#1D2B45] text-[#047857] whitespace-nowrap" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">พิกัดหลังกด<div class="font-mono text-[9.5px] font-bold text-[#047857]">Co (n, e) m</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#1D2B45] text-[#047857] whitespace-nowrap" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E)">ค่าเยื้องศูนย์<div class="font-mono text-[9.5px] font-bold text-[#047857]">Δn, Δe (mm)</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#1D2B45] text-[#E64C3C] whitespace-nowrap" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับตัดเข็ม<div class="font-mono text-[9.5px] font-bold text-[#E64C3C]">PCO (m)</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#1D2B45] text-[#0284C7] whitespace-nowrap" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับหัวเข็มจริง<div class="font-mono text-[9.5px] font-bold text-[#0284C7]">TOP (m)</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#1D2B45] whitespace-nowrap" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่างระดับ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Diff PCO (m)</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#1D2B45] whitespace-nowrap">ชนิดเข็ม<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Pile Type</div></th>
                   <th class="py-2 px-2 text-center whitespace-nowrap">วันที่กด<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Driven Date</div></th>
                 </tr>
               </thead>
@@ -9328,20 +9343,20 @@
             }
           } else {
             tr.className = 'hover:bg-[#FFF3EB] transition-colors cursor-pointer ' +
-              (isLastRow ? 'border-b-2 border-[#1D2B45] ' : 'border-b border-[#E2D9CC] ') +
+              (isLastRow ? 'border-b-2 border-[#1D2B45] ' : 'border-b border-[#1D2B45] ') +
               (index % 2 === 1 ? 'bg-[#FAF5EE]' : 'bg-white');
             tr.innerHTML = `
-              <td class="p-2.5 text-center font-bold text-[#8C9AA8] border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.no}</td>
-              <td class="p-2.5 font-black text-[#1D2B45] border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.tag}</td>
-              <td class="p-2.5 text-center font-black text-[#0284C7] border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.footing || '-'}</td>
-              <td class="p-2.5 text-center font-bold text-[#1D2B45] border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.grid}</td>
-              <td class="p-2.5 text-right border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${designCoordsHtml}</td>
-              <td class="p-2.5 text-right border-r border-[#E2D9CC] bg-emerald-50/20 ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${afterPressCoordsHtml}</td>
-              <td class="p-2.5 text-center border-r border-[#E2D9CC] bg-emerald-50/40 ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${coordDiffHtml}</td>
-              <td class="p-2.5 text-right font-black text-[#E64C3C] font-mono border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${pco.toFixed(3)}</td>
-              <td class="p-2.5 text-right font-mono border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${actualTopDisplay}</td>
-              <td class="p-2.5 text-center font-mono border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${diffDisplay}</td>
-              <td class="p-2.5 text-center font-semibold text-[#1D2B45] border-r border-[#E2D9CC] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.type || 'I-0.40m'}</td>
+              <td class="p-2.5 text-center font-bold text-[#8C9AA8] border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.no}</td>
+              <td class="p-2.5 font-black text-[#1D2B45] border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.tag}</td>
+              <td class="p-2.5 text-center font-black text-[#0284C7] border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.footing || '-'}</td>
+              <td class="p-2.5 text-center font-bold text-[#1D2B45] border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.grid}</td>
+              <td class="p-2.5 text-right border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${designCoordsHtml}</td>
+              <td class="p-2.5 text-right border-r border-[#1D2B45] bg-emerald-50/20 ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${afterPressCoordsHtml}</td>
+              <td class="p-2.5 text-center border-r border-[#1D2B45] bg-emerald-50/40 ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${coordDiffHtml}</td>
+              <td class="p-2.5 text-right font-black text-[#E64C3C] font-mono border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${pco.toFixed(3)}</td>
+              <td class="p-2.5 text-right font-mono border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${actualTopDisplay}</td>
+              <td class="p-2.5 text-center font-mono border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${diffDisplay}</td>
+              <td class="p-2.5 text-center font-semibold text-[#1D2B45] border-r border-[#1D2B45] ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${p.type || 'I-0.40m'}</td>
               <td class="p-2 text-center ${isLastRow ? '!border-b-2 !border-b-[#1D2B45]' : ''}">${dateDisplay}</td>
             `;
             if (isLastRow) {
@@ -9475,7 +9490,7 @@
         }
 
         return '<div class="piling-daily-tier-block border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] bg-white overflow-hidden rounded-xl">' +
-          '<div class="piling-daily-tier-head px-3 py-1.5 bg-[#FAF5EE] flex items-center justify-between gap-2 text-xs font-bold whitespace-nowrap flex-nowrap">' +
+          '<div class="piling-daily-tier-head px-3 py-1.5 bg-[#F6E9D7] flex items-center justify-between gap-2 text-xs font-bold whitespace-nowrap flex-nowrap">' +
             '<div class="flex items-center gap-2 shrink-0 whitespace-nowrap">' +
               '<span class="font-mono text-[10px] font-black px-2 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none whitespace-nowrap shrink-0 inline-block">' + tierNum + '</span>' +
               '<span class="text-[#1D2B45] font-black whitespace-nowrap shrink-0">' + tierDateRange + '</span>' +
@@ -10075,7 +10090,7 @@
               allThs.forEach((th, idx) => {
                 th.style.setProperty('border-top', 'none', 'important');
                 th.style.setProperty('border-left', 'none', 'important');
-                th.style.setProperty('border-right', idx === allThs.length - 1 ? 'none' : '1px solid #CBD5E1', 'important');
+                th.style.setProperty('border-right', idx === allThs.length - 1 ? 'none' : '1px solid #1D2B45', 'important');
                 th.style.setProperty('border-bottom', '1.5px solid #1D2B45', 'important');
               });
               expTable.querySelectorAll('tbody tr').forEach((tr, rIdx, rArr) => {
@@ -10084,8 +10099,8 @@
                 rowTds.forEach((td, cIdx) => {
                   td.style.setProperty('border-top', 'none', 'important');
                   td.style.setProperty('border-left', 'none', 'important');
-                  td.style.setProperty('border-right', cIdx === rowTds.length - 1 ? 'none' : '1px solid #CBD5E1', 'important');
-                  td.style.setProperty('border-bottom', isLast ? 'none' : '1px solid #CBD5E1', 'important');
+                  td.style.setProperty('border-right', cIdx === rowTds.length - 1 ? 'none' : '1px solid #1D2B45', 'important');
+                  td.style.setProperty('border-bottom', isLast ? 'none' : '1px solid #1D2B45', 'important');
                 });
               });
             }

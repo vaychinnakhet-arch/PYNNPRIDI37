@@ -2756,8 +2756,8 @@
       }
       .piling-daily-table th,
       .piling-daily-table td {
-        border-right: 1px solid #475569;
-        border-bottom: 1px solid #475569;
+        border-right: 1px solid #CBD5E1;
+        border-bottom: 1px solid #CBD5E1;
         padding: 4px 3px;
         text-align: center;
         white-space: nowrap;
@@ -2800,12 +2800,12 @@
         background-color: #f8fafc;
       }
       .piling-daily-table tr.row-accum-plan td {
-        border-top: 2px solid #1e293b !important;
+        border-top: 1px solid #CBD5E1 !important;
         background-color: #f1f5f9;
         color: #1e293b;
       }
       .piling-daily-table tr.row-accum-plan td.sticky-col {
-        border-top: 2px solid #1e293b !important;
+        border-top: 1px solid #CBD5E1 !important;
         background-color: #e2e8f0;
         box-shadow: 2px 0 4px rgba(0,0,0,0.1);
       }
