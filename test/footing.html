@@ -2,7 +2,6 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>PYNN PRIDI 37 — ผังฐานราก ค.ส.ล. 3 มิติ (3D Footing Progress Tracker)</title>
 
@@ -81,93 +80,100 @@
       border-color: var(--dw-navy);
     }
 
-    /* Unified Tactile DoodleWeb Layer Cards (Paper White & Clean Hierarchy) */
+    /* Tactile DoodleWeb Layer Toggle Cards */
     .layer-card {
       position: relative;
-      background: #FFFFFF !important;
-      border: 1.5px solid #1D2B45 !important;
-      border-radius: 12px !important;
-      padding: 6px 8px !important;
+      background: #FFFFFF;
+      border: 1.5px solid #E2D9CC;
+      border-radius: 0.875rem !important; /* rounded-xl */
+      padding: 8px 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 6px;
       cursor: pointer;
-      box-shadow: 1.5px 1.5px 0px #1D2B45 !important;
-      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: none;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
     }
     .layer-card:hover {
-      background: #FFFFFF !important;
-      transform: translate(-0.5px, -0.5px);
-      box-shadow: 2px 2px 0px #1D2B45 !important;
+      background: #FAF5EE;
+      border-color: var(--dw-navy);
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
     }
-    .layer-card:not(.active) {
-      opacity: 0.65;
-      background: #FAF8F5 !important;
-      box-shadow: 0.5px 0.5px 0px rgba(29, 43, 69, 0.3) !important;
-      border-color: #CBD5E1 !important;
+    .layer-card.active {
+      border: 2px solid var(--dw-navy);
+      box-shadow: 2.5px 2.5px 0px var(--dw-navy);
     }
     .layer-card.active:hover {
-      box-shadow: 2.5px 2.5px 0px #F26B2A !important;
+      box-shadow: 3.5px 3.5px 0px var(--dw-orange);
+    }
+    .layer-card.active.active-footing {
+      background: #F0F9FF;
+    }
+    .layer-card.active.active-pile {
+      background: #FFFDF7;
+    }
+    .layer-card.active.active-grid {
+      background: #F8FAFC;
+    }
+    .layer-card.active.active-boundary {
+      background: #FFF1F2;
+    }
+    .layer-card.active.active-badge {
+      background: #FAF5FF;
+    }
+    .layer-card.active.active-ground {
+      background: #F8FAFC;
     }
 
-    /* Discipline Grouping Containers (Clean, Transparent, No Conflicting Backgrounds) */
-    .discipline-group {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      padding: 0 !important;
-    }
-
-    #footing-toolbar {
-      width: 272px;
-      max-width: 275px;
-      max-height: calc(100vh - 86px);
-      overflow-y: auto;
-      overflow-x: visible;
-      padding-right: 6px;
-      padding-bottom: 6px;
-      scrollbar-width: thin;
-    }
-    #footing-toolbar::-webkit-scrollbar {
-      width: 4px;
-    }
-    #footing-toolbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-
-    /* Tactile Toggle Switch Pill - Unified Emerald Status Color */
+    /* Tactile Toggle Switch Pill */
     .toggle-switch {
-      width: 32px;
-      height: 18px;
+      width: 38px;
+      height: 22px;
       background: #E2D9CC;
-      border: 1.5px solid var(--dw-navy);
+      border: 2px solid var(--dw-navy);
       border-radius: 9999px !important;
       position: relative;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       flex-shrink: 0;
       cursor: pointer;
       box-shadow: inset 0 1px 2px rgba(29, 43, 69, 0.08);
     }
     .toggle-knob {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       background: #FFFFFF;
       border: 1.5px solid var(--dw-navy);
       border-radius: 9999px !important;
       position: absolute;
-      top: 1.5px;
-      left: 1.5px;
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0.5px 0.5px 0px var(--dw-navy);
+      top: 2px;
+      left: 2px;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 1px 1px 0px var(--dw-navy);
     }
     .layer-card.active .toggle-knob {
-      transform: translateX(14px);
+      transform: translateX(16px);
+      border-color: var(--dw-navy);
     }
-    .layer-card.active .toggle-switch {
-      background: #10B981 !important;
+    .layer-card.active.active-footing .toggle-switch {
+      background: #0284C7;
+    }
+    .layer-card.active.active-pile .toggle-switch {
+      background: #10B981;
+    }
+    .layer-card.active.active-grid .toggle-switch {
+      background: #6366F1;
+    }
+    .layer-card.active.active-boundary .toggle-switch {
+      background: var(--dw-coral);
+    }
+    .layer-card.active.active-badge .toggle-switch {
+      background: #8B5CF6;
+    }
+    .layer-card.active.active-ground .toggle-switch {
+      background: #64748B;
     }
 
     /* Isolate Solo Button */
@@ -278,349 +284,257 @@
   </div>
 
     <!-- TOP HEADER & LIVE KPI BAR (DoodleWeb Edition) -->
-  <header class="absolute top-2 left-2 right-2 md:left-4 md:right-4 z-20 comic-card bg-white/95 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-between gap-2 shadow-[3.5px_3.5px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl pointer-events-auto flex-nowrap overflow-x-auto custom-scrollbar-none">
-    
-    <!-- 1. Left: Brand & Title -->
-    <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-      <a href="index.html" class="comic-btn px-2.5 sm:px-3 py-1 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] border-2 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] transition-all" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
+  <header class="absolute top-2 left-2 right-2 md:left-4 md:right-4 z-20 comic-card bg-white/95 backdrop-blur-md px-4 py-2 flex flex-wrap items-center justify-between gap-2.5 shadow-sm border-2 border-[#1D2B45] rounded-2xl pointer-events-auto">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <a href="index.html" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 hover:bg-[#FAF5EE]" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-        <span class="hidden sm:inline font-bold">หน้าแรก</span>
+        <span class="hidden sm:inline">หน้าแรก</span>
       </a>
-      <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#1D2B45] font-display">
+      <div class="w-8 h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_#1D2B45] font-display">
         P37
       </div>
       <div>
-        <div class="flex items-center gap-2">
-          <h1 class="text-xs sm:text-sm font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
+        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <h1 class="text-sm font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
             Pynn <span class="text-[#F26B2A] italic">Pridi</span> 37
           </h1>
-          <span class="hidden md:inline-flex bg-[#E0F2FE] text-[#0369A1] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#BAE6FD]">
-            🏗️ ผังฐานราก 21 ฐาน
+          
+          <!-- Symmetrical Module Switcher (📍 เสาเข็ม 93 ต้น vs 🏗️ ผังฐานราก 21 ฐาน) -->
+          <div class="inline-flex items-center p-0.5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] select-none">
+            <a href="piling.html" class="px-3 py-1 rounded-full text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white text-[11px] font-bold flex items-center gap-1 transition-all" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น (3D Piling Tracker)">
+              <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#10B981]"></i>
+              <span>เสาเข็ม (93)</span>
+              <span class="text-[9px] font-mono font-extrabold text-[#10B981] bg-[#D1FAE5] px-1.5 py-0.5 rounded-full border border-[#A7F3D0]">↗</span>
+            </a>
+            <span class="px-3 py-1 rounded-full bg-[#0284C7] border-1.5 border-[#1D2B45] text-white font-black text-[11px] flex items-center gap-1.5 shadow-[1px_1px_0px_#1D2B45] cursor-default">
+              <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
+              <span>🏗️ ผังฐานราก (21)</span>
+            </span>
+          </div>
+
+          <span id="sync-badge" class="bg-[#E6FAF8] text-[#0F766E] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#40C4C4] hidden lg:flex items-center gap-1 shadow-[1px_1px_0px_#1D2B45]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#40C4C4] animate-pulse"></span> 3D BIM โมเดล ค.ส.ล. คมชัด
           </span>
         </div>
-        <p class="text-[9.5px] text-[#3E4B69] font-medium mt-0.5 hidden sm:block">ผังฐานราก ค.ส.ล. • เสาเข็ม 93 ต้น • ระดับ TOP-BOT-PCO</p>
+        <p class="text-[10px] text-[#3E4B69] font-medium mt-0.5">ผังฐานราก ค.ส.ล. 21 ฐาน • เสาเข็ม 93 ต้น • ระดับความสูง TOP-BOT-PCO</p>
       </div>
     </div>
 
-    <!-- 2. Right: Primary Metrics & Action Controls -->
-    <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-      <!-- Main KPI: เทคอนกรีตแล้ว -->
-      <div class="bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-full shadow-[1.5px_1.5px_0px_#1D2B45] px-3 py-1 flex items-center gap-1.5 text-xs font-bold shrink-0">
-        <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-        <span class="text-[10px] text-[#3E4B69] font-bold uppercase hidden sm:inline">เทคอนกรีต:</span>
-        <span id="kpi-poured-count" class="font-mono font-black text-sm text-[#10B981]">0</span>
-        <span class="text-[11px] text-[#3E4B69] font-bold">/ 21 ฐาน</span>
-        <span id="kpi-poured-pct" class="text-[10px] font-mono font-bold text-[#065F46] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0] ml-0.5">(0%)</span>
+    <!-- KPI STATS -->
+    <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto">
+      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 flex items-center gap-2">
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">เทคอนกรีต:</span>
+        <div class="flex items-baseline gap-1">
+          <span id="kpi-poured-count" class="font-mono font-black text-sm text-[#10B981]">0</span>
+          <span class="text-[11px] text-[#3E4B69] font-bold">/ 21 ฐาน</span>
+          <span id="kpi-poured-pct" class="text-[10px] font-mono font-bold text-[#065F46] bg-[#D1FAE5] px-1.5 py-0.2 rounded-full border border-[#A7F3D0] ml-1">(0%)</span>
+        </div>
       </div>
 
-      <!-- Secondary Metrics (Large screen only) -->
-      <div class="hidden lg:flex items-center gap-2 bg-white border-2 border-[#1D2B45] rounded-full px-3 py-1 text-[11px] font-mono font-bold text-[#3E4B69] shadow-[1.5px_1.5px_0px_#1D2B45]">
-        <span>คอนกรีต <strong id="kpi-concrete-poured" class="text-[#1D2B45]">0.0</strong>/155.5 m³</span>
-        <span class="text-[#CBD5E1]">|</span>
-        <span>เหล็ก <strong>10.9</strong> ตัน</span>
+      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 hidden sm:flex items-center gap-2">
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">คอนกรีต:</span>
+        <div class="flex items-baseline gap-1">
+          <span id="kpi-concrete-poured" class="font-mono font-bold text-[#1D2B45] text-xs">0.0</span>
+          <span class="text-[11px] text-[#3E4B69]">/ 155.5 m³</span>
+        </div>
       </div>
 
-      <!-- Print Button -->
-      <button id="btn-print" class="comic-btn px-2.5 sm:px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border-2 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] transition-all shrink-0" title="พิมพ์แบบแปลน">
-        <i data-lucide="printer" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
-        <span class="hidden md:inline">พิมพ์แปลน</span>
-      </button>
+      <div class="bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] px-3 py-1 hidden md:flex items-center gap-2">
+        <span class="text-[10px] text-[#3E4B69] font-bold uppercase">เหล็กเสริม:</span>
+        <div class="flex items-baseline gap-1">
+          <span class="font-mono font-bold text-[#1D2B45] text-xs">10.9</span>
+          <span class="text-[11px] text-[#3E4B69]">ตัน (10,901 kg)</span>
+        </div>
+      </div>
 
-      <!-- Mobile Layers Drawer Toggle -->
-      <button id="toggle-footing-toolbar-mobile" class="md:hidden comic-btn px-2.5 py-1.5 text-xs font-bold flex items-center gap-1 bg-[#FAF5EE] hover:bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-full shadow-[1.5px_1.5px_0px_#1D2B45] shrink-0" title="เปิด/ปิด แผงเลเยอร์">
-        <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0284C7]"></i>
-        <span id="footing-toolbar-mobile-text" class="text-[11px]">เลเยอร์</span>
-      </button>
+      <!-- Quick Links -->
+      <div class="flex items-center gap-1.5">
+        <a href="piling.html" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E]" title="ไปดูแปลนเสาเข็ม 93 ต้น">
+          <i data-lucide="anchor" class="w-3.5 h-3.5 text-[#B45309]"></i>
+          <span class="hidden sm:inline">แปลนเสาเข็ม 93 ต้น</span>
+        </a>
+        <button id="btn-print" class="comic-btn px-3 py-1.5 text-xs font-bold flex items-center gap-1 bg-white hover:bg-[#FAF5EE] text-[#1D2B45]">
+          <i data-lucide="printer" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+          <span class="hidden sm:inline">พิมพ์แปลน</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- LEFT FLOATING TOOLBAR: Consolidated Single Console Card with Tabs & Accordion -->
-  <div id="footing-toolbar" class="floating-hud absolute left-2 top-[72px] z-20 flex flex-col pointer-events-auto w-[272px] max-w-[275px] font-body">
-    
-    <div id="sidebar-main-console" class="pop-card bg-[#FFFDF9] border-2 border-[#1D2B45] shadow-[4px_4px_0px_#1D2B45] rounded-2xl overflow-hidden flex flex-col font-body">
-      
-      <!-- Console Header Bar with Title & Compact Actions -->
-      <div class="flex items-center justify-between px-3 py-1.5 bg-[#FFFDF9] border-b-2 border-[#1D2B45]">
-        <div class="flex items-center gap-1.5">
-          <div class="w-5 h-5 rounded-md bg-[#E0F2FE] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7]">
-            <i data-lucide="sliders-horizontal" class="w-3 h-3"></i>
+  <!-- Mobile Toggle Button for Toolbar -->
+  <button id="toggle-footing-toolbar-mobile" class="md:hidden fixed top-20 left-2 z-30 comic-btn px-2.5 py-1.5 text-xs font-black flex items-center gap-1.5 bg-amber-400 text-slate-950 shadow-[2px_2px_0px_#0f172a]">
+    <i data-lucide="layers" class="w-4 h-4"></i>
+    <span id="footing-toolbar-mobile-text">เลเยอร์ 3D</span>
+  </button>
+
+  <!-- LEFT FLOATING TOOLBAR (VIEWS & BOLDER LAYER CONTROLS) -->
+  <div id="footing-toolbar" class="absolute left-2 top-20 z-20 flex flex-col gap-2 pointer-events-auto w-[235px] max-w-[240px]">
+    <!-- 1. Views Card -->
+    <div class="comic-card p-2 bg-white/95 backdrop-blur flex flex-col gap-1.5">
+      <div class="flex items-center justify-between pb-1 border-b border-slate-200">
+        <span class="text-[10px] font-black uppercase text-slate-600 tracking-wider flex items-center gap-1">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-500"></i> มุมมอง (VIEWS)
+        </span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <button id="view-top-ortho" class="comic-btn py-1 px-2 text-xs flex items-center gap-2">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-slate-700"></i>
+          <span>แปลน Top View (2D)</span>
+        </button>
+        <button id="view-iso3d" class="comic-btn active py-1 px-2 text-xs flex items-center gap-2">
+          <i data-lucide="box" class="w-4 h-4 text-slate-700"></i>
+          <span>3D สามมิติ (Iso)</span>
+        </button>
+      </div>
+
+      <!-- Quick Camera Angles -->
+      <div class="grid grid-cols-4 gap-1 pt-1 border-t border-slate-200 text-[10px]">
+        <button id="btn-view-top" class="comic-btn py-0.5 text-center font-bold" title="มองจากด้านบน">บน (Top)</button>
+        <button id="btn-view-front" class="comic-btn py-0.5 text-center font-bold" title="มองจากทิศใต้">หน้า (S)</button>
+        <button id="btn-view-side" class="comic-btn py-0.5 text-center font-bold" title="มองจากทิศตะวันตก">ข้าง (W)</button>
+        <button id="btn-view-center" class="comic-btn py-0.5 text-center font-bold" title="เล็งกึ่งกลางไซต์">ไซต์</button>
+      </div>
+    </div>
+
+    <!-- 2. BOLDER BIM LAYER CONTROLS (ปุ่มเปิด-ปิดสวย เด่น มีสวิตช์ & SOLO MODE) -->
+    <div class="comic-card p-2.5 bg-white/95 backdrop-blur flex flex-col gap-2 text-xs shadow-md">
+      <!-- Section Header with Quick Actions -->
+      <div class="flex items-center justify-between pb-1 border-b-2 border-slate-800">
+        <span class="text-[11px] font-black uppercase text-slate-900 tracking-wider flex items-center gap-1.5">
+          <i data-lucide="layers" class="w-4 h-4 text-sky-600"></i> เลเยอร์งาน 3D
+        </span>
+        <div class="flex items-center gap-1">
+          <button id="btn-layers-all" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
+          <button id="btn-layers-reset" class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300" title="รีเซ็ตค่าเริ่มต้น">รีเซ็ต</button>
+        </div>
+      </div>
+
+      <!-- Layer 1: ฐานราก ค.ส.ล. (21 ฐาน) -->
+      <div id="card-footings" class="layer-card active active-footing" data-layer="footings" title="คลิกเพื่อ เปิด/ปิด งานฐานราก">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-sky-500 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="box" class="w-3.5 h-3.5"></i>
           </div>
-          <span class="text-xs font-black text-[#1D2B45] tracking-wide">ผังฐานราก / 3D</span>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">ฐานราก ค.ส.ล.</div>
+            <div class="text-[10px] text-sky-800 font-bold font-mono">21 ฐาน</div>
+          </div>
         </div>
         <div class="flex items-center gap-1">
-          <button id="btn-layers-all" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="เปิดแสดงผลทุกเลเยอร์">เปิดหมด</button>
-          <button id="btn-layers-reset" type="button" class="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-white hover:bg-[#FAF5EE] text-[#1D2B45] border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="รีเซ็ตค่าเริ่มต้น">รีเซ็ต</button>
-          <button id="btn-toggle-hud" type="button" class="text-[9px] font-extrabold text-[#1D2B45] hover:text-[#F26B2A] bg-[#FAF5EE] hover:bg-[#F6E9D7] px-2 py-0.5 rounded-full border border-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all cursor-pointer" title="ย่อ / ขยาย แผงควบคุม">
-            ย่อ
-          </button>
+          <button class="btn-solo" data-solo="footings" title="ดูเฉพาะฐานราก">SOLO</button>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
         </div>
       </div>
 
-      <!-- Segmented Tab Header (Compact Pills on Warm Cream Track) -->
-      <div class="flex items-center p-1 bg-[#FAF5EE] border-b-2 border-[#1D2B45] gap-1 select-none" id="floating-hud-body">
-        <button type="button" class="sidebar-tab-btn is-active flex-1 py-1 px-1 rounded-full text-[10.5px] font-black flex items-center justify-center gap-1 transition-all cursor-pointer border border-[#1D2B45] bg-[#0284C7] text-white shadow-[1px_1px_0px_#1D2B45]" data-tab="layers" id="tab-btn-layers" title="เลเยอร์และชิ้นส่วน 3D">
-          <i data-lucide="layers" class="w-3 h-3"></i>
-          <span>เลเยอร์</span>
-        </button>
-        <button type="button" class="sidebar-tab-btn is-inactive flex-1 py-1 px-1 rounded-full text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-transparent bg-transparent text-[#3E4B69] hover:bg-white" data-tab="views" id="tab-btn-views" title="มุมมองกล้อง 2D/3D">
-          <i data-lucide="compass" class="w-3 h-3 text-[#F26B2A]"></i>
-          <span>มุมมอง</span>
-        </button>
-        <button type="button" class="sidebar-tab-btn is-inactive flex-1 py-1 px-1 rounded-full text-[10.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer border border-transparent bg-transparent text-[#3E4B69] hover:bg-white" data-tab="filter" id="tab-btn-filter" title="ตัวกรองสถานะ 21 ฐาน">
-          <i data-lucide="filter" class="w-3 h-3 text-[#10B981]"></i>
-          <span>สถานะ</span>
-        </button>
+      <!-- Layer 2: งานเสาเข็ม (93 ต้น) -->
+      <div id="card-piles" class="layer-card active active-pile" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-amber-400 border border-slate-900 flex items-center justify-center text-slate-950 shadow-sm flex-shrink-0">
+            <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">งานเสาเข็ม I-beam</div>
+            <div class="text-[10px] text-amber-800 font-bold font-mono">93 ต้น</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
       </div>
 
-      <!-- Tab Content Area with Smooth Scroll -->
-      <div id="sidebar-tab-content" class="p-2 overflow-y-auto max-h-[calc(100vh-180px)] custom-scrollbar flex flex-col gap-2 bg-[#FFFDF9]">
-
-        <!-- Pane 1: เลเยอร์ 3D (Default Tab - Grouped with Collapsible Accordion) -->
-        <div id="pane-layers" class="sidebar-tab-pane flex flex-col gap-2">
-
-          <!-- GROUP 1: 🏗️ หมวดงานโครงสร้างหลัก -->
-          <div class="discipline-group flex flex-col gap-1.5" data-discipline="structural">
-            <button type="button" class="discipline-toggle-btn flex items-center justify-between w-full px-2 py-1 rounded-lg bg-[#FAF5EE] hover:bg-[#F2EAE0] border border-[#E2D9CC] transition-all cursor-pointer select-none" data-target="group-structural-items">
-              <div class="flex items-center gap-1.5">
-                <i data-lucide="chevron-down" class="discipline-chevron w-3.5 h-3.5 text-[#1D2B45] transition-transform duration-200" id="chevron-structural"></i>
-                <span class="text-[11px] font-black text-[#1D2B45] tracking-tight">🏗️ โครงสร้างหลัก</span>
-              </div>
-              <span class="text-[9px] font-mono font-bold text-[#64748B] bg-white px-1.5 py-0.2 rounded border border-[#E2D9CC]">2 รายการ</span>
-            </button>
-
-            <div id="group-structural-items" class="flex flex-col gap-1.5">
-              <!-- Layer 1: ฐานราก ค.ส.ล. -->
-              <div id="card-footings" class="layer-card active active-footing" data-layer="footings" title="คลิกเพื่อ เปิด/ปิด งานฐานราก">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-6 h-6 rounded-md bg-[#E0F2FE] border border-[#BAE6FD] flex items-center justify-center text-[#0284C7] shrink-0">
-                    <i data-lucide="box" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ฐานราก ค.ส.ล.</div>
-                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">21 ฐาน • คอนกรีต</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <button type="button" class="btn-solo" data-solo="footings" title="ดูเฉพาะฐานราก">SOLO</button>
-                  <div class="toggle-switch"><div class="toggle-knob"></div></div>
-                </div>
-              </div>
-
-              <!-- Layer 2: ผังเสาเข็ม I-beam -->
-              <div id="card-piles" class="layer-card active active-pile" data-layer="piles" title="คลิกเพื่อ เปิด/ปิด เสาเข็ม I-beam">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-6 h-6 rounded-md bg-[#FFF3EB] border border-[#FDBA74] flex items-center justify-center text-[#F26B2A] shrink-0">
-                    <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">งานเสาเข็ม I-beam</div>
-                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">93 ต้น • เข็มหลัก</div>
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <button type="button" class="btn-solo" data-solo="piles" title="ดูเฉพาะเสาเข็ม">SOLO</button>
-                  <div class="toggle-switch"><div class="toggle-knob"></div></div>
-                </div>
-              </div>
-            </div>
+      <!-- Layer 3: กริด & มิติวัด (Grid Lines) -->
+      <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-slate-700 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="grid" class="w-3.5 h-3.5"></i>
           </div>
-
-          <!-- GROUP 2: 📐 หมวดผังไซต์ & อ้างอิง CAD -->
-          <div class="discipline-group flex flex-col gap-1.5" data-discipline="cad">
-            <button type="button" class="discipline-toggle-btn flex items-center justify-between w-full px-2 py-1 rounded-lg bg-[#FAF5EE] hover:bg-[#F2EAE0] border border-[#E2D9CC] transition-all cursor-pointer select-none" data-target="group-cad-items">
-              <div class="flex items-center gap-1.5">
-                <i data-lucide="chevron-down" class="discipline-chevron w-3.5 h-3.5 text-[#1D2B45] transition-transform duration-200" id="chevron-cad"></i>
-                <span class="text-[11px] font-black text-[#1D2B45] tracking-tight">📐 ผังไซต์ & CAD</span>
-              </div>
-              <span class="text-[9px] font-mono font-bold text-[#64748B] bg-white px-1.5 py-0.2 rounded border border-[#E2D9CC]">2 รายการ</span>
-            </button>
-
-            <div id="group-cad-items" class="flex flex-col gap-1.5">
-              <!-- Layer 3: กริด & มิติ CAD -->
-              <div id="card-grid" class="layer-card active active-grid" data-layer="grid" title="คลิกเพื่อ เปิด/ปิด กริดไลน์และตัวเลขมิติ">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-6 h-6 rounded-md bg-[#EEF2FF] border border-[#C7D2FE] flex items-center justify-center text-[#4F46E5] shrink-0">
-                    <i data-lucide="grid" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">กริด & มิติ CAD</div>
-                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">กริด 1-10, A-E</div>
-                  </div>
-                </div>
-                <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
-              </div>
-
-              <!-- Layer 4: แนวเขตที่ดิน & หมุดสำรวจ -->
-              <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-6 h-6 rounded-md bg-[#FFE4E6] border border-[#FECDD3] flex items-center justify-center text-[#BE123C] shrink-0">
-                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">แนวเขตที่ดิน & หมุดสำรวจ</div>
-                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">4 ด้าน • หมุดแดง</div>
-                  </div>
-                </div>
-                <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- GROUP 3: 🏷️ หมวดระดับ & ป้ายกำกับ 3D -->
-          <div class="discipline-group flex flex-col gap-1.5" data-discipline="annot">
-            <button type="button" class="discipline-toggle-btn flex items-center justify-between w-full px-2 py-1 rounded-lg bg-[#FAF5EE] hover:bg-[#F2EAE0] border border-[#E2D9CC] transition-all cursor-pointer select-none" data-target="group-annot-items">
-              <div class="flex items-center gap-1.5">
-                <i data-lucide="chevron-down" class="discipline-chevron w-3.5 h-3.5 text-[#1D2B45] transition-transform duration-200" id="chevron-annot"></i>
-                <span class="text-[11px] font-black text-[#1D2B45] tracking-tight">🏷️ ระดับ & ป้ายกำกับ 3D</span>
-              </div>
-              <span class="text-[9px] font-mono font-bold text-[#64748B] bg-white px-1.5 py-0.2 rounded border border-[#E2D9CC]">2 รายการ</span>
-            </button>
-
-            <div id="group-annot-items" class="flex flex-col gap-1.5">
-              <!-- Layer 5: ป้ายสเปกฐานราก 3D -->
-              <div id="card-badges" class="layer-card active-badge" data-layer="badges" title="คลิกเพื่อ เปิด/ปิด ป้ายชื่อสเปกฐานราก 3D">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-6 h-6 rounded-md bg-[#FAF5FF] border border-[#E9D5FF] flex items-center justify-center text-[#9333EA] shrink-0">
-                    <i data-lucide="tag" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ป้ายสเปกฐานราก 3D</div>
-                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">Scene 06 Chips</div>
-                  </div>
-                </div>
-                <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
-              </div>
-
-              <!-- Layer 6: ระนาบดิน GL ±0.00 -->
-              <div id="card-ground" class="layer-card active-ground" data-layer="ground" title="คลิกเพื่อ เปิด/ปิด ระนาบดินอ้างอิง">
-                <div class="flex items-center gap-2 min-w-0">
-                  <div class="w-6 h-6 rounded-md bg-[#F1F5F9] border border-[#CBD5E1] flex items-center justify-center text-[#475569] shrink-0">
-                    <i data-lucide="scan" class="w-3.5 h-3.5"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <div class="font-extrabold text-[#1D2B45] text-xs leading-none">ระนาบดิน GL ±0.00</div>
-                    <div class="text-[9px] text-[#8C9AA8] font-bold font-mono mt-0.5">X-Ray มองทะลุ</div>
-                  </div>
-                </div>
-                <div class="toggle-switch shrink-0"><div class="toggle-knob"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tactile Opacity Control with Quick Presets -->
-          <div class="p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC] flex flex-col gap-1.5 mt-0.5">
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] font-black text-[#1D2B45] flex items-center gap-1 font-body">
-                <i data-lucide="eye" class="w-3 h-3 text-[#0284C7]"></i> ความทึบแสงฐานราก:
-              </span>
-              <span id="lbl-opacity" class="text-[10px] font-mono-code font-bold px-1.5 py-0.2 rounded bg-white text-[#0369A1] border border-[#BAE6FD]">88%</span>
-            </div>
-            <input type="range" id="rng-footing-opacity" min="0.15" max="1.0" step="0.05" value="0.88" class="w-full cursor-pointer accent-[#0284C7]">
-            <div class="grid grid-cols-3 gap-1 text-[9px]">
-              <button class="btn-opacity-preset px-1 py-0.5 rounded-md border border-[#1D2B45]/20 bg-white hover:bg-[#FAF5EE] text-[#1D2B45] font-bold" data-val="0.35">X-Ray (35%)</button>
-              <button class="btn-opacity-preset px-1 py-0.5 rounded-md border border-[#0284C7] bg-[#E0F2FE] hover:bg-[#BAE6FD] text-[#0369A1] font-bold" data-val="0.88">สมดุล (88%)</button>
-              <button class="btn-opacity-preset px-1 py-0.5 rounded-md border border-[#1D2B45]/20 bg-white hover:bg-[#FAF5EE] text-[#1D2B45] font-bold" data-val="1.0">ทึบ (100%)</button>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Pane 2: มุมมองกล้อง (Views - Compact & Unified) -->
-        <div id="pane-views" class="sidebar-tab-pane hidden flex flex-col gap-2">
-          <!-- GROUP 1: โหมดมิติหลัก (Projections) -->
-          <div class="flex flex-col gap-1.5 p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC]">
-            <div class="flex items-center justify-between">
-              <span class="text-[10.5px] font-black text-[#1D2B45] flex items-center gap-1">🌐 โหมดมิติหลัก</span>
-              <span class="text-[9px] font-mono font-bold text-[#F26B2A]">2D / 3D</span>
-            </div>
-            <div class="grid grid-cols-2 gap-1.5">
-              <button id="view-top-ortho" type="button" class="view-btn flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl border border-[#1D2B45] font-black text-xs transition-all cursor-pointer bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
-                <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#1D2B45]"></i>
-                <span>แปลน 2D</span>
-              </button>
-              <button id="view-iso3d" type="button" class="view-btn is-active flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl border border-[#1D2B45] font-black text-xs transition-all cursor-pointer bg-[#0284C7] text-white shadow-[1px_1px_0px_#1D2B45]">
-                <i data-lucide="box" class="w-3.5 h-3.5"></i>
-                <span>3D สามมิติ</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- GROUP 2: มุมมองมาตรฐาน & เล็งไซต์ -->
-          <div class="flex flex-col gap-1.5 p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC]">
-            <div class="flex items-center justify-between">
-              <span class="text-[10.5px] font-black text-[#1D2B45] flex items-center gap-1">📐 มุมมองมาตรฐาน</span>
-              <span class="text-[9px] font-mono font-bold text-[#64748B]">ORTHO/ISO</span>
-            </div>
-            <div class="grid grid-cols-3 gap-1">
-              <button id="btn-view-top" type="button" class="quick-view-btn py-1 px-1 rounded-lg border border-[#1D2B45] font-bold text-[10.5px] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] text-center" title="มองจากด้านบน">ด้านบน</button>
-              <button id="btn-view-front" type="button" class="quick-view-btn py-1 px-1 rounded-lg border border-[#1D2B45] font-bold text-[10.5px] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] text-center" title="มองจากด้านหน้า">ด้านหน้า</button>
-              <button id="btn-view-side" type="button" class="quick-view-btn py-1 px-1 rounded-lg border border-[#1D2B45] font-bold text-[10.5px] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] shadow-[0.5px_0.5px_0px_#1D2B45] text-center" title="มองจากด้านข้าง">ด้านข้าง</button>
-            </div>
-            <button id="btn-view-center" type="button" class="mt-0.5 py-1 px-2 rounded-lg border border-[#0284C7] font-black text-[10.5px] bg-[#E0F2FE] hover:bg-[#BAE6FD] text-[#0369A1] shadow-[0.5px_0.5px_0px_#0284C7] flex items-center justify-center gap-1" title="เล็งกึ่งกลางผังฐานราก">
-              <span>⌖ กึ่งกลางผังฐานราก</span>
-            </button>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">กริด & มิติ CAD</div>
+            <div class="text-[10px] text-slate-500 font-mono">1-10, A-E</div>
           </div>
         </div>
-
-        <!-- Pane 3: ตัวกรองสถานะ 21 ฐาน -->
-        <div id="pane-filter" class="sidebar-tab-pane hidden flex flex-col gap-2">
-          <div class="flex flex-col gap-1.5 p-2 rounded-xl bg-[#FAF5EE] border border-[#E2D9CC]">
-            <div class="flex items-center justify-between pb-1 border-b border-[#E2D9CC]">
-              <span class="text-[10.5px] font-black text-[#1D2B45] flex items-center gap-1 font-body">
-                <i data-lucide="filter" class="w-3.5 h-3.5 text-[#10B981]"></i> กรองสถานะฐานราก
-              </span>
-              <span class="text-[9.5px] font-mono font-bold text-[#1D2B45]">21 ฐาน</span>
-            </div>
-            <div class="grid grid-cols-2 gap-1 text-[10px]">
-              <button class="filter-btn comic-btn py-1 px-1.5 active bg-[#1D2B45] text-white flex items-center justify-between rounded-lg" data-filter="all">
-                <span>ทั้งหมด</span>
-                <span class="font-mono text-[9.5px] font-bold">(21)</span>
-              </button>
-              <button class="filter-btn comic-btn py-1 px-1.5 bg-white text-[#475569] hover:bg-[#F8FAFC] flex items-center justify-between rounded-lg border border-[#CBD5E1]" data-filter="pending">
-                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> รอเริ่ม</span>
-                <span class="font-mono text-[9.5px] font-bold" id="cnt-pending">21</span>
-              </button>
-              <button class="filter-btn comic-btn py-1 px-1.5 bg-white text-[#B45309] hover:bg-[#FEF3C7] flex items-center justify-between rounded-lg border border-[#CBD5E1]" data-filter="excavated">
-                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> ขุดดิน</span>
-                <span class="font-mono text-[9.5px] font-bold" id="cnt-excavated">0</span>
-              </button>
-              <button class="filter-btn comic-btn py-1 px-1.5 bg-white text-[#A16207] hover:bg-[#FEF9C3] flex items-center justify-between rounded-lg border border-[#CBD5E1]" data-filter="lean">
-                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span> เทลีน</span>
-                <span class="font-mono text-[9.5px] font-bold" id="cnt-lean">0</span>
-              </button>
-              <button class="filter-btn comic-btn py-1 px-1.5 bg-white text-[#7E22CE] hover:bg-[#FAF5FF] flex items-center justify-between rounded-lg border border-[#CBD5E1]" data-filter="rebar">
-                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span> ผูกเหล็ก</span>
-                <span class="font-mono text-[9.5px] font-bold" id="cnt-rebar">0</span>
-              </button>
-              <button class="filter-btn comic-btn py-1 px-1.5 bg-white text-[#047857] hover:bg-[#ECFDF5] flex items-center justify-between rounded-lg border border-[#CBD5E1]" data-filter="poured">
-                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> เทเสร็จ</span>
-                <span class="font-mono text-[9.5px] font-bold" id="cnt-poured">0</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
       </div>
 
+      <!-- Layer 4: แนวเขตที่ดิน (Property Boundary) -->
+      <div id="card-boundary" class="layer-card active active-boundary" data-layer="boundary" title="คลิกเพื่อ เปิด/ปิด แนวเขตที่ดินและหมุดสำรวจ">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-rose-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-900 text-xs leading-none">แนวเขตที่ดิน & หมุด</div>
+            <div class="text-[10px] text-rose-700 font-mono">4 ด้าน • หมุดแดง</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Layer 5: ป้ายระบุสเปกฐานราก (Scene 06) -->
+      <div id="card-badges" class="layer-card" data-layer="badges" title="คลิกเพื่อ เปิด/ปิด ป้ายชื่อสเปกฐานราก 3D">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-purple-600 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="tag" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-800 text-xs leading-none">ป้ายสเปกฐานราก</div>
+            <div class="text-[10px] text-slate-400 font-mono">Scene 06 Chips</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Layer 6: ระนาบดิน GL 0.00 (X-Ray) -->
+      <div id="card-ground" class="layer-card" data-layer="ground" title="คลิกเพื่อ เปิด/ปิด ระนาบดินอ้างอิง">
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="w-6 h-6 rounded bg-slate-400 border border-slate-900 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <i data-lucide="scan" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="truncate">
+            <div class="font-extrabold text-slate-800 text-xs leading-none">ระนาบดิน GL ±0.00</div>
+            <div class="text-[10px] text-slate-400 font-mono">X-Ray ใสมองทะลุ</div>
+          </div>
+        </div>
+        <div class="toggle-switch"><div class="toggle-knob"></div></div>
+      </div>
+
+      <!-- Tactile Opacity Control with Quick Presets -->
+      <div class="pt-2 border-t-2 border-slate-800 flex flex-col gap-1.5">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-black text-slate-900 flex items-center gap-1">
+            <i data-lucide="eye" class="w-3.5 h-3.5 text-sky-600"></i> ความทึบแสงฐานราก:
+          </span>
+          <span id="lbl-opacity" class="text-[11px] font-mono-code font-bold px-1.5 py-0.2 rounded bg-sky-100 text-sky-900 border border-sky-300">88%</span>
+        </div>
+        <input type="range" id="rng-footing-opacity" min="0.15" max="1.0" step="0.05" value="0.88" class="w-full cursor-pointer accent-sky-600">
+        <!-- Presets -->
+        <div class="grid grid-cols-3 gap-1 text-[9.5px]">
+          <button class="btn-opacity-preset px-1 py-0.5 rounded border border-slate-300 bg-slate-50 hover:bg-slate-200 text-slate-700 font-bold" data-val="0.35">X-Ray (35%)</button>
+          <button class="btn-opacity-preset px-1 py-0.5 rounded border border-slate-300 bg-sky-100 hover:bg-sky-200 text-sky-900 font-bold" data-val="0.88">สมดุล (88%)</button>
+          <button class="btn-opacity-preset px-1 py-0.5 rounded border border-slate-300 bg-slate-50 hover:bg-slate-200 text-slate-700 font-bold" data-val="1.0">ทึบ (100%)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Status Filter Buttons -->
+    <div class="comic-card p-2 bg-white/95 backdrop-blur flex flex-col gap-1 text-xs">
+      <div class="text-[10px] font-bold text-slate-500 uppercase mb-0.5">กรองสถานะฐานราก</div>
+      <div class="grid grid-cols-2 gap-1 text-[10.5px]">
+        <button class="filter-btn comic-btn py-0.5 px-1 active bg-slate-800 text-white" data-filter="all">ทั้งหมด (21)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-slate-700" data-filter="pending">รอเริ่ม (<span id="cnt-pending">21</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-amber-800" data-filter="excavated">ขุดดิน (<span id="cnt-excavated">0</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-yellow-800" data-filter="lean">เทลีน (<span id="cnt-lean">0</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-purple-800" data-filter="rebar">ผูกเหล็ก (<span id="cnt-rebar">0</span>)</button>
+        <button class="filter-btn comic-btn py-0.5 px-1 bg-white text-emerald-800" data-filter="poured">เทเสร็จ (<span id="cnt-poured">0</span>)</button>
+      </div>
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION HINT (DESKTOP ONLY, LIFTED ABOVE FLOATING DOCK) -->
-  <div class="fixed bottom-14 left-1/2 -translate-x-1/2 z-30 comic-card px-4 py-1.5 bg-white/95 backdrop-blur text-[11px] text-slate-700 shadow-[2px_2px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-full hidden lg:flex items-center gap-2 pointer-events-auto">
-    <span id="nav-hint-text">🖱️ <strong>คลิกซ้ายลาก:</strong> หมุนมุมมอง | <strong>Shift+ซ้าย หรือขวาลาก:</strong> เลื่อน (Pan) | <strong>ล้อเลื่อน:</strong> ซูม | <strong>คลิกที่ฐานราก:</strong> เปิดข้อมูล & อัปเดต</span>
+  <!-- BOTTOM NAVIGATION HINT -->
+  <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 comic-card px-4 py-1.5 bg-white/95 backdrop-blur text-xs text-slate-700 shadow-md hidden sm:flex items-center gap-2 pointer-events-auto">
+    <span id="nav-hint-text">🖱️ <strong>คลิกซ้ายลาก:</strong> หมุนมุมมอง (ไม่กลับหัว) | <strong>Shift+ซ้าย หรือขวาลาก:</strong> เลื่อน (Pan) | <strong>ล้อเลื่อน:</strong> ซูม | <strong>คลิกที่ฐานราก:</strong> เปิดข้อมูล & อัปเดตสถานะ</span>
   </div>
-
-  <!-- FLOATING BIM SWITCHER DOCK (SEAMLESS THUMB NAVIGATION ACROSS ALL DEVICES) -->
-  <nav id="bim-floating-dock" aria-label="BIM Module Navigation" class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-40 p-1 bg-white/95 backdrop-blur-md border-2 border-[#1D2B45] rounded-full shadow-[4px_4px_0px_#1D2B45] flex items-center gap-1 select-none pointer-events-auto font-body">
-    <a href="test/piling.html" id="dock-btn-piling" class="px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all text-[#1D2B45] hover:bg-[#FAF5EE] hover:text-[#F26B2A] active:scale-95" title="สลับไปหน้าผังงานเสาเข็ม 93 ต้น">
-      <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
-      <span class="whitespace-nowrap font-bold">📍 เสาเข็ม (93)</span>
-    </a>
-    <span id="dock-btn-footing" class="px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 bg-[#0284C7] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] cursor-default" title="กำลังดูผังฐานราก ค.ส.ล. 21 ฐาน">
-      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-      <span class="whitespace-nowrap font-bold">🏗️ ฐานราก (21)</span>
-    </span>
-  </nav>
 
   <!-- RIGHT INSPECTOR DRAWER -->
   <aside id="inspector-drawer" class="closed absolute top-0 right-0 h-full w-full sm:w-[420px] bg-white border-l-2 border-slate-800 shadow-2xl flex flex-col pointer-events-auto">
@@ -911,9 +825,6 @@
       };
       controlsOrtho.target.copy(PLAN_CENTER);
       controlsOrtho.enabled = false;
-
-      // Restore shared BIM camera viewpoint if navigating between piling and footing
-      restoreBimSharedCamera();
 
       // 5. Lighting
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
@@ -1601,84 +1512,9 @@
     }
 
     // ----------------------------------------------------
-    // SEAMLESS BIM CAMERA SYNC (SHARED ACROSS PILING & FOOTING)
-    // ----------------------------------------------------
-    function saveBimSharedCamera() {
-      try {
-        const isOrtho = (activeCamera === orthoCamera);
-        const cam = isOrtho ? orthoCamera : perspCamera;
-        const ctrl = isOrtho ? controlsOrtho : controlsPersp;
-        if (!cam || !ctrl) return;
-        const state = {
-          isOrtho: isOrtho,
-          camPos: { x: cam.position.x, y: cam.position.y, z: cam.position.z },
-          camUp: { x: cam.up.x, y: cam.up.y, z: cam.up.z },
-          target: { x: ctrl.target.x, y: ctrl.target.y, z: ctrl.target.z },
-          orthoZoom: orthoCamera ? orthoCamera.zoom : 1,
-          timestamp: Date.now()
-        };
-        sessionStorage.setItem('pynn_bim_shared_camera', JSON.stringify(state));
-      } catch (err) {
-        console.warn('saveBimSharedCamera error:', err);
-      }
-    }
-
-    function restoreBimSharedCamera() {
-      try {
-        const raw = sessionStorage.getItem('pynn_bim_shared_camera');
-        if (!raw) return false;
-        const state = JSON.parse(raw);
-        if (!state || !state.camPos || !state.target) return false;
-        if (Date.now() - (state.timestamp || 0) > 2 * 60 * 60 * 1000) return false;
-
-        if (state.isOrtho) {
-          activeCamera = orthoCamera;
-          if (controlsOrtho) controlsOrtho.enabled = true;
-          if (controlsPersp) controlsPersp.enabled = false;
-          orthoCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
-          if (state.camUp) orthoCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
-          if (controlsOrtho) {
-            controlsOrtho.target.set(state.target.x, state.target.y, state.target.z);
-            controlsOrtho.update();
-          }
-          if (state.orthoZoom && state.orthoZoom > 0.05 && state.orthoZoom < 50) {
-            orthoCamera.zoom = state.orthoZoom;
-            orthoCamera.updateProjectionMatrix();
-          }
-          document.getElementById('view-top-ortho')?.classList.add('active');
-          document.getElementById('view-iso3d')?.classList.remove('active');
-          updateNavHints('ortho');
-        } else {
-          activeCamera = perspCamera;
-          if (controlsOrtho) controlsOrtho.enabled = false;
-          if (controlsPersp) controlsPersp.enabled = true;
-          perspCamera.position.set(state.camPos.x, state.camPos.y, state.camPos.z);
-          if (state.camUp) perspCamera.up.set(state.camUp.x, state.camUp.y, state.camUp.z);
-          if (controlsPersp) {
-            controlsPersp.target.set(state.target.x, state.target.y, state.target.z);
-            controlsPersp.update();
-          }
-          document.getElementById('view-top-ortho')?.classList.remove('active');
-          document.getElementById('view-iso3d')?.classList.add('active');
-          updateNavHints('3d');
-        }
-        if (typeof updatePillBadgePositions === 'function') {
-          updatePillBadgePositions();
-        }
-        return true;
-      } catch (err) {
-        console.warn('restoreBimSharedCamera error:', err);
-        return false;
-      }
-    }
-
-    // ----------------------------------------------------
     // EVENT LISTENERS & UI WIRING
     // ----------------------------------------------------
     function setupUI() {
-      // Save BIM Camera on switching modules or navigating away
-      window.addEventListener('beforeunload', saveBimSharedCamera);
-      document.getElementById('dock-btn-piling')?.addEventListener('click', saveBimSharedCamera);
       // Views
       document.getElementById('view-top-ortho').addEventListener('click', resetTopView);
       document.getElementById('view-iso3d').addEventListener('click', resetIsoView);
@@ -1745,12 +1581,6 @@
 
       // Quick Batch Buttons: All / Reset
       document.getElementById('btn-layers-all')?.addEventListener('click', () => {
-        document.querySelectorAll('#group-structural-items, #group-cad-items, #group-annot-items').forEach(el => {
-          el.classList.remove('hidden');
-        });
-        document.querySelectorAll('.discipline-chevron').forEach(ch => {
-          ch.style.transform = 'rotate(0deg)';
-        });
         ['footings', 'piles', 'grid', 'boundary'].forEach(k => setLayerVisible(k, true));
       });
 
@@ -1761,68 +1591,6 @@
         setLayerVisible('boundary', true);
         setLayerVisible('badges', false);
         setLayerVisible('ground', false);
-      });
-
-      // Accordion Toggle for Engineering Disciplines
-      document.querySelectorAll('.discipline-toggle-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = btn.getAttribute('data-target');
-          const container = document.getElementById(targetId);
-          const chevron = btn.querySelector('.discipline-chevron');
-          if (container) {
-            const isHidden = container.classList.toggle('hidden');
-            if (chevron) {
-              chevron.style.transform = isHidden ? 'rotate(-90deg)' : 'rotate(0deg)';
-            }
-          }
-        });
-      });
-
-      // Sidebar Console Tab Switching Logic
-      document.querySelectorAll('.sidebar-tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetTab = btn.getAttribute('data-tab');
-          document.querySelectorAll('.sidebar-tab-btn').forEach(b => {
-            const isAct = b.getAttribute('data-tab') === targetTab;
-            if (isAct) {
-              b.classList.add('is-active');
-              b.classList.remove('is-inactive');
-              b.style.backgroundColor = '#0284C7';
-              b.style.color = '#FFFFFF';
-              b.style.borderColor = '#1D2B45';
-            } else {
-              b.classList.remove('is-active');
-              b.classList.add('is-inactive');
-              b.style.backgroundColor = '#FFFFFF';
-              b.style.color = '#1D2B45';
-              b.style.borderColor = '#E2D9CC';
-            }
-          });
-          document.querySelectorAll('.sidebar-tab-pane').forEach(p => {
-            if (p.id === 'pane-' + targetTab) {
-              p.classList.remove('hidden');
-            } else {
-              p.classList.add('hidden');
-            }
-          });
-          if (window.lucide) lucide.createIcons();
-        });
-      });
-
-      // Console HUD Toggle (ย่อ / ขยาย)
-      document.getElementById('btn-toggle-hud')?.addEventListener('click', () => {
-        const hud = document.getElementById('footing-toolbar');
-        const hudBody = document.getElementById('floating-hud-body');
-        const tabContent = document.getElementById('sidebar-tab-content');
-        const btnToggle = document.getElementById('btn-toggle-hud');
-        if (hud) {
-          hud.classList.toggle('collapsed');
-          const isCollapsed = hud.classList.contains('collapsed');
-          if (hudBody) hudBody.style.display = isCollapsed ? 'none' : 'flex';
-          if (tabContent) tabContent.style.display = isCollapsed ? 'none' : 'flex';
-          if (btnToggle) btnToggle.textContent = isCollapsed ? 'ขยาย' : 'ย่อ';
-        }
       });
 
       // Footing Opacity Slider & Presets
