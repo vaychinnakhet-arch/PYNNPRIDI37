@@ -551,42 +551,80 @@
     }
     #report-page-card.is-landscape #report-main-grid {
       display: grid !important;
-      grid-template-columns: 1.35fr 0.95fr !important;
+      grid-template-columns: 1.15fr 1fr !important;
       gap: 1.25rem !important;
-      align-items: start !important;
+      align-items: stretch !important;
     }
     #report-page-card.is-landscape #report-col-plan {
       width: 100% !important;
-      height: auto !important;
-    }
-    #report-page-card.is-landscape #report-sec-plan {
-      width: 100% !important;
-      height: auto !important;
+      height: 100% !important;
       display: flex !important;
       flex-direction: column !important;
     }
+    #report-page-card.is-landscape #report-sec-plan {
+      width: 100% !important;
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+    }
     #report-page-card.is-landscape #planSnapshotCanvasWrapper {
-      padding: 0.5rem !important;
-      flex: none !important;
-      height: auto !important;
-      min-height: unset !important;
+      padding: 0.75rem !important;
+      flex: 1 1 auto !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
     }
     #report-page-card.is-landscape #planCanvasContainer {
       width: 100% !important;
-      aspect-ratio: 2 / 1 !important;
-      max-height: 480px !important;
-      height: auto !important;
-      min-height: unset !important;
+      aspect-ratio: auto !important;
+      height: 530px !important;
+      min-height: 530px !important;
+      max-height: 530px !important;
+    }
+    #report-page-card.is-landscape #rep-daily-ledger-subnote {
+      display: none !important;
+    }
+    #report-page-card.is-landscape #rep-daily-ledger-title {
+      font-size: 11.5px !important;
     }
     #report-page-card.is-landscape #report-col-side {
       display: flex !important;
       flex-direction: column !important;
       gap: 1rem !important;
       width: 100% !important;
-      height: auto !important;
+      height: 100% !important;
+    }
+    #report-page-card.is-landscape #report-sec-scurve {
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
     }
     #report-page-card.is-landscape #report-sec-scurve .chart-wrapper {
-      height: 210px !important;
+      height: 195px !important;
+    }
+    #report-page-card.is-landscape #report-sec-table {
+      grid-column: 1 / -1 !important;
+      width: 100% !important;
+    }
+    #report-page-card.is-landscape .piling-daily-table {
+      min-width: 0 !important;
+      width: 100% !important;
+      font-size: 9.5px !important;
+    }
+    #report-page-card.is-landscape .piling-daily-table th,
+    #report-page-card.is-landscape .piling-daily-table td {
+      padding: 3px 1px !important;
+      font-size: 9.5px !important;
+    }
+    #report-page-card.is-landscape .piling-daily-table th.sticky-col,
+    #report-page-card.is-landscape .piling-daily-table td.sticky-col {
+      width: 72px !important;
+      min-width: 72px !important;
+      max-width: 72px !important;
+      padding-left: 5px !important;
+      padding-right: 3px !important;
     }
     /* Floating HUD Responsive Layout - Impeccable 4-Unit Rhythm */
     .floating-hud {
@@ -831,14 +869,14 @@
       max-height: 365px !important;
       overflow-y: auto !important;
     }
-    /* เส้นตารางและกรอบตารางสไตล์ Soft Ink Flat-Pop คมชัด เรียบหรู ไม่ซ้อนทับ */
+    /* เส้นตารางและกรอบตารางสไตล์ DoodleWeb Architectural Ledger คมชัด เรียบหรู ไม่ซ้อนทับ */
     #report-sec-table {
-      border: 2px solid #475569 !important;
-      border-radius: 12px !important;
+      border: 2px solid #1D2B45 !important;
+      border-radius: 14px !important;
       overflow: hidden !important;
     }
     #report-sec-table-head {
-      border-bottom: 2px solid #475569 !important;
+      border-bottom: 2px solid #1D2B45 !important;
     }
     #rep-today-table {
       border-collapse: collapse !important;
@@ -847,8 +885,8 @@
     }
     #rep-today-table th {
       border: none !important;
-      border-right: 1px solid rgba(71, 85, 105, 0.25) !important;
-      border-bottom: 2px solid #475569 !important;
+      border-right: 1px solid #E2D9CC !important;
+      border-bottom: 1.5px solid #1D2B45 !important;
       box-sizing: border-box !important;
     }
     #rep-today-table th:last-child {
@@ -856,8 +894,8 @@
     }
     #rep-today-table td {
       border: none !important;
-      border-right: 1px solid #cbd5e1 !important;
-      border-bottom: 1px solid #cbd5e1 !important;
+      border-right: 1px solid #E2D9CC !important;
+      border-bottom: 1px solid #E2D9CC !important;
       vertical-align: middle !important;
       box-sizing: border-box !important;
     }
@@ -888,12 +926,20 @@
     }
 
     /* ป้องกันสีเลอะขอบตอนแคปเจอร์ และล็อกขนาดตายตัว (Prevent edge smearing and force proper dimensions during export) */
+    #report-page.is-export-capturing,
+    #report-page.is-export-capturing *,
+    #report-page-card.is-export-capturing,
+    #report-page-card.is-export-capturing * {
+      transition: none !important;
+      transition-duration: 0s !important;
+      animation: none !important;
+    }
     #report-page.is-export-capturing {
       position: fixed !important;
       left: 0 !important;
       top: 0 !important;
-      width: 1420px !important;
-      min-width: 1420px !important;
+      width: var(--export-page-w, 1420px) !important;
+      min-width: var(--export-page-w, 1420px) !important;
       max-width: none !important;
       overflow: visible !important;
       padding: 0 !important;
@@ -903,30 +949,30 @@
       opacity: 0.001 !important;
     }
     #report-page.is-export-capturing.export-portrait {
-      width: 1200px !important;
-      min-width: 1200px !important;
-      max-width: 1200px !important;
+      width: var(--export-page-w, 1200px) !important;
+      min-width: var(--export-page-w, 1200px) !important;
+      max-width: var(--export-page-w, 1200px) !important;
     }
     /* ป้องกันสีเลอะขอบตอนแคปเจอร์ และล็อกขนาดตายตัว (Prevent color overflowing curved borders during export) */
     #report-page-card.is-export-capturing,
     .is-export-capturing #report-page-card {
       box-shadow: none !important;
-      border: 2px solid #334155 !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 14px !important;
       background: #ffffff !important;
       overflow: visible !important;
-      width: 1380px !important;
-      min-width: 1380px !important;
-      max-width: 1380px !important;
+      width: var(--export-card-w, 1380px) !important;
+      min-width: var(--export-card-w, 1380px) !important;
+      max-width: var(--export-card-w, 1380px) !important;
       margin: 0 !important;
       box-sizing: border-box !important;
       padding: 24px 28px !important;
     }
     #report-page-card.is-export-capturing.export-portrait,
     .is-export-capturing.export-portrait #report-page-card {
-      width: 1200px !important;
-      min-width: 1200px !important;
-      max-width: 1200px !important;
+      width: var(--export-card-w, 1200px) !important;
+      min-width: var(--export-card-w, 1200px) !important;
+      max-width: var(--export-card-w, 1200px) !important;
       margin: 0 !important;
       box-sizing: border-box !important;
       padding: 24px 28px !important;
@@ -934,17 +980,68 @@
     .is-export-capturing [class*="shadow-"] {
       box-shadow: none !important;
     }
+    /* Unified Architectural Telemetry Ledger (#rep-kpi-summary-box) */
+    #rep-kpi-summary-box .rep-kpi-cell {
+      border-color: var(--dw-navy, #1D2B45);
+      border-style: solid;
+      border-width: 0;
+    }
+    #rep-kpi-summary-box .rep-kpi-head {
+      border-bottom: 1.5px solid var(--dw-navy, #1D2B45) !important;
+    }
+    #rep-kpi-summary-box.is-excel-ledger .rep-kpi-cell {
+      border-color: #cbd5e1;
+    }
+    #rep-kpi-summary-box.is-excel-ledger .rep-kpi-head {
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    @media (max-width: 639px) {
+      #rep-kpi-summary-box .rep-kpi-cell:not(:last-child) {
+        border-bottom-width: 2px;
+      }
+      #rep-kpi-summary-box.is-excel-ledger .rep-kpi-cell:not(:last-child) {
+        border-bottom-width: 1px;
+      }
+    }
+    @media (min-width: 640px) and (max-width: 1023px) {
+      #rep-kpi-summary-box .rep-kpi-cell:nth-child(1),
+      #rep-kpi-summary-box .rep-kpi-cell:nth-child(2) {
+        border-bottom-width: 2px;
+      }
+      #rep-kpi-summary-box .rep-kpi-cell:nth-child(odd) {
+        border-right-width: 2px;
+      }
+      #rep-kpi-summary-box.is-excel-ledger .rep-kpi-cell:nth-child(1),
+      #rep-kpi-summary-box.is-excel-ledger .rep-kpi-cell:nth-child(2) {
+        border-bottom-width: 1px;
+      }
+      #rep-kpi-summary-box.is-excel-ledger .rep-kpi-cell:nth-child(odd) {
+        border-right-width: 1px;
+      }
+    }
+    @media (min-width: 1024px) {
+      #rep-kpi-summary-box .rep-kpi-cell:not(:last-child) {
+        border-right-width: 2px;
+      }
+      #rep-kpi-summary-box.is-excel-ledger .rep-kpi-cell:not(:last-child) {
+        border-right-width: 1px;
+      }
+    }
+
     .is-export-capturing #report-header-bar {
       box-shadow: none !important;
-      border: 2px solid #334155 !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 12px !important;
-      overflow: visible !important;
+      overflow: hidden !important;
       flex-shrink: 0 !important;
-      min-height: 84px !important;
+      width: 100% !important;
+      min-height: 76px !important;
       height: auto !important;
-      padding: 14px 20px !important;
+      padding: 0 !important;
       margin-bottom: 14px !important;
       background: #ffffff !important;
+      display: block !important;
+      box-sizing: border-box !important;
     }
     .is-export-capturing #report-header-bar > div:first-child {
       display: flex !important;
@@ -952,15 +1049,19 @@
       align-items: center !important;
       justify-content: space-between !important;
       width: 100% !important;
+      padding: 14px 20px !important;
       gap: 12px !important;
+      box-sizing: border-box !important;
     }
     .is-export-capturing #report-sec-plan,
     .is-export-capturing #report-sec-scurve,
     .is-export-capturing #report-sec-table {
       box-shadow: none !important;
-      border: 2px solid #334155 !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 12px !important;
       overflow: hidden !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
     /* ป้องกันสีพื้นหลังของหัวการ์ดล้นกรอบโค้ง (Prevent card head backgrounds from bleeding past rounded corners) */
     #report-sec-plan-head,
@@ -972,7 +1073,7 @@
     #report-sec-plan,
     #report-sec-scurve,
     #report-sec-table {
-      border-radius: 12px !important;
+      border-radius: 14px !important;
       overflow: hidden !important;
     }
     /* ป้องกันตัวหนังสือตกบรรทัดและป้องกันส่วนท้ายตารางถูกตัดในโหมดส่งออกภาพ (Prevent text wrapping and table clipping in export mode) */
@@ -993,17 +1094,26 @@
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
-      padding: 4px 16px 4px 14px !important;
-      font-size: 11.5px !important;
+      padding: 4px 14px !important;
+      font-size: 11px !important;
       font-weight: 900 !important;
       line-height: 1.35 !important;
-      margin-right: 8px !important;
+      margin-right: 6px !important;
       flex-shrink: 0 !important;
       width: auto !important;
       max-width: none !important;
       box-sizing: border-box !important;
-      border: 2px solid #0f172a !important;
+      border: 1.5px solid #1D2B45 !important;
       border-radius: 7px !important;
+    }
+    .is-export-capturing #rep-header-subtag {
+      margin-right: 12px !important;
+      padding-right: 4px !important;
+    }
+    .is-export-capturing #rep-header-docno {
+      padding: 2px 10px !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
     }
     .is-export-capturing #rep-header-subtag,
     .is-export-capturing #rep-header-title,
@@ -1013,19 +1123,34 @@
       flex-shrink: 0 !important;
     }
 
-    /* กรอบสรุป KPI สไตล์ Flat-Pop แถวเดียว ปรับความสูงให้โปร่งสวย ไม่บีบเล็กเกินไป */
+    /* แถบตารางสถาปัตยกรรมผืนเดียว (Unified Architectural Telemetry Ledger) ในโหมดส่งออกภาพ */
     .is-export-capturing #rep-kpi-summary-box {
       display: grid !important;
       grid-template-columns: repeat(4, 1fr) !important;
-      gap: 0.625rem !important;
+      gap: 0 !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
       margin-bottom: 0.875rem !important;
+      border: 2px solid #1D2B45 !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      box-shadow: none !important;
     }
-    .is-export-capturing #rep-kpi-summary-box > div {
-      min-height: 58px !important;
-      padding: 0.75rem 0.875rem !important;
+    .is-export-capturing #rep-kpi-summary-box > div.rep-kpi-cell {
+      min-height: 88px !important;
+      padding: 0 !important;
+      border-bottom-width: 0 !important;
+    }
+    .is-export-capturing #rep-kpi-summary-box > div.rep-kpi-cell:not(:last-child) {
+      border-right: 2px solid #1D2B45 !important;
     }
     .is-export-capturing #rep-kpi-summary-box * {
       white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+    .is-export-capturing #rep-kpi-summary-box .w-full.overflow-hidden {
+      overflow: hidden !important;
     }
     .is-export-capturing #rep-variance-badge {
       display: none !important;
@@ -1036,12 +1161,27 @@
     .is-export-capturing #report-sec-table-head {
       display: flex !important;
       flex-direction: row !important;
+      flex-wrap: nowrap !important;
       align-items: center !important;
       justify-content: space-between !important;
-      padding: 8px 16px !important;
+      padding: 9px 16px !important;
       box-sizing: border-box !important;
       width: 100% !important;
-      gap: 12px !important;
+      gap: 10px !important;
+    }
+    #report-page-card.is-landscape #report-sec-scurve-head {
+      flex-wrap: nowrap !important;
+      padding: 8px 12px !important;
+      gap: 8px !important;
+    }
+    #report-page-card.is-landscape #report-sec-scurve-head > span:first-child,
+    .is-export-capturing #report-page-card.is-landscape #report-sec-scurve-head > span:first-child {
+      font-size: 11.5px !important;
+    }
+    #report-page-card.is-landscape #rep-sec-scurve-badge,
+    .is-export-capturing #report-page-card.is-landscape #rep-sec-scurve-badge {
+      font-size: 9.5px !important;
+      padding: 3px 10px !important;
     }
     .is-export-capturing #report-sec-plan-head *,
     .is-export-capturing #report-sec-scurve-head *,
@@ -1049,7 +1189,7 @@
       white-space: nowrap !important;
     }
     .is-export-capturing #report-sec-scurve-head > span:first-child {
-      font-size: 12px !important;
+      font-size: 12.5px !important;
       font-weight: 900 !important;
       white-space: nowrap !important;
       display: flex !important;
@@ -1058,14 +1198,14 @@
       flex-shrink: 0 !important;
     }
     .is-export-capturing #rep-sec-scurve-badge {
-      font-size: 11px !important;
+      font-size: 10.5px !important;
       font-weight: 800 !important;
-      padding: 3px 10px !important;
+      padding: 4px 18px !important;
       white-space: nowrap !important;
       display: inline-flex !important;
       align-items: center !important;
       flex-shrink: 0 !important;
-      border-radius: 8px !important;
+      border-radius: 9999px !important;
     }
     .is-export-capturing #rep-today-table-badge {
       white-space: nowrap !important;
@@ -1078,40 +1218,51 @@
     .is-export-capturing #rep-daily-ledger-section .flex.items-center.justify-between {
       flex-wrap: nowrap !important;
     }
-    .is-export-capturing #rep-today-table .empty-log-msg,
-    .is-export-capturing #rep-today-table .empty-log-row td div {
-      display: none !important;
+    .is-export-capturing .piling-daily-tier-block {
+      border: 2px solid #1D2B45 !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+      box-shadow: none !important;
     }
-    .is-export-capturing #rep-today-table .empty-log-cell,
-    .is-export-capturing #rep-today-table tr.empty-log-row td[colspan] {
-      padding: 0 !important;
-      height: 32px !important;
-      min-height: 32px !important;
-      max-height: 32px !important;
-      line-height: 32px !important;
-      border: 1px solid #000000 !important;
-      border-bottom: 2px solid #000000 !important;
-      background: #ffffff !important;
+    .is-export-capturing .piling-daily-table {
+      width: 100% !important;
+      min-width: 0 !important;
+      table-layout: fixed !important;
+    }
+    .is-export-capturing .piling-daily-table th,
+    .is-export-capturing .piling-daily-table td {
+      padding: 4px 2px !important;
+      font-size: 10.5px !important;
+    }
+    .is-export-capturing .piling-daily-table th.sticky-col,
+    .is-export-capturing .piling-daily-table td.sticky-col {
+      width: 86px !important;
+      min-width: 86px !important;
+      max-width: 86px !important;
+      padding-left: 8px !important;
+      padding-right: 4px !important;
+      position: static !important;
+      box-shadow: none !important;
     }
 
-    /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง พร้อมเส้นตาราง Soft Ink คมชัด ไม่ซ้อนทับ */
+    /* ป้องกันตารางและข้อความท้ายตารางถูกตัดขอบล่าง พร้อมเส้นตารางคมชัด ไม่ซ้อนทับ */
     .is-export-capturing #report-page-card {
       overflow: visible !important;
-      padding-bottom: 36px !important;
+      padding-bottom: 28px !important;
       box-sizing: border-box !important;
     }
     .is-export-capturing #report-sec-table {
       height: auto !important;
       max-height: none !important;
-      overflow: visible !important;
-      border: 2px solid #475569 !important;
+      overflow: hidden !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 12px !important;
       box-shadow: none !important;
       background: #ffffff !important;
-      margin-bottom: 16px !important;
+      margin-bottom: 4px !important;
     }
     .is-export-capturing #report-sec-table-head {
-      border-bottom: 2px solid #475569 !important;
+      border-bottom: 2px solid #1D2B45 !important;
     }
     .is-export-capturing #report-sec-table .table-wrapper,
     .is-export-capturing #report-sec-table .table-wrapper.has-scroll,
@@ -1125,7 +1276,7 @@
     }
     .is-export-capturing #report-page-card.is-landscape #report-main-grid {
       display: grid !important;
-      grid-template-columns: 1.35fr 0.95fr !important;
+      grid-template-columns: 1.15fr 1fr !important;
       gap: 1.25rem !important;
     }
     .is-export-capturing #rep-today-table {
@@ -1137,8 +1288,8 @@
     }
     .is-export-capturing #rep-today-table th {
       border: none !important;
-      border-right: 1px solid rgba(71, 85, 105, 0.25) !important;
-      border-bottom: 2px solid #475569 !important;
+      border-right: 1px solid #CBD5E1 !important;
+      border-bottom: 1.5px solid #1D2B45 !important;
       box-sizing: border-box !important;
       padding: 6px 4px !important;
       vertical-align: middle !important;
@@ -1148,8 +1299,8 @@
     }
     .is-export-capturing #rep-today-table td {
       border: none !important;
-      border-right: 1px solid #cbd5e1 !important;
-      border-bottom: 1px solid #cbd5e1 !important;
+      border-right: 1px solid #CBD5E1 !important;
+      border-bottom: 1px solid #CBD5E1 !important;
       box-sizing: border-box !important;
       padding: 6px 4px !important;
       vertical-align: middle !important;
@@ -1161,7 +1312,7 @@
       border-bottom: none !important;
     }
     .is-export-capturing #rep-today-table td[colspan] {
-      padding: 16px 12px !important;
+      padding: 12px 16px !important;
       text-align: center !important;
       vertical-align: middle !important;
       box-sizing: border-box !important;
@@ -1177,14 +1328,14 @@
       flex-direction: column !important;
       box-sizing: border-box !important;
       padding: 22px 26px !important;
-      border: 2px solid #334155 !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 14px !important;
       background: #ffffff !important;
       gap: 12px !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-header-bar {
       flex-shrink: 0 !important;
-      min-height: 84px !important;
+      min-height: 76px !important;
       height: auto !important;
       margin-bottom: 0 !important;
     }
@@ -1204,7 +1355,7 @@
       flex-direction: column !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-plan {
-      border: 2px solid #334155 !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 12px !important;
       overflow: hidden !important;
     }
@@ -1223,7 +1374,7 @@
       gap: 14px !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-scurve {
-      border: 2px solid #334155 !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 12px !important;
       overflow: hidden !important;
     }
@@ -1233,7 +1384,7 @@
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-table {
       margin-bottom: 0 !important;
-      border: 2px solid #334155 !important;
+      border: 2px solid #1D2B45 !important;
       border-radius: 12px !important;
       overflow: hidden !important;
     }
@@ -1367,63 +1518,72 @@
       box-shadow: 1.5px 1.5px 0px var(--dw-orange, #F26B2A) !important;
     }
 
-        /* =========================================================================
+    /* =========================================================================
        PILING DAILY & CUMULATIVE PROGRESS TABLE (LEDGER - แผน 3 ต้น/วันทำการ)
        ========================================================================= */
     .piling-daily-tier-block {
-      border: 2px solid #0f172a;
+      border: 2px solid #1D2B45;
       background-color: #ffffff;
-      box-shadow: 2.5px 2.5px 0px #0f172a;
-      border-radius: 4px;
+      box-shadow: 2px 2px 0px #1D2B45;
+      border-radius: 12px;
       overflow: hidden;
     }
+    .piling-daily-tier-head {
+      border-bottom: none !important;
+    }
     .piling-daily-table {
-      border-collapse: separate;
+      border-collapse: collapse;
       border-spacing: 0;
       width: 100%;
-      min-width: 960px;
+      min-width: 720px;
       font-size: 11px;
       table-layout: fixed;
     }
     .piling-daily-table th,
     .piling-daily-table td {
-      border-right: 1px solid #475569;
-      border-bottom: 1px solid #475569;
-      padding: 5px 3px;
+      border-right: 1px solid #CBD5E1;
+      border-bottom: 1px solid #CBD5E1;
+      padding: 4.5px 2px;
       text-align: center;
       white-space: nowrap;
       box-sizing: border-box;
     }
+    .piling-daily-table th:last-child,
+    .piling-daily-table td:last-child {
+      border-right: none;
+    }
+    .piling-daily-table tbody tr:last-child td {
+      border-bottom: none;
+    }
     .piling-daily-table thead th {
-      background-color: #fceee7;
-      color: #1e293b;
+      background-color: #F6E9D7;
+      color: #1D2B45;
       font-weight: 800;
-      font-size: 11px;
-      border-bottom: 2px solid #0f172a;
+      font-size: 10.5px;
+      border-top: 1.5px solid #1D2B45 !important;
+      border-bottom: 1.5px solid #1D2B45 !important;
     }
     .piling-daily-table th.sticky-col,
     .piling-daily-table td.sticky-col {
       position: sticky;
       left: 0;
-      min-width: 135px;
-      width: 135px;
-      max-width: 135px;
+      min-width: 92px;
+      width: 92px;
+      max-width: 92px;
       text-align: left;
       padding-left: 8px;
       padding-right: 6px;
       box-sizing: border-box;
-      border-right: 2.5px solid #0f172a;
+      border-right: 2px solid #1D2B45;
     }
     .piling-daily-table th.sticky-col {
       z-index: 20;
-      background-color: #fceee7;
+      background-color: #F6E9D7;
       text-align: left;
-      box-shadow: 2px 0 4px rgba(0,0,0,0.08);
     }
     .piling-daily-table td.sticky-col {
       z-index: 10;
       background-color: #ffffff;
-      box-shadow: 2px 0 4px rgba(0,0,0,0.08);
     }
 
     /* --- Daily Rows (Rows 1 & 2) --- */
@@ -1431,74 +1591,68 @@
       background-color: #ffffff;
     }
     .piling-daily-table tr.row-actual td {
-      background-color: #f8fafc;
+      background-color: #FAF5EE;
     }
     .piling-daily-table tr.row-plan:hover td:not(.sticky-col):not(.active-col),
     .piling-daily-table tr.row-actual:hover td:not(.sticky-col):not(.active-col) {
-      background-color: rgba(254, 243, 199, 0.45);
+      background-color: #FFF3EB;
     }
 
     /* --- Accumulated Rows (Rows 3 & 4) Distinct Styling --- */
     /* Bold divider separating Daily from Cumulative */
     .piling-daily-table tr.row-accum-plan td {
-      border-top: 2.5px solid #1e293b !important;
-      background-color: #f1f5f9;
-      color: #1e293b;
+      border-top: 2px solid #1D2B45 !important;
+      background-color: #F1F5F9;
+      color: #1D2B45;
     }
     .piling-daily-table tr.row-accum-plan td.sticky-col {
-      border-top: 2.5px solid #1e293b !important;
-      background-color: #e2e8f0;
-      box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+      border-top: 2px solid #1D2B45 !important;
+      background-color: #E2E8F0;
     }
     .piling-daily-table tr.row-accum-plan:hover td:not(.sticky-col):not(.active-col) {
-      background-color: #e2e8f0;
+      background-color: #E2E8F0;
     }
 
     .piling-daily-table tr.row-accum-actual td {
-      background-color: #ecfdf5;
-      color: #064e3b;
+      background-color: #ECFDF5;
+      color: #064E3B;
     }
     .piling-daily-table tr.row-accum-actual td.sticky-col {
-      background-color: #d1fae5;
-      box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+      background-color: #D1FAE5;
     }
     .piling-daily-table tr.row-accum-actual:hover td:not(.sticky-col):not(.active-col) {
-      background-color: #d1fae5;
+      background-color: #D1FAE5;
     }
 
-    /* Orange rounded outline box for Active / Selected Reporting Date */
+    /* Tangerine outline box for Active / Selected Reporting Date */
     .piling-daily-table .active-col {
-      background-color: #fff7ed !important;
+      background-color: #FFF7ED !important;
     }
     .piling-daily-table th.active-col {
-      border-top: 2.5px solid #ea580c !important;
-      border-left: 2.5px solid #ea580c !important;
-      border-right: 2.5px solid #ea580c !important;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      background-color: #ffedd5 !important;
-      color: #9a3412 !important;
+      border-top: 2px solid #F26B2A !important;
+      border-left: 2px solid #F26B2A !important;
+      border-right: 2px solid #F26B2A !important;
+      background-color: #FFEDD5 !important;
+      color: #9A3412 !important;
       font-weight: 900;
     }
     .piling-daily-table td.active-col {
-      border-left: 2.5px solid #ea580c !important;
-      border-right: 2.5px solid #ea580c !important;
+      border-left: 2px solid #F26B2A !important;
+      border-right: 2px solid #F26B2A !important;
     }
     /* Highlighted accumulate cells for active date */
     .piling-daily-table tr.row-accum-plan td.active-col {
-      background-color: #fed7aa !important;
-      color: #9a3412 !important;
+      background-color: #FED7AA !important;
+      color: #9A3412 !important;
       font-weight: 900;
     }
     .piling-daily-table tr.row-accum-actual td.active-col {
-      background-color: #a7f3d0 !important;
-      color: #064e3b !important;
+      background-color: #A7F3D0 !important;
+      color: #064E3B !important;
       font-weight: 900;
     }
     .piling-daily-table tr:last-child td.active-col {
-      border-bottom: 2.5px solid #ea580c !important;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
+      border-bottom: 2px solid #F26B2A !important;
     }
   </style>
 
@@ -2666,22 +2820,23 @@
     <div id="report-page-card" class="w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45] p-3.5 sm:p-5 md:p-7 transition-all font-body">
       
       <!-- Report Header & Controls Bar (Transforms between Original DoodleWeb & Excel) -->
-      <div id="report-header-bar" class="bg-white border-2 border-[#1D2B45] rounded-2xl p-3.5 sm:p-4 md:p-5 shadow-[4px_4px_0px_#1D2B45] mb-4 transition-all font-body">
+      <div id="report-header-bar" class="bg-white border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] mb-4 transition-all font-body">
         
-        <!-- Row 1: Brand, Title & Primary View Controls -->
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 pb-3 border-b border-[#E2D9CC]">
-          <!-- Title & Project Info -->
+        <!-- Row 1: Official Architectural Title Block (Printed & Exported) -->
+        <div id="rep-header-title-row" class="px-4 py-3 sm:px-5 sm:py-3.5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">
+          <!-- Left: Emblem, Project Spec Tags & Document Title -->
           <div class="flex items-center gap-3 min-w-0">
-            <div id="rep-header-logo" class="w-12 h-12 rounded-2xl bg-[#F7B844] border-2 border-[#1D2B45] flex flex-col items-center justify-center font-black text-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] leading-tight shrink-0">
+            <div id="rep-header-logo" class="w-12 h-12 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] flex flex-col items-center justify-center font-black text-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] leading-tight shrink-0">
               <span class="text-[9px] font-black uppercase text-[#F26B2A] tracking-wider">PYNN</span>
               <span class="text-base font-black">37</span>
             </div>
             <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
-                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-full bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-[11px] font-black text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0 inline-flex items-center justify-center">
+                <span id="rep-header-tag" class="px-2.5 py-0.5 rounded-md bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-[11px] font-black text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0 inline-flex items-center justify-center">
                   โครงการ PYNN PRIDI 37
                 </span>
                 <span id="rep-header-subtag" class="text-xs text-[#3E4B69] font-bold whitespace-nowrap shrink-0 inline-block">ซอยปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
+                <span id="rep-header-docno" class="hidden md:inline-flex items-center px-2 py-0.5 rounded bg-[#F6E9D7] border border-[#1D2B45]/40 text-[10px] font-mono font-bold text-[#1D2B45] whitespace-nowrap shrink-0">DOC: P37-PILE-REP</span>
               </div>
               <h2 id="rep-header-title" class="text-xl md:text-2xl font-black text-[#1D2B45] mt-0.5 whitespace-nowrap tracking-tight">
                 รายงานความคืบหน้างานเสาเข็ม <span class="text-xs md:text-sm font-bold text-[#8C9AA8] hidden sm:inline whitespace-nowrap">(Piling Progress Report)</span>
@@ -2689,39 +2844,17 @@
             </div>
           </div>
 
-          <!-- Top-Right Controls: Theme, Date, Layout & Close Button -->
-          <div class="flex items-center flex-wrap gap-2 self-stretch lg:self-auto justify-end no-print no-export">
-            <!-- Format Selector -->
-            <div id="report-theme-selector" class="flex items-center bg-[#FAF5EE] rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45]" title="เลือกรูปแบบหน้ารายงาน">
-              <button id="btn-theme-original" class="px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer">
-                <span>🎨 ธีมหลัก</span>
-              </button>
-              <button id="btn-theme-excel" class="px-2.5 py-1 rounded-lg text-xs font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer">
-                <span>📊 สไตล์ Excel</span>
-              </button>
-            </div>
-
-            <!-- Date Badge -->
-            <div id="rep-date-badge-wrapper" class="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-xs font-bold text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0">
+          <!-- Right: Official Date Stamp (Visible in Export/Print) & Return to 3D Button -->
+          <div class="flex items-center flex-wrap gap-2 self-stretch lg:self-auto justify-end shrink-0">
+            <!-- Date Stamp (Included in Print & PNG Export) -->
+            <div id="rep-date-badge-wrapper" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-xs font-bold text-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] whitespace-nowrap shrink-0">
               <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#F26B2A] shrink-0"></i>
-              <span class="inline-block whitespace-nowrap text-slate-500">ประจำวันที่:</span>
+              <span class="inline-block whitespace-nowrap text-[#3E4B69]">ประจำวันที่:</span>
               <span id="rep-header-date" class="text-[#F26B2A] font-mono font-black inline-block whitespace-nowrap shrink-0">-</span>
             </div>
 
-            <!-- Orientation Switch -->
-            <div id="rep-layout-switch-wrapper" class="flex items-center bg-[#FAF5EE] rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45]">
-              <button id="btn-layout-portrait" class="px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer" title="จัดหน้าแนวตั้ง (Portrait)">
-                <i data-lucide="smartphone" class="w-3 h-3"></i>
-                <span>แนวตั้ง</span>
-              </button>
-              <button id="btn-layout-landscape" class="px-2.5 py-1 rounded-lg text-xs font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer" title="จัดหน้ารายงานแนวนอน (Landscape)">
-                <i data-lucide="monitor" class="w-3 h-3"></i>
-                <span>แนวนอน</span>
-              </button>
-            </div>
-
             <!-- Single Dedicated Return to 3D Button -->
-            <button id="btn-close-report" class="px-3.5 py-1.5 text-xs font-black rounded-xl bg-[#FAF5EE] hover:bg-[#F26B2A] hover:text-white text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer ml-1" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
+            <button id="btn-close-report" class="no-print no-export px-3.5 py-1.5 text-xs font-black rounded-xl bg-[#FAF5EE] hover:bg-[#F26B2A] hover:text-white text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer" title="ปิดหน้ารายงาน กลับสู่โมเดล 3D">
               <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
               <span>กลับสู่โมเดล 3D ✕</span>
             </button>
@@ -2730,51 +2863,64 @@
           </div>
         </div>
 
-        <!-- Row 2: Official Action Toolbar (ส่งออก, พิมพ์, รายงานแสนสิริ, ตารางสรุป) -->
-        <div class="pt-3 flex flex-wrap items-center justify-between gap-2.5 no-print no-export">
-          <div class="flex items-center flex-wrap gap-2">
-            <!-- Group 1: ส่งออก & พิมพ์ -->
-            <div class="flex items-center gap-1.5 bg-[#FAF5EE] p-1 rounded-xl border border-[#E2D9CC]">
-              <span class="text-[10px] font-black uppercase text-[#8C9AA8] px-1.5 flex items-center gap-1">
-                <i data-lucide="printer" class="w-3 h-3 text-[#3E4B69]"></i>
-                <span class="hidden sm:inline">จัดพิมพ์:</span>
-              </span>
-              <button id="btn-export-png" class="px-3 py-1 rounded-lg text-xs font-black bg-white hover:bg-[#10B981] hover:text-white text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer" title="ส่งออกภาพรายงาน PNG ความละเอียดสูง">
-                <i data-lucide="camera" class="w-3.5 h-3.5 text-[#10B981]"></i>
-                <span>ส่งออกภาพ PNG</span>
+        <!-- Row 2: Unified Utility & Export Control Ribbon (Hidden on Print & PNG Export) -->
+        <div id="rep-header-toolbar-row" class="bg-[#FAF5EE] border-t-2 border-[#1D2B45] px-3 py-1.5 sm:px-3.5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-1.5 no-print no-export">
+          <!-- Left Cluster: View Theme & Page Orientation -->
+          <div class="flex items-center flex-wrap lg:flex-nowrap gap-1.5 shrink-0">
+            <!-- Format Selector -->
+            <div id="report-theme-selector" class="flex items-center bg-white rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45] shrink-0" title="เลือกรูปแบบหน้ารายงาน">
+              <button id="btn-theme-original" class="px-2 py-1 rounded-lg text-[11px] font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                <span>🎨 ธีมหลัก</span>
               </button>
-              <button id="btn-print-report" class="px-3 py-1 rounded-lg text-xs font-black bg-[#F26B2A] hover:bg-[#d95618] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer" title="พิมพ์รายงาน / บันทึก PDF">
-                <i data-lucide="printer" class="w-3.5 h-3.5 text-white"></i>
-                <span>พิมพ์ / PDF</span>
+              <button id="btn-theme-excel" class="px-2 py-1 rounded-lg text-[11px] font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                <span>📊 สไตล์ Excel</span>
               </button>
             </div>
 
-            <!-- Group 2: รายงานเฉพาะทาง -->
-            <div class="flex items-center gap-1.5 bg-[#FAF5EE] p-1 rounded-xl border border-[#E2D9CC]">
-              <span class="text-[10px] font-black uppercase text-[#8C9AA8] px-1.5 flex items-center gap-1">
-                <i data-lucide="file-text" class="w-3 h-3 text-[#3E4B69]"></i>
-                <span class="hidden sm:inline">เอกสาร:</span>
-              </span>
-              <button id="btn-rep-open-daily-report" class="px-3 py-1 rounded-lg text-xs font-black bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#78350F] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย)">
-                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#D97706]"></i>
-                <span>Daily Report (PDF 3 หน้า)</span>
+            <!-- Orientation Switch -->
+            <div id="rep-layout-switch-wrapper" class="flex items-center bg-white rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45] shrink-0">
+              <button id="btn-layout-portrait" class="px-2 py-1 rounded-lg text-[11px] font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer whitespace-nowrap" title="จัดหน้าแนวตั้ง (Portrait)">
+                <i data-lucide="smartphone" class="w-3 h-3 shrink-0"></i>
+                <span>แนวตั้ง</span>
               </button>
-              <button id="btn-rep-open-summary" class="px-3 py-1 rounded-lg text-xs font-black bg-white hover:bg-sky-50 text-[#0369A1] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer" title="เปิดหน้าตารางรายงานสรุปงานเข็ม (ค่าโค ความยาวแต่ละท่อน)">
-                <i data-lucide="table" class="w-3.5 h-3.5 text-[#0284C7]"></i>
-                <span>ตารางสรุปงานเข็ม</span>
+              <button id="btn-layout-landscape" class="px-2 py-1 rounded-lg text-[11px] font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="จัดหน้ารายงานแนวนอน (Landscape)">
+                <i data-lucide="monitor" class="w-3 h-3 shrink-0"></i>
+                <span>แนวนอน</span>
               </button>
             </div>
           </div>
 
-          <!-- Group 3: Supabase Sync Status -->
-          <button id="btn-report-supabase-sync" class="px-3 py-1.5 text-xs font-black rounded-xl bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer ml-auto" title="ตรวจสอบและบันทึกข้อมูลเข้า Supabase">
-            <i data-lucide="cloud" class="w-3.5 h-3.5 text-[#10B981]"></i>
-            <span id="lbl-report-supabase">บันทึกแล้ว</span>
-          </button>
+          <!-- Right Cluster: Export, Print, Official Documents & Cloud Sync -->
+          <div class="flex items-center flex-wrap lg:flex-nowrap gap-1.5 shrink-0">
+            <button id="btn-export-png" class="px-2 py-1 rounded-lg text-[11px] font-black bg-white hover:bg-[#10B981] hover:text-white text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="ส่งออกภาพรายงาน PNG ความละเอียดสูง">
+              <i data-lucide="camera" class="w-3.5 h-3.5 text-[#10B981] shrink-0"></i>
+              <span>ส่งออก PNG</span>
+            </button>
+            <button id="btn-print-report" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#F26B2A] hover:bg-[#d95618] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="พิมพ์รายงาน / บันทึก PDF">
+              <i data-lucide="printer" class="w-3.5 h-3.5 text-white shrink-0"></i>
+              <span>พิมพ์ / PDF</span>
+            </button>
+
+            <span class="hidden sm:inline-block w-px h-4 bg-[#1D2B45]/20 mx-0.5 shrink-0"></span>
+
+            <button id="btn-rep-open-daily-report" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#78350F] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย)">
+              <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#D97706] shrink-0"></i>
+              <span>Daily Report (3 หน้า)</span>
+            </button>
+            <button id="btn-rep-open-summary" class="px-2 py-1 rounded-lg text-[11px] font-black bg-white hover:bg-sky-50 text-[#0369A1] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="เปิดหน้าตารางรายงานสรุปงานเข็ม (ค่าโค ความยาวแต่ละท่อน)">
+              <i data-lucide="table" class="w-3.5 h-3.5 text-[#0284C7] shrink-0"></i>
+              <span>ตารางสรุปงานเข็ม</span>
+            </button>
+
+            <button id="btn-report-supabase-sync" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="ตรวจสอบและบันทึกข้อมูลเข้า Supabase">
+              <i data-lucide="cloud" class="w-3.5 h-3.5 text-[#10B981] shrink-0"></i>
+              <span id="lbl-report-supabase">บันทึกแล้ว</span>
+            </button>
+          </div>
         </div>
 
         <!-- Excel Formula Bar Style Strip (Shown only in Excel Theme) -->
-        <div id="rep-excel-formula-bar" class="mt-2.5 pt-2 border-t border-white/20 flex items-center gap-2 text-[11px] text-white/90 hidden">
+        <div id="rep-excel-formula-bar" class="px-4 py-1.5 bg-[#0d6535] border-t border-white/20 flex items-center gap-2 text-[11px] text-white/90 hidden">
           <span class="font-mono bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold border border-white/30">fx</span>
           <span class="font-mono text-[11px] text-white/90 truncate">=PYNN_PILING_PROGRESS(เสาเข็ม_93_ต้น, แผน_3_ต้นต่อวัน, 31_วันทำการ)</span>
           <span class="hidden md:inline ml-auto text-[10.5px] text-white/80 bg-white/10 px-2 py-0.5 rounded border border-white/20">ตารางอ้างอิง: แบบ PCO SketchUp</span>
@@ -2795,79 +2941,128 @@
         <span class="text-slate-400 text-xs px-2">+</span>
       </div>
 
-      <!-- 4 KPI Summary Cards (สไตล์ DoodleWeb แท้ ทรงพลัง สะอาดตา เป็นทางการ จัดวาง 2 แถวไม่มีข้อความทับกัน 100%) -->
-      <div id="rep-kpi-summary-box" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 mb-4 font-body">
+      <!-- UNIFIED ARCHITECTURAL TELEMETRY LEDGER (แถบตารางสถาปัตยกรรมผืนเดียว — แทนที่กรอบพาสเทล 4 ใบแบบ AI) -->
+      <div id="rep-kpi-summary-box" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white mb-4 font-body">
         
-        <!-- Card 1: แผนวันนี้ 3 ต้น / กดแล้ว X ต้น -->
-        <div id="rep-kpi-1" class="bg-[#F0F9FF] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]">
-          <div class="flex items-center justify-between gap-1.5">
-            <span class="text-[10.5px] font-extrabold text-[#64748B] uppercase tracking-wider">งานประจำวัน</span>
-            <span class="w-7 h-7 rounded-lg bg-[#E0F2FE] text-[#0284C7] flex items-center justify-center border border-[#0284C7]/30 shadow-xs shrink-0">
-              <i data-lucide="hammer" class="w-3.5 h-3.5"></i>
-            </span>
-          </div>
-          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
-            <div class="flex items-baseline gap-1 min-w-0">
-              <span class="text-[11px] text-slate-500 font-bold shrink-0">กดแล้ว</span>
-              <span id="rep-today-count" class="text-2xl sm:text-3xl font-black font-mono text-[#0284C7] leading-none">0</span>
-              <span class="text-xs font-bold text-[#1D2B45] shrink-0">ต้น</span>
+        <!-- Cell 01: งานประจำวัน (Daily Output) -->
+        <div id="rep-kpi-1" class="rep-kpi-cell flex flex-col justify-between bg-white">
+          <div class="rep-kpi-head bg-[#F6E9D7] px-3.5 py-2 border-b-1.5 border-[#1D2B45] flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="rep-kpi-step font-mono text-[10px] font-black px-1.5 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none shrink-0">01</span>
+              <span class="text-xs font-black text-[#1D2B45] tracking-tight whitespace-nowrap">งานประจำวัน</span>
             </div>
-            <span class="text-[11px] font-bold text-[#0369A1] bg-white border border-[#BAE6FD] px-2 py-0.5 rounded-full shrink-0 shadow-xs whitespace-nowrap">แผน 3 ต้น</span>
-            <span id="rep-today-sub" class="hidden">0</span>
+            <span class="font-mono text-[9.5px] font-bold text-[#3E4B69] uppercase tracking-wider shrink-0">DAILY ACTUAL</span>
+          </div>
+          <div class="px-3.5 py-2.5 flex flex-col justify-between gap-2 flex-1 bg-[#FFFDF9]">
+            <div class="flex items-baseline justify-between gap-2">
+              <div class="flex items-baseline gap-1.5 shrink-0">
+                <span id="rep-today-count" class="text-2xl sm:text-[28px] font-black font-mono text-[#0284C7] leading-none tracking-tight">0</span>
+                <span class="text-xs font-extrabold text-[#3E4B69] shrink-0 whitespace-nowrap">/ 3 ต้น</span>
+              </div>
+              <span class="text-[10.5px] font-mono font-black text-[#1D2B45] bg-[#FAF5EE] border-1.5 border-[#1D2B45] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_#1D2B45] shrink-0 whitespace-nowrap">แผน 3 ต้น/วัน</span>
+              <span id="rep-today-sub" class="hidden">0</span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="w-full h-1.5 bg-[#EFE6D8] border border-[#1D2B45]/40 rounded-full overflow-hidden">
+                <div id="rep-today-bar" class="h-full bg-[#0284C7] transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex items-center justify-between gap-2 text-[10px] font-bold text-[#3E4B69]">
+                <span id="rep-today-status" class="whitespace-nowrap">รอบันทึกผลงานกดเสาเข็มวันนี้</span>
+                <span class="font-mono font-black text-[#0284C7] shrink-0 whitespace-nowrap">QUOTA 3/DAY</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Card 2: แผนกดสะสม .... ต้น -->
-        <div id="rep-kpi-2" class="bg-[#FFF7ED] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]" title="แผนสะสมตามวันทำการ (ไม่นับวันอาทิตย์และวันหยุดราชการ)">
-          <div class="flex items-center justify-between gap-1.5">
-            <span class="text-[10.5px] font-extrabold text-[#8C9AA8] uppercase tracking-wider">เป้าหมายสะสม</span>
-            <span class="w-7 h-7 rounded-lg bg-[#FFEDD5] text-[#F26B2A] flex items-center justify-center border border-[#F26B2A]/30 shadow-xs shrink-0">
-              <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-            </span>
-          </div>
-          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
-            <div class="flex items-baseline gap-1 min-w-0">
-              <span class="text-[11px] text-slate-500 font-bold shrink-0">แผน</span>
-              <span id="rep-plan-cum-count" class="text-2xl sm:text-3xl font-black font-mono text-[#F26B2A] leading-none">0</span>
-              <span class="text-xs font-bold text-[#1D2B45] shrink-0">ต้น</span>
+        <!-- Cell 02: เป้าหมายสะสม (Cumulative Plan Target) -->
+        <div id="rep-kpi-2" class="rep-kpi-cell flex flex-col justify-between bg-white" title="แผนสะสมตามวันทำการ (ไม่นับวันอาทิตย์และวันหยุดราชการ)">
+          <div class="rep-kpi-head bg-[#F6E9D7] px-3.5 py-2 border-b-1.5 border-[#1D2B45] flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="rep-kpi-step font-mono text-[10px] font-black px-1.5 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none shrink-0">02</span>
+              <span class="text-xs font-black text-[#1D2B45] tracking-tight whitespace-nowrap">เป้าหมายสะสม</span>
             </div>
-            <span class="text-[11px] font-bold text-[#C2410C] bg-white border border-[#FED7AA] px-2 py-0.5 rounded-full shrink-0 shadow-xs whitespace-nowrap">
-              <span id="rep-elapsed-days" class="font-mono font-bold">0</span>/31 วัน
-            </span>
+            <span class="font-mono text-[9.5px] font-bold text-[#3E4B69] uppercase tracking-wider shrink-0">PLAN TARGET</span>
+          </div>
+          <div class="px-3.5 py-2.5 flex flex-col justify-between gap-2 flex-1 bg-[#FFFDF9]">
+            <div class="flex items-baseline justify-between gap-2">
+              <div class="flex items-baseline gap-1.5 shrink-0">
+                <span id="rep-plan-cum-count" class="text-2xl sm:text-[28px] font-black font-mono text-[#F26B2A] leading-none tracking-tight">0</span>
+                <span class="text-xs font-extrabold text-[#3E4B69] shrink-0 whitespace-nowrap">/ 93 ต้น</span>
+              </div>
+              <span class="text-[10.5px] font-mono font-black text-[#1D2B45] bg-[#FAF5EE] border-1.5 border-[#1D2B45] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_#1D2B45] shrink-0 whitespace-nowrap">
+                วันทำการ <span id="rep-elapsed-days" class="font-mono font-black text-[#F26B2A]">0</span>/31
+              </span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="w-full h-1.5 bg-[#EFE6D8] border border-[#1D2B45]/40 rounded-full overflow-hidden">
+                <div id="rep-plan-bar" class="h-full bg-[#F26B2A] transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex items-center justify-between gap-2 text-[10px] font-bold text-[#3E4B69]">
+                <span id="rep-plan-pct" class="whitespace-nowrap">0.0% ของแผนโครงการ</span>
+                <span class="font-mono font-black text-[#F26B2A] shrink-0 whitespace-nowrap">31 WORKDAYS</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Card 3: กดสะสมจริง .... ต้น -->
-        <div id="rep-kpi-3" class="bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]">
-          <div class="flex items-center justify-between gap-1.5">
-            <span class="text-[10.5px] font-extrabold text-[#8C9AA8] uppercase tracking-wider">ผลงานจริงสะสม</span>
-            <span class="w-7 h-7 rounded-lg bg-[#D1FAE5] text-[#10B981] flex items-center justify-center border border-[#10B981]/30 shadow-xs shrink-0">
-              <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
-            </span>
-          </div>
-          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
-            <div class="flex items-baseline gap-1 min-w-0">
-              <span id="rep-cum-count" class="text-2xl sm:text-3xl font-black font-mono text-[#10B981] leading-none">0</span>
-              <span class="text-xs font-bold text-[#8C9AA8] shrink-0">/ 93 ต้น</span>
+        <!-- Cell 03: ผลงานจริงสะสม (Cumulative Actual Driven) -->
+        <div id="rep-kpi-3" class="rep-kpi-cell flex flex-col justify-between bg-white">
+          <div class="rep-kpi-head bg-[#F6E9D7] px-3.5 py-2 border-b-1.5 border-[#1D2B45] flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="rep-kpi-step font-mono text-[10px] font-black px-1.5 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none shrink-0">03</span>
+              <span class="text-xs font-black text-[#1D2B45] tracking-tight whitespace-nowrap">ผลงานจริงสะสม</span>
             </div>
-            <span id="rep-cum-pct" class="text-[11px] font-black text-[#047857] bg-white border border-[#6EE7B7] px-2.5 py-0.5 rounded-full shadow-xs shrink-0 whitespace-nowrap">0%</span>
-            <div class="hidden"><div id="rep-cum-bar" style="width:0%"></div></div>
+            <span class="font-mono text-[9.5px] font-bold text-[#3E4B69] uppercase tracking-wider shrink-0">CUMULATIVE</span>
+          </div>
+          <div class="px-3.5 py-2.5 flex flex-col justify-between gap-2 flex-1 bg-[#FFFDF9]">
+            <div class="flex items-baseline justify-between gap-2">
+              <div class="flex items-baseline gap-1.5 shrink-0">
+                <span id="rep-cum-count" class="text-2xl sm:text-[28px] font-black font-mono text-[#059669] leading-none tracking-tight">0</span>
+                <span class="text-xs font-extrabold text-[#3E4B69] shrink-0 whitespace-nowrap">/ 93 ต้น</span>
+              </div>
+              <span id="rep-cum-pct" class="text-[10.5px] font-mono font-black text-white bg-[#059669] border-1.5 border-[#1D2B45] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_#1D2B45] shrink-0 whitespace-nowrap">0%</span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="w-full h-1.5 bg-[#EFE6D8] border border-[#1D2B45]/40 rounded-full overflow-hidden">
+                <div id="rep-cum-bar" class="h-full bg-[#10B981] transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex items-center justify-between gap-2 text-[10px] font-bold text-[#3E4B69]">
+                <span id="rep-remain-sub" class="whitespace-nowrap">คงเหลือรอตอก 93 ต้น</span>
+                <span class="font-mono font-black text-[#059669] shrink-0 whitespace-nowrap">TOTAL 93 PILES</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Card 4: สถานะเทียบแผนงาน -->
-        <div id="rep-variance-card" class="bg-[#FEF2F2] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]">
-          <div class="flex items-center justify-between gap-1.5">
-            <span class="text-[10.5px] font-extrabold text-[#8C9AA8] uppercase tracking-wider">วิเคราะห์เทียบแผน</span>
-            <span class="w-7 h-7 rounded-lg bg-[#FEE2E2] text-[#E64C3C] flex items-center justify-center border border-[#E64C3C]/30 shadow-xs shrink-0">
-              <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-            </span>
+        <!-- Cell 04: วิเคราะห์เทียบแผน (Schedule Variance) -->
+        <div id="rep-variance-card" class="rep-kpi-cell flex flex-col justify-between bg-white">
+          <div class="rep-kpi-head bg-[#F6E9D7] px-3.5 py-2 border-b-1.5 border-[#1D2B45] flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="rep-kpi-step font-mono text-[10px] font-black px-1.5 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none shrink-0">04</span>
+              <span class="text-xs font-black text-[#1D2B45] tracking-tight whitespace-nowrap">วิเคราะห์เทียบแผน</span>
+            </div>
+            <span class="font-mono text-[9.5px] font-bold text-[#3E4B69] uppercase tracking-wider shrink-0">VARIANCE</span>
           </div>
-          <div class="flex items-baseline justify-between gap-1.5 mt-0.5">
-            <span id="rep-variance-display" class="font-black text-base sm:text-lg text-[#E64C3C] leading-none truncate">ช้ากว่าแผน 0 ต้น</span>
-            <span id="rep-variance-badge" class="text-[10.5px] font-black text-[#E64C3C] bg-white border border-[#FECACA] px-2 py-0.5 rounded-full shadow-xs shrink-0 hidden">ตามแผน</span>
-            <span id="rep-plan-sub" class="hidden">0</span>
-            <span id="rep-cum-sub" class="hidden">0</span>
+          <div class="px-3.5 py-2.5 flex flex-col justify-between gap-2 flex-1 bg-[#FFFDF9]">
+            <div class="flex items-baseline justify-between gap-2">
+              <div class="flex items-baseline gap-1.5 shrink-0">
+                <span id="rep-variance-num" class="text-2xl sm:text-[28px] font-black font-mono text-[#E11D48] leading-none tracking-tight">0</span>
+                <span class="text-xs font-extrabold text-[#3E4B69] shrink-0 whitespace-nowrap">ต้น</span>
+              </div>
+              <span id="rep-variance-display" class="text-[10.5px] font-black text-white bg-[#E11D48] border-1.5 border-[#1D2B45] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_#1D2B45] shrink-0 whitespace-nowrap">ตามแผนงาน</span>
+              <span id="rep-variance-badge" class="hidden">ตามแผน</span>
+              <span id="rep-plan-sub" class="hidden">0</span>
+              <span id="rep-cum-sub" class="hidden">0</span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="w-full h-1.5 bg-[#EFE6D8] border border-[#1D2B45]/40 rounded-full overflow-hidden">
+                <div id="rep-variance-bar" class="h-full bg-[#E11D48] transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex items-center justify-between gap-2 text-[10px] font-bold text-[#3E4B69]">
+                <span id="rep-variance-sub" class="whitespace-nowrap">เทียบผลงานจริงกับแผนสะสม</span>
+                <span id="rep-variance-ratio" class="font-mono font-black text-[#E11D48] shrink-0 whitespace-nowrap">VS PLAN</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2888,19 +3083,19 @@
               
               <!-- Legend Badges (Original Theme) -->
               <div id="rep-legend-original" class="flex items-center gap-2 text-[11px] font-black shrink-0">
-                <span class="flex items-center gap-1.5 bg-white px-2 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
+                <span class="flex items-center gap-1.5 bg-white px-2.5 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
                   <svg class="w-2.5 h-2.5 inline-block shrink-0" viewBox="0 0 10 10" width="10" height="10">
                     <circle cx="5" cy="5" r="4.2" fill="#0284c7" stroke="#0369a1" stroke-width="1" />
                   </svg>
                   <span class="text-[#0284c7] whitespace-nowrap">★ กดวันนี้</span>
                 </span>
-                <span class="flex items-center gap-1.5 bg-white px-2 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
+                <span class="flex items-center gap-1.5 bg-white px-2.5 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
                   <svg class="w-2.5 h-2.5 inline-block shrink-0" viewBox="0 0 10 10" width="10" height="10">
                     <circle cx="5" cy="5" r="4.2" fill="#10b981" stroke="#047857" stroke-width="1" />
                   </svg>
                   <span class="text-[#10b981] whitespace-nowrap">● กดแล้วสะสม</span>
                 </span>
-                <span class="flex items-center gap-1.5 bg-white px-2 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
+                <span class="flex items-center gap-1.5 bg-white px-2.5 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
                   <svg class="w-2.5 h-2.5 inline-block shrink-0" viewBox="0 0 10 10" width="10" height="10">
                     <circle cx="5" cy="5" r="4.2" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
                   </svg>
@@ -2933,19 +3128,19 @@
           </div>
         </div>
 
-        <!-- COLUMN 2: S-CURVE + TODAY'S TABLE -->
+        <!-- COLUMN 2: S-CURVE + 31-DAY LEDGER -->
         <div id="report-col-side" class="w-full flex flex-col gap-5">
           <!-- SECTION 2: S-CURVE PROGRESS GRAPH -->
           <div id="report-sec-scurve" class="border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white">
-            <div id="report-sec-scurve-head" class="bg-[#EEF4FF] px-4 py-2.5 border-b-2 border-[#1D2B45] flex items-center justify-between rounded-t-[14px]">
+            <div id="report-sec-scurve-head" class="bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 rounded-t-[14px]">
               <span class="text-xs md:text-sm font-black text-[#1D2B45] flex items-center gap-2">
                 <span class="w-6 h-6 rounded-lg bg-white border-1.5 border-[#1D2B45] flex items-center justify-center shadow-[1px_1px_0px_#1D2B45]">
                   <i data-lucide="trending-up" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
                 </span>
                 กราฟเปรียบเทียบผลงานสะสม S-Curve (Actual vs Plan: 3 ต้น/วัน)
               </span>
-              <span id="rep-sec-scurve-badge" class="text-xs font-black bg-white px-3 py-1 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] text-[#1D2B45] whitespace-nowrap shrink-0 inline-block">
-                แผนงานรวม 93 ต้น / 31 วันทำการ (ไม่นับวันอาทิตย์ & นักขัตฤกษ์)
+              <span id="rep-sec-scurve-badge" class="text-[11px] font-black bg-white px-3 py-1 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] text-[#1D2B45] whitespace-nowrap shrink-0 inline-block">
+                แผนงาน 93 ต้น · 31 วันทำการ (เว้นวันอาทิตย์/นักขัตฤกษ์)
               </span>
             </div>
             <div class="p-3.5">
@@ -2953,23 +3148,23 @@
                 <canvas id="reportScurveCanvas"></canvas>
               </div>
 
-              <!-- DAILY & CUMULATIVE PLAN VS ACTUAL TABLE (EXCEL STYLE LEDGER) -->
+              <!-- DAILY & CUMULATIVE PLAN VS ACTUAL TABLE (ARCHITECTURAL TELEMETRY LEDGER) -->
               <div id="rep-daily-ledger-section" class="mt-4 pt-3.5 border-t border-[#E2D9CC]">
-                <div class="flex items-center justify-between mb-2.5 flex-wrap gap-2 px-1">
-                  <div class="flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-lg bg-[#F26B2A] text-white flex items-center justify-center text-[10px] font-black border border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45]">
-                      <i data-lucide="table" class="w-3 h-3"></i>
+                <div id="rep-daily-ledger-title-row" class="flex items-center justify-between mb-2.5 flex-wrap gap-2 px-0.5">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="w-6 h-6 rounded-lg bg-[#F26B2A] text-white flex items-center justify-center text-[10px] font-black border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] shrink-0">
+                      <i data-lucide="table" class="w-3.5 h-3.5"></i>
                     </span>
-                    <span class="text-xs sm:text-sm font-black text-[#1D2B45]">
+                    <span id="rep-daily-ledger-title" class="text-xs sm:text-sm font-black text-[#1D2B45] whitespace-nowrap">
                       ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วัน vs Actual)
                     </span>
                   </div>
-                  <div class="flex items-center gap-2 text-[10.5px] font-bold text-[#3E4B69]">
-                    <span class="inline-flex items-center gap-1.5 bg-[#FFF3EB] px-2 py-0.5 rounded-full border border-[#F26B2A]/40">
-                      <span class="w-2.5 h-2.5 rounded-full border border-[#F26B2A] bg-[#F26B2A]"></span>
-                      <span class="text-[#F26B2A]">วันที่รายงาน</span>
+                  <div class="flex items-center gap-2 text-[11px] font-bold text-[#3E4B69] shrink-0 whitespace-nowrap">
+                    <span class="inline-flex items-center gap-1.5 bg-[#FFF7ED] px-2.5 py-0.5 rounded-full border-1.5 border-[#F26B2A] text-[#9A3412] font-black">
+                      <span class="w-2 h-2 rounded-full bg-[#F26B2A]"></span>
+                      <span>กรอบส้ม = วันที่รายงาน</span>
                     </span>
-                    <span class="text-slate-500 font-mono text-[10.5px]">· 2 แถว ครบ 31 วันทำการ</span>
+                    <span id="rep-daily-ledger-subnote" class="text-[#3E4B69] font-mono text-[10.5px] font-bold">· แบ่ง 2 แถว ครบ 31 วันทำการ</span>
                   </div>
                 </div>
                 <div id="rep-daily-ledger-container" class="space-y-3 max-w-full">
@@ -2978,56 +3173,56 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- SECTION 3: TODAY'S PRESSED PILES LOG TABLE -->
-          <div id="report-sec-table" class="border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white">
-            <div id="report-sec-table-head" class="bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 rounded-t-[14px]">
-              <span class="text-xs md:text-sm font-black text-[#1D2B45] flex items-center gap-2">
-                <span class="w-6 h-6 rounded-lg bg-white border-1.5 border-[#1D2B45] flex items-center justify-center shadow-[1px_1px_0px_#1D2B45]">
-                  <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#1D2B45]"></i>
-                </span>
-                <span id="rep-sec-table-title">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
+        <!-- SECTION 3: TODAY'S PRESSED PILES LOG TABLE (Spans full-width in both Portrait and Landscape) -->
+        <div id="report-sec-table" class="border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white w-full">
+          <div id="report-sec-table-head" class="bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 rounded-t-[14px]">
+            <span class="text-xs md:text-sm font-black text-[#1D2B45] flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-white border-1.5 border-[#1D2B45] flex items-center justify-center shadow-[1px_1px_0px_#1D2B45]">
+                <i data-lucide="list-checks" class="w-3.5 h-3.5 text-[#1D2B45]"></i>
               </span>
-              <div class="flex items-center gap-2 shrink-0">
-                <div id="rep-table-filter-group" class="flex items-center gap-1 bg-[#FAF5EE] p-0.5 rounded-xl border-1.5 border-[#1D2B45] text-[10.5px] whitespace-nowrap shrink-0 no-export no-print shadow-[1px_1px_0px_#1D2B45]" title="ตัวเลือกกรองรายการกดเสาเข็ม">
-                  <button id="btn-rep-filter-today" type="button" class="px-2.5 py-1 rounded-lg font-black bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] border-1.5 border-[#1D2B45] whitespace-nowrap cursor-pointer">
-                    เฉพาะวันที่นี้
-                  </button>
-                  <button id="btn-rep-filter-all" type="button" class="px-2.5 py-1 rounded-lg font-bold text-[#3E4B69] hover:text-[#1D2B45] whitespace-nowrap cursor-pointer">
-                    ทั้งหมด (ประวัติการกด)
-                  </button>
-                </div>
-                <span id="rep-today-table-badge" class="text-xs font-black px-2.5 py-1 rounded-full bg-white border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0 text-[#1D2B45]">
-                  0 ต้น
-                </span>
+              <span id="rep-sec-table-title">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
+            </span>
+            <div class="flex items-center gap-2 shrink-0">
+              <div id="rep-table-filter-group" class="flex items-center gap-1 bg-[#FAF5EE] p-0.5 rounded-xl border-1.5 border-[#1D2B45] text-[10.5px] whitespace-nowrap shrink-0 no-export no-print shadow-[1px_1px_0px_#1D2B45]" title="ตัวเลือกกรองรายการกดเสาเข็ม">
+                <button id="btn-rep-filter-today" type="button" class="px-2.5 py-1 rounded-lg font-black bg-white text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] border-1.5 border-[#1D2B45] whitespace-nowrap cursor-pointer">
+                  เฉพาะวันที่นี้
+                </button>
+                <button id="btn-rep-filter-all" type="button" class="px-2.5 py-1 rounded-lg font-bold text-[#3E4B69] hover:text-[#1D2B45] whitespace-nowrap cursor-pointer">
+                  ทั้งหมด (ประวัติการกด)
+                </button>
               </div>
+              <span id="rep-today-table-badge" class="text-xs font-black px-3 py-1 rounded-full bg-white border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0 text-[#1D2B45]">
+                0 ต้น
+              </span>
             </div>
-            <div class="table-wrapper overflow-x-auto">
-              <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
-                <thead id="rep-today-table-head" class="bg-[#FAF5EE] text-[#1D2B45] border-b-2 border-[#1D2B45] font-black text-xs">
-                  <tr>
-                    <th class="p-2.5 text-center border-r border-[#E2D9CC]">No.</th>
-                    <th class="p-2.5 border-r border-[#E2D9CC]">รหัสเข็ม (ID)</th>
-                    <th class="p-2.5 text-center border-r border-[#E2D9CC]">ฐานราก</th>
-                    <th class="p-2.5 text-center border-r border-[#E2D9CC]">ตำแหน่งกริด</th>
-                    <th class="p-2.5 text-right border-r border-[#E2D9CC] font-mono" title="พิกัดสำรวจตามแบบ (Northing, Easting)">Co (N, E) แบบ (m)</th>
-                    <th class="p-2.5 text-right border-r border-[#E2D9CC] font-mono text-[#047857]" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">Co (n,e) หลังกด (m)</th>
-                    <th class="p-2.5 text-center border-r border-[#E2D9CC] font-mono text-[#047857]" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E) และระยะหนีศูนย์รวมของแต่ละต้น">ผลต่าง (Δn, Δe)</th>
-                    <th class="p-2.5 text-right border-r border-[#E2D9CC] text-[#E64C3C] font-mono" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับ PCO (แบบ)</th>
-                    <th class="p-2.5 text-right border-r border-[#E2D9CC] text-[#0284C7] font-mono" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับ TOP จริง (m)</th>
-                    <th class="p-2.5 text-center border-r border-[#E2D9CC] font-mono" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่าง (Diff PCO) (ม.)</th>
-                    <th class="p-2.5 text-center border-r border-[#E2D9CC]">ชนิดเข็ม</th>
-                    <th class="p-2.5 text-center">วันที่กด</th>
-                  </tr>
-                </thead>
-                <tbody id="rep-today-table-body">
-                  <!-- Injected by JS -->
-                </tbody>
-                <tfoot id="rep-today-table-foot">
-                  <!-- Summary of Values Row Injected by JS -->
-                </tfoot>
-              </table>
-            </div>
+          </div>
+          <div class="table-wrapper overflow-x-auto">
+            <table id="rep-today-table" class="w-full text-xs text-left border-collapse">
+              <thead id="rep-today-table-head" class="bg-[#FAF5EE] text-[#1D2B45] border-b-2 border-[#1D2B45] font-black text-[11px]">
+                <tr>
+                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">ลำดับ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">No.</div></th>
+                  <th class="py-2 px-2 border-r border-[#E2D9CC] whitespace-nowrap">รหัสเข็ม<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Pile ID</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">ฐานราก<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Footing</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">กริด<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Grid</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] whitespace-nowrap" title="พิกัดสำรวจตามแบบ (Northing, Easting)">พิกัดตามแบบ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Co (N, E) m</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] text-[#047857] whitespace-nowrap" title="พิกัดเสาเข็มจริงหลังกดเสร็จ">พิกัดหลังกด<div class="font-mono text-[9.5px] font-bold text-[#047857]">Co (n, e) m</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] text-[#047857] whitespace-nowrap" title="ผลต่างพิกัด n, e (Δn = n - N, Δe = e - E)">ค่าเยื้องศูนย์<div class="font-mono text-[9.5px] font-bold text-[#047857]">Δn, Δe (mm)</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] text-[#E64C3C] whitespace-nowrap" title="ระดับตัดหัวเข็มตามแบบก่อสร้าง">ระดับตัดเข็ม<div class="font-mono text-[9.5px] font-bold text-[#E64C3C]">PCO (m)</div></th>
+                  <th class="py-2 px-2 text-right border-r border-[#E2D9CC] text-[#0284C7] whitespace-nowrap" title="ระดับ TOP หัวเข็มที่กดได้จริงในสนาม">ระดับหัวเข็มจริง<div class="font-mono text-[9.5px] font-bold text-[#0284C7]">TOP (m)</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap" title="ผลต่างระดับจริงเทียบกับระดับ PCO ตามแบบ (เมตร)">ผลต่างระดับ<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Diff PCO (m)</div></th>
+                  <th class="py-2 px-2 text-center border-r border-[#E2D9CC] whitespace-nowrap">ชนิดเข็ม<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Pile Type</div></th>
+                  <th class="py-2 px-2 text-center whitespace-nowrap">วันที่กด<div class="font-mono text-[9.5px] font-bold text-[#3E4B69]">Driven Date</div></th>
+                </tr>
+              </thead>
+              <tbody id="rep-today-table-body">
+                <!-- Injected by JS -->
+              </tbody>
+              <tfoot id="rep-today-table-foot">
+                <!-- Summary of Values Row Injected by JS -->
+              </tfoot>
+            </table>
           </div>
         </div>
 
@@ -3037,7 +3232,7 @@
       <div class="mt-5 pt-3.5 border-t-2 border-[#E2D9CC] flex flex-wrap items-center justify-between gap-3 no-print no-export font-body">
         <span class="text-xs font-bold text-[#3E4B69] flex items-center gap-1.5">
           <i data-lucide="info" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
-          <span>สามารถกดที่ต้นเข็มในแผนผัง หรือวันที่ในตารางเพื่อตรวจสอบและแก้ไขข้อมูลได้ทันที</span>
+          <span>สามารถกดที่ต้นเข็มในแผนผัง แถวตาราง หรือวันที่ในตารางเพื่อตรวจสอบและแก้ไขข้อมูลได้ทันที</span>
         </span>
         <button type="button" onclick="document.getElementById('btn-close-report').click()" class="px-4 py-2 text-xs font-black rounded-xl border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] bg-[#F26B2A] hover:bg-[#d95618] active:translate-x-0.5 active:translate-y-0.5 text-white transition-all flex items-center gap-2 cursor-pointer">
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
@@ -3048,109 +3243,112 @@
     </div>
   </div>
 
-  <!-- MODAL: EXPORT PROGRESS REPORT IMAGE (ส่งออกภาพรายงาน PNG ตามสัดส่วน) -->
+  <!-- MODAL: EXPORT PROGRESS REPORT IMAGE (DoodleWeb Architectural Export Studio) -->
   <!-- ========================================================================= -->
-  <div id="modal-export-image" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-3 md:p-6 hidden">
-    <div class="pop-card bg-white w-full max-w-4xl max-h-[94vh] flex flex-col overflow-hidden shadow-2xl border-2 border-slate-900">
+  <div id="modal-export-image" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-2.5 md:p-5 hidden font-body">
+    <div class="bg-white w-full max-w-5xl max-h-[95vh] flex flex-col overflow-hidden rounded-2xl border-2 border-[#1D2B45] shadow-[5px_5px_0px_#1D2B45]">
       
-      <!-- Modal Header -->
-      <div class="bg-gradient-to-r from-[#fff0c8] via-[#f4ece7] to-[#e5f4e9] p-3 px-5 border-b-2 border-slate-900 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-[#ed6845] text-white flex items-center justify-center border-2 border-slate-900 shadow-sm rounded-xl">
-            <i data-lucide="camera" class="w-5 h-5"></i>
+      <!-- Modal Header (DoodleWeb Warm Sand Title Block) -->
+      <div class="bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-[#F26B2A] text-white flex items-center justify-center border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] shrink-0">
+            <i data-lucide="camera" class="w-4 h-4"></i>
           </div>
-          <div>
-            <h3 class="text-sm md:text-base font-black text-[#34383b]">
-              ส่งออกภาพรายงานความคืบหน้า (Export Progress Report Image)
-            </h3>
-            <p class="text-[11px] text-[#667277] font-semibold">
-              สร้างภาพรายงานความละเอียดสูง สัดส่วนสวยงามตรงตามหน้าเว็บ พร้อมคัดลอกส่ง LINE หรือบันทึกไฟล์
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-sm md:text-base font-black text-[#1D2B45] tracking-tight" style="font-family: var(--font-heading, 'Prompt', sans-serif) !important;">
+                สตูดิโอส่งออกภาพรายงาน (Architectural PNG Export Studio)
+              </h3>
+              <span class="font-mono text-[10px] font-black px-2 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none">2X ULTRA HD</span>
+            </div>
+            <p class="text-[11px] text-[#3E4B69] font-semibold truncate">
+              สร้างภาพรายงานความละเอียดสูง เส้นคมกริบ สัดส่วนตรงตามหน้าเว็บ พร้อมคัดลอกส่ง LINE หรือดาวน์โหลดไฟล์ PNG
             </p>
           </div>
         </div>
-        <button id="btn-close-export" class="pop-btn p-1.5" title="ปิดหน้าต่างส่งออก">
+        <button id="btn-close-export" type="button" class="w-8 h-8 rounded-xl bg-white hover:bg-[#E11D48] hover:text-white text-[#1D2B45] border-2 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center justify-center shrink-0 cursor-pointer" title="ปิดหน้าต่างส่งออก">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <!-- Controls & Ratio Bar -->
-      <div class="p-3 bg-[#f8fbf9] border-b-1.5 border-slate-900 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+      <!-- Single-Row Compact Control Ribbon -->
+      <div class="px-4 py-2 bg-[#FAF5EE] border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
         
-        <!-- Mode Tabs -->
-        <div class="flex items-center gap-1.5 bg-white p-1 rounded-xl border-1.5 border-slate-900">
-          <button id="exp-tab-report" class="px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5">
+        <!-- Mode Switcher -->
+        <div class="flex items-center gap-1 bg-white p-0.5 rounded-xl border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] shrink-0">
+          <button id="exp-tab-report" type="button" class="px-2.5 py-1 rounded-lg font-black text-[11.5px] transition-all bg-[#F7B844] text-[#1D2B45] border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
             <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
-            <span>หน้ารายงานสรุป (Report Card)</span>
+            <span>หน้ารายงานสรุป</span>
           </button>
-          <button id="exp-tab-3d" class="px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5">
+          <button id="exp-tab-3d" type="button" class="px-2.5 py-1 rounded-lg font-bold text-[11.5px] text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
             <i data-lucide="box" class="w-3.5 h-3.5"></i>
-            <span>มุมมอง 3D / แปลน (3D CAD View)</span>
+            <span>มุมมอง 3D / แปลน</span>
           </button>
         </div>
 
-        <!-- Aspect Ratio Selector (อัตราส่วนรูปภาพ) -->
-        <div class="flex items-center gap-2">
-          <span class="font-black text-[#34383b]">สัดส่วนภาพ:</span>
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <button data-ratio="fit" class="exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs">
-              📑 พอดีเต็มอัตราส่วน (Auto Fit 100%)
+        <!-- Compact Aspect Ratio Pills -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="font-black text-[#1D2B45] text-[11px] whitespace-nowrap">สัดส่วน:</span>
+          <div class="flex items-center gap-1 flex-wrap">
+            <button data-ratio="fit" type="button" class="exp-ratio-btn px-2.5 py-1 rounded-lg border-1.5 border-[#1D2B45] font-black text-[11px] bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap cursor-pointer">
+              Auto Fit (100%)
             </button>
-            <button data-ratio="4:3" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📐 4:3 แนวนอน (Landscape 4:3)
+            <button data-ratio="a4" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
+              A4 แนวตั้ง
             </button>
-            <button data-ratio="3:4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📱 3:4 แนวตั้ง (Portrait 3:4)
+            <button data-ratio="3:4" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
+              3:4 แนวตั้ง
             </button>
-            <button data-ratio="16:9" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              🔲 16:9 สไลด์ (Landscape 16:9)
+            <button data-ratio="4:3" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
+              4:3 แนวนอน
             </button>
-            <button data-ratio="a4" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📄 A4 มาตรฐาน (Portrait A4)
+            <button data-ratio="16:9" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
+              16:9 สไลด์
             </button>
-            <button data-ratio="1:1" class="exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]">
-              📱 1:1 จัตุรัส (Square)
+            <button data-ratio="1:1" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
+              1:1 จัตุรัส
             </button>
           </div>
         </div>
 
         <!-- Resolution Scale -->
-        <div class="flex items-center gap-1.5">
-          <span class="font-bold text-[#667277]">ความคมชัด:</span>
-          <select id="exp-scale" class="bg-white border-1.5 border-slate-900 rounded px-2 py-1 font-bold text-xs text-[#34383b] focus:outline-none">
-            <option value="2" selected>2x Ultra HD (คมกริบ)</option>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <span class="font-bold text-[#3E4B69] text-[11px] whitespace-nowrap">ความคมชัด:</span>
+          <select id="exp-scale" class="bg-white border-1.5 border-[#1D2B45] rounded-lg px-2 py-1 font-mono font-bold text-[11px] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] focus:outline-none cursor-pointer">
+            <option value="2" selected>2x Ultra HD</option>
             <option value="1">1x Standard</option>
           </select>
         </div>
 
       </div>
 
-      <!-- Preview Canvas Area -->
-      <div class="flex-1 overflow-auto p-4 bg-slate-100/70 flex items-center justify-center min-h-[300px]">
+      <!-- Preview Canvas Area (Expanded Viewport) -->
+      <div class="flex-1 overflow-auto p-3.5 bg-[#EFE6D8]/55 flex items-center justify-center min-h-[340px]">
         <div id="export-preview-wrapper" class="relative max-w-full flex items-center justify-center">
-          <div id="export-loading-spinner" class="hidden absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/80 backdrop-blur-xs rounded-xl">
-            <div class="w-8 h-8 border-3 border-[#10b981] border-t-transparent rounded-full animate-spin mb-2"></div>
-            <span class="text-xs font-bold text-[#34383b]">กำลังสร้างภาพรายงานความละเอียดสูง...</span>
+          <div id="export-loading-spinner" class="hidden absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/85 backdrop-blur-xs rounded-xl border-2 border-[#1D2B45]">
+            <div class="w-8 h-8 border-3 border-[#F26B2A] border-t-transparent rounded-full animate-spin mb-2"></div>
+            <span class="text-xs font-black text-[#1D2B45]">กำลังประมวลผลภาพรายงานความละเอียดสูง...</span>
           </div>
           <!-- Live Preview Canvas -->
-          <canvas id="exportPreviewCanvas" class="max-w-full max-h-[50vh] object-contain rounded-lg border-2 border-slate-900 shadow-lg bg-white"></canvas>
+          <canvas id="exportPreviewCanvas" class="max-w-full max-h-[62vh] object-contain rounded-xl border-2 border-[#1D2B45] shadow-[3px_3px_0px_#1D2B45] bg-white"></canvas>
         </div>
       </div>
 
       <!-- Modal Footer Action Bar -->
-      <div class="p-3.5 px-5 bg-white border-t-2 border-[#475569] flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-xs text-[#667277] font-semibold flex items-center gap-2">
-          <span id="export-dim-label" class="font-mono font-bold text-[#34383b] bg-[#f1f5f9] px-2 py-0.5 rounded border border-[#cbd5e1]">-</span>
-          <span>• PNG คมชัดสูง เหมาะสำหรับแชร์ในแชทและแนบสไลด์</span>
+      <div class="px-4 py-2.5 bg-white border-t-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div class="text-xs text-[#3E4B69] font-bold flex items-center gap-2 min-w-0">
+          <span id="export-dim-label" class="font-mono font-black text-[11px] text-[#1D2B45] bg-[#FAF5EE] px-2.5 py-1 rounded-lg border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap">-</span>
+          <span class="hidden sm:inline text-[11px] text-[#3E4B69] truncate">• ภาพ PNG ความละเอียดสูง พร้อมวางใน LINE หรือแนบรายงาน</span>
         </div>
 
-        <div class="flex items-center gap-2.5">
-          <button id="btn-copy-export-png" class="pop-btn px-4 py-2 text-xs flex items-center gap-1.5 font-black shadow-xs" style="background:#fff0c8;">
-            <i data-lucide="copy" class="w-4 h-4 text-[#ed6845]"></i>
-            <span id="txt-copy-btn">คัดลอกรูปภาพ (Ctrl+V ใน LINE ได้ทันที)</span>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="btn-copy-export-png" type="button" class="px-3.5 py-2 rounded-xl text-xs font-black bg-[#FAF5EE] hover:bg-[#F7B844] text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+            <i data-lucide="copy" class="w-4 h-4 text-[#F26B2A] shrink-0"></i>
+            <span id="txt-copy-btn" class="whitespace-nowrap">คัดลอกรูปภาพวาง LINE (Ctrl+V)</span>
           </button>
-          <button id="btn-download-export-png" class="pop-btn-green px-5 py-2 text-xs flex items-center gap-1.5 font-black shadow-xs hover:shadow-sm active:scale-95">
-            <i data-lucide="download" class="w-4 h-4"></i>
-            <span>ดาวน์โหลดภาพ PNG</span>
+          <button id="btn-download-export-png" type="button" class="px-4 py-2 rounded-xl text-xs font-black bg-[#10B981] hover:bg-[#059669] text-white border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+            <i data-lucide="download" class="w-4 h-4 shrink-0"></i>
+            <span class="whitespace-nowrap">ดาวน์โหลดไฟล์ PNG</span>
           </button>
         </div>
       </div>
@@ -3959,6 +4157,25 @@
         }
       }
 
+      // 3. Direct REST fallback (works even if CDN script is still loading)
+      if (!fetched) {
+        try {
+          const restRes = await fetch(`${SUPABASE_URL}/rest/v1/project_data?id=eq.1&select=data`, {
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            }
+          });
+          if (restRes.ok) {
+            const rows = await restRes.json();
+            const remotePiles = rows && rows[0] && rows[0].data && rows[0].data.pilingProgress;
+            if (remotePiles && typeof remotePiles === 'object' && Object.keys(remotePiles).length > 0) {
+              fetched = remotePiles;
+            }
+          }
+        } catch (_) {}
+      }
+
       hasInitialSupabasePullCompleted = true;
 
       if (fetched && Object.keys(fetched).length > 0) {
@@ -3973,6 +4190,10 @@
         renderQuickChips();
         renderCoTable();
         renderReportSheet();
+        if (!document.getElementById('report-page')?.classList.contains('hidden')) {
+          renderPlanSnapshotCanvas();
+          scheduleReportScurveRender();
+        }
         const now = new Date();
         const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         updateSyncButtonUI('success', timeStr);
@@ -8005,23 +8226,23 @@
             {
               label: 'แผนงานสะสม (3 ต้น/วันทำการ)',
               data: planData,
-              borderColor: '#ed6845',
+              borderColor: '#F26B2A',
               borderWidth: 2.5,
               borderDash: [6, 4],
               pointRadius: 2.5,
-              pointBackgroundColor: '#ed6845',
+              pointBackgroundColor: '#F26B2A',
               fill: false,
               tension: 0.1
             },
             {
               label: 'ผลงานจริงสะสม (Actual)',
               data: actualData,
-              borderColor: '#10b981',
-              backgroundColor: 'rgba(16, 185, 129, 0.18)',
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.16)',
               borderWidth: 3.5,
               pointRadius: 3.5,
-              pointBackgroundColor: '#10b981',
-              pointBorderColor: '#064e3b',
+              pointBackgroundColor: '#10B981',
+              pointBorderColor: '#064E3B',
               pointBorderWidth: 1.5,
               fill: true,
               tension: 0.15
@@ -8029,6 +8250,7 @@
           ]
         },
         options: {
+          animation: false,
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
@@ -8040,7 +8262,7 @@
                 boxWidth: 38,
                 pointStyleWidth: 38,
                 font: { family: 'Sarabun', size: 12, weight: 'bold' },
-                color: '#34383b',
+                color: '#1D2B45',
                 padding: 14,
                 generateLabels: function(chart) {
                   return chart.data.datasets.map((dataset, i) => ({
@@ -8526,6 +8748,8 @@
       const reportPage = document.getElementById('report-page');
       const reportCard = document.getElementById('report-page-card');
       const header = document.getElementById('report-header-bar');
+      const headerToolbar = document.getElementById('rep-header-toolbar-row');
+      const docNo = document.getElementById('rep-header-docno');
       const themeSel = document.getElementById('report-theme-selector');
       const btnOrig = document.getElementById('btn-theme-original');
       const btnExcel = document.getElementById('btn-theme-excel');
@@ -8541,9 +8765,14 @@
       const subtag = document.getElementById('rep-header-subtag');
       const titleText = document.getElementById('rep-header-title');
 
+      const kpiBox = document.getElementById('rep-kpi-summary-box');
       const kpi1 = document.getElementById('rep-kpi-1');
       const kpi2 = document.getElementById('rep-kpi-2');
       const kpi3 = document.getElementById('rep-kpi-3');
+      const varCard = document.getElementById('rep-variance-card');
+      const kpiHeads = document.querySelectorAll('#rep-kpi-summary-box .rep-kpi-head');
+      const kpiSteps = document.querySelectorAll('#rep-kpi-summary-box .rep-kpi-step');
+
       const secPlan = document.getElementById('report-sec-plan');
       const secPlanHead = document.getElementById('report-sec-plan-head');
       const planCanvasBox = document.getElementById('planCanvasContainer');
@@ -8566,7 +8795,8 @@
         if (reportCard) {
           reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-1.5 border-slate-900 rounded-xl shadow-lg p-3 sm:p-4 md:p-6 transition-all' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
-        if (header) header.className = 'bg-[#107c41] text-white rounded-lg p-3.5 md:p-4 mb-4 shadow-sm border border-[#0d6535] transition-all';
+        if (header) header.className = 'bg-[#107c41] text-white rounded-lg overflow-hidden mb-4 shadow-sm border border-[#0d6535] transition-all';
+        if (headerToolbar) headerToolbar.className = 'bg-[#0d6535] border-t border-white/20 px-3 py-1.5 sm:px-3.5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-1.5 no-print no-export';
         if (logoBox) {
           logoBox.className = 'w-10 h-10 rounded bg-white text-[#107c41] font-black text-sm flex items-center justify-center shadow-xs border border-white/60 shrink-0';
           logoBox.innerHTML = 'XLS';
@@ -8576,14 +8806,15 @@
           tagPill.textContent = 'EXCEL REPORT';
         }
         if (subtag) subtag.className = 'text-xs text-white/90 font-medium';
+        if (docNo) docNo.className = 'hidden md:inline-flex items-center px-2 py-0.5 rounded bg-white/15 border border-white/30 text-[10px] font-mono font-bold text-white whitespace-nowrap shrink-0';
         if (titleText) {
           titleText.className = 'text-lg md:text-xl font-bold text-white mt-0.5 tracking-tight';
           titleText.innerHTML = 'รายงานความคืบหน้างานเสาเข็ม 93 ต้น <span class="text-xs font-normal text-white/80 hidden sm:inline">(Piling Daily Progress Report)</span>';
         }
 
-        if (themeSel) themeSel.className = 'flex items-center bg-[#0d6535] rounded p-0.5 border border-white/20 no-print no-export';
-        if (btnOrig) btnOrig.className = 'px-2 py-1 rounded text-xs font-medium text-white/80 hover:text-white transition-all flex items-center gap-1';
-        if (btnExcel) btnExcel.className = 'px-2 py-1 rounded text-xs font-bold transition-all bg-white text-[#107c41] shadow-xs flex items-center gap-1';
+        if (themeSel) themeSel.className = 'flex items-center bg-[#094725] rounded p-0.5 border border-white/20 no-print no-export';
+        if (btnOrig) btnOrig.className = 'px-2 py-1 rounded text-xs font-medium text-white/80 hover:text-white transition-all flex items-center gap-1 cursor-pointer';
+        if (btnExcel) btnExcel.className = 'px-2 py-1 rounded text-xs font-bold transition-all bg-white text-[#107c41] shadow-xs flex items-center gap-1 cursor-pointer';
 
         if (dateBadge) {
           dateBadge.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/15 border border-white/30 text-xs text-white';
@@ -8592,17 +8823,24 @@
           const dText = document.getElementById('rep-header-date');
           if (dText) dText.className = 'font-mono font-bold text-white';
         }
-        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-[#0d6535] rounded p-0.5 border border-white/20 no-print no-export';
-        if (btnExport) btnExport.className = 'px-3 py-1 rounded text-xs font-bold bg-white text-[#107c41] hover:bg-slate-100 transition-all border border-slate-200 shadow-xs flex items-center gap-1';
-        if (btnPrint) btnPrint.className = 'px-2.5 py-1 rounded text-xs font-bold bg-[#0d6535] hover:bg-[#094725] text-white transition-all border border-white/30 flex items-center gap-1';
-        if (btnClose) btnClose.className = 'p-1 rounded text-xs bg-white/20 hover:bg-white/30 text-white transition-all flex items-center justify-center';
+        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-[#094725] rounded p-0.5 border border-white/20 no-print no-export';
+        if (btnExport) btnExport.className = 'px-3 py-1 rounded text-xs font-bold bg-white text-[#107c41] hover:bg-slate-100 transition-all border border-slate-200 shadow-xs flex items-center gap-1 cursor-pointer';
+        if (btnPrint) btnPrint.className = 'px-2.5 py-1 rounded text-xs font-bold bg-[#094725] hover:bg-[#06331a] text-white transition-all border border-white/30 flex items-center gap-1 cursor-pointer';
+        if (btnClose) btnClose.className = 'no-print no-export px-3 py-1.5 rounded text-xs font-bold bg-white/20 hover:bg-white/30 text-white border border-white/30 transition-all flex items-center gap-1 cursor-pointer';
 
         if (formulaBar) formulaBar.classList.remove('hidden');
         if (sheetTabs) sheetTabs.classList.remove('hidden');
 
-        if (kpi1) kpi1.className = 'bg-[#f0f7ff] border border-blue-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs';
-        if (kpi2) kpi2.className = 'bg-[#fefce8] border border-amber-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs';
-        if (kpi3) kpi3.className = 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs';
+        if (kpiBox) kpiBox.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-1.5 border-slate-900 rounded-lg overflow-hidden shadow-xs bg-white mb-4 is-excel-ledger';
+        [kpi1, kpi2, kpi3, varCard].forEach(cell => {
+          if (cell) cell.className = 'rep-kpi-cell flex flex-col justify-between bg-white';
+        });
+        kpiHeads.forEach(h => {
+          h.className = 'rep-kpi-head bg-[#f8fafc] px-3.5 py-2 border-b border-slate-200 flex items-center justify-between gap-2';
+        });
+        kpiSteps.forEach(s => {
+          s.className = 'rep-kpi-step font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#107c41] text-white leading-none shrink-0';
+        });
 
         if (secPlan) secPlan.className = 'border-1.5 border-slate-900 rounded-lg overflow-hidden bg-white h-full flex flex-col shadow-xs';
         if (secPlanHead) secPlanHead.className = 'bg-[#f8fafc] px-3.5 py-2.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2';
@@ -8618,60 +8856,69 @@
         if (legendExcel) legendExcel.classList.remove('hidden');
 
       } else {
-        // ORIGINAL THEME (DOODLEWEB EXECUTIVE - OFFICIAL & TACTILE)
+        // ORIGINAL THEME (DOODLEWEB EXECUTIVE - UNIFIED ARCHITECTURAL TELEMETRY LEDGER)
         if (reportPage) {
           reportPage.className = 'fixed inset-0 z-50 overflow-y-auto bg-[#FAF5EE] p-2 sm:p-4 md:p-5 font-body' + (isHidden ? ' hidden' : '');
         }
         if (reportCard) {
           reportCard.className = 'w-full max-w-[98vw] 2xl:max-w-[1840px] mx-auto bg-white border-2 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45] p-3.5 sm:p-5 md:p-7 transition-all font-body' + (currentReportLayout === 'landscape' ? ' is-landscape' : '');
         }
-        if (header) header.className = 'bg-white border-2 border-[#1D2B45] rounded-2xl p-3.5 sm:p-4 md:p-5 shadow-[4px_4px_0px_#1D2B45] mb-4 transition-all font-body';
+        if (header) header.className = 'bg-white border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] mb-4 transition-all font-body';
+        if (headerToolbar) headerToolbar.className = 'bg-[#FAF5EE] border-t-2 border-[#1D2B45] px-3 py-1.5 sm:px-3.5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-1.5 no-print no-export';
         if (logoBox) {
-          logoBox.className = 'w-12 h-12 rounded-2xl bg-[#F7B844] border-2 border-[#1D2B45] flex flex-col items-center justify-center font-black text-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] leading-tight shrink-0';
+          logoBox.className = 'w-12 h-12 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] flex flex-col items-center justify-center font-black text-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] leading-tight shrink-0';
           logoBox.innerHTML = '<span class="text-[9px] font-black uppercase text-[#F26B2A] tracking-wider">PYNN</span><span class="text-base font-black">37</span>';
         }
         if (tagPill) {
-          tagPill.className = 'px-2.5 py-0.5 rounded-full bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-[11px] font-black text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0 inline-flex items-center justify-center';
+          tagPill.className = 'px-2.5 py-0.5 rounded-md bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-[11px] font-black text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0 inline-flex items-center justify-center';
           tagPill.textContent = 'โครงการ PYNN PRIDI 37';
         }
         if (subtag) subtag.className = 'text-xs text-[#3E4B69] font-bold whitespace-nowrap shrink-0 inline-block';
+        if (docNo) docNo.className = 'hidden md:inline-flex items-center px-2 py-0.5 rounded bg-[#F6E9D7] border border-[#1D2B45]/40 text-[10px] font-mono font-bold text-[#1D2B45] whitespace-nowrap shrink-0';
         if (titleText) {
           titleText.className = 'text-xl md:text-2xl font-black text-[#1D2B45] mt-0.5 whitespace-nowrap tracking-tight';
           titleText.innerHTML = 'รายงานความคืบหน้างานเสาเข็ม <span class="text-xs md:text-sm font-bold text-[#8C9AA8] hidden sm:inline whitespace-nowrap">(Piling Progress Report)</span>';
         }
 
-        if (themeSel) themeSel.className = 'flex items-center bg-[#FAF5EE] rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45] no-print no-export';
-        if (btnOrig) btnOrig.className = 'px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer';
-        if (btnExcel) btnExcel.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer';
+        if (themeSel) themeSel.className = 'flex items-center bg-white rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45] shrink-0 no-print no-export';
+        if (btnOrig) btnOrig.className = 'px-2 py-1 rounded-lg text-[11px] font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer whitespace-nowrap';
+        if (btnExcel) btnExcel.className = 'px-2 py-1 rounded-lg text-[11px] font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap';
 
         if (dateBadge) {
-          dateBadge.className = 'flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-xs font-bold text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0';
+          dateBadge.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FAF5EE] border-1.5 border-[#1D2B45] text-xs font-bold text-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] whitespace-nowrap shrink-0';
           const dIcon = dateBadge.querySelector('i');
           if (dIcon) dIcon.className = 'w-3.5 h-3.5 text-[#F26B2A] shrink-0';
           const dText = document.getElementById('rep-header-date');
           if (dText) dText.className = 'text-[#F26B2A] font-mono font-black inline-block whitespace-nowrap shrink-0';
         }
-        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-[#FAF5EE] rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45] no-print no-export';
-        if (btnExport) btnExport.className = 'px-3 py-1 rounded-lg text-xs font-black bg-white hover:bg-[#10B981] hover:text-white text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer';
-        if (btnPrint) btnPrint.className = 'px-3 py-1 rounded-lg text-xs font-black bg-[#F26B2A] hover:bg-[#d95618] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer';
-        if (btnClose) btnClose.className = 'px-3.5 py-1.5 text-xs font-black rounded-xl bg-[#FAF5EE] hover:bg-[#F26B2A] hover:text-white text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer ml-1';
+        if (layoutSwitch) layoutSwitch.className = 'flex items-center bg-white rounded-xl border-1.5 border-[#1D2B45] p-0.5 shadow-[1px_1px_0px_#1D2B45] shrink-0 no-print no-export';
+        if (btnExport) btnExport.className = 'px-2 py-1 rounded-lg text-[11px] font-black bg-white hover:bg-[#10B981] hover:text-white text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap';
+        if (btnPrint) btnPrint.className = 'px-2 py-1 rounded-lg text-[11px] font-black bg-[#F26B2A] hover:bg-[#d95618] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap';
+        if (btnClose) btnClose.className = 'no-print no-export px-3.5 py-1.5 text-xs font-black rounded-xl bg-[#FAF5EE] hover:bg-[#F26B2A] hover:text-white text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap';
 
         if (formulaBar) formulaBar.classList.add('hidden');
         if (sheetTabs) sheetTabs.classList.add('hidden');
 
-        if (kpi1) kpi1.className = 'bg-[#F0F9FF] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
-        if (kpi2) kpi2.className = 'bg-[#FFF7ED] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
-        if (kpi3) kpi3.className = 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
+        if (kpiBox) kpiBox.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white mb-4 font-body';
+        [kpi1, kpi2, kpi3, varCard].forEach(cell => {
+          if (cell) cell.className = 'rep-kpi-cell flex flex-col justify-between bg-white';
+        });
+        kpiHeads.forEach(h => {
+          h.className = 'rep-kpi-head bg-[#F6E9D7] px-3.5 py-2 border-b-1.5 border-[#1D2B45] flex items-center justify-between gap-2';
+        });
+        kpiSteps.forEach(s => {
+          s.className = 'rep-kpi-step font-mono text-[10px] font-black px-1.5 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none shrink-0';
+        });
 
         if (secPlan) secPlan.className = 'border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white h-full flex flex-col';
         if (secPlanHead) secPlanHead.className = 'bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 rounded-t-[14px]';
         if (planCanvasBox) planCanvasBox.className = 'w-full bg-white border-2 border-[#1D2B45] rounded-xl overflow-hidden flex items-center justify-center relative shadow-xs';
         if (secScurve) secScurve.className = 'border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white';
-        if (secScurveHead) secScurveHead.className = 'bg-[#EEF4FF] px-4 py-2.5 border-b-2 border-[#1D2B45] flex items-center justify-between rounded-t-[14px]';
-        if (scurveBadge) scurveBadge.className = 'text-xs font-black bg-white px-3 py-1 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] text-[#1D2B45] whitespace-nowrap inline-block';
-        if (secTable) secTable.className = 'border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white';
+        if (secScurveHead) secScurveHead.className = 'bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 rounded-t-[14px]';
+        if (scurveBadge) scurveBadge.className = 'text-[11px] font-black bg-white px-3 py-1 rounded-full border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] text-[#1D2B45] whitespace-nowrap shrink-0 inline-block';
+        if (secTable) secTable.className = 'border-2 border-[#1D2B45] rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1D2B45] bg-white w-full';
         if (secTableHead) secTableHead.className = 'bg-[#F6E9D7] px-4 py-2.5 border-b-2 border-[#1D2B45] flex flex-wrap items-center justify-between gap-2 rounded-t-[14px]';
-        if (theadTable) theadTable.className = 'bg-[#FAF5EE] text-[#1D2B45] border-b-2 border-[#1D2B45] font-black text-xs';
+        if (theadTable) theadTable.className = 'bg-[#FAF5EE] text-[#1D2B45] border-b-2 border-[#1D2B45] font-black text-[11px]';
 
         if (legendOrig) legendOrig.classList.remove('hidden');
         if (legendExcel) legendExcel.classList.add('hidden');
@@ -8696,11 +8943,11 @@
         }
       } else {
         if (layout === 'landscape') {
-          bLand.className = 'px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer';
-          bPort.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer';
+          bLand.className = 'px-2 py-1 rounded-lg text-[11.5px] font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer';
+          bPort.className = 'px-2 py-1 rounded-lg text-[11.5px] font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer';
         } else {
-          bPort.className = 'px-2.5 py-1 rounded-lg text-xs font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer';
-          bLand.className = 'px-2.5 py-1 rounded-lg text-xs font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer';
+          bPort.className = 'px-2 py-1 rounded-lg text-[11.5px] font-black transition-all bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1 cursor-pointer';
+          bLand.className = 'px-2 py-1 rounded-lg text-[11.5px] font-bold text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1 cursor-pointer';
         }
       }
     }
@@ -8773,7 +9020,7 @@
         return a.pile.no - b.pile.no;
       });
 
-            // 1. Calculate Elapsed Working Days & Cumulative Plan (ไม่นับวันอาทิตย์และวันหยุดราชการ)
+      // 1. Calculate Elapsed Working Days & Cumulative Plan (ไม่นับวันอาทิตย์และวันหยุดราชการ)
       const drivenRecords = Object.values(progressRecords).filter(r => r && r.status === 'driven');
       const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
       
@@ -8788,19 +9035,35 @@
       const planCumCount = Math.min(elapsedDays * 3, 93);
       const variance = drivenCount - planCumCount; // negative means delayed, positive means ahead
 
-      // Update Card 1: แผนวันนี้ 3 ต้น / กดแล้ว X ต้น
+      // Update Cell 01: งานประจำวัน (Daily Output)
       const repTodayCountEl = document.getElementById('rep-today-count');
       if (repTodayCountEl) repTodayCountEl.textContent = todayCount;
       const repTodaySubEl = document.getElementById('rep-today-sub');
       if (repTodaySubEl) repTodaySubEl.textContent = todayCount;
+      const todayPct = Math.min(100, Math.round((todayCount / 3) * 100));
+      const repTodayBarEl = document.getElementById('rep-today-bar');
+      if (repTodayBarEl) repTodayBarEl.style.width = `${todayPct}%`;
+      const repTodayStatusEl = document.getElementById('rep-today-status');
+      if (repTodayStatusEl) {
+        repTodayStatusEl.textContent = todayCount >= 3
+          ? `ครบเป้าหมายรายวัน (${todayCount}/3 ต้น)`
+          : todayCount > 0
+            ? `ดำเนินการแล้ว ${todayPct}% ของแผนรายวัน`
+            : 'รอบันทึกผลงานกดเสาเข็มวันนี้';
+      }
 
-      // Update Card 2: แผนกดสะสม X ต้น
+      // Update Cell 02: เป้าหมายสะสม (Cumulative Plan Target)
       const repPlanCumEl = document.getElementById('rep-plan-cum-count');
       if (repPlanCumEl) repPlanCumEl.textContent = planCumCount;
       const repElapsedEl = document.getElementById('rep-elapsed-days');
       if (repElapsedEl) repElapsedEl.textContent = elapsedDays;
+      const planPct = ((planCumCount / 93) * 100).toFixed(1);
+      const repPlanBarEl = document.getElementById('rep-plan-bar');
+      if (repPlanBarEl) repPlanBarEl.style.width = `${planPct}%`;
+      const repPlanPctEl = document.getElementById('rep-plan-pct');
+      if (repPlanPctEl) repPlanPctEl.textContent = `คิดเป็น ${planPct}% ของโครงการ`;
 
-      // Update Card 3: กดสะสมจริง X ต้น
+      // Update Cell 03: ผลงานจริงสะสม (Cumulative Actual Driven)
       const pct = ((drivenCount / 93) * 100).toFixed(1);
       const repCumCountEl = document.getElementById('rep-cum-count');
       if (repCumCountEl) repCumCountEl.textContent = drivenCount;
@@ -8808,63 +9071,71 @@
       if (repCumPctEl) repCumPctEl.textContent = `${pct}%`;
       const repCumBarEl = document.getElementById('rep-cum-bar');
       if (repCumBarEl) repCumBarEl.style.width = `${pct}%`;
+      const repRemainSubEl = document.getElementById('rep-remain-sub');
+      if (repRemainSubEl) {
+        const remain = Math.max(0, 93 - drivenCount);
+        repRemainSubEl.textContent = `กดแล้ว ${drivenCount} ต้น · คงเหลือ ${remain} ต้น`;
+      }
 
-      // Update Card 4: ช้ากว่าแผน X ต้น / เร็วกว่าแผน / ตามแผน (ตัดคำว่าพอดีออก)
+      // Update Cell 04: วิเคราะห์เทียบแผน (Schedule Variance)
       const repPlanSubEl = document.getElementById('rep-plan-sub');
       if (repPlanSubEl) repPlanSubEl.textContent = planCumCount;
       const repCumSubEl = document.getElementById('rep-cum-sub');
       if (repCumSubEl) repCumSubEl.textContent = drivenCount;
 
-      const varCard = document.getElementById('rep-variance-card');
+      const varNum = document.getElementById('rep-variance-num');
       const varDisplay = document.getElementById('rep-variance-display');
       const varBadge = document.getElementById('rep-variance-badge');
+      const varBar = document.getElementById('rep-variance-bar');
+      const varSub = document.getElementById('rep-variance-sub');
+      const varRatio = document.getElementById('rep-variance-ratio');
+
+      const vsPlanPct = planCumCount > 0 ? Math.min(100, Math.round((drivenCount / planCumCount) * 100)) : 100;
+      if (varBar) varBar.style.width = `${vsPlanPct}%`;
+      if (varSub) varSub.textContent = `ผลงานจริง ${drivenCount} / แผนสะสม ${planCumCount} ต้น`;
+      if (varRatio) varRatio.textContent = `${vsPlanPct}% OF PLAN`;
+      if (varBadge) varBadge.className = 'hidden';
 
       if (variance < 0) {
         const delayedCount = Math.abs(variance);
+        if (varNum) {
+          varNum.textContent = `-${delayedCount}`;
+          varNum.className = 'text-2xl sm:text-[28px] font-black font-mono text-[#E11D48] leading-none tracking-tight';
+        }
         if (varDisplay) {
           varDisplay.textContent = `ช้ากว่าแผน ${delayedCount} ต้น`;
           varDisplay.className = currentReportTheme === 'excel'
-            ? 'font-bold text-xs sm:text-sm text-rose-700 leading-none font-mono whitespace-nowrap shrink-0'
-            : 'font-black text-base sm:text-lg text-[#e11d48] leading-none whitespace-nowrap shrink-0';
+            ? 'text-[10.5px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded font-mono whitespace-nowrap shrink-0'
+            : 'text-[10.5px] font-black text-white bg-[#E11D48] border-1.5 border-[#1D2B45] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0';
         }
-        if (varBadge) {
-          varBadge.className = 'hidden';
-        }
-        if (varCard) {
-          varCard.className = currentReportTheme === 'excel'
-            ? 'bg-[#fef2f2] border border-rose-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs'
-            : 'bg-[#FEF2F2] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
-        }
+        if (varBar) varBar.className = 'h-full bg-[#E11D48] transition-all duration-300';
+        if (varRatio) varRatio.className = 'font-mono font-black text-[#E11D48] shrink-0';
       } else if (variance > 0) {
+        if (varNum) {
+          varNum.textContent = `+${variance}`;
+          varNum.className = 'text-2xl sm:text-[28px] font-black font-mono text-[#059669] leading-none tracking-tight';
+        }
         if (varDisplay) {
           varDisplay.textContent = `เร็วกว่าแผน +${variance} ต้น`;
           varDisplay.className = currentReportTheme === 'excel'
-            ? 'font-bold text-xs sm:text-sm text-emerald-700 leading-none font-mono whitespace-nowrap shrink-0'
-            : 'font-black text-base sm:text-lg text-[#10B981] leading-none whitespace-nowrap shrink-0';
+            ? 'text-[10.5px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-mono whitespace-nowrap shrink-0'
+            : 'text-[10.5px] font-black text-white bg-[#059669] border-1.5 border-[#1D2B45] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0';
         }
-        if (varBadge) {
-          varBadge.className = 'hidden';
-        }
-        if (varCard) {
-          varCard.className = currentReportTheme === 'excel'
-            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs'
-            : 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
-        }
+        if (varBar) varBar.className = 'h-full bg-[#10B981] transition-all duration-300';
+        if (varRatio) varRatio.className = 'font-mono font-black text-[#059669] shrink-0';
       } else {
+        if (varNum) {
+          varNum.textContent = '0';
+          varNum.className = 'text-2xl sm:text-[28px] font-black font-mono text-[#059669] leading-none tracking-tight';
+        }
         if (varDisplay) {
           varDisplay.textContent = currentReportTheme === 'excel' ? 'ตามแผน (0 ต้น)' : 'ตามแผนงาน';
           varDisplay.className = currentReportTheme === 'excel'
-            ? 'font-bold text-xs sm:text-sm text-emerald-700 leading-none font-mono whitespace-nowrap shrink-0'
-            : 'font-black text-base sm:text-lg text-[#064E3B] leading-none whitespace-nowrap shrink-0';
+            ? 'text-[10.5px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-mono whitespace-nowrap shrink-0'
+            : 'text-[10.5px] font-black text-white bg-[#059669] border-1.5 border-[#1D2B45] px-2 py-0.5 rounded-md shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap shrink-0';
         }
-        if (varBadge) {
-          varBadge.className = 'hidden';
-        }
-        if (varCard) {
-          varCard.className = currentReportTheme === 'excel'
-            ? 'bg-[#f0fdf4] border border-emerald-200 rounded-lg p-3 sm:p-3.5 flex flex-col justify-between gap-1.5 min-h-[70px] text-xs shadow-xs'
-            : 'bg-[#ECFDF5] border-2 border-[#1D2B45] rounded-2xl p-3 sm:p-3.5 shadow-[2.5px_2.5px_0px_#1D2B45] flex flex-col justify-between gap-1.5 min-h-[74px] transition-all hover:translate-y-[-1px]';
-        }
+        if (varBar) varBar.className = 'h-full bg-[#10B981] transition-all duration-300';
+        if (varRatio) varRatio.className = 'font-mono font-black text-[#059669] shrink-0';
       }
 
       // Render Today's Driven Piles Table
@@ -8899,10 +9170,10 @@
       }
 
       if (displayPilesList.length === 0) {
-        tbody.innerHTML = `<tr class="empty-log-row"><td colspan="12" class="empty-log-cell py-5 px-3 text-center border-b-2 border-slate-900">
-          <div class="empty-log-msg no-export inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-50 border border-slate-200 text-[#475569] font-bold text-xs leading-normal">
-            <i data-lucide="info" class="w-4 h-4 text-[#ed6845] shrink-0"></i>
-            <span>${isFilterAll ? 'ยังไม่มีเสาเข็มที่กดในโครงการ' : `ยังไม่มีการบันทึกเสาเข็มที่กดในวันที่ ${curDate} <span class="no-export no-print text-[11px] text-[#667277] font-normal block sm:inline mt-1 sm:mt-0">(คลิกปุ่ม "ทั้งหมด" ด้านบนเพื่อดูเข็มวันอื่น หรือคลิกที่ต้นเข็มบนแปลนเพื่อบันทึก)</span>`}</span>
+        tbody.innerHTML = `<tr class="empty-log-row"><td colspan="12" class="empty-log-cell py-4 px-4 text-center bg-[#FFFDF9]">
+          <div class="empty-log-msg inline-flex items-center justify-center gap-2 py-1.5 px-4 rounded-xl bg-[#FAF5EE] border-1.5 border-[#E2D9CC] text-[#3E4B69] font-bold text-xs leading-normal">
+            <i data-lucide="info" class="w-4 h-4 text-[#F26B2A] shrink-0 no-export"></i>
+            <span>${isFilterAll ? 'ยังไม่มีรายการเสาเข็มที่บันทึกกดในโครงการ' : `ไม่มีรายการบันทึกกดเสาเข็มในวันที่ ${curDate} — ดูผลงานสะสมรวม ${drivenCount}/93 ต้น ได้ที่ตารางเปรียบเทียบด้านบน <span class="no-export no-print text-[11px] text-[#8C9AA8] font-semibold">(คลิกปุ่ม "ทั้งหมด" เพื่อดูประวัติการกดทั้งหมด)</span>`}</span>
           </div>
         </td></tr>`;
         if (window.lucide) lucide.createIcons();
@@ -9009,10 +9280,10 @@
             </div>
           ` : ``;
 
-          // TOP display (clean, NO edit pencil clutter, always show pile top level)
+          // TOP display (clean executive engineering format — no emoji clutter)
           const actualTopDisplay = hasActualTop
-            ? `<span class="font-black font-mono ${currentReportTheme === 'excel' ? 'text-sky-800' : 'text-[#0284c7]'}">${actTopVal.toFixed(3)}</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`
-            : `<span class="font-bold font-mono text-slate-800">${actTopVal.toFixed(3)}</span><span class="pencil-edit-icon text-blue-500 text-[9px] ml-1 no-export no-print">✏️</span>`;
+            ? `<span class="font-black font-mono ${currentReportTheme === 'excel' ? 'text-sky-800' : 'text-[#0284c7]'}">${actTopVal.toFixed(3)}</span>`
+            : `<span class="font-bold font-mono text-slate-800">${actTopVal.toFixed(3)}</span>`;
 
           // ผลต่าง diff pco เอาเป็น เมตร ไม่ต้องมีกรอบสี (plain font-mono text in meters without colored border/badge)
           const diffDisplay = hasActualTop
@@ -9025,10 +9296,10 @@
             openPileCard(p.no);
           });
 
-          // วันที่เช่นกันไม่ต้องใส่กรอบสี (clean text without colored border/badge box)
+          // วันที่แบบตัวอักษรคมชัด ไม่มีอิโมจิดินสอรกตา
           const dateDisplay = `
-            <span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-slate-800 whitespace-nowrap">
-              ${formatThaiShortDate(rec.date || curDate)} <span class="pencil-edit-icon text-blue-500 text-[9px] no-export no-print">✏️</span>
+            <span class="inline-flex items-center font-mono text-[11px] font-bold text-[#1D2B45] whitespace-nowrap">
+              ${formatThaiShortDate(rec.date || curDate)}
             </span>
           `;
 
@@ -9166,7 +9437,7 @@
         });
       }
 
-      // 2. Helper to build one row / tier of the table (2 แถวแบบ Dashboard)
+      // 2. Helper to build one row / tier of the table (2 แถวแบบ Architectural Telemetry Grid)
       function buildTierBlock(tierNum, tierDateRange, startIdx, endIdx, hasTotalCol) {
         let headerCells = '';
         let planCells = '';
@@ -9180,60 +9451,60 @@
 
           const colClass = d.isToday ? 'active-col' : '';
           const headerInner = d.isToday
-            ? '<span class="font-black text-amber-950 text-xs">' + d.formattedDate + '</span>'
-            : '<span class="font-bold text-slate-800 text-xs">' + d.formattedDate + '</span>';
+            ? '<span class="font-black text-[#9A3412] text-[10.5px]">' + d.formattedDate + '</span>'
+            : '<span class="font-bold text-[#1D2B45] text-[10.5px]">' + d.formattedDate + '</span>';
 
-          headerCells += '<th class="py-1 px-1 sm:px-1.5 border border-slate-700 font-bold text-center select-none cursor-pointer transition-colors whitespace-nowrap ' + colClass + '" data-date="' + d.date + '" title="คลิกเพื่อดูรายงานวันที่ ' + d.date + '">' + headerInner + '</th>';
-          planCells += '<td class="py-1 px-1 sm:px-1.5 border border-slate-700 font-mono text-center text-slate-700 text-xs ' + colClass + '">' + d.dayPlan + '</td>';
+          headerCells += '<th class="py-1 px-0.5 font-bold text-center select-none cursor-pointer transition-colors whitespace-nowrap ' + colClass + '" data-date="' + d.date + '" title="คลิกเพื่อดูรายงานวันที่ ' + d.date + '">' + headerInner + '</th>';
+          planCells += '<td class="py-1 px-0.5 font-mono text-center text-[#3E4B69] text-[11px] ' + colClass + '">' + d.dayPlan + '</td>';
 
           const actualDisplay = d.isFuture ? '-' : d.dayActual;
-          actualCells += '<td class="py-1 px-1 sm:px-1.5 border border-slate-700 font-mono text-center font-black text-slate-950 text-xs ' + colClass + '">' + actualDisplay + '</td>';
+          actualCells += '<td class="py-1 px-0.5 font-mono text-center font-black text-[#1D2B45] text-[11px] ' + colClass + '">' + actualDisplay + '</td>';
 
-          cumPlanCells += '<td class="py-1 px-1 sm:px-1.5 border border-slate-700 font-mono text-center text-blue-900 font-bold text-xs ' + colClass + '">' + d.planCum + '</td>';
+          cumPlanCells += '<td class="py-1 px-0.5 font-mono text-center text-[#0284C7] font-bold text-[11px] ' + colClass + '">' + d.planCum + '</td>';
 
           const cumActualDisplay = d.isFuture ? '-' : d.actualCum;
-          cumActualCells += '<td class="py-1 px-1 sm:px-1.5 border border-slate-700 font-mono text-center font-black text-emerald-950 text-xs ' + colClass + '">' + cumActualDisplay + '</td>';
+          cumActualCells += '<td class="py-1 px-0.5 font-mono text-center font-black text-[#064E3B] text-[11px] ' + colClass + '">' + cumActualDisplay + '</td>';
         }
 
         if (hasTotalCol) {
-          headerCells += '<th class="py-1 px-1.5 border border-slate-700 bg-slate-950 text-amber-300 font-black text-center whitespace-nowrap min-w-[50px] text-xs">รวม</th>';
-          planCells += '<td class="py-1 px-1.5 border border-slate-700 font-mono text-center font-bold bg-slate-100 text-slate-800 text-xs">93</td>';
-          actualCells += '<td class="py-1 px-1.5 border border-slate-700 font-mono text-center font-black bg-slate-200 text-slate-950 text-xs">' + totalActualDriven + '</td>';
-          cumPlanCells += '<td class="py-1 px-1.5 border border-slate-700 font-mono text-center font-black bg-blue-100 text-blue-950 text-xs">93</td>';
-          cumActualCells += '<td class="py-1 px-1.5 border border-slate-700 font-mono text-center font-black bg-emerald-200 text-emerald-950 text-xs">' + totalActualDriven + '</td>';
+          headerCells += '<th class="py-1 px-1 bg-[#1D2B45] text-[#F7B844] font-black text-center whitespace-nowrap text-[10.5px]">รวม</th>';
+          planCells += '<td class="py-1 px-1 font-mono text-center font-bold bg-[#FAF5EE] text-[#1D2B45] text-[11px]">93</td>';
+          actualCells += '<td class="py-1 px-1 font-mono text-center font-black bg-[#F6E9D7] text-[#1D2B45] text-[11px]">' + totalActualDriven + '</td>';
+          cumPlanCells += '<td class="py-1 px-1 font-mono text-center font-black bg-[#E0F2FE] text-[#0369A1] text-[11px]">93</td>';
+          cumActualCells += '<td class="py-1 px-1 font-mono text-center font-black bg-[#D1FAE5] text-[#064E3B] text-[11px]">' + totalActualDriven + '</td>';
         }
 
-        return '<div class="piling-daily-tier-block border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] bg-white overflow-hidden rounded-xs">' +
-          '<div class="px-2.5 py-1 bg-slate-100 border-b border-slate-900 flex items-center justify-between text-xs font-bold">' +
-            '<div class="flex items-center gap-1.5">' +
-              '<span class="manga-sticker sticker-ink text-[9px] px-1 py-0.5 font-bold">' + tierNum + '</span>' +
-              '<span class="text-slate-900 font-black">' + tierDateRange + '</span>' +
+        return '<div class="piling-daily-tier-block border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] bg-white overflow-hidden rounded-xl">' +
+          '<div class="piling-daily-tier-head px-3 py-1.5 bg-[#FAF5EE] flex items-center justify-between gap-2 text-xs font-bold whitespace-nowrap flex-nowrap">' +
+            '<div class="flex items-center gap-2 shrink-0 whitespace-nowrap">' +
+              '<span class="font-mono text-[10px] font-black px-2 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none whitespace-nowrap shrink-0 inline-block">' + tierNum + '</span>' +
+              '<span class="text-[#1D2B45] font-black whitespace-nowrap shrink-0">' + tierDateRange + '</span>' +
             '</div>' +
-            '<span class="text-[10px] text-slate-600 font-mono hidden sm:inline">' + (hasTotalCol ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น') + '</span>' +
+            '<span class="text-[10.5px] text-[#3E4B69] font-mono font-bold hidden sm:inline whitespace-nowrap shrink-0">' + (hasTotalCol ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น') + '</span>' +
           '</div>' +
           '<div class="overflow-x-auto custom-scrollbar">' +
             '<table class="piling-daily-table w-full text-center border-collapse text-xs">' +
               '<thead>' +
                 '<tr>' +
-                  '<th class="py-1 px-2 border border-slate-700 sticky-col font-black text-left text-slate-950 text-xs whitespace-nowrap">วันที่</th>' +
+                  '<th class="py-1 px-2 sticky-col font-black text-left text-[#1D2B45] text-[11px] whitespace-nowrap">วันที่</th>' +
                   headerCells +
                 '</tr>' +
               '</thead>' +
               '<tbody>' +
                 '<tr class="row-plan">' +
-                  '<td class="py-1 px-2 border border-slate-700 sticky-col text-left font-bold text-slate-700 text-xs whitespace-nowrap">แผนรายวัน</td>' +
+                  '<td class="py-1 px-2 sticky-col text-left font-bold text-[#3E4B69] text-[11px] whitespace-nowrap">แผนรายวัน</td>' +
                   planCells +
                 '</tr>' +
                 '<tr class="row-actual">' +
-                  '<td class="py-1 px-2 border border-slate-700 sticky-col text-left font-black text-slate-950 text-xs whitespace-nowrap">ผลงานจริง</td>' +
+                  '<td class="py-1 px-2 sticky-col text-left font-black text-[#1D2B45] text-[11px] whitespace-nowrap">ผลงานจริง</td>' +
                   actualCells +
                 '</tr>' +
                 '<tr class="row-accum-plan">' +
-                  '<td class="py-1 px-2 border border-slate-700 sticky-col text-left font-extrabold text-blue-950 text-xs whitespace-nowrap">แผนสะสม</td>' +
+                  '<td class="py-1 px-2 sticky-col text-left font-extrabold text-[#1D2B45] text-[11px] whitespace-nowrap">แผนสะสม</td>' +
                   cumPlanCells +
                 '</tr>' +
                 '<tr class="row-accum-actual">' +
-                  '<td class="py-1 px-2 border border-slate-700 sticky-col text-left font-black text-emerald-950 text-xs whitespace-nowrap">ผลงานสะสม</td>' +
+                  '<td class="py-1 px-2 sticky-col text-left font-black text-[#064E3B] text-[11px] whitespace-nowrap">ผลงานสะสม</td>' +
                   cumActualCells +
                 '</tr>' +
               '</tbody>' +
@@ -9447,14 +9718,19 @@
     document.getElementById('btn-report-supabase-sync')?.addEventListener('click', () => syncPilingToSupabase(false));
 
     // Report Sheet Modal Toggles
-    document.getElementById('btn-open-report')?.addEventListener('click', () => {
+    const openReportPage = () => {
       document.getElementById('pile-card')?.classList.add('hidden');
       document.getElementById('modal-quick-select')?.classList.add('hidden');
-      document.getElementById('report-page').classList.remove('hidden');
+      document.getElementById('report-page')?.classList.remove('hidden');
       applyReportThemeUI(currentReportTheme);
       renderReportSheet();
+      requestAnimationFrame(() => renderPlanSnapshotCanvas());
       setTimeout(scheduleReportScurveRender, 50);
-    });
+    };
+    document.getElementById('btn-open-report')?.addEventListener('click', openReportPage);
+    if (window.location.search.includes('report=1') || window.location.hash === '#report') {
+      setTimeout(openReportPage, 400);
+    }
     const closeReportPage = () => {
       document.getElementById('report-page').classList.add('hidden');
       window.location.hash = '3d';
@@ -9484,36 +9760,43 @@
     let currentExportCanvas = null;
     let exportRequestId = 0;
 
+    function updateExportTabAndRatioUI() {
+      const bRep = document.getElementById('exp-tab-report');
+      const b3d = document.getElementById('exp-tab-3d');
+      const activeTabCls = 'px-2.5 py-1 rounded-lg font-black text-[11.5px] transition-all bg-[#F7B844] text-[#1D2B45] border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
+      const inactiveTabCls = 'px-2.5 py-1 rounded-lg font-bold text-[11.5px] text-[#3E4B69] hover:text-[#1D2B45] transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
+
+      if (currentExportMode === 'report') {
+        if (bRep) bRep.className = activeTabCls;
+        if (b3d) b3d.className = inactiveTabCls;
+      } else {
+        if (b3d) b3d.className = activeTabCls;
+        if (bRep) bRep.className = inactiveTabCls;
+      }
+
+      const activeRatioCls = 'exp-ratio-btn px-2.5 py-1 rounded-lg border-1.5 border-[#1D2B45] font-black text-[11px] bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap cursor-pointer';
+      const inactiveRatioCls = 'exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer';
+
+      document.querySelectorAll('.exp-ratio-btn').forEach(b => {
+        b.className = (b.getAttribute('data-ratio') === currentExportRatio) ? activeRatioCls : inactiveRatioCls;
+      });
+    }
+
     function openExportModal() {
       const modal = document.getElementById('modal-export-image');
       if (!modal) return;
 
       // Auto-detect view: If report-page is open, export report; otherwise export 3D view
       const isReportOpen = !document.getElementById('report-page')?.classList.contains('hidden');
-      const bRep = document.getElementById('exp-tab-report');
-      const b3d = document.getElementById('exp-tab-3d');
-
       if (isReportOpen) {
         currentExportMode = 'report';
         currentExportRatio = 'fit';
-        if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
-        if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       } else {
         currentExportMode = '3d';
         currentExportRatio = '16:9';
-        if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
-        if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
       }
 
-      // Update ratio button UI
-      document.querySelectorAll('.exp-ratio-btn').forEach(b => {
-        if (b.getAttribute('data-ratio') === currentExportRatio) {
-          b.className = 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs';
-        } else {
-          b.className = 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
-        }
-      });
-
+      updateExportTabAndRatioUI();
       modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
       updateExportPreview();
@@ -9532,54 +9815,51 @@
     document.getElementById('exp-tab-report')?.addEventListener('click', () => {
       currentExportMode = 'report';
       currentExportRatio = 'fit';
-      const bRep = document.getElementById('exp-tab-report');
-      const b3d = document.getElementById('exp-tab-3d');
-      if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
-      if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
-      document.querySelectorAll('.exp-ratio-btn').forEach(b => {
-        b.className = b.getAttribute('data-ratio') === 'fit'
-          ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs'
-          : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
-      });
+      updateExportTabAndRatioUI();
       updateExportPreview();
     });
 
     document.getElementById('exp-tab-3d')?.addEventListener('click', () => {
       currentExportMode = '3d';
       currentExportRatio = '16:9';
-      const bRep = document.getElementById('exp-tab-report');
-      const b3d = document.getElementById('exp-tab-3d');
-      if (b3d) b3d.className = 'px-3 py-1.5 rounded-lg font-black text-xs transition-all bg-[#ffc45b] text-[#34383b] border-1.5 border-slate-900 shadow-xs flex items-center gap-1.5';
-      if (bRep) bRep.className = 'px-3 py-1.5 rounded-lg font-bold text-xs text-[#667277] hover:text-[#34383b] transition-all flex items-center gap-1.5';
-      document.querySelectorAll('.exp-ratio-btn').forEach(b => {
-        b.className = b.getAttribute('data-ratio') === '16:9'
-          ? 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs'
-          : 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
-      });
+      updateExportTabAndRatioUI();
       updateExportPreview();
     });
 
-    // Ratio Buttons (Flat-Pop Style)
+    // Ratio Buttons (DoodleWeb Style)
     document.querySelectorAll('.exp-ratio-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.exp-ratio-btn').forEach(b => {
-          b.className = 'exp-ratio-btn px-2.5 py-1.5 rounded-lg border-2 border-slate-900/40 font-bold text-xs bg-white text-[#667277]';
-        });
-        btn.className = 'exp-ratio-btn px-3 py-1.5 rounded-lg border-2 border-slate-900 font-black text-xs bg-[#ffc45b] text-[#34383b] shadow-xs';
         currentExportRatio = btn.getAttribute('data-ratio');
+        updateExportTabAndRatioUI();
         updateExportPreview();
       });
     });
 
     document.getElementById('exp-scale')?.addEventListener('change', updateExportPreview);
 
+    let exportMutexChain = Promise.resolve();
+
     async function updateExportPreview() {
       const myRequestId = ++exportRequestId;
       const spinner = document.getElementById('export-loading-spinner');
       spinner?.classList.remove('hidden');
 
+      // Serialize export captures so concurrent calls never clobber DOM styles mid-capture
+      const prevLock = exportMutexChain;
+      let releaseLock;
+      exportMutexChain = new Promise(r => { releaseLock = r; });
+      await prevLock;
+
+      if (myRequestId !== exportRequestId) {
+        releaseLock();
+        return;
+      }
+
       const previewCanvas = document.getElementById('exportPreviewCanvas');
-      if (!previewCanvas) return;
+      if (!previewCanvas) {
+        releaseLock();
+        return;
+      }
       const scale = parseInt(document.getElementById('exp-scale')?.value || '2', 10);
       const curDate = datePicker.value || todayStr;
 
@@ -9619,10 +9899,30 @@
           if (document.fonts) {
             try { await document.fonts.ready; } catch(e) {}
           }
-          await new Promise(r => setTimeout(r, 120));
+          await new Promise(r => setTimeout(r, 80));
 
           const reportCard = document.getElementById('report-page-card');
           if (reportCard) {
+            // Save original inline styles BEFORE any temporary export mutations
+            const origCardW = reportCard.style.width;
+            const origCardMaxW = reportCard.style.maxWidth;
+            const origCardMinW = reportCard.style.minWidth;
+            const origCardMargin = reportCard.style.margin;
+            const origCardBoxShadow = reportCard.style.boxShadow;
+            const origCardBorderRadius = reportCard.style.borderRadius;
+            const origCardOverflow = reportCard.style.overflow;
+            const origCardPadding = reportCard.style.padding;
+            const origCardBg = reportCard.style.backgroundColor;
+
+            const origPageW = reportPage.style.width;
+            const origPageMaxW = reportPage.style.maxWidth;
+            const origPageMinW = reportPage.style.minWidth;
+            const origPagePad = reportPage.style.padding;
+            const origPageMargin = reportPage.style.margin;
+            const origPageScrollTop = reportPage.scrollTop;
+            reportPage.scrollTop = 0;
+            if (typeof window !== 'undefined') window.scrollTo(0, 0);
+
             const isPortraitLayout = currentReportLayout === 'portrait';
             reportCard.classList.add('is-export-capturing');
             reportPage.classList.add('is-export-capturing');
@@ -9643,13 +9943,51 @@
             });
 
             // Target export width for full table layout (Dynamic aspect-fit to eliminate side white bars)
-            let exportTargetW = isPortraitLayout ? 1200 : 1380;
+            let exportTargetW = isPortraitLayout ? 1200 : 1480;
+            let dynStyleEl = document.getElementById('export-dynamic-width-style');
+            if (!dynStyleEl) {
+              dynStyleEl = document.createElement('style');
+              dynStyleEl.id = 'export-dynamic-width-style';
+              document.head.appendChild(dynStyleEl);
+            }
+            const applyExportWidthRule = (w) => {
+              document.documentElement.style.setProperty('--export-card-w', `${w}px`);
+              document.documentElement.style.setProperty('--export-page-w', `${w + 40}px`);
+              dynStyleEl.textContent = `
+                #report-page.is-export-capturing,
+                #report-page.is-export-capturing.export-portrait {
+                  width: ${w + 40}px !important;
+                  min-width: ${w + 40}px !important;
+                  max-width: ${w + 40}px !important;
+                }
+                #report-page-card.is-export-capturing,
+                .is-export-capturing #report-page-card,
+                #report-page-card.is-landscape.is-export-capturing,
+                .is-export-capturing #report-page-card.is-landscape,
+                #report-page-card.is-export-capturing.export-portrait,
+                .is-export-capturing.export-portrait #report-page-card,
+                #report-page-card.is-export-capturing.export-ratio-3-4,
+                .is-export-capturing.export-ratio-3-4 #report-page-card {
+                  width: ${w}px !important;
+                  min-width: ${w}px !important;
+                  max-width: ${w}px !important;
+                  transition: none !important;
+                }
+              `;
+            };
+
+            applyExportWidthRule(exportTargetW);
+            reportPage.style.setProperty('width', `${exportTargetW + 40}px`, 'important');
+            reportPage.style.setProperty('max-width', `${exportTargetW + 40}px`, 'important');
+            reportPage.style.setProperty('min-width', `${exportTargetW + 40}px`, 'important');
+            reportCard.style.setProperty('box-sizing', 'border-box', 'important');
+            reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
+            reportCard.style.setProperty('max-width', `${exportTargetW}px`, 'important');
+            reportCard.style.setProperty('min-width', `${exportTargetW}px`, 'important');
+
             if (currentExportRatio === '3:4' || currentExportRatio === 'a4') {
               const targetAspect = (currentExportRatio === '3:4') ? (3 / 4) : (1 / 1.414);
-              reportCard.style.setProperty('box-sizing', 'border-box', 'important');
-              reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
-              reportCard.style.setProperty('max-width', `${exportTargetW}px`, 'important');
-              reportCard.style.setProperty('min-width', `${exportTargetW}px`, 'important');
+              void reportCard.offsetHeight;
               const initialH = Math.max(reportCard.offsetHeight, reportCard.scrollHeight);
               const idealW = Math.round(initialH * targetAspect);
               if (idealW > exportTargetW) {
@@ -9657,10 +9995,7 @@
               }
             } else if (currentExportRatio === '4:3' || currentExportRatio === '16:9') {
               const targetAspect = (currentExportRatio === '4:3') ? (4 / 3) : (16 / 9);
-              reportCard.style.setProperty('box-sizing', 'border-box', 'important');
-              reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
-              reportCard.style.setProperty('max-width', `${exportTargetW}px`, 'important');
-              reportCard.style.setProperty('min-width', `${exportTargetW}px`, 'important');
+              void reportCard.offsetHeight;
               const initialH = Math.max(reportCard.offsetHeight, reportCard.scrollHeight);
               const idealW = Math.round(initialH * targetAspect);
               if (idealW > exportTargetW) {
@@ -9668,24 +10003,12 @@
               }
             }
 
-            const origCardW = reportCard.style.width;
-            const origCardMaxW = reportCard.style.maxWidth;
-            const origCardMinW = reportCard.style.minWidth;
-            const origCardMargin = reportCard.style.margin;
-            const origCardBoxShadow = reportCard.style.boxShadow;
-            const origCardBorderRadius = reportCard.style.borderRadius;
-            const origCardOverflow = reportCard.style.overflow;
-            const origCardPadding = reportCard.style.padding;
-            const origCardBg = reportCard.style.backgroundColor;
-
-            let origEmptyDisplay = "";
-            let origEmptyHeight = "";
-            let origEmptyPadding = "";
-            const origPagePad = reportPage.style.padding;
-            const origPageMargin = reportPage.style.margin;
-            const origPageScrollTop = reportPage.scrollTop;
-            reportPage.scrollTop = 0;
-            if (typeof window !== 'undefined') window.scrollTo(0, 0);
+            applyExportWidthRule(exportTargetW);
+            reportPage.style.setProperty('width', `${exportTargetW + 40}px`, 'important');
+            reportPage.style.setProperty('max-width', `${exportTargetW + 40}px`, 'important');
+            reportPage.style.setProperty('min-width', `${exportTargetW + 40}px`, 'important');
+            reportPage.style.setProperty('padding', '0', 'important');
+            reportPage.style.setProperty('margin', '0', 'important');
 
             reportCard.style.setProperty('box-sizing', 'border-box', 'important');
             reportCard.style.setProperty('width', `${exportTargetW}px`, 'important');
@@ -9694,20 +10017,20 @@
             reportCard.style.setProperty('margin', '0', 'important');
             reportCard.style.setProperty('margin-left', '0', 'important');
             reportCard.style.setProperty('margin-right', '0', 'important');
-            reportCard.style.setProperty('border', '2px solid #334155', 'important');
+            reportCard.style.setProperty('border', '2px solid #1D2B45', 'important');
             reportCard.style.setProperty('padding', '24px 28px', 'important');
             reportCard.style.boxShadow = 'none';
             reportCard.style.borderRadius = '14px';
             reportCard.style.overflow = 'visible';
             reportCard.style.backgroundColor = '#ffffff';
 
-            reportPage.style.setProperty('padding', '0', 'important');
-            reportPage.style.setProperty('margin', '0', 'important');
+            // Force synchronous layout reflow before rendering internal canvases
+            void reportCard.offsetHeight;
 
-            // Re-render internal canvases at the crisp width
+            // Re-render internal canvases synchronously at the exact final width
             renderPlanSnapshotCanvas();
-            scheduleReportScurveRender();
-            await new Promise(r => setTimeout(r, 100));
+            renderReportScurveChart();
+            await new Promise(r => setTimeout(r, 80));
 
             // Expand table wrapper so table is NEVER clipped or scrollable during export
             const scrollWrappers = reportCard.querySelectorAll('.table-wrapper, .overflow-x-auto, .overflow-y-auto');
@@ -9723,60 +10046,48 @@
               w.style.setProperty('height', 'auto', 'important');
             });
 
-            // Compact padding on table cells so all 12 columns fit cleanly without horizontal scrolling
-            const cells = reportCard.querySelectorAll('th, td');
+            // Compact padding on 12-column log table cells ONLY (preserve .piling-daily-table compact padding)
+            const cells = reportCard.querySelectorAll('#rep-today-table th, #rep-today-table td');
             const savedPaddings = [];
             cells.forEach((cell, i) => {
               savedPaddings[i] = cell.style.padding;
               cell.style.setProperty('padding', '6px 4px', 'important');
             });
 
-            // Ensure #report-sec-table and #rep-today-table have solid black borders and clean containment
+            // Ensure #report-sec-table and #rep-today-table have clean single DoodleWeb borders (no double black border!)
             const expSecTable = reportCard.querySelector('#report-sec-table');
             if (expSecTable) {
-              expSecTable.style.setProperty('overflow', 'visible', 'important');
+              expSecTable.style.setProperty('overflow', 'hidden', 'important');
               expSecTable.style.setProperty('height', 'auto', 'important');
               expSecTable.style.setProperty('max-height', 'none', 'important');
-              expSecTable.style.setProperty('border', '2px solid #000000', 'important');
+              expSecTable.style.setProperty('border', '2px solid #1D2B45', 'important');
               expSecTable.style.setProperty('border-radius', '12px', 'important');
             }
             const expSecHead = reportCard.querySelector('#report-sec-table-head');
             if (expSecHead) {
-              expSecHead.style.setProperty('border-bottom', '2px solid #000000', 'important');
+              expSecHead.style.setProperty('border-bottom', '2px solid #1D2B45', 'important');
             }
             const expTable = reportCard.querySelector('#rep-today-table');
             if (expTable) {
-              expTable.style.setProperty('border', '2px solid #000000', 'important');
+              expTable.style.setProperty('border', 'none', 'important');
               expTable.style.setProperty('border-collapse', 'collapse', 'important');
-              expTable.querySelectorAll('th').forEach(th => {
-                th.style.setProperty('border', '1px solid #000000', 'important');
-                th.style.setProperty('border-bottom', '2px solid #000000', 'important');
+              const allThs = expTable.querySelectorAll('th');
+              allThs.forEach((th, idx) => {
+                th.style.setProperty('border-top', 'none', 'important');
+                th.style.setProperty('border-left', 'none', 'important');
+                th.style.setProperty('border-right', idx === allThs.length - 1 ? 'none' : '1px solid #CBD5E1', 'important');
+                th.style.setProperty('border-bottom', '1.5px solid #1D2B45', 'important');
               });
-              expTable.querySelectorAll('td').forEach(td => {
-                td.style.setProperty('border', '1px solid #000000', 'important');
-              });
-              const lastRow = expTable.querySelector('tbody tr:last-child');
-              if (lastRow) {
-                lastRow.style.setProperty('border-bottom', '2px solid #000000', 'important');
-                lastRow.querySelectorAll('td').forEach(td => {
-                  td.style.setProperty('border-bottom', '2px solid #000000', 'important');
+              expTable.querySelectorAll('tbody tr').forEach((tr, rIdx, rArr) => {
+                const isLast = rIdx === rArr.length - 1;
+                const rowTds = tr.querySelectorAll('td');
+                rowTds.forEach((td, cIdx) => {
+                  td.style.setProperty('border-top', 'none', 'important');
+                  td.style.setProperty('border-left', 'none', 'important');
+                  td.style.setProperty('border-right', cIdx === rowTds.length - 1 ? 'none' : '1px solid #CBD5E1', 'important');
+                  td.style.setProperty('border-bottom', isLast ? 'none' : '1px solid #CBD5E1', 'important');
                 });
-              // If empty pile log row exists in #rep-today-table, make sure no text or box is displayed during export
-              const emptyCell = expTable.querySelector(".empty-log-cell");
-              if (emptyCell) {
-                const emptyMsg = emptyCell.querySelector(".empty-log-msg");
-                if (emptyMsg) {
-                  origEmptyDisplay = emptyMsg.style.display;
-                  emptyMsg.style.setProperty("display", "none", "important");
-                }
-                origEmptyHeight = emptyCell.style.height;
-                origEmptyPadding = emptyCell.style.padding;
-                emptyCell.style.setProperty("height", "32px", "important");
-                emptyCell.style.setProperty("padding", "0", "important");
-                emptyCell.style.setProperty("border", "1px solid #000000", "important");
-                emptyCell.style.setProperty("border-bottom", "2px solid #000000", "important");
-              }
-              }
+              });
             }
 
             // Equalize cell heights in each row so all vertical borders span 100% of the row (เส้นเต็มช่องตาราง)
@@ -9880,7 +10191,7 @@
                       clonedCard.style.setProperty('margin', '0', 'important');
                       clonedCard.style.setProperty('margin-left', '0', 'important');
                       clonedCard.style.setProperty('margin-right', '0', 'important');
-                      clonedCard.style.setProperty('border', '2px solid #334155', 'important');
+                      clonedCard.style.setProperty('border', '2px solid #1D2B45', 'important');
                       clonedCard.style.setProperty('padding', '24px 28px', 'important');
                       clonedCard.style.overflow = 'visible';
                       clonedCard.style.boxShadow = 'none';
@@ -9890,37 +10201,19 @@
                       const clonedHeader = clonedDoc.getElementById('report-header-bar');
                       if (clonedHeader) {
                         clonedHeader.style.setProperty('flex-shrink', '0', 'important');
-                        clonedHeader.style.setProperty('min-height', '84px', 'important');
+                        clonedHeader.style.setProperty('min-height', '76px', 'important');
                         clonedHeader.style.setProperty('height', 'auto', 'important');
-                        clonedHeader.style.setProperty('display', 'flex', 'important');
-                        clonedHeader.style.setProperty('flex-direction', 'row', 'important');
-                        clonedHeader.style.setProperty('align-items', 'center', 'important');
-                        clonedHeader.style.setProperty('justify-content', 'space-between', 'important');
-                        clonedHeader.style.setProperty('padding', '14px 20px', 'important');
+                        clonedHeader.style.setProperty('display', 'block', 'important');
+                        clonedHeader.style.setProperty('padding', '0', 'important');
                         clonedHeader.style.setProperty('margin-bottom', '14px', 'important');
-                        clonedHeader.style.setProperty('border', '2px solid #334155', 'important');
-                        clonedHeader.style.border = '2px solid #334155';
+                        clonedHeader.style.setProperty('border', '2px solid #1D2B45', 'important');
                         clonedHeader.style.borderRadius = '12px';
                         clonedHeader.style.background = '#ffffff';
-                      }
-                      const clonedTag = clonedDoc.getElementById("rep-header-tag");
-                      if (clonedTag) {
-                        clonedTag.style.setProperty("display", "inline-flex", "important");
-                        clonedTag.style.setProperty("align-items", "center", "important");
-                        clonedTag.style.setProperty("justify-content", "center", "important");
-                        clonedTag.style.setProperty("padding", "4px 16px 4px 14px", "important");
-                        clonedTag.style.setProperty("font-size", "11.5px", "important");
-                        clonedTag.style.setProperty("line-height", "1.35", "important");
-                        clonedTag.style.setProperty("margin-right", "8px", "important");
-                        clonedTag.style.setProperty("border", "2px solid #0f172a", "important");
-                        clonedTag.style.setProperty("border-radius", "7px", "important");
-                        clonedTag.style.setProperty("width", "auto", "important");
-                        clonedTag.style.setProperty("max-width", "none", "important");
                       }
 
                       clonedCard.querySelectorAll(
                         '.no-export, .no-print, .pencil-edit-icon, #rep-table-filter-group, ' +
-                        '#btn-rep-filter-today, #btn-rep-filter-all, button'
+                        '#btn-rep-filter-today, #btn-rep-filter-all'
                       ).forEach(el => el.remove());
 
                       clonedCard.querySelectorAll('*').forEach(el => {
@@ -9930,36 +10223,22 @@
                       const clonedSecTable = clonedDoc.getElementById('report-sec-table');
                       if (clonedSecTable) {
                         clonedSecTable.style.setProperty('box-sizing', 'border-box', 'important');
-                        clonedSecTable.style.setProperty('overflow', 'visible', 'important');
+                        clonedSecTable.style.setProperty('overflow', 'hidden', 'important');
                         clonedSecTable.style.setProperty('height', 'auto', 'important');
                         clonedSecTable.style.setProperty('max-height', 'none', 'important');
-                        clonedSecTable.style.setProperty('border', '2px solid #000000', 'important');
+                        clonedSecTable.style.setProperty('border', '2px solid #1D2B45', 'important');
                         clonedSecTable.style.setProperty('border-radius', '12px', 'important');
                       }
 
                       const clonedSecHead = clonedDoc.getElementById('report-sec-table-head');
                       if (clonedSecHead) {
-                        clonedSecHead.style.setProperty('border-bottom', '2px solid #000000', 'important');
+                        clonedSecHead.style.setProperty('border-bottom', '2px solid #1D2B45', 'important');
                       }
 
                       const clonedTable = clonedDoc.getElementById('rep-today-table');
                       if (clonedTable) {
                         clonedTable.style.setProperty('border-collapse', 'collapse', 'important');
-                        clonedTable.style.setProperty('border', '2px solid #000000', 'important');
-                        clonedTable.querySelectorAll('th').forEach(th => {
-                          th.style.setProperty('border', '1px solid #000000', 'important');
-                          th.style.setProperty('border-bottom', '2px solid #000000', 'important');
-                        });
-                        clonedTable.querySelectorAll('td').forEach(td => {
-                          td.style.setProperty('border', '1px solid #000000', 'important');
-                        });
-                        const lastRow = clonedTable.querySelector('tbody tr:last-child');
-                        if (lastRow) {
-                          lastRow.style.setProperty('border-bottom', '2px solid #000000', 'important');
-                          lastRow.querySelectorAll('td').forEach(td => {
-                            td.style.setProperty('border-bottom', '2px solid #000000', 'important');
-                          });
-                        }
+                        clonedTable.style.setProperty('border', 'none', 'important');
                       }
 
                       clonedCard.querySelectorAll('.table-wrapper, .overflow-x-auto, .overflow-y-auto').forEach(w => {
@@ -9968,21 +10247,6 @@
                         w.style.setProperty('height', 'auto', 'important');
                       });
 
-                      clonedCard.querySelectorAll('th, td').forEach(c => {
-                        c.style.verticalAlign = 'middle';
-                        c.style.lineHeight = '1.2';
-                        c.style.padding = '6px 4px';
-                        c.style.boxSizing = 'border-box';
-                      });
-
-                      const clonedEmptyCell = clonedCard.querySelector(".empty-log-cell");
-                      if (clonedEmptyCell) {
-                        clonedEmptyCell.innerHTML = "";
-                        clonedEmptyCell.style.setProperty("height", "32px", "important");
-                        clonedEmptyCell.style.setProperty("padding", "0", "important");
-                        clonedEmptyCell.style.setProperty("border", "1px solid #000000", "important");
-                        clonedEmptyCell.style.setProperty("border-bottom", "2px solid #000000", "important");
-                      }
                       // Equalize row heights in clonedCard
                       clonedCard.querySelectorAll('#rep-today-table tbody tr').forEach(r => {
                         if (r.classList.contains('empty-log-row')) return;
@@ -10020,18 +10284,24 @@
                 expSecTable.style.borderRadius = '';
               }
               if (typeof expTable !== 'undefined' && expTable) {
+                expTable.style.border = '';
                 expTable.style.borderBottom = '';
-                const emptyCell = expTable.querySelector(".empty-log-cell");
-                if (emptyCell) {
-                  const emptyMsg = emptyCell.querySelector(".empty-log-msg");
-                  if (emptyMsg && typeof origEmptyDisplay !== "undefined") emptyMsg.style.display = origEmptyDisplay;
-                  if (typeof origEmptyHeight !== "undefined") emptyCell.style.height = origEmptyHeight;
-                  if (typeof origEmptyPadding !== "undefined") emptyCell.style.padding = origEmptyPadding;
-                }
+                expTable.querySelectorAll('th, td').forEach(cell => {
+                  cell.style.borderTop = '';
+                  cell.style.borderLeft = '';
+                  cell.style.borderRight = '';
+                  cell.style.borderBottom = '';
+                });
               }
+              if (typeof origPageW !== 'undefined') reportPage.style.width = origPageW;
+              if (typeof origPageMaxW !== 'undefined') reportPage.style.maxWidth = origPageMaxW;
+              if (typeof origPageMinW !== 'undefined') reportPage.style.minWidth = origPageMinW;
               if (typeof origPagePad !== 'undefined') reportPage.style.padding = origPagePad;
               if (typeof origPageMargin !== 'undefined') reportPage.style.margin = origPageMargin;
               if (typeof origPageScrollTop !== 'undefined') reportPage.scrollTop = origPageScrollTop;
+              if (typeof dynStyleEl !== 'undefined' && dynStyleEl) dynStyleEl.textContent = '';
+              document.documentElement.style.removeProperty('--export-card-w');
+              document.documentElement.style.removeProperty('--export-page-w');
               reportCard.classList.remove('is-export-capturing', 'export-portrait', 'export-ratio-3-4');
               reportPage.classList.remove('is-export-capturing', 'export-portrait', 'export-ratio-3-4');
               renderPlanSnapshotCanvas();
@@ -10157,19 +10427,19 @@
           const bPad = 16 * bannerScale;
           ctx.fillStyle = 'rgba(255, 255, 255, 0.96)';
           ctx.fillRect(bPad, bPad, targetW - bPad * 2, bH);
-          ctx.strokeStyle = '#475569';
+          ctx.strokeStyle = '#1D2B45';
           ctx.lineWidth = 2 * bannerScale;
           ctx.strokeRect(bPad, bPad, targetW - bPad * 2, bH);
 
           // Brand tag
           const tagW = 114 * bannerScale;
           const tagH = 44 * bannerScale;
-          ctx.fillStyle = '#ffc45b';
+          ctx.fillStyle = '#F7B844';
           ctx.fillRect(bPad + 10 * bannerScale, bPad + 10 * bannerScale, tagW, tagH);
-          ctx.strokeStyle = '#475569';
+          ctx.strokeStyle = '#1D2B45';
           ctx.lineWidth = 1.5 * bannerScale;
           ctx.strokeRect(bPad + 10 * bannerScale, bPad + 10 * bannerScale, tagW, tagH);
-          ctx.fillStyle = '#34383b';
+          ctx.fillStyle = '#1D2B45';
           ctx.font = `bold ${13 * bannerScale}px Montserrat, sans-serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -10178,14 +10448,14 @@
           // Title & Stats
           ctx.textAlign = 'left';
           ctx.textBaseline = 'middle';
-          ctx.fillStyle = '#1e293b';
+          ctx.fillStyle = '#1D2B45';
           ctx.font = `bold ${15 * bannerScale}px Sarabun, sans-serif`;
           const viewTitle = (typeof currentViewMode !== 'undefined' && currentViewMode === '3d')
             ? 'แบบจำลอง 3 มิติ (3D Piling Model View)'
             : 'แปลนงานเสาเข็ม (Piling Progress CAD View)';
           ctx.fillText(viewTitle, bPad + tagW + 24 * bannerScale, bPad + 22 * bannerScale);
           ctx.font = `${11.5 * bannerScale}px Sarabun, sans-serif`;
-          ctx.fillStyle = '#475569';
+          ctx.fillStyle = '#3E4B69';
           ctx.fillText(`ประจำวันที่: ${curDate}  |  กดวันนี้: ${todayCount} ต้น  |  กดแล้วสะสม: ${drivenCount} / 93 ต้น (${((drivenCount/93)*100).toFixed(1)}%)  |  คงเหลือ: ${93 - drivenCount} ต้น`, bPad + tagW + 24 * bannerScale, bPad + 44 * bannerScale);
 
           ctx.restore();
@@ -10196,6 +10466,8 @@
           throw new Error('Unable to create source canvas');
         }
 
+        if (myRequestId !== exportRequestId) return;
+
         // Apply chosen Aspect Ratio with elegant framing (พอดีเอกสาร 100%)
         const finalCanvas = formatCanvasAspect(sourceCanvas, currentExportRatio);
         currentExportCanvas = finalCanvas;
@@ -10204,7 +10476,7 @@
         previewCanvas.width = finalCanvas.width;
         previewCanvas.height = finalCanvas.height;
         previewCanvas.style.maxWidth = '100%';
-        previewCanvas.style.maxHeight = '55vh';
+        previewCanvas.style.maxHeight = '62vh';
         previewCanvas.style.width = 'auto';
         previewCanvas.style.height = 'auto';
         const pCtx = previewCanvas.getContext('2d');
@@ -10218,20 +10490,23 @@
       } catch (err) {
         console.error('Export error:', err);
       } finally {
-        spinner?.classList.add('hidden');
+        if (myRequestId === exportRequestId) {
+          spinner?.classList.add('hidden');
+        }
+        releaseLock();
       }
     }
 
     function formatCanvasAspect(src, ratioStr) {
       // Auto Fit or Full: Frame cleanly with neat 24px padding around the report card
       const pad = 24;
-      const targetBaseW = (typeof isPortraitLayout !== 'undefined' && isPortraitLayout) ? 1200 : 1380;
+      const targetBaseW = (typeof isPortraitLayout !== 'undefined' && isPortraitLayout) ? 1200 : 1480;
       const strokeW = Math.max(2, Math.round(2 * (src.width / targetBaseW)));
-      const radius = Math.round(12 * (src.width / targetBaseW));
+      const radius = Math.round(14 * (src.width / targetBaseW));
 
       function drawCrispOuterBorder(ctx, x, y, w, h) {
         ctx.save();
-        ctx.strokeStyle = '#000000';
+        ctx.strokeStyle = '#1D2B45';
         ctx.lineWidth = strokeW;
         if (typeof ctx.roundRect === 'function') {
           ctx.beginPath();
@@ -10266,23 +10541,6 @@
       const srcW = src.width;
       const srcH = src.height;
       const srcAspect = srcW / srcH;
-
-      // ถ้าสัดส่วนของเอกสารใกล้เคียงกับเป้าหมายอยู่แล้ว (เช่น 3:4 หรือ A4) ให้จัดวางแบบชิดขอบสมมาตร ไม่มีขอบขาวข้างๆ กว้างผิดปกติ
-      if (Math.abs(srcAspect - targetAspect) < 0.045) {
-        const outW = srcW + pad * 2;
-        const outH = Math.round(outW / targetAspect);
-        const outCanvas = document.createElement('canvas');
-        outCanvas.width = outW;
-        outCanvas.height = outH;
-        const ctx = outCanvas.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, outW, outH);
-        const padX = pad;
-        const padY = Math.max(0, Math.round((outH - srcH) / 2));
-        ctx.drawImage(src, padX, padY);
-        drawCrispOuterBorder(ctx, padX, padY, srcW, srcH);
-        return outCanvas;
-      }
 
       let outW, outH;
       if (srcAspect > targetAspect) {
