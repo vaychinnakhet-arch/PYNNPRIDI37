@@ -228,10 +228,17 @@
     reviewerRole: 'ผู้ช่วยผู้จัดการฝ่ายพัฒนาโครงการแนวสูง',
     weather: 'clear',
     weatherOther: '',
+    weatherHours: {
+      8: 'clear', 9: 'clear', 10: 'clear', 11: 'clear',
+      12: 'clear', 13: 'clear', 14: 'clear', 15: 'clear', 16: 'clear'
+    },
+    weatherImpact: 'none',
+    normalHours: '8',
+    overtimeHours: '0',
     workPermit: 'none',
     workPermitOther: '',
-    startTime: '08:00 น.',
-    endTime: '17:00 น.',
+    startTime: '08:00',
+    endTime: '17:00',
     duration: '8 ชั่วโมง',
     attachmentPages: 3,
     activeTab: 'all',
@@ -352,6 +359,10 @@
       reviewerRole: DailyReportState.reviewerRole,
       weather: DailyReportState.weather,
       weatherOther: DailyReportState.weatherOther,
+      weatherHours: DailyReportState.weatherHours,
+      weatherImpact: DailyReportState.weatherImpact,
+      normalHours: DailyReportState.normalHours,
+      overtimeHours: DailyReportState.overtimeHours,
       workPermit: DailyReportState.workPermit,
       workPermitOther: DailyReportState.workPermitOther,
       startTime: DailyReportState.startTime,
@@ -465,11 +476,21 @@
     if (cfg.reviewerRole) DailyReportState.reviewerRole = cfg.reviewerRole;
     if (cfg.weather) DailyReportState.weather = cfg.weather;
     if (cfg.weatherOther !== undefined) DailyReportState.weatherOther = cfg.weatherOther;
+    if (cfg.weatherHours && typeof cfg.weatherHours === 'object') DailyReportState.weatherHours = cfg.weatherHours;
+    if (cfg.weatherImpact) DailyReportState.weatherImpact = cfg.weatherImpact;
+    if (cfg.normalHours !== undefined) DailyReportState.normalHours = cfg.normalHours;
+    if (cfg.overtimeHours !== undefined) DailyReportState.overtimeHours = cfg.overtimeHours;
     if (cfg.workPermit) DailyReportState.workPermit = cfg.workPermit;
     if (cfg.workPermitOther !== undefined) DailyReportState.workPermitOther = cfg.workPermitOther;
-    if (cfg.startTime) DailyReportState.startTime = cfg.startTime;
-    if (cfg.endTime) DailyReportState.endTime = cfg.endTime;
-    if (cfg.duration) DailyReportState.duration = cfg.duration;
+    if (cfg.startTime) DailyReportState.startTime = String(cfg.startTime).replace(/\s*น\.?\s*$/, '').trim() || '08:00';
+    if (cfg.endTime) DailyReportState.endTime = String(cfg.endTime).replace(/\s*น\.?\s*$/, '').trim() || '17:00';
+    if (cfg.duration) {
+      DailyReportState.duration = cfg.duration;
+      if (cfg.normalHours === undefined) {
+        const m = String(cfg.duration).match(/(\d+(?:\.\d+)?)/);
+        if (m) DailyReportState.normalHours = m[1];
+      }
+    }
     if (cfg.attachmentPages !== undefined) DailyReportState.attachmentPages = cfg.attachmentPages;
     if (cfg.obstacles !== undefined) DailyReportState.obstacles = cfg.obstacles;
     if (cfg.solutions !== undefined) DailyReportState.solutions = cfg.solutions;
@@ -786,6 +807,163 @@
   }
 
   // =========================================================================
+  // INTERACTIVE 12-HOUR WEATHER CLOCKS (1-Hour Slices, 1-Click Color Cycle)
+  // =========================================================================
+  const WEATHER_STATES_CYCLE = ['none', 'clear', 'cloudy', 'rain'];
+  const WEATHER_PALETTE = {
+    none:   { fill: '#FFFFFF', hover: '#F1F5F9', stroke: '#334155', label: 'ว่าง (ไม่ระบุ)' },
+    clear:  { fill: '#67E8F9', hover: '#38BDF8', stroke: '#0284C7', label: 'ปลอดโปร่ง' },
+    cloudy: { fill: '#FDE047', hover: '#FACC15', stroke: '#CA8A04', label: 'ไม่แจ่มใส' },
+    rain:   { fill: '#FDBA74', hover: '#FB923C', stroke: '#EA580C', label: 'ฝนตก' }
+  };
+
+  window.cycleWeatherHourSlice = function (hour, el) {
+    if (!DailyReportState.weatherHours || typeof DailyReportState.weatherHours !== 'object') {
+      DailyReportState.weatherHours = {};
+    }
+    const cur = DailyReportState.weatherHours[hour] || 'none';
+    const nextIdx = (WEATHER_STATES_CYCLE.indexOf(cur) + 1) % WEATHER_STATES_CYCLE.length;
+    const nextState = WEATHER_STATES_CYCLE[nextIdx];
+    if (nextState === 'none') {
+      delete DailyReportState.weatherHours[hour];
+    } else {
+      DailyReportState.weatherHours[hour] = nextState;
+    }
+    if (el) {
+      const p = WEATHER_PALETTE[nextState] || WEATHER_PALETTE.none;
+      el.setAttribute('fill', p.fill);
+      el.setAttribute('data-state', nextState);
+      const nextHour = (hour + 1) % 24;
+      const hStr = `${String(hour).padStart(2, '0')}:00 - ${String(nextHour).padStart(2, '0')}:00 น.`;
+      el.setAttribute('title', `${hStr} : ${p.label} (คลิกเพื่อเปลี่ยนสี)`);
+    }
+    autoDebouncedSaveSupabase();
+  };
+
+  window.fillWorkdayWeatherHours = function (stateKey) {
+    if (!DailyReportState.weatherHours || typeof DailyReportState.weatherHours !== 'object') {
+      DailyReportState.weatherHours = {};
+    }
+    if (stateKey === 'none') {
+      DailyReportState.weatherHours = {};
+    } else {
+      for (let h = 8; h < 17; h++) {
+        DailyReportState.weatherHours[h] = stateKey;
+      }
+    }
+    renderDailyReportPage1();
+    autoDebouncedSaveSupabase();
+  };
+
+  function buildHourlyWeatherClockSVG(clockType) {
+    // clockType: 'day' (06:00 - 18:00) or 'night' (18:00 - 06:00)
+    const hours = clockType === 'day'
+      ? [12, 13, 14, 15, 16, 17, 6, 7, 8, 9, 10, 11]
+      : [0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23];
+
+    const cx = 74;
+    const cy = 57;
+    const r = 38;
+    const deg2rad = Math.PI / 180;
+
+    let pathsHtml = '';
+    let spokesHtml = '';
+    let ticksAndLabelsHtml = '';
+
+    // 12 1-hour pie slices
+    hours.forEach((h, idx) => {
+      const startDeg = -90 + idx * 30;
+      const endDeg = startDeg + 30;
+      const x1 = (cx + r * Math.cos(startDeg * deg2rad)).toFixed(2);
+      const y1 = (cy + r * Math.sin(startDeg * deg2rad)).toFixed(2);
+      const x2 = (cx + r * Math.cos(endDeg * deg2rad)).toFixed(2);
+      const y2 = (cy + r * Math.sin(endDeg * deg2rad)).toFixed(2);
+
+      const st = (DailyReportState.weatherHours && DailyReportState.weatherHours[h]) || 'none';
+      const pal = WEATHER_PALETTE[st] || WEATHER_PALETTE.none;
+      const nextH = (h + 1) % 24;
+      const rangeText = `${String(h).padStart(2, '0')}:00 - ${String(nextH).padStart(2, '0')}:00 น.`;
+
+      const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`;
+      pathsHtml += `
+        <path
+          d="${d}"
+          fill="${pal.fill}"
+          data-hour="${h}"
+          data-state="${st}"
+          class="dr-weather-slice cursor-pointer transition-colors duration-100"
+          onclick="cycleWeatherHourSlice(${h}, this)"
+        >
+          <title>${rangeText} : ${pal.label} (คลิกเพื่อเปลี่ยนสี)</title>
+        </path>
+      `;
+    });
+
+    // 12 radial spokes & hour labels around the perimeter
+    hours.forEach((h, idx) => {
+      const deg = -90 + idx * 30;
+      const rad = deg * deg2rad;
+      const cosA = Math.cos(rad);
+      const sinA = Math.sin(rad);
+
+      const isCardinal = (idx % 3 === 0);
+      const xEdge = (cx + r * cosA).toFixed(2);
+      const yEdge = (cy + r * sinA).toFixed(2);
+
+      // Spoke line from center to outer rim
+      spokesHtml += `<line x1="${cx}" y1="${cy}" x2="${xEdge}" y2="${yEdge}" stroke="${isCardinal ? '#0f172a' : '#475569'}" stroke-width="${isCardinal ? '1.15' : '0.65'}" pointer-events="none" />`;
+
+      // Outer tick mark
+      const tickLen = isCardinal ? 3.2 : 2.0;
+      const xTick = (cx + (r + tickLen) * cosA).toFixed(2);
+      const yTick = (cy + (r + tickLen) * sinA).toFixed(2);
+      spokesHtml += `<line x1="${xEdge}" y1="${yEdge}" x2="${xTick}" y2="${yTick}" stroke="#0f172a" stroke-width="${isCardinal ? '1.15' : '0.7'}" pointer-events="none" />`;
+
+      // Label placement
+      if (isCardinal) {
+        const lbl = `${String(h).padStart(2, '0')}:00`;
+        let lx = cx;
+        let ly = cy;
+        let anchor = 'middle';
+        if (idx === 0) {
+          lx = cx;
+          ly = cy - r - 6;
+          anchor = 'middle';
+        } else if (idx === 3) {
+          lx = cx + r + 5;
+          ly = cy + 3;
+          anchor = 'start';
+        } else if (idx === 6) {
+          lx = cx;
+          ly = cy + r + 12;
+          anchor = 'middle';
+        } else if (idx === 9) {
+          lx = cx - r - 5;
+          ly = cy + 3;
+          anchor = 'end';
+        }
+        ticksAndLabelsHtml += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-family="'Sarabun', sans-serif" font-size="9.5" font-weight="800" fill="#0f172a" pointer-events="none">${lbl}</text>`;
+      } else {
+        const lblR = r + 9.2;
+        const lx = (cx + lblR * cosA).toFixed(1);
+        const ly = (cy + lblR * sinA + 2.5).toFixed(1);
+        const shortH = String(h).padStart(2, '0');
+        ticksAndLabelsHtml += `<text x="${lx}" y="${ly}" text-anchor="middle" font-family="'Sarabun', sans-serif" font-size="7.5" font-weight="700" fill="#334155" pointer-events="none">${shortH}</text>`;
+      }
+    });
+
+    return `
+      <svg viewBox="0 0 148 114" style="width: 122px; height: 96px;" class="select-none overflow-visible shrink-0">
+        ${pathsHtml}
+        ${spokesHtml}
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#0f172a" stroke-width="1.4" pointer-events="none" />
+        <circle cx="${cx}" cy="${cy}" r="1.8" fill="#0f172a" pointer-events="none" />
+        ${ticksAndLabelsHtml}
+      </svg>
+    `;
+  }
+
+  // =========================================================================
   // PAGE 1 BUILDER: SANSIRI DAILY WORK REPORT (Strict Height Fit for A4)
   // =========================================================================
   function renderDailyReportPage1() {
@@ -829,7 +1007,7 @@
       totalDrivenNum += dVal;
 
       tasksRows += `
-        <tr style="height: 22px;">
+        <tr style="height: 20px;">
           <td class="text-center font-mono py-0.5 text-xs">${t.title ? (i + 1) : ''}</td>
           <td class="py-0.5 px-1.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-slate-900 text-xs font-bold" value="${escapeHtml(t.title)}" oninput="updateDrTask(${i}, 'title', this.value)"></td>
           <td class="text-center py-0.5"><input type="text" class="w-full bg-transparent border-0 outline-none p-0 text-center text-slate-800 text-xs" value="${escapeHtml(t.location)}" oninput="updateDrTask(${i}, 'location', this.value)"></td>
@@ -897,7 +1075,7 @@
 
     container.innerHTML = `
       <!-- SANSIRI Logo & Header (Using exact Sansiri-logo-en-black) -->
-      <div class="flex flex-col items-center justify-center mb-1.5">
+      <div class="flex flex-col items-center justify-center mb-1">
         <div class="flex items-center justify-center gap-2 mb-0.5">
           <img src="${SANSIRI_LOGO_BASE64}" onerror="if(this.src!='Logo/png/Sansiri-logo-en-black.png')this.src='Logo/png/Sansiri-logo-en-black.png';" alt="SANSIRI" class="h-6 max-w-[170px] object-contain inline-block">
         </div>
@@ -911,66 +1089,133 @@
       </div>
 
       <!-- Top Information Strip -->
-      <div class="border border-slate-900 text-[11px] p-2 mb-1.5 bg-white space-y-1.5 leading-normal">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-1">
-            <span class="font-bold shrink-0">ถึง :</span>
-            <input type="text" class="border-b border-slate-300 hover:border-slate-400 font-bold px-1 text-slate-900 bg-transparent outline-none w-64 text-[11px]" value="${escapeHtml(DailyReportState.toCompany || 'บริษัท แสนสิริ จำกัด (มหาชน)')}" oninput="DailyReportState.toCompany=this.value; autoDebouncedSaveSupabase();">
+      <div class="border border-slate-900 text-[11px] mb-1 bg-white leading-normal">
+        <div class="p-1.5 space-y-1">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-1">
+              <span class="font-bold shrink-0">ถึง :</span>
+              <input type="text" class="border-b border-slate-300 hover:border-slate-400 font-bold px-1 text-slate-900 bg-transparent outline-none w-64 text-[11px]" value="${escapeHtml(DailyReportState.toCompany || 'บริษัท แสนสิริ จำกัด (มหาชน)')}" oninput="DailyReportState.toCompany=this.value; autoDebouncedSaveSupabase();">
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="font-bold">วันที่ทำงาน :</span>
+              <input type="text" class="border-b border-slate-400 font-bold px-1 text-center bg-transparent outline-none w-36" value="${escapeHtml(thaiDate)}" onchange="handleManualDateChange(this.value)">
+            </div>
           </div>
-          <div class="flex items-center gap-1">
-            <span class="font-bold">วันที่ทำงาน :</span>
-            <input type="text" class="border-b border-slate-400 font-bold px-1 text-center bg-transparent outline-none w-36" value="${escapeHtml(thaiDate)}" onchange="handleManualDateChange(this.value)">
+
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-[11px] shrink-0">เรียน :</span>
+              <span contenteditable="true" tabindex="0" role="textbox" id="dr-recipient-input" class="border-b border-slate-400 font-bold px-1.5 text-slate-900 bg-transparent outline-none w-72 text-[11.5px] inline-block align-middle cursor-text" style="font-family: 'Sarabun', 'Prompt', sans-serif; line-height: 1.5; min-height: 22px;" onblur="DailyReportState.recipient=(this.innerText||'').trim() || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล'; autoDebouncedSaveSupabase();" onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}" oninput="DailyReportState.recipient=(this.innerText||'').trim(); autoDebouncedSaveSupabase();">${escapeHtml(DailyReportState.recipient || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล')}</span>
+            </div>
+            <div>
+              <span class="font-bold">เอกสารแนบจำนวน :</span>
+              <input type="number" min="1" class="border-b border-slate-400 text-center w-10 font-bold outline-none" value="${DailyReportState.attachmentPages}" oninput="DailyReportState.attachmentPages=this.value; autoDebouncedSaveSupabase();">
+              <span>แผ่น</span>
+            </div>
+          </div>
+
+          <!-- Permit Restrictions Checkboxes -->
+          <div class="flex items-center flex-wrap gap-x-3 gap-y-0.5 pt-0.5">
+            <span class="font-bold shrink-0">การระงับการทำงาน :</span>
+            ${permitItems.map(p => `
+              <label class="inline-flex items-center gap-1 cursor-pointer select-none">
+                <input type="checkbox" ${DailyReportState.workPermit === p.key ? 'checked' : ''} onchange="DailyReportState.workPermit='${p.key}'; renderDailyReportPage1(); autoDebouncedSaveSupabase();" class="rounded border-slate-900 text-slate-900 focus:ring-0">
+                <span>${p.label}</span>
+              </label>
+            `).join('')}
+            <input type="text" placeholder="ระบุ..." class="border-b border-slate-300 text-[10.5px] px-1 outline-none w-24 bg-transparent" value="${escapeHtml(DailyReportState.workPermitOther || '')}" oninput="DailyReportState.workPermitOther=this.value; autoDebouncedSaveSupabase();">
           </div>
         </div>
 
-        <div class="flex justify-between items-center pt-1 mt-0.5">
-          <div class="flex items-center gap-1.5">
-            <span class="font-bold text-[11.5px] shrink-0">เรียน :</span>
-            <span contenteditable="true" tabindex="0" role="textbox" id="dr-recipient-input" class="border-b border-slate-400 font-bold px-1.5 text-slate-900 bg-transparent outline-none w-80 text-[12px] inline-block align-middle cursor-text" style="font-family: 'Sarabun', 'Prompt', sans-serif; line-height: 1.8; min-height: 28px; padding-top: 1px; padding-bottom: 1px;" onblur="DailyReportState.recipient=(this.innerText||'').trim() || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล'; autoDebouncedSaveSupabase();" onkeydown="if(event.key==='Enter'){event.preventDefault(); this.blur();}" oninput="DailyReportState.recipient=(this.innerText||'').trim(); autoDebouncedSaveSupabase();">${escapeHtml(DailyReportState.recipient || 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล')}</span>
+        <!-- ================================================================= -->
+        <!-- เวลาการทำงาน / สภาพอากาศ (24-Hour Dual Clock Gauge - 1 Hr/Slice) -->
+        <!-- ================================================================= -->
+        <div id="dr-weather-section" class="border-t border-slate-900">
+          <!-- Clean Centered Section Title Bar -->
+          <div class="bg-[#e2e8f0] border-b border-slate-400 py-0.5 px-2 text-center">
+            <div class="text-xs font-extrabold text-slate-900 tracking-wide">
+              เวลาการทำงาน &nbsp;/&nbsp; สภาพอากาศ
+            </div>
           </div>
-        </div>
 
-        <!-- Weather Checkboxes -->
-        <div class="flex items-center flex-wrap gap-x-3 gap-y-0.5 pt-0.5">
-          <span class="font-bold shrink-0">อากาศ :</span>
-          ${weatherItems.map(w => `
-            <label class="inline-flex items-center gap-1 cursor-pointer select-none">
-              <input type="checkbox" ${DailyReportState.weather === w.key ? 'checked' : ''} onchange="DailyReportState.weather='${w.key}'; renderDailyReportPage1(); autoDebouncedSaveSupabase();" class="rounded border-slate-900 text-slate-900 focus:ring-0">
-              <span>${w.label}</span>
-            </label>
-          `).join('')}
-          <input type="text" placeholder="ระบุเพิ่มเติม..." class="border-b border-slate-300 text-[11px] px-1 outline-none w-28 bg-transparent" value="${escapeHtml(DailyReportState.weatherOther || '')}" oninput="DailyReportState.weatherOther=this.value; autoDebouncedSaveSupabase();">
-        </div>
+          <!-- Ordered 5-Zone Layout with Safe Margins & Compact Inputs -->
+          <div class="bg-white" style="display: grid; grid-template-columns: 124px 124px 172px 124px 116px; align-items: stretch; justify-content: space-between; padding: 6px 12px;">
+            
+            <!-- 1. Left Column: เวลาทำงานปกติ & เวลาเริ่มงาน -->
+            <div class="flex flex-col justify-between" style="padding: 4px 0;">
+              <div class="flex items-baseline gap-1 text-[10.5px] whitespace-nowrap">
+                <span class="font-bold text-slate-800">เวลาทำงานปกติ</span>
+                <input type="text" id="dr-input-duration" style="width: 28px;" class="border-b border-dotted border-slate-700 text-center font-bold text-slate-900 bg-transparent outline-none px-0.5" value="${escapeHtml(DailyReportState.normalHours || String(DailyReportState.duration || '8').replace(/[^\d.]/g, '') || '8')}" oninput="DailyReportState.normalHours=this.value; DailyReportState.duration=this.value+' ชั่วโมง'; autoDebouncedSaveSupabase();">
+                <span class="font-bold text-slate-800">ชั่วโมง</span>
+              </div>
+              <div class="flex items-baseline gap-1 text-[10.5px] whitespace-nowrap">
+                <span class="font-bold text-slate-800">เวลาเริ่มงาน</span>
+                <input type="text" id="dr-input-start-time" style="width: 42px;" class="border-b border-dotted border-slate-700 text-center font-bold text-slate-900 bg-transparent outline-none px-0.5" value="${escapeHtml(String(DailyReportState.startTime || '08:00').replace(/\s*น\.?\s*$/, ''))}" oninput="handleWorkTimeChange('start', this.value)" onchange="handleWorkTimeChange('start', this.value)">
+                <span class="font-bold text-slate-800">น.</span>
+              </div>
+            </div>
 
-        <!-- Permit Restrictions Checkboxes -->
-        <div class="flex items-center flex-wrap gap-x-3 gap-y-0.5 pt-0.5">
-          <span class="font-bold shrink-0">การระงับการทำงาน :</span>
-          ${permitItems.map(p => `
-            <label class="inline-flex items-center gap-1 cursor-pointer select-none">
-              <input type="checkbox" ${DailyReportState.workPermit === p.key ? 'checked' : ''} onchange="DailyReportState.workPermit='${p.key}'; renderDailyReportPage1(); autoDebouncedSaveSupabase();" class="rounded border-slate-900 text-slate-900 focus:ring-0">
-              <span>${p.label}</span>
-            </label>
-          `).join('')}
-          <input type="text" placeholder="ระบุ..." class="border-b border-slate-300 text-[11px] px-1 outline-none w-24 bg-transparent" value="${escapeHtml(DailyReportState.workPermitOther || '')}" oninput="DailyReportState.workPermitOther=this.value; autoDebouncedSaveSupabase();">
-        </div>
+            <!-- 2. Day Clock (06:00 - 18:00) -->
+            <div id="dr-weather-clock-day" class="flex items-center justify-center">
+              ${buildHourlyWeatherClockSVG('day')}
+            </div>
 
-        <!-- Work Time & Attachments -->
-        <div class="flex items-center justify-between text-[11px] pt-0.5 border-t border-slate-200">
-          <div class="flex items-center gap-4">
-            <div><span class="font-bold">เวลาเริ่มทำงาน :</span> <input type="text" id="dr-input-start-time" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.startTime}" oninput="handleWorkTimeChange('start', this.value)" onchange="handleWorkTimeChange('start', this.value)"></div>
-            <div><span class="font-bold">เวลาเลิกงาน :</span> <input type="text" id="dr-input-end-time" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.endTime}" oninput="handleWorkTimeChange('end', this.value)" onchange="handleWorkTimeChange('end', this.value)"></div>
-            <div><span class="font-bold">ระยะเวลาทำงาน :</span> <input type="text" id="dr-input-duration" class="border-b border-slate-400 text-center w-20 outline-none" value="${DailyReportState.duration}" oninput="DailyReportState.duration=this.value; autoDebouncedSaveSupabase();"></div>
-          </div>
-          <div>
-            <span class="font-bold">เอกสารแนบจำนวน :</span>
-            <input type="number" min="1" class="border-b border-slate-400 text-center w-10 font-bold outline-none" value="${DailyReportState.attachmentPages}" oninput="DailyReportState.attachmentPages=this.value; autoDebouncedSaveSupabase();">
-            <span>แผ่น</span>
+            <!-- 3. Center Column: นอกเวลาทำงานปกติ & ผลกระทบกับการทำงาน -->
+            <div class="flex flex-col justify-between border-l border-slate-200" style="padding: 4px 0 4px 8px;">
+              <div class="flex items-baseline gap-1 text-[10.5px] whitespace-nowrap">
+                <span class="font-bold text-slate-800">นอกเวลาทำงานปกติ</span>
+                <input type="text" style="width: 28px;" class="border-b border-dotted border-slate-700 text-center font-bold text-slate-900 bg-transparent outline-none px-0.5" value="${escapeHtml(DailyReportState.overtimeHours || '0')}" oninput="DailyReportState.overtimeHours=this.value; autoDebouncedSaveSupabase();">
+                <span class="font-bold text-slate-800">ชั่วโมง</span>
+              </div>
+              <div class="space-y-1">
+                <label class="flex items-center gap-1.5 cursor-pointer select-none text-[10.5px] font-bold text-slate-800 whitespace-nowrap">
+                  <input type="checkbox" ${DailyReportState.weatherImpact !== 'impact' ? 'checked' : ''} onchange="DailyReportState.weatherImpact = this.checked ? 'none' : 'impact'; renderDailyReportPage1(); autoDebouncedSaveSupabase();" class="w-3.5 h-3.5 rounded-none border-slate-900 text-slate-900 focus:ring-0">
+                  <span>ไม่กระทบกับการทำงาน</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer select-none text-[10.5px] font-bold text-slate-800 whitespace-nowrap">
+                  <input type="checkbox" ${DailyReportState.weatherImpact === 'impact' ? 'checked' : ''} onchange="DailyReportState.weatherImpact = this.checked ? 'impact' : 'none'; renderDailyReportPage1(); autoDebouncedSaveSupabase();" class="w-3.5 h-3.5 rounded-none border-slate-900 text-slate-900 focus:ring-0">
+                  <span>กระทบกับการทำงาน อธิบายในอุปสรรค</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 4. Night Clock (18:00 - 06:00) -->
+            <div id="dr-weather-clock-night" class="flex items-center justify-center">
+              ${buildHourlyWeatherClockSVG('night')}
+            </div>
+
+            <!-- 5. Right Column: สัญลักษณ์ & เวลาเลิกงาน -->
+            <div class="flex flex-col justify-between border-l border-slate-200" style="padding: 4px 2px 4px 8px;">
+              <div>
+                <div class="text-[10.5px] font-extrabold text-slate-900 leading-none mb-1.5">สัญลักษณ์</div>
+                <div class="space-y-1 pl-0.5">
+                  <div class="flex items-center gap-2 text-[10px] font-bold text-slate-800 whitespace-nowrap leading-none">
+                    <span style="width: 18px; height: 9px; background-color: #67E8F9; border: 1px solid #0284C7;" class="inline-block shrink-0"></span>
+                    <span>ปลอดโปร่ง</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-[10px] font-bold text-slate-800 whitespace-nowrap leading-none">
+                    <span style="width: 18px; height: 9px; background-color: #FDE047; border: 1px solid #CA8A04;" class="inline-block shrink-0"></span>
+                    <span>ไม่แจ่มใส</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-[10px] font-bold text-slate-800 whitespace-nowrap leading-none">
+                    <span style="width: 18px; height: 9px; background-color: #FDBA74; border: 1px solid #EA580C;" class="inline-block shrink-0"></span>
+                    <span>ฝนตก</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-baseline gap-1 text-[10.5px] whitespace-nowrap">
+                <span class="font-bold text-slate-800">เวลาเลิกงาน</span>
+                <input type="text" id="dr-input-end-time" style="width: 38px;" class="border-b border-dotted border-slate-700 text-center font-bold text-slate-900 bg-transparent outline-none px-0.5" value="${escapeHtml(String(DailyReportState.endTime || '17:00').replace(/\s*น\.?\s*$/, ''))}" oninput="handleWorkTimeChange('end', this.value)" onchange="handleWorkTimeChange('end', this.value)">
+                <span class="font-bold text-slate-800">น.</span>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
       <!-- Main Work Table (Automatically Grouped by Footings) -->
-      <div class="mb-1.5">
+      <div class="mb-1">
         <table class="dr-table">
           <thead>
             <tr>
@@ -990,7 +1235,7 @@
           </thead>
           <tbody>
             ${tasksRows}
-            <tr class="bg-slate-100 font-bold border-t-2 border-slate-900" style="height: 22px;">
+            <tr class="bg-slate-100 font-bold border-t-2 border-slate-900" style="height: 20px;">
               <td colspan="3" class="text-center font-bold py-0.5 text-xs text-slate-900">รวม</td>
               <td class="text-center font-mono font-bold py-0.5 text-xs text-slate-900">${totalQtyNum} ต้น</td>
               <td class="text-center font-mono font-black py-0.5 text-xs text-slate-900">${totalDrivenNum} ต้น</td>
@@ -1002,7 +1247,7 @@
       </div>
 
       <!-- 3-Column Manpower & Machinery Section -->
-      <div class="grid grid-cols-3 gap-2 border border-slate-900 p-1.5 mb-1.5 bg-white text-[10px]">
+      <div class="grid grid-cols-3 gap-2 border border-slate-900 p-1.5 mb-1 bg-white text-[10px]">
         
         <!-- Col 1: Management (ผู้จัดการ 1 คน, Staff 1 คน) -->
         <div class="border-r border-slate-300 pr-1.5 flex flex-col justify-between">
@@ -1049,7 +1294,7 @@
       </div>
 
       <!-- Bottom Grid: Problems & Materials (เข็ม i40 ยาว 10m 10 ต้น, เข็ม i40 ยาว 7m 5 ต้น) -->
-      <div class="grid grid-cols-2 gap-2 border border-slate-900 p-1.5 mb-1.5 text-[10.5px] bg-white">
+      <div class="grid grid-cols-2 gap-2 border border-slate-900 p-1.5 mb-1 text-[10.5px] bg-white">
         <!-- Left: Problems & Fixes -->
         <div class="border-r border-slate-300 pr-1.5 flex flex-col justify-between">
           <div class="mb-1">
@@ -2544,8 +2789,12 @@
     const autoDur = calculateDailyWorkDuration(DailyReportState.startTime, DailyReportState.endTime);
     if (autoDur) {
       DailyReportState.duration = autoDur;
+      const numMatch = String(autoDur).match(/(\d+(?:\.\d+)?)/);
+      if (numMatch) {
+        DailyReportState.normalHours = numMatch[1];
+      }
       const durEl = document.getElementById('dr-input-duration');
-      if (durEl) durEl.value = autoDur;
+      if (durEl) durEl.value = DailyReportState.normalHours || autoDur;
     }
     autoDebouncedSaveSupabase();
   };
@@ -2713,6 +2962,11 @@
       .daily-a4-sheet input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
         font-family: 'Sarabun', 'Prompt', sans-serif;
         line-height: normal;
+      }
+      .dr-weather-slice:hover {
+        filter: brightness(0.93);
+        stroke: #0f172a;
+        stroke-width: 1.2px;
       }
       .dr-table {
         width: 100%;
@@ -2973,6 +3227,11 @@
     injectDailyReportStyles();
     document.getElementById('btn-open-daily-report')?.addEventListener('click', window.openDailyReportModal);
     document.getElementById('btn-rep-open-daily-report')?.addEventListener('click', window.openDailyReportModal);
+    if (window.location.hash === '#daily-report' || new URLSearchParams(window.location.search).get('open') === 'daily') {
+      setTimeout(() => {
+        if (typeof window.openDailyReportModal === 'function') window.openDailyReportModal();
+      }, 200);
+    }
   }
 
   if (document.readyState === 'loading') {
