@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>PYNN PRIDI 37 — สารบัญสถาปัตยกรรมและศูนย์วิศวกรรม (Architectural Mokuroku)</title>
+
+  <!-- Google Fonts: Fraunces (Editorial Display) + Prompt & Sarabun (Clean Thai Typography) + Space Mono & Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Noto+Sans+JP:wght@400;500;700&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Real Piling & Footing Engineering Databases -->
+  <script src="piles_db.js"></script>
+  <script src="footings_db.js"></script>
+
+  <style>
+    :root {
+      /* Muji / Kenya Hara Pure Architectural Palette */
+      --ground-washi: #FCFBF8;      /* Natural unbleached paper off-white */
+      --sheet-pure: #FFFFFF;        /* Crisp drawing white */
+      --ink-charcoal: #2A2A28;      /* Warm sumi ink (never harsh #000) */
+      --ink-secondary: #6B6964;     /* Secondary editorial notation */
+      --ink-muted: #9E9B93;         /* Subtle drafting annotations */
+      --hairline: #E8E4DA;          /* Delicate 1px Japanese architectural rule */
+      --hairline-dark: #1E2229;     /* Solid registration rule */
+
+      /* Restrained Japanese Mineral Accent Colors (สีประจำหมวดสถาปัตยกรรม) */
+      --accent-vermilion: #C73E1D;  /* 朱色 - 01 งานเสาเข็มเจาะ */
+      --accent-indigo: #1E40AF;     /* 藍色 - 02 งานฐานราก ค.ส.ล. */
+      --accent-amber: #B45309;      /* 琥珀色 - 03 โครงสร้างอาคาร */
+      --accent-tokiwa: #047857;     /* 常磐色 - 04 สถาปัตย์ & Façade */
+      --accent-ochre: #854D0E;      /* 朽葉色 - 05 ระบบวิศวกรรม MEP */
+      --accent-peony: #9D174D;      /* 牡丹色 - 06 ศูนย์รายงานผู้บริหาร */
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-heading: 'Prompt', -apple-system, sans-serif;
+      --font-body: 'Sarabun', -apple-system, sans-serif;
+      --font-mono: 'Space Mono', monospace;
+      --font-jp: 'Noto Sans JP', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      border-radius: 0 !important; /* Strict Muji / Architectural 0px Radius - No Rounded Box Slop */
+    }
+
+    html, body {
+      background-color: var(--ground-washi);
+      color: var(--ink-charcoal);
+      font-family: var(--font-body);
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100%;
+    }
+
+    .break-thai {
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      line-break: loose;
+    }
+
+    .font-display { font-family: var(--font-display); }
+    .font-heading { font-family: var(--font-heading); }
+    .font-mono { font-family: var(--font-mono); }
+    .font-jp { font-family: var(--font-jp); }
+
+    /* Muji Editorial Row — Zero Box Container */
+    .mokuroku-row {
+      border-bottom: 1px solid var(--hairline);
+      background: transparent;
+      transition: background-color 0.16s ease-out;
+      cursor: pointer;
+      position: relative;
+    }
+    .mokuroku-row:hover {
+      background-color: #F8F6F0;
+    }
+    .mokuroku-row.active {
+      background-color: #F4F1E8;
+    }
+
+    /* Left Architectural Accent Indicator */
+    .row-accent-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      opacity: 0.35;
+      transition: opacity 0.2s ease, width 0.2s ease;
+    }
+    .mokuroku-row:hover .row-accent-bar,
+    .mokuroku-row.active .row-accent-bar {
+      opacity: 1;
+      width: 4px;
+    }
+
+    /* Minimalist Architectural Button (No Drop Shadow / Honest Linework) */
+    .muji-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1.15rem;
+      font-family: var(--font-heading);
+      font-size: 0.815rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      border: 1px solid var(--ink-charcoal);
+      background: transparent;
+      color: var(--ink-charcoal);
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+      user-select: none;
+    }
+    .muji-btn:hover {
+      background: var(--ink-charcoal);
+      color: #FFFFFF !important;
+    }
+    .muji-btn-primary {
+      background: var(--ink-charcoal);
+      color: #FFFFFF !important;
+    }
+    .muji-btn-primary:hover {
+      background: #000000;
+    }
+
+    .muji-btn-sm {
+      padding: 0.3rem 0.65rem !important;
+      font-size: 0.72rem !important;
+      gap: 0.3rem !important;
+    }
+
+    /* Japanese Hanko Inkan Seal */
+    .hanko-seal {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid #C73E1D;
+      color: #C73E1D;
+      font-family: var(--font-jp);
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      user-select: none;
+      background: rgba(199, 62, 29, 0.03);
+    }
+
+    /* Architectural Datum Marker */
+    .datum-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--hairline);
+      background: #FFFFFF;
+      color: var(--ink-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-[#C73E1D] selection:text-white">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP ARCHITECTURAL MASTHEAD (JAPANESE EDITORIAL BEAM - NO LOGO SLOP)   -->
+  <!-- ========================================================================= -->
+  <header class="w-full bg-[#FFFFFF] border-b border-[#E8E4DA] px-4 sm:px-8 py-3.5 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+      
+      <!-- Project Identity: Quiet Architectural Authority -->
+      <div class="flex items-start sm:items-center gap-3">
+        <!-- Hanko Seal Mark -->
+        <div class="hanko-seal shrink-0 mt-0.5 sm:mt-0">
+          <span class="text-[7.5px] font-mono leading-none">済</span>
+          <span class="text-[9.5px] font-bold leading-none mt-0.5">検定</span>
+        </div>
+
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-[9px] sm:text-[10.5px] font-mono tracking-wider text-[#C73E1D] uppercase font-bold">
+              PYNN PRIDI 37 · MOKUROKU (目録)
+            </span>
+            <span class="text-stone-300 hidden sm:inline">•</span>
+            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[8.5px] sm:text-[9px] font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200">
+              <span class="w-1.5 h-1.5 bg-emerald-600 animate-pulse"></span>
+              กำลังก่อสร้าง
+            </span>
+          </div>
+
+          <h1 class="text-sm sm:text-xl md:text-2xl font-display text-[#1E2229] leading-tight mt-0.5 break-thai">
+            สารบัญสถาปัตยกรรมและศูนย์วิศวกรรม · ปรีดี พนมยงค์ 37
+          </h1>
+        </div>
+      </div>
+
+      <!-- Real-Time Engineering Telemetry Strip (Quiet & Monospaced) -->
+      <div class="grid grid-cols-2 gap-2 text-xs font-mono text-stone-600 pt-2 border-t sm:border-t-0 sm:flex sm:items-center sm:gap-6 border-stone-100">
+        <div class="hidden lg:block text-right">
+          <span class="text-stone-400 block text-[9.5px]">PROJECT DATUM</span>
+          <span class="font-bold text-[#1E2229]">RL ±0.00 M (GL)</span>
+        </div>
+        <div class="text-left sm:text-right sm:border-l sm:border-stone-200 sm:pl-4">
+          <span class="text-stone-400 block text-[9.5px]">TIMELINE</span>
+          <span class="font-bold text-[#1E2229]">24 / 31 วันทำการ</span>
+        </div>
+        <div class="text-right sm:border-l sm:border-stone-200 sm:pl-4">
+          <span class="text-stone-400 block text-[9.5px]">BORED PILING</span>
+          <span class="font-bold text-[#C73E1D] text-xs sm:text-sm">49 / 93 (52.7%)</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MACRO HORIZON RULE & EDITORIAL GUIDELINE                               -->
+  <!-- ========================================================================= -->
+  <section class="w-full bg-[#FAF8F5] border-b border-[#E8E4DA] py-2 px-3 sm:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs font-mono text-stone-500">
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <span class="font-bold text-[#1E2229]">目録:</span>
+        <span class="text-[10.5px] sm:text-xs break-thai">6 หมวดงานสถาปัตยกรรมญี่ปุ่น • คลีนขาว สบายตา ไร้กรอบซ้ำซ้อน</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-3 text-[11px] text-stone-400">
+        <span>SCALE: 1:1 FIELD ACCURATE</span>
+        <span>•</span>
+        <span>MUJI EDITORIAL STANDARD</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 3. MAIN WORKSPACE: ASYMMETRICAL EDITORIAL SPREAD (TABLE OF CONTENTS)       -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-8 py-5 sm:py-8 min-w-0 overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start w-full min-w-0">
+
+      <!-- ===================================================================== -->
+      <!-- LEFT COLUMN: THE CLEAN MOKUROKU LEDGER (7 COLS)                      -->
+      <!-- ===================================================================== -->
+      <section class="lg:col-span-7 xl:col-span-7 flex flex-col w-full min-w-0">
+        
+        <!-- Ledger Table Header -->
+        <div class="border-t-2 border-b border-[#1E2229] py-2 mb-1 flex items-center justify-between font-mono text-[10.5px] font-bold tracking-wider text-[#1E2229] uppercase">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <span class="w-6 sm:w-7 text-stone-400">NO.</span>
+            <span class="hidden sm:inline">DISCIPLINE & ENGINEERING STRATUM</span>
+            <span class="sm:hidden">DISCIPLINE & STRATUM</span>
+          </div>
+          <div class="hidden sm:flex items-center gap-8 text-right text-stone-500">
+            <span>ELEVATION</span>
+            <span class="w-24">STATUS</span>
+          </div>
+        </div>
+
+        <!-- Master List of Disciplines (Zero Boxes, Hairline Rules Only) -->
+        <div class="divide-y divide-[#E8E4DA]">
+
+          <!-- ----------------------------------------------------------------- -->
+          <!-- 01: งานเสาเข็มเจาะและชั้นดิน (ACTIVE / 朱色 VERMILION)                 -->
+          <!-- ----------------------------------------------------------------- -->
+          <article class="mokuroku-row active p-3.5 sm:p-5" data-discipline="01" onclick="selectDiscipline('01')">
+            <div class="row-accent-bar" style="background-color: var(--accent-vermilion);"></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+              <div class="flex items-start gap-3 sm:gap-4 min-w-0">
+                <span class="font-display font-bold text-2xl sm:text-3xl text-[#C73E1D] leading-none pt-0.5 shrink-0">01</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] sm:text-[11px] font-jp font-bold px-1.5 py-0.2 bg-[#FEE2E2]/60 text-[#991B1B] border border-[#FECACA]">
+                      基礎工 · FOUNDATION
+                    </span>
+                    <span class="text-[11px] font-mono text-emerald-700 font-semibold flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                      กำลังทำงานหน้างาน
+                    </span>
+                  </div>
+                  <h2 class="text-sm sm:text-lg font-heading font-bold text-[#1E2229] mt-0.5 break-words">
+                    งานเสาเข็มเจาะ<wbr>และชั้นดินกรุงเทพฯ (Bored Piling)
+                  </h2>
+                  <p class="text-[11.5px] sm:text-xs text-stone-500 font-body mt-0.5 leading-relaxed break-words">
+                    เสาเข็มคอนกรีตอัดแรงขนาด 93 ต้น ลึกลงสู่ชั้นทรายแรก RL -24.00 ม. ควบคุมด้วย Blow Count และ Sonic Logging
+                  </p>
+                </div>
+              </div>
+
+              <!-- Desktop Metrics Column -->
+              <div class="hidden sm:flex flex-col items-end shrink-0 text-right">
+                <span class="font-mono text-xs font-bold text-[#1E2229]">RL -24.00 M</span>
+                <span class="text-[11px] font-mono text-[#C73E1D] font-bold mt-0.5">49 / 93 (52.7%)</span>
+                <div class="w-20 h-1 bg-stone-200 mt-1.5 overflow-hidden">
+                  <div class="h-full bg-[#C73E1D]" style="width: 52.7%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile Action Strip -->
+            <div class="flex sm:hidden items-center justify-between mt-2.5 pt-2 border-t border-stone-200/60 font-mono text-xs w-full">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-[#1E2229]">RL -24.00 M</span>
+                <span class="text-[#C73E1D] font-bold">52.7%</span>
+              </div>
+              <a href="piling.html" class="muji-btn muji-btn-primary muji-btn-sm" onclick="event.stopPropagation();">
+                <span>เข้าสู่ 3D</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- ----------------------------------------------------------------- -->
+          <!-- 02: งานฐานราก ค.ส.ล. และเสาเข็มตัด (藍色 INDIGO)                       -->
+          <!-- ----------------------------------------------------------------- -->
+          <article class="mokuroku-row p-3.5 sm:p-5" data-discipline="02" onclick="selectDiscipline('02')">
+            <div class="row-accent-bar" style="background-color: var(--accent-indigo);"></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+              <div class="flex items-start gap-3 sm:gap-4 min-w-0">
+                <span class="font-display font-bold text-2xl sm:text-3xl text-stone-400 group-hover:text-[#1E40AF] leading-none pt-0.5 shrink-0">02</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] sm:text-[11px] font-jp font-bold px-1.5 py-0.2 bg-[#DBEAFE]/60 text-[#1E3A8A] border border-[#BFDBFE]">
+                      地下構造 · SUBSTRUCTURE
+                    </span>
+                    <span class="text-[11px] font-mono text-stone-500">พร้อมเปิดแบบ 3D BIM</span>
+                  </div>
+                  <h2 class="text-sm sm:text-lg font-heading font-bold text-[#1E2229] mt-0.5 break-words">
+                    ฐานราก ค.ส.ล.<wbr> และพิกัดเสาเข็มตัด (Footings & PCO)
+                  </h2>
+                  <p class="text-[11.5px] sm:text-xs text-stone-500 font-body mt-0.5 leading-relaxed break-words">
+                    แบบจำลอง 3D ฐานราก 21 ฐาน (F1–F4), คานคอดิน GB, บ่อลิฟต์ คอนกรีต 155.47 m³ และ 9 พิกัดเสาเข็มตัด PCO
+                  </p>
+                </div>
+              </div>
+
+              <div class="hidden sm:flex flex-col items-end shrink-0 text-right">
+                <span class="font-mono text-xs font-bold text-[#1E2229]">RL -1.80 M</span>
+                <span class="text-[11px] font-mono text-stone-600 font-bold mt-0.5">21 ฐานราก</span>
+                <div class="w-20 h-1 bg-stone-200 mt-1.5 overflow-hidden">
+                  <div class="h-full bg-blue-600" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex sm:hidden items-center justify-between mt-2.5 pt-2 border-t border-stone-200/60 font-mono text-xs w-full">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-[#1E2229]">RL -1.80 M</span>
+                <span class="text-blue-700 font-bold">21 ฐาน</span>
+              </div>
+              <a href="footing.html" class="muji-btn muji-btn-sm" onclick="event.stopPropagation();">
+                <span>เข้าสู่ 3D</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- ----------------------------------------------------------------- -->
+          <!-- 03: โครงสร้างอาคาร ค.ส.ล. (琥珀色 AMBER)                              -->
+          <!-- ----------------------------------------------------------------- -->
+          <article class="mokuroku-row p-3.5 sm:p-5" data-discipline="03" onclick="selectDiscipline('03')">
+            <div class="row-accent-bar" style="background-color: var(--accent-amber);"></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+              <div class="flex items-start gap-3 sm:gap-4 min-w-0">
+                <span class="font-display font-bold text-2xl sm:text-3xl text-stone-400 group-hover:text-[#B45309] leading-none pt-0.5 shrink-0">03</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] sm:text-[11px] font-jp font-bold px-1.5 py-0.2 bg-[#FEF3C7]/60 text-[#78350F] border border-[#FDE68A]">
+                      躯体工事 · SUPERSTRUCTURE
+                    </span>
+                    <span class="text-[11px] font-mono text-stone-500">7 FLOORS + ROOFTOP</span>
+                  </div>
+                  <h2 class="text-sm sm:text-lg font-heading font-bold text-[#1E2229] mt-0.5 break-words">
+                    โครงสร้างอาคาร ค.ส.ล.<wbr> และพื้น Post-Tension (1F–7F)
+                  </h2>
+                  <p class="text-[11.5px] sm:text-xs text-stone-500 font-body mt-0.5 leading-relaxed break-words">
+                    เสา คาน ผนังรับแรงเฉือน (Shearwall) และแผ่นพื้นคอนกรีตอัดแรงไร้คาน กำลังอัดคอนกรีต 350 ksc
+                  </p>
+                </div>
+              </div>
+
+              <div class="hidden sm:flex flex-col items-end shrink-0 text-right">
+                <span class="font-mono text-xs font-bold text-[#1E2229]">RL +24.00 M</span>
+                <span class="text-[11px] font-mono text-amber-700 font-bold mt-0.5">7 ชั้นอาคาร</span>
+                <div class="w-20 h-1 bg-stone-200 mt-1.5 overflow-hidden">
+                  <div class="h-full bg-amber-500" style="width: 25%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex sm:hidden items-center justify-between mt-2.5 pt-2 border-t border-stone-200/60 font-mono text-xs w-full">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-[#1E2229]">RL +24.00 M</span>
+                <span class="text-amber-700 font-bold">7 ชั้น</span>
+              </div>
+              <a href="piling.html#schedule" class="muji-btn muji-btn-sm" onclick="event.stopPropagation();">
+                <span>แผนงาน</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- ----------------------------------------------------------------- -->
+          <!-- 04: สถาปัตยกรรม & FAÇADE (常磐色 TOKIWA JADE)                         -->
+          <!-- ----------------------------------------------------------------- -->
+          <article class="mokuroku-row p-3.5 sm:p-5" data-discipline="04" onclick="selectDiscipline('04')">
+            <div class="row-accent-bar" style="background-color: var(--accent-tokiwa);"></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+              <div class="flex items-start gap-3 sm:gap-4 min-w-0">
+                <span class="font-display font-bold text-2xl sm:text-3xl text-stone-400 group-hover:text-[#047857] leading-none pt-0.5 shrink-0">04</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] sm:text-[11px] font-jp font-bold px-1.5 py-0.2 bg-[#D1FAE5]/60 text-[#065F46] border border-[#A7F3D0]">
+                      意匠計画 · SKIN & ENVELOPE
+                    </span>
+                    <span class="text-[11px] font-mono text-stone-500">EXTERIOR CONCEPT</span>
+                  </div>
+                  <h2 class="text-sm sm:text-lg font-heading font-bold text-[#1E2229] mt-0.5 break-words">
+                    งานสถาปัตยกรรม<wbr>และเปลือกอาคาร (3D Façade & Louvers)
+                  </h2>
+                  <p class="text-[11.5px] sm:text-xs text-stone-500 font-body mt-0.5 leading-relaxed break-words">
+                    ระแนงบังแดดสถาปัตยกรรม (Architectural Louvers), กระจกนิรภัย Low-E ตัดแสง และแผงผนังฉนวนกันความร้อน
+                  </p>
+                </div>
+              </div>
+
+              <div class="hidden sm:flex flex-col items-end shrink-0 text-right">
+                <span class="font-mono text-xs font-bold text-[#1E2229]">RL +28.00 M</span>
+                <span class="text-[11px] font-mono text-emerald-700 font-bold mt-0.5">DESIGN PHASE</span>
+                <div class="w-20 h-1 bg-stone-200 mt-1.5 overflow-hidden">
+                  <div class="h-full bg-emerald-600" style="width: 15%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex sm:hidden items-center justify-between mt-2.5 pt-2 border-t border-stone-200/60 font-mono text-xs">
+              <div class="flex items-center gap-3">
+                <span class="font-bold text-[#1E2229]">RL +28.00 M</span>
+                <span class="text-emerald-700 font-bold">Façade Concept</span>
+              </div>
+              <span class="text-xs text-stone-500 flex items-center gap-1">
+                ดูแบบสเก็ตช์ <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+          </article>
+
+          <!-- ----------------------------------------------------------------- -->
+          <!-- 05: ระบบวิศวกรรมอาคาร MEP (朽葉色 OCHRE EARTH)                          -->
+          <!-- ----------------------------------------------------------------- -->
+          <article class="mokuroku-row p-3.5 sm:p-5" data-discipline="05" onclick="selectDiscipline('05')">
+            <div class="row-accent-bar" style="background-color: var(--accent-ochre);"></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+              <div class="flex items-start gap-3 sm:gap-4 min-w-0">
+                <span class="font-display font-bold text-2xl sm:text-3xl text-stone-400 group-hover:text-[#854D0E] leading-none pt-0.5 shrink-0">05</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] sm:text-[11px] font-jp font-bold px-1.5 py-0.2 bg-[#FEF9C3]/60 text-[#713F12] border border-[#FEF08A]">
+                      設備工事 · BUILDING SERVICES
+                    </span>
+                    <span class="text-[11px] font-mono text-stone-500">MEP CORE</span>
+                  </div>
+                  <h2 class="text-sm sm:text-lg font-heading font-bold text-[#1E2229] mt-0.5 break-words">
+                    ระบบวิศวกรรมอาคาร<wbr>และสุขาภิบาล (MEP Engineering)
+                  </h2>
+                  <p class="text-[11.5px] sm:text-xs text-stone-500 font-body mt-0.5 leading-relaxed break-words">
+                    ถังบำบัดน้ำเสีย, ถังหน่วงน้ำใต้ดิน, ห้องตู้ควบคุมไฟฟ้า MDB, ระบบปรับอากาศ VRV และท่อดักท์ระบายอากาศ
+                  </p>
+                </div>
+              </div>
+
+              <div class="hidden sm:flex flex-col items-end shrink-0 text-right">
+                <span class="font-mono text-xs font-bold text-[#1E2229]">RL ±0.00 M</span>
+                <span class="text-[11px] font-mono text-yellow-800 font-bold mt-0.5">UTILITIES</span>
+                <div class="w-20 h-1 bg-stone-200 mt-1.5 overflow-hidden">
+                  <div class="h-full bg-yellow-600" style="width: 30%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex sm:hidden items-center justify-between mt-2.5 pt-2 border-t border-stone-200/60 font-mono text-xs">
+              <div class="flex items-center gap-3">
+                <span class="font-bold text-[#1E2229]">RL ±0.00 M</span>
+                <span class="text-yellow-800 font-bold">MEP Services</span>
+              </div>
+              <span class="text-xs text-stone-500 flex items-center gap-1">
+                ดูแบบสเก็ตช์ <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </span>
+            </div>
+          </article>
+
+          <!-- ----------------------------------------------------------------- -->
+          <!-- 06: ศูนย์รายงานผู้บริหาร & ซิงก์คลาวด์ (牡丹色 PEONY PLUM)               -->
+          <!-- ----------------------------------------------------------------- -->
+          <article class="mokuroku-row p-3.5 sm:p-5" data-discipline="06" onclick="selectDiscipline('06')">
+            <div class="row-accent-bar" style="background-color: var(--accent-peony);"></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+              <div class="flex items-start gap-3 sm:gap-4 min-w-0">
+                <span class="font-display font-bold text-2xl sm:text-3xl text-stone-400 group-hover:text-[#9D174D] leading-none pt-0.5 shrink-0">06</span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] sm:text-[11px] font-jp font-bold px-1.5 py-0.2 bg-[#FCE7F3]/60 text-[#831843] border border-[#FBCFE8]">
+                      統括報告 · EXECUTIVE REPORT
+                    </span>
+                    <span class="text-[11px] font-mono text-rose-700 font-semibold">DAILY STUDIO</span>
+                  </div>
+                  <h2 class="text-sm sm:text-lg font-heading font-bold text-[#1E2229] mt-0.5 break-words">
+                    ศูนย์รายงานผู้บริหาร<wbr>และส่งออกเอกสาร (Daily Report Studio)
+                  </h2>
+                  <p class="text-[11.5px] sm:text-xs text-stone-500 font-body mt-0.5 leading-relaxed break-words">
+                    สตูดิโอออกรายงานประจำวัน 3 หน้ามาตรฐาน: สรุปสภาพอากาศ, บันทึกการเจาะเข็มประจำวัน และภาพถ่ายหน้างาน บันทึกภาพ PNG และพิมพ์ PDF
+                  </p>
+                </div>
+              </div>
+
+              <div class="hidden sm:flex flex-col items-end shrink-0 text-right">
+                <span class="font-mono text-xs font-bold text-[#1E2229]">DOC: P37-REP</span>
+                <span class="text-[11px] font-mono text-rose-700 font-bold mt-0.5" id="report-date-indicator">05/11/2569</span>
+                <div class="w-20 h-1 bg-stone-200 mt-1.5 overflow-hidden">
+                  <div class="h-full bg-rose-600" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex sm:hidden items-center justify-between mt-2.5 pt-2 border-t border-stone-200/60 font-mono text-xs w-full">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-[#1E2229]">DOC: P37-REP</span>
+                <span class="text-rose-700 font-bold">3 หน้า</span>
+              </div>
+              <a href="piling.html#report" class="muji-btn muji-btn-sm" onclick="event.stopPropagation();">
+                <span>เปิดสตูดิโอ</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- RIGHT COLUMN: THE ARCHITECTURAL DOSSIER PLATE (5 COLS - STICKY)      -->
+      <!-- ===================================================================== -->
+      <aside class="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-20 w-full min-w-0">
+        
+        <!-- The Architectural Dossier Frame (Zero-Card: Pure Drawing Paper Sheet) -->
+        <div class="bg-[#FFFFFF] border border-[#E8E4DA] p-3.5 sm:p-6 md:p-7 relative transition-all duration-200 w-full min-w-0 overflow-hidden">
+          
+          <!-- Drawing Corner Header -->
+          <div class="flex items-center justify-between border-b border-[#E8E4DA] pb-2.5 mb-3.5 font-mono text-xs text-stone-500">
+            <span id="dossier-ref" class="font-bold text-[#1E2229]">DISCIPLINE DOSSIER · REF: 01</span>
+            <span id="dossier-datum" class="datum-pill">RL -24.00 M (1ST SAND)</span>
+          </div>
+
+          <!-- Active Discipline Big Title -->
+          <h3 id="dossier-title" class="text-lg sm:text-xl md:text-2xl font-display text-[#1E2229] leading-tight mb-0.5">
+            งานเสาเข็มเจาะและชั้นดินกรุงเทพฯ
+          </h3>
+          <p id="dossier-subtitle" class="text-[11px] font-mono text-stone-500 mb-3.5">
+            BORED PILING TELEMETRY & STRATIGRAPHIC SECTION
+          </p>
+
+          <!-- Authentic Japanese Architectural Doodle Drawing (SVG Linework Canvas) -->
+          <div id="dossier-illustration" class="w-full h-48 sm:h-52 bg-[#FAF8F5] border border-[#E8E4DA] p-2.5 mb-4 flex items-center justify-center relative overflow-hidden">
+            <!-- Dynamically injected by JS -->
+          </div>
+
+          <!-- Engineering Telemetry Grid (Hairline Grid, No Rounded Boxes) -->
+          <div class="border-t border-b border-[#E8E4DA] py-3 my-3.5 space-y-2 text-xs font-mono">
+            <div class="flex items-center justify-between">
+              <span class="text-stone-500" id="spec-key-1">เป้าหมายทั้งหมด:</span>
+              <span class="font-bold text-[#1E2229]" id="spec-val-1">93 ต้น (เจาะแล้ว 49 ต้น)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-stone-500" id="spec-key-2">ความลึกปลายเสาเข็ม:</span>
+              <span class="font-bold text-[#C73E1D]" id="spec-val-2">RL -24.00 ม. (ชั้นทรายแรก)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-stone-500" id="spec-key-3">การตรวจสอบคุณภาพ:</span>
+              <span class="font-bold text-emerald-700" id="spec-val-3">Sonic Logging 100% ผ่าน</span>
+            </div>
+          </div>
+
+          <!-- Description Paragraph -->
+          <p id="dossier-description" class="text-xs text-stone-600 font-body leading-relaxed mb-5">
+            กดปลอกเหล็กชั่วคราว Casing ลึก 15 ม. เจาะด้วยสว่าน Auger ถึงชั้นทรายแรกที่ระดับ -24.00 ม. พร้อมเทคอนกรีตผสมเสร็จอัดแรง ควบคุมด้วยการนับ Blow Count และทดสอบความสมบูรณ์เนื้อคอนกรีต
+          </p>
+
+          <!-- Primary & Secondary Direct Action Links (No Dead Alerts) -->
+          <div class="flex flex-col gap-2 pt-2 border-t border-[#E8E4DA]">
+            <a id="dossier-primary-btn" href="piling.html" class="muji-btn muji-btn-primary w-full py-2.5 text-xs tracking-wide">
+              <i data-lucide="layers" class="w-4 h-4"></i>
+              <span id="dossier-primary-text">เข้าสู่โมเดล 3D เสาเข็มเจาะ 93 ต้น</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 ml-auto"></i>
+            </a>
+
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+              <a id="dossier-sub-1" href="piling.html" class="muji-btn text-[11px] py-1.5">
+                <i data-lucide="crosshair" class="w-3.5 h-3.5"></i>
+                <span id="dossier-sub-1-text">ผังแปลนพิกัด 2D</span>
+              </a>
+              <a id="dossier-sub-2" href="piling.html#report" class="muji-btn text-[11px] py-1.5">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                <span id="dossier-sub-2-text">Daily Report</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 4. FOOTER REGISTRATION (CLEAN JAPANESE ARCHITECTURAL COLOPHON)             -->
+  <!-- ========================================================================= -->
+  <footer class="w-full bg-[#FFFFFF] border-t border-[#E8E4DA] px-4 sm:px-8 py-5 text-xs font-mono text-stone-500 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <span class="font-display font-bold text-sm text-[#1E2229]">PYNN PRIDI 37</span>
+        <span>•</span>
+        <span>โครงการปรีดี พนมยงค์ 37 (สุขุมวิท 71)</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-[10.5px] sm:text-[11px] text-stone-400">
+        <span>DRAWING NO: P37-MOKUROKU-01</span>
+        <span>•</span>
+        <span>KENYA HARA EDITORIAL</span>
+        <span>•</span>
+        <span class="text-[#C73E1D] font-bold">100% ZERO-CARD</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 5. INTERACTIVE JAVASCRIPT: MOKUROKU CONTROLLER & VECTOR DOODLES           -->
+  <!-- ========================================================================= -->
+  <script>
+    // Authentic Japanese Vector Linework Doodles for each discipline (Crisp, Non-Overlapping)
+    const DOODLES = {
+      '01': `
+        <svg class="w-full h-full" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Soil Stratigraphy layers -->
+          <rect x="15" y="20" width="250" height="25" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="0.8"/>
+          <text x="22" y="36" fill="#64748B" font-size="7.5" font-family="Prompt">01 ดินเหนียวอ่อน (Soft Clay)</text>
+          
+          <rect x="15" y="45" width="250" height="35" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="0.8"/>
+          <text x="22" y="66" fill="#64748B" font-size="7.5" font-family="Prompt">02 ดินเหนียวแข็ง (Stiff Clay)</text>
+          
+          <rect x="15" y="80" width="250" height="32" fill="#FFFBEB" stroke="#FDE68A" stroke-width="0.8"/>
+          <text x="22" y="100" fill="#B45309" font-size="7.5" font-family="Prompt" font-weight="bold">03 ชั้นทรายแรก (Bearing Sand)</text>
+          
+          <!-- Ground Level Datum -->
+          <line x1="10" y1="20" x2="270" y2="20" stroke="#1E2229" stroke-width="1.2"/>
+          <text x="235" y="14" fill="#1E2229" font-size="7.5" font-family="Space Mono" font-weight="bold">GL ±0.00</text>
+          
+          <!-- Pile 1 (Done) -->
+          <rect x="135" y="20" width="10" height="72" fill="#FFFFFF" stroke="#C73E1D" stroke-width="1.2"/>
+          <polygon points="135,92 140,99 145,92" fill="#FFFFFF" stroke="#C73E1D" stroke-width="1.2"/>
+          <text x="140" y="14" fill="#C73E1D" font-size="7" font-family="Space Mono" font-weight="bold" text-anchor="middle">P-18</text>
+          <text x="140" y="112" fill="#059669" font-size="6.5" font-family="Space Mono" font-weight="bold" text-anchor="middle">DONE</text>
+          
+          <!-- Pile 2 (Done) -->
+          <rect x="175" y="20" width="10" height="72" fill="#FFFFFF" stroke="#C73E1D" stroke-width="1.2"/>
+          <polygon points="175,92 180,99 185,92" fill="#FFFFFF" stroke="#C73E1D" stroke-width="1.2"/>
+          <text x="180" y="14" fill="#C73E1D" font-size="7" font-family="Space Mono" font-weight="bold" text-anchor="middle">P-49</text>
+          <text x="180" y="112" fill="#059669" font-size="6.5" font-family="Space Mono" font-weight="bold" text-anchor="middle">DONE</text>
+          
+          <!-- Pile 3 (Planned) -->
+          <rect x="215" y="20" width="10" height="72" fill="none" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3 2"/>
+          <polygon points="215,92 220,99 225,92" fill="none" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="220" y="14" fill="#94A3B8" font-size="7" font-family="Space Mono" text-anchor="middle">P-50</text>
+          <text x="220" y="112" fill="#94A3B8" font-size="6.5" font-family="Space Mono" text-anchor="middle">WAIT</text>
+          
+          <!-- Dimension String -->
+          <line x1="255" y1="20" x2="255" y2="92" stroke="#C73E1D" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="250" y="58" fill="#C73E1D" font-size="7" font-family="Space Mono" transform="rotate(90 250 58)" text-anchor="middle">L = 21.00 m</text>
+          <text x="245" y="102" fill="#C73E1D" font-size="6.5" font-family="Space Mono" font-weight="bold">RL -24m</text>
+        </svg>
+      `,
+      '02': `
+        <svg class="w-full h-full" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Soil Line -->
+          <line x1="20" y1="30" x2="260" y2="30" stroke="#94A3B8" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="25" y="24" fill="#64748B" font-size="7.5" font-family="Space Mono">RL -1.80 M (Cut-Off PCO)</text>
+          
+          <!-- Footing Concrete Block -->
+          <rect x="65" y="40" width="150" height="45" fill="#FFFFFF" stroke="#1E40AF" stroke-width="1.5"/>
+          
+          <!-- Column Stub -->
+          <rect x="120" y="15" width="40" height="25" fill="#EFF6FF" stroke="#1E40AF" stroke-width="1.5"/>
+          <text x="140" y="10" fill="#1E40AF" font-size="8" font-family="Space Mono" font-weight="bold" text-anchor="middle">COLUMN C1</text>
+          
+          <!-- Reinforcement Rebars -->
+          <line x1="75" y1="75" x2="205" y2="75" stroke="#2563EB" stroke-width="1.5"/>
+          <line x1="75" y1="50" x2="205" y2="50" stroke="#2563EB" stroke-width="1" stroke-dasharray="2 2"/>
+          <line x1="85" y1="45" x2="85" y2="80" stroke="#60A5FA" stroke-width="1"/>
+          <line x1="110" y1="45" x2="110" y2="80" stroke="#60A5FA" stroke-width="1"/>
+          <line x1="140" y1="45" x2="140" y2="80" stroke="#60A5FA" stroke-width="1"/>
+          <line x1="170" y1="45" x2="170" y2="80" stroke="#60A5FA" stroke-width="1"/>
+          <line x1="195" y1="45" x2="195" y2="80" stroke="#60A5FA" stroke-width="1"/>
+          
+          <!-- Piles Heads -->
+          <rect x="90" y="85" width="16" height="25" fill="#FFFFFF" stroke="#1E2229" stroke-width="1.2"/>
+          <rect x="174" y="85" width="16" height="25" fill="#FFFFFF" stroke="#1E2229" stroke-width="1.2"/>
+          
+          <text x="140" y="65" fill="#1E3A8A" font-size="9" font-family="Prompt" font-weight="bold" text-anchor="middle">FOOTING F2 (4 PILES)</text>
+          <text x="140" y="115" fill="#1E40AF" font-size="7" font-family="Space Mono" font-weight="bold" text-anchor="middle">21 FOUNDATIONS · 155.5 M³</text>
+        </svg>
+      `,
+      '03': `
+        <svg class="w-full h-full" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 7-Storey Superstructure Frame -->
+          <rect x="50" y="15" width="180" height="90" fill="#FFFFFF" stroke="#1E2229" stroke-width="1.5"/>
+          <line x1="50" y1="28" x2="230" y2="28" stroke="#B45309" stroke-width="1.2"/>
+          <line x1="50" y1="41" x2="230" y2="41" stroke="#B45309" stroke-width="1.2"/>
+          <line x1="50" y1="54" x2="230" y2="54" stroke="#B45309" stroke-width="1.2"/>
+          <line x1="50" y1="67" x2="230" y2="67" stroke="#B45309" stroke-width="1.2"/>
+          <line x1="50" y1="80" x2="230" y2="80" stroke="#B45309" stroke-width="1.2"/>
+          <line x1="50" y1="93" x2="230" y2="93" stroke="#B45309" stroke-width="1.2"/>
+          
+          <line x1="90" y1="15" x2="90" y2="105" stroke="#1E2229" stroke-width="1" stroke-dasharray="2 2"/>
+          <line x1="140" y1="15" x2="140" y2="105" stroke="#1E2229" stroke-width="1" stroke-dasharray="2 2"/>
+          <line x1="190" y1="15" x2="190" y2="105" stroke="#1E2229" stroke-width="1" stroke-dasharray="2 2"/>
+          
+          <text x="235" y="20" fill="#B45309" font-size="7" font-family="Space Mono">7F (+24m)</text>
+          <text x="235" y="60" fill="#64748B" font-size="7" font-family="Space Mono">4F (+13m)</text>
+          <text x="235" y="105" fill="#1E2229" font-size="7" font-family="Space Mono">1F (±0.0m)</text>
+          
+          <rect x="100" y="47" width="80" height="15" fill="#FEF3C7" stroke="#B45309" stroke-width="1"/>
+          <text x="140" y="58" fill="#78350F" font-size="8" font-family="Prompt" font-weight="bold" text-anchor="middle">Post-Tension Slabs</text>
+        </svg>
+      `,
+      '04': `
+        <svg class="w-full h-full" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="15" width="200" height="90" fill="#FFFFFF" stroke="#047857" stroke-width="1.5"/>
+          <line x1="60" y1="15" x2="60" y2="105" stroke="#059669" stroke-width="1.5"/>
+          <line x1="75" y1="15" x2="75" y2="105" stroke="#059669" stroke-width="1.5"/>
+          <line x1="90" y1="15" x2="90" y2="105" stroke="#059669" stroke-width="1.5"/>
+          <line x1="105" y1="15" x2="105" y2="105" stroke="#059669" stroke-width="1.5"/>
+          
+          <rect x="120" y="25" width="105" height="70" fill="#ECFDF5" stroke="#10B981" stroke-width="1.2"/>
+          <line x1="130" y1="85" x2="175" y2="35" stroke="#6EE7B7" stroke-width="1"/>
+          <line x1="145" y1="85" x2="190" y2="35" stroke="#6EE7B7" stroke-width="1"/>
+          
+          <line x1="15" y1="10" x2="55" y2="35" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <text x="25" y="10" fill="#D97706" font-size="7" font-family="Space Mono">Sun 45°</text>
+          <text x="172" y="65" fill="#065F46" font-size="9" font-family="Prompt" font-weight="bold" text-anchor="middle">Low-E Glass Envelope</text>
+        </svg>
+      `,
+      '05': `
+        <svg class="w-full h-full" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="15" width="200" height="90" fill="#FFFFFF" stroke="#1E2229" stroke-width="1.5"/>
+          <rect x="125" y="15" width="30" height="90" fill="#FEF9C3" stroke="#854D0E" stroke-width="1.2"/>
+          <text x="140" y="60" fill="#713F12" font-size="7" font-family="Space Mono" transform="rotate(-90 140 60)" text-anchor="middle">MEP RISER SHAFT</text>
+          
+          <path d="M 60 90 L 125 90 L 125 25 L 80 25" stroke="#2563EB" stroke-width="1.5" fill="none"/>
+          <text x="70" y="85" fill="#1E40AF" font-size="7" font-family="Space Mono">Water Supply</text>
+          
+          <path d="M 220 90 L 155 90 L 155 35 L 200 35" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3 2" fill="none"/>
+          <text x="180" y="85" fill="#92400E" font-size="7" font-family="Space Mono">MDB Power</text>
+          
+          <rect x="50" y="95" width="60" height="10" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/>
+          <text x="80" y="103" fill="#1E3A8A" font-size="6" font-family="Prompt" text-anchor="middle">ถังหน่วงน้ำใต้ดิน</text>
+        </svg>
+      `,
+      '06': `
+        <svg class="w-full h-full" viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="80" y="10" width="120" height="100" fill="#FFFFFF" stroke="#9D174D" stroke-width="1.5"/>
+          <rect x="115" y="5" width="50" height="10" fill="#FCE7F3" stroke="#9D174D" stroke-width="1.5"/>
+          <circle cx="140" cy="10" r="2" fill="#9D174D"/>
+          
+          <line x1="95" y1="25" x2="185" y2="25" stroke="#9D174D" stroke-width="2"/>
+          <line x1="95" y1="35" x2="160" y2="35" stroke="#CBD5E1" stroke-width="1.5"/>
+          <line x1="95" y1="43" x2="175" y2="43" stroke="#CBD5E1" stroke-width="1.5"/>
+          <line x1="95" y1="51" x2="150" y2="51" stroke="#CBD5E1" stroke-width="1.5"/>
+          
+          <circle cx="115" cy="75" r="14" fill="#FDF2F8" stroke="#BE185D" stroke-width="1.5"/>
+          <text x="115" y="78" fill="#831843" font-size="8" font-family="Space Mono" font-weight="bold" text-anchor="middle">52%</text>
+          
+          <rect x="150" y="65" width="24" height="24" fill="none" stroke="#C73E1D" stroke-width="1.5"/>
+          <text x="162" y="80" fill="#C73E1D" font-size="9" font-family="Noto Sans JP" font-weight="bold" text-anchor="middle">済</text>
+          <text x="140" y="103" fill="#831843" font-size="7" font-family="Prompt" font-weight="bold" text-anchor="middle">DAILY REPORT 3 PAGES (PNG/PDF)</text>
+        </svg>
+      `
+    };
+
+    // Metadata & Link Database for each discipline
+    const DISCIPLINE_DATA = {
+      '01': {
+        ref: 'DISCIPLINE DOSSIER · REF: 01',
+        datum: 'RL -24.00 M (1ST SAND)',
+        title: 'งานเสาเข็มเจาะและชั้นดินกรุงเทพฯ',
+        subtitle: 'BORED PILING TELEMETRY & STRATIGRAPHIC SECTION',
+        k1: 'เป้าหมายทั้งหมด:', v1: '93 ต้น (เจาะแล้ว 49 ต้น, 52.7%)',
+        k2: 'ความลึกปลายเสาเข็ม:', v2: 'RL -24.00 ม. (ชั้นทรายแรก)',
+        k3: 'การตรวจสอบคุณภาพ:', v3: 'Sonic Logging 100% ผ่านเกณฑ์',
+        desc: 'กดปลอกเหล็กชั่วคราว Casing ลึก 15 ม. เจาะด้วยสว่าน Auger ลึกลงสู่ชั้นทรายแรกที่ระดับ -24.00 ม. ควบคุมด้วยการนับ Blow Count และตรวจสอบความต่อเนื่องของเนื้อคอนกรีตด้วยวิธี Sonic Logging แบบจำลอง 3D ตรวจสอบได้ทั้ง 93 ต้น',
+        btnText: 'เข้าสู่โมเดล 3D เสาเข็มเจาะ 93 ต้น',
+        btnUrl: 'piling.html',
+        sub1Text: 'ผังแปลนพิกัด 2D', sub1Url: 'piling.html',
+        sub2Text: 'Daily Report', sub2Url: 'piling.html#report'
+      },
+      '02': {
+        ref: 'DISCIPLINE DOSSIER · REF: 02',
+        datum: 'RL -1.80 M (CUT-OFF PCO)',
+        title: 'ฐานราก ค.ส.ล. และเสาเข็มตัด',
+        subtitle: 'SUBSTRUCTURE BIM MODEL & FOOTING REBAR SCHEDULE',
+        k1: 'จำนวนฐานราก:', v1: '21 ฐาน (F1=6, F2=12, F3=2, F4=1)',
+        k2: 'ปริมาตรคอนกรีต:', v2: '155.47 m³ (กำลังอัด 320 ksc)',
+        k3: 'พิกัดเสาเข็มตัด (PCO):', v3: '9 จุดตัดระดับดินฐานราก',
+        desc: 'แบบจำลอง 3D ฐานรากตื้น-ลึก 21 ฐาน พร้อมคานคอดิน Grade Beam (GB), บ่อลิฟต์คอนกรีตเสริมเหล็ก และการตัดหัวเสาเข็มตามระดับ PCO พร้อมตารางคำนวณปริมาณงานคอนกรีต เหล็กเสริม และไม้แบบอย่างละเอียด',
+        btnText: 'เข้าสู่โมเดล 3D ฐานราก 21 ฐาน',
+        btnUrl: 'footing.html',
+        sub1Text: 'ผังฐานราก 2D', sub1Url: 'footing.html',
+        sub2Text: 'ปริมาณงาน BOQ', sub2Url: 'footing.html'
+      },
+      '03': {
+        ref: 'DISCIPLINE DOSSIER · REF: 03',
+        datum: 'RL +24.00 M (7F FLOORS)',
+        title: 'โครงสร้างอาคาร ค.ส.ล. (1F–7F)',
+        subtitle: 'SUPERSTRUCTURE POST-TENSION & SHEARWALL SYSTEM',
+        k1: 'จำนวนชั้นอาคาร:', v1: '7 ชั้น + ชั้นหลังคาดาดฟ้า',
+        k2: 'ระบบแผ่นพื้น:', v2: 'Post-Tension Slabs (ไร้คาน)',
+        k3: 'กำลังอัดคอนกรีต:', v3: '350 ksc Cylinder (เสาและผนัง)',
+        desc: 'งานโครงสร้างวิศวกรรมอาคาร 7 ชั้น ประกอบด้วย เสาคอนกรีตเสริมเหล็ก, ผนังรับแรงเฉือน (Shearwall) ป้องกันแรงลมและแผ่นดินไหว และแผ่นพื้นคอนกรีตอัดแรงไร้คาน (Post-Tension) เพื่อเพิ่มพื้นที่ใช้สอยภายในห้องพัก',
+        btnText: 'ดูตารางแผนงานโครงสร้าง 31 วัน',
+        btnUrl: 'piling.html#schedule',
+        sub1Text: 'แผนงานก่อสร้าง', sub1Url: 'piling.html#schedule',
+        sub2Text: 'สรุปสถานะหน้างาน', sub2Url: 'piling.html'
+      },
+      '04': {
+        ref: 'DISCIPLINE DOSSIER · REF: 04',
+        datum: 'RL +28.00 M (ROOFTOP)',
+        title: 'งานสถาปัตยกรรม & เปลือกอาคาร',
+        subtitle: 'FACADE ENVELOPE, LOUVERS & INSULATION SYSTEM',
+        k1: 'ระบบเปลือกอาคาร:', v1: 'Double-Skin Facade & Louvers',
+        k2: 'กระจกอาคาร:', v2: 'Low-E Insulated Double Glass',
+        k3: 'ประสิทธิภาพพลังงาน:', v3: 'ลดความร้อนสะสมเข้าสู่อาคาร 38%',
+        desc: 'แนวคิดการออกแบบสถาปัตยกรรมแบบมินิมอลญี่ปุ่น ใช้ระแนงบังแดดแนวตั้ง (Architectural Vertical Louvers) ช่วยกรองแสงแดดตามทิศทางพระอาทิตย์ ผสานผนังภายนอกโทนสีธรรมชาติ เพื่อสร้างบรรยากาศที่สงบและเป็นส่วนตัว',
+        btnText: 'เปิดภาพร่างแนวคิดสถาปัตยกรรม 3D',
+        btnUrl: 'piling.html',
+        sub1Text: 'แนวคิดดีไซน์', sub1Url: 'piling.html',
+        sub2Text: 'สเปกวัสดุอาคาร', sub2Url: 'piling.html'
+      },
+      '05': {
+        ref: 'DISCIPLINE DOSSIER · REF: 05',
+        datum: 'RL ±0.00 M TO +28.00 M',
+        title: 'ระบบวิศวกรรมอาคาร (MEP)',
+        subtitle: 'MECHANICAL, ELECTRICAL & PLUMBING RISER MATRIX',
+        k1: 'ระบบไฟฟ้าหลัก:', v1: 'ตู้ควบคุม MDB + เครื่องกำเนิดไฟฟ้าสำรอง',
+        k2: 'ระบบสุขาภิบาล:', v2: 'ถังหน่วงน้ำฝน 60 m³ + บำบัดน้ำเสีย',
+        k3: 'ระบบปรับอากาศ:', v3: 'VRV Inverter ประหยัดพลังงาน',
+        desc: 'งานระบบวิศวกรรมอาคารครบวงจร ผังท่อสุขาภิบาล, ตู้ไฟฟ้าหลัก MDB, ระบบปรับอากาศ VRV, ระบบป้องกันอัคคีภัยตามมาตรฐานสากล NFPA พร้อมถังหน่วงน้ำใต้ดินเพื่อป้องกันปัญหาน้ำท่วมขังในซอยสุขุมวิท 71',
+        btnText: 'เปิดผังระบบท่อและชาร์ปไฟฟ้า MEP',
+        btnUrl: 'piling.html',
+        sub1Text: 'ผังระบบไฟฟ้า', sub1Url: 'piling.html',
+        sub2Text: 'ระบบสุขาภิบาล', sub2Url: 'piling.html'
+      },
+      '06': {
+        ref: 'DISCIPLINE DOSSIER · REF: 06',
+        datum: 'OFFICIAL DOCUMENT ARCHIVE',
+        title: 'ศูนย์รายงานผู้บริหาร & ซิงก์คลาวด์',
+        subtitle: 'DAILY QA REPORT STUDIO & HIGH-RESOLUTION EXPORT',
+        k1: 'รูปแบบรายงาน:', v1: '3 หน้ามาตรฐานโครงการ กทม.',
+        k2: 'ระบบส่งออกเอกสาร:', v2: 'บันทึกภาพ PNG คมชัดสูง & พิมพ์ PDF',
+        k3: 'สถานะรายงานประจำวัน:', v3: 'อัปเดตข้อมูลทุก 17:00 น.',
+        desc: 'สตูดิโอออกรายงานประจำวันทางการ 3 หน้า: สภาพอากาศ & บันทึกวิศวกร QC, บันทึกการเจาะเข็มประจำวันพร้อมพิกัด, และภาพถ่ายความคืบหน้าหน้างาน สามารถส่งออกภาพความละเอียดสูงสำหรับผู้บริหารได้ทันที',
+        btnText: 'เปิดสตูดิโอ Daily Report ทันที',
+        btnUrl: 'piling.html#report',
+        sub1Text: 'บันทึกภาพ PNG', sub1Url: 'piling.html#report',
+        sub2Text: 'พิมพ์ PDF รายงาน', sub2Url: 'piling.html#report'
+      }
+    };
+
+    // Selection Controller
+    function selectDiscipline(id) {
+      // Update Active Row
+      document.querySelectorAll('.mokuroku-row').forEach(row => {
+        row.classList.remove('active');
+      });
+      const activeRow = document.querySelector(`.mokuroku-row[data-discipline="${id}"]`);
+      if (activeRow) activeRow.classList.add('active');
+
+      const data = DISCIPLINE_DATA[id];
+      if (!data) return;
+
+      // Update Dossier Plate
+      document.getElementById('dossier-ref').textContent = data.ref;
+      document.getElementById('dossier-datum').textContent = data.datum;
+      document.getElementById('dossier-title').textContent = data.title;
+      document.getElementById('dossier-subtitle').textContent = data.subtitle;
+      document.getElementById('spec-key-1').textContent = data.k1;
+      document.getElementById('spec-val-1').textContent = data.v1;
+      document.getElementById('spec-key-2').textContent = data.k2;
+      document.getElementById('spec-val-2').textContent = data.v2;
+      document.getElementById('spec-key-3').textContent = data.k3;
+      document.getElementById('spec-val-3').textContent = data.v3;
+      document.getElementById('dossier-description').textContent = data.desc;
+
+      // Update Buttons
+      document.getElementById('dossier-primary-text').textContent = data.btnText;
+      document.getElementById('dossier-primary-btn').setAttribute('href', data.btnUrl);
+      document.getElementById('dossier-sub-1-text').textContent = data.sub1Text;
+      document.getElementById('dossier-sub-1').setAttribute('href', data.sub1Url);
+      document.getElementById('dossier-sub-2-text').textContent = data.sub2Text;
+      document.getElementById('dossier-sub-2').setAttribute('href', data.sub2Url);
+
+      // Inject Illustration
+      document.getElementById('dossier-illustration').innerHTML = DOODLES[id] || '';
+
+      // Re-create Lucide Icons
+      lucide.createIcons();
+    }
+
+    // Initialize with Discipline 01
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      selectDiscipline('01');
+
+      // Date string
+      const now = new Date();
+      const d = String(now.getDate()).padStart(2, '0');
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const y = now.getFullYear() + 543;
+      const dateEl = document.getElementById('report-date-indicator');
+      if (dateEl) dateEl.textContent = `${d}/${m}/${y}`;
+    });
+  </script>
+
+</body>
+</html>

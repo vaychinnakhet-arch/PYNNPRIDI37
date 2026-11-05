@@ -26,3 +26,5 @@ dist-ssr
 # Scratch & tooling
 scratch/
 .impeccable/
+portal_*_backup.html
+

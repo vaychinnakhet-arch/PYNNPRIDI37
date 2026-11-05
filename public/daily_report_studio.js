@@ -1731,7 +1731,7 @@
           </div>
           <div class="text-right">
             <div class="text-[11px] font-bold text-slate-800">วันที่รายงาน : <span class="font-mono font-black">${curDate}</span></div>
-            <div class="text-[9.5px] text-slate-600 font-mono">เสาเข็มไอไมโครไพล์ รวม 93 ต้น</div>
+            <div class="text-[9.5px] text-slate-600 font-mono">เสาเข็ม I-40 รวม 93 ต้น</div>
           </div>
         </div>
       </div>
