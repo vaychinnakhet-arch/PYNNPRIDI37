@@ -445,6 +445,42 @@
       bottom: 14px !important;
       top: auto !important;
     }
+    #footing-card {
+      position: fixed !important;
+      right: 20px !important;
+      bottom: 20px !important;
+      left: auto !important;
+      top: auto !important;
+      width: 350px !important;
+      max-width: min(350px, calc(100vw - 24px)) !important;
+      max-height: calc(100vh - 84px) !important;
+      background: #ffffff !important;
+      border: 2px solid var(--dw-navy, #1D2B45) !important;
+      border-radius: 1.25rem !important;
+      box-shadow: 4px 4px 0px var(--dw-navy, #1D2B45) !important;
+      z-index: 75 !important;
+    }
+    #footing-card.dock-left {
+      left: 16px !important;
+      right: auto !important;
+      bottom: 20px !important;
+      top: auto !important;
+    }
+    #footing-card.dock-right {
+      left: auto !important;
+      right: 20px !important;
+      bottom: 20px !important;
+      top: auto !important;
+    }
+    #footing-card.has-been-dragged {
+      right: auto !important;
+      bottom: auto !important;
+    }
+    #footing-card .tab-footing-panel {
+      max-height: calc(100vh - 220px) !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+    }
     #pile-card.is-minimized {
       width: 280px !important;
       padding: 8px 12px !important;
@@ -713,7 +749,8 @@
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
       }
-      #btn-dock-toggle-card {
+      #btn-dock-toggle-card,
+      #btn-dock-toggle-footing-card {
         display: none !important;
       }
       /* Center Dropdown as Mobile Bottom Sheet */
@@ -2559,9 +2596,14 @@
           <div id="card-footing-name" class="text-[10px] font-bold text-[#3E4B69] truncate">ฐานราก ค.ส.ล. • 5 เสาเข็ม</div>
         </div>
       </div>
-      <button id="btn-close-footing-card" type="button" class="w-7 h-7 rounded-lg border-1.5 border-[#1D2B45] bg-[#FAF5EE] hover:bg-slate-200 flex items-center justify-center text-[#1D2B45] transition-colors shadow-2xs cursor-pointer shrink-0" title="ปิดหน้าต่าง">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
+      <div class="flex items-center gap-1 shrink-0">
+        <button id="btn-dock-toggle-footing-card" type="button" aria-label="สลับฝั่งซ้ายขวา" class="w-7 h-7 rounded-lg text-[#3E4B69] hover:text-[#1D2B45] hover:bg-[#FAF5EE] border border-transparent hover:border-[#1D2B45]/20 flex items-center justify-center transition-all cursor-pointer" title="สลับฝั่ง ซ้าย-ขวา">
+          <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
+        </button>
+        <button id="btn-close-footing-card" type="button" class="w-7 h-7 rounded-lg border-1.5 border-[#1D2B45] bg-[#FAF5EE] hover:bg-[#FEE2E2] hover:text-[#E64C3C] flex items-center justify-center text-[#1D2B45] transition-colors shadow-2xs cursor-pointer shrink-0" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Segmented Tab Navigation: จัดหมวดหมู่ 3 แท็บ สะอาดตา คมชัด -->
@@ -6590,8 +6632,13 @@
         hud.style.maxHeight = `calc(100vh - ${topPos + 20}px)`;
       }
     }
-    window.addEventListener('resize', adjustFloatingHudPosition);
-    window.addEventListener('orientationchange', adjustFloatingHudPosition);
+    function onWindowResizeHudAndCards() {
+      adjustFloatingHudPosition();
+      if (typeof clampPileCardToViewport === 'function') clampPileCardToViewport();
+      if (typeof clampFootingCardToViewport === 'function') clampFootingCardToViewport();
+    }
+    window.addEventListener('resize', onWindowResizeHudAndCards);
+    window.addEventListener('orientationchange', onWindowResizeHudAndCards);
     
     // Auto-collapse HUD on mobile on first load to preserve clean 3D viewport
     if (window.innerWidth <= 768) {
@@ -7033,6 +7080,24 @@
       });
     });
 
+    // Clamp Footing Card so it NEVER goes above the top navbar or outside the viewport
+    function clampFootingCardToViewport() {
+      const card = document.getElementById('footing-card');
+      if (!card || card.classList.contains('hidden') || window.innerWidth <= 768) return;
+      if (!card.classList.contains('has-been-dragged')) return;
+      const headerEl = document.querySelector('header');
+      const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 60;
+      const minTop = Math.round(headerBottom + 10);
+      const minLeft = 16;
+      const rect = card.getBoundingClientRect();
+      const maxLeft = Math.max(minLeft, window.innerWidth - rect.width - 16);
+      const maxTop = Math.max(minTop, window.innerHeight - rect.height - 16);
+      const clampedLeft = Math.max(minLeft, Math.min(rect.left, maxLeft));
+      const clampedTop = Math.max(minTop, Math.min(rect.top, maxTop));
+      card.style.setProperty('left', Math.round(clampedLeft) + 'px', 'important');
+      card.style.setProperty('top', Math.round(clampedTop) + 'px', 'important');
+    }
+
     // Footing Card Modal Controller
     function openFootingCard(f) {
       if (!f) return;
@@ -7051,19 +7116,32 @@
 
       // Smart position check: On mobile and foldables (<= 768px), present as full bottom sheet
       if (window.innerWidth <= 768) {
-        card.classList.remove('has-been-dragged');
+        card.classList.remove('dock-left', 'has-been-dragged');
         card.style.removeProperty('left');
         card.style.removeProperty('right');
         card.style.removeProperty('top');
         card.style.removeProperty('bottom');
         card.style.removeProperty('width');
       } else {
+        // Auto-collapse left HUD on smaller laptop viewports (<= 1440px) if footing card is docked left
+        if (window.innerWidth <= 1440 && card.classList.contains('dock-left') && typeof setDesktopHudCollapsed === 'function') {
+          setDesktopHudCollapsed(true, true);
+        }
         if (!footingCardHasBeenDragged) {
-          card.style.setProperty('left', 'auto', 'important');
-          card.style.setProperty('top', 'auto', 'important');
-          card.style.setProperty('right', '20px', 'important');
-          card.style.setProperty('bottom', '20px', 'important');
+          if (card.classList.contains('dock-left')) {
+            card.style.setProperty('right', 'auto', 'important');
+            card.style.setProperty('top', 'auto', 'important');
+            card.style.setProperty('left', '16px', 'important');
+            card.style.setProperty('bottom', '20px', 'important');
+          } else {
+            card.style.setProperty('left', 'auto', 'important');
+            card.style.setProperty('top', 'auto', 'important');
+            card.style.setProperty('right', '20px', 'important');
+            card.style.setProperty('bottom', '20px', 'important');
+          }
           card.style.setProperty('width', '350px', 'important');
+        } else {
+          clampFootingCardToViewport();
         }
         makeFootingCardDraggable();
       }
@@ -7226,12 +7304,22 @@
     let footingCardHasBeenDragged = false;
     function closeFootingCard() {
       const card = document.getElementById('footing-card');
+      const hud = document.getElementById('floating-hud');
       if (!card) return;
       card.classList.add('translate-y-4', 'opacity-0');
       setTimeout(() => {
         card.classList.add('hidden');
         selectedFootingId = null;
         footingCardHasBeenDragged = false;
+        card.classList.remove('has-been-dragged');
+        card.style.removeProperty('left');
+        card.style.removeProperty('top');
+        card.style.removeProperty('right');
+        card.style.removeProperty('bottom');
+        if (hud && hud._autoCollapsedByFootingCard && typeof setDesktopHudCollapsed === 'function') {
+          setDesktopHudCollapsed(false, true);
+          hud._autoCollapsedByFootingCard = false;
+        }
         updateFootingsSceneVisuals();
       }, 200);
       document.getElementById('backdrop-sheet-mobile')?.classList.add('hidden');
@@ -7240,16 +7328,16 @@
     function makeFootingCardDraggable() {
       const card = document.getElementById('footing-card');
       const header = document.getElementById('footing-card-header');
-      if (!card || !header) return;
+      if (!card || !header || header._hasDragListener) return;
+      header._hasDragListener = true;
 
       let isDragging = false;
       let startX, startY, initialLeft, initialTop;
 
       function onPointerDown(e) {
         if (window.innerWidth <= 768 || ('ontouchstart' in window && !window.matchMedia('(pointer: fine)').matches)) return;
-        if (e.target.closest('#btn-close-footing-card') || e.target.closest('button')) return;
-        isDragging = true;
-        footingCardHasBeenDragged = true;
+        if (e.target.closest('#btn-close-footing-card') || e.target.closest('#btn-dock-toggle-footing-card') || e.target.closest('button')) return;
+        
         const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
         const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
         startX = clientX;
@@ -7259,13 +7347,6 @@
         initialLeft = rect.left;
         initialTop = rect.top;
 
-        card.style.setProperty('right', 'auto', 'important');
-        card.style.setProperty('bottom', 'auto', 'important');
-        card.style.setProperty('left', initialLeft + 'px', 'important');
-        card.style.setProperty('top', initialTop + 'px', 'important');
-        card.style.margin = '0';
-        header.style.cursor = 'grabbing';
-
         document.addEventListener('pointermove', onPointerMove);
         document.addEventListener('pointerup', onPointerUp);
         document.addEventListener('touchmove', onPointerMove, { passive: false });
@@ -7273,30 +7354,47 @@
       }
 
       function onPointerMove(e) {
-        if (!isDragging) return;
         const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
         const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
-        if (e.cancelable && e.type === 'touchmove') e.preventDefault();
-
         const dx = clientX - startX;
         const dy = clientY - startY;
+
+        if (!isDragging && Math.hypot(dx, dy) > 4) {
+          isDragging = true;
+          footingCardHasBeenDragged = true;
+          card.classList.add('has-been-dragged');
+          card.classList.remove('dock-left');
+          card.style.setProperty('right', 'auto', 'important');
+          card.style.setProperty('bottom', 'auto', 'important');
+          card.style.margin = '0';
+          header.style.cursor = 'grabbing';
+        }
+
+        if (!isDragging) return;
+        if (e.cancelable && e.type === 'touchmove') e.preventDefault();
+
         let newLeft = initialLeft + dx;
         let newTop = initialTop + dy;
 
-        const pad = 8;
-        const maxLeft = window.innerWidth - card.offsetWidth - pad;
-        const maxTop = window.innerHeight - card.offsetHeight - pad;
-        newLeft = Math.max(pad, Math.min(newLeft, maxLeft));
-        newTop = Math.max(pad, Math.min(newTop, maxTop));
+        const headerEl = document.querySelector('header');
+        const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 60;
+        const minTop = Math.round(headerBottom + 10); // STRICT: Never overlap top navbar!
+        const minLeft = 16;
+        const maxLeft = window.innerWidth - card.offsetWidth - 16;
+        const maxTop = window.innerHeight - card.offsetHeight - 16;
+
+        newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+        newTop = Math.max(minTop, Math.min(newTop, maxTop));
 
         card.style.setProperty('left', Math.round(newLeft) + 'px', 'important');
         card.style.setProperty('top', Math.round(newTop) + 'px', 'important');
       }
 
       function onPointerUp() {
-        if (!isDragging) return;
-        isDragging = false;
-        header.style.cursor = 'grab';
+        if (isDragging) {
+          isDragging = false;
+          header.style.cursor = 'grab';
+        }
         document.removeEventListener('pointermove', onPointerMove);
         document.removeEventListener('pointerup', onPointerUp);
         document.removeEventListener('touchmove', onPointerMove);
@@ -7307,6 +7405,42 @@
     }
 
     makeFootingCardDraggable();
+
+    // Dock Button Footing Toggle (สลับฝั่ง ซ้าย-ขวา แบบมีระเบียบ ไม่บังเมนูบน พร้อม Zen Mode)
+    document.getElementById('btn-dock-toggle-footing-card')?.addEventListener('click', () => {
+      const card = document.getElementById('footing-card');
+      const hud = document.getElementById('floating-hud');
+      if (!card) return;
+      footingCardHasBeenDragged = false;
+      card.classList.remove('has-been-dragged');
+      card.style.removeProperty('width');
+      if (card.classList.contains('dock-left')) {
+        card.classList.remove('dock-left');
+        card.style.setProperty('left', 'auto', 'important');
+        card.style.setProperty('top', 'auto', 'important');
+        card.style.setProperty('right', '20px', 'important');
+        card.style.setProperty('bottom', '20px', 'important');
+        if (hud && hud._autoCollapsedByFootingCard && typeof setDesktopHudCollapsed === 'function') {
+          setDesktopHudCollapsed(false, true);
+          hud._autoCollapsedByFootingCard = false;
+        }
+      } else {
+        card.classList.add('dock-left');
+        card.style.setProperty('right', 'auto', 'important');
+        card.style.setProperty('top', 'auto', 'important');
+        card.style.setProperty('left', '16px', 'important');
+        card.style.setProperty('bottom', '20px', 'important');
+        if (hud && !hud.classList.contains('collapsed') && typeof setDesktopHudCollapsed === 'function') {
+          hud._autoCollapsedByFootingCard = true;
+          setDesktopHudCollapsed(true, true);
+        }
+      }
+    });
+
+    // Expose helpers on window for external callers and debugging
+    window.openFootingCard = openFootingCard;
+    window.closeFootingCard = closeFootingCard;
+    window.clampFootingCardToViewport = clampFootingCardToViewport;
 
     // Accordion Toggle for Engineering Disciplines
     document.querySelectorAll('.discipline-toggle-btn').forEach(btn => {
