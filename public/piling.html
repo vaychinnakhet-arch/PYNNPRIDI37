@@ -23,7 +23,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="daily_report_studio.js?v=20261030_3"></script>
+  <script defer src="daily_report_studio.js?v=20261110_1"></script>
 
   <style>
     :root {
@@ -2993,20 +2993,21 @@
         </div>
 
         <!-- Row 2: Unified Utility & Export Control Ribbon (Hidden on Print & PNG Export) -->
-                <div id="rep-header-toolbar-row" class="bg-[#FAF5EE] border-t-2 border-[#1D2B45] rounded-b-2xl px-2.5 py-1 sm:px-3 flex items-center justify-between gap-1.5 sm:gap-2 no-print no-export overflow-visible">
+        <div id="rep-header-toolbar-row" style="overflow-x: auto; -webkit-overflow-scrolling: touch;" class="bg-[#FAF5EE] border-t-2 border-[#1D2B45] rounded-b-2xl px-2 py-1.5 sm:px-3 flex items-center justify-between gap-1.5 sm:gap-2 no-print no-export flex-nowrap w-full custom-scrollbar">
           <!-- Left Cluster: View Theme, Page Orientation & Forecast Controls -->
           <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
             <!-- S-Curve Forecast Projection Controls (Compact Floating Popover) -->
             <div id="rep-projection-dropdown-wrapper" class="relative shrink-0 select-none">
-              <!-- Main Header Trigger Button (145px, ไม่กินที่แถบเครื่องมือ ไม่ทำให้เมนูล้น) -->
+              <!-- Main Header Trigger Button (Compact, doesn't overflow toolbar) -->
               <button id="btn-forecast-dropdown-trigger" type="button" class="px-2.5 py-1 rounded-xl border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] bg-white hover:bg-amber-50/80 text-[#1D2B45] flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-all select-none hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none" title="คลิกเพื่อเลือกเปิด/ปิด เส้นประค่าเฉลี่ยในกราฟ S-Curve">
                 <i data-lucide="trending-up" class="w-3.5 h-3.5 text-[#F26B2A] shrink-0"></i>
-                <span class="text-[11px] font-black">เส้นประค่าเฉลี่ย</span>
+                <span class="text-[11px] font-black sm:inline hidden">เส้นประค่าเฉลี่ย</span>
+                <span class="text-[11px] font-black sm:hidden">เส้นประ</span>
                 <span id="badge-forecast-active-summary" class="text-[9.5px] font-bold px-1.5 py-0.2 rounded-md bg-slate-100 text-[#475569] border border-slate-200">ปิดอยู่</span>
                 <i data-lucide="chevron-down" id="icon-forecast-chevron" class="w-3.5 h-3.5 text-[#1D2B45] transition-transform duration-200"></i>
               </button>
 
-              <!-- Sleek Compact Flyout Popover (กะทัดรัด คลีน สวย ไม่เกะกะ ไม่เทอะทะ) -->
+              <!-- Sleek Compact Flyout Popover -->
               <div id="rep-forecast-dropdown-menu" class="absolute top-full mt-1.5 left-0 z-50 w-[310px] bg-white border-1.5 border-[#1D2B45] rounded-xl shadow-[3px_3px_0px_#1D2B45] p-1.5 transition-all duration-200 transform origin-top opacity-0 pointer-events-none scale-95 -translate-y-1 hidden">
                 <!-- Row 1: 5 วันล่าสุด -->
                 <button id="btn-proj-recent5" type="button" class="w-full text-left px-2.5 py-1.5 rounded-lg flex items-center justify-between gap-2 cursor-pointer transition-all hover:bg-rose-50/70 select-none group" title="คลิกเปิด/ปิด: เส้นประเฉลี่ย 5 วันล่าสุด">
@@ -3039,29 +3040,31 @@
             </div>
           </div>
 
-          <!-- Right Cluster: Export, Print, Official Documents & Cloud Sync -->
+          <!-- Right Cluster: Export (Capture & Print), Official Documents & Cloud Sync -->
           <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
-            <button id="btn-rep-open-daily-report" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#78350F] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย)">
+            <button id="btn-export-png" class="px-2.5 py-1 rounded-lg text-[11px] font-black bg-[#ecfdf5] hover:bg-[#10B981] hover:text-white text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0" title="บันทึกภาพรายงานความละเอียดสูง (PNG / แคปเจอร์)">
+              <i data-lucide="camera" class="w-3.5 h-3.5 text-[#10B981] shrink-0"></i>
+              <span class="sm:hidden">📸 แคปเจอร์</span>
+              <span class="hidden sm:inline">📸 บันทึกภาพรายงาน</span>
+            </button>
+            <button id="btn-print-report" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#F26B2A] hover:bg-[#d95618] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0" title="พิมพ์รายงาน / บันทึก PDF">
+              <i data-lucide="printer" class="w-3.5 h-3.5 text-white shrink-0"></i>
+              <span class="hidden sm:inline">🖨️ พิมพ์ / PDF</span>
+              <span class="sm:hidden">🖨️ พิมพ์</span>
+            </button>
+
+            <span class="inline-block w-px h-5 bg-[#1D2B45]/20 mx-0.5 shrink-0"></span>
+
+            <button id="btn-rep-open-daily-report" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#78350F] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0" title="จัดทำ Daily Report 3 หน้า (ฟอร์มแสนสิริ, รายงานเข็ม, ภาพถ่าย)">
               <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#D97706] shrink-0"></i>
               <span>Daily Report</span>
             </button>
-            <button id="btn-rep-open-summary" class="px-2 py-1 rounded-lg text-[11px] font-black bg-white hover:bg-sky-50 text-[#0369A1] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="เปิดหน้าตารางรายงานสรุปงานเข็ม (ค่าโบ ความยาวแต่ละท่อน)">
+            <button id="btn-rep-open-summary" class="px-2 py-1 rounded-lg text-[11px] font-black bg-white hover:bg-sky-50 text-[#0369A1] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0" title="เปิดหน้าตารางรายงานสรุปงานเข็ม (ค่าโบ ความยาวแต่ละท่อน)">
               <i data-lucide="table" class="w-3.5 h-3.5 text-[#0284C7] shrink-0"></i>
               <span>สรุปเข็ม</span>
             </button>
 
-            <span class="hidden sm:inline-block w-px h-5 bg-[#1D2B45]/20 mx-0.5 shrink-0"></span>
-
-            <button id="btn-export-png" class="px-2 py-1 rounded-lg text-[11px] font-black bg-white hover:bg-[#10B981] hover:text-white text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="บันทึกภาพรายงานความละเอียดสูง (PNG)">
-              <i data-lucide="camera" class="w-3.5 h-3.5 text-[#10B981] shrink-0"></i>
-              <span>บันทึกภาพรายงาน</span>
-            </button>
-            <button id="btn-print-report" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#F26B2A] hover:bg-[#d95618] text-white border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="พิมพ์รายงาน / บันทึก PDF">
-              <i data-lucide="printer" class="w-3.5 h-3.5 text-white shrink-0"></i>
-              <span>พิมพ์ / PDF</span>
-            </button>
-
-            <button id="btn-report-supabase-sync" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap" title="ตรวจสอบและบันทึกข้อมูลเข้า Supabase">
+            <button id="btn-report-supabase-sync" class="px-2 py-1 rounded-lg text-[11px] font-black bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#064E3B] border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0" title="ตรวจสอบและบันทึกข้อมูลเข้า Supabase">
               <i data-lucide="cloud" class="w-3.5 h-3.5 text-[#10B981] shrink-0"></i>
               <span id="lbl-report-supabase">บันทึกแล้ว</span>
             </button>
@@ -9665,6 +9668,17 @@
       const chev = document.getElementById('icon-forecast-chevron');
       if (!menu) return;
       if (open) {
+        if (menu.parentElement !== document.body) {
+          document.body.appendChild(menu);
+        }
+        const trigger = document.getElementById('btn-forecast-dropdown-trigger');
+        if (trigger) {
+          const rect = trigger.getBoundingClientRect();
+          menu.style.position = 'fixed';
+          menu.style.top = (rect.bottom + 6) + 'px';
+          menu.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 320)) + 'px';
+          menu.style.zIndex = '99999';
+        }
         menu.classList.remove('hidden');
         requestAnimationFrame(() => {
           menu.classList.remove('opacity-0', 'pointer-events-none', 'scale-95', '-translate-y-1');
@@ -9687,8 +9701,9 @@
     });
 
     document.addEventListener('click', (e) => {
-      const wrapper = document.getElementById('rep-projection-dropdown-wrapper');
-      if (wrapper && !wrapper.contains(e.target) && isForecastDropdownOpen) {
+      const trigger = document.getElementById('btn-forecast-dropdown-trigger');
+      const menu = document.getElementById('rep-forecast-dropdown-menu');
+      if (isForecastDropdownOpen && (!trigger || !trigger.contains(e.target)) && (!menu || !menu.contains(e.target))) {
         setForecastDropdownOpen(false);
       }
     });

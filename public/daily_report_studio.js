@@ -2637,7 +2637,7 @@
           photoCardsHtml += `
             <div class="dr-photo-card group relative">
               <div class="dr-photo-frame shadow-xs">
-                <img src="${photo.url}" alt="ภาพถ่ายงานกดเสาเข็ม" class="w-full h-full object-cover">
+                <img src="${photo.url}" alt="ภาพถ่ายงานกดเข็ม" class="w-full h-full object-cover">
                 <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity daily-no-print flex items-center gap-1">
                   <button type="button" onclick="removeDrPhoto(${globalIdx})" class="p-1 rounded bg-rose-600 text-white hover:bg-rose-700 shadow-sm text-xs cursor-pointer" title="ลบภาพนี้">
                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -2645,7 +2645,8 @@
                 </div>
               </div>
               <div class="w-full mt-1">
-                <input type="text" value="${escapeHtml(photo.caption || 'ภาพถ่ายงานกดเสาเข็ม')}" onchange="updateDrPhotoCaption(${globalIdx}, this.value)" class="w-full text-center text-[10.5px] font-bold text-slate-800 border-b border-transparent hover:border-slate-400 focus:border-slate-800 outline-none py-0.5 bg-transparent" placeholder="ภาพถ่ายงานกดเสาเข็ม">
+                <div class="daily-print-only text-center text-[11px] font-bold text-slate-800 py-0.5">${escapeHtml(photo.caption || 'ภาพถ่ายงานกดเข็ม')}</div>
+                <input type="text" value="${escapeHtml(photo.caption || 'ภาพถ่ายงานกดเข็ม')}" onchange="updateDrPhotoCaption(${globalIdx}, this.value)" class="daily-no-print w-full text-center text-[10.5px] font-bold text-slate-800 border-b border-transparent hover:border-slate-400 focus:border-slate-800 outline-none py-0.5 bg-transparent" placeholder="ภาพถ่ายงานกดเข็ม">
               </div>
             </div>
           `;
@@ -2653,7 +2654,7 @@
           photoCardsHtml += `
             <div class="dr-photo-card daily-no-print border-2 border-dashed border-slate-300 rounded p-2 flex flex-col items-center justify-center bg-slate-50/60 hover:bg-slate-100 hover:border-blue-400 transition-all cursor-pointer h-full" style="aspect-ratio: 4/3; max-height: 185px;" onclick="uploadDrPhotoAtSlot(${globalIdx})">
               <i data-lucide="camera" class="w-6 h-6 text-slate-400 mb-1"></i>
-              <span class="text-[11px] font-bold text-slate-700">+ ใส่ภาพถ่ายงานกดเสาเข็ม (4:3)</span>
+              <span class="text-[11px] font-bold text-slate-700">+ ใส่ภาพถ่ายงานกดเข็ม (4:3)</span>
               <span class="text-[9.5px] text-slate-400">ช่องที่ ${slot + 1} คลิกเพื่อเลือกรูป</span>
             </div>
           `;
@@ -2678,14 +2679,6 @@
               <div class="text-[11px] font-bold text-slate-800">
                 หมวดงานเสาเข็ม
               </div>
-            </div>
-
-            <!-- Bulk Upload Action Button (Hidden in Print) -->
-            <div class="daily-no-print mb-1.5 w-full">
-              <button type="button" onclick="triggerBulkPhotoUpload()" class="w-full py-1.5 px-3 rounded-none border-2 border-slate-900 bg-[#e0f2fe] hover:bg-[#bae6fd] text-[#0369a1] font-black text-xs shadow-[2px_2px_0px_#0f172a] active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
-                <i data-lucide="camera" class="w-4 h-4"></i>
-                <span>📸 + อัพโหลดภาพถ่ายเพิ่ม (เลือกพร้อมกันได้ทีละหลายรูป)</span>
-              </button>
             </div>
 
             <!-- 6 Photos Grid (2 Columns x 3 Rows in 4:3 Ratio) -->
@@ -2728,11 +2721,10 @@
       files.forEach((file, idx) => {
         const blobUrl = URL.createObjectURL(file);
         const targetIdx = activeTargetSlot + idx;
-        const captionName = file.name ? file.name.replace(/\.[^/.]+$/, "") : 'ภาพถ่ายงานกดเสาเข็ม';
         DailyReportState.photos[targetIdx] = {
           id: 'upload-' + Date.now() + '-' + idx,
           url: blobUrl,
-          caption: captionName || 'ภาพถ่ายงานกดเสาเข็ม'
+          caption: 'ภาพถ่ายงานกดเข็ม'
         };
       });
       activeTargetSlot = null;
@@ -2740,11 +2732,10 @@
       // User tapped Bulk upload button: append all selected photos
       files.forEach((file, idx) => {
         const blobUrl = URL.createObjectURL(file);
-        const captionName = file.name ? file.name.replace(/\.[^/.]+$/, "") : 'ภาพถ่ายงานกดเสาเข็ม';
         DailyReportState.photos.push({
           id: 'upload-' + Date.now() + '-' + idx,
           url: blobUrl,
-          caption: captionName || 'ภาพถ่ายงานกดเสาเข็ม'
+          caption: 'ภาพถ่ายงานกดเข็ม'
         });
       });
     }
@@ -2937,6 +2928,9 @@
     const wasFit = printArea.classList.contains('is-fit-mobile');
     if (wasFit) printArea.classList.remove('is-fit-mobile');
 
+    printArea.classList.add('is-exporting-pdf');
+    document.body.classList.add('is-exporting-pdf');
+
     const toast = document.createElement('div');
     toast.className = 'fixed bottom-6 right-6 z-[10000] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border-2 border-[#ffc45b] flex items-center gap-3 text-xs font-bold';
     toast.innerHTML = `
@@ -2970,6 +2964,9 @@
     const filename = getDailyReportPdfFilename();
 
     try {
+      // Small timeout to allow layout reflow under .is-exporting-pdf
+      await new Promise(r => setTimeout(r, 100));
+
       if (typeof window.html2pdf === 'function') {
         const opt = {
           margin: 0,
@@ -2980,10 +2977,11 @@
             useCORS: true,
             letterRendering: true,
             scrollY: 0,
+            scrollX: 0,
             windowWidth: 794
           },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['css', 'legacy'], after: '.daily-a4-sheet' }
+          pagebreak: { mode: ['css'] }
         };
         await window.html2pdf().set(opt).from(printArea).save();
       } else {
@@ -2993,6 +2991,8 @@
       console.error('Error generating PDF with html2pdf:', e);
       window.print();
     } finally {
+      printArea.classList.remove('is-exporting-pdf');
+      document.body.classList.remove('is-exporting-pdf');
       if (wasFit) printArea.classList.add('is-fit-mobile');
       if (toast && toast.parentElement) toast.remove();
     }
@@ -3003,6 +3003,48 @@
     const styleEl = document.createElement('style');
     styleEl.id = 'daily-report-injected-styles';
     styleEl.textContent = `
+      .daily-print-only {
+        display: none !important;
+      }
+      .is-exporting-pdf .daily-print-only {
+        display: block !important;
+      }
+      .is-exporting-pdf .daily-no-print {
+        display: none !important;
+      }
+      .is-exporting-pdf.daily-page-container,
+      .is-exporting-pdf .daily-page-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        display: block !important;
+        width: 210mm !important;
+      }
+      .is-exporting-pdf #dr-photo-sheets-container {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        width: 100% !important;
+      }
+      .is-exporting-pdf .daily-a4-sheet {
+        width: 210mm !important;
+        height: 296.5mm !important;
+        min-height: 296.5mm !important;
+        max-height: 296.8mm !important;
+        box-shadow: none !important;
+        border: 1px solid #000000 !important;
+        margin: 0 auto !important;
+        padding: 7mm 8mm 6mm 8mm !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+      .is-exporting-pdf .daily-a4-sheet:last-child {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
       .daily-page-container {
         display: flex;
         flex-direction: column;
