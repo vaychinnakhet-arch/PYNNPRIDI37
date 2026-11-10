@@ -2965,7 +2965,7 @@
 
     try {
       // Small timeout to allow layout reflow under .is-exporting-pdf
-      await new Promise(r => setTimeout(r, 100));
+      await new Promise(r => setTimeout(r, 200));
 
       if (typeof window.html2pdf === 'function') {
         const opt = {
@@ -3012,26 +3012,63 @@
       .is-exporting-pdf .daily-no-print {
         display: none !important;
       }
+      body.is-exporting-pdf {
+        overflow: visible !important;
+        position: static !important;
+        height: auto !important;
+      }
+      body.is-exporting-pdf #modal-daily-report {
+        position: static !important;
+        overflow: visible !important;
+        display: block !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        inset: auto !important;
+      }
+      body.is-exporting-pdf #modal-daily-report header {
+        display: none !important;
+      }
+      body.is-exporting-pdf #daily-report-printable-area,
+      body.is-exporting-pdf .daily-page-container,
+      .is-exporting-pdf#daily-report-printable-area,
       .is-exporting-pdf.daily-page-container,
       .is-exporting-pdf .daily-page-container {
+        position: static !important;
         padding: 0 !important;
-        margin: 0 !important;
+        margin: 0 auto !important;
         gap: 0 !important;
         display: block !important;
+        overflow: visible !important;
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: auto !important;
+        flex: none !important;
         width: 210mm !important;
+        max-width: 210mm !important;
       }
+      body.is-exporting-pdf #dr-photo-sheets-container,
       .is-exporting-pdf #dr-photo-sheets-container {
         display: block !important;
         margin: 0 !important;
         padding: 0 !important;
         gap: 0 !important;
         width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
       }
+      body.is-exporting-pdf .daily-a4-sheet,
       .is-exporting-pdf .daily-a4-sheet {
+        position: relative !important;
         width: 210mm !important;
-        height: 296.5mm !important;
-        min-height: 296.5mm !important;
-        max-height: 296.8mm !important;
+        max-width: 210mm !important;
+        min-width: 210mm !important;
+        height: 296.2mm !important;
+        min-height: 296.2mm !important;
+        max-height: 296.2mm !important;
+        transform: none !important;
         box-shadow: none !important;
         border: 1px solid #000000 !important;
         margin: 0 auto !important;
@@ -3040,7 +3077,18 @@
         overflow: hidden !important;
         page-break-after: always !important;
         break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        display: block !important;
       }
+      body.is-exporting-pdf #dr-photo-sheets-container .daily-a4-sheet,
+      .is-exporting-pdf #dr-photo-sheets-container .daily-a4-sheet {
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+      body.is-exporting-pdf #dr-photo-sheets-container .daily-a4-sheet:last-child,
+      .is-exporting-pdf #dr-photo-sheets-container .daily-a4-sheet:last-child,
+      body.is-exporting-pdf .daily-a4-sheet:last-child,
       .is-exporting-pdf .daily-a4-sheet:last-child {
         page-break-after: avoid !important;
         break-after: avoid !important;
@@ -3307,12 +3355,20 @@
           margin: 0 !important;
           padding: 0 !important;
           background: #ffffff !important;
+          position: static !important;
+          overflow: visible !important;
+          height: auto !important;
+          max-height: none !important;
+          width: 100% !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
           color-adjust: exact !important;
         }
         body.is-printing-daily-report {
+          position: static !important;
           overflow: visible !important;
+          height: auto !important;
+          max-height: none !important;
           background: #ffffff !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
@@ -3328,10 +3384,15 @@
           padding: 0 !important;
           margin: 0 !important;
           overflow: visible !important;
+          height: auto !important;
+          max-height: none !important;
           inset: auto !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
           color-adjust: exact !important;
+        }
+        body.is-printing-daily-report #modal-daily-report header {
+          display: none !important;
         }
         body.is-printing-daily-report #modal-daily-report * {
           -webkit-print-color-adjust: exact !important;
@@ -3341,11 +3402,23 @@
         body.is-printing-daily-report #modal-daily-report .daily-no-print {
           display: none !important;
         }
+        body.is-printing-daily-report .daily-print-only {
+          display: block !important;
+        }
+        body.is-printing-daily-report #daily-report-printable-area,
         body.is-printing-daily-report .daily-page-container {
+          position: static !important;
           padding: 0 !important;
-          margin: 0 !important;
+          margin: 0 auto !important;
           gap: 0 !important;
           display: block !important;
+          overflow: visible !important;
+          overflow-x: visible !important;
+          overflow-y: visible !important;
+          height: auto !important;
+          max-height: none !important;
+          flex: none !important;
+          width: 210mm !important;
         }
         body.is-printing-daily-report #dr-photo-sheets-container {
           display: block !important;
@@ -3353,25 +3426,39 @@
           padding: 0 !important;
           gap: 0 !important;
           width: 100% !important;
+          height: auto !important;
+          overflow: visible !important;
         }
         body.is-printing-daily-report .daily-a4-sheet {
+          position: relative !important;
           width: 210mm !important;
-          height: 297mm !important;
-          max-height: 297mm !important;
-          min-height: 297mm !important;
+          max-width: 210mm !important;
+          min-width: 210mm !important;
+          height: 296.2mm !important;
+          max-height: 296.2mm !important;
+          min-height: 296.2mm !important;
+          transform: none !important;
           page-break-inside: avoid !important;
           break-inside: avoid !important;
           page-break-after: always !important;
           break-after: page !important;
           border: none !important;
           box-shadow: none !important;
-          margin: 0 !important;
+          margin: 0 auto !important;
           padding: 7mm 8mm 6mm 8mm !important;
           box-sizing: border-box !important;
           overflow: hidden !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
           color-adjust: exact !important;
+        }
+        body.is-printing-daily-report #dr-photo-sheets-container .daily-a4-sheet {
+          page-break-after: always !important;
+          break-after: page !important;
+        }
+        body.is-printing-daily-report #dr-photo-sheets-container .daily-a4-sheet:last-child {
+          page-break-after: avoid !important;
+          break-after: avoid !important;
         }
       }
     `;
