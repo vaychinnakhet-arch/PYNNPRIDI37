@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Pynn pridi 37 - ติดตามงานเสาเข็ม 93 ต้น & รายงาน (3D WebGL & Plan)</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,9 +94,20 @@
       --leading-table: 1.45;
     }
 
-    body {
+    html, body {
+      width: 100%;
+      height: 100%;
       margin: 0;
-      overflow: hidden;
+      padding: 0;
+      overflow: hidden !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      touch-action: manipulation;
+      -webkit-text-size-adjust: 100%;
+      overscroll-behavior: none;
       background: var(--fp-bg);
       color: var(--fp-ink);
       font-family: var(--font-body);
@@ -172,7 +183,17 @@
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
+    header {
+      left: max(8px, env(safe-area-inset-left, 8px)) !important;
+      right: max(8px, env(safe-area-inset-right, 8px)) !important;
+      top: max(8px, env(safe-area-inset-top, 8px)) !important;
+      max-width: calc(100vw - 16px) !important;
+      box-sizing: border-box !important;
+    }
     .pop-header {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
       background: rgba(255, 255, 255, 0.96) !important;
       border: 2px solid var(--dw-navy, #1D2B45) !important;
       border-radius: 1.25rem !important; /* rounded-2xl */
@@ -731,29 +752,62 @@
         padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
       }
 
-      /* Mobile & Foldable Bottom Sheet for Pile & Footing Cards (<= 768px) */
-      #pile-card:not(.hidden),
-      #footing-card:not(.hidden) {
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        top: auto !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        max-height: 85vh !important;
-        height: auto !important;
-        border-radius: 1.5rem 1.5rem 0 0 !important;
-        border-left: 2px solid #1D2B45 !important;
-        border-right: 2px solid #1D2B45 !important;
-        border-top: 2px solid #1D2B45 !important;
-        border-bottom: none !important;
-        box-shadow: 0 -8px 30px rgba(29, 43, 69, 0.35) !important;
-        z-index: 95 !important;
-        margin: 0 !important;
-        padding: 0.75rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px)) 1rem !important;
-        display: flex !important;
-        flex-direction: column !important;
+      /* Mobile Portrait Bottom Sheet for Pile & Footing Cards (<= 768px & height > 520px) */
+      @media (max-width: 768px) and (min-height: 521px) {
+        #pile-card:not(.hidden),
+        #footing-card:not(.hidden) {
+          position: fixed !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          top: auto !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          max-height: 85vh !important;
+          height: auto !important;
+          border-radius: 1.5rem 1.5rem 0 0 !important;
+          border-left: 2px solid #1D2B45 !important;
+          border-right: 2px solid #1D2B45 !important;
+          border-top: 2px solid #1D2B45 !important;
+          border-bottom: none !important;
+          box-shadow: 0 -8px 30px rgba(29, 43, 69, 0.35) !important;
+          z-index: 95 !important;
+          margin: 0 !important;
+          padding: 0.75rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px)) 1rem !important;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+      }
+
+      /* Mobile Landscape Mode (height <= 520px) */
+      @media (max-height: 520px) {
+        #pile-card:not(.hidden),
+        #footing-card:not(.hidden) {
+          position: fixed !important;
+          right: max(8px, env(safe-area-inset-right, 8px)) !important;
+          bottom: max(6px, env(safe-area-inset-bottom, 6px)) !important;
+          left: auto !important;
+          top: auto !important;
+          width: min(340px, calc(50vw - 16px)) !important;
+          max-width: calc(100vw - 16px) !important;
+          max-height: calc(100vh - 54px) !important;
+          border-radius: 1rem !important;
+          border: 2px solid #1D2B45 !important;
+          box-shadow: 3.5px 3.5px 0px #1D2B45 !important;
+          z-index: 95 !important;
+          margin: 0 !important;
+          padding: 0.5rem 0.75rem !important;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+        #bim-floating-dock {
+          bottom: max(6px, env(safe-area-inset-bottom, 6px)) !important;
+          transform: translateX(-50%) scale(0.9);
+          transform-origin: bottom center;
+        }
+        header {
+          top: max(4px, env(safe-area-inset-top, 4px)) !important;
+        }
       }
       #pile-card-header,
       #footing-card-header {
@@ -1737,48 +1791,69 @@
   </div>
 
   <!-- Top Bar: Single Unified Responsive Executive Navbar (DoodleWeb Edition) -->
-  <header class="absolute top-2 left-2 right-2 z-30 pointer-events-none">
-    <div class="pop-header px-3 sm:px-4 py-1.5 sm:py-2 pointer-events-auto flex items-center justify-between gap-2 sm:gap-3 flex-nowrap shadow-[3.5px_3.5px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl bg-white/95 backdrop-blur-md overflow-visible relative">
+      <header class="absolute top-2 left-2 right-2 z-30 pointer-events-none">
+    <div class="pop-header px-2 sm:px-3 py-1 sm:py-1.5 pointer-events-auto flex items-center justify-between gap-1 sm:gap-2 flex-nowrap shadow-[3px_3px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl bg-white/95 backdrop-blur-md relative max-w-full">
       
       <!-- 1. Left: Brand & Page Badge -->
-      <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-        <a href="index.html" class="doodle-btn px-2.5 sm:px-3 py-1 rounded-full bg-white hover:bg-[#FAF5EE] border-2 border-[#1D2B45] text-[#1D2B45] font-bold text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 min-w-0">
+        <a href="index.html" class="doodle-btn px-2 py-1 rounded-full bg-white hover:bg-[#FAF5EE] border-1.5 sm:border-2 border-[#1D2B45] text-[#1D2B45] font-bold text-xs flex items-center gap-1 shadow-[1px_1px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-          <span class="hidden md:inline font-bold">หน้าแรก</span>
+          <span class="hidden xl:inline font-bold">หน้าแรก</span>
         </a>
         
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center gap-1.5 shrink-0">
           <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#F7B844] border-2 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center font-black text-xs shadow-[1.5px_1.5px_0px_#1D2B45] font-display">
             P37
           </div>
-          <div>
-            <h1 class="text-xs font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display">
+          <div class="min-w-0">
+            <h1 class="text-xs font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display truncate">
               Pynn <span class="text-[#F26B2A] italic">Pridi</span> 37
             </h1>
-            <p class="text-[9px] text-[#3E4B69] font-medium leading-none mt-0.5 font-body hidden sm:block">แผนงานโครงสร้างใต้ดิน</p>
+            <p class="text-[9px] text-[#3E4B69] font-medium leading-none mt-0.5 font-body hidden md:block">แผนงานโครงสร้างใต้ดิน</p>
           </div>
         </div>
 
-        <!-- Clean Status Badge (Replaces clunky top switcher) -->
-        <span class="hidden md:inline-flex bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#FDE68A] shrink-0">
+        <!-- Clean Status Badge -->
+        <span class="hidden 2xl:inline-flex bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#FDE68A] shrink-0">
           📍 ผังเสาเข็ม 93 ต้น
         </span>
       </div>
 
-      <!-- 2. Center: Key Metrics & Date Selector (DoodleWeb Capsule) -->
-      <div class="pop-header-metrics hidden md:flex items-center gap-2 text-xs bg-white px-3 sm:px-4 py-1 rounded-full border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] shrink-0 font-body flex-nowrap">
+      <!-- 2. Center: Key Metrics & Date Selector (Responsive) -->
+      <!-- A. Mobile Mini Badge (< 640px) -->
+      <div class="flex sm:hidden items-center gap-1 px-2 py-0.5 rounded-full bg-white border border-[#1D2B45] shadow-xs shrink-0 font-body">
+        <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+        <span class="text-[11px] font-mono font-black text-[#1D2B45]"><span class="stat-driven-count-bind text-[#10B981]">0</span>/93</span>
+        <span class="text-[9.5px] font-mono font-bold text-[#3E4B69] stat-driven-pct-bind">(0%)</span>
+      </div>
+
+      <!-- B. Tablet & Mobile Landscape streamlined capsule (640px to 1179px) -->
+      <div class="pop-header-metrics hidden sm:flex xl:hidden items-center gap-1.5 text-xs bg-white px-2.5 py-0.5 rounded-full border-1.5 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] shrink-0 font-body flex-nowrap">
+        <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+        <span class="text-[11px] text-[#3E4B69] font-bold">กด:</span>
+        <span class="text-xs font-black text-[#1D2B45]">
+          <span class="stat-driven-count-bind text-[#10B981] font-mono font-black">0</span>/93
+          <span class="text-[9.5px] text-[#3E4B69] font-mono font-bold stat-driven-pct-bind">(0%)</span>
+        </span>
+        <span class="text-[#CBD5E1]">|</span>
+        <span class="text-[11px] text-[#3E4B69] font-bold">เหลือ:</span>
+        <span class="stat-remain-count-bind text-xs font-mono font-black text-[#E64C3C]">93</span>
+      </div>
+
+      <!-- C. Full Desktop Capsule (>= 1180px) -->
+      <div class="pop-header-metrics hidden xl:flex items-center gap-2 text-xs bg-white px-3 sm:px-4 py-1 rounded-full border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] shrink-0 font-body flex-nowrap">
         <!-- Cumulative Metric -->
         <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
           <span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>
           <span class="text-[11px] text-[#3E4B69] font-bold">กดแล้ว:</span>
           <span class="text-xs font-black text-[#1D2B45]">
-            <span id="stat-driven-count" class="text-[#10B981] font-mono font-black text-sm">0</span>/93
-            <span id="stat-driven-pct" class="text-[10px] text-[#3E4B69] font-mono font-bold">(0%)</span>
+            <span id="stat-driven-count" class="text-[#10B981] font-mono font-black text-sm stat-driven-count-bind">0</span>/93
+            <span id="stat-driven-pct" class="text-[10px] text-[#3E4B69] font-mono font-bold stat-driven-pct-bind">(0%)</span>
           </span>
         </div>
 
         <!-- Date & Today's Metric (Visible on large screens) -->
-        <div class="hidden xl:flex items-center gap-2 pr-2 border-r border-[#E2D9CC]">
+        <div class="flex items-center gap-2 pr-2 border-r border-[#E2D9CC]">
           <input id="inp-report-date" type="date" class="text-[11px] bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-full px-2 py-0.5 font-bold text-[#1D2B45] font-mono focus:outline-none focus:ring-1 focus:ring-[#F26B2A] cursor-pointer">
           <span class="text-[11px] text-[#3E4B69] font-bold">วันนี้:</span>
           <span class="text-xs font-black text-[#1D2B45]">
@@ -1789,29 +1864,28 @@
         <!-- Remaining Pill -->
         <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#3E4B69]">
           <span>คงเหลือ:</span>
-          <span id="stat-remain-count" class="text-xs font-mono font-black text-[#E64C3C] text-sm">93</span>
+          <span id="stat-remain-count" class="text-xs font-mono font-black text-[#E64C3C] text-sm stat-remain-count-bind">93</span>
           <span>ต้น</span>
         </div>
       </div>
 
-
-
       <!-- 3. Right: Action Toolbars (DoodleWeb Single Unified Menu & Actions) -->
-      <div class="pop-header-actions flex items-center gap-2 shrink-0">
+      <div class="pop-header-actions flex items-center gap-1 sm:gap-1.5 shrink-0">
 
         <!-- Action 1: Field Quick Select (Signature Tangerine Pill) -->
-        <button id="btn-quick-select" class="doodle-btn doodle-btn-orange px-3.5 py-1.5 text-xs font-black rounded-full text-white border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[3.5px_3.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0" title="ระบุต้นที่กดด่วน (Quick Select 93 ต้น)">
-          <i data-lucide="check-square" class="w-4 h-4 text-white"></i>
-          <span class="whitespace-nowrap hidden sm:inline">✓ ระบุต้นที่กด</span>
+        <button id="btn-quick-select" class="doodle-btn doodle-btn-orange px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-black rounded-full text-white border-1.5 sm:border-2 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#1D2B45] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 transition-all cursor-pointer whitespace-nowrap shrink-0" title="ระบุต้นที่กดด่วน (Quick Select 93 ต้น)">
+          <i data-lucide="check-square" class="w-3.5 h-3.5 text-white"></i>
+          <span class="whitespace-nowrap hidden sm:inline">✓ ระบุต้น</span>
           <span class="whitespace-nowrap sm:hidden">ระบุต้น</span>
         </button>
 
         <!-- Action 2: Consolidated Master Reports & Tables Dropdown (All 7 In One Place) -->
         <div class="relative shrink-0" id="cluster-tables-dropdown">
-          <button id="btn-tables-dropdown-toggle" type="button" class="doodle-btn px-3.5 py-1.5 text-xs font-bold rounded-full bg-white text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[3.5px_3.5px_0px_#F26B2A] hover:bg-[#FAF5EE] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0" title="เปิดเอกสาร ตาราง และรายงานสรุปทั้งหมด">
-            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#F26B2A]"></i>
-            <span class="whitespace-nowrap font-extrabold tracking-tight hidden sm:inline">เอกสาร & รายงาน</span>
-            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#3E4B69] transition-transform duration-200" id="arrow-tables-dropdown"></i>
+          <button id="btn-tables-dropdown-toggle" type="button" class="doodle-btn px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-bold rounded-full bg-white text-[#1D2B45] border-1.5 sm:border-2 border-[#1D2B45] shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2.5px_2.5px_0px_#F26B2A] hover:bg-[#FAF5EE] active:translate-x-0.5 active:translate-y-0.5 flex items-center gap-1 transition-all cursor-pointer whitespace-nowrap shrink-0" title="เปิดเอกสาร ตาราง และรายงานสรุปทั้งหมด">
+            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
+            <span class="whitespace-nowrap font-extrabold tracking-tight hidden lg:inline">เอกสาร & รายงาน</span>
+            <span class="whitespace-nowrap font-extrabold tracking-tight lg:hidden">เอกสาร</span>
+            <i data-lucide="chevron-down" class="w-3 h-3 text-[#3E4B69] transition-transform duration-200" id="arrow-tables-dropdown"></i>
           </button>
           
           <div id="menu-tables-dropdown" class="hidden absolute right-0 top-full mt-2 w-84 sm:w-92 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[5px_5px_0px_#1D2B45] p-2.5 z-50 flex flex-col gap-2 max-h-[85vh] overflow-y-auto custom-scrollbar font-body">
@@ -1858,43 +1932,43 @@
                     <i data-lucide="line-chart" class="w-4 h-4 text-[#1D4ED8]"></i>
                   </div>
                   <div class="truncate">
-                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">รายงานภาพรวม & S-Curve</div>
-                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">กราฟความคืบหน้าสะสม vs แผน 3 ต้น/วัน</div>
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">สรุปภาพรวม & S-Curve</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">กราฟเปรียบเทียบแผน vs งานจริงรายวัน</div>
                   </div>
                 </div>
                 <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#EEF4FF] text-[#1D4ED8] border border-[#BFDBFE] shrink-0">S-CURVE</span>
               </button>
             </div>
 
-            <!-- GROUP 2: 📐 ตารางสเปก & พิกัดวิศวกรรม (Specs & Co - Sky Blue Theme) -->
-            <div class="bg-[#F0F9FF] border-1.5 border-[#0284C7] rounded-xl p-2 shadow-xs flex flex-col gap-1.5">
-              <div class="flex items-center justify-between px-1 pb-1 border-b border-[#0284C7]/30">
-                <div class="flex items-center gap-1.5 text-[#0369A1]">
-                  <span class="text-xs">📐</span>
-                  <span class="text-[10.5px] font-black uppercase tracking-wider">ตารางสเปก & พิกัดวิศวกรรม</span>
+            <!-- GROUP 2: 📋 ตารางข้อมูลวิศวกรรม (Engineering Data Tables - Slate Theme) -->
+            <div class="bg-[#F8FAFC] border-1.5 border-[#64748B] rounded-xl p-2 shadow-xs flex flex-col gap-1.5">
+              <div class="flex items-center justify-between px-1 pb-1 border-b border-[#64748B]/30">
+                <div class="flex items-center gap-1.5 text-[#334155]">
+                  <span class="text-xs">📋</span>
+                  <span class="text-[10.5px] font-black uppercase tracking-wider">ตารางข้อมูลวิศวกรรม</span>
                 </div>
-                <span class="text-[9px] font-mono font-bold text-[#0284C7]">SPECS & CO (4)</span>
+                <span class="text-[9px] font-mono font-bold text-[#64748B]">TABLES (4)</span>
               </div>
 
-              <!-- 3. ความยาวเสาเข็ม -->
-              <button id="btn-open-pile-lengths" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#E0F2FE] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#0284C7] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="กรอกระบุความยาวเสาเข็ม (ท่อนล่าง, ท่อนกลาง, ท่อนบน, ความสูง TOP)">
+              <!-- 3. ตารางความยาวเสาเข็ม -->
+              <button id="btn-open-pile-lengths" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#F1F5F9] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#64748B] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="ตารางความยาวเสาเข็มทั้งหมด 93 ต้น">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-lg bg-[#E0F2FE] text-[#0369A1] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
-                    <i data-lucide="ruler" class="w-4 h-4 text-[#0369A1]"></i>
+                  <div class="w-8 h-8 rounded-lg bg-[#E0E7FF] text-[#3730A3] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
+                    <i data-lucide="ruler" class="w-4 h-4 text-[#3730A3]"></i>
                   </div>
                   <div class="truncate">
-                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ความยาวเสาเข็ม (3 ท่อน)</div>
-                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ท่อนล่าง / กลาง / บน / ระดับ TOP</div>
+                    <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">ตารางความยาวเสาเข็ม</div>
+                    <div class="text-[9.5px] text-[#4F5D75] font-normal truncate">ความยาวหล่อจริง & สถิติรวม 93 ต้น</div>
                   </div>
                 </div>
-                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD] shrink-0">SPECS</span>
+                <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded-md bg-[#E0E7FF] text-[#3730A3] border border-[#C7D2FE] shrink-0">93 ต้น</span>
               </button>
 
               <!-- 4. สรุปข้อมูลเข็ม & ค่าโค -->
-              <button id="btn-open-pile-summary-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#E0F2FE] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#0284C7] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="หน้าตารางรายงานสรุปงานเข็ม ค่าโค ความยาวแต่ละท่อน และความยาวรวม">
+              <button id="btn-open-pile-summary-report" type="button" class="menu-report-item w-full text-left p-2 rounded-xl bg-white hover:bg-[#F1F5F9] text-[#1D2B45] border border-[#1D2B45]/20 hover:border-[#64748B] flex items-center justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-[1.5px_1.5px_0px_#1D2B45]" title="สรุปข้อมูลเสาเข็มเจาะ ค่าโค และความยาวรวม 93 ต้น">
                 <div class="flex items-center gap-2.5 min-w-0">
                   <div class="w-8 h-8 rounded-lg bg-[#D1FAE5] text-[#065F46] flex items-center justify-center shrink-0 border-1.5 border-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] group-hover:scale-105 transition-transform">
-                    <i data-lucide="layers" class="w-4 h-4 text-[#065F46]"></i>
+                    <i data-lucide="clipboard-check" class="w-4 h-4 text-[#065F46]"></i>
                   </div>
                   <div class="truncate">
                     <div class="text-xs font-black text-[#1D2B45] leading-tight group-hover:text-[#F26B2A] transition-colors">สรุปข้อมูลเข็ม & ค่าโค</div>
@@ -1964,8 +2038,8 @@
               </button>
             </div>
 
-            <!-- GROUP 4: 🛠️ เครื่องมือ & บันทึก (System & Quick Actions for Mobile) -->
-            <div class="bg-white border-1.5 border-[#1D2B45]/20 rounded-xl p-2 shadow-xs flex flex-col gap-1.5 md:hidden">
+            <!-- GROUP 4: 🛠️ เครื่องมือ & บันทึก (System & Quick Actions for Mobile & Tablets < 1180px) -->
+            <div class="bg-white border-1.5 border-[#1D2B45]/20 rounded-xl p-2 shadow-xs flex flex-col gap-1.5 xl:hidden">
               <div class="flex items-center justify-between px-1 pb-1 border-b border-[#1D2B45]/10">
                 <div class="flex items-center gap-1.5 text-[#1D2B45]">
                   <span class="text-xs">🛠️</span>
@@ -1996,20 +2070,14 @@
           </div>
         </div>
 
-        <!-- Action: Mobile 3D Layer Toggle (Instant Access on Small Screens) -->
-        <button id="btn-header-hud-toggle" type="button" class="md:hidden doodle-btn px-2.5 py-1.5 text-xs font-bold rounded-full bg-[#FAF5EE] text-[#1D2B45] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] hover:bg-white flex items-center gap-1 shrink-0 cursor-pointer" title="เปิด/ปิด ควบคุมแบบ 3D">
-          <i data-lucide="layers" class="w-3.5 h-3.5 text-[#F26B2A]"></i>
-          <span class="font-extrabold text-[11px]" id="txt-header-hud-btn">3D</span>
-        </button>
-
-        <!-- Action 3: Cloud Sync Pill (Desktop only in header, Mobile in Dropdown) -->
-        <button id="btn-supabase-sync" class="hidden md:inline-flex doodle-btn px-2.5 py-1.5 text-xs font-bold rounded-full bg-[#E8F8F5] text-[#0E5E57] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0px_#F26B2A] items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
+        <!-- Action 3: Cloud Sync Pill (Desktop only in header, Mobile & Tablet in Dropdown) -->
+        <button id="btn-supabase-sync" class="hidden xl:inline-flex doodle-btn px-2.5 py-1.5 text-xs font-bold rounded-full bg-[#E8F8F5] text-[#0E5E57] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0px_#F26B2A] items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0" title="บันทึกข้อมูลเข้า Supabase ของโครงการ">
           <i data-lucide="cloud" class="w-3.5 h-3.5 text-[#0E5E57]"></i>
-          <span id="lbl-supabase-top-btn" class="hidden xl:inline whitespace-nowrap">บันทึกแล้ว</span>
+          <span id="lbl-supabase-top-btn" class="whitespace-nowrap">บันทึกแล้ว</span>
         </button>
 
-        <!-- Action 4: Utility Dock (Camera, Reset, Fullscreen - Desktop only in header) -->
-        <div class="hidden md:inline-flex items-center p-0.5 bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] gap-0.5 shrink-0">
+        <!-- Action 4: Utility Dock (Camera, Reset, Fullscreen - Desktop only >= 1180px) -->
+        <div class="hidden xl:inline-flex items-center p-0.5 bg-white border-2 border-[#1D2B45] rounded-full shadow-[2px_2px_0px_#1D2B45] gap-0.5 shrink-0">
           <button id="btn-open-export" class="w-7 h-7 rounded-full hover:bg-[#FEE2E2] text-[#E64C3C] flex items-center justify-center transition-all cursor-pointer" title="ส่งออกภาพรายงาน PNG">
             <i data-lucide="camera" class="w-3.5 h-3.5"></i>
           </button>
@@ -4005,6 +4073,8 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     lucide.createIcons();
+    window.openPileCard = openPileCard;
+    window.openFootingCard = openFootingCard;
 
     const PILES_DATABASE = window.__PILES_DB__ || [];
     const STORAGE_KEY = 'PYNN37_PILING_PROGRESS_v3';
@@ -4471,6 +4541,11 @@
     };
     controlsOrtho.target.copy(PLAN_CENTER);
 
+    // Block browser document-level pinch zoom (especially iOS Safari)
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach(evt => {
+      document.addEventListener(evt, e => e.preventDefault(), { passive: false });
+    });
+
     // Dedicated Controls for 3D Perspective Camera (Smooth Natural Orbit)
     perspCamera.up.set(0, 0, 1); // Z is vertical UP in Three.js world
     const controlsPersp = new OrbitControls(perspCamera, renderer.domElement);
@@ -4479,6 +4554,11 @@
     controlsPersp.dampingFactor = 0.08;
     controlsPersp.rotateSpeed = 0.85;
     controlsPersp.screenSpacePanning = true;
+    // Clamp OrbitControls camera distances so 3D model never flies away to infinity or collapses
+    controlsPersp.minDistance = 6;
+    controlsPersp.maxDistance = 120;
+    controlsOrtho.minZoom = 0.25;
+    controlsOrtho.maxZoom = 4.0;
     // CRITICAL FIX: Ground is at Z=0. Clamp polar angle so camera NEVER dips under ground or flips upside down!
     controlsPersp.maxPolarAngle = Math.PI / 2 - 0.04; // ~87.7 deg: Ground plane always stays DOWN!
     controlsPersp.minPolarAngle = 0.05; // ~2.8 deg: Avoid straight-down gimbal lock spinning!
@@ -5422,6 +5502,9 @@
       setTxt('badge-pending', 93 - drivenCount);
       setTxt('stat-today-count', todayCount);
       setTxt('stat-remain-count', `${93 - drivenCount} ต้น`);
+      document.querySelectorAll('.stat-driven-count-bind').forEach(el => el.textContent = drivenCount);
+      document.querySelectorAll('.stat-driven-pct-bind').forEach(el => el.textContent = `(${pct}%)`);
+      document.querySelectorAll('.stat-remain-count-bind').forEach(el => el.textContent = 93 - drivenCount);
       setTxt('cotable-summary-stat', `ตอกแล้ว ${drivenCount} / 93 ต้น (${pct}%)`);
       setTxt('quick-driven-stat', drivenCount);
     }
@@ -6010,6 +6093,7 @@
     }
 
     function openPileCard(pileNo, fromQuickSelect = false, preserveExpanded = false) {
+      window.openPileCard = openPileCard;
       // ปิด Footing Card หากเปิดค้างอยู่ เพื่อป้องกันการซ้อนทับกัน
       const fc = document.getElementById('footing-card');
       if (fc && !fc.classList.contains('hidden')) {
@@ -6529,9 +6613,17 @@
 
     const handleRecenter = () => {
       if (activeCamera === perspCamera) {
+        perspCamera.position.set(PLAN_CENTER.x + 28, PLAN_CENTER.y - 36, 26);
+        perspCamera.up.set(0, 0, 1);
+        perspCamera.lookAt(PLAN_CENTER.x, PLAN_CENTER.y, 0);
         controlsPersp.target.copy(PLAN_CENTER);
         controlsPersp.update();
       } else {
+        orthoCamera.position.set(PLAN_CENTER.x, PLAN_CENTER.y, 80);
+        orthoCamera.up.set(0, 1, 0);
+        orthoCamera.lookAt(PLAN_CENTER.x, PLAN_CENTER.y, 0);
+        orthoCamera.zoom = 1;
+        orthoCamera.updateProjectionMatrix();
         controlsOrtho.target.copy(PLAN_CENTER);
         controlsOrtho.update();
       }
@@ -7351,6 +7443,7 @@
 
     // Footing Card Modal Controller
     function openFootingCard(f) {
+      window.openFootingCard = openFootingCard;
       if (!f) return;
       selectedFootingId = f.id;
       updateFootingsSceneVisuals();
@@ -7365,8 +7458,8 @@
       const card = document.getElementById('footing-card');
       if (!card) return;
 
-      // Smart position check: On mobile and foldables (<= 768px), present as full bottom sheet
-      if (window.innerWidth <= 768) {
+      // Smart position check: On mobile and foldables (<= 768px or landscape height <= 520px)
+      if (window.innerWidth <= 768 || window.innerHeight <= 520) {
         card.classList.remove('dock-left', 'has-been-dragged');
         card.style.removeProperty('left');
         card.style.removeProperty('right');
@@ -12717,6 +12810,10 @@
         if (window.lucide) lucide.createIcons();
       });
     });
+
+    window.openPileCard = openPileCard;
+    window.openFootingCard = openFootingCard;
+    window.closePileCard = closePileCard;
 
     // Desktop Zen Mode & Mobile HUD Toggle
     function setDesktopHudCollapsed(collapsed, isAuto = false) {
