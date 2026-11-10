@@ -1543,7 +1543,10 @@
       });
     }
 
-    function buildDrTierBlock(tierNum, tierTitle, startIdx, endIdx, hasTotalCol) {
+    function buildDrTierBlock(tierNum, tierTitle, startIdx, endIdx) {
+      const isTier2 = endIdx > 16;
+      const targetNote = isTier2 ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น';
+
       let headerCells = '';
       let planCells = '';
       let actualCells = '';
@@ -1555,116 +1558,85 @@
         if (!d) continue;
 
         const isAct = d.isToday;
-        let colClass = isAct ? 'bg-[#ffedd5] font-black border-2 border-[#ea580c]' : '';
-        if (d.isHolidayWork && !isAct) {
-          colClass += ' bg-amber-50/50';
-        }
+        const colClass = isAct ? 'active-col' : '';
 
         let headerInner = '';
         if (isAct) {
-          headerInner = `<span class="font-black text-amber-950">${d.formattedDate}</span>`;
+          headerInner = `<span class="font-black text-[#9a3412]">${d.formattedDate}</span>`;
           if (d.isHolidayWork) {
-            headerInner += `<span class="block text-[7.5px] text-amber-900 font-extrabold leading-tight">วันหยุด</span>`;
+            headerInner += `<span class="block text-[7px] text-amber-900 font-extrabold leading-tight">วันหยุด</span>`;
           }
         } else if (d.isHolidayWork) {
-          headerInner = `<span class="font-black text-rose-700">${d.formattedDate}</span><span class="block text-[7.5px] text-rose-600 font-extrabold leading-tight">วันหยุด</span>`;
+          headerInner = `<span class="font-black text-rose-700">${d.formattedDate}</span><span class="block text-[7px] text-rose-600 font-extrabold leading-tight">วันหยุด</span>`;
         } else {
-          headerInner = `<span class="font-bold text-slate-800">${d.formattedDate}</span>`;
+          headerInner = `<span class="font-bold text-[#1d2b45]">${d.formattedDate}</span>`;
         }
 
         const holidayTooltip = d.isHolidayWork ? ` (${d.holidayName || 'ทำงานวันหยุด'})` : '';
         headerCells += `
-          <th class="p-0.5 border border-slate-700 text-center select-none cursor-pointer transition-colors ${colClass}" title="คลิกเพื่อดูรายงานวันที่ ${d.date}${holidayTooltip}" onclick="handleDrDateSelect('${d.date}')" style="width: 5.88%;">
+          <th class="p-0.5 border border-slate-700 text-center select-none cursor-pointer transition-colors ${colClass}" title="คลิกเพื่อดูรายงานวันที่ ${d.date}${holidayTooltip}" onclick="handleDrDateSelect('${d.date}')">
             ${headerInner}
           </th>
         `;
 
         planCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center text-slate-700 ${colClass}">
+          <td class="p-0.5 border border-slate-700 font-mono text-center text-[#3e4b69] text-[8px] sm:text-[8.5px] ${colClass}">
             ${d.dayPlan}
           </td>
         `;
 
-        const actDisplay = d.isFuture ? '' : d.dayActual;
+        const actDisplay = d.isFuture ? '-' : d.dayActual;
         actualCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-bold text-slate-900 ${colClass}">
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-black text-[#1d2b45] text-[8px] sm:text-[8.5px] ${colClass}">
             ${actDisplay}
           </td>
         `;
 
         cumPlanCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-semibold text-slate-800 ${colClass}">
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-extrabold text-[#1d2b45] text-[8px] sm:text-[8.5px] ${colClass}">
             ${d.planCum}
           </td>
         `;
 
-        const cumActDisplay = d.isFuture ? '' : d.actualCum;
+        const cumActDisplay = d.isFuture ? '-' : d.actualCum;
         cumActualCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-black text-emerald-900 ${colClass}">
+          <td class="p-0.5 border border-slate-700 font-mono text-center font-black text-[#064e3b] text-[8px] sm:text-[8.5px] ${colClass}">
             ${cumActDisplay}
           </td>
         `;
       }
 
-      if (hasTotalCol) {
-        headerCells += `
-          <th class="p-0.5 border border-slate-700 bg-slate-900 text-amber-300 font-black text-center whitespace-nowrap text-[8.5px]" style="width: 5.88%;">
-            รวม
-          </th>
-        `;
-        planCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-bold bg-slate-100 text-slate-800">
-            93
-          </td>
-        `;
-        actualCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-black bg-slate-200 text-slate-900">
-            ${drivenCount}
-          </td>
-        `;
-        cumPlanCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-black bg-blue-100 text-blue-950">
-            93
-          </td>
-        `;
-        cumActualCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-black bg-emerald-200 text-emerald-950">
-            ${drivenCount}
-          </td>
-        `;
-      }
-
       return `
-        <div class="border-2 border-slate-900 bg-white overflow-hidden rounded-none shadow-[2.5px_2.5px_0px_#0f172a]">
-          <div class="px-2 py-0.5 bg-slate-100 border-b-2 border-slate-900 flex items-center justify-between text-[9px] font-bold">
+        <div class="border-2 border-[#1d2b45] bg-white overflow-hidden rounded-none shadow-[2px_2px_0px_#1d2b45]">
+          <div class="px-2 py-0.5 bg-[#f6e9d7] border-b-2 border-[#1d2b45] flex items-center justify-between text-[9px] font-bold">
             <div class="flex items-center gap-1.5">
-              <span class="px-1.5 py-0.2 bg-slate-900 text-white rounded-none text-[8px] font-black shadow-[1px_1px_0px_#0f172a]">${tierNum}</span>
-              <span class="text-slate-900 font-black">${tierTitle}</span>
+              <span class="px-1.5 py-0.2 bg-[#1d2b45] text-[#f7b844] rounded-none text-[8px] font-black">${tierNum}</span>
+              <span class="text-[#1d2b45] font-black">${tierTitle}</span>
             </div>
-            <span class="text-[8.5px] text-slate-600 font-bold">${hasTotalCol ? 'เป้าหมายเสาเข็มครบ 93 ต้น' : 'เป้าหมายงวดนี้ 48 ต้น'}</span>
+            <span class="text-[8.5px] text-[#3e4b69] font-mono font-bold">${targetNote}</span>
           </div>
-          <table class="w-full text-center border-collapse text-[8px] sm:text-[8.5px] leading-tight table-fixed">
+          <table class="piling-daily-table w-full text-center border-collapse text-[8px] sm:text-[8.5px] leading-tight table-fixed">
             <thead>
-              <tr class="bg-[#fceee7] border-b border-slate-700">
-                <th class="p-0.5 border border-slate-700 font-black text-left text-slate-900 whitespace-nowrap pl-1 text-[8px]" style="width: 62px;">DATE / วันที่</th>
+              <tr class="bg-white border-b border-slate-700">
+                <th class="p-0.5 border border-slate-700 font-black text-left text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]" style="width: 58px;">วันที่</th>
                 ${headerCells}
               </tr>
             </thead>
             <tbody>
-              <tr class="bg-white">
-                <td class="p-0.5 border border-slate-700 text-left font-bold text-slate-700 whitespace-nowrap pl-1 text-[8px]">PLAN (แผน)</td>
+              <tr class="row-plan bg-white">
+                <td class="p-0.5 border border-slate-700 text-left font-bold text-[#3e4b69] whitespace-nowrap pl-1 text-[8px]">แผนรายวัน</td>
                 ${planCells}
               </tr>
-              <tr class="bg-[#f8fafc]">
-                <td class="p-0.5 border border-slate-700 text-left font-bold text-slate-900 whitespace-nowrap pl-1 text-[8px]">ACTUAL (จริง)</td>
+              <tr class="row-actual bg-[#f8fafc]">
+                <td class="p-0.5 border border-slate-700 text-left font-black text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]">ผลงานจริง</td>
                 ${actualCells}
               </tr>
-              <tr class="bg-[#e2e8f0]">
-                <td class="p-0.5 border border-slate-700 text-left font-bold text-slate-800 whitespace-nowrap pl-1 text-[8px]">Acc. PLAN</td>
+              <tr class="row-accum-plan bg-[#f1f5f9]">
+                <td class="p-0.5 border border-slate-700 text-left font-extrabold text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]">แผนสะสม</td>
                 ${cumPlanCells}
               </tr>
-              <tr class="bg-[#ecfdf5]">
-                <td class="p-0.5 border border-slate-700 text-left font-black text-emerald-950 whitespace-nowrap pl-1 text-[8px]">Acc. ACTUAL</td>
+              <tr class="row-accum-actual bg-[#ecfdf5]">
+                <td class="p-0.5 border border-slate-700 text-left font-black text-[#064e3b] whitespace-nowrap pl-1 text-[8px]">ผลงานสะสม</td>
                 ${cumActualCells}
               </tr>
             </tbody>
@@ -1681,8 +1653,8 @@
     const endD2 = workingDaysSchedule[30] ? formatThaiDayMonth(workingDaysSchedule[30]) : 'D31';
     const tier2Range = `วันทำการที่ 17 – 31 (${startD2} – ${endD2})`;
 
-    const tier1Html = buildDrTierBlock('แถวที่ 1', tier1Range, 0, 16, false);
-    const tier2Html = buildDrTierBlock('แถวที่ 2', tier2Range, 16, 31, true);
+    const tier1Html = buildDrTierBlock('แถวที่ 1', tier1Range, 0, 16);
+    const tier2Html = buildDrTierBlock('แถวที่ 2', tier2Range, 16, 31);
 
     // Build Today's Pressed Piles Log Rows
     let pilesLogRows = '';
@@ -3304,23 +3276,25 @@
         box-shadow: 2px 0 4px rgba(0,0,0,0.1);
       }
 
-      /* Orange Highlight Column for Active / Selected Reporting Date */
+      /* Tangerine outline box for Active / Selected Reporting Date (Matches Piling Ledger) */
       .piling-daily-table .active-col {
         background-color: #fff7ed !important;
       }
       .piling-daily-table th.active-col {
-        border-top: 2.5px solid #ea580c !important;
-        border-left: 2.5px solid #ea580c !important;
-        border-right: 2.5px solid #ea580c !important;
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
+        border-top: 2px solid #f26b2a !important;
+        border-left: 2px solid #f26b2a !important;
+        border-right: 2px solid #f26b2a !important;
+        border-bottom: 1px solid #fdba74 !important;
+        border-radius: 0 !important;
         background-color: #ffedd5 !important;
         color: #9a3412 !important;
         font-weight: 900;
+        box-shadow: none !important;
       }
       .piling-daily-table td.active-col {
-        border-left: 2.5px solid #ea580c !important;
-        border-right: 2.5px solid #ea580c !important;
+        border-left: 2px solid #f26b2a !important;
+        border-right: 2px solid #f26b2a !important;
+        box-shadow: none !important;
       }
       .piling-daily-table tr.row-accum-plan td.active-col {
         background-color: #fed7aa !important;
@@ -3331,9 +3305,9 @@
         background-color: #a7f3d0 !important;
         color: #064e3b !important;
         font-weight: 900;
-        border-bottom: 2.5px solid #ea580c !important;
-        border-bottom-left-radius: 6px;
-        border-bottom-right-radius: 6px;
+        border-bottom: 2px solid #f26b2a !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
       }
 
       /* Photo Grid */
