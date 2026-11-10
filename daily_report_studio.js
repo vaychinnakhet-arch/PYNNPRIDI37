@@ -2932,12 +2932,16 @@
     document.body.classList.add('is-exporting-pdf');
 
     const toast = document.createElement('div');
-    toast.className = 'fixed bottom-6 right-6 z-[10000] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border-2 border-[#ffc45b] flex items-center gap-3 text-xs font-bold';
+    toast.className = 'fixed bottom-6 right-6 z-[10000] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border-2 border-[#10b981] flex items-center gap-3 text-xs font-bold';
     toast.innerHTML = `
       <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-      <span>กำลังส่งออก PDF ขนาด A4 (3 หน้าพอดีขอบ)... กรุณารอสักครู่</span>
+      <span id="dr-export-toast-msg">กำลังเตรียมข้อมูล PDF ขนาด A4 (3 หน้าพอดีขอบ)...</span>
     `;
     document.body.appendChild(toast);
+    const updateToast = (msg) => {
+      const el = document.getElementById('dr-export-toast-msg');
+      if (el) el.textContent = msg;
+    };
 
     function getDailyReportPdfFilename() {
       let dateStr = DailyReportState.date;
@@ -2967,7 +2971,40 @@
       // Small timeout to allow layout reflow under .is-exporting-pdf
       await new Promise(r => setTimeout(r, 200));
 
-      if (typeof window.html2pdf === 'function') {
+      const sheets = Array.from(document.querySelectorAll('.daily-a4-sheet'));
+      const jsPdfClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+
+      if (sheets.length > 0 && typeof jsPdfClass === 'function' && typeof window.html2canvas === 'function') {
+        const pdf = new jsPdfClass({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+          compress: true
+        });
+
+        for (let i = 0; i < sheets.length; i++) {
+          const sheet = sheets[i];
+          updateToast(`กำลังบันทึกหน้า ${i + 1}/${sheets.length} (ความละเอียดสูง A4)...`);
+          if (i > 0) {
+            pdf.addPage('a4', 'portrait');
+          }
+
+          const canvas = await window.html2canvas(sheet, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            scrollY: 0,
+            scrollX: 0,
+            logging: false
+          });
+
+          const imgData = canvas.toDataURL('image/jpeg', 0.96);
+          pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+        }
+
+        updateToast('สร้างไฟล์ PDF ขนาด A4 สำเร็จ กำลังเริ่มดาวน์โหลด...');
+        pdf.save(filename);
+      } else if (typeof window.html2pdf === 'function') {
         const opt = {
           margin: 0,
           filename: filename,
@@ -2977,24 +3014,24 @@
             useCORS: true,
             letterRendering: true,
             scrollY: 0,
-            scrollX: 0,
-            windowWidth: 794
+            scrollX: 0
           },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['css'] }
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         await window.html2pdf().set(opt).from(printArea).save();
       } else {
         window.print();
       }
     } catch (e) {
-      console.error('Error generating PDF with html2pdf:', e);
+      console.error('Error generating PDF with per-sheet jsPDF:', e);
       window.print();
     } finally {
       printArea.classList.remove('is-exporting-pdf');
       document.body.classList.remove('is-exporting-pdf');
       if (wasFit) printArea.classList.add('is-fit-mobile');
-      if (toast && toast.parentElement) toast.remove();
+      if (toast && toast.parentElement) {
+        setTimeout(() => toast.remove(), 900);
+      }
     }
   };
 
@@ -3065,12 +3102,12 @@
         width: 210mm !important;
         max-width: 210mm !important;
         min-width: 210mm !important;
-        height: 296.2mm !important;
-        min-height: 296.2mm !important;
-        max-height: 296.2mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
         transform: none !important;
         box-shadow: none !important;
-        border: 1px solid #000000 !important;
+        border: none !important;
         margin: 0 auto !important;
         padding: 7mm 8mm 6mm 8mm !important;
         box-sizing: border-box !important;
@@ -3140,6 +3177,23 @@
       .daily-a4-sheet input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
         font-family: 'Sarabun', 'Prompt', sans-serif;
         line-height: normal;
+        font-size: inherit !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      body.is-exporting-pdf .daily-a4-sheet input[type="text"],
+      body.is-exporting-pdf .daily-a4-sheet input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+      .is-exporting-pdf .daily-a4-sheet input[type="text"],
+      .is-exporting-pdf .daily-a4-sheet input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
+        font-size: inherit !important;
+        height: 19px !important;
+        min-height: 19px !important;
+        max-height: 19px !important;
+        padding: 0 4px !important;
+        line-height: 18px !important;
+        box-sizing: border-box !important;
       }
       .dr-weather-slice:hover {
         filter: brightness(0.93);
