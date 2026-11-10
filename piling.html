@@ -12811,6 +12811,20 @@
       });
     });
 
+    const closePileCard = () => {
+      const card = document.getElementById('pile-card');
+      if (!card) return;
+      card.classList.add('translate-y-4', 'opacity-0');
+      if (card._hideTimer) clearTimeout(card._hideTimer);
+      card._hideTimer = setTimeout(() => card.classList.add('hidden'), 200);
+      selectedCardPileNo = null;
+      document.getElementById('backdrop-sheet-mobile')?.classList.add('hidden');
+      const hud = document.getElementById('floating-hud');
+      if (hud && hud._autoCollapsedByPileCard && typeof setDesktopHudCollapsed === 'function') {
+        setDesktopHudCollapsed(false, false);
+      }
+    };
+
     window.openPileCard = openPileCard;
     window.openFootingCard = openFootingCard;
     window.closePileCard = closePileCard;
@@ -12857,41 +12871,55 @@
     document.getElementById('btn-toggle-hud')?.addEventListener('click', toggleHudState);
     document.getElementById('btn-thumb-menu')?.addEventListener('click', toggleHudState);
     document.getElementById('btn-close-hud')?.addEventListener('click', () => {
-      const hud = document.getElementById('floating-hud');
       if (window.innerWidth <= 768) {
-        if (hud) hud.classList.add('is-mobile-collapsed');
+        toggleMobileHud(false);
       } else {
         setDesktopHudCollapsed(true, false);
       }
     });
 
     // Mobile HUD Toggle & Controls
-    const toggleMobileHud = () => {
+    const toggleMobileHud = (forceState) => {
       const hud = document.getElementById('floating-hud');
-      if (hud) {
-        hud.classList.toggle('is-mobile-collapsed');
+      const backdrop = document.getElementById('backdrop-hud-mobile');
+      if (!hud) return;
+
+      const isCurrentlyCollapsed = hud.classList.contains('is-mobile-collapsed');
+      const willOpen = forceState !== undefined ? forceState : isCurrentlyCollapsed;
+
+      if (willOpen) {
+        hud.classList.remove('is-mobile-collapsed', 'hidden', 'collapsed');
+        const hudBody = document.getElementById('floating-hud-body');
+        const tabContent = document.getElementById('sidebar-tab-content');
+        if (hudBody) hudBody.style.display = 'flex';
+        if (tabContent) tabContent.style.display = 'flex';
+        if (backdrop) {
+          backdrop.classList.remove('hidden', 'pointer-events-none');
+          backdrop.classList.add('pointer-events-auto');
+        }
+      } else {
+        hud.classList.add('is-mobile-collapsed');
+        if (backdrop) {
+          backdrop.classList.add('hidden', 'pointer-events-none');
+          backdrop.classList.remove('pointer-events-auto');
+        }
       }
     };
 
+    // Close HUD when tapping backdrop
+    document.getElementById('backdrop-hud-mobile')?.addEventListener('click', () => {
+      toggleMobileHud(false);
+    });
+
     document.getElementById('btn-header-hud-toggle')?.addEventListener('click', toggleMobileHud);
     document.getElementById('dock-btn-menu-3d')?.addEventListener('click', () => {
-      const hud = document.getElementById('floating-hud');
       if (window.innerWidth <= 768) {
         toggleMobileHud();
       } else {
+        const hud = document.getElementById('floating-hud');
         if (hud) {
-          hud.classList.remove('is-mobile-collapsed');
-          if (hud.classList.contains('hidden') || hud.classList.contains('collapsed')) {
-            hud.classList.remove('hidden', 'collapsed');
-            const hudBody = document.getElementById('floating-hud-body');
-            const tabContent = document.getElementById('sidebar-tab-content');
-            if (hudBody) hudBody.style.display = 'flex';
-            if (tabContent) tabContent.style.display = 'flex';
-            const btnToggle = document.getElementById('btn-toggle-hud');
-            if (btnToggle) btnToggle.textContent = 'ย่อ';
-          } else {
-            toggleHudState();
-          }
+          const isCollapsed = hud.classList.contains('collapsed') || hud.classList.contains('hidden');
+          setDesktopHudCollapsed(!isCollapsed, false);
         }
       }
     });
