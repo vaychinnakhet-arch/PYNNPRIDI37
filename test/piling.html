@@ -857,7 +857,7 @@
         margin: 0 auto !important;
         max-height: 82vh !important;
         z-index: 95 !important;
-        box-shadow: 0 10px 30px rgba(29, 43, 69, 0.4), 0 0 0 100vmax rgba(29, 43, 69, 0.45) !important;
+        box-shadow: 0 10px 30px rgba(29, 43, 69, 0.4) !important;
         border-radius: 1.5rem !important;
       }
       /* Compass Widget: Shift up on narrow mobile so it doesn't overlap center dock */
@@ -1898,7 +1898,12 @@
                 </div>
                 <span class="text-xs font-black text-[#1D2B45] tracking-wide">เอกสาร & รายงานโครงการ</span>
               </div>
-              <span class="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#F59E0B]">7 รายการ</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-mono font-black px-2 py-0.5 rounded-full bg-[#FEF3C7] text-[#92400E] border border-[#F59E0B]">7 รายการ</span>
+                <button id="btn-close-tables-dropdown" type="button" aria-label="ปิดเมนูเอกสาร" class="w-6 h-6 rounded-md bg-[#FAF5EE] hover:bg-[#FEE2E2] hover:text-rose-600 text-[#1D2B45] border border-[#1D2B45] flex items-center justify-center transition-all cursor-pointer shadow-xs" title="ปิดเมนูเอกสาร">
+                  <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
             </div>
 
             <!-- GROUP 1: 📊 รายงานทางการ & ส่งมอบ (Official Reports - Amber Theme) -->
@@ -12037,32 +12042,60 @@
     const tblToggle = document.getElementById('btn-tables-dropdown-toggle');
     const tblMenu = document.getElementById('menu-tables-dropdown');
     const tblArrow = document.getElementById('arrow-tables-dropdown');
+    const tblBackdrop = document.getElementById('backdrop-dropdown-mobile');
+
+    const ensureDropdownPlacement = () => {
+      if (!tblMenu) return;
+      if (window.innerWidth <= 768) {
+        if (tblMenu.parentElement !== document.body) document.body.appendChild(tblMenu);
+      } else {
+        const cluster = document.getElementById('cluster-tables-dropdown');
+        if (cluster && tblMenu.parentElement !== cluster) cluster.appendChild(tblMenu);
+      }
+    };
+    window.addEventListener('resize', ensureDropdownPlacement);
+    ensureDropdownPlacement();
+
+    const closeDropdownMenu = () => {
+      if (!tblMenu) return;
+      tblMenu.classList.add('hidden');
+      if (tblBackdrop) tblBackdrop.classList.add('hidden');
+      if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
+    };
+
     if (tblToggle && tblMenu) {
       tblToggle.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const isHidden = tblMenu.classList.contains('hidden');
-        if (isHidden) {
+        ensureDropdownPlacement();
+        const willOpen = tblMenu.classList.contains('hidden');
+        if (willOpen) {
           tblMenu.classList.remove('hidden');
           if (tblArrow) tblArrow.style.transform = 'rotate(180deg)';
+          if (tblBackdrop && window.innerWidth <= 768) tblBackdrop.classList.remove('hidden');
         } else {
-          tblMenu.classList.add('hidden');
-          if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
+          closeDropdownMenu();
         }
       });
-      // Close dropdown when any item clicked
+
+      // Close dropdown when clicking items (except close button which handles it)
       tblMenu.querySelectorAll('button').forEach(b => {
         b.addEventListener('click', () => {
-          tblMenu.classList.add('hidden');
-          if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
+          closeDropdownMenu();
         });
       });
+
       // Close when clicking outside
       document.addEventListener('click', (e) => {
         if (!tblMenu.contains(e.target) && !tblToggle.contains(e.target)) {
-          tblMenu.classList.add('hidden');
-          if (tblArrow) tblArrow.style.transform = 'rotate(0deg)';
+          closeDropdownMenu();
         }
+      });
+
+      tblBackdrop?.addEventListener('click', closeDropdownMenu);
+      document.getElementById('btn-close-tables-dropdown')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeDropdownMenu();
       });
     }
 
@@ -12928,28 +12961,7 @@
     });
     document.getElementById('btn-toggle-hud-mobile')?.addEventListener('click', toggleMobileHud);
 
-    // Mobile Tables Dropdown Backdrop & Menu Actions
-    const dropdownMenu = document.getElementById('menu-tables-dropdown');
-    const dropdownToggle = document.getElementById('btn-tables-dropdown-toggle');
-    const dropdownBackdrop = document.getElementById('backdrop-dropdown-mobile');
-    if (dropdownToggle && dropdownMenu) {
-      dropdownToggle.addEventListener('click', () => {
-        setTimeout(() => {
-          const isVisible = !dropdownMenu.classList.contains('hidden');
-          if (dropdownBackdrop) {
-            if (isVisible && window.innerWidth < 640) dropdownBackdrop.classList.remove('hidden');
-            else dropdownBackdrop.classList.add('hidden');
-          }
-        }, 10);
-      });
-    }
-
-    const closeDropdownMenu = () => {
-      dropdownMenu?.classList.add('hidden');
-      dropdownBackdrop?.classList.add('hidden');
-    };
-
-    dropdownBackdrop?.addEventListener('click', closeDropdownMenu);
+// Mobile Tables Dropdown handled by unified ensureDropdownPlacement
 
     document.getElementById('btn-menu-sync')?.addEventListener('click', () => {
       closeDropdownMenu();

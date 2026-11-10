@@ -633,6 +633,20 @@
   }
 
   // Open Daily Report Studio Modal
+    window.toggleDrFitMobile = function () {
+    const area = document.getElementById('daily-report-printable-area');
+    const btn = document.getElementById('btn-dr-fit-toggle');
+    if (!area) return;
+    area.classList.toggle('is-fit-mobile');
+    const isFit = area.classList.contains('is-fit-mobile');
+    if (btn) {
+      btn.innerHTML = isFit 
+        ? '<i data-lucide="zoom-in" class="w-3.5 h-3.5"></i><span>🔍 ขนาด 100%</span>' 
+        : '<i data-lucide="minimize-2" class="w-3.5 h-3.5"></i><span>📱 พอดีจอ</span>';
+      if (window.lucide) window.lucide.createIcons();
+    }
+  };
+
   window.openDailyReportModal = function () {
     syncDailyReportState();
     loadDailyReportConfigFromSupabase();
@@ -644,6 +658,17 @@
     }
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    if (window.innerWidth <= 768) {
+      const area = document.getElementById('daily-report-printable-area');
+      if (area && !area.classList.contains('is-fit-mobile')) {
+        area.classList.add('is-fit-mobile');
+        const btn = document.getElementById('btn-dr-fit-toggle');
+        if (btn) {
+          btn.innerHTML = '<i data-lucide="zoom-in" class="w-3.5 h-3.5"></i><span>🔍 ขนาด 100%</span>';
+          if (window.lucide) window.lucide.createIcons();
+        }
+      }
+    }
     renderDailyReportAll();
     
     setTimeout(() => {
@@ -702,68 +727,86 @@
     const modalHtml = `
       <div id="modal-daily-report" class="fixed inset-0 z-[9999] bg-slate-900/80 backdrop-blur-md overflow-y-auto flex flex-col hidden">
         
-        <!-- Sticky Top Control Toolbar (Hidden in Print) -->
-        <header class="sticky top-0 z-50 bg-white border-b-2 border-slate-900 px-4 py-2.5 shadow-[3px_3px_0px_#0f172a] daily-no-print flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <!-- Sticky Top Control Toolbar (Hidden in Print, Responsive on Mobile) -->
+        <header class="sticky top-0 z-50 bg-white border-b-2 border-slate-900 px-3 sm:px-4 py-2 sm:py-2.5 shadow-[3px_3px_0px_#0f172a] daily-no-print flex flex-col gap-2 shrink-0">
           
-          <!-- Left: Title & Project Badge -->
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-none bg-[#ffc45b] border-2 border-slate-900 flex items-center justify-center font-black text-slate-900 shadow-[2px_2px_0px_#0f172a] shrink-0">
-              <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded-none text-[10px] font-black bg-slate-900 text-white shadow-[1px_1px_0px_#0f172a]">SANSIRI STANDARD</span>
-                <span class="text-xs text-slate-600 font-bold">โครงการ PYNN PRIDI 37</span>
+          <!-- Top Row: Project Badge, Title & Always-Visible Close Button -->
+          <div class="flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-none bg-[#ffc45b] border-2 border-slate-900 flex items-center justify-center font-black text-slate-900 shadow-[2px_2px_0px_#0f172a] shrink-0">
+                <i data-lucide="file-spreadsheet" class="w-4 h-4 sm:w-5 sm:h-5"></i>
               </div>
-              <h2 class="text-base sm:text-lg font-black text-slate-900 leading-tight">
-                ระบบจัดทำ Daily Report & รายงานเสาเข็ม (PDF 3 หน้าตรงมาตรฐาน A4)
-              </h2>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-1.5 sm:px-2 py-0.5 rounded-none text-[9px] sm:text-[10px] font-black bg-slate-900 text-white shadow-[1px_1px_0px_#0f172a]">SANSIRI STANDARD</span>
+                  <span class="text-[11px] sm:text-xs text-slate-600 font-bold truncate">PYNN PRIDI 37</span>
+                </div>
+                <h2 class="text-xs sm:text-base font-black text-slate-900 leading-tight truncate">
+                  ระบบจัดทำ Daily Report & รายงานเสาเข็ม (PDF 3 หน้า A4)
+                </h2>
+              </div>
             </div>
-          </div>
 
-          <!-- Center: Tab Switcher -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-none border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] gap-1 text-xs font-bold">
-            <button id="dr-tab-all" onclick="switchDailyReportTab('all')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-slate-900 bg-[#1e293b] text-white shadow-[1px_1px_0px_#0f172a] transition-all cursor-pointer">
-              📑 ดูทั้ง 3 หน้า (PDF All)
-            </button>
-            <button id="dr-tab-p1" onclick="switchDailyReportTab('p1')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
-              หน้า 1: รายงานประจำวัน
-            </button>
-            <button id="dr-tab-p2" onclick="switchDailyReportTab('p2')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
-              หน้า 2: รายงานเข็ม (Ledger)
-            </button>
-            <button id="dr-tab-p3" onclick="switchDailyReportTab('p3')" class="dr-nav-tab px-3 py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer">
-              หน้า 3: ภาพถ่ายหน้างาน
+            <!-- Close Button (Pinned right, large touch target) -->
+            <button type="button" onclick="closeDailyReportModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-none bg-slate-100 hover:bg-rose-100 active:bg-rose-200 border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] text-slate-700 hover:text-rose-600 flex items-center justify-center cursor-pointer transition-all shrink-0" title="ปิดหน้าต่าง">
+              <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i>
             </button>
           </div>
 
-          <!-- Right: Actions -->
-          <div class="flex items-center gap-2">
-            <input type="file" id="dr-file-input" multiple accept="image/*" class="hidden" onchange="handleTemporaryPhotoSelect(event)">
+          <!-- Bottom Row: Navigation Tabs & Action Buttons (Scrollable on Mobile) -->
+          <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 w-full">
             
-            <button type="button" id="btn-dr-save-supabase" onclick="saveDailyReportConfigToSupabase(false)" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#3b82f6] text-white font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-blue-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="บันทึกการตั้งค่า (ชื่อ, กำลังคน, วัสดุ, เครื่องจักร) ขึ้น Supabase เพื่อใช้วันถัดไปโดยไม่ต้องกรอกใหม่">
-              <i data-lucide="cloud-upload" class="w-4 h-4"></i>
-              <span id="lbl-dr-save-supabase">☁️ บันทึกลง Supabase</span>
-            </button>
+            <!-- Segmented Tabs -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-none border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] gap-1 text-[11px] sm:text-xs font-bold overflow-x-auto custom-scrollbar flex-nowrap shrink-0">
+              <button id="dr-tab-all" onclick="switchDailyReportTab('all')" class="dr-nav-tab px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border border-slate-900 bg-[#1e293b] text-white shadow-[1px_1px_0px_#0f172a] transition-all cursor-pointer whitespace-nowrap shrink-0">
+                📑 ดูทั้ง 3 หน้า (PDF All)
+              </button>
+              <button id="dr-tab-p1" onclick="switchDailyReportTab('p1')" class="dr-nav-tab px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer whitespace-nowrap shrink-0">
+                หน้า 1: ประจำวัน
+              </button>
+              <button id="dr-tab-p2" onclick="switchDailyReportTab('p2')" class="dr-nav-tab px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer whitespace-nowrap shrink-0">
+                หน้า 2: เข็ม (Ledger)
+              </button>
+              <button id="dr-tab-p3" onclick="switchDailyReportTab('p3')" class="dr-nav-tab px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border border-transparent bg-white text-slate-700 transition-all hover:bg-slate-200 cursor-pointer whitespace-nowrap shrink-0">
+                หน้า 3: ภาพถ่ายหน้างาน
+              </button>
+            </div>
 
-            <button type="button" onclick="document.getElementById('dr-file-input').click()" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#e0f2fe] text-[#0369a1] font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-sky-100 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="อัพโหลดรูปภาพชั่วคราวเพื่อนำไปจัดลงหน้า 3 (ไม่เปลืองพื้นที่เซิร์ฟเวอร์)">
-              <i data-lucide="camera" class="w-4 h-4"></i>
-              <span>📸 อัพโหลดรูปชั่วคราว</span>
-            </button>
+            <!-- Action Buttons Strip -->
+            <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto custom-scrollbar flex-nowrap py-0.5">
+              <input type="file" id="dr-file-input" multiple accept="image/*" class="hidden" onchange="handleTemporaryPhotoSelect(event)">
+              
+              <!-- Download PDF button (Highlighted Emerald) -->
+              <button type="button" onclick="downloadDailyReportPDF()" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border-2 border-slate-900 bg-[#10b981] text-white font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-emerald-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0" title="ดาวน์โหลดไฟล์ PDF ทันที">
+                <i data-lucide="download" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                <span>📥 ดาวน์โหลด PDF ทันที</span>
+              </button>
 
-            <button type="button" onclick="printDailyReportPDF()" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#ffc45b] text-slate-900 font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:brightness-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="พิมพ์หรือบันทึกเป็น PDF ขนาด A4 เวกเตอร์ความคมชัดสูงสุด">
-              <i data-lucide="printer" class="w-4 h-4"></i>
-              <span>🖨️ พิมพ์ / บันทึก PDF (A4)</span>
-            </button>
+              <!-- Print / Save PDF (Amber) -->
+              <button type="button" onclick="printDailyReportPDF()" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border-2 border-slate-900 bg-[#ffc45b] text-slate-900 font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:brightness-105 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0" title="พิมพ์หรือบันทึกเป็น PDF ขนาด A4 เวกเตอร์">
+                <i data-lucide="printer" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                <span class="hidden sm:inline">🖨️ พิมพ์ / บันทึก PDF (A4)</span>
+                <span class="sm:hidden">🖨️ พิมพ์</span>
+              </button>
 
-            <button type="button" onclick="downloadDailyReportPDF()" class="px-3 py-1.5 rounded-none border-2 border-slate-900 bg-[#10b981] text-white font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-emerald-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer" title="ดาวน์โหลดไฟล์ PDF ทันที">
-              <i data-lucide="download" class="w-4 h-4"></i>
-              <span>📥 ดาวน์โหลด PDF ทันที</span>
-            </button>
+              <!-- Multi-photo upload button (Sky) -->
+              <button type="button" onclick="triggerBulkPhotoUpload()" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border-2 border-slate-900 bg-[#e0f2fe] text-[#0369a1] font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-sky-100 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0" title="อัพโหลดรูปภาพพร้อมกันได้หลายรูป เพื่อนำไปจัดลงหน้า 3">
+                <i data-lucide="camera" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                <span>📸 อัพโหลดรูป (หลายรูป)</span>
+              </button>
 
-            <button type="button" onclick="closeDailyReportModal()" class="w-8 h-8 rounded-none bg-slate-100 hover:bg-rose-100 border-2 border-slate-900 shadow-[2px_2px_0px_#0f172a] text-slate-700 hover:text-rose-600 flex items-center justify-center cursor-pointer transition-all ml-1" title="ปิดหน้าต่าง">
-              <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
+              <!-- Save Supabase (Blue) -->
+              <button type="button" id="btn-dr-save-supabase" onclick="saveDailyReportConfigToSupabase(false)" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border-2 border-slate-900 bg-[#3b82f6] text-white font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-blue-600 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0" title="บันทึกการตั้งค่าขึ้น Supabase">
+                <i data-lucide="cloud-upload" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                <span id="lbl-dr-save-supabase">☁️ บันทึก</span>
+              </button>
+
+              <!-- Fit-to-screen mobile toggle -->
+              <button type="button" id="btn-dr-fit-toggle" onclick="toggleDrFitMobile()" class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-none border-2 border-slate-900 bg-white text-slate-800 font-black text-xs shadow-[2px_2px_0px_#0f172a] hover:bg-slate-100 active:scale-95 transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0 sm:hidden" title="ย่อหน้า A4 ให้พอดีหน้าจอมือถือ หรือดูขนาด 100%">
+                <i data-lucide="minimize-2" class="w-3.5 h-3.5"></i>
+                <span>📱 พอดีจอ</span>
+              </button>
+            </div>
           </div>
         </header>
 
@@ -2637,6 +2680,14 @@
               </div>
             </div>
 
+            <!-- Bulk Upload Action Button (Hidden in Print) -->
+            <div class="daily-no-print mb-1.5 w-full">
+              <button type="button" onclick="triggerBulkPhotoUpload()" class="w-full py-1.5 px-3 rounded-none border-2 border-slate-900 bg-[#e0f2fe] hover:bg-[#bae6fd] text-[#0369a1] font-black text-xs shadow-[2px_2px_0px_#0f172a] active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                <i data-lucide="camera" class="w-4 h-4"></i>
+                <span>📸 + อัพโหลดภาพถ่ายเพิ่ม (เลือกพร้อมกันได้ทีละหลายรูป)</span>
+              </button>
+            </div>
+
             <!-- 6 Photos Grid (2 Columns x 3 Rows in 4:3 Ratio) -->
             <div class="dr-photo-grid flex-1">
               ${photoCardsHtml}
@@ -2667,30 +2718,35 @@
   // TEMPORARY IN-MEMORY PHOTO UPLOAD LOGIC
   // =========================================================================
   window.handleTemporaryPhotoSelect = function (event) {
-    const files = event.target.files;
+    const files = Array.from(event.target.files || []);
     if (!files || files.length === 0) return;
 
     if (!DailyReportState.photos) DailyReportState.photos = [];
 
     if (activeTargetSlot !== null && activeTargetSlot !== undefined) {
-      const file = files[0];
-      const blobUrl = URL.createObjectURL(file);
-      DailyReportState.photos[activeTargetSlot] = {
-        id: 'upload-' + Date.now(),
-        url: blobUrl,
-        caption: 'ภาพถ่ายงานกดเสาเข็ม'
-      };
+      // User tapped a specific photo card slot: fill from this slot onwards
+      files.forEach((file, idx) => {
+        const blobUrl = URL.createObjectURL(file);
+        const targetIdx = activeTargetSlot + idx;
+        const captionName = file.name ? file.name.replace(/\.[^/.]+$/, "") : 'ภาพถ่ายงานกดเสาเข็ม';
+        DailyReportState.photos[targetIdx] = {
+          id: 'upload-' + Date.now() + '-' + idx,
+          url: blobUrl,
+          caption: captionName || 'ภาพถ่ายงานกดเสาเข็ม'
+        };
+      });
       activeTargetSlot = null;
     } else {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      // User tapped Bulk upload button: append all selected photos
+      files.forEach((file, idx) => {
         const blobUrl = URL.createObjectURL(file);
+        const captionName = file.name ? file.name.replace(/\.[^/.]+$/, "") : 'ภาพถ่ายงานกดเสาเข็ม';
         DailyReportState.photos.push({
-          id: 'upload-' + Date.now() + '-' + i,
+          id: 'upload-' + Date.now() + '-' + idx,
           url: blobUrl,
-          caption: 'ภาพถ่ายงานกดเสาเข็ม'
+          caption: captionName || 'ภาพถ่ายงานกดเสาเข็ม'
         });
-      }
+      });
     }
 
     event.target.value = '';
@@ -2700,6 +2756,12 @@
 
     renderDailyReportAll();
     switchDailyReportTab('p3');
+  };
+
+  window.triggerBulkPhotoUpload = function () {
+    activeTargetSlot = null;
+    const fi = document.getElementById('dr-file-input');
+    if (fi) fi.click();
   };
 
   window.removeDrPhoto = function (index) {
@@ -2872,6 +2934,9 @@
     const printArea = document.getElementById('daily-report-printable-area');
     if (!printArea) return;
 
+    const wasFit = printArea.classList.contains('is-fit-mobile');
+    if (wasFit) printArea.classList.remove('is-fit-mobile');
+
     const toast = document.createElement('div');
     toast.className = 'fixed bottom-6 right-6 z-[10000] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border-2 border-[#ffc45b] flex items-center gap-3 text-xs font-bold';
     toast.innerHTML = `
@@ -2880,7 +2945,29 @@
     `;
     document.body.appendChild(toast);
 
-    const filename = `Daily_Report_PYNN_PRIDI_37_${DailyReportState.date || 'today'}.pdf`;
+    function getDailyReportPdfFilename() {
+      let dateStr = DailyReportState.date;
+      let dd = '09', mm = '11', yy = '69';
+      if (dateStr && typeof dateStr === 'string' && dateStr.includes('-')) {
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+          let y = parseInt(parts[0], 10);
+          mm = parts[1].padStart(2, '0');
+          dd = parts[2].padStart(2, '0');
+          if (y < 2500) y += 543;
+          yy = String(y % 100).padStart(2, '0');
+        }
+      } else {
+        const now = new Date();
+        dd = String(now.getDate()).padStart(2, '0');
+        mm = String(now.getMonth() + 1).padStart(2, '0');
+        let y = now.getFullYear() + 543;
+        yy = String(y % 100).padStart(2, '0');
+      }
+      return `Daily Report   โครงการ Pynn PRidi37   ${dd}-${mm}-${yy}.pdf`;
+    }
+
+    const filename = getDailyReportPdfFilename();
 
     try {
       if (typeof window.html2pdf === 'function') {
@@ -2906,6 +2993,7 @@
       console.error('Error generating PDF with html2pdf:', e);
       window.print();
     } finally {
+      if (wasFit) printArea.classList.add('is-fit-mobile');
       if (toast && toast.parentElement) toast.remove();
     }
   };
@@ -3132,6 +3220,32 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+      }
+
+            /* =========================================================================
+         MOBILE RESPONSIVE RULES & FIT-TO-SCREEN ZOOM
+         ========================================================================= */
+      @media (max-width: 768px) {
+        #modal-daily-report {
+          padding: 0 !important;
+        }
+        .daily-page-container {
+          overflow-x: auto !important;
+          -webkit-overflow-scrolling: touch;
+          padding: 8px 4px 60px 4px !important;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100% !important;
+        }
+        .daily-page-container.is-fit-mobile {
+          overflow-x: hidden !important;
+        }
+        .daily-page-container.is-fit-mobile .daily-a4-sheet {
+          transform-origin: top center;
+          transform: scale(calc((100vw - 16px) / 794px));
+          margin-bottom: calc(288mm * (calc((100vw - 16px) / 794px) - 1) + 16px) !important;
+        }
       }
 
       /* =========================================================================
