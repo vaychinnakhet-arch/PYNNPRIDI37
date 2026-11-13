@@ -136,9 +136,12 @@
 
   function isThaiWorkingDay(dateStr, actualDates = null) {
     if (!dateStr) return false;
-    const actualMap = actualDates || getActualDrivenDatesMap();
-    if (actualMap && (actualMap[dateStr] || (Array.isArray(actualMap) && actualMap.includes(dateStr)))) {
-      return true;
+    // Only treat Sunday/holiday actual-work dates as working days AFTER baseline D31 (2026-11-12)
+    if (dateStr > '2026-11-12') {
+      const actualMap = actualDates || getActualDrivenDatesMap();
+      if (actualMap && (actualMap[dateStr] || (Array.isArray(actualMap) && actualMap.includes(dateStr)))) {
+        return true;
+      }
     }
     const d = parseDateLocal(dateStr);
     if (d.getDay() === 0) return false;
@@ -170,6 +173,74 @@
       cur.setDate(cur.getDate() + 1);
     }
     return schedule;
+  }
+
+  function getExtendedWorkingScheduleInfo(projectStartDate, curDate) {
+    if (typeof window.getExtendedWorkingScheduleInfo === 'function') {
+      try {
+        const res = window.getExtendedWorkingScheduleInfo(projectStartDate, curDate);
+        if (res && Array.isArray(res.schedule) && res.schedule.length >= 31) return res;
+      } catch (e) {}
+    }
+
+    const TOTAL_PILES = 93;
+    const BASE_DAYS = 31;
+    const progressRecs = getProgressRecords();
+    const drivenRecords = Object.values(progressRecs || {}).filter(r => r && r.status === 'driven');
+    const dailyActualMap = {};
+    let latestDrivenDate = '';
+    drivenRecords.forEach(r => {
+      if (r.date) {
+        dailyActualMap[r.date] = (dailyActualMap[r.date] || 0) + 1;
+        if (!latestDrivenDate || r.date > latestDrivenDate) {
+          latestDrivenDate = r.date;
+        }
+      }
+    });
+
+    const allDrivenCount = drivenRecords.length;
+    const remainingPiles = Math.max(0, TOTAL_PILES - allDrivenCount);
+    const todayRef = window.todayStr || formatDateLocal(new Date());
+    const effectiveMaxDate = (allDrivenCount < TOTAL_PILES)
+      ? ([curDate, todayRef, latestDrivenDate].filter(Boolean).sort().pop() || curDate || todayRef)
+      : ([curDate, latestDrivenDate].filter(Boolean).sort().pop() || curDate || todayRef);
+
+    const actualDateFlags = {};
+    Object.keys(dailyActualMap).forEach(d => { actualDateFlags[d] = true; });
+
+    let probeDays = BASE_DAYS;
+    let tempSched = getWorkingDaysSchedule(projectStartDate, probeDays, actualDateFlags);
+    while (tempSched.length < 90 && tempSched[tempSched.length - 1] < effectiveMaxDate) {
+      probeDays += 16;
+      tempSched = getWorkingDaysSchedule(projectStartDate, probeDays, actualDateFlags);
+    }
+
+    const activeWorkingDays = Math.max(1, tempSched.filter(d => d <= effectiveMaxDate).length);
+    let totalScheduleDays = Math.max(BASE_DAYS, activeWorkingDays);
+
+    if (remainingPiles > 0 && activeWorkingDays > BASE_DAYS) {
+      const drivenOnMax = dailyActualMap[effectiveMaxDate] || 0;
+      const baseCompletedDays = drivenOnMax > 0 ? activeWorkingDays : Math.max(BASE_DAYS, activeWorkingDays - 1);
+      const extraDaysNeeded = Math.ceil(remainingPiles / 3);
+      totalScheduleDays = Math.max(BASE_DAYS, activeWorkingDays, baseCompletedDays + extraDaysNeeded);
+    } else if (remainingPiles > 0 && activeWorkingDays === BASE_DAYS && tempSched[BASE_DAYS - 1] < effectiveMaxDate) {
+      const extraDaysNeeded = Math.ceil(remainingPiles / 3);
+      totalScheduleDays = Math.max(BASE_DAYS, BASE_DAYS + extraDaysNeeded);
+    }
+
+    totalScheduleDays = Math.min(90, totalScheduleDays);
+    const schedule = getWorkingDaysSchedule(projectStartDate, totalScheduleDays, actualDateFlags);
+    const elapsedWorkingDays = Math.max(1, schedule.filter(d => d <= curDate).length);
+
+    return {
+      totalScheduleDays,
+      schedule,
+      elapsedWorkingDays,
+      allDrivenCount,
+      remainingPiles,
+      dailyActualMap,
+      effectiveMaxDate
+    };
   }
 
   function formatThaiDayMonth(dateStr) {
@@ -1472,46 +1543,47 @@
     const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
     const projectStartDate = (uniqueDates.length > 0) ? uniqueDates[0] : '2026-10-06';
     
-    // Complete 31-day working schedule
-    const workingDaysSchedule = getWorkingDaysSchedule(projectStartDate, 31);
+    // Dynamic working schedule (31 baseline days + automatic extension until 93 piles complete)
+    const extInfo = getExtendedWorkingScheduleInfo(projectStartDate, curDate);
+    const workingDaysSchedule = extInfo.schedule;
+    const totalDays = Math.max(31, workingDaysSchedule.length);
+    const isExtended = totalDays > 31;
 
-    let elapsedDays = 1;
-    if (curDate >= projectStartDate) {
-      elapsedDays = workingDaysSchedule.filter(d => d <= curDate).length;
-    }
-    elapsedDays = Math.min(31, Math.max(1, elapsedDays));
+    const elapsedDays = extInfo.elapsedWorkingDays;
     const planCumCount = Math.min(elapsedDays * 3, 93);
     const variance = drivenCount - planCumCount;
     const varianceText = variance > 0 ? `เร็วกว่าแผน +${variance} ต้น` : (variance < 0 ? `ช้ากว่าแผน ${Math.abs(variance)} ต้น` : `ตามแผนงาน (0 ต้น)`);
     const pct = ((drivenCount / 93) * 100).toFixed(1);
 
     // =========================================================================
-    // DYNAMIC HEIGHT SCALING FOR PERFECT FIT ON A4 (Especially with 3 piles)
+    // DYNAMIC HEIGHT SCALING FOR PERFECT FIT ON A4 (Handles 3+ piles & 3+ tiers)
     // =========================================================================
     const effectivePilesCount = Math.max(0, todayCount);
+    const extraTiersCount = Math.max(0, Math.ceil(Math.max(0, totalDays - 31) / 16));
     let planContainerH = 175;
     let chartContainerH = 165;
-    let planCanvasH = 350;
-    let chartCanvasH = 330;
 
     if (effectivePilesCount >= 3) {
-      // 3 or more piles: scale down canvas containers to make room for all log rows
       const extra = effectivePilesCount - 2;
-      planContainerH = Math.max(130, 155 - (extra * 10));
-      chartContainerH = Math.max(120, 145 - (extra * 10));
-      planCanvasH = planContainerH * 2;
-      chartCanvasH = chartContainerH * 2;
+      planContainerH = Math.max(115, 155 - (extra * 10));
+      chartContainerH = Math.max(108, 145 - (extra * 10));
     } else if (effectivePilesCount === 2) {
       planContainerH = 168;
       chartContainerH = 158;
-      planCanvasH = 336;
-      chartCanvasH = 316;
     }
 
+    if (extraTiersCount > 0) {
+      // Reserve vertical budget for แถวที่ 3+ (~78px per tier) so A4 page 2 never overflows 297mm
+      planContainerH = Math.max(106, planContainerH - (extraTiersCount * 36));
+      chartContainerH = Math.max(98, chartContainerH - (extraTiersCount * 36));
+    }
+
+    const planCanvasH = planContainerH * 2;
+    const chartCanvasH = chartContainerH * 2;
+
     // =========================================================================
-    // BUILD 2-TIER COMPARISON TABLE (เหมือนหน้ารายงาน แยก 2 แถว ครบ 31 วัน)
+    // BUILD DYNAMIC TIER COMPARISON TABLE (แถวที่ 1-2 ครบ 31 วัน + แถวที่ 3+ อัตโนมัติจนครบ 93 ต้น)
     // =========================================================================
-    const totalDays = 31;
     const allDays = [];
     let runningPlanCum = 0;
 
@@ -1519,11 +1591,12 @@
       const schedDate = workingDaysSchedule[i] || '';
       const isTodayOrSelected = (schedDate === curDate);
       const isFuture = schedDate ? (schedDate > curDate) : true;
+      const isExtendedDay = i >= 31;
       const holidayInfo = getHolidayInfo(schedDate);
       const isHolidayWork = Boolean(holidayInfo);
 
-      const dayPlan = 3;
-      runningPlanCum = Math.min(93, (i + 1) * 3);
+      const dayPlan = isExtendedDay ? 0 : 3;
+      runningPlanCum = isExtendedDay ? 93 : Math.min(93, (i + 1) * 3);
 
       const dayActual = drivenRecords.filter(r => r.date === schedDate).length;
       const cumActual = drivenRecords.filter(r => r.date && r.date <= schedDate).length;
@@ -1534,6 +1607,7 @@
         formattedDate: schedDate ? formatThaiDayMonth(schedDate) : ('D' + (i + 1)),
         isToday: isTodayOrSelected,
         isFuture: isFuture,
+        isExtendedDay: isExtendedDay,
         isHolidayWork: isHolidayWork,
         holidayName: holidayInfo ? holidayInfo.name : '',
         dayPlan: dayPlan,
@@ -1543,15 +1617,14 @@
       });
     }
 
-    function buildDrTierBlock(tierNum, tierTitle, startIdx, endIdx) {
-      const isTier2 = endIdx > 16;
-      const targetNote = isTier2 ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น';
-
+    function buildDrTierBlock(tierNum, tierTitle, startIdx, endIdx, targetNote, isOverrunTier) {
       let headerCells = '';
       let planCells = '';
       let actualCells = '';
       let cumPlanCells = '';
       let cumActualCells = '';
+
+      const cellPadCls = isExtended ? 'px-0.5 py-[1px]' : 'p-0.5';
 
       for (let i = startIdx; i < endIdx; i++) {
         const d = allDays[i];
@@ -1574,43 +1647,48 @@
 
         const holidayTooltip = d.isHolidayWork ? ` (${d.holidayName || 'ทำงานวันหยุด'})` : '';
         headerCells += `
-          <th class="p-0.5 border border-slate-700 text-center select-none cursor-pointer transition-colors ${colClass}" title="คลิกเพื่อดูรายงานวันที่ ${d.date}${holidayTooltip}" onclick="handleDrDateSelect('${d.date}')">
+          <th class="${cellPadCls} border border-slate-700 text-center select-none cursor-pointer transition-colors ${colClass}" title="คลิกเพื่อดูรายงานวันที่ ${d.date}${holidayTooltip}" onclick="handleDrDateSelect('${d.date}')">
             ${headerInner}
           </th>
         `;
 
         planCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center text-[#3e4b69] text-[8px] sm:text-[8.5px] ${colClass}">
-            ${d.dayPlan}
+          <td class="${cellPadCls} border border-slate-700 font-mono text-center text-[#3e4b69] text-[8px] sm:text-[8.5px] ${colClass}">
+            ${d.isExtendedDay ? '<span class="text-slate-400">-</span>' : d.dayPlan}
           </td>
         `;
 
         const actDisplay = d.isFuture ? '-' : d.dayActual;
         actualCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-black text-[#1d2b45] text-[8px] sm:text-[8.5px] ${colClass}">
+          <td class="${cellPadCls} border border-slate-700 font-mono text-center font-black text-[#1d2b45] text-[8px] sm:text-[8.5px] ${colClass}">
             ${actDisplay}
           </td>
         `;
 
         cumPlanCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-extrabold text-[#1d2b45] text-[8px] sm:text-[8.5px] ${colClass}">
+          <td class="${cellPadCls} border border-slate-700 font-mono text-center font-extrabold text-[#1d2b45] text-[8px] sm:text-[8.5px] ${colClass}">
             ${d.planCum}
           </td>
         `;
 
         const cumActDisplay = d.isFuture ? '-' : d.actualCum;
         cumActualCells += `
-          <td class="p-0.5 border border-slate-700 font-mono text-center font-black text-[#064e3b] text-[8px] sm:text-[8.5px] ${colClass}">
+          <td class="${cellPadCls} border border-slate-700 font-mono text-center font-black text-[#064e3b] text-[8px] sm:text-[8.5px] ${colClass}">
             ${cumActDisplay}
           </td>
         `;
       }
 
+      const headBg = isOverrunTier ? 'bg-[#fff3e0]' : 'bg-[#f6e9d7]';
+      const badgeCls = isOverrunTier
+        ? 'px-1.5 py-0.2 bg-[#ea580c] text-white border border-slate-900 rounded-none text-[8px] font-black'
+        : 'px-1.5 py-0.2 bg-[#1d2b45] text-[#f7b844] rounded-none text-[8px] font-black';
+
       return `
         <div class="border-2 border-[#1d2b45] bg-white overflow-hidden rounded-none shadow-[2px_2px_0px_#1d2b45]">
-          <div class="px-2 py-0.5 bg-[#f6e9d7] border-b-2 border-[#1d2b45] flex items-center justify-between text-[9px] font-bold">
+          <div class="px-2 py-0.5 ${headBg} border-b-2 border-[#1d2b45] flex items-center justify-between text-[9px] font-bold">
             <div class="flex items-center gap-1.5">
-              <span class="px-1.5 py-0.2 bg-[#1d2b45] text-[#f7b844] rounded-none text-[8px] font-black">${tierNum}</span>
+              <span class="${badgeCls}">${tierNum}</span>
               <span class="text-[#1d2b45] font-black">${tierTitle}</span>
             </div>
             <span class="text-[8.5px] text-[#3e4b69] font-mono font-bold">${targetNote}</span>
@@ -1618,25 +1696,25 @@
           <table class="piling-daily-table w-full text-center border-collapse text-[8px] sm:text-[8.5px] leading-tight table-fixed">
             <thead>
               <tr class="bg-white border-b border-slate-700">
-                <th class="p-0.5 border border-slate-700 font-black text-left text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]" style="width: 58px;">วันที่</th>
+                <th class="${cellPadCls} border border-slate-700 font-black text-left text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]" style="width: 58px;">วันที่</th>
                 ${headerCells}
               </tr>
             </thead>
             <tbody>
               <tr class="row-plan bg-white">
-                <td class="p-0.5 border border-slate-700 text-left font-bold text-[#3e4b69] whitespace-nowrap pl-1 text-[8px]">แผนรายวัน</td>
+                <td class="${cellPadCls} border border-slate-700 text-left font-bold text-[#3e4b69] whitespace-nowrap pl-1 text-[8px]">แผนรายวัน</td>
                 ${planCells}
               </tr>
               <tr class="row-actual bg-[#f8fafc]">
-                <td class="p-0.5 border border-slate-700 text-left font-black text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]">ผลงานจริง</td>
+                <td class="${cellPadCls} border border-slate-700 text-left font-black text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]">ผลงานจริง</td>
                 ${actualCells}
               </tr>
               <tr class="row-accum-plan bg-[#f1f5f9]">
-                <td class="p-0.5 border border-slate-700 text-left font-extrabold text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]">แผนสะสม</td>
+                <td class="${cellPadCls} border border-slate-700 text-left font-extrabold text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]">แผนสะสม</td>
                 ${cumPlanCells}
               </tr>
               <tr class="row-accum-actual bg-[#ecfdf5]">
-                <td class="p-0.5 border border-slate-700 text-left font-black text-[#064e3b] whitespace-nowrap pl-1 text-[8px]">ผลงานสะสม</td>
+                <td class="${cellPadCls} border border-slate-700 text-left font-black text-[#064e3b] whitespace-nowrap pl-1 text-[8px]">ผลงานสะสม</td>
                 ${cumActualCells}
               </tr>
             </tbody>
@@ -1645,16 +1723,41 @@
       `;
     }
 
-    const startD1 = workingDaysSchedule[0] ? formatThaiDayMonth(workingDaysSchedule[0]) : 'D1';
-    const endD1 = workingDaysSchedule[15] ? formatThaiDayMonth(workingDaysSchedule[15]) : 'D16';
-    const tier1Range = `วันทำการที่ 1 – 16 (${startD1} – ${endD1})`;
+    const tierDefinitions = [
+      { start: 0, end: 16, num: 'แถวที่ 1', note: 'เป้าหมายสะสมงวดนี้ 48 ต้น', overrun: false },
+      { start: 16, end: 31, num: 'แถวที่ 2', note: isExtended ? 'เป้าหมายตามแผนเดิม 93 ต้น (ครบกำหนด 31 วัน)' : 'เป้าหมายงานเสาเข็มครบ 93 ต้น', overrun: false }
+    ];
 
-    const startD2 = workingDaysSchedule[16] ? formatThaiDayMonth(workingDaysSchedule[16]) : 'D17';
-    const endD2 = workingDaysSchedule[30] ? formatThaiDayMonth(workingDaysSchedule[30]) : 'D31';
-    const tier2Range = `วันทำการที่ 17 – 31 (${startD2} – ${endD2})`;
+    let nextTierStart = 31;
+    let tierNumCounter = 3;
+    while (nextTierStart < totalDays) {
+      const nextTierEnd = Math.min(totalDays, nextTierStart + 16);
+      const remPiles = Math.max(0, 93 - drivenCount);
+      const rightNote = remPiles > 0
+        ? `เก็บงานต่อเนื่องจนครบ 93 ต้น (สะสม ${drivenCount}/93 · เหลือ ${remPiles} ต้น)`
+        : `กดครบ 93 ต้นแล้ว (สะสม 93/93 ต้น)`;
+      tierDefinitions.push({
+        start: nextTierStart,
+        end: nextTierEnd,
+        num: `แถวที่ ${tierNumCounter}`,
+        note: rightNote,
+        overrun: true
+      });
+      nextTierStart = nextTierEnd;
+      tierNumCounter++;
+    }
 
-    const tier1Html = buildDrTierBlock('แถวที่ 1', tier1Range, 0, 16);
-    const tier2Html = buildDrTierBlock('แถวที่ 2', tier2Range, 16, 31);
+    const allTiersHtml = tierDefinitions.map(td => {
+      const sLabel = workingDaysSchedule[td.start] ? formatThaiDayMonth(workingDaysSchedule[td.start]) : `D${td.start + 1}`;
+      const eLabel = workingDaysSchedule[td.end - 1] ? formatThaiDayMonth(workingDaysSchedule[td.end - 1]) : `D${td.end}`;
+      const rangeTitle = td.overrun
+        ? `วันทำการที่ ${td.start + 1} – ${td.end} (${sLabel} – ${eLabel}) · ช่วงเร่งรัดหลังครบกำหนดแผน`
+        : `วันทำการที่ ${td.start + 1} – ${td.end} (${sLabel} – ${eLabel})`;
+      return buildDrTierBlock(td.num, rangeTitle, td.start, td.end, td.note, td.overrun);
+    }).join('');
+    const ledgerSubnoteText = isExtended
+      ? `· ${tierDefinitions.length} แถว · แผน 31 วัน + ขยายถึง D${totalDays} (จนครบ 93 ต้น)`
+      : `· 2 แถว ครบ 31 วันทำการ`;
 
     // Build Today's Pressed Piles Log Rows
     let pilesLogRows = '';
@@ -1756,7 +1859,7 @@
         <thead>
           <tr class="bg-slate-100">
             <th class="border border-black p-0.5 w-1/4">แผนวันนี้ / กดแล้ว</th>
-            <th class="border border-black p-0.5 w-1/4">แผนสะสม (${elapsedDays}/31 วัน)</th>
+            <th class="border border-black p-0.5 w-1/4">แผนสะสม (${elapsedDays}/31 วัน${elapsedDays > 31 ? ` · เลยแผน +${elapsedDays - 31} วัน` : ''})</th>
             <th class="border border-black p-0.5 w-1/4">กดจริงสะสม</th>
             <th class="border border-black p-0.5 w-1/4">สถานะเทียบแผนงาน</th>
           </tr>
@@ -1820,7 +1923,7 @@
         </div>
       </div>
 
-      <!-- 2-TIER COMPARISON TABLE: Plan 3 ต้น/วันทำการ vs Actual (เหมือนหน้ารายงาน แยก 2 แถว ครบ 31 วัน) -->
+      <!-- DYNAMIC COMPARISON TABLE: Plan 3 ต้น/วันทำการ vs Actual (ขยายแถวอัตโนมัติจนครบ 93 ต้น) -->
       <div class="border-2 border-slate-900 rounded-none overflow-hidden mb-1.5 bg-white shadow-[3px_3px_0px_#0f172a]">
         <div class="bg-white px-2 py-0.5 border-b-2 border-slate-900 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
@@ -1829,11 +1932,10 @@
             </span>
             <h3 class="text-[10px] font-black text-slate-900">ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วันทำการ vs Actual)</h3>
           </div>
-          <span class="text-[9px] font-mono text-slate-500">· 2 แถว ครบ 31 วันทำการ</span>
+          <span class="text-[9px] font-mono text-slate-500">${ledgerSubnoteText}</span>
         </div>
-        <div class="p-1 space-y-1.5">
-          ${tier1Html}
-          ${tier2Html}
+        <div class="p-1 ${isExtended ? 'space-y-1' : 'space-y-1.5'}">
+          ${allTiersHtml}
         </div>
       </div>
 
@@ -1913,9 +2015,10 @@
     const drivenRecords = Object.values(progressRecs).filter(r => r && r.status === 'driven');
     const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
     const projectStartDate = (uniqueDates.length > 0) ? uniqueDates[0] : '2026-10-06';
-    const schedule = getWorkingDaysSchedule(projectStartDate, 31);
+    const extInfo = getExtendedWorkingScheduleInfo(projectStartDate, curDate);
+    const schedule = extInfo.schedule;
 
-    // Plan array: [3, 6, 9, ..., 93]
+    // Plan array: [3, 6, 9, ..., 93, 93, ...]
     const planData = schedule.map((_, idx) => Math.min(93, (idx + 1) * 3));
 
     // Actual array up to curDate
@@ -1947,15 +2050,29 @@
       ctx.fillText(yVal + ' ต้น', padL - 8, py);
     }
 
-    // X-Axis Grid & Labels (วันทำการ D1, D5, D10, D15, D20, D25, D31 เหมือนในเว็บ)
+    // X-Axis Grid & Labels (วันทำการ D1, D5, D10, D15, D20, D25, D31 และช่วงขยาย D32+ ถึงวันสุดท้าย)
     ctx.font = 'bold 10px Montserrat, Sarabun, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
 
-    const markedIndices = [0, 4, 9, 14, 19, 24, 30]; // D1, D5, D10, D15, D20, D25, D31
+    const markedSet = new Set([0, 4, 9, 14, 19, 24, 30]);
+    if (schedule.length > 31) {
+      const lastSchedIdx = schedule.length - 1;
+      for (let m = 34; m <= lastSchedIdx - 4; m += 5) {
+        markedSet.add(m);
+      }
+      if (lastSchedIdx - 30 >= 4) {
+        markedSet.add(lastSchedIdx);
+      }
+      const curIdx = actualData.length - 1;
+      if (curIdx > 30 && Math.abs(curIdx - 30) >= 4 && Math.abs(curIdx - lastSchedIdx) >= 4) {
+        markedSet.add(curIdx);
+      }
+    }
+    const markedIndices = [...markedSet].filter(idx => idx >= 0 && idx < schedule.length).sort((a, b) => a - b);
     markedIndices.forEach(idx => {
       if (idx < schedule.length) {
-        const px = padL + (idx / (schedule.length - 1)) * plotW;
+        const px = padL + (idx / Math.max(1, schedule.length - 1)) * plotW;
         ctx.strokeStyle = '#f1f5f9';
         ctx.lineWidth = 1;
         ctx.beginPath();

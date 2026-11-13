@@ -23,7 +23,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="daily_report_studio.js?v=20261110_2"></script>
+  <script defer src="daily_report_studio.js?v=20261110_3"></script>
 
   <style>
     :root {
@@ -8409,8 +8409,13 @@
       return y + '-' + m + '-' + day;
     }
 
-    function isThaiWorkingDay(dateStr) {
+    function isThaiWorkingDay(dateStr, actualDates = null) {
       if (!dateStr) return false;
+      // Only treat Sunday/holiday actual-work dates as working days AFTER baseline D31 (2026-11-12)
+      if (actualDates && dateStr > '2026-11-12') {
+        if (Array.isArray(actualDates) && actualDates.includes(dateStr)) return true;
+        if (typeof actualDates === 'object' && actualDates[dateStr]) return true;
+      }
       const d = parseDateLocal(dateStr);
       // 1. วันอาทิตย์ (0) -> ไม่นับเป็นวันทำการ
       if (d.getDay() === 0) return false;
@@ -8422,25 +8427,101 @@
       return true;
     }
 
-    // สร้างลิสต์ 31 วันทำการจริงของโครงการ โดยข้ามวันอาทิตย์และวันหยุดราชการทั้งหมด
+    function getActualDrivenDateFlags() {
+      const flags = {};
+      if (typeof progressRecords === 'object' && progressRecords) {
+        Object.values(progressRecords).forEach(r => {
+          if (r && r.status === 'driven' && r.date) {
+            flags[r.date] = true;
+          }
+        });
+      }
+      return flags;
+    }
+
+    // สร้างลิสต์วันทำการจริงของโครงการ โดยข้ามวันอาทิตย์และวันหยุดราชการทั้งหมด (รวมวันที่มีผลงานจริง)
     window.getWorkingDaysSchedule = getWorkingDaysSchedule;
-    function getWorkingDaysSchedule(startDateStr, totalWorkingDays = 31) {
+    function getWorkingDaysSchedule(startDateStr, totalWorkingDays = 31, actualDates = null) {
       const schedule = [];
-      let cur = parseDateLocal(startDateStr);
+      const actualMap = actualDates || getActualDrivenDateFlags();
+      let cur = parseDateLocal(startDateStr || '2026-10-06');
       
       // ถ้าวันเริ่มต้นตรงกับวันอาทิตย์หรือวันหยุด เลื่อนไปวันทำการแรก
-      while (!isThaiWorkingDay(formatDateLocal(cur)) && schedule.length === 0) {
+      while (!isThaiWorkingDay(formatDateLocal(cur), actualMap) && schedule.length === 0) {
         cur.setDate(cur.getDate() + 1);
       }
 
       while (schedule.length < totalWorkingDays) {
         const s = formatDateLocal(cur);
-        if (isThaiWorkingDay(s)) {
+        if (isThaiWorkingDay(s, actualMap)) {
           schedule.push(s);
         }
         cur.setDate(cur.getDate() + 1);
       }
       return schedule;
+    }
+
+    // คำนวณตารางวันทำการแบบขยายอัตโนมัติเมื่อเลยแผน 31 วัน และยังกดไม่ครบ 93 ต้น
+    window.getExtendedWorkingScheduleInfo = getExtendedWorkingScheduleInfo;
+    function getExtendedWorkingScheduleInfo(projectStartDate, curDate) {
+      const TOTAL_PILES = 93;
+      const BASE_DAYS = 31;
+      const drivenRecords = Object.values(progressRecords || {}).filter(r => r && r.status === 'driven');
+      const dailyActualMap = {};
+      let latestDrivenDate = '';
+      drivenRecords.forEach(r => {
+        if (r.date) {
+          dailyActualMap[r.date] = (dailyActualMap[r.date] || 0) + 1;
+          if (!latestDrivenDate || r.date > latestDrivenDate) {
+            latestDrivenDate = r.date;
+          }
+        }
+      });
+
+      const allDrivenCount = drivenRecords.length;
+      const remainingPiles = Math.max(0, TOTAL_PILES - allDrivenCount);
+      const todayRef = (typeof todayStr !== 'undefined' && todayStr) ? todayStr : formatDateLocal(new Date());
+      const effectiveMaxDate = (allDrivenCount < TOTAL_PILES)
+        ? ([curDate, todayRef, latestDrivenDate].filter(Boolean).sort().pop() || curDate || todayRef)
+        : ([curDate, latestDrivenDate].filter(Boolean).sort().pop() || curDate || todayRef);
+
+      const actualDateFlags = {};
+      Object.keys(dailyActualMap).forEach(d => { actualDateFlags[d] = true; });
+
+      // Generate working days up to effectiveMaxDate and at least BASE_DAYS (31)
+      let probeDays = BASE_DAYS;
+      let tempSched = getWorkingDaysSchedule(projectStartDate, probeDays, actualDateFlags);
+      while (tempSched.length < 90 && tempSched[tempSched.length - 1] < effectiveMaxDate) {
+        probeDays += 16;
+        tempSched = getWorkingDaysSchedule(projectStartDate, probeDays, actualDateFlags);
+      }
+
+      const activeWorkingDays = Math.max(1, tempSched.filter(d => d <= effectiveMaxDate).length);
+      let totalScheduleDays = Math.max(BASE_DAYS, activeWorkingDays);
+
+      if (remainingPiles > 0 && activeWorkingDays > BASE_DAYS) {
+        const drivenOnMax = dailyActualMap[effectiveMaxDate] || 0;
+        const baseCompletedDays = drivenOnMax > 0 ? activeWorkingDays : Math.max(BASE_DAYS, activeWorkingDays - 1);
+        const extraDaysNeeded = Math.ceil(remainingPiles / 3);
+        totalScheduleDays = Math.max(BASE_DAYS, activeWorkingDays, baseCompletedDays + extraDaysNeeded);
+      } else if (remainingPiles > 0 && activeWorkingDays === BASE_DAYS && tempSched[BASE_DAYS - 1] < effectiveMaxDate) {
+        const extraDaysNeeded = Math.ceil(remainingPiles / 3);
+        totalScheduleDays = Math.max(BASE_DAYS, BASE_DAYS + extraDaysNeeded);
+      }
+
+      totalScheduleDays = Math.min(90, totalScheduleDays);
+      const schedule = getWorkingDaysSchedule(projectStartDate, totalScheduleDays, actualDateFlags);
+      const elapsedWorkingDays = Math.max(1, schedule.filter(d => d <= curDate).length);
+
+      return {
+        totalScheduleDays,
+        schedule,
+        elapsedWorkingDays,
+        allDrivenCount,
+        remainingPiles,
+        dailyActualMap,
+        effectiveMaxDate
+      };
     }
 
     // =========================================================================
@@ -8548,6 +8629,8 @@
           scurveBadge.innerHTML = `<span class="text-[#DC2626]">🏁 คาดการณ์จบ: ${formatThaiDayMonth(metrics.finishDateRecent5)} 2569 (D${metrics.finishIdxRecent5 + 1}) · เฉลี่ยย้อนหลัง 5 วัน: ${metrics.rateRecent5.toFixed(1)} ต้น/วัน</span>`;
         } else if (showProjOverall) {
           scurveBadge.innerHTML = `<span class="text-[#4F46E5]">🏁 คาดการณ์จบ: ${formatThaiDayMonth(metrics.finishDateOverall)} 2569 (D${metrics.finishIdxOverall + 1}) · เฉลี่ยรวมทุกวัน: ${metrics.rateOverall.toFixed(1)} ต้น/วัน</span>`;
+        } else if (metrics.totalScheduleDays && metrics.totalScheduleDays > 31) {
+          scurveBadge.textContent = `แผน 93 ต้น (31 วัน) · ขยายตารางถึง D${metrics.totalScheduleDays} จนครบ 93 ต้น`;
         } else {
           scurveBadge.textContent = 'แผนงาน 93 ต้น · 31 วันทำการ (เว้นวันอาทิตย์/นักขัตฤกษ์)';
         }
@@ -8676,19 +8759,16 @@
 
       const totalPiles = 93;
 
-      // Base 31 days schedule
-      const baseSchedule = getWorkingDaysSchedule(projectStartDate, 31);
+      // ตารางวันทำการแบบขยายอัตโนมัติ (อย่างน้อย 31 วัน และขยายอัตโนมัติเมื่อเลยแผนจนกว่าจะครบ 93 ต้น)
+      const extInfo = getExtendedWorkingScheduleInfo(projectStartDate, curDate);
+      const baseSchedule = extInfo.schedule;
 
       // คำนวณจำนวนวันทำการสะสมถึงวันที่รายงาน (curDate)
-      let elapsedWorkingDays = 1;
-      if (curDate >= projectStartDate) {
-        elapsedWorkingDays = baseSchedule.filter(d => d <= curDate).length;
-      }
-      elapsedWorkingDays = Math.min(31, Math.max(1, elapsedWorkingDays));
+      const elapsedWorkingDays = extInfo.elapsedWorkingDays;
       const lastActualIdx = elapsedWorkingDays - 1;
 
       // ค่าผลงานสะสม ณ วันที่ล่าสุด
-      const lastSchedDate = baseSchedule[lastActualIdx];
+      const lastSchedDate = baseSchedule[lastActualIdx] || curDate;
       const lastActualVal = drivenRecords.filter(r => 
         r && r.status === 'driven' && r.date && (r.date <= lastSchedDate || (lastActualIdx === elapsedWorkingDays - 1 && r.date <= curDate))
       ).length;
@@ -8721,12 +8801,12 @@
       const finishIdxRecent5 = lastActualIdx + daysNeeded5D;
 
       // กำหนดจำนวนวันบนแกน X
-      let chartDaysCount = 31;
+      let chartDaysCount = Math.max(31, extInfo.totalScheduleDays);
       if (showProjOverall) chartDaysCount = Math.max(chartDaysCount, finishIdxOverall + 1);
       if (showProjRecent5) chartDaysCount = Math.max(chartDaysCount, finishIdxRecent5 + 1);
-      chartDaysCount = Math.min(65, chartDaysCount); // ป้องกันแกนยาวเกิน 65 วัน
+      chartDaysCount = Math.min(90, chartDaysCount); // ป้องกันแกนยาวเกิน 90 วัน
 
-      const workingDaysSchedule = getWorkingDaysSchedule(projectStartDate, chartDaysCount);
+      const workingDaysSchedule = getWorkingDaysSchedule(projectStartDate, chartDaysCount, extInfo.dailyActualMap);
 
       const finishDateOverall = workingDaysSchedule[finishIdxOverall] || workingDaysSchedule[workingDaysSchedule.length - 1] || curDate;
       const finishDateRecent5 = workingDaysSchedule[finishIdxRecent5] || workingDaysSchedule[workingDaysSchedule.length - 1] || curDate;
@@ -8740,7 +8820,8 @@
         finishIdxOverall,
         finishIdxRecent5,
         finishDateOverall,
-        finishDateRecent5
+        finishDateRecent5,
+        totalScheduleDays: extInfo.totalScheduleDays
       };
       updateProjectionButtonsUI(metrics);
 
@@ -8750,14 +8831,10 @@
         labels.push(`D${day}`);
       }
 
-      // ข้อมูลแผนงาน 31 วัน (3 ต้น/วันทำการ รวม 93 ต้น)
+      // ข้อมูลแผนงาน 31 วัน (3 ต้น/วันทำการ รวม 93 ต้น) และคงเส้นอ้างอิงที่ 93 เมื่อเลยแผน
       const planData = [];
       for (let day = 1; day <= chartDaysCount; day++) {
-        if (day <= 31) {
-          planData.push(Math.min(day * 3, 93));
-        } else {
-          planData.push(null);
-        }
+        planData.push(Math.min(day * 3, 93));
       }
 
       // ข้อมูลผลงานจริงสะสม (Actual)
@@ -8988,12 +9065,14 @@
               title: { 
                 display: true, 
                 text: (showProjOverall || showProjRecent5)
-                  ? `วันทำการ (แผนงาน D1 - D31 · ขยายแสดงการคาดการณ์วันจบตามค่าเฉลี่ย)`
-                  : 'วันทำการ (Days: D1 - D31: ไม่นับวันอาทิตย์ & วันหยุดราชการ)', 
+                  ? `วันทำการ (แผนงาน D1 - D31 · ขยายแสดงการคาดการณ์วันจบถึง D${chartDaysCount})`
+                  : (chartDaysCount > 31
+                    ? `วันทำการ (Days: D1 - D${chartDaysCount} · แผน 31 วัน + ขยายจนครบ 93 ต้น)`
+                    : 'วันทำการ (Days: D1 - D31: ไม่นับวันอาทิตย์ & วันหยุดราชการ)'), 
                 font: { family: 'Sarabun', size: 11, weight: 'bold' }, 
                 color: '#475569' 
               },
-              ticks: { maxTicksLimit: (showProjOverall || showProjRecent5) ? 22 : 16, font: { family: 'Sarabun', weight: 'bold' }, color: '#34383b' }
+              ticks: { maxTicksLimit: (showProjOverall || showProjRecent5 || chartDaysCount > 31) ? 22 : 16, font: { family: 'Sarabun', weight: 'bold' }, color: '#34383b' }
             }
           }
         }
@@ -9753,18 +9832,15 @@
         return a.pile.no - b.pile.no;
       });
 
-      // 1. Calculate Elapsed Working Days & Cumulative Plan (ไม่นับวันอาทิตย์และวันหยุดราชการ)
+      // 1. Calculate Elapsed Working Days & Cumulative Plan (ไม่นับวันอาทิตย์และวันหยุดราชการ, ขยายอัตโนมัติเมื่อเลย 31 วันจนครบ 93 ต้น)
       const drivenRecords = Object.values(progressRecords).filter(r => r && r.status === 'driven');
       const uniqueDates = [...new Set(drivenRecords.map(r => r.date))].filter(Boolean).sort();
       
       const projectStartDate = (uniqueDates.length > 0) ? uniqueDates[0] : (curDate || todayStr);
-      const workingDaysSchedule = getWorkingDaysSchedule(projectStartDate, 31);
+      const extInfo = getExtendedWorkingScheduleInfo(projectStartDate, curDate);
+      const workingDaysSchedule = extInfo.schedule;
       
-      let elapsedDays = 1;
-      if (curDate >= projectStartDate) {
-        elapsedDays = workingDaysSchedule.filter(d => d <= curDate).length;
-      }
-      elapsedDays = Math.min(31, Math.max(1, elapsedDays));
+      const elapsedDays = extInfo.elapsedWorkingDays;
       const planCumCount = Math.min(elapsedDays * 3, 93);
       const variance = drivenCount - planCumCount; // negative means delayed, positive means ahead
 
@@ -9794,7 +9870,11 @@
       const repPlanBarEl = document.getElementById('rep-plan-bar');
       if (repPlanBarEl) repPlanBarEl.style.width = `${planPct}%`;
       const repPlanPctEl = document.getElementById('rep-plan-pct');
-      if (repPlanPctEl) repPlanPctEl.textContent = `คิดเป็น ${planPct}% ของโครงการ`;
+      if (repPlanPctEl) {
+        repPlanPctEl.textContent = elapsedDays > 31
+          ? `คิดเป็น ${planPct}% ของโครงการ (เลยแผน +${elapsedDays - 31} วัน)`
+          : `คิดเป็น ${planPct}% ของโครงการ`;
+      }
 
       // Update Cell 03: ผลงานจริงสะสม (Cumulative Actual Driven)
       const pct = ((drivenCount / 93) * 100).toFixed(1);
@@ -10135,14 +10215,14 @@
       const container = document.getElementById('rep-daily-ledger-container');
       if (!container) return;
 
-      const totalDays = 31;
+      const totalDays = Math.max(31, workingDaysSchedule.length);
       const dailyPlan = 3;
       const totalPiles = 93;
 
       const drivenRecords = Object.values(progressRecords || {}).filter(r => r && r.status === 'driven');
-      const totalActualDriven = drivenRecords.length;
+      const drivenUpToCur = drivenRecords.filter(r => !r.date || r.date <= curDate).length;
 
-      // 1. Precalculate metrics for all 31 working days
+      // 1. Precalculate metrics for all working days (แผน 31 วัน + ช่วงขยายจนกว่าจะครบ 93 ต้น)
       const allDays = [];
       let runningPlanCum = 0;
 
@@ -10150,9 +10230,10 @@
         const schedDate = workingDaysSchedule[i] || '';
         const isTodayOrSelected = (schedDate === curDate || (curDate && curDate.indexOf(schedDate) === 0));
         const isFuture = schedDate ? (schedDate > curDate) : true;
+        const isExtendedDay = i >= 31;
 
-        const dayPlan = Math.min(dailyPlan, Math.max(0, totalPiles - runningPlanCum));
-        runningPlanCum = Math.min(totalPiles, runningPlanCum + dayPlan);
+        const dayPlan = isExtendedDay ? 0 : Math.min(dailyPlan, Math.max(0, totalPiles - runningPlanCum));
+        runningPlanCum = isExtendedDay ? totalPiles : Math.min(totalPiles, runningPlanCum + dayPlan);
 
         const dayActual = drivenRecords.filter(r => r.date === schedDate).length;
         const cumActual = drivenRecords.filter(r => r.date && r.date <= schedDate).length;
@@ -10163,6 +10244,7 @@
           formattedDate: schedDate ? formatThaiDayMonth(schedDate) : ('D' + (i + 1)),
           isToday: isTodayOrSelected,
           isFuture: isFuture,
+          isExtendedDay: isExtendedDay,
           dayPlan: dayPlan,
           planCum: runningPlanCum,
           dayActual: dayActual,
@@ -10170,8 +10252,8 @@
         });
       }
 
-      // 2. Helper to build one row / tier of the table (2 แถวแบบ Architectural Telemetry Grid)
-      function buildTierBlock(tierNum, tierDateRange, startIdx, endIdx, hasTotalCol) {
+      // 2. Helper to build one row / tier of the table
+      function buildTierBlock(tierNum, tierDateRange, startIdx, endIdx, rightNoteText, isOverrunTier) {
         let headerCells = '';
         let planCells = '';
         let actualCells = '';
@@ -10188,7 +10270,7 @@
             : '<span class="font-bold text-[#1D2B45] text-[10.5px]">' + d.formattedDate + '</span>';
 
           headerCells += '<th class="py-1 px-0.5 font-bold text-center select-none cursor-pointer transition-colors whitespace-nowrap ' + colClass + '" data-date="' + d.date + '" title="คลิกเพื่อดูรายงานวันที่ ' + d.date + '">' + headerInner + '</th>';
-          planCells += '<td class="py-1 px-0.5 font-mono text-center text-[#3E4B69] text-[11px] ' + colClass + '">' + d.dayPlan + '</td>';
+          planCells += '<td class="py-1 px-0.5 font-mono text-center text-[#3E4B69] text-[11px] ' + colClass + '">' + (d.isExtendedDay ? '<span class="text-slate-400">-</span>' : d.dayPlan) + '</td>';
 
           const actualDisplay = d.isFuture ? '-' : d.dayActual;
           actualCells += '<td class="py-1 px-0.5 font-mono text-center font-black text-[#1D2B45] text-[11px] ' + colClass + '">' + actualDisplay + '</td>';
@@ -10199,15 +10281,18 @@
           cumActualCells += '<td class="py-1 px-0.5 font-mono text-center font-black text-[#064E3B] text-[11px] ' + colClass + '">' + cumActualDisplay + '</td>';
         }
 
-        // Removed confusing รวม column from daily table as requested
+        const badgeClass = isOverrunTier
+          ? 'font-mono text-[10px] font-black px-2 py-0.5 rounded bg-[#F26B2A] text-white border border-[#1D2B45] leading-none whitespace-nowrap shrink-0 inline-block'
+          : 'font-mono text-[10px] font-black px-2 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none whitespace-nowrap shrink-0 inline-block';
+        const headBgClass = isOverrunTier ? 'bg-[#FFF3E0]' : 'bg-[#F6E9D7]';
 
         return '<div class="piling-daily-tier-block border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] bg-white overflow-hidden rounded-xl">' +
-          '<div class="piling-daily-tier-head px-3 py-1.5 bg-[#F6E9D7] flex items-center justify-between gap-2 text-xs font-bold whitespace-nowrap flex-nowrap">' +
+          '<div class="piling-daily-tier-head px-3 py-1.5 ' + headBgClass + ' flex items-center justify-between gap-2 text-xs font-bold whitespace-nowrap flex-nowrap">' +
             '<div class="flex items-center gap-2 shrink-0 whitespace-nowrap">' +
-              '<span class="font-mono text-[10px] font-black px-2 py-0.5 rounded bg-[#1D2B45] text-[#F7B844] leading-none whitespace-nowrap shrink-0 inline-block">' + tierNum + '</span>' +
+              '<span class="' + badgeClass + '">' + tierNum + '</span>' +
               '<span class="text-[#1D2B45] font-black whitespace-nowrap shrink-0">' + tierDateRange + '</span>' +
             '</div>' +
-            '<span class="text-[10.5px] text-[#3E4B69] font-mono font-bold hidden sm:inline whitespace-nowrap shrink-0">' + (hasTotalCol ? 'เป้าหมายงานเสาเข็มครบ 93 ต้น' : 'เป้าหมายสะสมงวดนี้ 48 ต้น') + '</span>' +
+            '<span class="text-[10.5px] text-[#3E4B69] font-mono font-bold hidden sm:inline whitespace-nowrap shrink-0">' + rightNoteText + '</span>' +
           '</div>' +
           '<div class="overflow-x-auto custom-scrollbar">' +
             '<table class="piling-daily-table w-full text-center border-collapse text-xs">' +
@@ -10240,18 +10325,48 @@
         '</div>';
       }
 
-      const startD1 = workingDaysSchedule[0] ? formatThaiDayMonth(workingDaysSchedule[0]) : 'D1';
-      const endD1 = workingDaysSchedule[15] ? formatThaiDayMonth(workingDaysSchedule[15]) : 'D16';
-      const tier1Range = 'วันทำการที่ 1 – 16 (' + startD1 + ' – ' + endD1 + ')';
+      // Build Tiers: Tier 1 (D1-D16), Tier 2 (D17-D31), and dynamic Tier 3+ (D32+ until 93 piles complete)
+      const tierDefinitions = [
+        { start: 0, end: 16, num: 'แถวที่ 1', note: 'เป้าหมายสะสมงวดนี้ 48 ต้น', overrun: false },
+        { start: 16, end: 31, num: 'แถวที่ 2', note: totalDays > 31 ? 'เป้าหมายตามแผนเดิม 93 ต้น (ครบกำหนด 31 วัน)' : 'เป้าหมายงานเสาเข็มครบ 93 ต้น', overrun: false }
+      ];
 
-      const startD2 = workingDaysSchedule[16] ? formatThaiDayMonth(workingDaysSchedule[16]) : 'D17';
-      const endD2 = workingDaysSchedule[30] ? formatThaiDayMonth(workingDaysSchedule[30]) : 'D31';
-      const tier2Range = 'วันทำการที่ 17 – 31 (' + startD2 + ' – ' + endD2 + ')';
+      let nextStart = 31;
+      let tierIdx = 3;
+      while (nextStart < totalDays) {
+        const nextEnd = Math.min(totalDays, nextStart + 16);
+        const remAfterCur = Math.max(0, totalPiles - drivenUpToCur);
+        const rightNote = remAfterCur > 0
+          ? ('เก็บงานต่อเนื่องจนครบ 93 ต้น (สะสม ' + drivenUpToCur + '/93 ต้น · คงเหลือ ' + remAfterCur + ' ต้น)')
+          : ('กดครบ 93 ต้นแล้ว (สะสม 93/93 ต้น)');
+        tierDefinitions.push({
+          start: nextStart,
+          end: nextEnd,
+          num: 'แถวที่ ' + tierIdx,
+          note: rightNote,
+          overrun: true
+        });
+        nextStart = nextEnd;
+        tierIdx++;
+      }
 
-      const tier1Html = buildTierBlock('แถวที่ 1', tier1Range, 0, 16, false);
-      const tier2Html = buildTierBlock('แถวที่ 2', tier2Range, 16, 31, true);
+      const tierHtmls = tierDefinitions.map(td => {
+        const sLabel = workingDaysSchedule[td.start] ? formatThaiDayMonth(workingDaysSchedule[td.start]) : ('D' + (td.start + 1));
+        const eLabel = workingDaysSchedule[td.end - 1] ? formatThaiDayMonth(workingDaysSchedule[td.end - 1]) : ('D' + td.end);
+        const rangeTitle = td.overrun
+          ? ('วันทำการที่ ' + (td.start + 1) + ' – ' + td.end + ' (' + sLabel + ' – ' + eLabel + ') · ช่วงเร่งรัดหลังครบกำหนดแผน')
+          : ('วันทำการที่ ' + (td.start + 1) + ' – ' + td.end + ' (' + sLabel + ' – ' + eLabel + ')');
+        return buildTierBlock(td.num, rangeTitle, td.start, td.end, td.note, td.overrun);
+      });
 
-      container.innerHTML = '<div class="space-y-3">' + tier1Html + tier2Html + '</div>';
+      const subnoteEl = document.getElementById('rep-daily-ledger-subnote');
+      if (subnoteEl) {
+        subnoteEl.textContent = totalDays > 31
+          ? ('แบ่ง ' + tierDefinitions.length + ' แถว · แผน 31 วัน + ขยายถึง D' + totalDays + ' (จนครบ 93 ต้น)')
+          : 'แบ่ง 2 แถว ครบ 31 วันทำการ';
+      }
+
+      container.innerHTML = '<div class="space-y-3">' + tierHtmls.join('') + '</div>';
 
       // Click to select date in report
       container.querySelectorAll('th[data-date]').forEach(th => {
@@ -10340,7 +10455,9 @@
 
       const cfg = buildChartConfig();
       const planData = cfg.data.datasets[0].data;
-      const actualData = cfg.data.datasets[1].data;
+      const actualDataRaw = cfg.data.datasets[1].data;
+      const actualData = actualDataRaw.filter(v => v !== null && v !== undefined);
+      const totalSlots = Math.max(1, (cfg.data.labels ? cfg.data.labels.length : planData.length) - 1);
 
       // Y-Grid
       ctx.font = 'bold 10px Sarabun, sans-serif';
@@ -10363,11 +10480,17 @@
       ctx.lineWidth = 2.5;
       ctx.setLineDash([5, 4]);
       ctx.beginPath();
+      let planStarted = false;
       for (let i = 0; i < planData.length; i++) {
-        const px = padL + (i / (planData.length - 1)) * plotW;
+        if (planData[i] === null || planData[i] === undefined) continue;
+        const px = padL + (i / totalSlots) * plotW;
         const py = padT + plotH - (planData[i] / maxY) * plotH;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
+        if (!planStarted) {
+          ctx.moveTo(px, py);
+          planStarted = true;
+        } else {
+          ctx.lineTo(px, py);
+        }
       }
       ctx.stroke();
       ctx.setLineDash([]);
@@ -10376,12 +10499,12 @@
       if (actualData.length > 0) {
         ctx.beginPath();
         for (let i = 0; i < actualData.length; i++) {
-          const px = padL + (i / (planData.length - 1)) * plotW;
+          const px = padL + (i / totalSlots) * plotW;
           const py = padT + plotH - (actualData[i] / maxY) * plotH;
           if (i === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         }
-        const lastPx = padL + ((actualData.length - 1) / (planData.length - 1)) * plotW;
+        const lastPx = padL + ((actualData.length - 1) / totalSlots) * plotW;
         ctx.lineTo(lastPx, padT + plotH);
         ctx.lineTo(padL, padT + plotH);
         ctx.closePath();
@@ -10392,7 +10515,7 @@
         ctx.lineWidth = 3;
         ctx.beginPath();
         for (let i = 0; i < actualData.length; i++) {
-          const px = padL + (i / (planData.length - 1)) * plotW;
+          const px = padL + (i / totalSlots) * plotW;
           const py = padT + plotH - (actualData[i] / maxY) * plotH;
           if (i === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
@@ -10400,7 +10523,7 @@
         ctx.stroke();
 
         for (let i = 0; i < actualData.length; i++) {
-          const px = padL + (i / (planData.length - 1)) * plotW;
+          const px = padL + (i / totalSlots) * plotW;
           const py = padT + plotH - (actualData[i] / maxY) * plotH;
           ctx.fillStyle = '#10b981';
           ctx.beginPath();
@@ -10413,7 +10536,6 @@
       }
 
       // Projections (Direct Canvas Fallback)
-      const totalSlots = Math.max(1, (cfg.data.labels ? cfg.data.labels.length : 31) - 1);
       for (let dsIdx = 2; dsIdx < cfg.data.datasets.length; dsIdx++) {
         const ds = cfg.data.datasets[dsIdx];
         if (!ds || !ds.data) continue;
