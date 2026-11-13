@@ -1410,7 +1410,7 @@
       border: none !important;
     }
 
-    /* โหมดแคปภาพแนวตั้ง 4:3 (Portrait 3:4) ปรับสัดส่วนทุกอย่างให้พอดีเป๊ะเต็มเฟรม */
+    /* โหมดแคปภาพแนวตั้ง 3:4 (Portrait 3:4) ปรับสัดส่วนทุกอย่างให้พอดีเป๊ะเต็มเฟรม */
     #report-page-card.is-export-capturing.export-ratio-3-4,
     .is-export-capturing.export-ratio-3-4 #report-page-card {
       min-height: auto !important;
@@ -1418,15 +1418,15 @@
       display: flex !important;
       flex-direction: column !important;
       box-sizing: border-box !important;
-      padding: 22px 26px !important;
+      padding: 18px 22px !important;
       border: 2px solid #1D2B45 !important;
       border-radius: 14px !important;
       background: #ffffff !important;
-      gap: 12px !important;
+      gap: 10px !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-header-bar {
       flex-shrink: 0 !important;
-      min-height: 76px !important;
+      min-height: 70px !important;
       height: auto !important;
       margin-bottom: 0 !important;
     }
@@ -1437,7 +1437,7 @@
     .is-export-capturing.export-ratio-3-4 #report-main-grid {
       display: flex !important;
       flex-direction: column !important;
-      gap: 14px !important;
+      gap: 10px !important;
       width: 100% !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-col-plan {
@@ -1451,18 +1451,18 @@
       overflow: hidden !important;
     }
     .is-export-capturing.export-ratio-3-4 #planSnapshotCanvasWrapper {
-      padding: 10px !important;
+      padding: 6px !important;
     }
     .is-export-capturing.export-ratio-3-4 #planCanvasContainer {
-      height: 480px !important;
-      min-height: 480px !important;
-      max-height: 480px !important;
+      height: 560px !important;
+      min-height: 560px !important;
+      max-height: 560px !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-col-side {
       width: 100% !important;
       display: flex !important;
       flex-direction: column !important;
-      gap: 14px !important;
+      gap: 10px !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-scurve {
       border: 2px solid #1D2B45 !important;
@@ -1470,14 +1470,37 @@
       overflow: hidden !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-scurve .chart-wrapper {
-      height: 230px !important;
-      max-height: 230px !important;
+      height: 185px !important;
+      max-height: 185px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #rep-daily-ledger-section {
+      margin-top: 8px !important;
+      padding-top: 8px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #rep-daily-ledger-title-row {
+      margin-bottom: 6px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #rep-daily-ledger-container {
+      gap: 6px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 .piling-daily-tier-block > div:first-child {
+      padding: 3px 10px !important;
+    }
+    .is-export-capturing.export-ratio-3-4 .piling-daily-table th,
+    .is-export-capturing.export-ratio-3-4 .piling-daily-table td {
+      padding: 2.5px 2px !important;
+      font-size: 10px !important;
+      line-height: 1.15 !important;
     }
     .is-export-capturing.export-ratio-3-4 #report-sec-table {
       margin-bottom: 0 !important;
       border: 2px solid #1D2B45 !important;
       border-radius: 12px !important;
       overflow: hidden !important;
+    }
+    .is-export-capturing.export-ratio-3-4 #rep-today-table th,
+    .is-export-capturing.export-ratio-3-4 #rep-today-table td {
+      padding: 4px 4px !important;
     }
   
     /* =========================================================================
@@ -3438,13 +3461,13 @@
         <div class="flex items-center gap-1.5 flex-wrap">
           <span class="font-black text-[#1D2B45] text-[11px] whitespace-nowrap">สัดส่วน:</span>
           <div class="flex items-center gap-1 flex-wrap">
-            <button data-ratio="fit" type="button" class="exp-ratio-btn px-2.5 py-1 rounded-lg border-1.5 border-[#1D2B45] font-black text-[11px] bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap cursor-pointer">
+            <button data-ratio="fit" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
               Auto Fit (100%)
             </button>
             <button data-ratio="a4" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
               A4 แนวตั้ง
             </button>
-            <button data-ratio="3:4" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
+            <button data-ratio="3:4" type="button" class="exp-ratio-btn px-2.5 py-1 rounded-lg border-1.5 border-[#1D2B45] font-black text-[11px] bg-[#F7B844] text-[#1D2B45] shadow-[1px_1px_0px_#1D2B45] whitespace-nowrap cursor-pointer">
               3:4 แนวตั้ง
             </button>
             <button data-ratio="4:3" type="button" class="exp-ratio-btn px-2 py-1 rounded-lg border-1.5 border-[#1D2B45]/40 font-bold text-[11px] bg-white text-[#3E4B69] hover:border-[#1D2B45] whitespace-nowrap cursor-pointer">
@@ -4510,6 +4533,7 @@
     const container = document.getElementById('viewport');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
+    window.scene = scene;
 
     const aspect = window.innerWidth / window.innerHeight;
     const frustumHeight = 32; // Crisp, well-framed CAD zoom
@@ -4521,11 +4545,13 @@
       0.1,
       2000
     );
+    window.orthoCamera = orthoCamera;
 
     const perspCamera = new THREE.PerspectiveCamera(40, aspect, 0.1, 3000);
     let activeCamera = orthoCamera;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    window.renderer = renderer;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0xffffff, 1);
@@ -4926,6 +4952,8 @@
         const lBar = document.getElementById('loading-bar');
         if (lBar) lBar.style.width = '100%';
         currentModel = gltf.scene;
+        window.currentModel = currentModel;
+        window.updatePileMeshVisuals = updatePileMeshVisuals;
 
         // CRITICAL FIX: Rotate model around X by +90 degrees to align North (+Y) UP and East (+X) RIGHT!
         currentModel.rotation.x = Math.PI / 2;
@@ -9119,10 +9147,10 @@
           renderer.setPixelRatio(1);
 
           // Center of the site in Three.js coordinates (คำนวณระยะให้ Fit เต็มกรอบพอดี ไม่เหลือขอบขาวกว้าง)
-          const centerX = 16.85;
-          const centerY = 8.30;
-          const spanX = 46.5;
-          const spanY = 23.8;
+          const centerX = 16.90;
+          const centerY = 8.05;
+          const spanX = 45.2;
+          const spanY = 22.8;
           const canvasAspect = renderW / renderH;
           let camW, camH;
           if (canvasAspect > spanX / spanY) {
@@ -9169,13 +9197,13 @@
       }
 
       // 2. FALLBACK 2D VECTOR RENDERING (If 3D model is still loading)
-      const minX = -6.2, maxX = 39.8; // spanX = 46.0m
-      const minY = -3.4, maxY = 20.0; // spanY = 23.4m
+      const minX = -5.2, maxX = 40.0; // spanX = 45.2m
+      const minY = -3.35, maxY = 19.35; // spanY = 22.7m
       const spanX = maxX - minX;
       const spanY = maxY - minY;
 
-      const padX = 14;
-      const padY = 12;
+      const padX = 10;
+      const padY = 8;
       const availW = Math.max(80, w - padX * 2);
       const availH = Math.max(80, h - padY * 2);
       const scale = Math.min(availW / spanX, availH / spanY);
@@ -10695,7 +10723,7 @@
       const isReportOpen = !document.getElementById('report-page')?.classList.contains('hidden');
       if (isReportOpen) {
         currentExportMode = 'report';
-        currentExportRatio = 'fit';
+        currentExportRatio = '3:4';
       } else {
         currentExportMode = '3d';
         currentExportRatio = '16:9';
@@ -10719,7 +10747,7 @@
     // Switch Export Mode Tabs
     document.getElementById('exp-tab-report')?.addEventListener('click', () => {
       currentExportMode = 'report';
-      currentExportRatio = 'fit';
+      currentExportRatio = '3:4';
       updateExportTabAndRatioUI();
       updateExportPreview();
     });

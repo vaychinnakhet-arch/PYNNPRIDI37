@@ -1560,22 +1560,21 @@
     // =========================================================================
     const effectivePilesCount = Math.max(0, todayCount);
     const extraTiersCount = Math.max(0, Math.ceil(Math.max(0, totalDays - 31) / 16));
-    let planContainerH = 175;
-    let chartContainerH = 165;
+    let planContainerH = 300;
+    let chartContainerH = 152;
 
     if (effectivePilesCount >= 3) {
       const extra = effectivePilesCount - 2;
-      planContainerH = Math.max(115, 155 - (extra * 10));
-      chartContainerH = Math.max(108, 145 - (extra * 10));
+      planContainerH = Math.max(245, 290 - (extra * 7));
+      chartContainerH = Math.max(128, 148 - (extra * 4));
     } else if (effectivePilesCount === 2) {
-      planContainerH = 168;
-      chartContainerH = 158;
+      planContainerH = 292;
+      chartContainerH = 150;
     }
 
     if (extraTiersCount > 0) {
-      // Reserve vertical budget for แถวที่ 3+ (~78px per tier) so A4 page 2 never overflows 297mm
-      planContainerH = Math.max(106, planContainerH - (extraTiersCount * 36));
-      chartContainerH = Math.max(98, chartContainerH - (extraTiersCount * 36));
+      planContainerH = Math.max(235, planContainerH - (extraTiersCount * 16));
+      chartContainerH = Math.max(124, chartContainerH - (extraTiersCount * 10));
     }
 
     const planCanvasH = planContainerH * 2;
@@ -1685,15 +1684,15 @@
         : 'px-1.5 py-0.2 bg-[#1d2b45] text-[#f7b844] rounded-none text-[8px] font-black';
 
       return `
-        <div class="border-2 border-[#1d2b45] bg-white overflow-hidden rounded-none shadow-[2px_2px_0px_#1d2b45]">
-          <div class="px-2 py-0.5 ${headBg} border-b-2 border-[#1d2b45] flex items-center justify-between text-[9px] font-bold">
+        <div class="border-1.5 border-[#1d2b45] bg-white overflow-hidden rounded-none shadow-[1.5px_1.5px_0px_#1d2b45]">
+          <div class="px-2 py-[1.5px] ${headBg} border-b-1.5 border-[#1d2b45] flex items-center justify-between text-[8.5px] font-bold leading-tight">
             <div class="flex items-center gap-1.5">
               <span class="${badgeCls}">${tierNum}</span>
               <span class="text-[#1d2b45] font-black">${tierTitle}</span>
             </div>
-            <span class="text-[8.5px] text-[#3e4b69] font-mono font-bold">${targetNote}</span>
+            <span class="text-[8px] text-[#3e4b69] font-mono font-bold">${targetNote}</span>
           </div>
-          <table class="piling-daily-table w-full text-center border-collapse text-[8px] sm:text-[8.5px] leading-tight table-fixed">
+          <table class="piling-daily-table w-full text-center border-collapse text-[8px] sm:text-[8.5px] leading-none table-fixed">
             <thead>
               <tr class="bg-white border-b border-slate-700">
                 <th class="${cellPadCls} border border-slate-700 font-black text-left text-[#1d2b45] whitespace-nowrap pl-1 text-[8px]" style="width: 58px;">วันที่</th>
@@ -1821,19 +1820,19 @@
         }
 
         pilesLogRows += `
-          <tr class="text-[8.5px] sm:text-[9px]" style="height: 18px;">
-            <td class="border border-slate-700 p-0.5 text-center font-mono">${idx + 1}</td>
-            <td class="border border-slate-700 p-0.5 font-bold text-center text-slate-900">${pileId}</td>
-            <td class="border border-slate-700 p-0.5 text-center">${p.footing || '-'}</td>
-            <td class="border border-slate-700 p-0.5 text-center font-mono">${p.grid || '-'}</td>
-            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px]">${targetCoStr}</td>
-            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px] font-bold text-emerald-800">${actualCoStr}</td>
-            <td class="border border-slate-700 p-0.5 text-center font-mono text-[8px] sm:text-[8.5px]">${diffCoStr}</td>
-            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px]">${pco}</td>
-            <td class="border border-slate-700 p-0.5 text-right font-mono text-[8px] sm:text-[8.5px] font-bold">${actualTop}</td>
-            <td class="border border-slate-700 p-0.5 text-center font-mono text-[8px] sm:text-[8.5px]">${diffTop}</td>
-            <td class="border border-slate-700 p-0.5 text-center text-[8px] sm:text-[8.5px]">${p.type || 'I-0.40m'}</td>
-            <td class="border border-slate-700 p-0.5 text-center font-mono text-[8px] sm:text-[8.5px]">${r.date || curDate}</td>
+          <tr class="text-[8px] leading-tight" style="height: 16px;">
+            <td class="border border-slate-700 px-1 py-[1px] text-center font-mono whitespace-nowrap">${idx + 1}</td>
+            <td class="border border-slate-700 px-1 py-[1px] font-bold text-center text-slate-900 whitespace-nowrap">${pileId}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-center whitespace-nowrap">${p.footing || '-'}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-center font-mono whitespace-nowrap">${p.grid || '-'}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-right font-mono text-[7.5px] whitespace-nowrap">${targetCoStr}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-right font-mono text-[7.5px] font-bold text-emerald-800 whitespace-nowrap">${actualCoStr}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-center font-mono text-[7.5px] whitespace-nowrap">${diffCoStr}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-right font-mono text-[8px] whitespace-nowrap">${pco}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-right font-mono text-[8px] font-bold whitespace-nowrap">${actualTop}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-center font-mono text-[8px] whitespace-nowrap">${diffTop}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-center text-[8px] whitespace-nowrap">${p.type || 'I-0.40m'}</td>
+            <td class="border border-slate-700 px-1 py-[1px] text-center font-mono text-[8px] whitespace-nowrap">${r.date || curDate}</td>
           </tr>
         `;
       });
@@ -1841,41 +1840,41 @@
 
     container.innerHTML = `
       <!-- Header: Clean Rectangular Frame (Monochrome) -->
-      <div class="border-2 border-black p-1.5 mb-1 bg-white">
+      <div class="border-2 border-black px-2 py-1 mb-1 bg-white">
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-[10px] font-bold text-slate-800">โครงการ PYNN PRIDI 37 (ซอยปรีดี พนมยงค์ 37)</div>
-            <h2 class="text-xs sm:text-sm font-black text-black">รายงานความคืบหน้างานเสาเข็ม (Piling Progress Report)</h2>
+            <div class="text-[9.5px] font-bold text-slate-800 leading-tight">โครงการ PYNN PRIDI 37 (ซอยปรีดี พนมยงค์ 37)</div>
+            <h2 class="text-xs sm:text-[13px] font-black text-black leading-tight">รายงานความคืบหน้างานเสาเข็ม (Piling Progress Report)</h2>
           </div>
-          <div class="text-right">
-            <div class="text-[11px] font-bold text-slate-800">วันที่รายงาน : <span class="font-mono font-black">${curDate}</span></div>
-            <div class="text-[9.5px] text-slate-600 font-mono">เสาเข็ม I-40 รวม 93 ต้น</div>
+          <div class="text-right leading-tight">
+            <div class="text-[10.5px] font-bold text-slate-800">วันที่รายงาน : <span class="font-mono font-black">${curDate}</span></div>
+            <div class="text-[9px] text-slate-600 font-mono">เสาเข็ม I-40 รวม 93 ต้น</div>
           </div>
         </div>
       </div>
 
       <!-- KPI Summary Table: Simple Rectangular B&W Grid -->
-      <table class="w-full border-collapse border border-black text-[10px] text-center font-bold mb-1 bg-white">
+      <table class="w-full border-collapse border border-black text-[9.5px] text-center font-bold mb-1 bg-white">
         <thead>
           <tr class="bg-slate-100">
-            <th class="border border-black p-0.5 w-1/4">แผนวันนี้ / กดแล้ว</th>
-            <th class="border border-black p-0.5 w-1/4">แผนสะสม (${elapsedDays}/31 วัน${elapsedDays > 31 ? ` · เลยแผน +${elapsedDays - 31} วัน` : ''})</th>
-            <th class="border border-black p-0.5 w-1/4">กดจริงสะสม</th>
-            <th class="border border-black p-0.5 w-1/4">สถานะเทียบแผนงาน</th>
+            <th class="border border-black py-0.5 px-1 w-1/4">แผนวันนี้ / กดแล้ว</th>
+            <th class="border border-black py-0.5 px-1 w-1/4">แผนสะสม (${elapsedDays}/31 วัน${elapsedDays > 31 ? ` · เลยแผน +${elapsedDays - 31} วัน` : ''})</th>
+            <th class="border border-black py-0.5 px-1 w-1/4">กดจริงสะสม</th>
+            <th class="border border-black py-0.5 px-1 w-1/4">สถานะเทียบแผนงาน</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td class="border border-black p-1 font-mono text-[11px]">
+            <td class="border border-black py-0.5 px-1 font-mono text-[10.5px]">
               แผน 3 ต้น | <span class="font-black text-black">กดแล้ว ${todayCount} ต้น</span>
             </td>
-            <td class="border border-black p-1 font-mono text-[11px]">
+            <td class="border border-black py-0.5 px-1 font-mono text-[10.5px]">
               <span class="font-black text-black">${planCumCount}</span> ต้น
             </td>
-            <td class="border border-black p-1 font-mono text-[11px]">
+            <td class="border border-black py-0.5 px-1 font-mono text-[10.5px]">
               <span class="font-black text-black">${drivenCount}/93</span> (${pct}%)
             </td>
-            <td class="border border-black p-1 font-mono text-[11px] font-black">
+            <td class="border border-black py-0.5 px-1 font-mono text-[10.5px] font-black">
               ${varianceText}
             </td>
           </tr>
@@ -1884,9 +1883,9 @@
 
       <!-- Piling Progress Plan Snapshot (Dynamic Height Auto-Fit) -->
       <div class="border border-black mb-1 bg-white">
-        <div class="bg-slate-100 border-b border-black px-2 py-0.5 flex items-center justify-between text-[10px] font-black">
+        <div class="bg-slate-100 border-b border-black px-2 py-0.5 flex items-center justify-between text-[9.5px] font-black">
           <span>แผนผังความคืบหน้างานเสาเข็ม (Piling Progress Plan)</span>
-          <div class="flex items-center gap-3 text-[9.5px]">
+          <div class="flex items-center gap-3 text-[9px]">
             <span class="inline-flex items-center gap-1 font-bold text-sky-700">
               <svg class="w-2.5 h-2.5 inline-block shrink-0" viewBox="0 0 12 12" width="10" height="10">
                 <circle cx="6" cy="6" r="5" fill="#0284c7" stroke="#0369a1" stroke-width="1.2" />
@@ -1907,16 +1906,16 @@
             </span>
           </div>
         </div>
-        <div class="p-0.5 flex items-center justify-center bg-white" style="height: ${planContainerH}px;">
-          <canvas id="drPlanCanvas" class="w-full h-full block object-contain" width="1200" height="${planCanvasH}"></canvas>
+        <div class="p-0.5 flex items-center justify-center bg-white overflow-hidden" style="height: ${planContainerH}px;">
+          <canvas id="drPlanCanvas" class="w-full h-full block" width="1440" height="${planCanvasH}"></canvas>
         </div>
       </div>
 
       <!-- S-Curve Progress Graph (Dynamic Height Auto-Fit) -->
       <div class="border border-slate-700 rounded-sm overflow-hidden mb-1 bg-white shadow-xs">
-        <div class="bg-slate-100 border-b border-slate-700 px-2 py-0.5 flex items-center justify-between text-[10px] font-black">
+        <div class="bg-slate-100 border-b border-slate-700 px-2 py-0.5 flex items-center justify-between text-[9.5px] font-black">
           <span class="text-slate-900">กราฟความคืบหน้าสะสมงานเสาเข็ม (Accumulated Progress S-Curve: Plan vs Actual)</span>
-          <span class="text-[9px] text-slate-600 font-normal">เกณฑ์แผนงาน 3 ต้น/วันทำการ (รวม 93 ต้น)</span>
+          <span class="text-[8.5px] text-slate-600 font-normal">เกณฑ์แผนงาน 3 ต้น/วันทำการ (รวม 93 ต้น)</span>
         </div>
         <div class="p-0.5 flex items-center justify-center bg-white" style="height: ${chartContainerH}px;">
           <canvas id="drProgressChartCanvas" class="w-full h-full block" width="1160" height="${chartCanvasH}"></canvas>
@@ -1924,43 +1923,43 @@
       </div>
 
       <!-- DYNAMIC COMPARISON TABLE: Plan 3 ต้น/วันทำการ vs Actual (ขยายแถวอัตโนมัติจนครบ 93 ต้น) -->
-      <div class="border-2 border-slate-900 rounded-none overflow-hidden mb-1.5 bg-white shadow-[3px_3px_0px_#0f172a]">
-        <div class="bg-white px-2 py-0.5 border-b-2 border-slate-900 flex items-center justify-between">
+      <div class="border-2 border-slate-900 rounded-none overflow-hidden mb-1 bg-white shadow-[2px_2px_0px_#0f172a]">
+        <div class="bg-white px-2 py-[2px] border-b-2 border-slate-900 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
-            <span class="w-4 h-4 rounded-none bg-[#ea580c] text-white flex items-center justify-center text-[8px] font-black shadow-[1px_1px_0px_#0f172a]">
+            <span class="w-3.5 h-3.5 rounded-none bg-[#ea580c] text-white flex items-center justify-center text-[8px] font-black shadow-[1px_1px_0px_#0f172a]">
               <i data-lucide="table" class="w-2.5 h-2.5"></i>
             </span>
-            <h3 class="text-[10px] font-black text-slate-900">ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วันทำการ vs Actual)</h3>
+            <h3 class="text-[9.5px] font-black text-slate-900">ตารางเปรียบเทียบแผนงานรายวันและสะสม (Plan 3 ต้น/วันทำการ vs Actual)</h3>
           </div>
-          <span class="text-[9px] font-mono text-slate-500">${ledgerSubnoteText}</span>
+          <span class="text-[8.5px] font-mono text-slate-500">${ledgerSubnoteText}</span>
         </div>
-        <div class="p-1 ${isExtended ? 'space-y-1' : 'space-y-1.5'}">
+        <div class="p-0.5 ${isExtended ? 'space-y-0.5' : 'space-y-1'}">
           ${allTiersHtml}
         </div>
       </div>
 
       <!-- Today's Pressed Piles Log Table -->
-      <div class="border-2 border-slate-900 rounded-none overflow-hidden bg-white shadow-[3px_3px_0px_#0f172a]">
-        <div class="bg-slate-100 border-b-2 border-slate-900 px-2 py-0.5 text-[10px] font-bold flex justify-between items-center">
+      <div class="border-2 border-slate-900 rounded-none overflow-hidden bg-white shadow-[2px_2px_0px_#0f172a]">
+        <div class="bg-slate-100 border-b-2 border-slate-900 px-2 py-[2px] text-[9.5px] font-bold flex justify-between items-center">
           <span class="text-slate-900 font-black">รายการเสาเข็มที่กดในวันที่รายงาน (Daily Pressed Piles Log)</span>
-          <span class="font-mono font-black text-slate-900 bg-white px-2 py-0.5 border border-slate-900 shadow-[1px_1px_0px_#0f172a]">${todayCount} ต้น</span>
+          <span class="font-mono font-black text-slate-900 bg-white px-2 py-[1px] border border-slate-900 shadow-[1px_1px_0px_#0f172a]">${todayCount} ต้น</span>
         </div>
         <div class="overflow-x-auto">
           <table class="dr-piling-table w-full text-center border-collapse">
             <thead>
-              <tr class="bg-slate-50 text-[9px]">
-                <th class="w-6 py-0.5">No.</th>
-                <th class="py-0.5">รหัสเข็ม (ID)</th>
-                <th class="py-0.5">ฐานราก</th>
-                <th class="py-0.5">ตำแหน่งกริด</th>
-                <th class="py-0.5">Co (N, E) แบบ (m)</th>
-                <th class="py-0.5">Co (n,e) หลังกด (m)</th>
-                <th class="py-0.5">ผลต่าง (Δn, Δe)</th>
-                <th class="py-0.5">ระดับ PCO (แบบ)</th>
-                <th class="py-0.5">ระดับ TOP จริง (m)</th>
-                <th class="py-0.5">ผลต่าง (ม.)</th>
-                <th class="py-0.5">ชนิดเข็ม</th>
-                <th class="py-0.5">วันที่กด</th>
+              <tr class="bg-slate-50 text-[8px] whitespace-nowrap">
+                <th class="w-5 py-0.5 px-1">No.</th>
+                <th class="py-0.5 px-1">รหัสเข็ม</th>
+                <th class="py-0.5 px-1">ฐานราก</th>
+                <th class="py-0.5 px-1">กริด</th>
+                <th class="py-0.5 px-1">Co (N, E) แบบ (m)</th>
+                <th class="py-0.5 px-1">Co (n, e) หลังกด (m)</th>
+                <th class="py-0.5 px-1">ผลต่าง (Δn, Δe)</th>
+                <th class="py-0.5 px-1">ระดับ PCO</th>
+                <th class="py-0.5 px-1">ระดับ TOP จริง</th>
+                <th class="py-0.5 px-1">ผลต่าง (ม.)</th>
+                <th class="py-0.5 px-1">ชนิดเข็ม</th>
+                <th class="py-0.5 px-1">วันที่กด</th>
               </tr>
             </thead>
             <tbody>
@@ -2251,9 +2250,16 @@
   function renderDailyPilingPlanMonochrome() {
     const canvas = document.getElementById('drPlanCanvas');
     if (!canvas) return;
+    const parent = canvas.parentElement;
+    const targetW = (parent && parent.clientWidth > 100) ? Math.round(parent.clientWidth * 2) : (canvas.width || 1440);
+    const targetH = (parent && parent.clientHeight > 60) ? Math.round(parent.clientHeight * 2) : (canvas.height || 474);
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
     const ctx = canvas.getContext('2d');
-    const w = canvas.width || 1200;
-    const h = canvas.height || 420;
+    const w = canvas.width;
+    const h = canvas.height;
 
     // Crisp white background
     ctx.fillStyle = '#ffffff';
@@ -2270,10 +2276,10 @@
         window.renderer.setSize(w, h, false);
         window.renderer.setPixelRatio(1);
 
-        const centerX = 16.85;
-        const centerY = 8.30;
-        const spanX = 46.5;
-        const spanY = 23.8;
+        const centerX = 16.90;
+        const centerY = 8.05;
+        const spanX = 45.2;
+        const spanY = 22.8;
         const canvasAspect = w / h;
         let camW, camH;
         if (canvasAspect > spanX / spanY) {
@@ -2309,13 +2315,13 @@
     }
 
     // 2. High-Precision 2D CAD Blueprint Vector Render (Image 2)
-    const minX = -6.2, maxX = 39.8;
-    const minY = -3.4, maxY = 20.0;
+    const minX = -5.2, maxX = 40.0;
+    const minY = -3.35, maxY = 19.35;
     const spanX = maxX - minX;
     const spanY = maxY - minY;
 
-    const padX = 14;
-    const padY = 12;
+    const padX = 12;
+    const padY = 8;
     const availW = Math.max(80, w - padX * 2);
     const availH = Math.max(80, h - padY * 2);
     const scale = Math.min(availW / spanX, availH / spanY);
@@ -3235,9 +3241,9 @@
       }
       .daily-a4-sheet {
         width: 210mm;
-        height: 288mm;
-        min-height: 288mm;
-        max-height: 290mm;
+        height: 297mm;
+        min-height: 297mm;
+        max-height: 297mm;
         max-width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -3246,7 +3252,7 @@
         box-shadow: 4px 4px 0px #0f172a;
         border: 2px solid #0f172a;
         border-radius: 0px !important;
-        padding: 7mm 8mm 6mm 8mm;
+        padding: 6mm 7.5mm 5.5mm 7.5mm;
         box-sizing: border-box;
         position: relative;
         font-family: 'Sarabun', 'Prompt', sans-serif;
@@ -3307,12 +3313,15 @@
       .dr-piling-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 9.5px;
-        line-height: 1.25;
+        font-size: 8.5px;
+        line-height: 1.2;
       }
       .dr-piling-table th, .dr-piling-table td {
         border: 1px solid #000000;
-        padding: 2.5px 3.5px;
+        padding: 1.5px 2.5px !important;
+        white-space: nowrap !important;
+        font-size: 8.5px !important;
+        line-height: 1.2 !important;
       }
       .dr-piling-table th {
         background-color: #f1f5f9;
@@ -3343,6 +3352,16 @@
         color: #1e293b;
         font-weight: 800;
         font-size: 10px;
+      }
+      #dr-sheet-2 .piling-daily-table th,
+      #dr-sheet-2 .piling-daily-table td {
+        padding: 1.5px 2px !important;
+        font-size: 8.5px !important;
+        line-height: 1.15 !important;
+      }
+      #dr-sheet-2 .piling-daily-table thead th {
+        padding: 2px 2px !important;
+        font-size: 8.5px !important;
       }
       .piling-daily-table th.sticky-col,
       .piling-daily-table td.sticky-col {
