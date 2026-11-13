@@ -1733,7 +1733,7 @@
       const nextTierEnd = Math.min(totalDays, nextTierStart + 16);
       const remPiles = Math.max(0, 93 - drivenCount);
       const rightNote = remPiles > 0
-        ? `เก็บงานต่อเนื่องจนครบ 93 ต้น (สะสม ${drivenCount}/93 · เหลือ ${remPiles} ต้น)`
+        ? `จนครบ 93 ต้น (สะสม ${drivenCount}/93 · เหลือ ${remPiles} ต้น)`
         : `กดครบ 93 ต้นแล้ว (สะสม 93/93 ต้น)`;
       tierDefinitions.push({
         start: nextTierStart,
