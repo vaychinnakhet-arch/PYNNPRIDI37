@@ -3063,13 +3063,16 @@
     const filename = getDailyReportPdfFilename();
 
     try {
-      // Small timeout to allow layout reflow under .is-exporting-pdf
-      await new Promise(r => setTimeout(r, 200));
+      // Wait for fonts & allow layout reflow under .is-exporting-pdf
+      if (document.fonts && document.fonts.ready) {
+        try { await document.fonts.ready; } catch (_) {}
+      }
+      await new Promise(r => setTimeout(r, 220));
 
       const sheets = Array.from(document.querySelectorAll('.daily-a4-sheet'));
       const jsPdfClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
 
-      if (sheets.length > 0 && typeof jsPdfClass === 'function' && typeof window.html2canvas === 'function') {
+      if (sheets.length > 0 && typeof jsPdfClass === 'function' && (typeof window.htmlToImage?.toCanvas === 'function' || typeof window.html2canvas === 'function')) {
         const pdf = new jsPdfClass({
           orientation: 'portrait',
           unit: 'mm',
@@ -3084,16 +3087,96 @@
             pdf.addPage('a4', 'portrait');
           }
 
-          const canvas = await window.html2canvas(sheet, {
-            scale: 2,
-            useCORS: true,
-            backgroundColor: '#ffffff',
-            scrollY: 0,
-            scrollX: 0,
-            logging: false
+          // Sync checkbox/radio attributes & temporarily mirror text inputs as spans so native browser SVG foreignObject renders crisp, unclipped text
+          const swappedInputs = [];
+          sheet.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(cb => {
+            if (cb.checked) cb.setAttribute('checked', 'checked');
+            else cb.removeAttribute('checked');
+          });
+          sheet.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea').forEach(inp => {
+            const cs = window.getComputedStyle(inp);
+            const rect = inp.getBoundingClientRect();
+            const mirror = document.createElement(inp.tagName === 'TEXTAREA' ? 'div' : 'span');
+            mirror.className = inp.className;
+            mirror.style.cssText = inp.style.cssText;
+            mirror.style.display = inp.tagName === 'TEXTAREA' ? 'block' : 'inline-flex';
+            mirror.style.alignItems = 'center';
+            mirror.style.justifyContent = cs.textAlign === 'center' ? 'center' : (cs.textAlign === 'right' ? 'flex-end' : 'flex-start');
+            mirror.style.textAlign = cs.textAlign;
+            mirror.style.fontFamily = cs.fontFamily;
+            mirror.style.fontSize = cs.fontSize;
+            mirror.style.fontWeight = cs.fontWeight;
+            mirror.style.color = cs.color;
+            mirror.style.lineHeight = '1.3';
+            mirror.style.whiteSpace = inp.tagName === 'TEXTAREA' ? 'pre-wrap' : 'nowrap';
+            mirror.style.overflow = 'visible';
+            if (rect.width > 0) mirror.style.width = `${rect.width}px`;
+            if (rect.height > 0) mirror.style.minHeight = `${rect.height}px`;
+            mirror.style.height = 'auto';
+            mirror.style.padding = cs.padding || '0 3px';
+            mirror.style.boxSizing = 'border-box';
+            mirror.textContent = inp.value || '';
+            if (inp.parentNode) {
+              inp.parentNode.insertBefore(mirror, inp);
+              inp.style.display = 'none';
+              swappedInputs.push({ inp, mirror });
+            }
           });
 
-          const imgData = canvas.toDataURL('image/jpeg', 0.96);
+          let canvas = null;
+          try {
+            const w = Math.round(sheet.offsetWidth || 794);
+            const h = Math.round(sheet.offsetHeight || 1123);
+
+            // Priority 1: htmlToImage.toCanvas with embedded Sarabun/Prompt fonts (100% native browser text rendering, matches window.print())
+            if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
+              const h2iFilter = (node) => !(node && node.classList && node.classList.contains('daily-no-print'));
+              try {
+                canvas = await window.htmlToImage.toCanvas(sheet, {
+                  backgroundColor: '#ffffff',
+                  pixelRatio: 2.5,
+                  width: w,
+                  height: h,
+                  filter: h2iFilter
+                });
+              } catch (fontErr) {
+                console.warn('Daily Report htmlToImage with fonts failed, retrying with skipFonts:', fontErr);
+                try {
+                  canvas = await window.htmlToImage.toCanvas(sheet, {
+                    backgroundColor: '#ffffff',
+                    pixelRatio: 2.5,
+                    width: w,
+                    height: h,
+                    skipFonts: true,
+                    filter: h2iFilter
+                  });
+                } catch (h2iErr) {
+                  console.warn('Daily Report htmlToImage failed, falling back to html2canvas:', h2iErr);
+                }
+              }
+            }
+
+            // Priority 2: Fallback to html2canvas
+            if (!canvas && typeof window.html2canvas === 'function') {
+              canvas = await window.html2canvas(sheet, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                scrollY: 0,
+                scrollX: 0,
+                logging: false
+              });
+            }
+          } finally {
+            swappedInputs.forEach(({ inp, mirror }) => {
+              inp.style.display = '';
+              if (mirror && mirror.parentNode) mirror.parentNode.removeChild(mirror);
+            });
+          }
+
+          if (!canvas) throw new Error('Unable to render sheet canvas for PDF');
+
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
           pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
         }
 
