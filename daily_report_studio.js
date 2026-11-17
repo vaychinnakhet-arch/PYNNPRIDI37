@@ -314,9 +314,28 @@
     duration: '8 ชั่วโมง',
     attachmentPages: 3,
     activeTab: 'all',
+    conzolMode: 'table',
     conzolImageUrl: '',
     conzolTitle: 'UPDATE รายการเอกสารอนุมัติ Conzol ประจำวัน',
     conzolRotate90: false,
+    conzolTable: {
+      columns: ['ลำดับ', 'ID', 'รายการ', 'STATUS', 'หมายเหตุ'],
+      rows: [
+        { isGroup: true, label: 'Material' },
+        { isGroup: false, cells: ['1', 'PYNN37-SSRC-SSR-MAT-STR-012:00', 'ขออนุมัติใช้น้ำยาประสานคอนกรีต', 'AP', ''] },
+        { isGroup: false, cells: ['2', 'PYNN37-SSRC-SSR-MAT-STR-013:00', 'ขออนุมัติใช้ปูน Non-Shrink เกร้าท์', 'AP', ''] },
+        { isGroup: false, cells: ['3', 'PYNN37-SSRC-SSR-MAT-STR-002:00', 'ขออนุมัติใช้คอนกรีตสำเร็จรูป', 'AP', ''] },
+        { isGroup: false, cells: ['4', 'PYNN37-SSRC-SSR-MAT-STR-003:00', 'ขออนุมัติใช้เสาเข็ม', 'AP', ''] },
+        { isGroup: false, cells: ['5', 'PYNN37-SSRC-SSR-MAT-STR-004:00', 'ขออนุมัติใช้เหล็กเส้นเสริมคอนกรีต', 'AP', ''] },
+        { isGroup: false, cells: ['6', 'PYNN37-SSRC-SSR-MAT-STR-007:00', 'ขออนุมัติใช้ตะแกรงกัน Joint', 'AP', ''] },
+        { isGroup: false, cells: ['7', 'PYNN37-SSRC-SSR-MAT-STR-005:00', 'ขออนุมัติใช้ Waterstop', 'AP', ''] },
+        { isGroup: true, label: 'Shop Drawing' },
+        { isGroup: false, cells: ['8', 'PYNN37-SSRC-SSR-SHOP-STR-002:00', 'แปลนค่าพิกัดเข็ม', 'AP', ''] },
+        { isGroup: false, cells: ['9', 'PYNN37-SSRC-SSR-SHOP-STR-011:00', 'แบบขยายเสาชั้น 1-8', 'AP', ''] },
+        { isGroup: false, cells: ['10', 'PYNN37-SSRC-SSR-SHOP-STR-007:00', 'แปลนโครงสร้างพื้นถังเก็บน้ำชั้นใต้ดิน', 'APN', '***ในกรณีที่มีการขยายหรือปรับแนวผนังถังเก็บน้ำเพื่อเพิ่มปริมาตร ให้นำเสนอต่อผู้ออกแบบอีกครั้ง เพื่อพิจารณาแนวทางดำเนินการต่อไป'] },
+        { isGroup: false, cells: ['11', 'PYNN37-SSRC-SSR-SHOP-STR-008:00', 'รูปตัดถังเก็บน้ำใต้ดิน', 'APN', '***ในกรณีที่มีการขยายหรือปรับแนวผนังถังเก็บน้ำเพื่อเพิ่มปริมาตร ให้นำเสนอต่อผู้ออกแบบอีกครั้ง เพื่อพิจารณาแนวทางดำเนินการต่อไป'] }
+      ]
+    },
     tasksRemarks: [],
     
     // Manpower defaults matching exact user specification
@@ -449,7 +468,9 @@
       machinery: DailyReportState.manpower.machinery,
       obstacles: DailyReportState.obstacles,
       solutions: DailyReportState.solutions,
+      conzolMode: DailyReportState.conzolMode,
       conzolTitle: DailyReportState.conzolTitle,
+      conzolTable: DailyReportState.conzolTable,
       tasks: (DailyReportState.tasks || []).map(t => ({
         no: t.no,
         title: t.title,
@@ -571,8 +592,14 @@
     if (cfg.attachmentPages !== undefined) DailyReportState.attachmentPages = cfg.attachmentPages;
     if (cfg.obstacles !== undefined) DailyReportState.obstacles = cfg.obstacles;
     if (cfg.solutions !== undefined) DailyReportState.solutions = cfg.solutions;
+    if (cfg.conzolMode === 'table' || cfg.conzolMode === 'image') {
+      DailyReportState.conzolMode = cfg.conzolMode;
+    }
     if (cfg.conzolTitle !== undefined && String(cfg.conzolTitle).trim() !== '') {
       DailyReportState.conzolTitle = String(cfg.conzolTitle).trim();
+    }
+    if (cfg.conzolTable && Array.isArray(cfg.conzolTable.columns) && cfg.conzolTable.columns.length > 0 && Array.isArray(cfg.conzolTable.rows)) {
+      DailyReportState.conzolTable = cfg.conzolTable;
     }
 
     if (cfg.manpower) {
@@ -921,20 +948,47 @@
             <div id="dr-ctx-divider" class="hidden sm:block h-5 w-[1px] bg-slate-300"></div>
             <div id="dr-ctx-p4" class="flex items-center gap-1.5 flex-wrap">
               <span class="px-1.5 py-0.5 bg-slate-900 text-white text-[10px] font-black">หน้า 4</span>
-              <button type="button" id="btn-conzol-upload" onclick="triggerConzolPhotoUpload()" class="px-2.5 py-1 rounded-none border-2 border-slate-900 bg-[#e0f2fe] text-[#0369a1] font-black text-[11px] shadow-[1px_1px_0px_#0f172a] hover:bg-sky-100 cursor-pointer flex items-center gap-1">
-                <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                <span id="lbl-conzol-upload">เปลี่ยนภาพ Conzol</span>
-              </button>
-              <button type="button" id="btn-conzol-rotate" onclick="toggleConzolRotate90()" class="px-2.5 py-1 rounded-none border-2 border-slate-900 bg-white text-slate-800 font-black text-[11px] shadow-[1px_1px_0px_#0f172a] hover:bg-slate-100 cursor-pointer flex items-center gap-1" title="หมุนภาพ 90° เพื่อขยายเต็มแนวตั้ง A4">
-                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
-                <span id="lbl-conzol-rotate">หมุน 90° เต็มหน้า</span>
-              </button>
-              <button type="button" onclick="resetConzolDefaultPhoto()" class="px-2.5 py-1 rounded-none border border-slate-400 bg-white text-slate-700 font-bold text-[11px] hover:bg-slate-100 cursor-pointer">
-                ภาพตัวอย่างเดิม
-              </button>
-              <button type="button" id="btn-conzol-remove" onclick="removeConzolPhoto()" class="px-2.5 py-1 rounded-none border border-rose-400 bg-rose-50 text-rose-700 font-bold text-[11px] hover:bg-rose-100 cursor-pointer">
-                ล้างภาพ
-              </button>
+              <!-- Table Mode Controls -->
+              <div id="dr-ctx-p4-table-btns" class="flex items-center gap-1.5 flex-wrap">
+                <button type="button" onclick="addConzolRow(false)" class="px-2 py-1 rounded-none border-2 border-slate-900 bg-[#dcfce7] text-emerald-900 font-black text-[11px] shadow-[1px_1px_0px_#0f172a] hover:bg-emerald-200 cursor-pointer flex items-center gap-1">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  <span>เพิ่มแถว</span>
+                </button>
+                <button type="button" onclick="addConzolRow(true)" class="px-2 py-1 rounded-none border border-slate-400 bg-slate-100 text-slate-800 font-bold text-[11px] hover:bg-slate-200 cursor-pointer">
+                  + หมวดหมู่
+                </button>
+                <button type="button" onclick="addConzolColumn()" class="px-2 py-1 rounded-none border-2 border-slate-900 bg-[#e0f2fe] text-[#0369a1] font-black text-[11px] shadow-[1px_1px_0px_#0f172a] hover:bg-sky-100 cursor-pointer flex items-center gap-1">
+                  <i data-lucide="columns" class="w-3.5 h-3.5"></i>
+                  <span>+ เพิ่มคอลัมน์</span>
+                </button>
+                <button type="button" onclick="openConzolExcelPasteModal()" class="px-2 py-1 rounded-none border-2 border-slate-900 bg-[#fef3c7] text-amber-900 font-black text-[11px] shadow-[1px_1px_0px_#0f172a] hover:bg-amber-200 cursor-pointer flex items-center gap-1" title="วางตารางที่ Copy จาก Excel ได้ทันที">
+                  <i data-lucide="clipboard-paste" class="w-3.5 h-3.5"></i>
+                  <span>วางจาก Excel</span>
+                </button>
+                <button type="button" onclick="toggleConzolMode('image')" class="px-2 py-1 rounded-none border border-slate-400 bg-white text-slate-600 font-bold text-[11px] hover:bg-slate-100 cursor-pointer">
+                  สลับเป็นแนบรูปภาพ
+                </button>
+              </div>
+              <!-- Image Mode Controls -->
+              <div id="dr-ctx-p4-image-btns" class="hidden items-center gap-1.5 flex-wrap">
+                <button type="button" id="btn-conzol-upload" onclick="triggerConzolPhotoUpload()" class="px-2.5 py-1 rounded-none border-2 border-slate-900 bg-[#e0f2fe] text-[#0369a1] font-black text-[11px] shadow-[1px_1px_0px_#0f172a] hover:bg-sky-100 cursor-pointer flex items-center gap-1">
+                  <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                  <span id="lbl-conzol-upload">เพิ่มภาพ Conzol</span>
+                </button>
+                <button type="button" id="btn-conzol-rotate" onclick="toggleConzolRotate90()" class="px-2.5 py-1 rounded-none border-2 border-slate-900 bg-white text-slate-800 font-black text-[11px] shadow-[1px_1px_0px_#0f172a] hover:bg-slate-100 cursor-pointer flex items-center gap-1" title="หมุนภาพ 90° เพื่อขยายเต็มแนวตั้ง A4">
+                  <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+                  <span id="lbl-conzol-rotate">หมุน 90° เต็มหน้า</span>
+                </button>
+                <button type="button" onclick="resetConzolDefaultPhoto()" class="px-2.5 py-1 rounded-none border border-slate-400 bg-white text-slate-700 font-bold text-[11px] hover:bg-slate-100 cursor-pointer">
+                  ภาพตัวอย่างเดิม
+                </button>
+                <button type="button" id="btn-conzol-remove" onclick="removeConzolPhoto()" class="px-2.5 py-1 rounded-none border border-rose-400 bg-rose-50 text-rose-700 font-bold text-[11px] hover:bg-rose-100 cursor-pointer">
+                  ล้างภาพ
+                </button>
+                <button type="button" onclick="toggleConzolMode('table')" class="px-2 py-1 rounded-none border border-slate-400 bg-white text-slate-700 font-bold text-[11px] hover:bg-slate-100 cursor-pointer">
+                  สลับเป็นตาราง
+                </button>
+              </div>
             </div>
           </div>
         </header>
@@ -2859,28 +2913,161 @@
   // =========================================================================
   // PAGE 4 BUILDER: UPDATE รายการเอกสารอนุมัติ Conzol ประจำวัน (Single Full-Page)
   // =========================================================================
+  function getConzolTableData() {
+    if (!DailyReportState.conzolTable || !Array.isArray(DailyReportState.conzolTable.columns) || DailyReportState.conzolTable.columns.length === 0) {
+      DailyReportState.conzolTable = {
+        columns: ['ลำดับ', 'ID', 'รายการ', 'STATUS', 'หมายเหตุ'],
+        rows: []
+      };
+    }
+    if (!Array.isArray(DailyReportState.conzolTable.rows)) {
+      DailyReportState.conzolTable.rows = [];
+    }
+    return DailyReportState.conzolTable;
+  }
+
+  function renderConzolTableHtml() {
+    const tbl = getConzolTableData();
+    const cols = tbl.columns;
+    const rows = tbl.rows;
+    const colCount = cols.length;
+    const dataItemCount = rows.filter(r => r && !r.isGroup).length;
+
+    const thCells = cols.map((colName, cIdx) => {
+      const nameStr = String(colName || '');
+      const isNarrow = cIdx === 0 || /ลำดับ|no\.?|status|สถานะ/i.test(nameStr);
+      const widthStyle = cIdx === 0 ? 'width: 62px;' : (/status|สถานะ/i.test(nameStr) ? 'width: 72px;' : (isNarrow ? 'width: 80px;' : ''));
+      return `
+        <th class="border border-slate-500 bg-[#1f4e78] text-white font-bold text-[11px] px-1.5 py-1.5 text-center align-middle relative group" style="${widthStyle}">
+          <div class="daily-print-only text-center leading-tight">${escapeHtml(nameStr)}</div>
+          <div class="daily-no-print flex items-center justify-center gap-0.5">
+            <input type="text" value="${escapeHtml(nameStr)}" onchange="updateConzolColumnName(${cIdx}, this.value)" class="w-full bg-transparent text-white text-center font-bold text-[11px] outline-none border-b border-transparent focus:border-amber-300 px-0.5" title="คลิกแก้ชื่อคอลัมน์">
+            ${colCount > 1 ? `<button type="button" onclick="removeConzolColumn(${cIdx})" class="text-rose-200 hover:text-rose-400 font-black text-[11px] leading-none px-0.5 cursor-pointer shrink-0" title="ลบคอลัมน์นี้">×</button>` : ''}
+          </div>
+        </th>
+      `;
+    }).join('');
+
+    const bodyRowsHtml = rows.map((row, rIdx) => {
+      if (row && row.isGroup) {
+        const label = String(row.label || '');
+        return `
+          <tr class="bg-[#d9d9d9]">
+            <td colspan="${colCount}" class="border border-slate-400 px-2 py-1 text-left font-bold text-[11px] text-slate-900">
+              <div class="daily-print-only">${escapeHtml(label)}</div>
+              <div class="daily-no-print flex items-center justify-between gap-2">
+                <input type="text" value="${escapeHtml(label)}" onchange="updateConzolGroupLabel(${rIdx}, this.value)" class="flex-1 bg-transparent font-bold text-[11px] text-slate-900 outline-none border-b border-transparent focus:border-slate-700" placeholder="ชื่อหมวดหมู่...">
+                <button type="button" onclick="removeConzolRow(${rIdx})" class="text-rose-600 hover:text-rose-800 font-black text-xs px-1 cursor-pointer" title="ลบหมวดหมู่นี้">×</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
+      const cells = Array.isArray(row && row.cells) ? row.cells : [];
+      const tds = cols.map((colName, cIdx) => {
+        const val = cells[cIdx] !== undefined ? String(cells[cIdx]) : '';
+        const colHeader = String(colName || '');
+        const isStatusCol = /status|สถานะ/i.test(colHeader);
+        const isCenterCol = cIdx === 0 || isStatusCol;
+        const upperVal = val.trim().toUpperCase();
+
+        let cellBg = 'bg-white';
+        let textStyle = 'text-slate-800';
+        if (isStatusCol) {
+          if (upperVal === 'AP' || upperVal === 'APN' || upperVal === 'APPROVED' || upperVal.includes('อนุมัติ')) {
+            cellBg = 'bg-[#e2efda]';
+            textStyle = 'text-[#375623] font-bold';
+          } else if (upperVal === 'R' || upperVal === 'REJECT' || upperVal.includes('แก้')) {
+            cellBg = 'bg-rose-50';
+            textStyle = 'text-rose-700 font-bold';
+          } else {
+            cellBg = 'bg-[#e2efda]/60';
+            textStyle = 'text-[#375623] font-bold';
+          }
+        }
+
+        return `
+          <td class="border border-slate-300 ${cellBg} ${textStyle} px-1.5 py-1 text-[10.5px] align-middle ${isCenterCol ? 'text-center' : 'text-left'}">
+            <div class="daily-print-only whitespace-pre-wrap leading-snug">${escapeHtml(val)}</div>
+            <textarea rows="1" onchange="updateConzolCell(${rIdx}, ${cIdx}, this.value)" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';" class="daily-no-print w-full bg-transparent ${textStyle} ${isCenterCol ? 'text-center' : 'text-left'} text-[10.5px] leading-snug outline-none resize-none overflow-hidden border-b border-transparent focus:border-slate-500 py-0">${escapeHtml(val)}</textarea>
+          </td>
+        `;
+      }).join('');
+
+      return `
+        <tr class="hover:bg-slate-50/70">
+          ${tds}
+          <td class="daily-no-print border border-slate-200 bg-slate-50 px-1 text-center align-middle" style="width: 24px;">
+            <button type="button" onclick="removeConzolRow(${rIdx})" class="text-rose-500 hover:text-rose-700 font-black text-xs leading-none cursor-pointer" title="ลบแถวนี้">×</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const summaryColspanLeft = Math.max(1, colCount - 2);
+    const summaryRowHtml = colCount >= 3
+      ? `
+        <tr class="bg-slate-50 border-t-2 border-slate-700 font-bold text-[11px] text-slate-900">
+          <td colspan="${summaryColspanLeft}" class="border border-slate-300 px-3 py-1.5 text-right">รวมรายการทั้งหมด</td>
+          <td class="border border-slate-300 px-2 py-1.5 text-center">${dataItemCount}</td>
+          <td class="border border-slate-300 px-2 py-1.5 text-left">รายการ</td>
+          <td class="daily-no-print border border-slate-200 bg-slate-50"></td>
+        </tr>
+      `
+      : `
+        <tr class="bg-slate-50 border-t-2 border-slate-700 font-bold text-[11px] text-slate-900">
+          <td colspan="${colCount}" class="border border-slate-300 px-3 py-1.5 text-right">รวมรายการทั้งหมด ${dataItemCount} รายการ</td>
+          <td class="daily-no-print border border-slate-200 bg-slate-50"></td>
+        </tr>
+      `;
+
+    return `
+      <div class="w-full h-full overflow-auto bg-white">
+        <table class="w-full border-collapse table-auto">
+          <thead>
+            <tr>
+              ${thCells}
+              <th class="daily-no-print border border-slate-400 bg-slate-700 text-white text-[10px] px-1 py-1 text-center" style="width: 24px;" title="ลบแถว">ลบ</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${bodyRowsHtml || `<tr><td colspan="${colCount}" class="border border-slate-300 p-6 text-center text-xs text-slate-400">ยังไม่มีรายการ — กด "เพิ่มแถว" หรือ "วางจาก Excel" ที่แถบด้านบน</td></tr>`}
+            ${summaryRowHtml}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function renderDailyReportPage4() {
     const sheet = document.getElementById('dr-sheet-4');
     if (!sheet) return;
 
     const thaiDate = formatThaiDate(DailyReportState.date);
     const titleText = DailyReportState.conzolTitle || 'UPDATE รายการเอกสารอนุมัติ Conzol ประจำวัน';
+    const mode = DailyReportState.conzolMode === 'image' ? 'image' : 'table';
     const imgUrl = DailyReportState.conzolImageUrl || '';
     const rotate90 = !!DailyReportState.conzolRotate90;
 
-    const imageBodyHtml = imgUrl
-      ? (rotate90
-          ? `<div class="w-full h-full flex items-center justify-center overflow-hidden bg-white">
-               <img src="${imgUrl}" alt="UPDATE รายการเอกสารอนุมัติ Conzol" style="max-width: 222mm; max-height: 176mm; width: auto; height: auto; transform: rotate(90deg); object-fit: contain;">
-             </div>`
-          : `<div class="w-full h-full flex items-center justify-center overflow-hidden bg-white p-1">
-               <img src="${imgUrl}" alt="UPDATE รายการเอกสารอนุมัติ Conzol" class="w-full h-full object-contain">
-             </div>`)
-      : `<div class="daily-no-print w-full h-full border-2 border-dashed border-slate-300 rounded flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 hover:border-blue-500 transition-all cursor-pointer p-6 text-center" onclick="triggerConzolPhotoUpload()">
-           <i data-lucide="image-plus" class="w-10 h-10 text-slate-400 mb-2"></i>
-           <div class="text-sm font-black text-slate-800">+ คลิกเพื่อเพิ่มภาพ UPDATE รายการเอกสารอนุมัติ Conzol ประจำวัน</div>
-           <div class="text-xs text-slate-500 mt-1">แสดงผลเต็มหน้า A4 (1 ภาพต่อหน้า)</div>
-         </div>`;
+    let bodyHtml = '';
+    if (mode === 'table') {
+      bodyHtml = renderConzolTableHtml();
+    } else {
+      bodyHtml = imgUrl
+        ? (rotate90
+            ? `<div class="w-full h-full flex items-center justify-center overflow-hidden bg-white">
+                 <img src="${imgUrl}" alt="UPDATE รายการเอกสารอนุมัติ Conzol" style="max-width: 222mm; max-height: 176mm; width: auto; height: auto; transform: rotate(90deg); object-fit: contain;">
+               </div>`
+            : `<div class="w-full h-full flex items-center justify-center overflow-hidden bg-white p-1">
+                 <img src="${imgUrl}" alt="UPDATE รายการเอกสารอนุมัติ Conzol" class="w-full h-full object-contain">
+               </div>`)
+        : `<div class="daily-no-print w-full h-full border-2 border-dashed border-slate-300 rounded flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 hover:border-blue-500 transition-all cursor-pointer p-6 text-center" onclick="triggerConzolPhotoUpload()">
+             <i data-lucide="image-plus" class="w-10 h-10 text-slate-400 mb-2"></i>
+             <div class="text-sm font-black text-slate-800">+ คลิกเพื่อเพิ่มภาพ UPDATE รายการเอกสารอนุมัติ Conzol ประจำวัน</div>
+             <div class="text-xs text-slate-500 mt-1">แสดงผลเต็มหน้า A4 (1 ภาพต่อหน้า)</div>
+           </div>`;
+    }
 
     sheet.innerHTML = `
       <div class="border border-slate-800 p-4 h-full flex flex-col justify-between" style="height: 270mm; max-height: 270mm; box-sizing: border-box; overflow: hidden;">
@@ -2901,9 +3088,9 @@
           </div>
         </div>
 
-        <!-- Full-Page Single Image Container -->
-        <div class="flex-1 min-h-0 w-full border border-slate-300 bg-white flex items-center justify-center overflow-hidden">
-          ${imageBodyHtml}
+        <!-- Main Body (Vector Table or Full-Page Image) -->
+        <div class="flex-1 min-h-0 w-full ${mode === 'table' ? '' : 'border border-slate-300'} bg-white flex flex-col overflow-hidden">
+          ${bodyHtml}
         </div>
 
         <!-- Footer -->
@@ -2915,9 +3102,31 @@
     `;
     updateConzolToolbarState();
     if (window.lucide) window.lucide.createIcons();
+    sheet.querySelectorAll('textarea').forEach(ta => {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+  }
+
+  function syncConzolToCloudSilent() {
+    if (typeof window.saveDailyReportConfigToSupabase === 'function') {
+      window.saveDailyReportConfigToSupabase(true);
+    }
   }
 
   function updateConzolToolbarState() {
+    const mode = DailyReportState.conzolMode === 'image' ? 'image' : 'table';
+    const tableBtns = document.getElementById('dr-ctx-p4-table-btns');
+    const imageBtns = document.getElementById('dr-ctx-p4-image-btns');
+    if (tableBtns) {
+      tableBtns.classList.toggle('hidden', mode !== 'table');
+      tableBtns.classList.toggle('flex', mode === 'table');
+    }
+    if (imageBtns) {
+      imageBtns.classList.toggle('hidden', mode !== 'image');
+      imageBtns.classList.toggle('flex', mode === 'image');
+    }
+
     const imgUrl = DailyReportState.conzolImageUrl || '';
     const rotate90 = !!DailyReportState.conzolRotate90;
     const lblUpload = document.getElementById('lbl-conzol-upload');
@@ -2933,6 +3142,175 @@
     if (btnRemove) btnRemove.classList.toggle('hidden', !imgUrl);
   }
 
+  window.toggleConzolMode = function (mode) {
+    DailyReportState.conzolMode = mode === 'image' ? 'image' : 'table';
+    renderDailyReportPage4();
+    syncConzolToCloudSilent();
+  };
+
+  window.addConzolColumn = function () {
+    const tbl = getConzolTableData();
+    const newName = prompt('ระบุชื่อคอลัมน์ใหม่:', `คอลัมน์ ${tbl.columns.length + 1}`);
+    if (newName === null) return;
+    const cleanName = newName.trim() || `คอลัมน์ ${tbl.columns.length + 1}`;
+    tbl.columns.push(cleanName);
+    tbl.rows.forEach(r => {
+      if (r && !r.isGroup) {
+        if (!Array.isArray(r.cells)) r.cells = [];
+        while (r.cells.length < tbl.columns.length) r.cells.push('');
+      }
+    });
+    renderDailyReportPage4();
+    syncConzolToCloudSilent();
+  };
+
+  window.removeConzolColumn = function (colIdx) {
+    const tbl = getConzolTableData();
+    if (tbl.columns.length <= 1) {
+      alert('ต้องมีคอลัมน์อย่างน้อย 1 คอลัมน์');
+      return;
+    }
+    tbl.columns.splice(colIdx, 1);
+    tbl.rows.forEach(r => {
+      if (r && !r.isGroup && Array.isArray(r.cells)) {
+        r.cells.splice(colIdx, 1);
+      }
+    });
+    renderDailyReportPage4();
+    syncConzolToCloudSilent();
+  };
+
+  window.updateConzolColumnName = function (colIdx, val) {
+    const tbl = getConzolTableData();
+    if (colIdx >= 0 && colIdx < tbl.columns.length) {
+      tbl.columns[colIdx] = (val || '').trim() || `คอลัมน์ ${colIdx + 1}`;
+      renderDailyReportPage4();
+      syncConzolToCloudSilent();
+    }
+  };
+
+  window.addConzolRow = function (isGroup) {
+    const tbl = getConzolTableData();
+    if (isGroup) {
+      tbl.rows.push({ isGroup: true, label: 'หมวดหมู่ใหม่' });
+    } else {
+      const nextNum = tbl.rows.filter(r => r && !r.isGroup).length + 1;
+      const cells = tbl.columns.map((c, idx) => (idx === 0 && /ลำดับ|no/i.test(String(c))) ? String(nextNum) : '');
+      tbl.rows.push({ isGroup: false, cells });
+    }
+    renderDailyReportPage4();
+    syncConzolToCloudSilent();
+  };
+
+  window.removeConzolRow = function (rowIdx) {
+    const tbl = getConzolTableData();
+    if (rowIdx >= 0 && rowIdx < tbl.rows.length) {
+      tbl.rows.splice(rowIdx, 1);
+      renderDailyReportPage4();
+      syncConzolToCloudSilent();
+    }
+  };
+
+  window.updateConzolGroupLabel = function (rowIdx, val) {
+    const tbl = getConzolTableData();
+    if (tbl.rows[rowIdx] && tbl.rows[rowIdx].isGroup) {
+      tbl.rows[rowIdx].label = val || '';
+      renderDailyReportPage4();
+      syncConzolToCloudSilent();
+    }
+  };
+
+  window.updateConzolCell = function (rowIdx, colIdx, val) {
+    const tbl = getConzolTableData();
+    const row = tbl.rows[rowIdx];
+    if (row && !row.isGroup) {
+      if (!Array.isArray(row.cells)) row.cells = [];
+      row.cells[colIdx] = val;
+      renderDailyReportPage4();
+      syncConzolToCloudSilent();
+    }
+  };
+
+  window.openConzolExcelPasteModal = function () {
+    const existing = document.getElementById('dr-conzol-paste-modal');
+    if (existing) existing.remove();
+    const html = `
+      <div id="dr-conzol-paste-modal" class="daily-no-print fixed inset-0 z-[10050] bg-slate-900/60 flex items-center justify-center p-4">
+        <div class="bg-white border-2 border-slate-900 shadow-[4px_4px_0px_#0f172a] w-full max-w-2xl p-4 flex flex-col gap-3">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+            <div>
+              <h3 class="text-sm font-black text-slate-900">วางข้อมูลตารางจาก Excel</h3>
+              <p class="text-[11px] text-slate-600">ไปที่ไฟล์ Excel -> ลากคลุมตาราง -> กด Ctrl+C -> แล้วมากด Ctrl+V ในช่องด้านล่าง</p>
+            </div>
+            <button type="button" onclick="document.getElementById('dr-conzol-paste-modal').remove()" class="px-2 py-1 border border-slate-400 text-xs font-bold hover:bg-slate-100 cursor-pointer">ปิด</button>
+          </div>
+          <textarea id="dr-conzol-paste-box" rows="8" placeholder="กด Ctrl+V เพื่อวางข้อมูลจาก Excel ที่นี่..." class="w-full border-2 border-slate-300 focus:border-slate-900 p-2 text-xs font-mono outline-none"></textarea>
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <label class="flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer">
+              <input type="checkbox" id="dr-conzol-paste-has-header" checked class="w-4 h-4">
+              <span>แถวแรกที่ Copy มาคือชื่อคอลัมน์ (Header)</span>
+            </label>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="applyConzolExcelPaste(true)" class="px-3 py-1.5 border-2 border-slate-900 bg-white text-slate-800 font-black text-xs hover:bg-slate-100 cursor-pointer">เพิ่มต่อท้ายตารางเดิม</button>
+              <button type="button" onclick="applyConzolExcelPaste(false)" class="px-3 py-1.5 border-2 border-slate-900 bg-[#10b981] text-white font-black text-xs hover:bg-emerald-600 cursor-pointer">แทนที่ตารางทั้งหมด</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', html);
+    const box = document.getElementById('dr-conzol-paste-box');
+    if (box) box.focus();
+  };
+
+  window.applyConzolExcelPaste = function (appendMode) {
+    const box = document.getElementById('dr-conzol-paste-box');
+    const hasHeaderEl = document.getElementById('dr-conzol-paste-has-header');
+    const raw = box ? box.value : '';
+    if (!raw || !raw.trim()) {
+      alert('กรุณาวางข้อมูลจาก Excel ก่อนครับ');
+      return;
+    }
+    const lines = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').filter(l => l.trim() !== '');
+    if (lines.length === 0) return;
+
+    const parsed = lines.map(line => line.split('\t').map(c => c.trim()));
+    const tbl = getConzolTableData();
+    const hasHeader = !!(hasHeaderEl && hasHeaderEl.checked);
+
+    let dataLines = parsed;
+    if (!appendMode && hasHeader && parsed.length > 0) {
+      tbl.columns = parsed[0].map((h, i) => h || `คอลัมน์ ${i + 1}`);
+      dataLines = parsed.slice(1);
+    } else if (!appendMode && !hasHeader) {
+      const maxCols = Math.max(...parsed.map(r => r.length));
+      if (maxCols !== tbl.columns.length) {
+        tbl.columns = Array.from({ length: maxCols }, (_, i) => tbl.columns[i] || `คอลัมน์ ${i + 1}`);
+      }
+    }
+
+    const colLen = tbl.columns.length;
+    const newRows = dataLines.map(cells => {
+      const nonEmpty = cells.filter(c => c !== '');
+      if (nonEmpty.length === 1 && cells.length > 1 && cells[0] !== '' && cells.slice(1).every(c => c === '')) {
+        return { isGroup: true, label: cells[0] };
+      }
+      const padded = Array.from({ length: colLen }, (_, i) => (cells[i] !== undefined ? cells[i] : ''));
+      return { isGroup: false, cells: padded };
+    });
+
+    if (appendMode) {
+      tbl.rows = tbl.rows.concat(newRows);
+    } else {
+      tbl.rows = newRows;
+    }
+
+    const modal = document.getElementById('dr-conzol-paste-modal');
+    if (modal) modal.remove();
+    renderDailyReportPage4();
+    syncConzolToCloudSilent();
+  };
+
   window.triggerConzolPhotoUpload = function () {
     const inp = document.getElementById('dr-conzol-file-input');
     if (inp) inp.click();
@@ -2943,6 +3321,7 @@
     if (!file) return;
     const reader = new FileReader();
     reader.onload = function (e) {
+      DailyReportState.conzolMode = 'image';
       DailyReportState.conzolImageUrl = e.target.result;
       renderDailyReportPage4();
       switchDailyReportTab('p4');
@@ -2957,6 +3336,7 @@
   };
 
   window.resetConzolDefaultPhoto = function () {
+    DailyReportState.conzolMode = 'image';
     DailyReportState.conzolImageUrl = DEFAULT_CONZOL_IMAGE_DATA;
     renderDailyReportPage4();
   };
@@ -2969,9 +3349,7 @@
   window.updateConzolTitle = function (val) {
     DailyReportState.conzolTitle = (val || '').trim() || 'UPDATE รายการเอกสารอนุมัติ Conzol ประจำวัน';
     renderDailyReportPage4();
-    if (typeof window.saveDailyReportConfigToSupabase === 'function') {
-      window.saveDailyReportConfigToSupabase(true);
-    }
+    syncConzolToCloudSilent();
   };
 
   let activeTargetSlot = null;
