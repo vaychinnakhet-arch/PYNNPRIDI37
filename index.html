@@ -7834,100 +7834,70 @@ body.manga-screentone-bg,
       class="min-h-screen w-full flex flex-col justify-start px-2 py-3 sm:px-6 md:px-8 lg:px-10"
     >
       <div class="w-full max-w-[1540px] mx-auto splash-content">
-        <!-- Splash Hero Header with Distilled Brand & Primary Actions -->
-        <div class="splash-hero-intro mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b-2 border-[#1D2B45]/15 pb-5">
-          <div>
-            <div class="flex items-center gap-2 mb-2 flex-wrap">
-              <span class="doodle-pill doodle-pill-teal text-[11px] font-black tracking-wide shadow-2xs">
-                <span class="doodle-dot-live"></span>
-                ACTIVE PHASE · งานฐานรากและเสาเข็ม
-              </span>
-              <span class="doodle-pill bg-white text-[#3E4B69] font-mono text-[11px] font-bold shadow-2xs hidden sm:inline-flex">
-                📍 สุขุมวิท 63 · เอกมัย 12
-              </span>
-            </div>
-            <h1 class="font-display text-4xl sm:text-5xl md:text-6xl font-black text-[#1D2B45] tracking-tight leading-[1.05]">
+        <!-- Splash Hero Header (Distilled & Compact) -->
+        <div class="splash-hero-intro mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-b-2 border-[#1D2B45]/15 pb-3.5">
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <h1 class="font-display text-3xl sm:text-4xl md:text-[42px] font-black text-[#1D2B45] tracking-tight leading-none">
               PYNN <span class="text-[#F26B2A] italic" style="color: #F26B2A;">EKKAMAI 12</span>
             </h1>
-            <p class="text-xs sm:text-sm text-[#3E4B69] font-medium mt-1.5 flex items-center gap-2" style="font-family: 'DM Sans', 'Prompt', sans-serif;">
-              <span>ระบบติดตามความคืบหน้างานก่อสร้าง (CONSTRUCTION TELEMETRY COCKPIT)</span>
-              <span class="doodle-annotation hidden sm:inline-flex text-xs text-[#F26B2A]">✦ Senior Engineering Edition</span>
-            </p>
+            <span class="doodle-pill bg-white text-[#3E4B69] font-mono text-[11px] font-bold shadow-2xs">
+              📍 สุขุมวิท 63 · เอกมัย 12
+            </span>
           </div>
 
-          <!-- Live System Status Chip -->
-          <div class="doodle-pill doodle-pill-gold px-3.5 py-1.5 text-xs font-mono font-bold shadow-[2px_2px_0px_#1D2B45] shrink-0">
-            <span class="doodle-dot-live"></span>
-            <span>SYSTEM ONLINE · 93 PILES READY</span>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="doodle-pill doodle-pill-teal text-[11px] font-black shadow-2xs">
+              <span class="doodle-dot-live"></span>
+              งานฐานรากและเสาเข็ม
+            </span>
           </div>
         </div>
 
-        <!-- Piling Dedicated Hero Portal Card (UX Psychology + Warm Craft Edition) -->
-        <div class="doodle-card-hero mb-8 p-5 sm:p-7 md:p-8 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45]">
-          <!-- Consolidated Specification & Delay Alert Bar (Cognitive Load: Single Scan Row) -->
-          <div class="flex items-center justify-between flex-wrap gap-2.5 mb-5 pb-3.5 border-b-2 border-[#1D2B45]/15 relative z-10">
+        <!-- Piling Dedicated Hero Portal Card (Distilled + Compact 1-Screen Cockpit) -->
+        <div class="doodle-card-hero mb-6 p-4 sm:p-5 md:p-6 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45]">
+          <!-- Single Compact Spec & Live Status Bar -->
+          <div class="flex items-center justify-between flex-wrap gap-2 mb-4 pb-2.5 border-b-2 border-[#1D2B45]/15 relative z-10">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="doodle-pill bg-[#1D2B45] text-white text-[10.5px] font-mono font-bold shadow-2xs">
-                SPECIFICATION
-              </span>
-              <span class="doodle-pill bg-[#FAF5EE] text-[#1D2B45] text-xs font-bold border-[#1D2B45] shadow-2xs">
+              <span class="doodle-pill bg-[#FAF5EE] text-[#1D2B45] text-[11px] font-bold border-[#1D2B45]/50 shadow-2xs">
                 เสาเข็ม I 0.40 × 21.00 ม. · แผน 93 ต้น (3 ต้น/วัน · 31 วันทำการ)
               </span>
             </div>
-            <div id="portal-header-status-pill" class="doodle-pill bg-[#ECFDF5] border-[#10B981] text-[#065F46] text-xs font-mono font-bold shadow-2xs">
+            <div id="portal-header-status-pill" class="doodle-pill bg-[#ECFDF5] border-[#10B981] text-[#065F46] text-[11px] font-mono font-bold shadow-2xs">
               <span class="doodle-dot-live"></span>
               <span>LIVE TELEMETRY</span>
             </div>
           </div>
 
-          <!-- Loss Aversion / Preattentive Overdue Alert Banner (Shown automatically when delayed past D31) -->
-          <div id="portal-delay-banner" class="hidden mb-5 px-4 py-3 rounded-2xl bg-[#FFF1F2] border-2 border-[#E64C3C] shadow-[3px_3px_0px_#E64C3C] flex items-center justify-between flex-wrap gap-2 relative z-10">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <span class="w-7 h-7 rounded-xl bg-[#E64C3C] text-white flex items-center justify-center font-black text-sm shrink-0">!</span>
-              <div class="min-w-0">
-                <div id="portal-delay-banner-title" class="text-xs sm:text-sm font-black text-[#9F1239] leading-tight">
-                  เลยกำหนดแผน 31 วันทำการแล้ว
-                </div>
-                <div id="portal-delay-banner-sub" class="text-[11px] font-bold text-[#9F1239]/85 mt-0.5">
-                  กราฟและตารางด้านล่างขยายแสดงช่วงวันล่าช้าถึงวันปัจจุบันอัตโนมัติ
-                </div>
-              </div>
-            </div>
-            <a href="piling.html?view=3d#remaining" class="doodle-pill bg-[#E64C3C] hover:bg-[#BE123C] text-white border-[#1D2B45] text-[11px] font-black shrink-0 transition-colors">
-              ดูต้นที่เหลือใน 3D →
-            </a>
-          </div>
-
           <!-- Main 2-Column Grid: Left S-Curve Progress Chart | Right Goal-Gradient KPI Console -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch relative z-10">
             
             <!-- Left (Col 12 / Lg 7): S-Curve Progress Chart (Plan vs Actual + Overdue Zone) -->
             <div class="lg:col-span-7 flex flex-col">
               <div class="flex-1 flex flex-col min-h-0">
-                <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5 shrink-0">
-                  <h2 class="font-display text-lg md:text-xl font-black text-[#1D2B45] tracking-tight leading-tight flex items-center gap-2">
+                <div class="flex items-center justify-between flex-wrap gap-2 mb-2 shrink-0">
+                  <h2 class="font-display text-base md:text-lg font-black text-[#1D2B45] tracking-tight leading-tight flex items-center gap-2">
                     <span>กราฟเปรียบเทียบผลงานเสาเข็ม</span>
-                    <span class="doodle-pill bg-[#1D2B45] text-white text-[9.5px] font-mono">PLAN VS ACTUAL</span>
+                    <span class="doodle-pill bg-[#1D2B45] text-white text-[9px] font-mono">PLAN VS ACTUAL</span>
                   </h2>
                   <div class="flex items-center gap-1.5 flex-wrap text-xs font-bold">
-                    <span class="doodle-pill bg-[#FFF1F2] border-[#E64C3C] text-[#9F1239] text-[10.5px] shadow-2xs">
+                    <span class="doodle-pill bg-[#FFF1F2] border-[#E64C3C] text-[#9F1239] text-[10px] shadow-2xs">
                       <span class="w-2.5 h-0.5 bg-[#E64C3C] inline-block mr-1"></span>
-                      แผนสะสม (93 ต้น)
+                      แผนสะสม (93)
                     </span>
-                    <span class="doodle-pill doodle-pill-teal text-[10.5px] shadow-2xs">
+                    <span class="doodle-pill doodle-pill-teal text-[10px] shadow-2xs">
                       <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1"></span>
-                      ผลงานจริงสะสม
+                      ผลงานจริง
                     </span>
-                    <span id="portal-chart-delay-legend" class="hidden doodle-pill bg-[#FFE4E6] border-[#E64C3C] text-[#9F1239] text-[10.5px] shadow-2xs">
+                    <span id="portal-chart-delay-legend" class="hidden doodle-pill bg-[#FFE4E6] border-[#E64C3C] text-[#9F1239] text-[10px] shadow-2xs">
                       <span class="w-2.5 h-2.5 rounded-xs bg-[#E64C3C]/25 border border-[#E64C3C] inline-block mr-1"></span>
                       ช่วงล่าช้า
                     </span>
                   </div>
                 </div>
 
-                <!-- Chart Canvas Box: Full Height S-Curve Monitor -->
+                <!-- Chart Canvas Box: Compact Height S-Curve Monitor -->
                 <div 
-                  class="doodle-chart-frame relative w-full flex-1 min-h-[340px] sm:min-h-[370px] lg:min-h-[390px] p-2.5 sm:p-3 overflow-hidden bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45]"
+                  class="doodle-chart-frame relative w-full flex-1 min-h-[290px] sm:min-h-[320px] lg:min-h-[340px] p-2 sm:p-2.5 overflow-hidden bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45]"
                 >
                   <canvas id="splashScurveCanvas" class="w-full h-full block"></canvas>
                 </div>
@@ -7935,107 +7905,101 @@ body.manga-screentone-bg,
             </div>
 
             <!-- Right (Col 12 / Lg 5): Goal-Gradient & 3-Second Scan KPI Console -->
-            <div class="lg:col-span-5 flex flex-col justify-between doodle-card p-4 sm:p-5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] overflow-hidden">
+            <div class="lg:col-span-5 flex flex-col justify-between doodle-card p-3.5 sm:p-4 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] overflow-hidden">
               <div>
                 <!-- Console Top Header Ribbon: Progress % + Goal-Gradient Remaining Callout -->
-                <div class="p-3.5 sm:p-4 bg-[#1D2B45] text-white rounded-xl mb-3.5 shadow-[2px_2px_0px_#1D2B45]">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <span class="text-xs font-bold tracking-wide text-white/90">
+                <div class="p-3 bg-[#1D2B45] text-white rounded-xl mb-3 shadow-[2px_2px_0px_#1D2B45]">
+                  <div class="flex items-center justify-between gap-2 mb-1.5">
+                    <span class="text-[11px] font-bold tracking-wide text-white/90">
                       ความคืบหน้างานเสาเข็มรวม
                     </span>
-                    <span id="portal-goal-pill" class="px-2.5 py-0.5 rounded-full bg-[#F7B844] text-[#1D2B45] text-[10.5px] font-black tracking-tight">
+                    <span id="portal-goal-pill" class="px-2 py-0.5 rounded-full bg-[#F7B844] text-[#1D2B45] text-[10px] font-black tracking-tight">
                       อีก 93 ต้น ครบ 93 ต้น
                     </span>
                   </div>
                   <div class="flex items-baseline justify-between gap-2">
-                    <span id="portal-piling-percent" class="font-display text-4xl sm:text-5xl font-black text-[#F7B844] tracking-tight leading-none">0%</span>
-                    <span id="portal-piling-fraction" class="font-mono text-xs sm:text-sm font-bold text-white/80">0 / 93 ต้น</span>
+                    <span id="portal-piling-percent" class="font-display text-3xl sm:text-4xl font-black text-[#F7B844] tracking-tight leading-none">0%</span>
+                    <span id="portal-piling-fraction" class="font-mono text-xs font-bold text-white/80">0 / 93 ต้น</span>
                   </div>
-                  <!-- Progress Bar inside dark console for strong figure-ground contrast -->
-                  <div class="w-full h-3.5 bg-white/15 border border-white/25 rounded-full overflow-hidden mt-3 p-0.5">
+                  <div class="w-full h-2.5 bg-white/15 border border-white/25 rounded-full overflow-hidden mt-2.5 p-0.5">
                     <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-[#10B981] via-[#40C4C4] to-[#F7B844] rounded-full transition-all duration-700" style="width: 0%"></div>
                   </div>
                 </div>
 
-                <!-- 4-Stat Metric Grid (Miller's Law: 4 clean chunks, zero duplicate widgets) -->
-                <div class="grid grid-cols-2 gap-3">
+                <!-- 4-Stat Metric Grid (Miller's Law: 4 clean chunks) -->
+                <div class="grid grid-cols-2 gap-2.5">
                   <!-- Stat 1: Driven Cumulative -->
-                  <a href="piling.html?view=3d#completed" class="doodle-metric-tile block p-3.5 bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#10B981] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มที่กดเสร็จในโมเดล 3D">
+                  <a href="piling.html?view=3d#completed" class="doodle-metric-tile block p-2.5 sm:p-3 bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all border-2 border-[#1D2B45] rounded-xl shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0_0_#10B981] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มที่กดเสร็จในโมเดล 3D">
                     <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-[#14532D] block">กดเสร็จสะสม</span>
-                      <i data-lucide="check-circle-2" class="w-4 h-4 text-[#10B981]"></i>
+                      <span class="text-[10.5px] font-black text-[#14532D] block">กดเสร็จสะสม</span>
+                      <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#10B981]"></i>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1.5">
-                      <span id="portal-piling-driven-count" class="font-display text-2xl sm:text-3xl font-extrabold text-[#14532D]">0</span>
-                      <span class="text-[11px] font-bold text-[#14532D] font-mono">/ 93 ต้น</span>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-driven-count" class="font-display text-xl sm:text-2xl font-extrabold text-[#14532D]">0</span>
+                      <span class="text-[10.5px] font-bold text-[#14532D] font-mono">/ 93 ต้น</span>
                     </div>
-                    <div id="portal-piling-driven-sub" class="text-[10px] font-bold text-[#14532D]/80 truncate mt-1">0.0% ของงานทั้งหมด</div>
+                    <div id="portal-piling-driven-sub" class="text-[9.5px] font-bold text-[#14532D]/80 truncate mt-0.5">0.0% ของงานทั้งหมด</div>
                   </a>
 
                   <!-- Stat 2: Today Driven -->
-                  <a href="piling.html?view=report#today" class="doodle-metric-tile block p-3.5 bg-[#FEF9C3] hover:bg-[#FEF08A] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#F7B844] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อเปิดรายงานประจำวัน">
+                  <a href="piling.html?view=report#today" class="doodle-metric-tile block p-2.5 sm:p-3 bg-[#FEF9C3] hover:bg-[#FEF08A] transition-all border-2 border-[#1D2B45] rounded-xl shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0_0_#F7B844] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อเปิดรายงานประจำวัน">
                     <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-[#78350F] block">กดเสร็จวันนี้</span>
-                      <span class="doodle-pill bg-[#F7B844] border border-[#1D2B45] text-[#1D2B45] text-[9px] font-black">TODAY</span>
+                      <span class="text-[10.5px] font-black text-[#78350F] block">กดเสร็จวันนี้</span>
+                      <span class="doodle-pill bg-[#F7B844] border border-[#1D2B45] text-[#1D2B45] text-[8.5px] font-black">TODAY</span>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1.5">
-                      <span id="portal-piling-today" class="font-display text-2xl sm:text-3xl font-extrabold text-[#78350F]">0</span>
-                      <span class="text-[11px] font-bold text-[#78350F]">ต้น</span>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-today" class="font-display text-xl sm:text-2xl font-extrabold text-[#78350F]">0</span>
+                      <span class="text-[10.5px] font-bold text-[#78350F]">ต้น</span>
                     </div>
-                    <div id="portal-piling-today-sub" class="text-[10px] font-bold text-[#78350F]/80 truncate mt-1">กำลังโหลดข้อมูล...</div>
+                    <div id="portal-piling-today-sub" class="text-[9.5px] font-bold text-[#78350F]/80 truncate mt-0.5">กำลังโหลดข้อมูล...</div>
                   </a>
 
                   <!-- Stat 3: Goal-Gradient Remaining -->
-                  <a href="piling.html?view=3d#remaining" class="doodle-metric-tile block p-3.5 bg-[#E0F2FE] hover:bg-[#BAE6FD] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#0284C7] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มคงเหลือในโมเดล 3D">
+                  <a href="piling.html?view=3d#remaining" class="doodle-metric-tile block p-2.5 sm:p-3 bg-[#E0F2FE] hover:bg-[#BAE6FD] transition-all border-2 border-[#1D2B45] rounded-xl shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0_0_#0284C7] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มคงเหลือในโมเดล 3D">
                     <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-[#075985] block">เหลืออีก (ปิดงาน)</span>
-                      <i data-lucide="target" class="w-4 h-4 text-[#0284C7]"></i>
+                      <span class="text-[10.5px] font-black text-[#075985] block">เหลืออีก (ปิดงาน)</span>
+                      <i data-lucide="target" class="w-3.5 h-3.5 text-[#0284C7]"></i>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1.5">
-                      <span id="portal-piling-remain" class="font-display text-2xl sm:text-3xl font-extrabold text-[#075985]">93</span>
-                      <span class="text-[11px] font-bold text-[#075985]">ต้น</span>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-remain" class="font-display text-xl sm:text-2xl font-extrabold text-[#075985]">93</span>
+                      <span class="text-[10.5px] font-bold text-[#075985]">ต้น</span>
                     </div>
-                    <div id="portal-piling-remain-sub" class="text-[10px] font-bold text-[#075985]/80 truncate mt-1">เป้าหมายครบ 93 ต้น</div>
+                    <div id="portal-piling-remain-sub" class="text-[9.5px] font-bold text-[#075985]/80 truncate mt-0.5">เป้าหมายครบ 93 ต้น</div>
                   </a>
 
-                  <!-- Stat 4: Schedule Variance (Loss Aversion / Delay Highlight) -->
-                  <a href="piling.html?view=report#variance" id="portal-piling-variance-card" class="doodle-metric-tile block p-3.5 bg-[#FFE4E6] hover:bg-[#FECDD3] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#E64C3C] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูรายละเอียดผลงานเทียบแผน">
+                  <!-- Stat 4: Schedule Variance -->
+                  <a href="piling.html?view=report#variance" id="portal-piling-variance-card" class="doodle-metric-tile block p-2.5 sm:p-3 bg-[#FFE4E6] hover:bg-[#FECDD3] transition-all border-2 border-[#1D2B45] rounded-xl shadow-[2px_2px_0px_#1D2B45] hover:shadow-[3px_3px_0_0_#E64C3C] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูรายละเอียดผลงานเทียบแผน">
                     <div class="flex items-center justify-between gap-1">
-                      <span class="text-[11px] font-black text-[#9F1239] block truncate">สถานะเทียบแผน</span>
-                      <span id="portal-piling-variance-badge" class="doodle-pill bg-[#E64C3C] text-white border border-[#1D2B45] text-[9px] font-black shrink-0">ช้ากว่าแผน</span>
+                      <span class="text-[10.5px] font-black text-[#9F1239] block truncate">สถานะเทียบแผน</span>
+                      <span id="portal-piling-variance-badge" class="doodle-pill bg-[#E64C3C] text-white border border-[#1D2B45] text-[8.5px] font-black shrink-0">ช้ากว่าแผน</span>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1.5">
-                      <span id="portal-piling-variance-val" class="font-display text-2xl sm:text-3xl font-extrabold text-[#9F1239]">0</span>
-                      <span id="portal-piling-variance-unit" class="text-[11px] font-bold text-[#9F1239]">ต้น</span>
+                    <div class="flex items-baseline gap-1 mt-1">
+                      <span id="portal-piling-variance-val" class="font-display text-xl sm:text-2xl font-extrabold text-[#9F1239]">0</span>
+                      <span id="portal-piling-variance-unit" class="text-[10.5px] font-bold text-[#9F1239]">ต้น</span>
                     </div>
-                    <span id="portal-piling-variance-sub" class="text-[10px] text-[#9F1239] font-bold block truncate mt-1 font-mono">กำลังคำนวณ...</span>
+                    <span id="portal-piling-variance-sub" class="text-[9.5px] text-[#9F1239] font-bold block truncate mt-0.5 font-mono">กำลังคำนวณ...</span>
                   </a>
                 </div>
               </div>
 
-              <!-- Fitts's Law: Primary Action inside Cockpit + Quiet Secondary Links -->
-              <div class="mt-4 pt-3.5 border-t-2 border-[#1D2B45]/15 space-y-2.5">
+              <!-- Fitts's Law: Primary Action + Compact Secondary Row -->
+              <div class="mt-3 pt-3 border-t-2 border-[#1D2B45]/15 space-y-2">
                 <a
                   href="piling.html?view=3d#3d"
-                  class="hero-cta-btn w-full min-h-[60px] flex items-center justify-between px-4 sm:px-5 py-3 cursor-pointer group bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] hover:shadow-[5px_5px_0px_#1D2B45] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+                  class="hero-cta-btn w-full min-h-[52px] flex items-center justify-between px-4 py-2.5 cursor-pointer group bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] rounded-xl shadow-[3px_3px_0px_#1D2B45] hover:shadow-[4px_4px_0px_#1D2B45] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
                   title="คลิกเพื่อเข้าสู่แบบจำลอง 3D เสาเข็ม 93 ต้น และเริ่มงานทันที"
                 >
-                  <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-10 h-10 bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-xl flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#1D2B45] group-hover:rotate-6 transition-transform">
-                      <i data-lucide="box" class="w-5 h-5 text-[#F26B2A]"></i>
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-8 h-8 bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-lg flex items-center justify-center shrink-0 shadow-[1.5px_1.5px_0px_#1D2B45] group-hover:rotate-6 transition-transform">
+                      <i data-lucide="box" class="w-4 h-4 text-[#F26B2A]"></i>
                     </div>
-                    <div class="flex flex-col text-left leading-tight min-w-0">
-                      <span class="text-[9.5px] font-mono font-bold uppercase tracking-wider text-white/90">
-                        ACTIVE 3D WORKSPACE
-                      </span>
-                      <span class="font-display text-sm sm:text-base font-bold text-white tracking-tight truncate">
-                        เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น
-                      </span>
-                    </div>
+                    <span class="font-display text-sm sm:text-[15px] font-bold text-white tracking-tight truncate">
+                      เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น
+                    </span>
                   </div>
                   <div class="flex items-center gap-1.5 shrink-0 pl-2">
-                    <span class="doodle-pill bg-white text-[#1D2B45] text-[11px] font-bold shadow-2xs hidden sm:inline-flex">เริ่มงาน</span>
-                    <i data-lucide="arrow-right" class="w-5 h-5 text-white group-hover:translate-x-1 transition-transform"></i>
+                    <span class="doodle-pill bg-white text-[#1D2B45] text-[10.5px] font-bold shadow-2xs hidden sm:inline-flex">เริ่มงาน</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 text-white group-hover:translate-x-1 transition-transform"></i>
                   </div>
                 </a>
 
@@ -14682,10 +14646,27 @@ if (typeof window !== "undefined") {
               ctx.lineTo(xBoundary, chartArea.bottom);
               ctx.stroke();
               ctx.setLineDash([]);
-              ctx.fillStyle = '#9F1239';
+              // Place Overdue pill in open space near bottom of shaded zone so it never overlaps the 93 plan line or 82 actual line
+              const pillText = `ช่วงล่าช้า +${delayDays} วัน`;
               ctx.font = 'bold 10px Prompt, Sarabun, sans-serif';
-              ctx.textAlign = 'right';
-              ctx.fillText(`ช่วงล่าช้า +${delayDays} วัน`, chartArea.right - 6, chartArea.top + 14);
+              const tw = ctx.measureText(pillText).width;
+              const pw = tw + 14;
+              const ph = 20;
+              const zoneW = chartArea.right - xBoundary;
+              const px = zoneW > pw + 8 ? (xBoundary + zoneW / 2 - pw / 2) : (chartArea.right - pw - 6);
+              const py = chartArea.bottom - ph - 10;
+              ctx.fillStyle = 'rgba(255, 241, 242, 0.94)';
+              ctx.strokeStyle = '#E64C3C';
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              if (ctx.roundRect) ctx.roundRect(px, py, pw, ph, 6);
+              else ctx.rect(px, py, pw, ph);
+              ctx.fill();
+              ctx.stroke();
+              ctx.fillStyle = '#9F1239';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(pillText, px + pw / 2, py + ph / 2);
               ctx.restore();
             }
           };
@@ -14764,17 +14745,22 @@ if (typeof window !== "undefined") {
                   scales: {
                     y: {
                       min: 0,
-                      max: 95,
+                      max: 105,
                       grid: { color: 'rgba(15, 23, 42, 0.08)' },
                       border: { color: '#0f172a', width: 2 },
                       title: { display: true, text: 'จำนวนเสาเข็มสะสม (ต้น)', font: { family: 'Prompt, Sarabun', size: 11, weight: 'bold' }, color: '#0f172a' },
-                      ticks: { stepSize: 15, font: { family: 'Prompt, Sarabun', weight: 'bold' }, color: '#0f172a' }
+                      ticks: {
+                        stepSize: 15,
+                        callback: function(v) { return v <= 95 ? v : ''; },
+                        font: { family: 'Prompt, Sarabun', weight: 'bold' },
+                        color: '#0f172a'
+                      }
                     },
                     x: {
                       grid: { color: 'rgba(15, 23, 42, 0.05)' },
                       border: { color: '#0f172a', width: 2 },
                       title: { display: true, text: delayDays > 0 ? `วันทำการ (D1 - D31 + ล่าช้า ${delayDays} วัน)` : 'วันทำการ (D1 - D31)', font: { family: 'Prompt, Sarabun', size: 11, weight: 'bold' }, color: '#0f172a' },
-                      ticks: { maxTicksLimit: 16, font: { family: 'Prompt, Sarabun', weight: 'bold' }, color: '#0f172a' }
+                      ticks: { maxTicksLimit: 12, autoSkipPadding: 14, maxRotation: 0, font: { family: 'Prompt, Sarabun', size: 10, weight: 'bold' }, color: '#0f172a' }
                     }
                   }
                 }
