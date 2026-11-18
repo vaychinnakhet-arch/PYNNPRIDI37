@@ -1,6 +1,6 @@
 /**
  * 3D PRECAST PRESTRESSED CONCRETE I-PILE ENGINE (Anatomy Technical Edition)
- * Built for Pynn Pridi 37 Construction Progress Portal
+ * Built for PYNN EKKAMAI 12 Construction Progress Portal
  * 
  * Standards & Design Philosophy (/impeccable + /anatomy):
  * - Strict In-Frame Fit: Width fill ratio 0.74 guarantees 13% breathing margins on left & right.

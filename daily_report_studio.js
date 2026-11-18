@@ -1,5 +1,5 @@
 /**
- * Daily Report Studio for PYNN PRIDI 37
+ * Daily Report Studio for PYNN EKKAMAI 12
  * Standard SANSIRI Daily Work Report & Piling Progress Multi-Page PDF Exporter
  * 
  * Features:
@@ -273,9 +273,9 @@
       return window.progressRecords;
     }
     try {
-      const raw = localStorage.getItem('PYNN37_PILING_PROGRESS_LIVE_v3') ||
-                  localStorage.getItem('PYNN37_PILING_PROGRESS_v2') ||
-                  localStorage.getItem('pynn_pridi37_piling_progress');
+      const raw = localStorage.getItem('PE12_PILING_PROGRESS_LIVE_v3') ||
+                  localStorage.getItem('PE12_PILING_PROGRESS_v2') ||
+                  localStorage.getItem('pynn_ekkamai12_piling_progress');
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object') return parsed;
@@ -287,7 +287,7 @@
   // Global State for Daily Report Studio
   const DailyReportState = {
     date: '',
-    projectName: 'PYNN PRIDI 37',
+    projectName: 'PYNN EKKAMAI 12',
     toCompany: 'บริษัท แสนสิริ จำกัด (มหาชน)',
     recipient: 'คุณ วิสุทธิ์ จันทร์วัฒรังกูล',
     authorCompany: 'บริษัท แสนสิริ จำกัด (มหาชน)',
@@ -322,18 +322,18 @@
       columns: ['ลำดับ', 'ID', 'รายการ', 'STATUS', 'หมายเหตุ'],
       rows: [
         { isGroup: true, label: 'Material' },
-        { isGroup: false, cells: ['1', 'PYNN37-SSRC-SSR-MAT-STR-012:00', 'ขออนุมัติใช้น้ำยาประสานคอนกรีต', 'AP', ''] },
-        { isGroup: false, cells: ['2', 'PYNN37-SSRC-SSR-MAT-STR-013:00', 'ขออนุมัติใช้ปูน Non-Shrink เกร้าท์', 'AP', ''] },
-        { isGroup: false, cells: ['3', 'PYNN37-SSRC-SSR-MAT-STR-002:00', 'ขออนุมัติใช้คอนกรีตสำเร็จรูป', 'AP', ''] },
-        { isGroup: false, cells: ['4', 'PYNN37-SSRC-SSR-MAT-STR-003:00', 'ขออนุมัติใช้เสาเข็ม', 'AP', ''] },
-        { isGroup: false, cells: ['5', 'PYNN37-SSRC-SSR-MAT-STR-004:00', 'ขออนุมัติใช้เหล็กเส้นเสริมคอนกรีต', 'AP', ''] },
-        { isGroup: false, cells: ['6', 'PYNN37-SSRC-SSR-MAT-STR-007:00', 'ขออนุมัติใช้ตะแกรงกัน Joint', 'AP', ''] },
-        { isGroup: false, cells: ['7', 'PYNN37-SSRC-SSR-MAT-STR-005:00', 'ขออนุมัติใช้ Waterstop', 'AP', ''] },
+        { isGroup: false, cells: ['1', 'PE12-SSRC-SSR-MAT-STR-012:00', 'ขออนุมัติใช้น้ำยาประสานคอนกรีต', 'AP', ''] },
+        { isGroup: false, cells: ['2', 'PE12-SSRC-SSR-MAT-STR-013:00', 'ขออนุมัติใช้ปูน Non-Shrink เกร้าท์', 'AP', ''] },
+        { isGroup: false, cells: ['3', 'PE12-SSRC-SSR-MAT-STR-002:00', 'ขออนุมัติใช้คอนกรีตสำเร็จรูป', 'AP', ''] },
+        { isGroup: false, cells: ['4', 'PE12-SSRC-SSR-MAT-STR-003:00', 'ขออนุมัติใช้เสาเข็ม', 'AP', ''] },
+        { isGroup: false, cells: ['5', 'PE12-SSRC-SSR-MAT-STR-004:00', 'ขออนุมัติใช้เหล็กเส้นเสริมคอนกรีต', 'AP', ''] },
+        { isGroup: false, cells: ['6', 'PE12-SSRC-SSR-MAT-STR-007:00', 'ขออนุมัติใช้ตะแกรงกัน Joint', 'AP', ''] },
+        { isGroup: false, cells: ['7', 'PE12-SSRC-SSR-MAT-STR-005:00', 'ขออนุมัติใช้ Waterstop', 'AP', ''] },
         { isGroup: true, label: 'Shop Drawing' },
-        { isGroup: false, cells: ['8', 'PYNN37-SSRC-SSR-SHOP-STR-002:00', 'แปลนค่าพิกัดเข็ม', 'AP', ''] },
-        { isGroup: false, cells: ['9', 'PYNN37-SSRC-SSR-SHOP-STR-011:00', 'แบบขยายเสาชั้น 1-8', 'AP', ''] },
-        { isGroup: false, cells: ['10', 'PYNN37-SSRC-SSR-SHOP-STR-007:00', 'แปลนโครงสร้างพื้นถังเก็บน้ำชั้นใต้ดิน', 'APN', '***ในกรณีที่มีการขยายหรือปรับแนวผนังถังเก็บน้ำเพื่อเพิ่มปริมาตร ให้นำเสนอต่อผู้ออกแบบอีกครั้ง เพื่อพิจารณาแนวทางดำเนินการต่อไป'] },
-        { isGroup: false, cells: ['11', 'PYNN37-SSRC-SSR-SHOP-STR-008:00', 'รูปตัดถังเก็บน้ำใต้ดิน', 'APN', '***ในกรณีที่มีการขยายหรือปรับแนวผนังถังเก็บน้ำเพื่อเพิ่มปริมาตร ให้นำเสนอต่อผู้ออกแบบอีกครั้ง เพื่อพิจารณาแนวทางดำเนินการต่อไป'] }
+        { isGroup: false, cells: ['8', 'PE12-SSRC-SSR-SHOP-STR-002:00', 'แปลนค่าพิกัดเข็ม', 'AP', ''] },
+        { isGroup: false, cells: ['9', 'PE12-SSRC-SSR-SHOP-STR-011:00', 'แบบขยายเสาชั้น 1-8', 'AP', ''] },
+        { isGroup: false, cells: ['10', 'PE12-SSRC-SSR-SHOP-STR-007:00', 'แปลนโครงสร้างพื้นถังเก็บน้ำชั้นใต้ดิน', 'APN', '***ในกรณีที่มีการขยายหรือปรับแนวผนังถังเก็บน้ำเพื่อเพิ่มปริมาตร ให้นำเสนอต่อผู้ออกแบบอีกครั้ง เพื่อพิจารณาแนวทางดำเนินการต่อไป'] },
+        { isGroup: false, cells: ['11', 'PE12-SSRC-SSR-SHOP-STR-008:00', 'รูปตัดถังเก็บน้ำใต้ดิน', 'APN', '***ในกรณีที่มีการขยายหรือปรับแนวผนังถังเก็บน้ำเพื่อเพิ่มปริมาตร ให้นำเสนอต่อผู้ออกแบบอีกครั้ง เพื่อพิจารณาแนวทางดำเนินการต่อไป'] }
       ]
     },
     tasksRemarks: [],
@@ -481,7 +481,7 @@
 
     // Save locally immediately
     try {
-      localStorage.setItem('PYNN37_DAILY_REPORT_CONFIG', JSON.stringify(config));
+      localStorage.setItem('PE12_DAILY_REPORT_CONFIG', JSON.stringify(config));
     } catch (_) {}
 
     const btn = document.getElementById('btn-dr-save-supabase');
@@ -533,7 +533,7 @@
   async function loadDailyReportConfigFromSupabase() {
     // 1. Read from localStorage cache first
     try {
-      const raw = localStorage.getItem('PYNN37_DAILY_REPORT_CONFIG');
+      const raw = localStorage.getItem('PE12_DAILY_REPORT_CONFIG');
       if (raw) {
         const parsed = JSON.parse(raw);
         applyDailyReportConfig(parsed);
@@ -559,9 +559,19 @@
     }
   }
 
+  function normalizeProjectBrand(val) {
+    if (typeof val !== 'string') return val;
+    return val
+      .replace(/PYNN\s*PRIDI\s*37/gi, 'PYNN EKKAMAI 12')
+      .replace(/PRIDI\s*37/gi, 'EKKAMAI 12')
+      .replace(/ซอยปรีดี\s*พนมยงค์\s*37/g, 'ซอยเอกมัย 12')
+      .replace(/PYNN37-/gi, 'PE12-')
+      .replace(/P37-/gi, 'PE12-');
+  }
+
   function applyDailyReportConfig(cfg) {
     if (!cfg) return;
-    if (cfg.projectName) DailyReportState.projectName = cfg.projectName;
+    if (cfg.projectName) DailyReportState.projectName = normalizeProjectBrand(cfg.projectName);
     if (cfg.toCompany) DailyReportState.toCompany = cfg.toCompany;
     if (cfg.recipient) DailyReportState.recipient = cfg.recipient;
     if (cfg.authorCompany) DailyReportState.authorCompany = cfg.authorCompany;
@@ -596,10 +606,13 @@
       DailyReportState.conzolMode = cfg.conzolMode;
     }
     if (cfg.conzolTitle !== undefined && String(cfg.conzolTitle).trim() !== '') {
-      DailyReportState.conzolTitle = String(cfg.conzolTitle).trim();
+      DailyReportState.conzolTitle = normalizeProjectBrand(String(cfg.conzolTitle).trim());
     }
     if (cfg.conzolTable && Array.isArray(cfg.conzolTable.columns) && cfg.conzolTable.columns.length > 0 && Array.isArray(cfg.conzolTable.rows)) {
-      DailyReportState.conzolTable = cfg.conzolTable;
+      DailyReportState.conzolTable = {
+        columns: cfg.conzolTable.columns,
+        rows: cfg.conzolTable.rows.map(r => r && Array.isArray(r.cells) ? { ...r, cells: r.cells.map(c => normalizeProjectBrand(c)) } : r)
+      };
     }
 
     if (cfg.manpower) {
@@ -635,7 +648,7 @@
     const pilesDb = window.__PILES_DB__ || [];
     const progressRecs = getProgressRecords();
 
-    // 7 Official Footing Groups of PYNN PRIDI 37 (Image 3: F20A, F18A, F6, F3, F2, F5, F1)
+    // 7 Official Footing Groups of PYNN EKKAMAI 12 (Image 3: F20A, F18A, F6, F3, F2, F5, F1)
     const footingsOrder = ['F20A', 'F18A', 'F6', 'F3', 'F2', 'F5', 'F1'];
     const existingSet = new Set(footingsOrder.map(f => f.toUpperCase()));
 
@@ -869,7 +882,7 @@
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <span class="px-1.5 sm:px-2 py-0.5 rounded-none text-[9px] sm:text-[10px] font-black bg-slate-900 text-white shadow-[1px_1px_0px_#0f172a]">SANSIRI STANDARD</span>
-                  <span class="text-[11px] sm:text-xs text-slate-600 font-bold truncate">PYNN PRIDI 37</span>
+                  <span class="text-[11px] sm:text-xs text-slate-600 font-bold truncate">PYNN EKKAMAI 12</span>
                 </div>
                 <h2 class="text-xs sm:text-base font-black text-slate-900 leading-tight truncate">
                   ระบบจัดทำ Daily Report & รายงานเสาเข็ม (PDF 4 หน้า A4)
@@ -1958,7 +1971,7 @@
       <div class="border-2 border-black px-2 py-1 mb-1 bg-white">
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-[9.5px] font-bold text-slate-800 leading-tight">โครงการ PYNN PRIDI 37 (ซอยปรีดี พนมยงค์ 37)</div>
+            <div class="text-[9.5px] font-bold text-slate-800 leading-tight">โครงการ PYNN EKKAMAI 12 (ซอยเอกมัย 12)</div>
             <h2 class="text-xs sm:text-[13px] font-black text-black leading-tight">รายงานความคืบหน้างานเสาเข็ม (Piling Progress Report)</h2>
           </div>
           <div class="text-right leading-tight">
@@ -3615,7 +3628,7 @@
         let y = now.getFullYear() + 543;
         yy = String(y % 100).padStart(2, '0');
       }
-      return `Daily Report   โครงการ Pynn PRidi37   ${dd}-${mm}-${yy}.pdf`;
+      return `Daily Report   โครงการ PYNN EKKAMAI 12   ${dd}-${mm}-${yy}.pdf`;
     }
 
     const filename = getDailyReportPdfFilename();

@@ -1,5 +1,5 @@
 # 🎨 คู่มือระบบสีและการออกแบบสไตล์ DoodleWeb (Design System Cheat Sheet)
-**โครงการ:** PYNN PRIDI 37  
+**โครงการ:** PYNN EKKAMAI 12  
 **แรงบันดาลใจ:** [DoodleWeb (doodleweb.io)](https://doodleweb.io/services/web-design-and-development)  
 **ไฟล์ CSS หลัก:** `doodle_theme.css`  
 **ไฟล์สเปกทางการ:** `DESIGN.md`
@@ -34,7 +34,7 @@
 
 | รหัสสี | โทน | การใช้งาน |
 |---|---|---|
-| `#F26B2A` | **Tangerine Primary** | ปุ่มหลัก (Primary CTA), ตัวหนังสือไฮไลต์ (เช่น `PRIDI 37`), ขอบช่องวันที่ปัจจุบัน (Today), **สีเงา Hover (`hover:shadow-[6px_6px_0px_#F26B2A]`)**, สี Hilight คลุมข้อความ |
+| `#F26B2A` | **Tangerine Primary** | ปุ่มหลัก (Primary CTA), ตัวหนังสือไฮไลต์ (เช่น `EKKAMAI 12`), ขอบช่องวันที่ปัจจุบัน (Today), **สีเงา Hover (`hover:shadow-[6px_6px_0px_#F26B2A]`)**, สี Hilight คลุมข้อความ |
 | `#FFE8D6` | Tangerine Soft Tint | พื้นหลังแถบตารางวันที่กำลังเลือก, กล่องเน้นข้อความ |
 | `#FFF3EB` | Tangerine Ultra Light | พื้นหลังเซลล์ข้อมูลวันปัจจุบันในตาราง Ledger |
 
@@ -96,7 +96,7 @@ box-shadow: 1px 1px 0px #1D2B45;
 1. **ฟอนต์หัวเรื่องสไตล์นิตยสาร (Editorial Serif)**:
    - ฟอนต์: `'Fraunces', Georgia, serif`
    - จุดเด่น: หรูหรา อบอุ่น มีสไตล์ เส้นหนาบางชัดเจน
-   - ใช้กับ: ชื่อโครงการ `PYNN PRIDI 37`, ตัวเลขไฮไลต์ใหญ่
+   - ใช้กับ: ชื่อโครงการ `PYNN EKKAMAI 12`, ตัวเลขไฮไลต์ใหญ่
 2. **ฟอนต์เนื้อหาและปุ่ม (Modern Geometric Sans)**:
    - ฟอนต์: `'DM Sans', 'Prompt', 'Sarabun', sans-serif`
    - จุดเด่น: อ่านง่าย ทันสมัย รองรับภาษาไทยสมบูรณ์แบบ

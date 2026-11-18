@@ -1,5 +1,5 @@
 window.__FOOTINGS_METADATA__ = {
-  "project": "PYNN PRIDI 37",
+  "project": "PYNN EKKAMAI 12",
   "scene": "06_ฟุตติ้ง_เข็ม_เหล็กตอม่อ_TOP_BOT_PCO",
   "generated_at": "2026-10-18 20:15:19",
   "summary": {
@@ -23,7 +23,7 @@ window.__FOOTINGS_METADATA__ = {
       "length_m": 19.77
     },
     "east": {
-      "label": "18.25 m (SOI PRIDI 37)",
+      "label": "18.25 m (SOI EKKAMAI 12)",
       "length_m": 18.25
     },
     "code": "n115816"
@@ -836,7 +836,7 @@ window.__FOOTINGS_METADATA__ = {
         },
         {
           "no": 37,
-          "tag": "P37",
+          "tag": "PE12",
           "grid": "2-D",
           "pco": -1.426
         }

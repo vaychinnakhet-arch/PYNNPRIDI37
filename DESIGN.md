@@ -1,5 +1,5 @@
 ---
-name: PYNN PRIDI 37 — DoodleWeb Warm Craft Design System
+name: PYNN EKKAMAI 12 — DoodleWeb Warm Craft Design System
 description: Warm editorial craft design system inspired by DoodleWeb, featuring warm cream paper canvas, deep navy ink, vibrant tangerine accents, Fraunces serif typography, and tactile offset shadows with signature orange hover pops.
 colors:
   # Canvas & Paper
@@ -94,7 +94,7 @@ components:
 # DESIGN.md — DoodleWeb Warm Craft Edition
 
 ## Overview
-A warm, tactile, high-craft design system crafted for the **PYNN PRIDI 37** construction telemetry portal. Inspired directly by the visual identity of **DoodleWeb** ([doodleweb.io](https://doodleweb.io/services/web-design-and-development)), this design system reconciles precision engineering telemetry (93 piles, S-curve analytics, 3D BIM models) with warm editorial elegance, inviting paper textures, friendly squircles, pill badges, and playful tactile physics.
+A warm, tactile, high-craft design system crafted for the **PYNN EKKAMAI 12** construction telemetry portal. Inspired directly by the visual identity of **DoodleWeb** ([doodleweb.io](https://doodleweb.io/services/web-design-and-development)), this design system reconciles precision engineering telemetry (93 piles, S-curve analytics, 3D BIM models) with warm editorial elegance, inviting paper textures, friendly squircles, pill badges, and playful tactile physics.
 
 ---
 
@@ -132,7 +132,7 @@ A warm, tactile, high-craft design system crafted for the **PYNN PRIDI 37** cons
 ### 1. Font Hierarchy
 - **Editorial Display**: `'Fraunces', Georgia, serif`
   - High-contrast, warm editorial serif with distinctive human curves.
-  - Used for: Brand identity (`PYNN PRIDI 37`), Hero milestone headlines, and primary dashboard greetings.
+  - Used for: Brand identity (`PYNN EKKAMAI 12`), Hero milestone headlines, and primary dashboard greetings.
 - **Modern Sans (Body & Controls)**: `'DM Sans', 'Prompt', 'Sarabun', sans-serif`
   - Crisp, legible geometric grotesque with full Thai language support.
   - Used for: Button text, table labels, card copy, dialog instructions.
