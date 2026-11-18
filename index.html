@@ -7862,31 +7862,46 @@ body.manga-screentone-bg,
           </div>
         </div>
 
-        <!-- Piling Dedicated Hero Portal Card (DoodleWeb Warm Craft Edition) -->
+        <!-- Piling Dedicated Hero Portal Card (UX Psychology + Warm Craft Edition) -->
         <div class="doodle-card-hero mb-8 p-5 sm:p-7 md:p-8 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45]">
-          <!-- Consolidated Specification Bar (Single Row, Zero Clutter) -->
-          <div class="flex items-center justify-between flex-wrap gap-2.5 mb-6 pb-3.5 border-b-2 border-[#1D2B45]/15 relative z-10">
+          <!-- Consolidated Specification & Delay Alert Bar (Cognitive Load: Single Scan Row) -->
+          <div class="flex items-center justify-between flex-wrap gap-2.5 mb-5 pb-3.5 border-b-2 border-[#1D2B45]/15 relative z-10">
             <div class="flex items-center gap-2 flex-wrap">
               <span class="doodle-pill bg-[#1D2B45] text-white text-[10.5px] font-mono font-bold shadow-2xs">
                 SPECIFICATION
               </span>
               <span class="doodle-pill bg-[#FAF5EE] text-[#1D2B45] text-xs font-bold border-[#1D2B45] shadow-2xs">
-                เสาเข็มคอนกรีตอัดแรงไอ 0.40 × 21.00 ม. (มอก. 396-2549)
-              </span>
-              <span class="doodle-pill bg-[#FAF5EE] text-[#3E4B69] text-xs font-bold border-[#1D2B45]/40 font-mono hidden sm:inline-flex shadow-2xs">
-                แผนรวม 93 ต้น · อัตราเฉลี่ย 3 ต้น/วัน (31 วันทำการ)
+                เสาเข็ม I 0.40 × 21.00 ม. · แผน 93 ต้น (3 ต้น/วัน · 31 วันทำการ)
               </span>
             </div>
-            <div class="flex items-center gap-2 text-xs font-mono font-bold text-[#3E4B69]">
+            <div id="portal-header-status-pill" class="doodle-pill bg-[#ECFDF5] border-[#10B981] text-[#065F46] text-xs font-mono font-bold shadow-2xs">
               <span class="doodle-dot-live"></span>
-              <span class="text-[#1D2B45]">LIVE TELEMETRY</span>
+              <span>LIVE TELEMETRY</span>
             </div>
           </div>
 
-          <!-- Main 2-Column Grid: Left S-Curve Progress Chart | Right Controls & Live Stats -->
+          <!-- Loss Aversion / Preattentive Overdue Alert Banner (Shown automatically when delayed past D31) -->
+          <div id="portal-delay-banner" class="hidden mb-5 px-4 py-3 rounded-2xl bg-[#FFF1F2] border-2 border-[#E64C3C] shadow-[3px_3px_0px_#E64C3C] flex items-center justify-between flex-wrap gap-2 relative z-10">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-7 h-7 rounded-xl bg-[#E64C3C] text-white flex items-center justify-center font-black text-sm shrink-0">!</span>
+              <div class="min-w-0">
+                <div id="portal-delay-banner-title" class="text-xs sm:text-sm font-black text-[#9F1239] leading-tight">
+                  เลยกำหนดแผน 31 วันทำการแล้ว
+                </div>
+                <div id="portal-delay-banner-sub" class="text-[11px] font-bold text-[#9F1239]/85 mt-0.5">
+                  กราฟและตารางด้านล่างขยายแสดงช่วงวันล่าช้าถึงวันปัจจุบันอัตโนมัติ
+                </div>
+              </div>
+            </div>
+            <a href="piling.html?view=3d#remaining" class="doodle-pill bg-[#E64C3C] hover:bg-[#BE123C] text-white border-[#1D2B45] text-[11px] font-black shrink-0 transition-colors">
+              ดูต้นที่เหลือใน 3D →
+            </a>
+          </div>
+
+          <!-- Main 2-Column Grid: Left S-Curve Progress Chart | Right Goal-Gradient KPI Console -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch relative z-10">
             
-            <!-- Left (Col 12 / Lg 7): S-Curve Progress Chart (Plan vs Actual) -->
+            <!-- Left (Col 12 / Lg 7): S-Curve Progress Chart (Plan vs Actual + Overdue Zone) -->
             <div class="lg:col-span-7 flex flex-col">
               <div class="flex-1 flex flex-col min-h-0">
                 <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5 shrink-0">
@@ -7894,244 +7909,157 @@ body.manga-screentone-bg,
                     <span>กราฟเปรียบเทียบผลงานเสาเข็ม</span>
                     <span class="doodle-pill bg-[#1D2B45] text-white text-[9.5px] font-mono">PLAN VS ACTUAL</span>
                   </h2>
-                  <div class="flex items-center gap-2 text-xs font-bold">
-                    <span class="doodle-pill bg-[#FFF1F2] border-[#E64C3C] text-[#9F1239] text-[11px] shadow-2xs">
+                  <div class="flex items-center gap-1.5 flex-wrap text-xs font-bold">
+                    <span class="doodle-pill bg-[#FFF1F2] border-[#E64C3C] text-[#9F1239] text-[10.5px] shadow-2xs">
                       <span class="w-2.5 h-0.5 bg-[#E64C3C] inline-block mr-1"></span>
-                      แผนสะสม (3 ต้น/วัน)
+                      แผนสะสม (93 ต้น)
                     </span>
-                    <span class="doodle-pill doodle-pill-teal text-[11px] shadow-2xs">
+                    <span class="doodle-pill doodle-pill-teal text-[10.5px] shadow-2xs">
                       <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1"></span>
                       ผลงานจริงสะสม
+                    </span>
+                    <span id="portal-chart-delay-legend" class="hidden doodle-pill bg-[#FFE4E6] border-[#E64C3C] text-[#9F1239] text-[10.5px] shadow-2xs">
+                      <span class="w-2.5 h-2.5 rounded-xs bg-[#E64C3C]/25 border border-[#E64C3C] inline-block mr-1"></span>
+                      ช่วงล่าช้า
                     </span>
                   </div>
                 </div>
 
                 <!-- Chart Canvas Box: Full Height S-Curve Monitor -->
                 <div 
-                  class="doodle-chart-frame relative w-full flex-1 h-[370px] sm:h-[390px] lg:h-[415px] p-2.5 sm:p-3 overflow-hidden bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45]"
+                  class="doodle-chart-frame relative w-full flex-1 min-h-[340px] sm:min-h-[370px] lg:min-h-[390px] p-2.5 sm:p-3 overflow-hidden bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45]"
                 >
                   <canvas id="splashScurveCanvas" class="w-full h-full block"></canvas>
                 </div>
               </div>
             </div>
 
-            <!-- Right (Col 12 / Lg 5): Metric Dashboard & Live Counters in High-Contrast Orderly Layer -->
+            <!-- Right (Col 12 / Lg 5): Goal-Gradient & 3-Second Scan KPI Console -->
             <div class="lg:col-span-5 flex flex-col justify-between doodle-card p-4 sm:p-5 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] overflow-hidden">
               <div>
-                <!-- Console Top Header Ribbon: Deep Navy with Status LED & Big Counter -->
-                <div class="flex items-center justify-between p-3.5 bg-[#1D2B45] text-white rounded-xl mb-3.5 shadow-[2px_2px_0px_#1D2B45]">
-                  <div class="flex items-center gap-2">
-                    <span class="doodle-pill doodle-pill-teal text-[10px] font-black uppercase tracking-wider">
-                      <span class="doodle-dot-live"></span>
-                      ACTIVE
-                    </span>
-                    <span class="text-xs font-bold tracking-wide text-white uppercase" style="font-family: 'DM Sans', 'Prompt', sans-serif;">
+                <!-- Console Top Header Ribbon: Progress % + Goal-Gradient Remaining Callout -->
+                <div class="p-3.5 sm:p-4 bg-[#1D2B45] text-white rounded-xl mb-3.5 shadow-[2px_2px_0px_#1D2B45]">
+                  <div class="flex items-center justify-between gap-2 mb-2">
+                    <span class="text-xs font-bold tracking-wide text-white/90">
                       ความคืบหน้างานเสาเข็มรวม
                     </span>
+                    <span id="portal-goal-pill" class="px-2.5 py-0.5 rounded-full bg-[#F7B844] text-[#1D2B45] text-[10.5px] font-black tracking-tight">
+                      อีก 93 ต้น ครบ 93 ต้น
+                    </span>
                   </div>
-                  <div class="flex items-baseline gap-1">
-                    <span id="portal-piling-percent" class="font-display text-3xl sm:text-4xl font-black text-[#F7B844] tracking-tight">0%</span>
+                  <div class="flex items-baseline justify-between gap-2">
+                    <span id="portal-piling-percent" class="font-display text-4xl sm:text-5xl font-black text-[#F7B844] tracking-tight leading-none">0%</span>
+                    <span id="portal-piling-fraction" class="font-mono text-xs sm:text-sm font-bold text-white/80">0 / 93 ต้น</span>
                   </div>
-                </div>
-                
-                <!-- Doodle Pill Progress Bar -->
-                <div class="w-full h-4 bg-white border-2 border-[#1D2B45] rounded-full overflow-hidden mb-3.5 p-0.5 shadow-inner">
-                  <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-[#10B981] to-[#40C4C4] rounded-full transition-all duration-700" style="width: 0%"></div>
+                  <!-- Progress Bar inside dark console for strong figure-ground contrast -->
+                  <div class="w-full h-3.5 bg-white/15 border border-white/25 rounded-full overflow-hidden mt-3 p-0.5">
+                    <div id="portal-piling-progress-bar" class="h-full bg-gradient-to-r from-[#10B981] via-[#40C4C4] to-[#F7B844] rounded-full transition-all duration-700" style="width: 0%"></div>
+                  </div>
                 </div>
 
-                <!-- 4-Stat Metric Grid in Rich DoodleWeb Cards -->
-                <div class="grid grid-cols-2 gap-2.5 mb-2">
-                  <!-- Stat 1: Driven Cumulative (Soft Mint Pastel) -->
-                  <a href="piling.html?view=3d#completed" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#10B981] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มที่กดเสร็จในโมเดล 3D">
+                <!-- 4-Stat Metric Grid (Miller's Law: 4 clean chunks, zero duplicate widgets) -->
+                <div class="grid grid-cols-2 gap-3">
+                  <!-- Stat 1: Driven Cumulative -->
+                  <a href="piling.html?view=3d#completed" class="doodle-metric-tile block p-3.5 bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#10B981] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มที่กดเสร็จในโมเดล 3D">
                     <div class="flex items-center justify-between">
                       <span class="text-[11px] font-black text-[#14532D] block">กดเสร็จสะสม</span>
-                      <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border border-[#1D2B45] flex items-center justify-center text-[#14532D] shadow-2xs">
-                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#10B981]"></i>
-                      </div>
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-[#10B981]"></i>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1">
+                    <div class="flex items-baseline gap-1 mt-1.5">
                       <span id="portal-piling-driven-count" class="font-display text-2xl sm:text-3xl font-extrabold text-[#14532D]">0</span>
                       <span class="text-[11px] font-bold text-[#14532D] font-mono">/ 93 ต้น</span>
                     </div>
-                    <div class="text-[9.5px] font-bold text-[#14532D]/80 truncate mt-0.5">28.0% ของงานทั้งหมด</div>
+                    <div id="portal-piling-driven-sub" class="text-[10px] font-bold text-[#14532D]/80 truncate mt-1">0.0% ของงานทั้งหมด</div>
                   </a>
 
-                  <!-- Stat 2: Today Driven (Soft Butter Pastel) - ACCURATELY ZERO UNTIL FILLED TODAY! -->
-                  <a href="piling.html?view=report#today" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#FEF9C3] hover:bg-[#FEF08A] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#F7B844] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อเปิดรายงานประจำวัน">
+                  <!-- Stat 2: Today Driven -->
+                  <a href="piling.html?view=report#today" class="doodle-metric-tile block p-3.5 bg-[#FEF9C3] hover:bg-[#FEF08A] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#F7B844] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อเปิดรายงานประจำวัน">
                     <div class="flex items-center justify-between">
                       <span class="text-[11px] font-black text-[#78350F] block">กดเสร็จวันนี้</span>
                       <span class="doodle-pill bg-[#F7B844] border border-[#1D2B45] text-[#1D2B45] text-[9px] font-black">TODAY</span>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1">
+                    <div class="flex items-baseline gap-1 mt-1.5">
                       <span id="portal-piling-today" class="font-display text-2xl sm:text-3xl font-extrabold text-[#78350F]">0</span>
                       <span class="text-[11px] font-bold text-[#78350F]">ต้น</span>
                     </div>
-                    <div id="portal-piling-today-sub" class="text-[9.5px] font-bold text-[#78350F]/80 truncate mt-0.5">ยังไม่บันทึกวันนี้ · ล่าสุด 24 ต.ค. (2 ต้น)</div>
+                    <div id="portal-piling-today-sub" class="text-[10px] font-bold text-[#78350F]/80 truncate mt-1">กำลังโหลดข้อมูล...</div>
                   </a>
 
-                  <!-- Stat 3: Remaining Piles (Soft Sky Pastel) -->
-                  <a href="piling.html?view=3d#remaining" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#E0F2FE] hover:bg-[#BAE6FD] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#0284C7] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มคงเหลือในโมเดล 3D">
+                  <!-- Stat 3: Goal-Gradient Remaining -->
+                  <a href="piling.html?view=3d#remaining" class="doodle-metric-tile block p-3.5 bg-[#E0F2FE] hover:bg-[#BAE6FD] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#0284C7] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูเสาเข็มคงเหลือในโมเดล 3D">
                     <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-[#075985] block">คงเหลือ</span>
-                      <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border border-[#1D2B45] flex items-center justify-center text-[#075985] shadow-2xs">
-                        <i data-lucide="clock" class="w-3.5 h-3.5 text-[#0284C7]"></i>
-                      </div>
+                      <span class="text-[11px] font-black text-[#075985] block">เหลืออีก (ปิดงาน)</span>
+                      <i data-lucide="target" class="w-4 h-4 text-[#0284C7]"></i>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1">
+                    <div class="flex items-baseline gap-1 mt-1.5">
                       <span id="portal-piling-remain" class="font-display text-2xl sm:text-3xl font-extrabold text-[#075985]">93</span>
                       <span class="text-[11px] font-bold text-[#075985]">ต้น</span>
                     </div>
-                    <div class="text-[9.5px] font-bold text-[#075985]/80 truncate mt-0.5">เป้าหมายเสร็จตามสัญญา</div>
+                    <div id="portal-piling-remain-sub" class="text-[10px] font-bold text-[#075985]/80 truncate mt-1">เป้าหมายครบ 93 ต้น</div>
                   </a>
 
-                  <!-- Stat 4: Schedule Variance (Soft Blush/Rose Pastel) -->
-                  <a href="piling.html?view=report#variance" id="portal-piling-variance-card" class="doodle-metric-tile block p-3 sm:p-3.5 bg-[#FFE4E6] hover:bg-[#FECDD3] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#E64C3C] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูรายละเอียดผลงานเทียบแผน">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[11px] font-black text-[#9F1239] block">สถานะเทียบแผน</span>
-                      <span id="portal-piling-variance-badge" class="doodle-pill bg-[#E64C3C] text-white border border-[#1D2B45] text-[9px] font-black">ช้ากว่าแผน</span>
+                  <!-- Stat 4: Schedule Variance (Loss Aversion / Delay Highlight) -->
+                  <a href="piling.html?view=report#variance" id="portal-piling-variance-card" class="doodle-metric-tile block p-3.5 bg-[#FFE4E6] hover:bg-[#FECDD3] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#E64C3C] active:translate-x-[1px] active:translate-y-[1px]" title="คลิกเพื่อดูรายละเอียดผลงานเทียบแผน">
+                    <div class="flex items-center justify-between gap-1">
+                      <span class="text-[11px] font-black text-[#9F1239] block truncate">สถานะเทียบแผน</span>
+                      <span id="portal-piling-variance-badge" class="doodle-pill bg-[#E64C3C] text-white border border-[#1D2B45] text-[9px] font-black shrink-0">ช้ากว่าแผน</span>
                     </div>
-                    <div class="flex items-baseline gap-1 mt-1">
-                      <span id="portal-piling-variance-val" class="font-display text-2xl sm:text-3xl font-extrabold text-[#9F1239]">-19</span>
+                    <div class="flex items-baseline gap-1 mt-1.5">
+                      <span id="portal-piling-variance-val" class="font-display text-2xl sm:text-3xl font-extrabold text-[#9F1239]">0</span>
                       <span id="portal-piling-variance-unit" class="text-[11px] font-bold text-[#9F1239]">ต้น</span>
                     </div>
-                    <span id="portal-piling-variance-sub" class="text-[9.5px] text-[#9F1239] font-bold block truncate mt-0.5 font-mono">แผนสะสม 45 · จริง 26 ต้น</span>
+                    <span id="portal-piling-variance-sub" class="text-[10px] text-[#9F1239] font-bold block truncate mt-1 font-mono">กำลังคำนวณ...</span>
                   </a>
                 </div>
+              </div>
 
-                <!-- ✦ CRAFT PILING RIG VISUAL TELEMETRY CARD (TACTILE & ELEGANT) -->
-                <div class="mt-3.5 pt-3 border-t-2 border-[#1D2B45]/15">
-                  <!-- Animated Piling Scene Container -->
-                  <div id="piling-rig-scene" onclick="window.triggerRigImpact()" class="relative w-full bg-white border-2 border-[#1D2B45] rounded-2xl overflow-hidden p-3 sm:p-3.5 flex items-center gap-3.5 shadow-[3px_3px_0px_#1D2B45] hover:shadow-[4.5px_4.5px_0px_#1D2B45] hover:-translate-y-0.5 active:translate-y-0.5 transition-all cursor-pointer group" title="แตะหรือคลิกเพื่อดูจังหวะกดเสาเข็ม">
-                    <!-- Clean Subtle Strata Bands (Zero distracting background text) -->
-                    <div class="absolute inset-y-0 right-0 w-1/2 pointer-events-none flex flex-col opacity-15">
-                      <div class="h-1/3 bg-[#F6E9D7]"></div>
-                      <div class="h-1/3 bg-[#E2D9CC]"></div>
-                      <div class="h-1/3 bg-[#CBD5E1]"></div>
+              <!-- Fitts's Law: Primary Action inside Cockpit + Quiet Secondary Links -->
+              <div class="mt-4 pt-3.5 border-t-2 border-[#1D2B45]/15 space-y-2.5">
+                <a
+                  href="piling.html?view=3d#3d"
+                  class="hero-cta-btn w-full min-h-[60px] flex items-center justify-between px-4 sm:px-5 py-3 cursor-pointer group bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] hover:shadow-[5px_5px_0px_#1D2B45] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+                  title="คลิกเพื่อเข้าสู่แบบจำลอง 3D เสาเข็ม 93 ต้น และเริ่มงานทันที"
+                >
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-xl flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#1D2B45] group-hover:rotate-6 transition-transform">
+                      <i data-lucide="box" class="w-5 h-5 text-[#F26B2A]"></i>
                     </div>
-
-                    <!-- Animated Pile Rig Illustration (SVG Craft) -->
-                    <div class="relative z-10 w-12 sm:w-14 h-16 sm:h-20 shrink-0 flex items-end justify-center group-hover:scale-105 transition-transform duration-200">
-                      <svg viewBox="0 0 70 95" class="w-full h-full overflow-visible">
-                        <rect x="5" y="85" width="60" height="7" rx="2" fill="#1D2B45" stroke="#1D2B45" stroke-width="1.5"/>
-                        <circle cx="15" cy="88" r="2" fill="#F7B844"/>
-                        <circle cx="55" cy="88" r="2" fill="#F7B844"/>
-                        <line x1="12" y1="85" x2="28" y2="12" stroke="#1D2B45" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="58" y1="85" x2="42" y2="12" stroke="#1D2B45" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="20" y1="65" x2="50" y2="65" stroke="#F26B2A" stroke-width="1.5"/>
-                        <line x1="25" y1="45" x2="45" y2="45" stroke="#F26B2A" stroke-width="1.5"/>
-                        <line x1="30" y1="25" x2="40" y2="25" stroke="#F26B2A" stroke-width="1.5"/>
-                        <circle cx="35" cy="12" r="6" fill="#F7B844" stroke="#1D2B45" stroke-width="2"/>
-                        <circle cx="35" cy="12" r="2" fill="#1D2B45"/>
-                        <line x1="35" y1="18" x2="35" y2="85" stroke="#3E4B69" stroke-width="1.5" stroke-dasharray="2 2"/>
-                        <g class="rig-hammer-animated" id="rig-hammer-group">
-                          <rect x="25" y="22" width="20" height="18" rx="3" fill="#F26B2A" stroke="#1D2B45" stroke-width="2"/>
-                          <rect x="28" y="32" width="14" height="6" fill="#E05615"/>
-                        </g>
-                        <rect x="27" y="55" width="16" height="8" rx="2" fill="#1D2B45"/>
-                        <rect x="30" y="63" width="10" height="24" rx="1" fill="#CBD5E1" stroke="#1D2B45" stroke-width="1.5"/>
-                        <ellipse cx="35" cy="87" rx="16" ry="3.5" fill="none" stroke="#F26B2A" stroke-width="2" class="ground-shockwave"/>
-                        <circle cx="28" cy="84" r="3" fill="#E2D9CC" class="dust-puff"/>
-                        <circle cx="42" cy="84" r="3.5" fill="#E2D9CC" class="dust-puff" style="animation-delay: 0.05s;"/>
-                      </svg>
+                    <div class="flex flex-col text-left leading-tight min-w-0">
+                      <span class="text-[9.5px] font-mono font-bold uppercase tracking-wider text-white/90">
+                        ACTIVE 3D WORKSPACE
+                      </span>
+                      <span class="font-display text-sm sm:text-base font-bold text-white tracking-tight truncate">
+                        เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น
+                      </span>
                     </div>
-
-                    <!-- Clean Readout & Bar (No ellipses, fully readable) -->
-                    <div class="flex-1 min-w-0 z-10">
-                      <div class="flex items-center justify-between mb-1.5 gap-1.5">
-                        <div class="flex items-center gap-1.5 min-w-0">
-                          <span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shrink-0"></span>
-                          <span id="rig-driven-title" class="font-display font-black text-xs sm:text-sm text-[#1D2B45] truncate">
-                            กดสะสม 26 ต้น
-                          </span>
-                        </div>
-                        <span id="rig-percent-pill" class="doodle-pill bg-[#FAF5EE] text-[#F26B2A] text-[9.5px] font-mono font-bold shrink-0 border border-[#1D2B45]/15">
-                          28.0%
-                        </span>
-                      </div>
-
-                      <!-- Pile Progress Bar -->
-                      <div class="w-full h-3 sm:h-3.5 bg-[#FAF5EE] border border-[#1D2B45] rounded-full overflow-hidden relative shadow-inner mb-2">
-                        <div id="rig-progress-fill" class="h-full bg-gradient-to-r from-[#10B981] via-[#40C4C4] to-[#F26B2A] rounded-full transition-all duration-500" style="width: 28.0%"></div>
-                      </div>
-
-                      <!-- Readable Telemetry Sentence (No truncated pills!) -->
-                      <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-[#3E4B69] whitespace-nowrap">
-                        <span class="font-medium text-[#64748B]">เป้าหมาย 93 ต้น</span>
-                        <span id="rig-remain-text" class="font-bold text-[#F26B2A]">คงเหลืออีก 67 ต้น</span>
-                      </div>
-                    </div>
-
                   </div>
+                  <div class="flex items-center gap-1.5 shrink-0 pl-2">
+                    <span class="doodle-pill bg-white text-[#1D2B45] text-[11px] font-bold shadow-2xs hidden sm:inline-flex">เริ่มงาน</span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-white group-hover:translate-x-1 transition-transform"></i>
+                  </div>
+                </a>
+
+                <!-- Hick's Law: Quiet 3-option Secondary Bar -->
+                <div class="grid grid-cols-3 gap-2">
+                  <a href="piling.html?view=report#report" class="px-2.5 py-2 rounded-xl bg-white hover:bg-[#ECFDF5] border-1.5 border-[#1D2B45]/40 hover:border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors text-center" title="เปิดรายงานผลงานเสาเข็มและบันทึกประจำวัน">
+                    <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#10B981] shrink-0"></i>
+                    <span class="truncate">รายงาน S-Curve</span>
+                  </a>
+                  <a href="footing.html" class="px-2.5 py-2 rounded-xl bg-white hover:bg-[#E0F2FE] border-1.5 border-[#1D2B45]/40 hover:border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors text-center" title="เปิดผังแบบจำลอง 3D ฐานราก ค.ส.ล. 21 ฐาน">
+                    <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0284C7] shrink-0"></i>
+                    <span class="truncate">ผังฐานราก 3D</span>
+                  </a>
+                  <button type="button" onclick="enterAppView('residential')" class="px-2.5 py-2 rounded-xl bg-white hover:bg-[#FFF1F2] border-1.5 border-[#1D2B45]/40 hover:border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer text-center" title="เข้าสู่ระบบตรวจรับห้องพักและติดตาม Defect (QC System)">
+                    <i data-lucide="building-2" class="w-3.5 h-3.5 text-[#E64C3C] shrink-0"></i>
+                    <span class="truncate">ตรวจห้อง QC</span>
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- Hero Command Deck (DoodleWeb Action Launchpad: Mobile-First, Touch-Perfected) -->
-          <div class="action-deck-layout mt-5">
-            <!-- Primary Hero CTA: เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น (Full Width, Large Touch Target) -->
-            <a
-              href="piling.html?view=3d#3d"
-              class="hero-cta-btn w-full min-h-[60px] sm:min-h-[66px] flex items-center justify-between px-4 sm:px-6 py-3.5 cursor-pointer group bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] hover:shadow-[5px_5px_0px_#1D2B45] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
-              title="คลิกเพื่อเข้าสู่แบบจำลอง 3D เสาเข็ม 93 ต้น และเริ่มงานทันที"
-            >
-              <div class="flex items-center gap-3.5 min-w-0">
-                <div class="w-11 h-11 bg-white text-[#1D2B45] border-2 border-[#1D2B45] rounded-xl flex items-center justify-center shrink-0 shadow-[2px_2px_0px_#1D2B45] group-hover:rotate-6 transition-transform">
-                  <i data-lucide="box" class="w-6 h-6 text-[#F26B2A]"></i>
-                </div>
-                <div class="flex flex-col text-left leading-tight min-w-0">
-                  <span class="text-[9.5px] sm:text-[10px] font-mono font-bold uppercase tracking-wider text-white/90">
-                    ACTIVE 3D WORKSPACE · 93 PILES
-                  </span>
-                  <span class="font-display text-sm sm:text-base md:text-lg font-bold text-white tracking-tight whitespace-nowrap">
-                    ⚡ เข้าสู่หน้างาน 3D เสาเข็ม 93 ต้น
-                  </span>
-                </div>
-              </div>
-              
-              <div class="flex items-center gap-2 shrink-0 pl-2">
-                <span class="doodle-pill bg-white text-[#1D2B45] text-xs font-bold shadow-2xs hidden sm:inline-flex">เริ่มงาน</span>
-                <i data-lucide="arrow-right" class="w-5 h-5 text-white group-hover:translate-x-1.5 transition-transform"></i>
-              </div>
-            </a>
-
-            <!-- Secondary Quick Actions: 2 Columns on Mobile + Full-width QC (NEVER clipped!) -->
-            <div class="secondary-actions-grid">
-              <!-- Button 1: รายงาน S-Curve -->
-              <a
-                href="piling.html?view=report#report"
-                class="action-btn action-btn-green gap-2 px-3 py-3 text-xs sm:text-sm font-bold w-full"
-                title="เปิดรายงานผลงานเสาเข็มและบันทึกประจำวัน"
-              >
-                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#10B981] shrink-0"></i>
-                <span>รายงาน S-Curve</span>
-              </a>
-
-              <!-- Button 2: ผังฐานราก 3D -->
-              <a
-                href="footing.html"
-                class="action-btn action-btn-blue gap-2 px-3 py-3 text-xs sm:text-sm font-bold w-full"
-                title="เปิดผังแบบจำลอง 3D ฐานราก ค.ส.ล. 21 ฐาน"
-              >
-                <i data-lucide="box" class="w-4 h-4 text-[#0284C7] shrink-0"></i>
-                <span>ผังฐานราก 3D</span>
-              </a>
-
-              <!-- Button 3: ตรวจห้อง QC (Spans 2 columns on Mobile, 3rd column on Desktop) -->
-              <button
-                type="button"
-                onclick="enterAppView('residential')"
-                class="action-btn action-btn-red qc-full-btn gap-2 px-4 py-3 text-xs sm:text-sm font-bold w-full cursor-pointer"
-                title="เข้าสู่ระบบตรวจรับห้องพักและติดตาม Defect (QC System)"
-              >
-                <i data-lucide="building-2" class="w-4 h-4 text-[#E64C3C] shrink-0"></i>
-                <span>ระบบตรวจห้องพัก QC Defect</span>
-              </button>
             </div>
           </div>
 
           <!-- Piling Daily & Cumulative Progress Table (DoodleWeb Editorial Ledger) -->
-          <div id="portal-piling-daily-table-wrapper" class="mt-5 pt-5 border-t-2 border-[#1D2B45]/15">
+          <div id="portal-piling-daily-table-wrapper" class="mt-6 pt-5 border-t-2 border-[#1D2B45]/15">
             <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
               <div class="flex items-center gap-2">
                 <span class="doodle-pill bg-[#1D2B45] text-white text-[10px] font-mono font-black">LEDGER</span>
@@ -8150,9 +8078,9 @@ body.manga-screentone-bg,
                 </span>
                 <span class="doodle-pill doodle-pill-gold text-[10.5px] shadow-xs">
                   <span class="w-2.5 h-2.5 bg-[#F7B844] border border-[#B45309] rounded-xs"></span>
-                  <span>กรอบเน้น: วันนี้ (Active Day)</span>
+                  <span>วันนี้ (Active Day)</span>
                 </span>
-                <span class="text-[#3E4B69] font-mono text-[10.5px] hidden lg:inline">· 2 แถว ครบ 31 วันทำการ</span>
+                <span id="portal-ledger-summary-pill" class="text-[#3E4B69] font-mono text-[10.5px] hidden lg:inline">· แผน 31 วันทำการ</span>
               </div>
             </div>
             <div id="portal-piling-daily-table-container" class="space-y-3 max-w-full">
@@ -14426,6 +14354,35 @@ if (typeof window !== "undefined") {
           return schedule;
         }
 
+        function getExtendedWorkingSchedule(startDateStr, minPlanDays, targetEndDateStr, actualSet) {
+          var planSchedule = getWorkingDaysSchedule(startDateStr, minPlanDays, actualSet);
+          var schedule = planSchedule.slice();
+          var planEnd = planSchedule[planSchedule.length - 1] || '';
+          if (targetEndDateStr && planEnd && targetEndDateStr > planEnd) {
+            var parts = planEnd.split('-');
+            var cur = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            cur.setDate(cur.getDate() + 1);
+            function fmt(dt) {
+              return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+            }
+            var safety = 0;
+            while (safety++ < 120) {
+              var s = fmt(cur);
+              if (s > targetEndDateStr) break;
+              if (isThaiWorkingDay(s, actualSet)) {
+                schedule.push(s);
+              }
+              cur.setDate(cur.getDate() + 1);
+            }
+          }
+          return {
+            schedule: schedule,
+            planDays: minPlanDays,
+            totalDays: schedule.length,
+            delayDays: Math.max(0, schedule.length - minPlanDays)
+          };
+        }
+
         function formatThaiShortDate(dateStr) {
           if (!dateStr) return '';
           var parts = dateStr.split('-');
@@ -14444,7 +14401,7 @@ if (typeof window !== "undefined") {
 
           if (containers.length === 0) return;
 
-          var totalDays = 31;
+          var planDays = 31;
           var dailyPlan = 3;
           var totalPiles = 93;
 
@@ -14457,10 +14414,15 @@ if (typeof window !== "undefined") {
           });
           var uniqueDates = Object.keys(dateMap).sort();
           var todayStr = curDate || new Date().toISOString().split('T')[0];
+          var latestRecDate = uniqueDates.length > 0 ? uniqueDates[uniqueDates.length - 1] : '';
+          var maxTargetDate = (latestRecDate && latestRecDate > todayStr) ? latestRecDate : todayStr;
           var projectStartDate = (uniqueDates.length > 0) ? uniqueDates[0] : '2026-10-06';
-          var workingDaysSchedule = getWorkingDaysSchedule(projectStartDate, totalDays, dateMap);
+          var ext = getExtendedWorkingSchedule(projectStartDate, planDays, (totalActualDriven < totalPiles || latestRecDate > todayStr) ? maxTargetDate : '', dateMap);
+          var workingDaysSchedule = ext.schedule;
+          var totalDays = ext.totalDays;
+          var delayDays = ext.delayDays;
 
-          // Find active/current working day (fallback if today is holiday or weekend)
+          // Find active/current working day across the extended schedule
           var activeDate = todayStr;
           if (workingDaysSchedule.indexOf(activeDate) === -1) {
             var validPreceding = workingDaysSchedule.filter(function(d) { return d <= todayStr; });
@@ -14473,16 +14435,17 @@ if (typeof window !== "undefined") {
             }
           }
 
-          // 1. Precalculate metrics for all 31 working days
+          // 1. Precalculate metrics for all working days (Plan 31 + Overdue D32+)
           var allDays = [];
           var runningPlanCum = 0;
           for (var i = 0; i < totalDays; i++) {
             var schedDate = workingDaysSchedule[i] || '';
+            var isOverdueDay = i >= planDays;
             var isTodayOrSelected = (schedDate === activeDate || (activeDate && activeDate.indexOf(schedDate) === 0));
             var isFuture = schedDate ? (schedDate > activeDate) : true;
 
-            var dayPlan = Math.min(dailyPlan, Math.max(0, totalPiles - runningPlanCum));
-            runningPlanCum = Math.min(totalPiles, runningPlanCum + dayPlan);
+            var dayPlan = isOverdueDay ? 0 : Math.min(dailyPlan, Math.max(0, totalPiles - runningPlanCum));
+            runningPlanCum = isOverdueDay ? totalPiles : Math.min(totalPiles, runningPlanCum + dayPlan);
 
             var dayActual = drivenRecords.filter(function(r) { return r.date === schedDate; }).length;
             var cumActual = drivenRecords.filter(function(r) { return r.date && r.date <= schedDate; }).length;
@@ -14493,6 +14456,7 @@ if (typeof window !== "undefined") {
               formattedDate: schedDate ? formatThaiShortDate(schedDate) : ('D' + (i + 1)),
               isToday: isTodayOrSelected,
               isFuture: isFuture,
+              isOverdue: isOverdueDay,
               dayPlan: dayPlan,
               planCum: runningPlanCum,
               dayActual: dayActual,
@@ -14610,9 +14574,26 @@ if (typeof window !== "undefined") {
           var tier2Range = 'วันทำการที่ 17 – 31 (' + startD2 + ' – ' + endD2 + ')';
 
           var tier1Html = buildTierBlock('แถวที่ 1', tier1Range, 0, 16, false);
-          var tier2Html = buildTierBlock('แถวที่ 2', tier2Range, 16, 31, true);
+          var tier2Html = buildTierBlock('แถวที่ 2', tier2Range, 16, 31, delayDays === 0);
+          var tier3Html = '';
+          if (delayDays > 0) {
+            var startD3 = workingDaysSchedule[31] ? formatThaiShortDate(workingDaysSchedule[31]) : 'D32';
+            var endD3 = workingDaysSchedule[totalDays - 1] ? formatThaiShortDate(workingDaysSchedule[totalDays - 1]) : ('D' + totalDays);
+            var tier3Range = 'ช่วงล่าช้ากว่าแผน · วันทำการที่ 32 – ' + totalDays + ' (' + startD3 + ' – ' + endD3 + ') · เกินแผน +' + delayDays + ' วัน';
+            tier3Html = buildTierBlock('OVERDUE +' + delayDays + 'D', tier3Range, 31, totalDays, true)
+              .replace('border-2 border-[#1D2B45] shadow-[4px_4px_0px_#1D2B45] bg-white', 'border-2 border-[#E64C3C] shadow-[4px_4px_0px_#E64C3C] bg-[#FFF1F2]')
+              .replace('bg-[#FAF5EE] border-b-2 border-[#1D2B45]', 'bg-[#FFE4E6] border-b-2 border-[#E64C3C]')
+              .replace('bg-[#1D2B45] text-white text-[10px]', 'bg-[#E64C3C] text-white text-[10px]');
+          }
 
-          var combinedHtml = '<div class="space-y-3">' + tier1Html + tier2Html + '</div>';
+          var ledgerPill = document.getElementById('portal-ledger-summary-pill');
+          if (ledgerPill) {
+            ledgerPill.textContent = delayDays > 0
+              ? '· แผน 31 วัน + ล่าช้า ' + delayDays + ' วันทำการ'
+              : '· 2 แถว ครบ 31 วันทำการ';
+          }
+
+          var combinedHtml = '<div class="space-y-3">' + tier1Html + tier2Html + tier3Html + '</div>';
 
           containers.forEach(function(cnt) {
             cnt.innerHTML = combinedHtml;
@@ -14632,7 +14613,7 @@ if (typeof window !== "undefined") {
           const canvas = document.getElementById('splashScurveCanvas');
           if (!canvas) return;
 
-          const daysCount = 31;
+          const planDays = 31;
           const labels = [];
           const planData = [];
           const actualData = [];
@@ -14653,19 +14634,61 @@ if (typeof window !== "undefined") {
 
           const sortedDates = Object.keys(drivenDatesMap).sort();
           const projStart = (sortedDates.length > 0) ? sortedDates[0] : '2026-10-06';
-          const sched = getWorkingDaysSchedule(projStart, daysCount, drivenDatesMap);
           const activeDate = curDate || new Date().toISOString().split('T')[0];
+          const latestRecDate = sortedDates.length > 0 ? sortedDates[sortedDates.length - 1] : '';
+          const maxTargetDate = (latestRecDate && latestRecDate > activeDate) ? latestRecDate : activeDate;
+          const ext = getExtendedWorkingSchedule(projStart, planDays, totalDrivenCount < 93 ? maxTargetDate : '', drivenDatesMap);
+          const sched = ext.schedule;
+          const daysCount = ext.totalDays;
+          const delayDays = ext.delayDays;
 
           for (let day = 1; day <= daysCount; day++) {
-            labels.push(`D${day}`);
-            planData.push(Math.min(day * 3, 93));
-
             const sDate = sched[day - 1];
-            if (sDate && sDate <= activeDate) {
+            labels.push(day > planDays && sDate ? `${formatThaiShortDate(sDate)}` : `D${day}`);
+            planData.push(day <= planDays ? Math.min(day * 3, 93) : 93);
+
+            if (sDate && (sDate <= activeDate || sDate <= latestRecDate)) {
               const count = Object.values(records || {}).filter(r => r && r.status === 'driven' && r.date && r.date <= sDate).length;
               actualData.push(count);
             }
           }
+
+          const delayLegend = document.getElementById('portal-chart-delay-legend');
+          if (delayLegend) {
+            if (delayDays > 0) {
+              delayLegend.classList.remove('hidden');
+              delayLegend.innerHTML = `<span class="w-2.5 h-2.5 rounded-xs bg-[#E64C3C]/25 border border-[#E64C3C] inline-block mr-1"></span>ช่วงล่าช้า (+${delayDays} วัน)`;
+            } else {
+              delayLegend.classList.add('hidden');
+            }
+          }
+
+          const overdueZonePlugin = {
+            id: 'overdueZone',
+            beforeDatasetsDraw(chart) {
+              if (delayDays <= 0) return;
+              const { ctx, chartArea, scales: { x } } = chart;
+              if (!chartArea || !x) return;
+              const xBoundary = x.getPixelForValue(planDays - 1);
+              if (!isFinite(xBoundary)) return;
+              ctx.save();
+              ctx.fillStyle = 'rgba(230, 76, 60, 0.08)';
+              ctx.fillRect(xBoundary, chartArea.top, chartArea.right - xBoundary, chartArea.bottom - chartArea.top);
+              ctx.strokeStyle = 'rgba(230, 76, 60, 0.65)';
+              ctx.lineWidth = 1.5;
+              ctx.setLineDash([4, 4]);
+              ctx.beginPath();
+              ctx.moveTo(xBoundary, chartArea.top);
+              ctx.lineTo(xBoundary, chartArea.bottom);
+              ctx.stroke();
+              ctx.setLineDash([]);
+              ctx.fillStyle = '#9F1239';
+              ctx.font = 'bold 10px Prompt, Sarabun, sans-serif';
+              ctx.textAlign = 'right';
+              ctx.fillText(`ช่วงล่าช้า +${delayDays} วัน`, chartArea.right - 6, chartArea.top + 14);
+              ctx.restore();
+            }
+          };
 
           // Chart.js rendering
           if (typeof Chart !== 'undefined') {
@@ -14676,6 +14699,7 @@ if (typeof window !== "undefined") {
               }
               splashPilingChartInstance = new Chart(canvas, {
                 type: 'line',
+                plugins: [overdueZonePlugin],
                 data: {
                   labels,
                   datasets: [
@@ -14749,7 +14773,7 @@ if (typeof window !== "undefined") {
                     x: {
                       grid: { color: 'rgba(15, 23, 42, 0.05)' },
                       border: { color: '#0f172a', width: 2 },
-                      title: { display: true, text: 'วันทำการ (D1 - D31)', font: { family: 'Prompt, Sarabun', size: 11, weight: 'bold' }, color: '#0f172a' },
+                      title: { display: true, text: delayDays > 0 ? `วันทำการ (D1 - D31 + ล่าช้า ${delayDays} วัน)` : 'วันทำการ (D1 - D31)', font: { family: 'Prompt, Sarabun', size: 11, weight: 'bold' }, color: '#0f172a' },
                       ticks: { maxTicksLimit: 16, font: { family: 'Prompt, Sarabun', weight: 'bold' }, color: '#0f172a' }
                     }
                   }
@@ -15396,25 +15420,43 @@ if (typeof window !== "undefined") {
             const pct = ((drivenPiles / 93) * 100).toFixed(1);
             
             const elDriven = document.getElementById("portal-piling-driven-count");
+            const elDrivenSub = document.getElementById("portal-piling-driven-sub");
+            const elFraction = document.getElementById("portal-piling-fraction");
+            const elGoalPill = document.getElementById("portal-goal-pill");
             const elPct = document.getElementById("portal-piling-percent");
             const elToday = document.getElementById("portal-piling-today");
             const elTodaySub = document.getElementById("portal-piling-today-sub");
             const elRemain = document.getElementById("portal-piling-remain");
+            const elRemainSub = document.getElementById("portal-piling-remain-sub");
             const elBar = document.getElementById("portal-piling-progress-bar");
             const elSplashCount = document.getElementById("splash-piling-count-text");
+            const remainCount = Math.max(0, 93 - drivenPiles);
 
             if (elDriven) elDriven.textContent = drivenPiles;
+            if (elDrivenSub) elDrivenSub.textContent = `${pct}% ของงานทั้งหมด`;
+            if (elFraction) elFraction.textContent = `${drivenPiles} / 93 ต้น`;
+            if (elGoalPill) {
+              elGoalPill.textContent = remainCount === 0 ? 'ครบ 93 ต้นแล้ว 🎉' : `อีก ${remainCount} ต้น ครบ 93 ต้น`;
+              elGoalPill.className = remainCount === 0
+                ? 'px-2.5 py-0.5 rounded-full bg-[#10B981] text-white text-[10.5px] font-black tracking-tight'
+                : 'px-2.5 py-0.5 rounded-full bg-[#F7B844] text-[#1D2B45] text-[10.5px] font-black tracking-tight';
+            }
             if (elPct) elPct.textContent = `${pct}%`;
             if (elToday) elToday.textContent = todayPiles;
             if (elTodaySub) {
               if (todayPiles > 0) {
                 elTodaySub.textContent = `กดเสร็จวันนี้ ${todayPiles} ต้น`;
-              } else {
+              } else if (latestDrivenDate) {
                 const fDate = typeof formatThaiShortDate === 'function' ? formatThaiShortDate(latestDrivenDate) : latestDrivenDate;
                 elTodaySub.textContent = `ยังไม่บันทึกวันนี้ · ล่าสุด ${fDate} (${latestDrivenCount} ต้น)`;
+              } else {
+                elTodaySub.textContent = 'ยังไม่มีบันทึกงานกดเข็ม';
               }
             }
-            if (elRemain) elRemain.textContent = (93 - drivenPiles);
+            if (elRemain) elRemain.textContent = remainCount;
+            if (elRemainSub) {
+              elRemainSub.textContent = remainCount === 0 ? 'ปิดงานเสาเข็มครบแล้ว' : `เหลืออีก ${remainCount} ต้น จะครบ 93 ต้น`;
+            }
             if (elBar) elBar.style.width = `${pct}%`;
             if (elSplashCount) elSplashCount.textContent = `${drivenPiles} / 93 ต้น`;
             const elSplashRate = document.getElementById("splash-piling-rate");
@@ -15424,22 +15466,12 @@ if (typeof window !== "undefined") {
             if (elMobileDriven) elMobileDriven.textContent = drivenPiles;
             if (elMobilePct) elMobilePct.textContent = `${pct}%`;
 
-            // Update Piling Rig SVG telemetry readouts
-            const elRigDriven = document.getElementById("rig-driven-title");
-            const elRigPct = document.getElementById("rig-percent-pill");
-            const elRigFill = document.getElementById("rig-progress-fill");
-            const elRigRemain = document.getElementById("rig-remain-text");
-            if (elRigDriven) elRigDriven.textContent = `กดสะสม ${drivenPiles} ต้น`;
-            if (elRigPct) elRigPct.textContent = `${pct}%`;
-            if (elRigFill) elRigFill.style.width = `${pct}%`;
-            if (elRigRemain) elRigRemain.textContent = `คงเหลืออีก ${93 - drivenPiles} ต้น`;
-
             // Delight: Trigger Count-Up Animations for Numbers
             if (typeof animateCountUp === 'function') {
               animateCountUp(document.getElementById("portal-piling-percent"), parseFloat(pct) || 0, 1000, '%', 1);
               animateCountUp(document.getElementById("portal-piling-driven-count"), drivenPiles, 1000);
               animateCountUp(document.getElementById("portal-piling-today"), todayPiles, 1000);
-              animateCountUp(document.getElementById("portal-piling-remain"), 93 - drivenPiles, 1000);
+              animateCountUp(document.getElementById("portal-piling-remain"), remainCount, 1000);
               animateCountUp(document.getElementById("portal-piling-mobile-pct"), parseFloat(pct) || 0, 1000, '%', 1);
               animateCountUp(document.getElementById("portal-piling-mobile-driven"), drivenPiles, 1000);
               animateCountUp(document.getElementById("splash-overall-progress"), summary.overallProgress, 1000, '%', 1);
@@ -15449,8 +15481,7 @@ if (typeof window !== "undefined") {
               lucide.createIcons();
             }
 
-            // Delight: Render 93 Isometric Piles Radar
-                        // Calculate Schedule Variance (สถานะเทียบแผนงาน)
+            // Calculate Extended Schedule Variance (including Overdue / Delay Days past D31)
             var scheduleRecords = rawPiles ? (typeof rawPiles === 'string' ? JSON.parse(rawPiles) : rawPiles) : {};
             var schedDateMap = {};
             if (scheduleRecords && typeof scheduleRecords === 'object') {
@@ -15460,11 +15491,37 @@ if (typeof window !== "undefined") {
             }
             var schedUnique = Object.keys(schedDateMap).sort();
             var projStart = (schedUnique.length > 0) ? schedUnique[0] : '2026-10-06';
-            var schedList = getWorkingDaysSchedule(projStart, 31, schedDateMap);
             var activeTodayStr = todayStr || new Date().toISOString().split('T')[0];
-            var elapsedDays = Math.max(1, schedList.filter(function(d) { return d <= activeTodayStr; }).length);
+            var extSched = getExtendedWorkingSchedule(projStart, 31, remainCount > 0 ? activeTodayStr : '', schedDateMap);
+            var elapsedDays = Math.max(1, extSched.schedule.filter(function(d) { return d <= activeTodayStr; }).length);
+            var delayDays = Math.max(0, elapsedDays - 31);
             var planCum = Math.min(93, elapsedDays * 3);
             var variance = drivenPiles - planCum;
+
+            // Update Overdue Alert Banner & Header Status Pill (Loss Aversion / Preattentive Processing)
+            const elDelayBanner = document.getElementById("portal-delay-banner");
+            const elDelayTitle = document.getElementById("portal-delay-banner-title");
+            const elDelaySub = document.getElementById("portal-delay-banner-sub");
+            const elHeaderStatus = document.getElementById("portal-header-status-pill");
+            if (elDelayBanner) {
+              if (delayDays > 0 && remainCount > 0) {
+                elDelayBanner.classList.remove("hidden");
+                if (elDelayTitle) elDelayTitle.textContent = `เลยกำหนดแผน 31 วันทำการ (+${delayDays} วันทำการ) · ขาดอีก ${remainCount} ต้น`;
+                if (elDelaySub) elDelaySub.textContent = `แผนกำหนดครบ 93 ต้นที่ D31 (${formatThaiShortDate(extSched.schedule[30])}) · วันนี้เข้าสู่วันทำการที่ D${elapsedDays}`;
+              } else {
+                elDelayBanner.classList.add("hidden");
+              }
+            }
+            if (elHeaderStatus) {
+              if (delayDays > 0 && remainCount > 0) {
+                elHeaderStatus.className = "doodle-pill bg-[#FFE4E6] border-[#E64C3C] text-[#9F1239] text-xs font-mono font-bold shadow-2xs";
+                elHeaderStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-[#E64C3C] animate-pulse"></span><span>DELAY +${delayDays}D · D${elapsedDays}</span>`;
+              } else {
+                elHeaderStatus.className = "doodle-pill bg-[#ECFDF5] border-[#10B981] text-[#065F46] text-xs font-mono font-bold shadow-2xs";
+                elHeaderStatus.innerHTML = `<span class="doodle-dot-live"></span><span>ON TRACK · D${elapsedDays}</span>`;
+              }
+            }
+
             const elVarVal = document.getElementById("portal-piling-variance-val");
             const elVarBadge = document.getElementById("portal-piling-variance-badge");
             const elVarSub = document.getElementById("portal-piling-variance-sub");
@@ -15473,24 +15530,26 @@ if (typeof window !== "undefined") {
             if (elVarVal) {
               elVarVal.textContent = (variance > 0 ? `+${variance}` : `${variance}`);
               if (variance < 0) {
-                elVarVal.className = "text-2xl sm:text-3xl font-black text-rose-600 font-mono";
+                elVarVal.className = "font-display text-2xl sm:text-3xl font-extrabold text-[#9F1239]";
                 if (elVarBadge) {
-                  elVarBadge.textContent = "ช้ากว่าแผน";
-                  elVarBadge.className = "text-[10px] font-black px-2 py-0.5 rounded bg-rose-400 text-slate-950 border border-slate-900 shadow-[1px_1px_0px_#0f172a]";
+                  elVarBadge.textContent = delayDays > 0 ? `ช้ากว่าแผน +${delayDays} วัน` : "ช้ากว่าแผน";
+                  elVarBadge.className = "doodle-pill bg-[#E64C3C] text-white border border-[#1D2B45] text-[9px] font-black shrink-0";
                 }
-                if (elVarCard) elVarCard.className = "piling-metric-tile border-2 border-slate-900 bg-rose-50 rounded-lg p-3.5 shadow-[3px_3px_0px_#0f172a] block group hover:no-underline";
+                if (elVarCard) elVarCard.className = "doodle-metric-tile block p-3.5 bg-[#FFE4E6] hover:bg-[#FECDD3] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#E64C3C] active:translate-x-[1px] active:translate-y-[1px]";
               } else {
                 elVarVal.textContent = (variance === 0 ? "ตามแผน" : `+${variance}`);
-                elVarVal.className = "text-2xl sm:text-3xl font-black text-emerald-600 font-mono";
+                elVarVal.className = "font-display text-2xl sm:text-3xl font-extrabold text-[#14532D]";
                 if (elVarBadge) {
                   elVarBadge.textContent = "ตามแผนงาน";
-                  elVarBadge.className = "text-[10px] font-black px-2 py-0.5 rounded bg-emerald-400 text-slate-950 border border-slate-900 shadow-[1px_1px_0px_#0f172a]";
+                  elVarBadge.className = "doodle-pill bg-[#10B981] text-white border border-[#1D2B45] text-[9px] font-black shrink-0";
                 }
-                if (elVarCard) elVarCard.className = "piling-metric-tile border-2 border-slate-900 bg-emerald-50 rounded-lg p-3.5 shadow-[3px_3px_0px_#0f172a] block group hover:no-underline";
+                if (elVarCard) elVarCard.className = "doodle-metric-tile block p-3.5 bg-[#ECFDF5] hover:bg-[#D1FAE5] transition-all border-2 border-[#1D2B45] rounded-2xl shadow-[2.5px_2.5px_0px_#1D2B45] hover:shadow-[4px_4px_0_0_#10B981] active:translate-x-[1px] active:translate-y-[1px]";
               }
             }
             if (elVarSub) {
-              elVarSub.textContent = `แผนสะสม D${elapsedDays} (${planCum} ต้น) · จริง ${drivenPiles} ต้น`;
+              elVarSub.textContent = delayDays > 0
+                ? `เลยแผน D31 (+${delayDays} วัน) · จริง ${drivenPiles}/93`
+                : `แผนสะสม D${elapsedDays} (${planCum} ต้น) · จริง ${drivenPiles} ต้น`;
             }
 
             // Render Hero S-Curve Chart
