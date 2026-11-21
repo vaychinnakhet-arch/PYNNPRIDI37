@@ -4137,7 +4137,7 @@
         </div>
 
         <div class="flex-1 overflow-auto border-2 border-[#1D2B45] rounded-xl bg-white shadow-xs">
-          <table id="pile-summary-combined-table" class="w-full text-xs text-left border-collapse min-w-[1320px]">
+          <table id="pile-summary-combined-table" class="w-full text-xs text-left border-collapse min-w-[1440px]">
             <thead class="bg-[#F6E9D7] text-[#1D2B45] sticky top-0 z-10 border-b-2 border-[#1D2B45] select-none shadow-xs">
               <tr>
                 <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-10">No.</th>
@@ -4148,7 +4148,9 @@
                 <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono">Co (E) แบบ</th>
                 <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#E8F8F5] text-[#0E5E57]">Co (N) หลังกด</th>
                 <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#E8F8F5] text-[#0E5E57]">Co (E) หลังกด</th>
-                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FFE8D6] text-[#1D2B45]" title="ระยะเยื้องศูนย์สุทธิ √(ΔN² + ΔE²) ซม. (เกณฑ์ ACI ≤ 7.62 ซม.)">ระยะเยื้อง (ซม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#EEF4FF] text-[#1E3A8A]" title="(N หลังกด - N แบบ) × 100">ΔN (ซม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#EEF4FF] text-[#1E3A8A]" title="(E หลังกด - E แบบ) × 100">ΔE (ซม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FFE8D6] text-[#1D2B45]" title="√(ΔN² + ΔE²) ซม. | เกณฑ์ ACI: F1/F2 ≤ 5.00 ซม., กลุ่ม F3+ ≤ 7.62 ซม.">ระยะเยื้อง (ซม.)</th>
                 <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FEF3C7]/70">ท่อนล่าง (ม.)</th>
                 <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FEF3C7]/70">ท่อนกลาง (ม.)</th>
                 <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#EEF4FF] text-[#1E3A8A]" title="ท่อนบนที่ตัดค่า TOP แล้ว (ถ้า TOP ติดลบ = ยาวเต็มไม่ตัด)">ท่อนบน ตัดแล้ว (ม.)</th>
@@ -4163,6 +4165,8 @@
                 <td colspan="8" class="p-2.5 text-right text-[#F7B844]">
                   สรุปรวม (<span id="comb-foot-count">0</span> ต้นที่มีพิกัด / กรอกความยาว <span id="comb-foot-entered">0</span> ต้น) :
                 </td>
+                <td id="comb-foot-avgdn" class="p-2 text-right font-mono text-sky-300">-</td>
+                <td id="comb-foot-avgde" class="p-2 text-right font-mono text-sky-300">-</td>
                 <td id="comb-foot-avgdev" class="p-2 text-right font-mono text-[#F7B844] bg-[#F26B2A]/30">-</td>
                 <td id="comb-foot-bottom" class="p-2 text-right font-mono text-amber-200">-</td>
                 <td id="comb-foot-middle" class="p-2 text-right font-mono text-amber-200">-</td>
@@ -12694,11 +12698,16 @@
       const dE_cm = designE !== null ? (rawActE - designE) * 100 : null;
       const dev_cm = (dN_cm !== null && dE_cm !== null) ? Math.hypot(dN_cm, dE_cm) : null;
 
+      // เกณฑ์มาตรฐาน ACI 543R / ACI 318-25 Sec. 13.4:
+      // - ฐานรากเดี่ยว/คู่ (F1, F2): เข้มงวด ≤ 5.00 ซม.
+      // - ฐานรากกลุ่ม (F3, F5, F6, F18A, F20A ฯลฯ): ≤ 7.62 ซม. (3 นิ้ว)
+      const isSingleOrPair = /^F[12]([^0-9]|$)/i.test(String(pile?.footing || '').trim());
+      const limitCm = isSingleOrPair ? 5.0 : 7.62;
+
       let grade = null;
       if (dev_cm !== null) {
-        // มาตรฐาน ACI 543R / ACI 318-25 Sec. 13.4: เกณฑ์เยื้องศูนย์เสาเข็มตอก/กด ≤ 3 นิ้ว (7.62 ซม.)
         if (dev_cm <= 5.0) grade = 'pass';
-        else if (dev_cm <= 7.62) grade = 'aci_pass';
+        else if (dev_cm <= limitCm) grade = 'aci_pass';
         else grade = 'over';
       }
 
@@ -12711,7 +12720,9 @@
         dE_cm,
         dev_cm,
         hasActualCoords: true,
-        grade
+        grade,
+        limitCm,
+        isSingleOrPair
       };
     }
 
@@ -13085,7 +13096,7 @@
       const noteEl = document.getElementById('sum-report-formula-note');
       if (noteEl) {
         if (tabKey === 'combined') {
-          noteEl.textContent = '* ตารางสรุปรวม (Read-only): พิกัด Co ก่อน/หลัง + เยื้องสุทธิ √(ΔN²+ΔE²) ซม. (เกณฑ์ ACI 543R ≤ 7.62 ซม. / 3") + ความยาวท่อนล่าง / กลาง / ท่อนบนสุทธิ (ลบ TOP แล้ว)';
+          noteEl.textContent = '* ตารางสรุป (Read-only): พิกัด Co ก่อน/หลัง + ΔN, ΔE, ระยะเยื้อง (เกณฑ์ ACI: F1/F2 ≤ 5.00 ซม., กลุ่ม F3+ ≤ 7.62 ซม.) + ความยาวล่าง/กลาง/บนตัดแล้ว (TOP ติดลบ = เต็มท่อน)';
         } else if (tabKey === 'coord') {
           noteEl.textContent = '* เกณฑ์มาตรฐาน ACI 543R / ACI 318-25 Sec. 13.4: เยื้องศูนย์เสาเข็ม ≤ 3 นิ้ว (7.62 ซม.) | ΔN=(Nจริง-Nแบบ)×100, ΔE=(Eจริง-Eแบบ)×100, เยื้องสุทธิ=√(ΔN²+ΔE²) ซม.';
         } else if (tabKey === 'length') {
@@ -13339,7 +13350,7 @@
             maxDev = coord.dev_cm;
             maxDevTag = p.tag;
           }
-          if (coord.dev_cm > 7.62) overLimitCount++;
+          if (coord.grade === 'over') overLimitCount++;
         }
 
         const actTopStr = len.topCut !== null ? len.topCut.toFixed(3) : '<span class="text-slate-300">-</span>';
@@ -13413,7 +13424,10 @@
           `;
         }
 
-        // 2) Unified Summary Row (Co ก่อน/หลัง/เยื้อง + ความยาวสุทธิ ท่อนบนลบ TOP แล้ว)
+        // 2) Unified Summary Row (Co ก่อน/หลัง + ΔN, ΔE + เยื้อง + ความยาวสุทธิ ท่อนบนตัดแล้ว)
+        const devTooltip = coord.dev_cm !== null
+          ? `เกณฑ์ฐานราก ${p.footing || '-'}: ≤ ${coord.limitCm.toFixed(2)} ซม. (${coord.isSingleOrPair ? 'F1/F2 เข็มเดี่ยว/คู่' : 'ฐานรากกลุ่ม ACI 543R 3 นิ้ว'})`
+          : '';
         htmlCombined += `
           <tr class="${(coord.hasActualCoords || len.isCustomized) ? 'bg-white hover:bg-[#FAF5EE]' : 'bg-slate-50/40 hover:bg-slate-50'} transition-colors">
             <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#1D2B45]">${p.no}</td>
@@ -13424,7 +13438,9 @@
             <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#3E4B69]">${coord.designE !== null ? coord.designE.toFixed(4) : '-'}</td>
             <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-bold text-[#0E5E57] bg-[#E8F8F5]/40">${coord.actualN !== null ? coord.actualN.toFixed(4) : '<span class="text-slate-300 font-normal">-</span>'}</td>
             <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-bold text-[#0E5E57] bg-[#E8F8F5]/40">${coord.actualE !== null ? coord.actualE.toFixed(4) : '<span class="text-slate-300 font-normal">-</span>'}</td>
-            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono bg-[#FFF3EB]/50">
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#1E3A8A] bg-[#EEF4FF]/40">${fmtSignedCm(coord.dN_cm)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#1E3A8A] bg-[#EEF4FF]/40">${fmtSignedCm(coord.dE_cm)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono bg-[#FFF3EB]/50" title="${devTooltip}">
               ${coord.dev_cm !== null ? `<span class="${devPillClass}">${coord.dev_cm.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
             </td>
             <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-semibold text-[#78350F] bg-[#FEF3C7]/25">${fmtOpt(len.bottom, 2)}</td>
@@ -13521,7 +13537,7 @@
         });
       }
 
-      if (tbodyCombined) tbodyCombined.innerHTML = htmlCombined || `<tr><td colspan="13" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+      if (tbodyCombined) tbodyCombined.innerHTML = htmlCombined || `<tr><td colspan="15" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
       if (tbodyCoord) tbodyCoord.innerHTML = htmlCoord || `<tr><td colspan="12" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
       if (tbodyLen) tbodyLen.innerHTML = htmlLen || `<tr><td colspan="10" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
 
@@ -13558,6 +13574,8 @@
       setTxt('comb-kpi-efftotal', enteredLenCount > 0 ? `${totalEffSum.toFixed(2)} ม.` : '-');
       setTxt('comb-foot-count', coordEnteredCount);
       setTxt('comb-foot-entered', enteredLenCount);
+      setTxt('comb-foot-avgdn', avgAbsDN !== null ? `เฉลี่ย ${avgAbsDN.toFixed(2)}` : '-');
+      setTxt('comb-foot-avgde', avgAbsDE !== null ? `เฉลี่ย ${avgAbsDE.toFixed(2)}` : '-');
       setTxt('comb-foot-avgdev', avgDev !== null ? `เฉลี่ย ${avgDev.toFixed(2)}` : '-');
       setTxt('comb-foot-bottom', hasBottomAny ? totalBottom.toFixed(2) : '-');
       setTxt('comb-foot-middle', hasMiddleAny ? totalMiddle.toFixed(2) : '-');
@@ -13733,28 +13751,30 @@
         };
 
         // ---------------------------------------------------------------------
-        // SINGLE CLEAN SUMMARY SHEET: Co ก่อน/หลัง + ระยะเยื้อง + ล่าง/กลาง/บน(ตัดแล้ว)/รวม
+        // SINGLE CLEAN SUMMARY SHEET: Co ก่อน/หลัง + ΔN, ΔE + ระยะเยื้อง (สีตามเกณฑ์ ACI F1/F2 vs กลุ่ม) + ล่าง/กลาง/บน(ตัดแล้ว)/รวม
         // ---------------------------------------------------------------------
         const ws0 = wb.addWorksheet('สรุปเสาเข็ม_Co_ความยาว');
         styleTitleBanner(
-          ws0, 13,
-          'โครงการ PYNN EKKAMAI 12 — ตารางสรุปพิกัด Co (ก่อน/หลัง/ระยะเยื้อง) และความยาวเสาเข็ม (ล่าง / กลาง / บนตัดแล้ว)',
-          `วันที่ส่งออก: ${todayStr} | เสาเข็มไอ 0.40 ม. รวม 93 ต้น | เกณฑ์เยื้อง ACI 543R ≤ 7.62 ซม. (3 นิ้ว) | ถ้า TOP ติดลบ = ยาวเต็มไม่ตัด`
+          ws0, 15,
+          'โครงการ PYNN EKKAMAI 12 — ตารางสรุปพิกัด Co (ก่อน/หลัง/ΔN/ΔE/ระยะเยื้อง) และความยาวเสาเข็ม (ล่าง / กลาง / บนตัดแล้ว)',
+          `วันที่ส่งออก: ${todayStr} | เสาเข็มไอ 0.40 ม. รวม 93 ต้น | เกณฑ์ ACI 543R: F1/F2 ≤ 5.00 ซม., กลุ่ม F3+ ≤ 7.62 ซม. (3 นิ้ว) | TOP ติดลบ = เต็มท่อน`
         );
         styleHeaderRow(ws0, 4, [
           'No.', 'รหัสเข็ม', 'ฐานราก', 'กริด',
-          'Co (N) แบบ', 'Co (E) แบบ', 'Co (N) หลังกด', 'Co (E) หลังกด', 'ระยะเยื้อง (ซม.)',
+          'Co (N) แบบ', 'Co (E) แบบ', 'Co (N) หลังกด', 'Co (E) หลังกด',
+          'ΔN (ซม.)', 'ΔE (ซม.)', 'ระยะเยื้อง (ซม.)',
           'ท่อนล่าง (ม.)', 'ท่อนกลาง (ม.)', 'ท่อนบน ตัดแล้ว (ม.)', 'ความยาวรวม (ม.)'
         ], 'FF1D2B45');
         ws0.columns = [
           { width: 7 }, { width: 10 }, { width: 10 }, { width: 10 },
-          { width: 15 }, { width: 15 }, { width: 15 }, { width: 15 }, { width: 15 },
+          { width: 15 }, { width: 15 }, { width: 15 }, { width: 15 },
+          { width: 11 }, { width: 11 }, { width: 15 },
           { width: 13 }, { width: 13 }, { width: 17 }, { width: 16 }
         ];
 
         const startRow = 5;
         let lastRow = startRow - 1;
-        let coordCount0 = 0, sumDev0 = 0, sumB0 = 0, sumM0 = 0, sumTN0 = 0, sumEff0 = 0;
+        let coordCount0 = 0, sumAbsDN0 = 0, sumAbsDE0 = 0, sumDev0 = 0, sumB0 = 0, sumM0 = 0, sumTN0 = 0, sumEff0 = 0;
 
         PILES_DATABASE.forEach((p, idx) => {
           const r = startRow + idx;
@@ -13762,7 +13782,12 @@
           const rec = progressRecords[p.no] || { status: 'pending', date: '' };
           const coord = getPileCoordDeviation(p, rec);
           const len = getPileLengthData(p.no);
-          if (coord.hasActualCoords && coord.dev_cm !== null) { coordCount0++; sumDev0 += coord.dev_cm; }
+          if (coord.hasActualCoords && coord.dev_cm !== null) {
+            coordCount0++;
+            sumAbsDN0 += Math.abs(coord.dN_cm ?? 0);
+            sumAbsDE0 += Math.abs(coord.dE_cm ?? 0);
+            sumDev0 += coord.dev_cm;
+          }
           if (len.bottom !== null) sumB0 += len.bottom;
           if (len.middle !== null) sumM0 += len.middle;
           if (len.topNet !== null) sumTN0 += len.topNet;
@@ -13779,23 +13804,34 @@
           row.getCell(7).value = coord.actualN;
           row.getCell(8).value = coord.actualE;
           row.getCell(9).value = {
-            formula: `IF(AND(ISNUMBER(E${r}),ISNUMBER(F${r}),ISNUMBER(G${r}),ISNUMBER(H${r})),SQRT(((G${r}-E${r})*100)^2+((H${r}-F${r})*100)^2),"")`,
+            formula: `IF(AND(ISNUMBER(E${r}),ISNUMBER(G${r})),(G${r}-E${r})*100,"")`,
+            result: coord.dN_cm !== null ? Number(coord.dN_cm.toFixed(4)) : ''
+          };
+          row.getCell(10).value = {
+            formula: `IF(AND(ISNUMBER(F${r}),ISNUMBER(H${r})),(H${r}-F${r})*100,"")`,
+            result: coord.dE_cm !== null ? Number(coord.dE_cm.toFixed(4)) : ''
+          };
+          row.getCell(11).value = {
+            formula: `IF(AND(ISNUMBER(I${r}),ISNUMBER(J${r})),SQRT(I${r}^2+J${r}^2),"")`,
             result: coord.dev_cm !== null ? Number(coord.dev_cm.toFixed(4)) : ''
           };
-          row.getCell(10).value = len.bottom;
-          row.getCell(11).value = len.middle;
-          row.getCell(12).value = len.topNet !== null ? Number(len.topNet.toFixed(4)) : null;
-          row.getCell(13).value = {
-            formula: `IF(OR(ISNUMBER(J${r}),ISNUMBER(K${r}),ISNUMBER(L${r})),SUM(J${r}:L${r}),"")`,
+          row.getCell(12).value = len.bottom;
+          row.getCell(13).value = len.middle;
+          row.getCell(14).value = len.topNet !== null ? Number(len.topNet.toFixed(4)) : null;
+          row.getCell(15).value = {
+            formula: `IF(OR(ISNUMBER(L${r}),ISNUMBER(M${r}),ISNUMBER(N${r})),SUM(L${r}:N${r}),"")`,
             result: len.totalEffective !== null ? Number(len.totalEffective.toFixed(4)) : ''
           };
 
-          for (let c = 1; c <= 13; c++) {
+          for (let c = 1; c <= 15; c++) {
             const cell = row.getCell(c);
-            cell.font = (c === 9 || c === 12 || c === 13) ? fontBold : fontBase;
+            cell.font = (c === 11 || c === 14 || c === 15) ? fontBold : fontBase;
             cell.border = borderThin;
             cell.alignment = { vertical: 'middle', horizontal: c <= 4 ? 'center' : 'right' };
-            if (c === 9) {
+            if (c === 9 || c === 10) {
+              cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEEF4FF' } };
+              cell.font = { name: 'Arial', size: 10, color: { argb: 'FF1E3A8A' } };
+            } else if (c === 11) {
               if (coord.grade === 'pass') {
                 cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD1FAE5' } };
                 cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF064E3B' } };
@@ -13809,41 +13845,43 @@
                 cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFCF9F5' } };
               }
             }
-            else if (c === 12) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEEF4FF' } };
-            else if (c === 13) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD1FAE5' } };
+            else if (c === 14) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEEF4FF' } };
+            else if (c === 15) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD1FAE5' } };
             else if (idx % 2 === 1) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFCF9F5' } };
           }
           [5, 6, 7, 8].forEach(c => { row.getCell(c).numFmt = '0.0000'; });
-          [9, 10, 11, 12, 13].forEach(c => { row.getCell(c).numFmt = '0.00'; });
+          [9, 10].forEach(c => { row.getCell(c).numFmt = '+0.00;-0.00;0.00'; });
+          [11, 12, 13, 14, 15].forEach(c => { row.getCell(c).numFmt = '0.00'; });
         });
 
         const sumRow0 = lastRow + 1;
         const sr0 = ws0.getRow(sumRow0);
         sr0.height = 24;
         ws0.mergeCells(sumRow0, 1, sumRow0, 8);
-        sr0.getCell(1).value = 'สรุปรวม (ระยะเยื้องเฉลี่ย ซม. / ความยาวรวม ม.) :';
-        sr0.getCell(9).value = { formula: `IFERROR(AVERAGE(I${startRow}:I${lastRow}),"")`, result: coordCount0 > 0 ? Number((sumDev0 / coordCount0).toFixed(2)) : '' };
-        sr0.getCell(10).value = { formula: `SUM(J${startRow}:J${lastRow})`, result: Number(sumB0.toFixed(2)) };
-        sr0.getCell(11).value = { formula: `SUM(K${startRow}:K${lastRow})`, result: Number(sumM0.toFixed(2)) };
-        sr0.getCell(12).value = { formula: `SUM(L${startRow}:L${lastRow})`, result: Number(sumTN0.toFixed(2)) };
-        sr0.getCell(13).value = { formula: `SUM(M${startRow}:M${lastRow})`, result: Number(sumEff0.toFixed(2)) };
-        for (let c = 1; c <= 13; c++) {
+        sr0.getCell(1).value = 'สรุปรวม (เฉลี่ย |ΔN|, |ΔE|, เยื้อง ซม. / ความยาวรวม ม.) :';
+        sr0.getCell(9).value = { formula: `IFERROR(SUMPRODUCT(ABS(IF(ISNUMBER(I${startRow}:I${lastRow}),I${startRow}:I${lastRow},0)))/COUNT(I${startRow}:I${lastRow}),"")`, result: coordCount0 > 0 ? Number((sumAbsDN0 / coordCount0).toFixed(2)) : '' };
+        sr0.getCell(10).value = { formula: `IFERROR(SUMPRODUCT(ABS(IF(ISNUMBER(J${startRow}:J${lastRow}),J${startRow}:J${lastRow},0)))/COUNT(J${startRow}:J${lastRow}),"")`, result: coordCount0 > 0 ? Number((sumAbsDE0 / coordCount0).toFixed(2)) : '' };
+        sr0.getCell(11).value = { formula: `IFERROR(AVERAGE(K${startRow}:K${lastRow}),"")`, result: coordCount0 > 0 ? Number((sumDev0 / coordCount0).toFixed(2)) : '' };
+        sr0.getCell(12).value = { formula: `SUM(L${startRow}:L${lastRow})`, result: Number(sumB0.toFixed(2)) };
+        sr0.getCell(13).value = { formula: `SUM(M${startRow}:M${lastRow})`, result: Number(sumM0.toFixed(2)) };
+        sr0.getCell(14).value = { formula: `SUM(N${startRow}:N${lastRow})`, result: Number(sumTN0.toFixed(2)) };
+        sr0.getCell(15).value = { formula: `SUM(O${startRow}:O${lastRow})`, result: Number(sumEff0.toFixed(2)) };
+        for (let c = 1; c <= 15; c++) {
           const cell = sr0.getCell(c);
           cell.font = { name: 'Arial', size: 10.5, bold: true, color: { argb: 'FF1D2B45' } };
           cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFEF3C7' } };
           cell.border = borderTotal;
           cell.alignment = { vertical: 'middle', horizontal: 'right' };
         }
-        [9, 10, 11, 12, 13].forEach(c => { sr0.getCell(c).numFmt = '#,##0.00'; });
+        [9, 10, 11, 12, 13, 14, 15].forEach(c => { sr0.getCell(c).numFmt = '#,##0.00'; });
 
-        // Dynamic Conditional Formatting on Deviation column (I5:I97) + ACI Color Legend
+        // Dynamic Footing-Aware Conditional Formatting on Deviation column (K5:K97)
         ws0.addConditionalFormatting({
-          ref: `I${startRow}:I${lastRow}`,
+          ref: `K${startRow}:K${lastRow}`,
           rules: [
             {
-              type: 'cellIs',
-              operator: 'greaterThan',
-              formulae: [7.62],
+              type: 'expression',
+              formulae: [`AND(ISNUMBER(K${startRow}),K${startRow}>IF(OR($C${startRow}="F1",$C${startRow}="F2"),5,7.62))`],
               priority: 1,
               style: {
                 fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFEE2E2' } },
@@ -13851,9 +13889,8 @@
               }
             },
             {
-              type: 'cellIs',
-              operator: 'between',
-              formulae: [5.0001, 7.62],
+              type: 'expression',
+              formulae: [`AND(ISNUMBER(K${startRow}),K${startRow}>5,K${startRow}<=7.62,NOT(OR($C${startRow}="F1",$C${startRow}="F2")))`],
               priority: 2,
               style: {
                 fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFEF3C7' } },
@@ -13861,9 +13898,8 @@
               }
             },
             {
-              type: 'cellIs',
-              operator: 'lessThanOrEqual',
-              formulae: [5.0],
+              type: 'expression',
+              formulae: [`AND(ISNUMBER(K${startRow}),K${startRow}<=5)`],
               priority: 3,
               style: {
                 fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFD1FAE5' } },
@@ -13880,9 +13916,9 @@
         ws0.mergeCells(sumRow0 + 2, 1, sumRow0 + 2, 4);
 
         const legItems = [
-          { colStart: 5, colEnd: 6, text: '≤ 5.00 ซม. : ผ่านเกณฑ์ (ดี)', bg: 'FFD1FAE5', fg: 'FF064E3B' },
-          { colStart: 7, colEnd: 9, text: '5.01 – 7.62 ซม. : ผ่านเกณฑ์ ACI (≤ 3 นิ้ว)', bg: 'FFFEF3C7', fg: 'FF78350F' },
-          { colStart: 10, colEnd: 13, text: '> 7.62 ซม. : เกินเกณฑ์ ACI (> 3 นิ้ว) ต้องตรวจสอบฐานราก', bg: 'FFFEE2E2', fg: 'FF991B1B' }
+          { colStart: 5, colEnd: 7, text: '≤ 5.00 ซม. : ผ่านเกณฑ์ทุกฐานราก (F1/F2 และกลุ่ม)', bg: 'FFD1FAE5', fg: 'FF064E3B' },
+          { colStart: 8, colEnd: 11, text: '5.01 – 7.62 ซม. : ผ่าน ACI กลุ่ม F3+ (≤ 3 นิ้ว) | F1/F2 เกินเกณฑ์', bg: 'FFFEF3C7', fg: 'FF78350F' },
+          { colStart: 12, colEnd: 15, text: '> 5.00 ซม. (F1/F2) หรือ > 7.62 ซม. (กลุ่ม) : เกินเกณฑ์ ACI ต้องตรวจฐานราก', bg: 'FFFEE2E2', fg: 'FF991B1B' }
         ];
         legItems.forEach(item => {
           ws0.mergeCells(sumRow0 + 2, item.colStart, sumRow0 + 2, item.colEnd);
