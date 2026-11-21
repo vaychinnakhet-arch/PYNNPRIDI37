@@ -23,6 +23,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
   <script defer src="daily_report_studio.js?v=20261118_pe12"></script>
 
   <style>
@@ -3941,26 +3942,53 @@
 
         <!-- Action Tools -->
         <div class="flex items-center gap-1.5 flex-wrap">
-          <button id="btn-sum-rep-open-lengths" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-[#38bdf8] text-slate-900 flex items-center gap-1 cursor-pointer">
+          <button id="btn-sum-rep-open-lengths" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-[#38bdf8] text-[#1D2B45] flex items-center gap-1 cursor-pointer">
             <i data-lucide="ruler" class="w-3.5 h-3.5 text-sky-950"></i>
             <span>กรอกความยาวเข็ม</span>
           </button>
-          <button id="btn-sum-rep-print" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-white hover:bg-slate-100 text-slate-800 flex items-center gap-1 cursor-pointer">
-            <i data-lucide="printer" class="w-3.5 h-3.5 text-slate-600"></i>
+          <button id="btn-sum-rep-print" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-white hover:bg-[#FAF5EE] text-[#1D2B45] flex items-center gap-1 cursor-pointer">
+            <i data-lucide="printer" class="w-3.5 h-3.5 text-[#3E4B69]"></i>
             <span>พิมพ์รายงาน</span>
           </button>
-          <button id="btn-sum-rep-export-csv" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-[#e5f4e9] text-emerald-900 flex items-center gap-1 cursor-pointer">
-            <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-700"></i>
-            <span>ส่งออก CSV</span>
+          <button id="btn-sum-rep-export-xlsx" type="button" style="background-color:#059669;color:#FFFFFF;border-color:#1D2B45;" class="pop-btn px-3 py-1 text-xs font-black flex items-center gap-1.5 cursor-pointer" title="ส่งออกไฟล์ Excel (.xlsx) แยกชีตพร้อมสูตรคำนวณ">
+            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5" style="color:#FFFFFF;"></i>
+            <span>ส่งออก Excel (.xlsx)</span>
           </button>
-          <button id="btn-close-pile-summary-report" type="button" class="pop-btn p-1.5 hover:bg-slate-100 rounded-lg cursor-pointer">
+          <button id="btn-sum-rep-export-csv" type="button" class="pop-btn px-2.5 py-1 text-xs font-black bg-[#FAF5EE] hover:bg-[#F6E9D7] text-[#1D2B45] flex items-center gap-1 cursor-pointer" title="ส่งออก CSV สำรอง">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-[#3E4B69]"></i>
+            <span>CSV</span>
+          </button>
+          <button id="btn-close-pile-summary-report" type="button" aria-label="ปิดหน้าต่างรายงานสรุป" class="pop-btn p-1.5 hover:bg-slate-100 rounded-lg cursor-pointer">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
 
+      <!-- Report Mode Tabs (DoodleWeb Warm Craft — 2 Clean Tabs) -->
+      <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+        <div id="sum-rep-tablist" role="tablist" aria-label="มุมมองรายงานสรุปเสาเข็ม" class="inline-flex items-center gap-1.5 p-1 rounded-xl bg-[#FAF5EE] border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] flex-wrap">
+          <button id="sum-tab-main" type="button" role="tab" aria-selected="true" aria-controls="sum-pane-main" data-sum-tab="main" class="sum-rep-tab-btn px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 bg-[#F26B2A] text-white border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <i data-lucide="table-2" class="w-3.5 h-3.5"></i>
+            <span>ตารางกรอกข้อมูล</span>
+          </button>
+          <button id="sum-tab-combined" type="button" role="tab" aria-selected="false" aria-controls="sum-pane-combined" data-sum-tab="combined" class="sum-rep-tab-btn px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 bg-white text-[#1D2B45] border-1.5 border-transparent hover:bg-[#F6E9D7]">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+            <span>ตารางสรุป (Co + ความยาว)</span>
+            <span class="px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-[#D1FAE5] text-[#064E3B] border border-[#10B981]/50">คำนวณล้วน</span>
+          </button>
+        </div>
+        <div id="sum-rep-readonly-badge" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF3EB] border border-[#F26B2A]/50 text-[11px] font-bold text-[#1D2B45]">
+          <i data-lucide="lock" class="w-3 h-3 text-[#F26B2A]"></i>
+          <span>หน้าสรุปคำนวณอัตโนมัติ (Read-only)</span>
+        </div>
+        <div id="sum-rep-edit-hint" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E8F8F5] border border-[#40C4C4]/60 text-[11px] font-bold text-[#0E5E57]">
+          <i data-lucide="pencil-line" class="w-3 h-3 text-[#0E5E57]"></i>
+          <span>พิมพ์กรอกในตารางได้เลย (กด Enter เพื่อเลื่อนลงแถวถัดไป · บันทึกอัตโนมัติ)</span>
+        </div>
+      </div>
+
       <!-- 4 KPI Summary Cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
+      <div id="sum-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
         <div class="p-2.5 rounded-xl bg-sky-50 border-1.5 border-slate-900 shadow-2xs">
           <div class="flex items-center justify-between text-xs text-sky-800 font-bold">
             <span>เสาเข็มที่กดแล้ว</span>
@@ -3979,6 +4007,7 @@
           </div>
           <div class="text-base sm:text-lg font-black text-emerald-700 mt-0.5 font-mono">
             <span id="sum-kpi-total-eff-len">0.00</span> ม.
+            <span id="sum-kpi-len-entered-count" class="text-[10.5px] text-emerald-700/80 font-sans font-bold ml-1">(0/93 ต้น)</span>
           </div>
         </div>
 
@@ -4007,7 +4036,7 @@
       <div class="flex items-center justify-between gap-2 pb-2.5 flex-wrap">
         <div class="flex items-center gap-2 flex-wrap">
           <div class="relative">
-            <input id="sum-rep-search" type="text" placeholder="🔍 ค้นหาเบอร์เข็ม / ฐานราก (F1, F2...) / กริด..." class="text-xs bg-white border-1.5 border-slate-900 rounded-lg px-2.5 py-1.5 font-medium focus:outline-none w-64 md:w-80 shadow-2xs">
+            <input id="sum-rep-search" type="text" aria-label="ค้นหาเบอร์เข็ม ฐานราก หรือกริด" placeholder="🔍 ค้นหาเบอร์เข็ม / ฐานราก (F1, F2...) / กริด..." class="text-xs bg-white border-1.5 border-slate-900 rounded-lg px-2.5 py-1.5 font-medium focus:outline-none w-64 md:w-80 shadow-2xs">
           </div>
           
           <!-- Footing filter chips -->
@@ -4031,53 +4060,242 @@
         </div>
       </div>
 
-      <!-- Main Detailed Table Container -->
-      <div class="flex-1 overflow-auto border-2 border-slate-900 rounded-xl bg-white shadow-xs">
-        <table id="pile-summary-main-table" class="w-full text-xs text-left border-collapse min-w-[1250px]">
-          <thead class="bg-[#ffc45b] text-[#1e293b] sticky top-0 z-10 border-b-2 border-slate-900 select-none shadow-xs">
+      <!-- PANE 1: Main Detailed Table Container (Inline Editable) -->
+      <div id="sum-pane-main" role="tabpanel" aria-labelledby="sum-tab-main" class="flex-1 overflow-auto border-2 border-[#1D2B45] rounded-xl bg-white shadow-xs">
+        <table id="pile-summary-main-table" class="w-full text-xs text-left border-collapse min-w-[1460px]">
+          <thead class="bg-[#ffc45b] text-[#1e293b] sticky top-0 z-10 border-b-2 border-[#1D2B45] select-none shadow-xs">
             <tr>
-              <th class="p-2 border-r border-slate-900/30 font-black text-center w-12">No.</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-center w-16">รหัสเข็ม</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-center w-16">ฐานราก</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-center w-16">กริด</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-center w-10">No.</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-center w-14">รหัสเข็ม</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-center w-14">ฐานราก</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-center w-14">กริด</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono" title="พิกัดตามแบบ Northing (N)">Co (N) แบบ</th>
               <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono" title="พิกัดตามแบบ Easting (E)">Co (E) แบบ</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#047857]" title="พิกัดจริง (n, e) หลังกดเสร็จ">Co (n, e) จริง</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#a84631]" title="ระดับตัดหัวเข็มตามแบบ PCO">PCO แบบ (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-sky-800 bg-sky-50" title="ระดับ TOP เข็มจริงที่กดได้ (TOP คืออันเดียวกัน ใช้อันบน)">ระดับ TOP จริง (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/70" title="ความยาวท่อนล่าง">ท่อนล่าง (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/70" title="ความยาวท่อนกลาง">ท่อนกลาง (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/70" title="ความยาวท่อนบน (ก่อนตัด)">ท่อนบน (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right text-blue-900 bg-blue-100/80" title="ท่อนบนสุทธิ = ท่อนบน - ระดับ TOP จริง">ท่อนบนสุทธิ (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-right text-emerald-950 bg-emerald-100" title="ความยาวเข็มรวมใช้งาน = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ">ความยาวรวม (ม.)</th>
-              <th class="p-2 border-r border-slate-900/30 font-black text-center w-28">สถานะ</th>
-              <th class="p-2 font-black text-center w-16">แก้ไข</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#0E5E57] bg-[#E8F8F5] w-28" title="กรอกพิกัดจริง Northing หลังกด">Co (N) จริง ✎</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#0E5E57] bg-[#E8F8F5] w-28" title="กรอกพิกัดจริง Easting หลังกด">Co (E) จริง ✎</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#1D2B45] bg-[#FFE8D6] w-20" title="ระยะเยื้องศูนย์สุทธิ √(ΔN²+ΔE²) ซม.">เยื้อง (ซม.)</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-[#a84631]" title="ระดับตัดหัวเข็มตามแบบ PCO">PCO แบบ</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right font-mono text-sky-900 bg-sky-50 w-24" title="กรอกระดับ TOP เข็มจริง (ม.)">ระดับ TOP ✎</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/80 w-20" title="กรอกความยาวท่อนล่าง (ม.)">ท่อนล่าง ✎</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/80 w-20" title="กรอกความยาวท่อนกลาง (ม.)">ท่อนกลาง ✎</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right bg-amber-100/80 w-20" title="กรอกความยาวท่อนบนก่อนตัด (ม.)">ท่อนบน ✎</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right text-blue-900 bg-blue-100/80" title="ท่อนบนสุทธิ = ท่อนบน - ระดับ TOP จริง">ท่อนบนสุทธิ</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-right text-emerald-950 bg-emerald-100" title="ความยาวเข็มรวมใช้งาน = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ">ความยาวรวม</th>
+              <th class="p-2 border-r border-slate-900/30 font-black text-center w-24">สถานะ</th>
+              <th class="p-2 font-black text-center w-12">ฟอร์ม</th>
             </tr>
           </thead>
           <tbody id="pile-summary-report-tbody" class="divide-y divide-slate-200">
-            <!-- Dynamic Rows -->
+            <!-- Dynamic Inline-Editable Rows -->
           </tbody>
-          <tfoot class="bg-slate-900 text-white font-black text-xs sticky bottom-0 z-10 border-t-2 border-slate-900 shadow-md">
+          <tfoot class="bg-[#1D2B45] text-white font-black text-xs sticky bottom-0 z-10 border-t-2 border-[#1D2B45] shadow-md">
             <tr>
               <td colspan="8" class="p-2.5 text-right font-bold text-amber-300">
-                รวมทั้งหมด <span id="sum-foot-visible-count">93</span> ต้น :
+                รวมทั้งหมด <span id="sum-foot-visible-count">93</span> ต้น (กรอกความยาว <span id="sum-foot-entered-count">0</span> ต้น) :
               </td>
+              <td id="sum-foot-avgdev" class="p-2 text-right font-mono text-[#F7B844]">-</td>
+              <td class="p-2 text-right font-mono text-slate-400">-</td>
               <td id="sum-foot-topcut" class="p-2 text-right font-mono text-sky-300 font-bold">-</td>
               <td id="sum-foot-bottom" class="p-2 text-right font-mono text-amber-200">-</td>
               <td id="sum-foot-middle" class="p-2 text-right font-mono text-amber-200">-</td>
               <td id="sum-foot-top" class="p-2 text-right font-mono text-amber-200">-</td>
               <td id="sum-foot-topnet" class="p-2 text-right font-mono text-sky-300">-</td>
               <td id="sum-foot-efftotal" class="p-2 text-right font-mono text-emerald-300 text-sm font-black bg-emerald-950/60">-</td>
-              <td colspan="2" class="p-2 text-center text-[10.5px] text-slate-300">ความยาวสุทธิใช้งานจริง</td>
+              <td colspan="2" class="p-2 text-center text-[10.5px] text-slate-300">สุทธิใช้งานจริง</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
+      <!-- PANE 2: Unified Calculated Summary — Co (ก่อน/หลัง/เยื้อง) + ความยาวสุทธิ (ท่อนบนลบ TOP แล้ว) -->
+      <div id="sum-pane-combined" role="tabpanel" aria-labelledby="sum-tab-combined" class="hidden flex-1 flex flex-col min-h-0 gap-2">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 shrink-0">
+          <div class="px-3 py-2 rounded-xl bg-[#E8F8F5] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[10.5px] font-bold text-[#0E5E57]">เยื้องเฉลี่ย / สูงสุด</div>
+            <div id="comb-kpi-dev" class="text-xs sm:text-sm font-black font-mono text-[#1D2B45]">-</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#FAF5EE] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[10.5px] font-bold text-[#3E4B69]">กรอกความยาวแล้ว</div>
+            <div id="comb-kpi-entered" class="text-xs sm:text-sm font-black font-mono text-[#1D2B45]">0 / 93 ต้น</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#FEF3C7] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[10.5px] font-bold text-[#78350F]">รวมท่อนล่าง</div>
+            <div id="comb-kpi-bottom" class="text-xs sm:text-sm font-black font-mono text-[#78350F]">-</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#FEF3C7] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[10.5px] font-bold text-[#78350F]">รวมท่อนกลาง</div>
+            <div id="comb-kpi-middle" class="text-xs sm:text-sm font-black font-mono text-[#78350F]">-</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#EEF4FF] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[10.5px] font-bold text-[#1E3A8A]">รวมท่อนบน (ลบ TOP)</div>
+            <div id="comb-kpi-topnet" class="text-xs sm:text-sm font-black font-mono text-[#1E3A8A]">-</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#D1FAE5] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[10.5px] font-bold text-[#064E3B]">ความยาวรวมสุทธิ</div>
+            <div id="comb-kpi-efftotal" class="text-xs sm:text-sm font-black font-mono text-[#064E3B]">-</div>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-auto border-2 border-[#1D2B45] rounded-xl bg-white shadow-xs">
+          <table id="pile-summary-combined-table" class="w-full text-xs text-left border-collapse min-w-[1320px]">
+            <thead class="bg-[#F6E9D7] text-[#1D2B45] sticky top-0 z-10 border-b-2 border-[#1D2B45] select-none shadow-xs">
+              <tr>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-10">No.</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-14">รหัสเข็ม</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-14">ฐานราก</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-14">กริด</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono">Co (N) แบบ</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono">Co (E) แบบ</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#E8F8F5] text-[#0E5E57]">Co (N) หลังกด</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#E8F8F5] text-[#0E5E57]">Co (E) หลังกด</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FFE8D6] text-[#1D2B45]" title="ระยะเยื้องศูนย์สุทธิ √(ΔN² + ΔE²) ซม. (เกณฑ์ ACI ≤ 7.62 ซม.)">ระยะเยื้อง (ซม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FEF3C7]/70">ท่อนล่าง (ม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FEF3C7]/70">ท่อนกลาง (ม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#EEF4FF] text-[#1E3A8A]" title="ท่อนบนที่ตัดค่า TOP แล้ว (ถ้า TOP ติดลบ = ยาวเต็มไม่ตัด)">ท่อนบน ตัดแล้ว (ม.)</th>
+                <th class="p-2 font-black text-right font-mono bg-[#D1FAE5] text-[#064E3B]" title="ท่อนล่าง + ท่อนกลาง + ท่อนบน (ตัดแล้ว)">ความยาวรวม (ม.)</th>
+              </tr>
+            </thead>
+            <tbody id="pile-summary-combined-tbody" class="divide-y divide-[#E2D9CC]">
+              <!-- Dynamic Unified Summary Rows -->
+            </tbody>
+            <tfoot class="bg-[#1D2B45] text-white font-black text-xs sticky bottom-0 z-10 border-t-2 border-[#1D2B45]">
+              <tr>
+                <td colspan="8" class="p-2.5 text-right text-[#F7B844]">
+                  สรุปรวม (<span id="comb-foot-count">0</span> ต้นที่มีพิกัด / กรอกความยาว <span id="comb-foot-entered">0</span> ต้น) :
+                </td>
+                <td id="comb-foot-avgdev" class="p-2 text-right font-mono text-[#F7B844] bg-[#F26B2A]/30">-</td>
+                <td id="comb-foot-bottom" class="p-2 text-right font-mono text-amber-200">-</td>
+                <td id="comb-foot-middle" class="p-2 text-right font-mono text-amber-200">-</td>
+                <td id="comb-foot-topnet" class="p-2 text-right font-mono text-blue-200">-</td>
+                <td id="comb-foot-efftotal" class="p-2 text-right font-mono text-emerald-300 text-sm bg-emerald-950/60">-</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANE 2: Pure Calculated Summary — Coordinate Deviation (ซม.) -->
+      <div id="sum-pane-coord" role="tabpanel" aria-labelledby="sum-tab-coord" class="hidden flex-1 flex flex-col min-h-0 gap-2">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 shrink-0">
+          <div class="px-3 py-2 rounded-xl bg-[#E8F8F5] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#0E5E57]">ต้นที่มีพิกัด Co จริง</div>
+            <div id="coord-kpi-count" class="text-sm sm:text-base font-black font-mono text-[#1D2B45]">0 / 93 ต้น</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#EEF4FF] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#1E3A8A]">ค่าเยื้องเฉลี่ย</div>
+            <div id="coord-kpi-avg" class="text-sm sm:text-base font-black font-mono text-[#1E3A8A]">-</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#FEF3C7] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#78350F]">ค่าเยื้องสูงสุด</div>
+            <div id="coord-kpi-max" class="text-sm sm:text-base font-black font-mono text-[#78350F]">-</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#FEE2E2] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#991B1B]">เกินเกณฑ์ ACI (&gt; 7.62 ซม. / 3")</div>
+            <div id="coord-kpi-over" class="text-sm sm:text-base font-black font-mono text-[#991B1B]">0 ต้น</div>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-auto border-2 border-[#1D2B45] rounded-xl bg-white shadow-xs">
+          <table id="pile-summary-coord-table" class="w-full text-xs text-left border-collapse min-w-[1050px]">
+            <thead class="bg-[#F6E9D7] text-[#1D2B45] sticky top-0 z-10 border-b-2 border-[#1D2B45] select-none shadow-xs">
+              <tr>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-12">No.</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-16">รหัสเข็ม</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-16">ฐานราก</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-16">กริด</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono">Co (N) ตามแบบ</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono">Co (E) ตามแบบ</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#E8F8F5] text-[#0E5E57]">Co (N) หลังกด</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#E8F8F5] text-[#0E5E57]">Co (E) หลังกด</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#EEF4FF] text-[#1E3A8A]" title="(N หลังกด - N ตามแบบ) × 100">ΔN (ซม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#EEF4FF] text-[#1E3A8A]" title="(E หลังกด - E ตามแบบ) × 100">ΔE (ซม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FFE8D6] text-[#1D2B45]" title="√(ΔN² + ΔE²)">เยื้องสุทธิ (ซม.)</th>
+                <th class="p-2 font-black text-center w-24">เกณฑ์</th>
+              </tr>
+            </thead>
+            <tbody id="pile-summary-coord-tbody" class="divide-y divide-[#E2D9CC]">
+              <!-- Dynamic Calculated Rows -->
+            </tbody>
+            <tfoot class="bg-[#1D2B45] text-white font-black text-xs sticky bottom-0 z-10 border-t-2 border-[#1D2B45]">
+              <tr>
+                <td colspan="8" class="p-2.5 text-right text-[#F7B844]">
+                  สรุปค่าเยื้องศูนย์ (<span id="coord-foot-count">0 / 93</span> ต้นที่มีพิกัดจริง) :
+                </td>
+                <td id="coord-foot-avg-dn" class="p-2 text-right font-mono text-sky-300">-</td>
+                <td id="coord-foot-avg-de" class="p-2 text-right font-mono text-sky-300">-</td>
+                <td id="coord-foot-avg-dev" class="p-2 text-right font-mono text-[#F7B844] bg-[#F26B2A]/30">-</td>
+                <td id="coord-foot-max-dev" class="p-2 text-center font-mono text-[10.5px] text-rose-300">-</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANE 3: Pure Calculated Summary — Net Pile Lengths (ม.) -->
+      <div id="sum-pane-length" role="tabpanel" aria-labelledby="sum-tab-length" class="hidden flex-1 flex flex-col min-h-0 gap-2">
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-2 shrink-0">
+          <div class="px-3 py-2 rounded-xl bg-[#FAF5EE] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#3E4B69]">กรอกความยาวแล้ว</div>
+            <div id="len-kpi-entered" class="text-sm sm:text-base font-black font-mono text-[#1D2B45]">0 / 93 ต้น</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#FEF3C7] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#78350F]">รวมท่อนล่าง</div>
+            <div id="len-kpi-bottom" class="text-sm sm:text-base font-black font-mono text-[#78350F]">0.00 ม.</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#FEF3C7] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#78350F]">รวมท่อนกลาง</div>
+            <div id="len-kpi-middle" class="text-sm sm:text-base font-black font-mono text-[#78350F]">0.00 ม.</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#EEF4FF] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45]">
+            <div class="text-[11px] font-bold text-[#1E3A8A]">รวมท่อนบนสุทธิ (ลบ TOP)</div>
+            <div id="len-kpi-topnet" class="text-sm sm:text-base font-black font-mono text-[#1E3A8A]">0.00 ม.</div>
+          </div>
+          <div class="px-3 py-2 rounded-xl bg-[#D1FAE5] border-1.5 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] col-span-2 lg:col-span-1">
+            <div class="text-[11px] font-bold text-[#064E3B]">รวมความยาวสุทธิทั้งหมด</div>
+            <div id="len-kpi-efftotal" class="text-sm sm:text-base font-black font-mono text-[#064E3B]">0.00 ม.</div>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-auto border-2 border-[#1D2B45] rounded-xl bg-white shadow-xs">
+          <table id="pile-summary-length-table" class="w-full text-xs text-left border-collapse min-w-[960px]">
+            <thead class="bg-[#F6E9D7] text-[#1D2B45] sticky top-0 z-10 border-b-2 border-[#1D2B45] select-none shadow-xs">
+              <tr>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-12">No.</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-16">รหัสเข็ม</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-16">ฐานราก</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-center w-16">กริด</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FEF3C7]/70">ท่อนล่าง (ม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FEF3C7]/70">ท่อนกลาง (ม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#FAF5EE]">ท่อนบนก่อนตัด (ม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-sky-50 text-sky-900">ระดับ TOP จริง (ม.)</th>
+                <th class="p-2 border-r border-[#1D2B45]/25 font-black text-right font-mono bg-[#EEF4FF] text-[#1E3A8A]" title="ท่อนบนก่อนตัด - ระดับ TOP จริง">ท่อนบนสุทธิ ลบ TOP (ม.)</th>
+                <th class="p-2 font-black text-right font-mono bg-[#D1FAE5] text-[#064E3B]" title="ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ">ความยาวรวมสุทธิ (ม.)</th>
+              </tr>
+            </thead>
+            <tbody id="pile-summary-length-tbody" class="divide-y divide-[#E2D9CC]">
+              <!-- Dynamic Calculated Rows -->
+            </tbody>
+            <tfoot class="bg-[#1D2B45] text-white font-black text-xs sticky bottom-0 z-10 border-t-2 border-[#1D2B45]">
+              <tr>
+                <td colspan="4" class="p-2.5 text-right text-[#F7B844]">
+                  รวมทั้งหมด (กรอกแล้ว <span id="len-foot-entered">0 / 93</span> ต้น) :
+                </td>
+                <td id="len-foot-bottom" class="p-2 text-right font-mono text-amber-200">-</td>
+                <td id="len-foot-middle" class="p-2 text-right font-mono text-amber-200">-</td>
+                <td id="len-foot-top" class="p-2 text-right font-mono text-slate-200">-</td>
+                <td id="len-foot-topcut" class="p-2 text-right font-mono text-sky-300">-</td>
+                <td id="len-foot-topnet" class="p-2 text-right font-mono text-blue-200">-</td>
+                <td id="len-foot-efftotal" class="p-2 text-right font-mono text-emerald-300 text-sm bg-emerald-950/60">-</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
       <!-- Report Footer Note -->
-      <div class="mt-2.5 flex justify-between items-center text-[11px] text-slate-500 font-semibold">
-        <span>* ความยาวสุทธิใช้งานจริง = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ (หักระดับ TOP เข็มจริง)</span>
-        <span id="sum-report-rendered-info" class="font-bold text-slate-700">แสดง 93 / 93 ต้น</span>
+      <div class="mt-2.5 flex justify-between items-center text-[11px] text-[#3E4B69] font-semibold flex-wrap gap-2">
+        <span id="sum-report-formula-note">* ต้นที่ยังไม่ได้กรอกท่อนล่าง/กลาง/บน จะเว้นว่างและไม่นำมาคำนวณรวม | ท่อนบนสุทธิ = ท่อนบน - ระดับ TOP จริง</span>
+        <span id="sum-report-rendered-info" class="font-bold text-[#1D2B45]">แสดง 93 / 93 ต้น</span>
       </div>
 
     </div>
@@ -4450,7 +4668,9 @@
             filter: 'id=eq.1'
           }, (payload) => {
             const remotePiles = payload?.new?.data?.pilingProgress;
-            if (remotePiles && !isSyncInProgress) {
+            const recentlyEditedInline = (typeof lastInlineEditTs !== 'undefined' && (Date.now() - lastInlineEditTs) < 4000);
+            const activeInlineEl = document.activeElement?.classList?.contains('sum-inline-input');
+            if (remotePiles && !isSyncInProgress && !recentlyEditedInline && !activeInlineEl) {
               const localStr = JSON.stringify(progressRecords);
               const remoteStr = JSON.stringify(remotePiles);
               if (localStr !== remoteStr) {
@@ -6182,15 +6402,15 @@
         (hasSavedCoords && rec && rec.actual_e !== undefined) ? rec.actual_e : null
       );
 
-      // Set pile segment lengths (ท่อนล่าง กลาง บน - คำนวณ TOP สดจากช่องบน)
+      // Set pile segment lengths (ท่อนล่าง กลาง บน - เว้นว่างถ้าไม่ได้กรอกจริง)
       if (typeof getPileLengthData === 'function') {
         const lenData = getPileLengthData(pileNo);
         const segBotInp = document.getElementById('card-pile-seg-bottom');
         const segMidInp = document.getElementById('card-pile-seg-middle');
         const segTopInp = document.getElementById('card-pile-seg-top');
-        if (segBotInp) segBotInp.value = lenData.bottom.toFixed(2);
-        if (segMidInp) segMidInp.value = lenData.middle.toFixed(2);
-        if (segTopInp) segTopInp.value = lenData.top.toFixed(2);
+        if (segBotInp) segBotInp.value = lenData.bottom !== null ? lenData.bottom.toFixed(2) : '';
+        if (segMidInp) segMidInp.value = lenData.middle !== null ? lenData.middle.toFixed(2) : '';
+        if (segTopInp) segTopInp.value = lenData.top !== null ? lenData.top.toFixed(2) : '';
         if (typeof updatePileCardLengthCalc === 'function') {
           updatePileCardLengthCalc();
         }
@@ -6556,33 +6776,59 @@
         record.coords_entered = true;
       }
 
-      // Read Segment Lengths (ท่อนล่าง, กลาง, บน - ใช้ TOP จากช่องระดับ TOP เข็มจริงด้านบน)
+      // Read Segment Lengths (ท่อนล่าง, กลาง, บน - บันทึกเฉพาะเมื่อมีการกรอกจริง ไม่ใส่ค่า default)
       const segBotInp = document.getElementById('card-pile-seg-bottom');
       const segMidInp = document.getElementById('card-pile-seg-middle');
       const segTopInp = document.getElementById('card-pile-seg-top');
       if (segBotInp && segMidInp && segTopInp) {
-        const b = parseFloat(segBotInp.value) || 0;
-        const m = parseFloat(segMidInp.value) || 0;
-        const t = parseFloat(segTopInp.value) || 0;
-        const c = (record.actual_top !== undefined) ? record.actual_top : defTop;
-        const netTop = Math.max(0, t - c);
-        const effTotal = b + m + netTop;
-        record.seg_bottom = b;
-        record.seg_middle = m;
-        record.seg_top = t;
-        record.top_cutoff = c;
-        record.seg_top_net = netTop;
-        record.total_length = effTotal;
+        const parseSeg = (el) => {
+          const s = (el.value || '').trim();
+          if (s === '') return null;
+          const n = parseFloat(s);
+          return Number.isFinite(n) ? n : null;
+        };
+        const b = parseSeg(segBotInp);
+        const m = parseSeg(segMidInp);
+        const t = parseSeg(segTopInp);
+        const hasAnySeg = (b !== null || m !== null || t !== null);
+        if (hasAnySeg) {
+          const c = (record.actual_top !== undefined && Number.isFinite(Number(record.actual_top))) ? Number(record.actual_top) : 0;
+          const cutOff = c > 0 ? c : 0;
+          const netTop = t !== null ? Math.max(0, t - cutOff) : null;
+          const effTotal = (b ?? 0) + (m ?? 0) + (netTop ?? 0);
+          if (b !== null) record.seg_bottom = b; else delete record.seg_bottom;
+          if (m !== null) record.seg_middle = m; else delete record.seg_middle;
+          if (t !== null) record.seg_top = t; else delete record.seg_top;
+          record.top_cutoff = c;
+          if (netTop !== null) record.seg_top_net = netTop; else delete record.seg_top_net;
+          record.total_length = effTotal;
 
-        try {
-          let raw = localStorage.getItem('PE12_PILE_LENGTHS');
-          let map = raw ? JSON.parse(raw) : {};
-          map[savedPileNo] = {
-            seg_bottom: b, seg_middle: m, seg_top: t, top_cutoff: c,
-            seg_top_net: netTop, total_length: effTotal
-          };
-          localStorage.setItem('PE12_PILE_LENGTHS', JSON.stringify(map));
-        } catch(e) {}
+          try {
+            let raw = localStorage.getItem('PE12_PILE_LENGTHS');
+            let map = raw ? JSON.parse(raw) : {};
+            map[savedPileNo] = {
+              seg_bottom: b, seg_middle: m, seg_top: t, top_cutoff: c,
+              seg_top_net: netTop, total_length: effTotal
+            };
+            localStorage.setItem('PE12_PILE_LENGTHS', JSON.stringify(map));
+          } catch(e) {}
+        } else {
+          delete record.seg_bottom;
+          delete record.seg_middle;
+          delete record.seg_top;
+          delete record.seg_top_net;
+          delete record.total_length;
+          try {
+            let raw = localStorage.getItem('PE12_PILE_LENGTHS');
+            if (raw) {
+              let map = JSON.parse(raw);
+              if (map && map[savedPileNo]) {
+                delete map[savedPileNo];
+                localStorage.setItem('PE12_PILE_LENGTHS', JSON.stringify(map));
+              }
+            }
+          } catch(e) {}
+        }
       }
       
       progressRecords[savedPileNo] = record;
@@ -12353,11 +12599,26 @@
     // PILE SEGMENT LENGTHS & SUMMARY REPORT MODULE (ท่อนล่าง, กลาง, บน, TOP, รายงานสรุป)
     // =========================================================================
 
+    function parseOptionalNum(val) {
+      if (val === undefined || val === null) return null;
+      const str = String(val).trim();
+      if (str === '' || str === '-') return null;
+      const num = Number(str);
+      return Number.isFinite(num) ? num : null;
+    }
+
+    function calcNetTopSegment(topLen, topLevel) {
+      if (topLen === null) return null;
+      // ถ้าระดับ TOP <= 0 (ติดลบ = เข็มถูกส่งลงไป) ท่อนบนยาวเต็มไม่ถูกตัด และไม่นำไปบวกเพิ่ม
+      const cutOff = (topLevel !== null && topLevel > 0) ? topLevel : 0;
+      return Math.max(0, topLen - cutOff);
+    }
+
     /**
      * ดึงข้อมูลความยาวแต่ละท่อนของเสาเข็ม
-     * เช่น เบอร์ 50 มี ท่อนล่าง, กลาง, บน (ก่อนตัด), ความสูง TOP (ส่วนที่ตัดออก)
-     * ท่อนบนสุทธิ = ท่อนบน - TOP
-     * ความยาวเข็มรวม = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ
+     * - หากไม่ได้เกิดจากการกรอกจริง จะคืนค่า null (เว้นว่างในตาราง และไม่นำมาคำนวณรวม)
+     * - ท่อนบนสุทธิ = ท่อนบน - (TOP > 0 ? TOP : 0) — ถ้า TOP ติดลบ (ส่งเข็มลง) ท่อนบนยาวเต็ม ไม่บวกเพิ่ม
+     * - ความยาวเข็มรวม = ท่อนล่าง + ท่อนกลาง + ท่อนบนสุทธิ
      */
     function getPileLengthData(pileNo) {
       pileNo = parseInt(pileNo, 10);
@@ -12372,27 +12633,18 @@
         }
       } catch(e) {}
 
-      // Default standard values for 21m pile: bottom 7, middle 7, top 7, topCut 0
-      const bottom = (rec.seg_bottom !== undefined) ? Number(rec.seg_bottom) :
-                     (custom && custom.seg_bottom !== undefined) ? Number(custom.seg_bottom) : 7.00;
-
-      const middle = (rec.seg_middle !== undefined) ? Number(rec.seg_middle) :
-                     (custom && custom.seg_middle !== undefined) ? Number(custom.seg_middle) : 7.00;
-
-      const top = (rec.seg_top !== undefined) ? Number(rec.seg_top) :
-                  (custom && custom.seg_top !== undefined) ? Number(custom.seg_top) : 7.00;
+      // ค่าแต่ละท่อน: ใช้เฉพาะค่าที่เกิดจากการกรอกจริงเท่านั้น (ไม่มี default 7.00)
+      const bottom = parseOptionalNum(rec.seg_bottom) ?? parseOptionalNum(custom?.seg_bottom);
+      const middle = parseOptionalNum(rec.seg_middle) ?? parseOptionalNum(custom?.seg_middle);
+      const top = parseOptionalNum(rec.seg_top) ?? parseOptionalNum(custom?.seg_top);
 
       // TOP คืออันเดียวกัน ใช้อันบน: ดึงจากระดับ TOP เข็มจริง (actual_top) เป็นหลัก
-      const topCut = (rec.actual_top !== undefined && rec.actual_top !== null && String(rec.actual_top).trim() !== '' && !isNaN(parseFloat(rec.actual_top)))
-                     ? Number(rec.actual_top)
-                     : (rec.top_cutoff !== undefined && rec.top_cutoff !== null && String(rec.top_cutoff).trim() !== '' && !isNaN(parseFloat(rec.top_cutoff)))
-                     ? Number(rec.top_cutoff)
-                     : (custom && custom.top_cutoff !== undefined) ? Number(custom.top_cutoff) : 0.00;
+      const topCut = parseOptionalNum(rec.actual_top) ?? parseOptionalNum(rec.top_cutoff) ?? parseOptionalNum(custom?.top_cutoff);
 
-      const topNet = Math.max(0, top - topCut);
-      const totalEffective = bottom + middle + topNet;
-      const totalManufactured = bottom + middle + top;
-      const isCustomized = (rec.seg_bottom !== undefined || (custom && custom.seg_bottom !== undefined));
+      const hasAnySegment = (bottom !== null || middle !== null || top !== null);
+      const topNet = calcNetTopSegment(top, topCut);
+      const totalEffective = hasAnySegment ? ((bottom ?? 0) + (middle ?? 0) + (topNet ?? 0)) : null;
+      const totalManufactured = hasAnySegment ? ((bottom ?? 0) + (middle ?? 0) + (top ?? 0)) : null;
 
       return {
         pileNo,
@@ -12403,52 +12655,119 @@
         topNet,
         totalEffective,
         totalManufactured,
-        isCustomized
+        isCustomized: hasAnySegment
       };
     }
 
     /**
-     * บันทึกความยาวแต่ละท่อนของเสาเข็ม
+     * คำนวณค่าพิกัด Co ตามแบบ vs หลังกด และระยะเยื้องศูนย์ (ซม.)
+     * - หากยังไม่มีพิกัดหลังกดจริง จะคืนค่า null ทั้งหมด (ไม่แสดง NaN)
+     */
+    function getPileCoordDeviation(pile, rec) {
+      const designN = parseOptionalNum(pile?.northing);
+      const designE = parseOptionalNum(pile?.easting);
+      const rawActN = parseOptionalNum(rec?.actual_n);
+      const rawActE = parseOptionalNum(rec?.actual_e);
+
+      const hasActualCoords = Boolean(
+        rec &&
+        rawActN !== null &&
+        rawActE !== null &&
+        (rec.coords_entered === true || (designN !== null && designE !== null && (rawActN !== designN || rawActE !== designE)))
+      );
+
+      if (!hasActualCoords) {
+        return {
+          designN,
+          designE,
+          actualN: null,
+          actualE: null,
+          dN_cm: null,
+          dE_cm: null,
+          dev_cm: null,
+          hasActualCoords: false,
+          grade: null
+        };
+      }
+
+      const dN_cm = designN !== null ? (rawActN - designN) * 100 : null;
+      const dE_cm = designE !== null ? (rawActE - designE) * 100 : null;
+      const dev_cm = (dN_cm !== null && dE_cm !== null) ? Math.hypot(dN_cm, dE_cm) : null;
+
+      let grade = null;
+      if (dev_cm !== null) {
+        // มาตรฐาน ACI 543R / ACI 318-25 Sec. 13.4: เกณฑ์เยื้องศูนย์เสาเข็มตอก/กด ≤ 3 นิ้ว (7.62 ซม.)
+        if (dev_cm <= 5.0) grade = 'pass';
+        else if (dev_cm <= 7.62) grade = 'aci_pass';
+        else grade = 'over';
+      }
+
+      return {
+        designN,
+        designE,
+        actualN: rawActN,
+        actualE: rawActE,
+        dN_cm,
+        dE_cm,
+        dev_cm,
+        hasActualCoords: true,
+        grade
+      };
+    }
+
+    /**
+     * บันทึกความยาวแต่ละท่อนของเสาเข็ม (รองรับการเว้นว่าง)
      */
     function savePileLengthData(pileNo, bottom, middle, top, topCut) {
       pileNo = parseInt(pileNo, 10);
-      bottom = parseFloat(bottom) || 0;
-      middle = parseFloat(middle) || 0;
-      top = parseFloat(top) || 0;
-      topCut = parseFloat(topCut) || 0;
-      const topNet = Math.max(0, top - topCut);
-      const totalEffective = bottom + middle + topNet;
+      const b = parseOptionalNum(bottom);
+      const m = parseOptionalNum(middle);
+      const t = parseOptionalNum(top);
+      const c = parseOptionalNum(topCut);
+      const hasAnySeg = (b !== null || m !== null || t !== null);
+      const topNet = calcNetTopSegment(t, c);
+      const totalEffective = hasAnySeg ? ((b ?? 0) + (m ?? 0) + (topNet ?? 0)) : null;
 
       if (!progressRecords[pileNo]) {
         progressRecords[pileNo] = { status: 'pending' };
       }
-      progressRecords[pileNo].seg_bottom = bottom;
-      progressRecords[pileNo].seg_middle = middle;
-      progressRecords[pileNo].seg_top = top;
-      progressRecords[pileNo].actual_top = topCut;
-      progressRecords[pileNo].top_cutoff = topCut;
-      progressRecords[pileNo].seg_top_net = topNet;
-      progressRecords[pileNo].total_length = totalEffective;
+
+      if (b !== null) progressRecords[pileNo].seg_bottom = b; else delete progressRecords[pileNo].seg_bottom;
+      if (m !== null) progressRecords[pileNo].seg_middle = m; else delete progressRecords[pileNo].seg_middle;
+      if (t !== null) progressRecords[pileNo].seg_top = t; else delete progressRecords[pileNo].seg_top;
+      if (c !== null) {
+        progressRecords[pileNo].actual_top = c;
+        progressRecords[pileNo].top_cutoff = c;
+      } else {
+        delete progressRecords[pileNo].actual_top;
+        delete progressRecords[pileNo].top_cutoff;
+      }
+      if (topNet !== null) progressRecords[pileNo].seg_top_net = topNet; else delete progressRecords[pileNo].seg_top_net;
+      if (totalEffective !== null) progressRecords[pileNo].total_length = totalEffective; else delete progressRecords[pileNo].total_length;
 
       try {
         let raw = localStorage.getItem('PE12_PILE_LENGTHS');
         let map = raw ? JSON.parse(raw) : {};
-        map[pileNo] = {
-          seg_bottom: bottom,
-          seg_middle: middle,
-          seg_top: top,
-          actual_top: topCut,
-          top_cutoff: topCut,
-          seg_top_net: topNet,
-          total_length: totalEffective
-        };
+        if (hasAnySeg || c !== null) {
+          map[pileNo] = {
+            seg_bottom: b,
+            seg_middle: m,
+            seg_top: t,
+            actual_top: c,
+            top_cutoff: c,
+            seg_top_net: topNet,
+            total_length: totalEffective
+          };
+        } else {
+          delete map[pileNo];
+        }
         localStorage.setItem('PE12_PILE_LENGTHS', JSON.stringify(map));
       } catch(e) {}
 
       // ถ้าการ์ดของต้นนี้เปิดอยู่ ให้ปรับค่าในช่องระดับ TOP จริงด้านบนด้วย
       if (typeof selectedCardPileNo !== 'undefined' && selectedCardPileNo === pileNo) {
         const topInp = document.getElementById('card-pile-actual-top');
-        if (topInp) topInp.value = topCut !== 0 ? topCut : '';
+        if (topInp) topInp.value = c !== null ? c : '';
         if (typeof updatePileCardLengthCalc === 'function') updatePileCardLengthCalc();
       }
 
@@ -12508,15 +12827,15 @@
         }
       }
 
-      // Input values
+      // Input values (เว้นว่างถ้ายังไม่ได้กรอกจริง)
       const botInp = document.getElementById('len-modal-inp-bottom');
       const midInp = document.getElementById('len-modal-inp-middle');
       const topInp = document.getElementById('len-modal-inp-top');
       const cutInp = document.getElementById('len-modal-inp-topcut');
-      if (botInp) botInp.value = lenData.bottom.toFixed(2);
-      if (midInp) midInp.value = lenData.middle.toFixed(2);
-      if (topInp) topInp.value = lenData.top.toFixed(2);
-      if (cutInp) cutInp.value = lenData.topCut.toFixed(2);
+      if (botInp) botInp.value = lenData.bottom !== null ? lenData.bottom.toFixed(2) : '';
+      if (midInp) midInp.value = lenData.middle !== null ? lenData.middle.toFixed(2) : '';
+      if (topInp) topInp.value = lenData.top !== null ? lenData.top.toFixed(2) : '';
+      if (cutInp) cutInp.value = lenData.topCut !== null ? lenData.topCut.toFixed(3) : '';
 
       const lblApplyF = document.getElementById('lbl-len-apply-footing');
       if (lblApplyF) lblApplyF.textContent = `ใช้กับทุกต้นในฐานราก ${pile.footing || '-'}`;
@@ -12525,26 +12844,39 @@
     }
 
     function updateLenModalLiveCalc() {
-      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
-      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
-      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
-      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+      const b = parseOptionalNum(document.getElementById('len-modal-inp-bottom')?.value);
+      const m = parseOptionalNum(document.getElementById('len-modal-inp-middle')?.value);
+      const t = parseOptionalNum(document.getElementById('len-modal-inp-top')?.value);
+      const c = parseOptionalNum(document.getElementById('len-modal-inp-topcut')?.value);
+      const hasAny = (b !== null || m !== null || t !== null);
 
-      const netTop = Math.max(0, t - c);
-      const totalEff = b + m + netTop;
-      const totalMfg = b + m + t;
+      const netTop = calcNetTopSegment(t, c);
+      const totalEff = hasAny ? ((b ?? 0) + (m ?? 0) + (netTop ?? 0)) : null;
+      const totalMfg = hasAny ? ((b ?? 0) + (m ?? 0) + (t ?? 0)) : null;
 
       const formEl = document.getElementById('len-modal-calc-formula');
-      if (formEl) formEl.textContent = `ท่อนบน (${t.toFixed(2)} ม.) - ความสูง TOP (${c.toFixed(2)} ม.) = ${netTop.toFixed(2)} ม.`;
+      if (formEl) {
+        if (t === null) {
+          formEl.textContent = 'ยังไม่ได้กรอกความยาวท่อนบน';
+        } else if (c !== null && c < 0) {
+          formEl.textContent = `ระดับ TOP ติดลบ (${c.toFixed(3)} ม. ส่งเข็มลง) → ท่อนบนยาวเต็ม ${netTop.toFixed(2)} ม. (ไม่ถูกตัด)`;
+        } else {
+          formEl.textContent = `ท่อนบน (${t.toFixed(2)} ม.) - ระดับ TOP (${(c ?? 0).toFixed(3)} ม.) = ${netTop.toFixed(2)} ม.`;
+        }
+      }
 
       const netTopEl = document.getElementById('len-modal-net-top-val');
-      if (netTopEl) netTopEl.textContent = `${netTop.toFixed(2)} ม.`;
+      if (netTopEl) netTopEl.textContent = netTop !== null ? `${netTop.toFixed(2)} ม.` : '-';
 
       const effEl = document.getElementById('len-modal-total-eff-val');
-      if (effEl) effEl.textContent = `${totalEff.toFixed(2)} ม.`;
+      if (effEl) effEl.textContent = totalEff !== null ? `${totalEff.toFixed(2)} ม.` : '-';
 
       const mfgEl = document.getElementById('len-modal-total-mfg-val');
-      if (mfgEl) mfgEl.textContent = `${totalMfg.toFixed(2)} ม. (ท่อนล่าง ${b.toFixed(2)} + กลาง ${m.toFixed(2)} + บน ${t.toFixed(2)})`;
+      if (mfgEl) {
+        mfgEl.textContent = totalMfg !== null
+          ? `${totalMfg.toFixed(2)} ม. (ล่าง ${b !== null ? b.toFixed(2) : '-'} + กลาง ${m !== null ? m.toFixed(2) : '-'} + บน ${t !== null ? t.toFixed(2) : '-'})`
+          : 'ยังไม่ได้กรอกความยาวท่อนเข็ม';
+      }
     }
 
     function openPileLengthModal(pileNo) {
@@ -12582,13 +12914,15 @@
     });
 
     document.getElementById('btn-len-modal-save')?.addEventListener('click', () => {
-      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
-      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
-      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
-      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+      const b = document.getElementById('len-modal-inp-bottom')?.value;
+      const m = document.getElementById('len-modal-inp-middle')?.value;
+      const t = document.getElementById('len-modal-inp-top')?.value;
+      const c = document.getElementById('len-modal-inp-topcut')?.value;
       savePileLengthData(currentLengthModalPileNo, b, m, t, c);
+      const saved = getPileLengthData(currentLengthModalPileNo);
       if (typeof showSyncToast === 'function') {
-        showSyncToast(`✓ บันทึกความยาวเข็มต้นที่ ${currentLengthModalPileNo} สำเร็จ (รวม ${ (b + m + Math.max(0, t - c)).toFixed(2) } ม.)`);
+        const effStr = saved.totalEffective !== null ? `รวม ${saved.totalEffective.toFixed(2)} ม.` : 'ล้างค่าความยาวแล้ว';
+        showSyncToast(`✓ บันทึกความยาวเข็มต้นที่ ${currentLengthModalPileNo} สำเร็จ (${effStr})`);
       }
       if (selectedCardPileNo === currentLengthModalPileNo) {
         openPileCard(currentLengthModalPileNo);
@@ -12596,10 +12930,10 @@
     });
 
     document.getElementById('btn-len-modal-save-next')?.addEventListener('click', () => {
-      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
-      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
-      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
-      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+      const b = document.getElementById('len-modal-inp-bottom')?.value;
+      const m = document.getElementById('len-modal-inp-middle')?.value;
+      const t = document.getElementById('len-modal-inp-top')?.value;
+      const c = document.getElementById('len-modal-inp-topcut')?.value;
       savePileLengthData(currentLengthModalPileNo, b, m, t, c);
       if (typeof showSyncToast === 'function') {
         showSyncToast(`✓ บันทึกต้นที่ ${currentLengthModalPileNo} เรียบร้อย`);
@@ -12612,10 +12946,10 @@
     document.getElementById('btn-len-apply-footing')?.addEventListener('click', () => {
       const curPile = PILES_DATABASE.find(p => p.no === currentLengthModalPileNo);
       if (!curPile || !curPile.footing) return;
-      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
-      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
-      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
-      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+      const b = document.getElementById('len-modal-inp-bottom')?.value;
+      const m = document.getElementById('len-modal-inp-middle')?.value;
+      const t = document.getElementById('len-modal-inp-top')?.value;
+      const c = document.getElementById('len-modal-inp-topcut')?.value;
 
       const sameFootingPiles = PILES_DATABASE.filter(p => p.footing === curPile.footing);
       sameFootingPiles.forEach(p => {
@@ -12628,10 +12962,10 @@
 
     document.getElementById('btn-len-apply-all')?.addEventListener('click', () => {
       if (!confirm('ต้องการใช้ค่าความยาวเข็มนี้ (ล่าง/กลาง/บน/TOP) กับเสาเข็มทั้งหมด 93 ต้น หรือไม่?')) return;
-      const b = parseFloat(document.getElementById('len-modal-inp-bottom')?.value) || 0;
-      const m = parseFloat(document.getElementById('len-modal-inp-middle')?.value) || 0;
-      const t = parseFloat(document.getElementById('len-modal-inp-top')?.value) || 0;
-      const c = parseFloat(document.getElementById('len-modal-inp-topcut')?.value) || 0;
+      const b = document.getElementById('len-modal-inp-bottom')?.value;
+      const m = document.getElementById('len-modal-inp-middle')?.value;
+      const t = document.getElementById('len-modal-inp-top')?.value;
+      const c = document.getElementById('len-modal-inp-topcut')?.value;
 
       PILES_DATABASE.forEach(p => {
         savePileLengthData(p.no, b, m, t, c);
@@ -12648,27 +12982,30 @@
 
     // Card Live Segment Inputs Calculation (TOP คืออันเดียวกัน ใช้อันบน: card-pile-actual-top)
     function updatePileCardLengthCalc() {
-      const segBotInp = document.getElementById('card-pile-seg-bottom');
-      const segMidInp = document.getElementById('card-pile-seg-middle');
-      const segTopInp = document.getElementById('card-pile-seg-top');
-      const actualTopInp = document.getElementById('card-pile-actual-top');
-      const b = parseFloat(segBotInp?.value) || 0;
-      const m = parseFloat(segMidInp?.value) || 0;
-      const t = parseFloat(segTopInp?.value) || 0;
-      const c = parseFloat(actualTopInp?.value) || 0;
-      const netTop = Math.max(0, t - c);
-      const totalEff = b + m + netTop;
+      const b = parseOptionalNum(document.getElementById('card-pile-seg-bottom')?.value);
+      const m = parseOptionalNum(document.getElementById('card-pile-seg-middle')?.value);
+      const t = parseOptionalNum(document.getElementById('card-pile-seg-top')?.value);
+      const c = parseOptionalNum(document.getElementById('card-pile-actual-top')?.value);
+      const hasAny = (b !== null || m !== null || t !== null);
+      const netTop = calcNetTopSegment(t, c);
+      const totalEff = hasAny ? ((b ?? 0) + (m ?? 0) + (netTop ?? 0)) : null;
 
       const topNetEl = document.getElementById('card-pile-top-net-text');
       if (topNetEl) {
-        topNetEl.textContent = `${netTop.toFixed(2)} ม. (หัก TOP ${c.toFixed(2)} ม.)`;
+        if (netTop === null) {
+          topNetEl.textContent = 'ยังไม่ได้กรอกท่อนบน';
+        } else if (c !== null && c < 0) {
+          topNetEl.textContent = `${netTop.toFixed(2)} ม. (TOP ${c.toFixed(3)} ส่งลง · เต็มท่อน)`;
+        } else {
+          topNetEl.textContent = `${netTop.toFixed(2)} ม. (หัก TOP ${(c ?? 0).toFixed(3)} ม.)`;
+        }
       }
 
       const effEl = document.getElementById('card-pile-eff-len-text');
-      if (effEl) effEl.textContent = `${totalEff.toFixed(2)} ม.`;
+      if (effEl) effEl.textContent = totalEff !== null ? `${totalEff.toFixed(2)} ม.` : '-';
 
       const badgeEl = document.getElementById('card-pile-eff-len-badge');
-      if (badgeEl) badgeEl.textContent = `รวม ${totalEff.toFixed(2)} ม.`;
+      if (badgeEl) badgeEl.textContent = totalEff !== null ? `รวม ${totalEff.toFixed(2)} ม.` : 'ยังไม่กรอก';
     }
 
     ['card-pile-seg-bottom', 'card-pile-seg-middle', 'card-pile-seg-top', 'card-pile-actual-top'].forEach(id => {
@@ -12682,14 +13019,92 @@
     });
 
     // =========================================================================
-    // DEDICATED PILE SUMMARY REPORT TABLE (หน้าตารางรายงานสรุปงานเข็ม)
+    // DEDICATED PILE SUMMARY REPORT TABLE (ตารางหลักกรอกได้ | สรุปรวม | สรุปค่าเยื้อง Co | สรุปความยาวเข็ม)
     // =========================================================================
     let sumRepActiveFooting = 'all';
     let sumRepActiveStatus = 'all';
+    let sumRepActiveTab = 'main'; // 'main' | 'combined' | 'coord' | 'length'
+    let inlineSyncDebounceTimer = null;
+    let lastInlineEditTs = 0;
 
-    function openPileSummaryReport() {
-      document.getElementById('modal-pile-summary-report')?.classList.remove('hidden');
+    function setSummaryReportTab(tabKey) {
+      if (!['main', 'combined', 'coord', 'length'].includes(tabKey)) tabKey = 'main';
+      sumRepActiveTab = tabKey;
+
+      document.querySelectorAll('.sum-rep-tab-btn').forEach(btn => {
+        const isAct = btn.getAttribute('data-sum-tab') === tabKey;
+        btn.setAttribute('aria-selected', isAct ? 'true' : 'false');
+        if (isAct) {
+          btn.classList.add('bg-[#F26B2A]', 'text-white', 'border-[#1D2B45]', 'shadow-[2px_2px_0px_#1D2B45]');
+          btn.classList.remove('bg-white', 'text-[#1D2B45]', 'border-transparent', 'hover:bg-[#F6E9D7]');
+        } else {
+          btn.classList.remove('bg-[#F26B2A]', 'text-white', 'border-[#1D2B45]', 'shadow-[2px_2px_0px_#1D2B45]');
+          btn.classList.add('bg-white', 'text-[#1D2B45]', 'border-transparent', 'hover:bg-[#F6E9D7]');
+        }
+      });
+
+      const paneMap = {
+        main: document.getElementById('sum-pane-main'),
+        combined: document.getElementById('sum-pane-combined'),
+        coord: document.getElementById('sum-pane-coord'),
+        length: document.getElementById('sum-pane-length')
+      };
+      Object.entries(paneMap).forEach(([k, el]) => {
+        if (!el) return;
+        if (k === tabKey) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+
+      const kpiGrid = document.getElementById('sum-kpi-grid');
+      if (kpiGrid) {
+        if (tabKey === 'main') kpiGrid.classList.remove('hidden');
+        else kpiGrid.classList.add('hidden');
+      }
+
+      const roBadge = document.getElementById('sum-rep-readonly-badge');
+      const editHint = document.getElementById('sum-rep-edit-hint');
+      if (roBadge) {
+        if (tabKey === 'main') {
+          roBadge.classList.add('hidden');
+          roBadge.classList.remove('inline-flex');
+        } else {
+          roBadge.classList.remove('hidden');
+          roBadge.classList.add('inline-flex');
+        }
+      }
+      if (editHint) {
+        if (tabKey === 'main') {
+          editHint.classList.remove('hidden');
+          editHint.classList.add('inline-flex');
+        } else {
+          editHint.classList.add('hidden');
+          editHint.classList.remove('inline-flex');
+        }
+      }
+
+      const noteEl = document.getElementById('sum-report-formula-note');
+      if (noteEl) {
+        if (tabKey === 'combined') {
+          noteEl.textContent = '* ตารางสรุปรวม (Read-only): พิกัด Co ก่อน/หลัง + เยื้องสุทธิ √(ΔN²+ΔE²) ซม. (เกณฑ์ ACI 543R ≤ 7.62 ซม. / 3") + ความยาวท่อนล่าง / กลาง / ท่อนบนสุทธิ (ลบ TOP แล้ว)';
+        } else if (tabKey === 'coord') {
+          noteEl.textContent = '* เกณฑ์มาตรฐาน ACI 543R / ACI 318-25 Sec. 13.4: เยื้องศูนย์เสาเข็ม ≤ 3 นิ้ว (7.62 ซม.) | ΔN=(Nจริง-Nแบบ)×100, ΔE=(Eจริง-Eแบบ)×100, เยื้องสุทธิ=√(ΔN²+ΔE²) ซม.';
+        } else if (tabKey === 'length') {
+          noteEl.textContent = '* คำนวณอัตโนมัติ (Read-only): ท่อนบนสุทธิ = ท่อนบน - (TOP > 0 ? TOP : 0) | ถ้า TOP ติดลบ (ส่งเข็มลง) ท่อนบนยาวเต็มไม่ถูกตัด ไม่บวกเพิ่ม';
+        } else {
+          noteEl.textContent = '* พิมพ์กรอกในตารางได้เลย (บันทึกอัตโนมัติ) | ถ้า TOP ติดลบ (ส่งเข็มลง) ท่อนบนยาวเต็มไม่ถูกตัด ไม่บวกเพิ่ม | เว้นว่างหากไม่ได้กรอก';
+        }
+      }
+
       renderPileSummaryReportTable();
+    }
+
+    function openPileSummaryReport(initialTab) {
+      document.getElementById('modal-pile-summary-report')?.classList.remove('hidden');
+      if (initialTab && ['main', 'combined', 'coord', 'length'].includes(initialTab)) {
+        setSummaryReportTab(initialTab);
+      } else {
+        renderPileSummaryReportTable();
+      }
       if (window.lucide) lucide.createIcons();
     }
 
@@ -12697,139 +13112,519 @@
       document.getElementById('modal-pile-summary-report')?.classList.add('hidden');
     }
 
-    function renderPileSummaryReportTable() {
-      const tbody = document.getElementById('pile-summary-report-tbody');
-      if (!tbody) return;
+    function saveInlineSummaryCell(pileNo, field, rawValue, inputEl) {
+      pileNo = parseInt(pileNo, 10);
+      if (!Number.isFinite(pileNo)) return;
+      const val = parseOptionalNum(rawValue);
 
+      if (!progressRecords[pileNo]) {
+        progressRecords[pileNo] = { status: 'pending' };
+      }
+      const rec = progressRecords[pileNo];
+
+      if (field === 'actual_n' || field === 'actual_e') {
+        if (val !== null) {
+          rec[field] = val;
+          rec.coords_entered = true;
+        } else {
+          delete rec[field];
+          if (parseOptionalNum(rec.actual_n) === null && parseOptionalNum(rec.actual_e) === null) {
+            delete rec.coords_entered;
+          }
+        }
+      } else if (field === 'actual_top') {
+        if (val !== null) {
+          rec.actual_top = val;
+          rec.top_cutoff = val;
+        } else {
+          delete rec.actual_top;
+          delete rec.top_cutoff;
+        }
+      } else if (field === 'seg_bottom' || field === 'seg_middle' || field === 'seg_top') {
+        if (val !== null) rec[field] = val;
+        else delete rec[field];
+      }
+
+      // Recompute derived length fields cleanly
+      const b = parseOptionalNum(rec.seg_bottom);
+      const m = parseOptionalNum(rec.seg_middle);
+      const t = parseOptionalNum(rec.seg_top);
+      const c = parseOptionalNum(rec.actual_top) ?? parseOptionalNum(rec.top_cutoff);
+      const hasAnySeg = (b !== null || m !== null || t !== null);
+      const topNet = calcNetTopSegment(t, c);
+      const totalEff = hasAnySeg ? ((b ?? 0) + (m ?? 0) + (topNet ?? 0)) : null;
+
+      if (topNet !== null) rec.seg_top_net = topNet; else delete rec.seg_top_net;
+      if (totalEff !== null) rec.total_length = totalEff; else delete rec.total_length;
+
+      // Sync PE12_PILE_LENGTHS localStorage
+      try {
+        let raw = localStorage.getItem('PE12_PILE_LENGTHS');
+        let map = raw ? JSON.parse(raw) : {};
+        if (hasAnySeg || c !== null) {
+          map[pileNo] = {
+            seg_bottom: b, seg_middle: m, seg_top: t,
+            actual_top: c, top_cutoff: c,
+            seg_top_net: topNet, total_length: totalEff
+          };
+        } else {
+          delete map[pileNo];
+        }
+        localStorage.setItem('PE12_PILE_LENGTHS', JSON.stringify(map));
+      } catch(e) {}
+
+      // Format normalized value back into the input
+      if (inputEl) {
+        if (val !== null) {
+          const dec = (field === 'actual_n' || field === 'actual_e') ? 4 : (field === 'actual_top' ? 3 : 2);
+          inputEl.value = val.toFixed(dec);
+        } else {
+          inputEl.value = '';
+        }
+        inputEl.classList.add('bg-emerald-100');
+        setTimeout(() => inputEl.classList.remove('bg-emerald-100'), 450);
+      }
+
+      // Live-update this row's calculated cells without re-rendering the main tbody (preserves keyboard focus!)
+      const pile = PILES_DATABASE.find(p => p.no === pileNo);
+      const tr = inputEl ? inputEl.closest('tr') : null;
+      if (pile && tr) {
+        const len = getPileLengthData(pileNo);
+        const coord = getPileCoordDeviation(pile, rec);
+        const devCell = tr.querySelector('.inline-calc-dev');
+        const topNetCell = tr.querySelector('.inline-calc-topnet');
+        const effCell = tr.querySelector('.inline-calc-eff');
+        if (devCell) {
+          if (coord.dev_cm !== null) {
+            const cls = coord.grade === 'pass' ? 'bg-[#D1FAE5] text-[#064E3B]' : coord.grade === 'aci_pass' ? 'bg-[#FEF3C7] text-[#78350F]' : 'bg-[#FEE2E2] text-[#991B1B]';
+            devCell.innerHTML = `<span class="px-1.5 py-0.5 rounded font-black ${cls}">${coord.dev_cm.toFixed(2)}</span>`;
+          } else {
+            devCell.innerHTML = '<span class="text-slate-300">-</span>';
+          }
+        }
+        if (topNetCell) {
+          topNetCell.innerHTML = len.topNet !== null
+            ? `<span class="px-1.5 py-0.5 rounded bg-blue-100/80 text-blue-800">${len.topNet.toFixed(2)}</span>`
+            : '<span class="text-slate-300">-</span>';
+        }
+        if (effCell) {
+          effCell.innerHTML = len.totalEffective !== null
+            ? `<span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 border border-emerald-300">${len.totalEffective.toFixed(2)}</span>`
+            : '<span class="text-slate-300">-</span>';
+        }
+      }
+
+      // Refresh aggregates, footers, KPIs, and summary tabs without touching main tbody DOM
+      lastInlineEditTs = Date.now();
+      renderPileSummaryReportTable({ skipMainRows: true });
+
+      // Fast localStorage persistence ONLY (no heavy 3D/DOM redraw on every keystroke)
+      try {
+        const jsonStr = JSON.stringify(progressRecords);
+        localStorage.setItem(STORAGE_KEY, jsonStr);
+        localStorage.setItem('PE12_PILING_PROGRESS_LIVE_v3', jsonStr);
+        localStorage.setItem('PE12_PILING_PROGRESS_v2', jsonStr);
+      } catch(e) {}
+
+      // Single debounced cloud sync (2s after user finishes typing)
+      if (supabaseSyncTimeout) clearTimeout(supabaseSyncTimeout);
+      if (inlineSyncDebounceTimer) clearTimeout(inlineSyncDebounceTimer);
+      inlineSyncDebounceTimer = setTimeout(() => {
+        lastInlineEditTs = Date.now();
+        try {
+          if (typeof updateUI === 'function') updateUI();
+          if (typeof renderCoTable === 'function') renderCoTable();
+          if (typeof renderReportSheet === 'function') renderReportSheet();
+        } catch(e) {}
+        if (typeof syncPilingToSupabase === 'function') {
+          syncPilingToSupabase(true);
+        }
+      }, 2000);
+    }
+
+    function getFilteredSummaryRows() {
       const searchKeyword = (document.getElementById('sum-rep-search')?.value || '').trim().toLowerCase();
-
-      let visibleCount = 0;
-      let totalBottom = 0;
-      let totalMiddle = 0;
-      let totalTop = 0;
-      let totalTopCut = 0;
-      let totalTopNet = 0;
-      let totalEffSum = 0;
-      let totalMfgSum = 0;
-      let drivenCount = 0;
-
-      let html = '';
+      const rows = [];
+      let totalDrivenAll = 0;
 
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no] || { status: 'pending', date: '' };
         const isDriven = rec && rec.status === 'driven';
-        if (isDriven) drivenCount++;
+        if (isDriven) totalDrivenAll++;
 
-        // Filter: Footing
-        if (sumRepActiveFooting !== 'all' && (p.footing || '') !== sumRepActiveFooting) {
-          return;
-        }
-
-        // Filter: Status
+        if (sumRepActiveFooting !== 'all' && (p.footing || '') !== sumRepActiveFooting) return;
         if (sumRepActiveStatus === 'driven' && !isDriven) return;
         if (sumRepActiveStatus === 'pending' && isDriven) return;
 
-        // Filter: Search keyword (matches pile no, tag, footing, grid)
         if (searchKeyword) {
-          const matchString = `${p.no} ${p.tag} ${p.footing || ''} ${p.grid}`.toLowerCase();
+          const matchString = `${p.no} ${p.tag} ${p.footing || ''} ${p.grid || ''}`.toLowerCase();
           if (!matchString.includes(searchKeyword)) return;
         }
 
-        visibleCount++;
-
         const len = getPileLengthData(p.no);
-        totalBottom += len.bottom;
-        totalMiddle += len.middle;
-        totalTop += len.top;
-        totalTopCut += len.topCut;
-        totalTopNet += len.topNet;
-        totalEffSum += len.totalEffective;
-        totalMfgSum += len.totalManufactured;
-
+        const coord = getPileCoordDeviation(p, rec);
         const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
-        const actTop = (rec && rec.actual_top !== undefined) ? Number(rec.actual_top).toFixed(3) : '-';
 
-        const hasCustomCoords = rec && (rec.coords_entered === true || (rec.actual_n !== undefined && p.northing !== undefined && (parseFloat(rec.actual_n) !== p.northing || parseFloat(rec.actual_e) !== p.easting)));
-        const actualCoordsStr = hasCustomCoords
-          ? `<span class="text-emerald-700 font-bold">${Number(rec.actual_n).toFixed(3)}, ${Number(rec.actual_e).toFixed(3)}</span>`
-          : '<span class="text-slate-400">-</span>';
+        rows.push({ pile: p, rec, isDriven, len, coord, pco });
+      });
 
-        const rowBg = isDriven ? 'bg-emerald-50/70 hover:bg-emerald-100/70' : 'bg-white hover:bg-slate-50';
+      return { rows, totalDrivenAll };
+    }
 
-        html += `
-          <tr class="${rowBg} transition-colors border-b border-slate-100">
-            <td class="p-2 border-r border-slate-200 text-center font-bold text-slate-800">${p.no}</td>
-            <td class="p-2 border-r border-slate-200 text-center font-black text-slate-900">${p.tag}</td>
-            <td class="p-2 border-r border-slate-200 text-center font-bold text-slate-700">${p.footing || '-'}</td>
-            <td class="p-2 border-r border-slate-200 text-center font-bold text-slate-700">${p.grid || '-'}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono text-slate-700">${p.northing !== undefined ? p.northing.toFixed(4) : '-'}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono text-slate-700">${p.easting !== undefined ? p.easting.toFixed(4) : '-'}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono">${actualCoordsStr}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono font-bold text-amber-800">${Number(pco).toFixed(3)}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono font-bold text-sky-800">${actTop}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono font-medium bg-amber-50/40">${len.bottom.toFixed(2)}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono font-medium bg-amber-50/40">${len.middle.toFixed(2)}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono font-medium bg-amber-50/40">${len.top.toFixed(2)}</td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono font-black text-blue-900 bg-blue-50/60">
-              <span class="px-1.5 py-0.5 rounded bg-blue-100/80 text-blue-800">${len.topNet.toFixed(2)}</span>
+    function renderPileSummaryReportTable(opts = {}) {
+      const tbodyMain = document.getElementById('pile-summary-report-tbody');
+      const tbodyCombined = document.getElementById('pile-summary-combined-tbody');
+      const tbodyCoord = document.getElementById('pile-summary-coord-tbody');
+      const tbodyLen = document.getElementById('pile-summary-length-tbody');
+      if (!tbodyMain) return;
+
+      // Never wipe main tbody while the user is actively typing in an inline input!
+      const activeEl = document.activeElement;
+      const isEditingInline = Boolean(activeEl && activeEl.classList && activeEl.classList.contains('sum-inline-input') && tbodyMain.contains(activeEl));
+      const skipMainRows = Boolean((opts && opts.skipMainRows) || isEditingInline);
+
+      const { rows, totalDrivenAll } = getFilteredSummaryRows();
+      const visibleCount = rows.length;
+
+      // Aggregates — Length (only for entered values, never fake defaults)
+      let enteredLenCount = 0;
+      let totalBottom = 0, hasBottomAny = false;
+      let totalMiddle = 0, hasMiddleAny = false;
+      let totalTop = 0, hasTopAny = false;
+      let totalTopCut = 0, hasTopCutAny = false;
+      let totalTopNet = 0, hasTopNetAny = false;
+      let totalEffSum = 0;
+      let totalMfgSum = 0;
+
+      // Aggregates — Coord Deviation
+      let coordEnteredCount = 0;
+      let sumAbsDN = 0;
+      let sumAbsDE = 0;
+      let sumDev = 0;
+      let maxDev = -1;
+      let maxDevTag = '';
+      let overLimitCount = 0;
+
+      let htmlMain = '';
+      let htmlCombined = '';
+      let htmlCoord = '';
+      let htmlLen = '';
+
+      const fmtOpt = (val, dec = 2) => val !== null ? val.toFixed(dec) : '<span class="text-slate-300">-</span>';
+      const fmtSignedCm = (val) => {
+        if (val === null) return '<span class="text-slate-300">-</span>';
+        const sign = val > 0 ? '+' : '';
+        return `${sign}${val.toFixed(2)}`;
+      };
+      const inpCls = 'sum-inline-input w-full text-right font-mono text-xs bg-white/80 hover:bg-white focus:bg-[#FFF3EB] border border-transparent hover:border-[#1D2B45]/30 focus:border-[#F26B2A] rounded px-1.5 py-1 outline-none transition-colors';
+
+      rows.forEach(({ pile: p, rec, isDriven, len, coord, pco }) => {
+        if (len.isCustomized) {
+          enteredLenCount++;
+          totalEffSum += len.totalEffective ?? 0;
+          totalMfgSum += len.totalManufactured ?? 0;
+        }
+        if (len.bottom !== null) { totalBottom += len.bottom; hasBottomAny = true; }
+        if (len.middle !== null) { totalMiddle += len.middle; hasMiddleAny = true; }
+        if (len.top !== null) { totalTop += len.top; hasTopAny = true; }
+        if (len.topCut !== null) { if (len.topCut > 0) totalTopCut += len.topCut; hasTopCutAny = true; }
+        if (len.topNet !== null) { totalTopNet += len.topNet; hasTopNetAny = true; }
+
+        if (coord.hasActualCoords && coord.dev_cm !== null) {
+          coordEnteredCount++;
+          sumAbsDN += Math.abs(coord.dN_cm ?? 0);
+          sumAbsDE += Math.abs(coord.dE_cm ?? 0);
+          sumDev += coord.dev_cm;
+          if (coord.dev_cm > maxDev) {
+            maxDev = coord.dev_cm;
+            maxDevTag = p.tag;
+          }
+          if (coord.dev_cm > 7.62) overLimitCount++;
+        }
+
+        const actTopStr = len.topCut !== null ? len.topCut.toFixed(3) : '<span class="text-slate-300">-</span>';
+        const rowBg = isDriven ? 'bg-emerald-50/60 hover:bg-emerald-100/60' : 'bg-white hover:bg-slate-50';
+
+        let gradeBadge = '<span class="text-slate-300">-</span>';
+        let devPillClass = 'text-slate-400';
+        if (coord.grade === 'pass') {
+          gradeBadge = '<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-black bg-[#D1FAE5] text-[#064E3B] border border-[#10B981]/50">✓ ผ่านเกณฑ์</span>';
+          devPillClass = 'px-1.5 py-0.5 rounded bg-[#D1FAE5] text-[#064E3B] font-black';
+        } else if (coord.grade === 'aci_pass') {
+          gradeBadge = '<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-black bg-[#FEF3C7] text-[#78350F] border border-[#F7B844]" title="ผ่านเกณฑ์ ACI 543R (≤ 3 นิ้ว = 7.62 ซม.)">✓ ผ่าน (ACI ≤ 3")</span>';
+          devPillClass = 'px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#78350F] font-black';
+        } else if (coord.grade === 'over') {
+          gradeBadge = '<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-black bg-[#FEE2E2] text-[#991B1B] border border-[#E64C3C]/50" title="เกินเกณฑ์ ACI 543R (> 3 นิ้ว = 7.62 ซม.) ต้องตรวจสอบฐานรากตาม ACI 318-25 Sec. 13.4">✕ เกิน ACI (&gt; 3")</span>';
+          devPillClass = 'px-1.5 py-0.5 rounded bg-[#FEE2E2] text-[#991B1B] font-black';
+        }
+
+        // 1) Main Table Row (Inline Editable)
+        if (!skipMainRows) {
+          htmlMain += `
+            <tr class="${rowBg} transition-colors border-b border-slate-100" data-pile-row="${p.no}">
+              <td class="p-1.5 border-r border-slate-200 text-center font-bold text-slate-800">${p.no}</td>
+              <td class="p-1.5 border-r border-slate-200 text-center font-black text-slate-900">${p.tag}</td>
+              <td class="p-1.5 border-r border-slate-200 text-center font-bold text-slate-700">${p.footing || '-'}</td>
+              <td class="p-1.5 border-r border-slate-200 text-center font-bold text-slate-700">${p.grid || '-'}</td>
+              <td class="p-1.5 border-r border-slate-200 text-right font-mono text-slate-600">${coord.designN !== null ? coord.designN.toFixed(4) : '-'}</td>
+              <td class="p-1.5 border-r border-slate-200 text-right font-mono text-slate-600">${coord.designE !== null ? coord.designE.toFixed(4) : '-'}</td>
+              <td class="p-1 border-r border-slate-200 bg-[#E8F8F5]/35">
+                <input type="text" inputmode="decimal" class="${inpCls} text-[#0E5E57] font-bold" data-pile="${p.no}" data-field="actual_n" value="${coord.actualN !== null ? coord.actualN.toFixed(4) : ''}" placeholder="-" aria-label="Co N จริง ${p.tag}">
+              </td>
+              <td class="p-1 border-r border-slate-200 bg-[#E8F8F5]/35">
+                <input type="text" inputmode="decimal" class="${inpCls} text-[#0E5E57] font-bold" data-pile="${p.no}" data-field="actual_e" value="${coord.actualE !== null ? coord.actualE.toFixed(4) : ''}" placeholder="-" aria-label="Co E จริง ${p.tag}">
+              </td>
+              <td class="inline-calc-dev p-1.5 border-r border-slate-200 text-right font-mono bg-[#FFF3EB]/45">
+                ${coord.dev_cm !== null ? `<span class="${devPillClass}">${coord.dev_cm.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
+              </td>
+              <td class="p-1.5 border-r border-slate-200 text-right font-mono font-bold text-amber-800">${Number(pco).toFixed(3)}</td>
+              <td class="p-1 border-r border-slate-200 bg-sky-50/50">
+                <input type="text" inputmode="decimal" class="${inpCls} text-sky-900 font-bold" data-pile="${p.no}" data-field="actual_top" value="${len.topCut !== null ? len.topCut.toFixed(3) : ''}" placeholder="-" aria-label="ระดับ TOP จริง ${p.tag}">
+              </td>
+              <td class="p-1 border-r border-slate-200 bg-amber-50/45">
+                <input type="text" inputmode="decimal" class="${inpCls} text-[#78350F] font-semibold" data-pile="${p.no}" data-field="seg_bottom" value="${len.bottom !== null ? len.bottom.toFixed(2) : ''}" placeholder="-" aria-label="ท่อนล่าง ${p.tag}">
+              </td>
+              <td class="p-1 border-r border-slate-200 bg-amber-50/45">
+                <input type="text" inputmode="decimal" class="${inpCls} text-[#78350F] font-semibold" data-pile="${p.no}" data-field="seg_middle" value="${len.middle !== null ? len.middle.toFixed(2) : ''}" placeholder="-" aria-label="ท่อนกลาง ${p.tag}">
+              </td>
+              <td class="p-1 border-r border-slate-200 bg-amber-50/45">
+                <input type="text" inputmode="decimal" class="${inpCls} text-[#78350F] font-semibold" data-pile="${p.no}" data-field="seg_top" value="${len.top !== null ? len.top.toFixed(2) : ''}" placeholder="-" aria-label="ท่อนบน ${p.tag}">
+              </td>
+              <td class="inline-calc-topnet p-1.5 border-r border-slate-200 text-right font-mono font-black text-blue-900 bg-blue-50/60">
+                ${len.topNet !== null ? `<span class="px-1.5 py-0.5 rounded bg-blue-100/80 text-blue-800">${len.topNet.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
+              </td>
+              <td class="inline-calc-eff p-1.5 border-r border-slate-200 text-right font-mono font-black text-emerald-950 bg-emerald-100/70">
+                ${len.totalEffective !== null ? `<span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 border border-emerald-300">${len.totalEffective.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
+              </td>
+              <td class="p-1.5 border-r border-slate-200 text-center">
+                ${isDriven
+                  ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>${rec.date ? rec.date.slice(5) : 'กดแล้ว'}
+                     </span>`
+                  : `<span class="inline-block px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-slate-100 text-slate-500">รอการกด</span>`
+                }
+              </td>
+              <td class="p-1.5 text-center">
+                <button type="button" class="btn-edit-pile-len p-1 rounded hover:bg-sky-100 text-sky-700 cursor-pointer transition-colors" data-pile="${p.no}" title="เปิดฟอร์มกรอกความยาวต้นที่ ${p.no}">
+                  <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 pointer-events-none"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }
+
+        // 2) Unified Summary Row (Co ก่อน/หลัง/เยื้อง + ความยาวสุทธิ ท่อนบนลบ TOP แล้ว)
+        htmlCombined += `
+          <tr class="${(coord.hasActualCoords || len.isCustomized) ? 'bg-white hover:bg-[#FAF5EE]' : 'bg-slate-50/40 hover:bg-slate-50'} transition-colors">
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#1D2B45]">${p.no}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-black text-[#1D2B45]">${p.tag}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#3E4B69]">${p.footing || '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#3E4B69]">${p.grid || '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#3E4B69]">${coord.designN !== null ? coord.designN.toFixed(4) : '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#3E4B69]">${coord.designE !== null ? coord.designE.toFixed(4) : '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-bold text-[#0E5E57] bg-[#E8F8F5]/40">${coord.actualN !== null ? coord.actualN.toFixed(4) : '<span class="text-slate-300 font-normal">-</span>'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-bold text-[#0E5E57] bg-[#E8F8F5]/40">${coord.actualE !== null ? coord.actualE.toFixed(4) : '<span class="text-slate-300 font-normal">-</span>'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono bg-[#FFF3EB]/50">
+              ${coord.dev_cm !== null ? `<span class="${devPillClass}">${coord.dev_cm.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
             </td>
-            <td class="p-2 border-r border-slate-200 text-right font-mono font-black text-emerald-950 bg-emerald-100/70">
-              <span class="px-2 py-0.5 rounded bg-emerald-200 text-emerald-900 border border-emerald-300">${len.totalEffective.toFixed(2)}</span>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-semibold text-[#78350F] bg-[#FEF3C7]/25">${fmtOpt(len.bottom, 2)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-semibold text-[#78350F] bg-[#FEF3C7]/25">${fmtOpt(len.middle, 2)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-black text-[#1E3A8A] bg-[#EEF4FF]/50">
+              ${len.topNet !== null ? `<span class="px-1.5 py-0.5 rounded bg-blue-100/90 text-[#1E3A8A]">${len.topNet.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
             </td>
-            <td class="p-2 border-r border-slate-200 text-center">
-              ${isDriven
-                ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
-                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>กดแล้ว ${rec.date ? rec.date.slice(5) : ''}
-                   </span>`
-                : `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500">รอการกด</span>`
-              }
+            <td class="p-2 text-right font-mono font-black text-[#064E3B] bg-[#D1FAE5]/45">
+              ${len.totalEffective !== null ? `<span class="px-2 py-0.5 rounded bg-[#D1FAE5] text-[#064E3B] border border-[#10B981]/50">${len.totalEffective.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
             </td>
-            <td class="p-2 text-center">
-              <button type="button" class="btn-edit-pile-len p-1 rounded hover:bg-sky-100 text-sky-700 cursor-pointer transition-colors" data-pile="${p.no}" title="แก้ไขความยาวต้นที่ ${p.no}">
-                <i data-lucide="edit-2" class="w-3.5 h-3.5 pointer-events-none"></i>
-              </button>
+          </tr>
+        `;
+
+        // 3) Coordinate Deviation Summary Row (Read-only)
+        htmlCoord += `
+          <tr class="${coord.hasActualCoords ? 'bg-white hover:bg-[#FAF5EE]' : 'bg-slate-50/40 hover:bg-slate-50'} transition-colors">
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#1D2B45]">${p.no}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-black text-[#1D2B45]">${p.tag}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#3E4B69]">${p.footing || '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#3E4B69]">${p.grid || '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#3E4B69]">${coord.designN !== null ? coord.designN.toFixed(4) : '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#3E4B69]">${coord.designE !== null ? coord.designE.toFixed(4) : '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-bold text-[#0E5E57] bg-[#E8F8F5]/40">${coord.actualN !== null ? coord.actualN.toFixed(4) : '<span class="text-slate-300 font-normal">-</span>'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-bold text-[#0E5E57] bg-[#E8F8F5]/40">${coord.actualE !== null ? coord.actualE.toFixed(4) : '<span class="text-slate-300 font-normal">-</span>'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#1E3A8A] bg-[#EEF4FF]/40">${fmtSignedCm(coord.dN_cm)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#1E3A8A] bg-[#EEF4FF]/40">${fmtSignedCm(coord.dE_cm)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono bg-[#FFF3EB]/50">
+              ${coord.dev_cm !== null ? `<span class="${devPillClass}">${coord.dev_cm.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
+            </td>
+            <td class="p-2 text-center">${gradeBadge}</td>
+          </tr>
+        `;
+
+        // 4) Net Pile Length Summary Row (Read-only)
+        htmlLen += `
+          <tr class="${len.isCustomized ? 'bg-white hover:bg-[#FAF5EE]' : 'bg-slate-50/40 hover:bg-slate-50'} transition-colors">
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#1D2B45]">${p.no}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-black text-[#1D2B45]">${p.tag}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#3E4B69]">${p.footing || '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-center font-bold text-[#3E4B69]">${p.grid || '-'}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-semibold text-[#78350F] bg-[#FEF3C7]/25">${fmtOpt(len.bottom, 2)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-semibold text-[#78350F] bg-[#FEF3C7]/25">${fmtOpt(len.middle, 2)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono text-[#3E4B69] bg-[#FAF5EE]/50">${fmtOpt(len.top, 2)}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-bold text-sky-800 bg-sky-50/40">${actTopStr}</td>
+            <td class="p-2 border-r border-[#E2D9CC] text-right font-mono font-black text-[#1E3A8A] bg-[#EEF4FF]/50">
+              ${len.topNet !== null ? `<span class="px-1.5 py-0.5 rounded bg-blue-100/90 text-[#1E3A8A]">${len.topNet.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
+            </td>
+            <td class="p-2 text-right font-mono font-black text-[#064E3B] bg-[#D1FAE5]/45">
+              ${len.totalEffective !== null ? `<span class="px-2 py-0.5 rounded bg-[#D1FAE5] text-[#064E3B] border border-[#10B981]/50">${len.totalEffective.toFixed(2)}</span>` : '<span class="text-slate-300">-</span>'}
             </td>
           </tr>
         `;
       });
 
-      tbody.innerHTML = html || `<tr><td colspan="16" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+      if (!skipMainRows) {
+        tbodyMain.innerHTML = htmlMain || `<tr><td colspan="18" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
 
-      // Wire row edit buttons
-      tbody.querySelectorAll('.btn-edit-pile-len').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const pNo = parseInt(btn.getAttribute('data-pile'), 10);
-          openPileLengthModal(pNo);
+        // Wire row edit buttons
+        tbodyMain.querySelectorAll('.btn-edit-pile-len').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const pNo = parseInt(btn.getAttribute('data-pile'), 10);
+            openPileLengthModal(pNo);
+          });
         });
-      });
 
-      // Update KPI Cards
-      const pct = ((drivenCount / 93) * 100).toFixed(1);
+        // Wire inline editable cells (auto-save on change + Excel-like Enter to move down)
+        tbodyMain.querySelectorAll('.sum-inline-input').forEach(inp => {
+          inp.addEventListener('focus', () => {
+            lastInlineEditTs = Date.now();
+            inp.select();
+          });
+          inp.addEventListener('input', () => {
+            lastInlineEditTs = Date.now();
+          });
+          inp.addEventListener('change', () => {
+            const pNo = inp.getAttribute('data-pile');
+            const field = inp.getAttribute('data-field');
+            saveInlineSummaryCell(pNo, field, inp.value, inp);
+          });
+          inp.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              const field = inp.getAttribute('data-field');
+              const curTr = inp.closest('tr');
+              const nextTr = curTr?.nextElementSibling;
+              const nextInp = nextTr?.querySelector(`.sum-inline-input[data-field="${field}"]`);
+              if (nextInp) {
+                nextInp.focus(); // triggers blur+change on inp naturally, then focuses nextInp
+              } else {
+                inp.blur();
+              }
+            }
+          });
+        });
+      }
+
+      if (tbodyCombined) tbodyCombined.innerHTML = htmlCombined || `<tr><td colspan="13" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+      if (tbodyCoord) tbodyCoord.innerHTML = htmlCoord || `<tr><td colspan="12" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+      if (tbodyLen) tbodyLen.innerHTML = htmlLen || `<tr><td colspan="10" class="p-6 text-center text-slate-400 font-bold">ไม่พบข้อมูลเสาเข็มที่ตรงกับเงื่อนไขการค้นหา</td></tr>`;
+
       const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-      setTxt('sum-kpi-driven-count', drivenCount);
+      const avgDev = coordEnteredCount > 0 ? (sumDev / coordEnteredCount) : null;
+      const avgAbsDN = coordEnteredCount > 0 ? (sumAbsDN / coordEnteredCount) : null;
+      const avgAbsDE = coordEnteredCount > 0 ? (sumAbsDE / coordEnteredCount) : null;
+
+      // Update Main KPI Cards & Footer
+      const pct = ((totalDrivenAll / 93) * 100).toFixed(1);
+      setTxt('sum-kpi-driven-count', totalDrivenAll);
       setTxt('sum-kpi-driven-pct', `(${pct}%)`);
-      setTxt('sum-kpi-total-eff-len', totalEffSum.toFixed(2));
-      setTxt('sum-kpi-total-mfg-len', totalMfgSum.toFixed(2));
-      setTxt('sum-kpi-total-topcut-len', totalTopCut.toFixed(2));
+      setTxt('sum-kpi-total-eff-len', enteredLenCount > 0 ? totalEffSum.toFixed(2) : '0.00');
+      setTxt('sum-kpi-len-entered-count', `(กรอกแล้ว ${enteredLenCount}/${visibleCount} ต้น)`);
+      setTxt('sum-kpi-total-mfg-len', enteredLenCount > 0 ? totalMfgSum.toFixed(2) : '0.00');
+      setTxt('sum-kpi-total-topcut-len', hasTopCutAny ? totalTopCut.toFixed(2) : '0.00');
 
-      // Update Footer totals
       setTxt('sum-foot-visible-count', visibleCount);
-      setTxt('sum-foot-bottom', totalBottom.toFixed(2));
-      setTxt('sum-foot-middle', totalMiddle.toFixed(2));
-      setTxt('sum-foot-top', totalTop.toFixed(2));
-      setTxt('sum-foot-topcut', totalTopCut.toFixed(2));
-      setTxt('sum-foot-topnet', totalTopNet.toFixed(2));
-      setTxt('sum-foot-efftotal', `${totalEffSum.toFixed(2)} ม.`);
-      setTxt('sum-report-rendered-info', `แสดง ${visibleCount} / 93 ต้น | ความยาวใช้งานรวม: ${totalEffSum.toFixed(2)} ม.`);
+      setTxt('sum-foot-entered-count', enteredLenCount);
+      setTxt('sum-foot-avgdev', avgDev !== null ? `${avgDev.toFixed(2)}` : '-');
+      setTxt('sum-foot-bottom', hasBottomAny ? totalBottom.toFixed(2) : '-');
+      setTxt('sum-foot-middle', hasMiddleAny ? totalMiddle.toFixed(2) : '-');
+      setTxt('sum-foot-top', hasTopAny ? totalTop.toFixed(2) : '-');
+      setTxt('sum-foot-topcut', hasTopCutAny ? totalTopCut.toFixed(2) : '-');
+      setTxt('sum-foot-topnet', hasTopNetAny ? totalTopNet.toFixed(2) : '-');
+      setTxt('sum-foot-efftotal', enteredLenCount > 0 ? `${totalEffSum.toFixed(2)} ม.` : '-');
 
-      if (window.lucide) lucide.createIcons();
+      // Update Combined Summary KPIs & Footer
+      setTxt('comb-kpi-dev', avgDev !== null ? `${avgDev.toFixed(2)} / ${maxDev.toFixed(2)} ซม.` : '-');
+      setTxt('comb-kpi-entered', `${enteredLenCount} / ${visibleCount} ต้น`);
+      setTxt('comb-kpi-bottom', hasBottomAny ? `${totalBottom.toFixed(2)} ม.` : '-');
+      setTxt('comb-kpi-middle', hasMiddleAny ? `${totalMiddle.toFixed(2)} ม.` : '-');
+      setTxt('comb-kpi-topnet', hasTopNetAny ? `${totalTopNet.toFixed(2)} ม.` : '-');
+      setTxt('comb-kpi-efftotal', enteredLenCount > 0 ? `${totalEffSum.toFixed(2)} ม.` : '-');
+      setTxt('comb-foot-count', coordEnteredCount);
+      setTxt('comb-foot-entered', enteredLenCount);
+      setTxt('comb-foot-avgdev', avgDev !== null ? `เฉลี่ย ${avgDev.toFixed(2)}` : '-');
+      setTxt('comb-foot-bottom', hasBottomAny ? totalBottom.toFixed(2) : '-');
+      setTxt('comb-foot-middle', hasMiddleAny ? totalMiddle.toFixed(2) : '-');
+      setTxt('comb-foot-topnet', hasTopNetAny ? totalTopNet.toFixed(2) : '-');
+      setTxt('comb-foot-efftotal', enteredLenCount > 0 ? `${totalEffSum.toFixed(2)} ม.` : '-');
+
+      // Update Coord Summary KPIs & Footer
+      setTxt('coord-kpi-count', `${coordEnteredCount} / ${visibleCount} ต้น`);
+      setTxt('coord-kpi-avg', avgDev !== null ? `${avgDev.toFixed(2)} ซม.` : '-');
+      setTxt('coord-kpi-max', maxDev >= 0 ? `${maxDev.toFixed(2)} ซม. (${maxDevTag})` : '-');
+      setTxt('coord-kpi-over', `${overLimitCount} ต้น`);
+      setTxt('coord-foot-count', `${coordEnteredCount} / ${visibleCount}`);
+      setTxt('coord-foot-avg-dn', avgAbsDN !== null ? `เฉลี่ย ${avgAbsDN.toFixed(2)}` : '-');
+      setTxt('coord-foot-avg-de', avgAbsDE !== null ? `เฉลี่ย ${avgAbsDE.toFixed(2)}` : '-');
+      setTxt('coord-foot-avg-dev', avgDev !== null ? `เฉลี่ย ${avgDev.toFixed(2)} ซม.` : '-');
+      setTxt('coord-foot-max-dev', maxDev >= 0 ? `สูงสุด ${maxDev.toFixed(2)} ซม.` : '-');
+
+      // Update Length Summary KPIs & Footer
+      setTxt('len-kpi-entered', `${enteredLenCount} / ${visibleCount} ต้น`);
+      setTxt('len-kpi-bottom', hasBottomAny ? `${totalBottom.toFixed(2)} ม.` : '-');
+      setTxt('len-kpi-middle', hasMiddleAny ? `${totalMiddle.toFixed(2)} ม.` : '-');
+      setTxt('len-kpi-topnet', hasTopNetAny ? `${totalTopNet.toFixed(2)} ม.` : '-');
+      setTxt('len-kpi-efftotal', enteredLenCount > 0 ? `${totalEffSum.toFixed(2)} ม.` : '-');
+      setTxt('len-foot-entered', `${enteredLenCount} / ${visibleCount}`);
+      setTxt('len-foot-bottom', hasBottomAny ? totalBottom.toFixed(2) : '-');
+      setTxt('len-foot-middle', hasMiddleAny ? totalMiddle.toFixed(2) : '-');
+      setTxt('len-foot-top', hasTopAny ? totalTop.toFixed(2) : '-');
+      setTxt('len-foot-topcut', hasTopCutAny ? totalTopCut.toFixed(2) : '-');
+      setTxt('len-foot-topnet', hasTopNetAny ? totalTopNet.toFixed(2) : '-');
+      setTxt('len-foot-efftotal', enteredLenCount > 0 ? `${totalEffSum.toFixed(2)} ม.` : '-');
+
+      // Bottom status bar info
+      if (sumRepActiveTab === 'coord') {
+        setTxt('sum-report-rendered-info', `แสดง ${visibleCount} / 93 ต้น | มีพิกัดจริง ${coordEnteredCount} ต้น${avgDev !== null ? ` | เยื้องเฉลี่ย ${avgDev.toFixed(2)} ซม.` : ''}`);
+      } else {
+        setTxt('sum-report-rendered-info', `แสดง ${visibleCount} / 93 ต้น | กรอกความยาว ${enteredLenCount} ต้น | ความยาวใช้งานรวม: ${totalEffSum.toFixed(2)} ม.`);
+      }
+
+      if (!skipMainRows && window.lucide) lucide.createIcons();
     }
 
-    // Wiring Summary Report Controls
-    document.getElementById('btn-open-pile-summary-report')?.addEventListener('click', openPileSummaryReport);
+    // Wiring Summary Report Controls & Tabs
+    document.getElementById('btn-open-pile-summary-report')?.addEventListener('click', () => openPileSummaryReport());
     document.getElementById('btn-close-pile-summary-report')?.addEventListener('click', closePileSummaryReport);
     document.getElementById('btn-sum-rep-open-lengths')?.addEventListener('click', () => {
       openPileLengthModal(selectedCardPileNo || 1);
+    });
+
+    document.querySelectorAll('.sum-rep-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setSummaryReportTab(btn.getAttribute('data-sum-tab') || 'main');
+      });
+      btn.addEventListener('keydown', (e) => {
+        const tabs = Array.from(document.querySelectorAll('.sum-rep-tab-btn'));
+        const idx = tabs.indexOf(btn);
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          const next = tabs[(idx + 1) % tabs.length];
+          next.focus();
+          setSummaryReportTab(next.getAttribute('data-sum-tab') || 'main');
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const prev = tabs[(idx - 1 + tabs.length) % tabs.length];
+          prev.focus();
+          setSummaryReportTab(prev.getAttribute('data-sum-tab') || 'main');
+        }
+      });
     });
 
     document.getElementById('sum-rep-search')?.addEventListener('input', renderPileSummaryReportTable);
@@ -12862,25 +13657,295 @@
       });
     });
 
-    // CSV Export for Pile Summary Report
+    // =========================================================================
+    // REAL EXCEL (.xlsx) EXPORT WITH LIVE FORMULAS (ExcelJS — 3 Formatted Sheets)
+    // =========================================================================
+    let isExportingXlsx = false;
+
+    async function exportPileSummaryExcel() {
+      if (isExportingXlsx) return;
+      if (typeof window.ExcelJS === 'undefined') {
+        alert('ไม่สามารถโหลดไลบรารีสร้างไฟล์ Excel ได้ในขณะนี้ (กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต หรือใช้ปุ่ม CSV แทน)');
+        return;
+      }
+
+      const btn = document.getElementById('btn-sum-rep-export-xlsx');
+      const prevHtml = btn ? btn.innerHTML : '';
+      isExportingXlsx = true;
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>กำลังสร้างไฟล์ Excel...</span>';
+      }
+
+      try {
+        const wb = new window.ExcelJS.Workbook();
+        wb.creator = 'PYNN EKKAMAI 12 — Site Tools AI';
+        wb.created = new Date();
+        wb.calcProperties.fullCalcOnLoad = true;
+
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const fontBase = { name: 'Arial', size: 10, color: { argb: 'FF1D2B45' } };
+        const fontHeader = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+        const fontBold = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF1D2B45' } };
+        const borderThin = {
+          top: { style: 'thin', color: { argb: 'FFD6CCBE' } },
+          left: { style: 'thin', color: { argb: 'FFD6CCBE' } },
+          bottom: { style: 'thin', color: { argb: 'FFD6CCBE' } },
+          right: { style: 'thin', color: { argb: 'FFD6CCBE' } }
+        };
+        const borderTotal = {
+          top: { style: 'medium', color: { argb: 'FF1D2B45' } },
+          bottom: { style: 'double', color: { argb: 'FF1D2B45' } },
+          left: { style: 'thin', color: { argb: 'FF1D2B45' } },
+          right: { style: 'thin', color: { argb: 'FF1D2B45' } }
+        };
+
+        const styleTitleBanner = (ws, colCount, title, subtitle) => {
+          ws.mergeCells(1, 1, 1, colCount);
+          const c1 = ws.getCell(1, 1);
+          c1.value = title;
+          c1.font = { name: 'Arial', size: 13, bold: true, color: { argb: 'FF1D2B45' } };
+          c1.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFAF5EE' } };
+          c1.alignment = { vertical: 'middle', horizontal: 'left' };
+          ws.getRow(1).height = 26;
+
+          ws.mergeCells(2, 1, 2, colCount);
+          const c2 = ws.getCell(2, 1);
+          c2.value = subtitle;
+          c2.font = { name: 'Arial', size: 9.5, italic: true, color: { argb: 'FF3E4B69' } };
+          c2.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFAF5EE' } };
+          c2.alignment = { vertical: 'middle', horizontal: 'left' };
+          ws.getRow(2).height = 19;
+        };
+
+        const styleHeaderRow = (ws, rowIdx, headers, fillArgb = 'FF1D2B45') => {
+          const row = ws.getRow(rowIdx);
+          row.height = 26;
+          headers.forEach((h, i) => {
+            const cell = row.getCell(i + 1);
+            cell.value = h;
+            cell.font = fontHeader;
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: fillArgb } };
+            cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+            cell.border = borderThin;
+          });
+          ws.views = [{ state: 'frozen', ySplit: rowIdx }];
+        };
+
+        // ---------------------------------------------------------------------
+        // SINGLE CLEAN SUMMARY SHEET: Co ก่อน/หลัง + ระยะเยื้อง + ล่าง/กลาง/บน(ตัดแล้ว)/รวม
+        // ---------------------------------------------------------------------
+        const ws0 = wb.addWorksheet('สรุปเสาเข็ม_Co_ความยาว');
+        styleTitleBanner(
+          ws0, 13,
+          'โครงการ PYNN EKKAMAI 12 — ตารางสรุปพิกัด Co (ก่อน/หลัง/ระยะเยื้อง) และความยาวเสาเข็ม (ล่าง / กลาง / บนตัดแล้ว)',
+          `วันที่ส่งออก: ${todayStr} | เสาเข็มไอ 0.40 ม. รวม 93 ต้น | เกณฑ์เยื้อง ACI 543R ≤ 7.62 ซม. (3 นิ้ว) | ถ้า TOP ติดลบ = ยาวเต็มไม่ตัด`
+        );
+        styleHeaderRow(ws0, 4, [
+          'No.', 'รหัสเข็ม', 'ฐานราก', 'กริด',
+          'Co (N) แบบ', 'Co (E) แบบ', 'Co (N) หลังกด', 'Co (E) หลังกด', 'ระยะเยื้อง (ซม.)',
+          'ท่อนล่าง (ม.)', 'ท่อนกลาง (ม.)', 'ท่อนบน ตัดแล้ว (ม.)', 'ความยาวรวม (ม.)'
+        ], 'FF1D2B45');
+        ws0.columns = [
+          { width: 7 }, { width: 10 }, { width: 10 }, { width: 10 },
+          { width: 15 }, { width: 15 }, { width: 15 }, { width: 15 }, { width: 15 },
+          { width: 13 }, { width: 13 }, { width: 17 }, { width: 16 }
+        ];
+
+        const startRow = 5;
+        let lastRow = startRow - 1;
+        let coordCount0 = 0, sumDev0 = 0, sumB0 = 0, sumM0 = 0, sumTN0 = 0, sumEff0 = 0;
+
+        PILES_DATABASE.forEach((p, idx) => {
+          const r = startRow + idx;
+          lastRow = r;
+          const rec = progressRecords[p.no] || { status: 'pending', date: '' };
+          const coord = getPileCoordDeviation(p, rec);
+          const len = getPileLengthData(p.no);
+          if (coord.hasActualCoords && coord.dev_cm !== null) { coordCount0++; sumDev0 += coord.dev_cm; }
+          if (len.bottom !== null) sumB0 += len.bottom;
+          if (len.middle !== null) sumM0 += len.middle;
+          if (len.topNet !== null) sumTN0 += len.topNet;
+          if (len.totalEffective !== null) sumEff0 += len.totalEffective;
+
+          const row = ws0.getRow(r);
+          row.height = 19;
+          row.getCell(1).value = p.no;
+          row.getCell(2).value = p.tag;
+          row.getCell(3).value = p.footing || '';
+          row.getCell(4).value = p.grid || '';
+          row.getCell(5).value = coord.designN;
+          row.getCell(6).value = coord.designE;
+          row.getCell(7).value = coord.actualN;
+          row.getCell(8).value = coord.actualE;
+          row.getCell(9).value = {
+            formula: `IF(AND(ISNUMBER(E${r}),ISNUMBER(F${r}),ISNUMBER(G${r}),ISNUMBER(H${r})),SQRT(((G${r}-E${r})*100)^2+((H${r}-F${r})*100)^2),"")`,
+            result: coord.dev_cm !== null ? Number(coord.dev_cm.toFixed(4)) : ''
+          };
+          row.getCell(10).value = len.bottom;
+          row.getCell(11).value = len.middle;
+          row.getCell(12).value = len.topNet !== null ? Number(len.topNet.toFixed(4)) : null;
+          row.getCell(13).value = {
+            formula: `IF(OR(ISNUMBER(J${r}),ISNUMBER(K${r}),ISNUMBER(L${r})),SUM(J${r}:L${r}),"")`,
+            result: len.totalEffective !== null ? Number(len.totalEffective.toFixed(4)) : ''
+          };
+
+          for (let c = 1; c <= 13; c++) {
+            const cell = row.getCell(c);
+            cell.font = (c === 9 || c === 12 || c === 13) ? fontBold : fontBase;
+            cell.border = borderThin;
+            cell.alignment = { vertical: 'middle', horizontal: c <= 4 ? 'center' : 'right' };
+            if (c === 9) {
+              if (coord.grade === 'pass') {
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD1FAE5' } };
+                cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF064E3B' } };
+              } else if (coord.grade === 'aci_pass') {
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFEF3C7' } };
+                cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF78350F' } };
+              } else if (coord.grade === 'over') {
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFEE2E2' } };
+                cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF991B1B' } };
+              } else {
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFCF9F5' } };
+              }
+            }
+            else if (c === 12) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEEF4FF' } };
+            else if (c === 13) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD1FAE5' } };
+            else if (idx % 2 === 1) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFCF9F5' } };
+          }
+          [5, 6, 7, 8].forEach(c => { row.getCell(c).numFmt = '0.0000'; });
+          [9, 10, 11, 12, 13].forEach(c => { row.getCell(c).numFmt = '0.00'; });
+        });
+
+        const sumRow0 = lastRow + 1;
+        const sr0 = ws0.getRow(sumRow0);
+        sr0.height = 24;
+        ws0.mergeCells(sumRow0, 1, sumRow0, 8);
+        sr0.getCell(1).value = 'สรุปรวม (ระยะเยื้องเฉลี่ย ซม. / ความยาวรวม ม.) :';
+        sr0.getCell(9).value = { formula: `IFERROR(AVERAGE(I${startRow}:I${lastRow}),"")`, result: coordCount0 > 0 ? Number((sumDev0 / coordCount0).toFixed(2)) : '' };
+        sr0.getCell(10).value = { formula: `SUM(J${startRow}:J${lastRow})`, result: Number(sumB0.toFixed(2)) };
+        sr0.getCell(11).value = { formula: `SUM(K${startRow}:K${lastRow})`, result: Number(sumM0.toFixed(2)) };
+        sr0.getCell(12).value = { formula: `SUM(L${startRow}:L${lastRow})`, result: Number(sumTN0.toFixed(2)) };
+        sr0.getCell(13).value = { formula: `SUM(M${startRow}:M${lastRow})`, result: Number(sumEff0.toFixed(2)) };
+        for (let c = 1; c <= 13; c++) {
+          const cell = sr0.getCell(c);
+          cell.font = { name: 'Arial', size: 10.5, bold: true, color: { argb: 'FF1D2B45' } };
+          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFEF3C7' } };
+          cell.border = borderTotal;
+          cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        }
+        [9, 10, 11, 12, 13].forEach(c => { sr0.getCell(c).numFmt = '#,##0.00'; });
+
+        // Dynamic Conditional Formatting on Deviation column (I5:I97) + ACI Color Legend
+        ws0.addConditionalFormatting({
+          ref: `I${startRow}:I${lastRow}`,
+          rules: [
+            {
+              type: 'cellIs',
+              operator: 'greaterThan',
+              formulae: [7.62],
+              priority: 1,
+              style: {
+                fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFEE2E2' } },
+                font: { name: 'Arial', size: 10, bold: true, color: { argb: 'FF991B1B' } }
+              }
+            },
+            {
+              type: 'cellIs',
+              operator: 'between',
+              formulae: [5.0001, 7.62],
+              priority: 2,
+              style: {
+                fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFFEF3C7' } },
+                font: { name: 'Arial', size: 10, bold: true, color: { argb: 'FF78350F' } }
+              }
+            },
+            {
+              type: 'cellIs',
+              operator: 'lessThanOrEqual',
+              formulae: [5.0],
+              priority: 3,
+              style: {
+                fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFD1FAE5' } },
+                font: { name: 'Arial', size: 10, bold: true, color: { argb: 'FF064E3B' } }
+              }
+            }
+          ]
+        });
+
+        const legRow = ws0.getRow(sumRow0 + 2);
+        legRow.height = 20;
+        legRow.getCell(1).value = 'เกณฑ์สีระยะเยื้อง (ACI 543R):';
+        legRow.getCell(1).font = { name: 'Arial', size: 9.5, bold: true, color: { argb: 'FF1D2B45' } };
+        ws0.mergeCells(sumRow0 + 2, 1, sumRow0 + 2, 4);
+
+        const legItems = [
+          { colStart: 5, colEnd: 6, text: '≤ 5.00 ซม. : ผ่านเกณฑ์ (ดี)', bg: 'FFD1FAE5', fg: 'FF064E3B' },
+          { colStart: 7, colEnd: 9, text: '5.01 – 7.62 ซม. : ผ่านเกณฑ์ ACI (≤ 3 นิ้ว)', bg: 'FFFEF3C7', fg: 'FF78350F' },
+          { colStart: 10, colEnd: 13, text: '> 7.62 ซม. : เกินเกณฑ์ ACI (> 3 นิ้ว) ต้องตรวจสอบฐานราก', bg: 'FFFEE2E2', fg: 'FF991B1B' }
+        ];
+        legItems.forEach(item => {
+          ws0.mergeCells(sumRow0 + 2, item.colStart, sumRow0 + 2, item.colEnd);
+          const cell = legRow.getCell(item.colStart);
+          cell.value = item.text;
+          cell.font = { name: 'Arial', size: 9.5, bold: true, color: { argb: item.fg } };
+          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: item.bg } };
+          cell.alignment = { vertical: 'middle', horizontal: 'center' };
+          cell.border = borderThin;
+        });
+
+        // Generate & Download .xlsx
+        const buffer = await wb.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `PYNN_EKKAMAI_12_Pile_Summary_${todayStr}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+
+        if (typeof showSyncToast === 'function') {
+          showSyncToast(`✓ ส่งออก Excel (.xlsx) ตารางสรุปสำเร็จ!`);
+        }
+      } catch (err) {
+        console.error('Excel export failed:', err);
+        alert('เกิดข้อผิดพลาดระหว่างสร้างไฟล์ Excel: ' + (err?.message || err));
+      } finally {
+        isExportingXlsx = false;
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = prevHtml;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+
+    document.getElementById('btn-sum-rep-export-xlsx')?.addEventListener('click', exportPileSummaryExcel);
+
+    // CSV Export for Pile Summary Report (เว้นว่างเมื่อไม่ได้กรอกจริง + เพิ่มค่าเยื้อง ซม.)
     document.getElementById('btn-sum-rep-export-csv')?.addEventListener('click', () => {
-      let csv = "\uFEFFNo,Pile_Tag,Footing,Grid,Design_Northing,Design_Easting,Actual_Northing,Actual_Easting,PCO_Design_m,Actual_Top_m,Bottom_Seg_m,Middle_Seg_m,Top_Seg_m,Top_Net_m,Total_Effective_Length_m,Total_Manufactured_m,Status,Drive_Date\n";
+      let csv = "\uFEFFNo,Pile_Tag,Footing,Grid,Design_Northing,Design_Easting,Actual_Northing,Actual_Easting,Delta_N_cm,Delta_E_cm,Deviation_cm,PCO_Design_m,Actual_Top_m,Bottom_Seg_m,Middle_Seg_m,Top_Seg_m,Top_Net_m,Total_Effective_Length_m,Total_Manufactured_m,Status,Drive_Date\n";
       PILES_DATABASE.forEach(p => {
         const rec = progressRecords[p.no] || { status: 'pending', date: '' };
         const len = getPileLengthData(p.no);
+        const coord = getPileCoordDeviation(p, rec);
         const pco = p.pco_level !== undefined ? p.pco_level : p.co_level;
-        const actTop = rec.actual_top !== undefined ? rec.actual_top : '';
-        const actN = rec.actual_n !== undefined ? rec.actual_n : '';
-        const actE = rec.actual_e !== undefined ? rec.actual_e : '';
+        const v = (x, dec) => x !== null ? (dec !== undefined ? x.toFixed(dec) : x) : '';
 
-        csv += `${p.no},${p.tag},${p.footing || ''},${p.grid},${p.northing || ''},${p.easting || ''},${actN},${actE},${pco},${actTop},${len.bottom},${len.middle},${len.top},${len.topNet},${len.totalEffective},${len.totalManufactured},${rec.status},${rec.date || ''}\n`;
+        csv += `${p.no},${p.tag},${p.footing || ''},${p.grid || ''},${v(coord.designN, 4)},${v(coord.designE, 4)},${v(coord.actualN, 4)},${v(coord.actualE, 4)},${v(coord.dN_cm, 2)},${v(coord.dE_cm, 2)},${v(coord.dev_cm, 2)},${pco},${v(len.topCut, 3)},${v(len.bottom, 2)},${v(len.middle, 2)},${v(len.top, 2)},${v(len.topNet, 2)},${v(len.totalEffective, 2)},${v(len.totalManufactured, 2)},${rec.status},${rec.date || ''}\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
+      a.href = url;
       a.download = `PYNN_EKKAMAI_12_Pile_Summary_Length_Report_${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
     });
 
     // Print Pile Summary Report
