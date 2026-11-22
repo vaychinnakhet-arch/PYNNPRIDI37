@@ -7826,6 +7826,7 @@ body.manga-screentone-bg,
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script defer src="sheetpile_dashboard_home.js"></script>
   </head>
   <body class="p-2 sm:p-4 md:p-6 bg-[#FAF5EE] relative min-h-screen text-[#1D2B45] font-body selection:bg-[#F26B2A] selection:text-white">
     <!-- Splash Screen (DoodleWeb Warm Craft Cockpit) -->
@@ -7845,16 +7846,36 @@ body.manga-screentone-bg,
             </span>
           </div>
 
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="doodle-pill doodle-pill-teal text-[11px] font-black shadow-2xs">
-              <span class="doodle-dot-live"></span>
-              งานฐานรากและเสาเข็ม
-            </span>
+          <!-- 2-Phase Menu Switcher: งาน Sheet Pile (Active) | งานเสาเข็ม 93 ต้น -->
+          <div class="flex items-center gap-2 shrink-0 flex-wrap">
+            <button
+              id="btn-phase-sheetpile"
+              type="button"
+              aria-pressed="true"
+              onclick="switchHomePhase('sheetpile')"
+              class="px-3.5 py-2 rounded-full border-2 border-[#1D2B45] bg-[#1D2B45] text-white font-display text-xs font-bold shadow-[3px_3px_0px_#F26B2A] inline-flex items-center gap-1.5 cursor-pointer transition-all"
+            >
+              <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+              <span>🛡️ งาน Sheet Pile &amp; ขุดดิน</span>
+            </button>
+            <button
+              id="btn-phase-piling"
+              type="button"
+              aria-pressed="false"
+              onclick="switchHomePhase('piling')"
+              class="px-3.5 py-2 rounded-full border-2 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] font-display text-xs font-bold shadow-[2px_2px_0px_#1D2B45] inline-flex items-center gap-1.5 cursor-pointer transition-all"
+            >
+              <span>🏗️ งานเสาเข็ม 93 ต้น</span>
+              <span class="px-1.5 py-0.5 rounded-full bg-[#ECFDF5] text-[#065F46] border border-[#10B981] font-mono text-[10px] font-black">100%</span>
+            </button>
           </div>
         </div>
 
-        <!-- Piling Dedicated Hero Portal Card (Distilled + Compact 1-Screen Cockpit) -->
-        <div class="doodle-card-hero mb-6 p-4 sm:p-5 md:p-6 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45]">
+        <!-- ACTIVE PHASE 1: SHEET PILE & EXCAVATION PROGRESS PLAN DASHBOARD (Rendered by sheetpile_dashboard_home.js) -->
+        <section id="portal-sheetpile-panel" aria-label="ผังแสดงความก้าวหน้างานป้องกันดิน Sheet Pile และงานขุดดิน"></section>
+
+        <!-- LEGACY PHASE: Piling Dedicated Hero Portal Card (100% Intact, toggleable via งานเสาเข็ม 93 ต้น) -->
+        <div id="portal-piling-panel" class="hidden doodle-card-hero mb-6 p-4 sm:p-5 md:p-6 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45]">
           <!-- Single Compact Spec & Live Status Bar -->
           <div class="flex items-center justify-between flex-wrap gap-2 mb-4 pb-2.5 border-b-2 border-[#1D2B45]/15 relative z-10">
             <div class="flex items-center gap-2 flex-wrap">

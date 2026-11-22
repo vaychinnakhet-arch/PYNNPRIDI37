@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="manga_theme.css" />
     <link rel="stylesheet" href="doodle_theme.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="html-to-image.min.js"></script>
     <script defer src="sheetpile_report_studio.js"></script>
     <script type="importmap">
       {
@@ -100,13 +101,57 @@
       #viewport-container {
         background: #FFFFFF;
       }
+      body.is-embed-mode header,
+      body.is-embed-mode #left-tool-dock,
+      body.is-embed-mode #report-drawer,
+      body.is-embed-mode #selection-hud,
+      body.is-embed-mode .sp-embed-hide {
+        display: none !important;
+      }
       @media print {
-        @page { size: A4 portrait; margin: 10mm; }
-        html, body { height: auto !important; width: auto !important; overflow: visible !important; background: #FFFFFF !important; }
+        @page { size: A4 portrait; margin: 5mm; }
+        html, body {
+          height: auto !important;
+          width: auto !important;
+          overflow: visible !important;
+          background: #FFFFFF !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
         .sp-app-shell, .no-print { display: none !important; }
-        .sp-print-root { position: static !important; display: block !important; height: auto !important; overflow: visible !important; background: #FFFFFF !important; }
-        .sp-a4-page { max-width: none !important; margin: 0 0 8mm 0 !important; border: none !important; box-shadow: none !important; page-break-after: always; break-after: page; }
-        .sp-a4-page:last-child { page-break-after: auto; break-after: auto; }
+        .sp-print-root {
+          position: static !important;
+          display: block !important;
+          height: auto !important;
+          overflow: visible !important;
+          background: #FFFFFF !important;
+        }
+        .sp-print-scroll {
+          padding: 0 !important;
+          margin: 0 !important;
+          overflow: visible !important;
+          background: #FFFFFF !important;
+        }
+        .sp-a4-page {
+          width: 200mm !important;
+          max-width: 200mm !important;
+          height: 285mm !important;
+          max-height: 285mm !important;
+          padding: 3.5mm 4.5mm !important;
+          margin: 0 auto !important;
+          border: none !important;
+          box-shadow: none !important;
+          overflow: hidden !important;
+          box-sizing: border-box !important;
+          page-break-after: always !important;
+          break-after: page !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+        .sp-a4-page:last-child {
+          page-break-after: auto !important;
+          break-after: auto !important;
+        }
       }
       /* Full-Viewport App Shell */
       .sp-app-shell {
@@ -179,35 +224,41 @@
       input[type="range"].pynn-slider {
         -webkit-appearance: none;
         appearance: none;
-        height: 6px;
+        height: 12px;
         border-radius: 9999px;
-        background: var(--pynn-surface-subtle);
-        border: 1px solid var(--pynn-border-ui);
+        background: #E2E8F0;
+        border: 2px solid #1D2B45;
         outline: none;
+        cursor: pointer;
+        box-shadow: inset 0 1px 2px rgba(29, 43, 69, 0.12);
       }
       input[type="range"].pynn-slider:focus-visible {
-        outline: 2px solid var(--pynn-forest);
-        outline-offset: 4px;
+        outline: 2px solid #F26B2A;
+        outline-offset: 3px;
       }
       input[type="range"].pynn-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         border-radius: 9999px;
-        background: var(--pynn-sienna);
-        border: 2px solid #FFFFFF;
-        cursor: pointer;
-        box-shadow: 0 1px 4px rgba(24, 26, 31, 0.28);
+        background: #F26B2A;
+        border: 2.5px solid #1D2B45;
+        cursor: grab;
+        box-shadow: 2px 2px 0px #1D2B45;
+      }
+      input[type="range"].pynn-slider::-webkit-slider-thumb:active {
+        cursor: grabbing;
+        transform: scale(1.08);
       }
       input[type="range"].pynn-slider::-moz-range-thumb {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         border-radius: 9999px;
-        background: var(--pynn-sienna);
-        border: 2px solid #FFFFFF;
-        cursor: pointer;
-        box-shadow: 0 1px 4px rgba(24, 26, 31, 0.28);
+        background: #F26B2A;
+        border: 2.5px solid #1D2B45;
+        cursor: grab;
+        box-shadow: 2px 2px 0px #1D2B45;
       }
       .status-pill-active {
         background-color: var(--pynn-forest) !important;
@@ -245,11 +296,11 @@
               <h1 class="text-xs font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display truncate">
                 PYNN <span class="text-[#F26B2A] italic">EKKAMAI</span> 12
               </h1>
-              <p class="text-[9.5px] text-[#3E4B69] font-semibold leading-none mt-0.5 hidden md:block">งานป้องกันดิน Sheet Pile &amp; ขุดดิน 4D</p>
+              <p class="text-[9.5px] text-[#3E4B69] font-semibold leading-none mt-0.5 hidden md:block">งานป้องกันดิน Sheet Pile &amp; งานขุดดิน</p>
             </div>
 
             <span class="hidden 2xl:inline-flex bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#FDE68A] shrink-0">
-              🛡️ 142 แผ่น · EL -3.80m
+              🛡️ 142 แผ่น · EL -3.65m
             </span>
           </div>
 
@@ -267,7 +318,7 @@
 
             <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
               <span class="w-2.5 h-2.5 rounded-full bg-[#F26B2A]"></span>
-              <span class="text-[11px] text-[#3E4B69] font-bold">ขุดดิน 4D:</span>
+              <span class="text-[11px] text-[#3E4B69] font-bold">งานขุดดิน:</span>
               <span class="text-xs font-black text-[#1D2B45] font-mono">
                 EL.<span id="kpi-ex-el" class="text-[#F26B2A] font-black">0.00</span>ม.
                 <span class="text-[10px] text-[#3E4B69]">(<span id="kpi-ex-vol">0.0</span>ม³)</span>
@@ -300,12 +351,21 @@
 
           <!-- 3. Right: DoodleWeb Action Pills (Matching piling.html + Report Dropdown) -->
           <div id="pynn-nav-actions" class="flex items-center gap-1.5 shrink-0 relative">
-            <a href="piling.html" class="hidden lg:inline-flex px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display">
+            <a href="piling.html" class="hidden 2xl:inline-flex px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display">
               เสาเข็ม 93
             </a>
-            <a href="footing.html" class="hidden lg:inline-flex px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display">
+            <a href="footing.html" class="hidden 2xl:inline-flex px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display">
               ฐานราก 3D
             </a>
+            <button
+              id="btn-today-update-mode"
+              type="button"
+              class="pynn-btn text-xs py-1 sm:py-1.5 px-2.5 sm:px-3 bg-[#0284C7] hover:bg-[#0369A1] text-white"
+              title="เข้าสู่โหมดคลิกเลือกงานที่ทำเสร็จวันนี้หลายชิ้น แล้วกดยืนยันบันทึก"
+            >
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-white" aria-hidden="true"></i>
+              <span>อัปเดตงานวันนี้</span>
+            </button>
             <button
               id="btn-toggle-drawer"
               type="button"
@@ -314,7 +374,7 @@
               class="pynn-btn pynn-btn-forest text-xs py-1 sm:py-1.5 px-2.5 sm:px-3"
             >
               <i data-lucide="check-square" class="w-3.5 h-3.5 text-white" aria-hidden="true"></i>
-              <span>บันทึกผลงาน</span>
+              <span class="hidden 2xl:inline">บันทึกผลงาน</span>
             </button>
 
             <!-- Report Center Dropdown (Exact piling.html Style!) -->
@@ -339,20 +399,20 @@
                     <span class="w-8 h-8 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📄</span>
                     <div class="min-w-0">
                       <div class="text-xs font-black text-[#1D2B45] truncate">Daily Report (PDF แสนสิริ)</div>
-                      <div class="text-[10px] text-[#4F5D75] truncate">3 หน้า: ชีตไพล์ · Waler/Packing · ขุดดิน + ภาพถ่าย</div>
+                      <div class="text-[10px] text-[#4F5D75] truncate">4 หน้า: ประจำวัน · สรุปชีตไพล์ · ภาพถ่าย · Consult</div>
                     </div>
                   </div>
-                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] shrink-0">PDF 3 หน้า</span>
+                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] shrink-0">PDF 4 หน้า</span>
                 </button>
                 <button id="btn-open-sp-overview" type="button" class="w-full text-left p-2 rounded-xl bg-white hover:bg-[#ECFDF5] border border-[#1D2B45]/20 hover:border-[#10B981] flex items-center justify-between gap-2 cursor-pointer transition-all">
                   <div class="flex items-center gap-2 min-w-0">
                     <span class="w-8 h-8 rounded-lg bg-[#ECFDF5] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📊</span>
                     <div class="min-w-0">
-                      <div class="text-xs font-black text-[#1D2B45] truncate">หน้ารายงานสรุป 3 หมวดงาน</div>
-                      <div class="text-[10px] text-[#4F5D75] truncate">ตารางกดชีตไพล์ · Waler/Strut · ปริมาตรขุดดิน</div>
+                      <div class="text-xs font-black text-[#1D2B45] truncate">หน้ารายงานสรุป (แคปภาพ &amp; ส่ง LINE)</div>
+                      <div class="text-[10px] text-[#4F5D75] truncate">แคปภาพ PNG + สร้างข้อความสรุปทางการส่ง LINE</div>
                     </div>
                   </div>
-                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#ECFDF5] text-[#065F46] shrink-0">3 หมวด</span>
+                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#ECFDF5] text-[#065F46] shrink-0">แคป / LINE</span>
                 </button>
               </div>
             </div>
@@ -391,50 +451,151 @@
             </div>
           </div>
 
-          <!-- FLOATING TOP-LEFT HUD (Below Piling-Style Navbar): Camera + Color Mode + Layers -->
-          <div class="absolute top-[64px] left-3 z-20 flex items-center gap-2 flex-wrap max-w-[calc(100%-24px)]">
-            <div class="pynn-hud px-2 py-1 flex items-center gap-1 flex-wrap">
-              <span class="pynn-badge pynn-badge-forest pynn-mono-id text-[10px]">3D BIM</span>
-              <button type="button" data-cam="iso" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">Iso</button>
-              <button type="button" data-cam="top" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">Top</button>
-              <button type="button" data-cam="pit" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">ในบ่อ</button>
-              <button type="button" data-cam="side" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">ด้านข้าง</button>
-              <div class="inline-flex bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-lg p-0.5 text-[11px] ml-0.5">
-                <button type="button" id="mode-sketchup" class="px-2 py-0.5 rounded-md bg-[#1D2B45] text-white font-bold">สี SketchUp</button>
-                <button type="button" id="mode-status" class="px-2 py-0.5 rounded-md text-[#3E4B69] hover:text-[#1D2B45] font-semibold">สีสถานะ</button>
-              </div>
-              <button id="btn-multi-select" type="button" aria-pressed="false" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold inline-flex items-center gap-1" title="เปิดโหมดเลือกหลายชิ้นพร้อมกัน (หรือกด Ctrl/Shift + คลิก)">
-                <i data-lucide="layers" class="w-3.5 h-3.5" aria-hidden="true"></i>
-                <span>เลือกหลายชิ้น</span>
-              </button>
-              <button id="btn-fullscreen" type="button" aria-pressed="false" aria-label="ขยายเต็มจอ" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold inline-flex items-center gap-1">
-                <i data-lucide="maximize-2" class="w-3.5 h-3.5" aria-hidden="true"></i>
-                <span class="hidden md:inline">เต็มจอ</span>
-              </button>
+          <!-- FLOATING RAPID TODAY-UPDATE BANNER (Tap-Tap-Tap + Backdate Picker -> Confirm Save) -->
+          <div id="today-update-banner" class="sp-embed-hide hidden absolute top-[64px] left-1/2 -translate-x-1/2 z-30 pynn-hud px-3.5 py-2 flex flex-wrap items-center justify-center gap-2 bg-[#F0F9FF] border-[#0284C7]">
+            <div class="flex items-center gap-2 text-xs font-extrabold text-[#0C4A6E] flex-wrap justify-center">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#0284C7] text-white font-mono text-[10px]">⚡ โหมดอัปเดตผลงาน</span>
+              <label class="inline-flex items-center gap-1 bg-white border-1.5 border-[#0284C7] rounded-full px-2 py-0.5 text-[11px] font-bold text-[#0C4A6E]" title="เลือกวันที่ทำงาน (เลือกย้อนหลังได้)">
+                <span>วันที่:</span>
+                <input id="inp-today-update-date" type="date" class="bg-transparent font-mono font-bold text-[#0284C7] outline-none cursor-pointer text-[11px]" />
+              </label>
+              <span id="today-update-hint" class="font-display">คลิกชิ้นงานในโมเดล · เลือกแล้ว <strong id="today-update-count" class="font-mono text-sm text-[#0284C7]">0</strong> ชิ้น</span>
             </div>
-
-            <!-- Layer Toggles Pill -->
-            <div class="pynn-hud px-2.5 py-1 hidden sm:flex items-center gap-2 flex-wrap text-[11px] font-bold text-[#1D2B45]">
-              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
-                <input id="tog-grid" type="checkbox" checked class="accent-[#F26B2A]" /><span>Grid</span>
-              </label>
-              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
-                <input id="tog-soil" type="checkbox" checked class="accent-[#F26B2A]" /><span>ชั้นดิน</span>
-              </label>
-              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
-                <input id="tog-piles" type="checkbox" checked class="accent-[#F26B2A]" /><span>เข็ม 93</span>
-              </label>
-              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
-                <input id="tog-bracing" type="checkbox" checked class="accent-[#F26B2A]" /><span>Waler</span>
-              </label>
-              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
-                <input id="tog-pc" type="checkbox" checked class="accent-[#F26B2A]" /><span>Packing</span>
-              </label>
+            <div class="flex items-center gap-1.5">
+              <button id="btn-today-confirm" type="button" class="px-3 py-1 rounded-full border-2 border-[#1D2B45] bg-[#10B981] hover:bg-[#059669] text-white text-xs font-extrabold font-display shadow-[2px_2px_0px_#1D2B45] cursor-pointer">
+                ✅ ยืนยันบันทึก (<span id="today-confirm-count">0</span>)
+              </button>
+              <button id="btn-today-unmark" type="button" class="px-2.5 py-1 rounded-full border-1.5 border-[#1D2B45] bg-white hover:bg-[#FEF2F2] text-[#B91C1C] text-[11px] font-bold cursor-pointer" title="ล้างสถานะชิ้นที่เลือกกลับเป็นยังไม่ทำ">
+                ↩️ ล้างสถานะ
+              </button>
+              <button id="btn-today-cancel" type="button" class="px-2.5 py-1 rounded-full border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] text-[11px] font-bold cursor-pointer">
+                ✕ ยกเลิก
+              </button>
             </div>
           </div>
 
-          <!-- Floating Selected Object Inspector (Below Camera Dock) -->
-          <div id="selection-hud" class="hidden absolute top-[118px] left-3 z-20 w-[min(300px,calc(100%-24px))] pynn-hud p-3">
+          <!-- ORGANIZED LEFT VERTICAL TOOL DOCK (UI/UX Pro Max: Views · Style · Layers · Tools) -->
+          <aside id="left-tool-dock" aria-label="แผงควบคุมมุมมอง สไตล์ และเลเยอร์ 3 มิติ" class="absolute top-[64px] left-3 z-20 flex flex-col gap-2 w-[228px] max-h-[calc(100dvh-148px)]">
+            <!-- Collapse / Expand Pill -->
+            <button
+              id="btn-toggle-left-dock"
+              type="button"
+              aria-expanded="true"
+              class="pynn-hud self-start px-3 py-1.5 text-[11px] font-extrabold font-display text-[#1D2B45] hover:bg-[#FAF5EE] inline-flex items-center gap-1.5 cursor-pointer"
+              title="พับหรือกางแผงเครื่องมือ 3 มิติ"
+            >
+              <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-[#F26B2A]" aria-hidden="true"></i>
+              <span id="lbl-left-dock-toggle">เครื่องมือ 3D</span>
+              <i id="ico-left-dock-chev" data-lucide="chevron-up" class="w-3.5 h-3.5 text-[#3E4B69]" aria-hidden="true"></i>
+            </button>
+
+            <!-- Collapsible Organized Panel Body -->
+            <div id="left-tool-body" class="pynn-hud p-2.5 flex flex-col gap-2.5 overflow-y-auto">
+              <!-- 1. CAMERA VIEWS -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5 px-0.5">
+                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">01 · มุมมองกล้อง</span>
+                  <span class="text-[9px] font-mono font-bold text-[#64748B]">VIEW</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button type="button" data-cam="iso" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
+                    <i data-lucide="box" class="w-3.5 h-3.5 text-[#F26B2A]" aria-hidden="true"></i><span>Iso 3D</span>
+                  </button>
+                  <button type="button" data-cam="top" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
+                    <i data-lucide="square" class="w-3.5 h-3.5 text-[#0284C7]" aria-hidden="true"></i><span>Top แปลน</span>
+                  </button>
+                  <button type="button" data-cam="pit" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
+                    <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#10B981]" aria-hidden="true"></i><span>ในบ่อ</span>
+                  </button>
+                  <button type="button" data-cam="side" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
+                    <i data-lucide="panel-left" class="w-3.5 h-3.5 text-[#64748B]" aria-hidden="true"></i><span>ด้านข้าง</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 2. VISUAL STYLE -->
+              <div class="border-t border-[#E2D9CC] pt-2">
+                <div class="flex items-center justify-between mb-1.5 px-0.5">
+                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">02 · สไตล์แสดงผล</span>
+                  <span class="text-[9px] font-mono font-bold text-[#64748B]">STYLE</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1 bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-xl p-1 text-[11px]">
+                  <button type="button" id="mode-sketchup" class="py-1.5 px-1.5 rounded-lg bg-[#1D2B45] text-white font-bold cursor-pointer transition-colors text-center">
+                    สี SketchUp
+                  </button>
+                  <button type="button" id="mode-status" class="py-1.5 px-1.5 rounded-lg text-[#3E4B69] hover:text-[#1D2B45] font-bold cursor-pointer transition-colors text-center">
+                    สีสถานะ
+                  </button>
+                </div>
+              </div>
+
+              <!-- 3. LAYERS (Clear Toggle Rows with Color Swatch + ON/OFF Switch) -->
+              <div class="border-t border-[#E2D9CC] pt-2">
+                <div class="flex items-center justify-between mb-1.5 px-0.5">
+                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">03 · เปิด/ปิดเลเยอร์</span>
+                  <span class="text-[9px] font-mono font-bold text-[#64748B]">LAYERS</span>
+                </div>
+                <div class="flex flex-col gap-1 text-[11px] font-bold text-[#1D2B45]">
+                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                    <span class="flex items-center gap-2 min-w-0">
+                      <span class="w-2.5 h-2.5 rounded-full bg-[#DC2626] shrink-0"></span>
+                      <span class="truncate">Grid &amp; แนวเขต</span>
+                    </span>
+                    <input id="tog-grid" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                  </label>
+                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                    <span class="flex items-center gap-2 min-w-0">
+                      <span class="w-2.5 h-2.5 rounded-full bg-[#8C7254] shrink-0"></span>
+                      <span class="truncate">ชั้นดิน &amp; ชื่อชั้นดิน</span>
+                    </span>
+                    <input id="tog-soil" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                  </label>
+                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                    <span class="flex items-center gap-2 min-w-0">
+                      <span class="w-2.5 h-2.5 rounded-full bg-[#94A3B8] shrink-0"></span>
+                      <span class="truncate">เสาเข็ม 93 ต้น</span>
+                    </span>
+                    <input id="tog-piles" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                  </label>
+                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                    <span class="flex items-center gap-2 min-w-0">
+                      <span class="w-2.5 h-2.5 rounded-full bg-[#C64828] shrink-0"></span>
+                      <span class="truncate">Waler &amp; Strut</span>
+                    </span>
+                    <input id="tog-bracing" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                  </label>
+                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                    <span class="flex items-center gap-2 min-w-0">
+                      <span class="w-2.5 h-2.5 rounded-full bg-[#9C9A94] shrink-0"></span>
+                      <span class="truncate">Packing Concrete</span>
+                    </span>
+                    <input id="tog-pc" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                  </label>
+                </div>
+              </div>
+
+              <!-- 4. INTERACTION TOOLS -->
+              <div class="border-t border-[#E2D9CC] pt-2">
+                <div class="flex items-center justify-between mb-1.5 px-0.5">
+                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">04 · เครื่องมือ</span>
+                  <span class="text-[9px] font-mono font-bold text-[#64748B]">TOOLS</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button id="btn-multi-select" type="button" aria-pressed="false" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer transition-colors" title="เปิดโหมดเลือกหลายชิ้นพร้อมกัน (หรือกด Ctrl/Shift + คลิก)">
+                    <i data-lucide="layers" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
+                    <span class="truncate">หลายชิ้น</span>
+                  </button>
+                  <button id="btn-fullscreen" type="button" aria-pressed="false" aria-label="ขยายเต็มจอ" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer transition-colors">
+                    <i data-lucide="maximize-2" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
+                    <span class="truncate">เต็มจอ</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Floating Selected Object Inspector (Positioned cleanly beside Left Tool Dock) -->
+          <div id="selection-hud" class="hidden absolute top-[64px] left-[252px] max-sm:left-3 max-sm:top-[112px] z-20 w-[min(290px,calc(100%-24px))] pynn-hud p-3">
             <div class="flex items-start justify-between gap-2">
               <div class="min-w-0">
                 <span id="sel-cat" class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">SHEET PILE</span>
@@ -453,7 +614,7 @@
           </div>
 
           <!-- FLOATING BOTTOM-LEFT LEGEND (Desktop only so mobile stays spacious) -->
-          <div class="hidden xl:flex absolute bottom-3 left-3 z-10 pynn-hud px-3 py-1.5 text-[11px] font-medium text-[#181A1F] items-center gap-2.5">
+          <div class="sp-embed-hide hidden xl:flex absolute bottom-3 left-3 z-10 pynn-hud px-3 py-1.5 text-[11px] font-medium text-[#181A1F] items-center gap-2.5">
             <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#4A4542]"></span>Sheet Pile</span>
             <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#C64828]"></span>Waler</span>
             <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#E07022]"></span>Strut</span>
@@ -462,10 +623,10 @@
           </div>
 
           <!-- FLOATING BOTTOM-CENTER 4D EXCAVATION DOCK -->
-          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 w-[min(700px,calc(100%-20px))] pynn-hud px-3.5 py-2.5" style="margin-bottom: env(safe-area-inset-bottom, 0px);">
+          <div class="sp-embed-hide absolute bottom-3 left-1/2 -translate-x-1/2 z-20 w-[min(700px,calc(100%-20px))] pynn-hud px-3.5 py-2.5" style="margin-bottom: env(safe-area-inset-bottom, 0px);">
             <div class="flex items-center justify-between flex-wrap gap-1.5 mb-1.5">
               <div class="flex items-center gap-2">
-                <span class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">4D EXCAVATION</span>
+                <span class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">EXCAVATION</span>
                 <span class="text-xs font-semibold text-[#181A1F]">
                   ระดับขุด: <span id="slider-el-label" class="pynn-mono-id font-bold text-[#AD421E]">EL. 0.00 ม. (ดินเต็ม)</span>
                 </span>
@@ -475,10 +636,16 @@
                 <button type="button" data-depth="1.0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-1.00m</button>
                 <button type="button" data-depth="1.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-1.50m</button>
                 <button type="button" data-depth="2.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-2.50m</button>
-                <button type="button" data-depth="3.8" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-3.80m</button>
+                <button type="button" data-depth="3.65" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-3.65m</button>
               </div>
             </div>
-            <input id="excavation-slider" type="range" min="0" max="3.8" step="0.05" value="0" aria-label="ปรับระดับการขุดดิน 4D" class="pynn-slider w-full" />
+            <input id="excavation-slider" type="range" min="0" max="3.65" step="0.05" value="0" aria-label="ปรับระดับงานขุดดิน" class="pynn-slider w-full mt-1" />
+            <div class="flex items-center justify-between text-[9.5px] font-mono font-bold text-[#475569] mt-1 px-0.5 select-none">
+              <span>0.00m</span>
+              <span>-1.50m (Stage 1)</span>
+              <span>-2.50m (Stage 2)</span>
+              <span class="text-[#B91C1C]">-3.65m (100%)</span>
+            </div>
           </div>
         </div>
 
@@ -517,10 +684,10 @@
               <span class="text-xs font-semibold text-[#181A1F] block mb-2">2) Bracket, Waler, Strut &amp; Jack (EL -1.00m)</span>
               <div class="grid grid-cols-2 gap-1.5 text-xs font-semibold">
                 <button type="button" data-toggle-id="BRACKETS_ALL" class="quick-toggle col-span-2 px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Bracket (20 ตัว)</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
-                <button type="button" data-toggle-id="WALER_South" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler ใต้</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
-                <button type="button" data-toggle-id="WALER_North" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler เหนือ</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
-                <button type="button" data-toggle-id="WALER_West" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler ตก</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
-                <button type="button" data-toggle-id="WALER_East" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler ออก</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_North" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler Grid A–B</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_South" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler Grid E</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_West" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler Grid 3–4</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_East" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler Grid 7</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
                 <button type="button" data-toggle-id="STRUT_01_West" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Strut 1</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
                 <button type="button" data-toggle-id="STRUT_02_East" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Strut 2</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
                 <button type="button" data-toggle-id="JACK_01_West" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Jack 1</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
@@ -612,7 +779,7 @@
 
           const depthNum = Number(parsed.excavationDepth);
           const excavationDepth = Number.isFinite(depthNum)
-            ? Math.max(0, Math.min(3.8, depthNum))
+            ? Math.max(0, Math.min(3.65, depthNum))
             : base.excavationDepth;
 
           const statuses = isPlainObject(parsed.statuses) ? { ...parsed.statuses } : {};
@@ -640,10 +807,76 @@
         return base;
       }
 
-      function saveState() {
+      const SUPABASE_URL = 'https://gyzrsrxzzturoqwhuiul.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5enJzcnh6enR1cm9xd2h1aXVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODYxNDcsImV4cCI6MjA5MTA2MjE0N30.CJAFW3acVnOwb5hvSDO6H0TGPTK__MOTBdgUxUWpM70';
+      let spCloudSaveTimer = null;
+
+      async function pushSheetPileToSupabase(payload) {
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, summaryKPI: computeKPIs(), updatedAt: new Date().toISOString() }));
+          const getRes = await fetch(SUPABASE_URL + '/rest/v1/project_data?id=eq.1&select=data', {
+            headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+          });
+          const rows = await getRes.json();
+          if (!rows || !rows[0] || !rows[0].data) return false;
+          const data = rows[0].data;
+          data.sheetpileProgress = payload;
+          data.sheetpileProgressLastUpdated = payload.updatedAt;
+          const patchRes = await fetch(SUPABASE_URL + '/rest/v1/project_data?id=eq.1', {
+            method: 'PATCH',
+            headers: {
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+              'Content-Type': 'application/json',
+              Prefer: 'return=minimal',
+            },
+            body: JSON.stringify({ data }),
+          });
+          return patchRes.ok;
+        } catch (e) {
+          console.warn('Supabase sheetpile sync error:', e);
+          return false;
+        }
+      }
+
+      async function pullSheetPileFromSupabase() {
+        try {
+          const res = await fetch(SUPABASE_URL + '/rest/v1/project_data?id=eq.1&select=data', {
+            headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+          });
+          const rows = await res.json();
+          const remote = rows?.[0]?.data?.sheetpileProgress;
+          if (!remote || typeof remote !== 'object') return;
+          const localRaw = localStorage.getItem(STORAGE_KEY);
+          const localParsed = localRaw ? JSON.parse(localRaw) : null;
+          const localTs = localParsed?.updatedAt ? Date.parse(localParsed.updatedAt) : 0;
+          const remoteTs = remote.updatedAt ? Date.parse(remote.updatedAt) : 0;
+          if (!localParsed || remoteTs > localTs) {
+            state = {
+              ...state,
+              excavationDepth: Math.max(0, Math.min(3.65, Number(remote.excavationDepth) || 0)),
+              statuses: isPlainObject(remote.statuses) ? { ...remote.statuses } : {},
+              statusDates: isPlainObject(remote.statusDates) ? { ...remote.statusDates } : {},
+              preloadTons: remote.preloadTons ?? state.preloadTons,
+              logs: Array.isArray(remote.logs) ? remote.logs : state.logs,
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, summaryKPI: computeKPIs(), updatedAt: remote.updatedAt || new Date().toISOString() }));
+            applyVisualState();
+            updateDashboardUI();
+          }
+        } catch (e) {
+          console.warn('Supabase sheetpile pull skipped:', e);
+        }
+      }
+
+      function saveState() {
+        const payload = { ...state, summaryKPI: computeKPIs(), updatedAt: new Date().toISOString() };
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
         } catch (e) {}
+        clearTimeout(spCloudSaveTimer);
+        spCloudSaveTimer = setTimeout(() => {
+          pushSheetPileToSupabase(payload);
+        }, 450);
       }
 
       function showToast(msg) {
@@ -762,7 +995,7 @@
         const strata = [
           { y: -0.75,  code: 'L1',  text: 'ดินถม Fill (0.00 ถึง -1.50 ม.)',              color: '#8C7254' },
           { y: -2.05,  code: 'L2',  text: 'ดินเหนียวปนซิลท์ (-1.50 ถึง -2.50 ม.)',       color: '#7A6855' },
-          { y: -3.80,  code: 'EL',  text: 'ก้นบ่อขุดดิน -3.80 ม. (Excavation Bot)',      color: '#AD421E', highlight: true },
+          { y: -3.65,  code: 'EL',  text: 'ก้นบ่อขุดดิน -3.65 ม. (Excavation Bot)',      color: '#AD421E', highlight: true },
           { y: -8.40,  code: 'L3',  text: 'ดินเหนียวอ่อนมาก Very Soft Clay (-2.50 ถึง -13.0 ม.)', color: '#5A666C' },
           { y: -13.75, code: 'L3c', text: 'ชั้นทรายแทรก Sand Lens (-13.0 ถึง -14.5 ม.)',  color: '#7B7E6F' },
           { y: -16.75, code: 'L3d', text: 'ดินเหนียวอ่อน Soft Clay (-14.5 ถึง -19.0 ม.)', color: '#5A666C' },
@@ -1073,7 +1306,7 @@
           if (!soilOn) { m.visible = false; return; }
           if (m.name.includes('Stage1') && d >= 1.5) m.visible = false;
           else if (m.name.includes('Stage2') && d >= 2.5) m.visible = false;
-          else if (m.name.includes('Stage3') && d >= 3.8) m.visible = false;
+          else if (m.name.includes('Stage3') && d >= 3.65) m.visible = false;
           else m.visible = true;
 
           const edgeChild = m.children.find((c) => c.isLineSegments);
@@ -1159,7 +1392,11 @@
             if (edgeChild) edgeChild.material = EDGE_MONO_PENDING;
           }
 
-          if (selectedMeshes.has(m.name) || m.name === selectedMeshName) {
+          if (todayDraftSet.has(m.name)) {
+            m.material.color.setHex(0x0284C7);
+            m.material.emissive = new THREE.Color(0x0284C7);
+            m.material.emissiveIntensity = 0.65;
+          } else if (selectedMeshes.has(m.name) || m.name === selectedMeshName) {
             m.material.emissive = new THREE.Color(0xF26B2A);
             m.material.emissiveIntensity = 0.55;
           } else if (m.name === hoveredMeshName) {
@@ -1177,6 +1414,84 @@
 
       const selectedMeshes = new Set();
       let multiSelectMode = false;
+
+      // Rapid Today-Update Mode (Tap-Tap-Tap -> Confirm Save)
+      let todayUpdateMode = false;
+      const todayDraftSet = new Set();
+      const todayBanner = document.getElementById('today-update-banner');
+      const btnTodayMode = document.getElementById('btn-today-update-mode');
+
+      function updateTodayBannerCount() {
+        const n = todayDraftSet.size;
+        const c1 = document.getElementById('today-update-count');
+        const c2 = document.getElementById('today-confirm-count');
+        if (c1) c1.textContent = String(n);
+        if (c2) c2.textContent = String(n);
+      }
+
+      function setTodayUpdateMode(active) {
+        todayUpdateMode = active;
+        todayDraftSet.clear();
+        if (active) {
+          closeSelectionHud();
+          // Sync backdate picker default to current report date (or today)
+          const mainDate = document.getElementById('inp-sp-report-date')?.value || new Date().toISOString().slice(0, 10);
+          const todayDateInp = document.getElementById('inp-today-update-date');
+          if (todayDateInp) todayDateInp.value = mainDate;
+          // Switch to crisp B&W Status Mode so tapped items glow bright Sky Blue
+          colorMode = 'status';
+          document.getElementById('mode-status')?.click();
+          todayBanner?.classList.remove('hidden');
+          btnTodayMode?.classList.add('ring-2', 'ring-[#F26B2A]');
+          showToast('เข้าสู่โหมดอัปเดตผลงาน — เลือกวันที่ (ย้อนหลังได้) แล้วคลิกชิ้นงานในโมเดลได้เลย');
+        } else {
+          todayBanner?.classList.add('hidden');
+          btnTodayMode?.classList.remove('ring-2', 'ring-[#F26B2A]');
+        }
+        updateTodayBannerCount();
+        applyVisualState();
+      }
+
+      btnTodayMode?.addEventListener('click', () => setTodayUpdateMode(!todayUpdateMode));
+      document.getElementById('btn-today-cancel')?.addEventListener('click', () => setTodayUpdateMode(false));
+
+      document.getElementById('btn-today-confirm')?.addEventListener('click', () => {
+        if (todayDraftSet.size === 0) {
+          showToast('กรุณาคลิกเลือกชิ้นงานในโมเดลก่อนกดยืนยัน');
+          return;
+        }
+        const chosenDate = document.getElementById('inp-today-update-date')?.value
+          || document.getElementById('inp-sp-report-date')?.value
+          || new Date().toISOString().slice(0, 10);
+        if (!state.statusDates) state.statusDates = {};
+        const count = todayDraftSet.size;
+        todayDraftSet.forEach((id) => {
+          state.statuses[id] = 'done';
+          state.statusDates[id] = chosenDate;
+        });
+        saveState();
+        setTodayUpdateMode(false);
+        updateDashboardUI();
+        applyVisualState();
+        showToast(`✅ บันทึกผลงานวันที่ ${chosenDate} เรียบร้อย (${count} ชิ้น · ☁️ ซิงค์ Supabase)`);
+      });
+
+      document.getElementById('btn-today-unmark')?.addEventListener('click', () => {
+        if (todayDraftSet.size === 0) {
+          showToast('กรุณาคลิกเลือกชิ้นงานที่ต้องการล้างสถานะก่อน');
+          return;
+        }
+        const count = todayDraftSet.size;
+        todayDraftSet.forEach((id) => {
+          state.statuses[id] = 'pending';
+          if (state.statusDates) delete state.statusDates[id];
+        });
+        saveState();
+        setTodayUpdateMode(false);
+        updateDashboardUI();
+        applyVisualState();
+        showToast(`↩️ ล้างสถานะเป็นยังไม่ทำแล้ว (${count} ชิ้น)`);
+      });
 
       const btnMultiSelect = document.getElementById('btn-multi-select');
       if (btnMultiSelect) {
@@ -1230,9 +1545,19 @@
           raycaster.setFromCamera(pointer, camera);
           const hits = raycaster.intersectObjects(clickableMeshes.filter((m) => m.visible), false);
           if (hits.length > 0) {
+            const hitName = hits[0].object.name;
+            if (todayUpdateMode) {
+              // Rapid Tap-Tap-Tap mode: toggle directly into Today batch without opening popup cards!
+              if (todayDraftSet.has(hitName)) todayDraftSet.delete(hitName);
+              else todayDraftSet.add(hitName);
+              updateTodayBannerCount();
+              applyVisualState();
+              return;
+            }
             const addMode = multiSelectMode || e.ctrlKey || e.metaKey || e.shiftKey;
-            selectMesh(hits[0].object.name, addMode);
+            selectMesh(hitName, addMode);
           } else {
+            if (todayUpdateMode) return; // Don't accidentally lose batch when clicking empty space
             // Click empty space -> Deselect all & clear highlight!
             closeSelectionHud();
           }
@@ -1261,10 +1586,12 @@
           const cat = meshMap.get(single)?.userData?.category || item?.category || 'element';
           document.getElementById('sel-cat').textContent = labels[cat] || cat.toUpperCase();
           document.getElementById('sel-name').textContent = single;
+          const sideGridMap = { North: 'แนว Grid A–B', South: 'แนว Grid E', West: 'แนว Grid 3–4', East: 'แนว Grid 7' };
+          const gridLabel = sideGridMap[item?.side] || item?.side || '-';
           document.getElementById('sel-detail').textContent =
-            cat === 'sheetpile' ? `ด้าน ${item?.side || '-'} · กว้าง 0.40 ม. · ลึก ${item?.depth_m || 13.5} ม. (กด Ctrl+คลิก เพื่อเลือกเพิ่ม)`
-            : cat === 'packing_concrete' ? `ด้าน ${item?.side || '-'} · ยาว ${item?.length_m || 2.0} ม. · ~${item?.vol_m3 || 0.06} ลบ.ม.`
-            : `ค้ำยันระบบ ERSS · ยาว ${item?.length_m || '-'} ม. (กด Ctrl+คลิก เพื่อเลือกเพิ่ม)`;
+            cat === 'sheetpile' ? `${gridLabel} · กว้าง 0.40 ม. · ลึก ${item?.depth_m || 13.5} ม. (Ctrl+คลิก เลือกเพิ่ม)`
+            : cat === 'packing_concrete' ? `${gridLabel} · ยาว ${item?.length_m || 2.0} ม. · ~${item?.vol_m3 || 0.06} ลบ.ม.`
+            : `ค้ำยันระบบ ERSS · ยาว ${item?.length_m || '-'} ม. (Ctrl+คลิก เลือกเพิ่ม)`;
           const cur = state.statuses[single] || 'pending';
           document.querySelectorAll('.sel-status-btn').forEach((b) => b.classList.toggle('status-pill-active', b.dataset.setStatus === cur));
         } else {
@@ -1326,7 +1653,7 @@
 
         const d = Number(state.excavationDepth) || 0;
         const exVol = +(18.8 * 8.8 * d).toFixed(1);
-        const exPct = Math.round((d / 3.8) * 100);
+        const exPct = Math.min(100, Math.round((d / 3.65) * 100));
 
         const walerLens = { WALER_South: 18.62, WALER_North: 18.62, WALER_West: 8.62, WALER_East: 8.62 };
         let walerM = 0;
@@ -1356,7 +1683,12 @@
         document.getElementById('kpi-ex-el').textContent = k.depth === 0 ? '0.00' : `-${k.depth.toFixed(2)}`;
         document.getElementById('kpi-ex-vol').textContent = k.exVol.toFixed(1);
         document.getElementById('kpi-ex-pct').textContent = `${k.exPct}%`;
-        document.getElementById('excavation-slider').value = k.depth;
+        const slider = document.getElementById('excavation-slider');
+        if (slider) {
+          slider.value = k.depth;
+          const pct = Math.min(100, Math.max(0, (k.depth / 3.65) * 100));
+          slider.style.background = `linear-gradient(to right, #F26B2A 0%, #F26B2A ${pct}%, #E2E8F0 ${pct}%, #E2E8F0 100%)`;
+        }
         document.getElementById('slider-el-label').textContent = k.depth === 0 ? 'EL. 0.00 ม. (ดินเต็ม)' : `EL. -${k.depth.toFixed(2)} ม. (${k.exVol.toFixed(1)} ลบ.ม.)`;
 
         document.getElementById('kpi-waler-m').textContent = k.walerM.toFixed(1);
@@ -1443,6 +1775,7 @@
 
       document.addEventListener('keydown', (e) => {
         if (e.key !== 'Escape') return;
+        if (todayUpdateMode) { setTodayUpdateMode(false); return; }
         const card = document.getElementById('viewer-card');
         if (card && card.classList.contains('is-fullscreen-3d')) {
           setFullscreen3D(false);
@@ -1573,6 +1906,21 @@
       if (btnToggleDrawer) btnToggleDrawer.addEventListener('click', () => setDrawerOpen(reportDrawer.classList.contains('is-collapsed')));
       if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', () => setDrawerOpen(false));
 
+      // Collapsible Left Vertical Tool Dock (auto-collapse on small mobile screens < 640px)
+      const btnLeftDock = document.getElementById('btn-toggle-left-dock');
+      const leftToolBody = document.getElementById('left-tool-body');
+      const icoLeftChev = document.getElementById('ico-left-dock-chev');
+      function setLeftDockOpen(open) {
+        if (!leftToolBody || !btnLeftDock) return;
+        leftToolBody.classList.toggle('hidden', !open);
+        btnLeftDock.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (icoLeftChev) icoLeftChev.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+      }
+      if (btnLeftDock) {
+        if (window.innerWidth < 640) setLeftDockOpen(false);
+        btnLeftDock.addEventListener('click', () => setLeftDockOpen(leftToolBody.classList.contains('hidden')));
+      }
+
       // ResizeObserver: Auto-fit Three.js canvas to EVERY resolution (390px -> 4K) smoothly!
       function resizeViewport() {
         if (!renderer || !container) return;
@@ -1616,6 +1964,10 @@
           const savedSize = new THREE.Vector2();
           renderer.getSize(savedSize);
 
+          // Hide ONLY L1-L7 soil text labels during report plate capture (keep translucent soil strata visible!)
+          const prevSoilLabels = soilLabelsGroup.visible;
+          soilLabelsGroup.visible = false;
+
           // Apply exact B&W Status Mode (Today = Blue, Previous Done = Green, Pending & Soil = Crisp B&W Gray) or SketchUp Mode
           applyVisualState(captureMode);
 
@@ -1632,8 +1984,8 @@
 
           const views = [
             { id: 'top',  label: '1. แปลน TOP VIEW โซนชีตไพล์ (ZOOMED PIT PLAN)', pos: [0.0, 23.0, 0.05],   target: [0.0, -1.0, 0.0] },
-            { id: 'iso',  label: '2. มุมมอง 3 มิติภาพรวม (ISOMETRIC 3D)',          pos: [-2.9, 42.0, 31.0],  target: [-2.0, -4.5, -5.0] },
-            { id: 'pit',  label: '3. ระบบค้ำยัน Waler / Strut (INSIDE PIT)',      pos: [-11.5, 11.5, 11.5], target: [-1.5, -1.8, -3.5] },
+            { id: 'iso',  label: '2. มุมมอง 3 มิติภาพรวม (ISOMETRIC 3D)',          pos: [0.0, 36.0, 34.0],   target: [0.0, -5.5, -2.5] },
+            { id: 'pit',  label: '3. ระบบค้ำยัน Waler / Strut (INSIDE PIT)',      pos: [-14.0, 17.5, 14.5], target: [0.0, -1.8, 0.0] },
             { id: 'side', label: '4. รูปตัดระดับขุดดิน 4D & ชั้นดิน (SECTION CUT)', pos: [4.5, -5.5, 42.0],   target: [4.5, -7.5, 0.0], sectionCut: true },
           ];
 
@@ -1681,7 +2033,8 @@
             }
           }
 
-          // Restore live visual mode, background, and camera seamlessly
+          // Restore live visual mode, soil labels, background, and camera seamlessly
+          soilLabelsGroup.visible = prevSoilLabels;
           scene.background = prevBg;
           applyVisualState();
 
@@ -1717,6 +2070,86 @@
         reportDropdown?.classList.add('hidden');
         window.openSheetPileReportStudio?.('overview');
       });
+
+      // Pull latest cloud Sheet Pile progress from Supabase on startup
+      setTimeout(() => { pullSheetPileFromSupabase(); }, 600);
+
+      // ==========================================
+      // 9. EMBED MODE FOR HOME DASHBOARD (?embed=top)
+      // ==========================================
+      (function initEmbedMode() {
+        const embedType = new URLSearchParams(window.location.search).get('embed');
+        if (!embedType) return;
+        document.body.classList.add('is-embed-mode');
+        colorMode = 'status';
+
+        const hideSoilLabelsOnly = () => {
+          soilLabelsGroup.visible = false;
+        };
+
+        const setEmbedCam = (mode) => {
+          if (mode === 'iso') {
+            camera.position.set(0.0, 36.0, 34.0);
+            controls.target.set(0.0, -5.5, -2.5);
+          } else if (mode === 'pit') {
+            camera.position.set(-14.0, 17.5, 14.5);
+            controls.target.set(0.0, -1.8, 0.0);
+          } else {
+            // Exact Zoomed Pit Top Plan (identical to Report Plate 1)
+            camera.position.set(0.0, 20.5, 0.2);
+            controls.target.set(0.0, -1.0, 0.0);
+          }
+          camera.updateProjectionMatrix();
+          controls.update();
+          renderer.render(scene, camera);
+        };
+
+        // Add sleek mini view-switcher pill in bottom-right corner of embed
+        const pill = document.createElement('div');
+        pill.className = 'absolute bottom-2 right-2 z-30 inline-flex items-center gap-1 bg-white/95 border border-[#1D2B45] rounded-full px-1.5 py-1 shadow-[2px_2px_0px_#1D2B45] text-[10px] font-bold font-display';
+        pill.innerHTML = [
+          { id: 'top', label: 'Top' },
+          { id: 'iso', label: 'Iso 3D' },
+          { id: 'pit', label: 'ในบ่อ' },
+        ].map((v, i) => `<button type="button" data-embed-cam="${v.id}" class="px-2 py-0.5 rounded-full cursor-pointer transition-colors ${i === 0 ? 'bg-[#1D2B45] text-white' : 'text-[#1D2B45] hover:bg-[#FAF5EE]'}">${v.label}</button>`).join('');
+        document.getElementById('viewport-container')?.appendChild(pill);
+
+        pill.querySelectorAll('[data-embed-cam]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            setEmbedCam(btn.dataset.embedCam);
+            pill.querySelectorAll('[data-embed-cam]').forEach((b) => {
+              const active = b === btn;
+              b.classList.toggle('bg-[#1D2B45]', active);
+              b.classList.toggle('text-white', active);
+              b.classList.toggle('text-[#1D2B45]', !active);
+            });
+          });
+        });
+
+        // Apply zoomed top-plan camera + locked B&W status mode + keep translucent soil (hide L1-L7 text labels only)
+        const waitAndApply = () => {
+          const overlay = document.getElementById('loading-overlay');
+          if (overlay && !overlay.classList.contains('hidden')) {
+            setTimeout(waitAndApply, 120);
+            return;
+          }
+          colorMode = 'status';
+          applyVisualState('status');
+          hideSoilLabelsOnly();
+          setEmbedCam(embedType);
+        };
+        setTimeout(waitAndApply, 150);
+
+        // Live sync if user updates progress in another tab
+        window.addEventListener('storage', (e) => {
+          if (e.key === STORAGE_KEY) {
+            state = loadState();
+            colorMode = 'status';
+            applyVisualState('status');
+            hideSoilLabelsOnly();
+          }
+        });
+      })();
     </script>
   </body>
 </html>
