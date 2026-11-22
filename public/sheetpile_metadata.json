@@ -1,0 +1,1722 @@
+{
+  "center_m": [
+    17.9601,
+    3.1,
+    0.0
+  ],
+  "summary": {
+    "sheet_piles_count": 142,
+    "sheet_piles_perimeter_m": 56.8,
+    "waler_perimeter_m": 54.48,
+    "brackets_count": 20,
+    "packing_concrete_perimeter_m": 54.82,
+    "packing_concrete_segments": 28,
+    "excavation_total_m3": 628.67,
+    "excavation_stages": [
+      {
+        "id": "Excavation_Stage1_L1_0_to_-1.5m",
+        "label": "Stage 1: L1 ดินถม + คอนกรีตเดิม (0.00 ถึง -1.50m)",
+        "z_top": 0.0,
+        "z_bot": -1.5,
+        "vol_m3": 248.16
+      },
+      {
+        "id": "Excavation_Stage2_L2_-1.5_to_-2.5m",
+        "label": "Stage 2: L2 ดินเหนียวปนซิลท์ (-1.50 ถึง -2.50m)",
+        "z_top": -1.5,
+        "z_bot": -2.5,
+        "vol_m3": 165.44
+      },
+      {
+        "id": "Excavation_Stage3_L3a_-2.5_to_-3.8m",
+        "label": "Stage 3: L3a ดินเหนียวอ่อนถึงก้นบ่อ (-2.50 ถึง -3.80m)",
+        "z_top": -2.5,
+        "z_bot": -3.8,
+        "vol_m3": 215.07
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "SP_S_001",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 1,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": -0.3
+    },
+    {
+      "id": "SP_S_002",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 2,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": -1.1
+    },
+    {
+      "id": "SP_S_003",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 3,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.46,
+      "y": -1.41
+    },
+    {
+      "id": "SP_S_004",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 4,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": -0.7
+    },
+    {
+      "id": "SP_S_005",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 5,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.76,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_006",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 6,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 9.16,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_007",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 7,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 9.56,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_008",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 8,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 9.96,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_009",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 9,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 10.36,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_010",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 10,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 10.76,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_011",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 11,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 11.16,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_012",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 12,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 11.56,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_013",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 13,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 11.96,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_014",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 14,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 12.36,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_015",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 15,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 12.76,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_016",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 16,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 13.16,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_017",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 17,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 13.56,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_018",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 18,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 13.96,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_019",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 19,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 14.36,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_020",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 20,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 14.76,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_021",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 21,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 15.16,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_022",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 22,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 15.56,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_023",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 23,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 15.96,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_024",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 24,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 16.36,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_025",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 25,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 16.76,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_026",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 26,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 17.16,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_027",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 27,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 17.56,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_028",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 28,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 17.96,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_029",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 29,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 18.36,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_030",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 30,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 18.76,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_031",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 31,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 19.16,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_032",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 32,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 19.56,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_033",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 33,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 19.96,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_034",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 34,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 20.36,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_035",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 35,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 20.76,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_036",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 36,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 21.16,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_037",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 37,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 21.56,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_038",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 38,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 21.96,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_039",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 39,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 22.36,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_040",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 40,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 22.76,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_041",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 41,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 23.16,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_042",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 42,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 23.56,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_043",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 43,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 23.96,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_044",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 44,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 24.36,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_045",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 45,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 24.76,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_046",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 46,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 25.16,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_047",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 47,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 25.56,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_048",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 48,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 25.96,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_049",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 49,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 26.36,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_050",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 50,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 26.76,
+      "y": -1.48
+    },
+    {
+      "id": "SP_S_051",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 51,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.16,
+      "y": -1.36
+    },
+    {
+      "id": "SP_S_052",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 52,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": -0.7
+    },
+    {
+      "id": "SP_S_053",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 53,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.47,
+      "y": -1.41
+    },
+    {
+      "id": "SP_S_054",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 54,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": -0.3
+    },
+    {
+      "id": "SP_S_055",
+      "category": "sheetpile",
+      "side": "South",
+      "index": 55,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": -1.1
+    },
+    {
+      "id": "SP_E_056",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 56,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 0.1
+    },
+    {
+      "id": "SP_E_057",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 57,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 0.5
+    },
+    {
+      "id": "SP_E_058",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 58,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 0.9
+    },
+    {
+      "id": "SP_E_059",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 59,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 1.3
+    },
+    {
+      "id": "SP_E_060",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 60,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 1.7
+    },
+    {
+      "id": "SP_E_061",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 61,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 2.1
+    },
+    {
+      "id": "SP_E_062",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 62,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 2.5
+    },
+    {
+      "id": "SP_E_063",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 63,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 2.9
+    },
+    {
+      "id": "SP_E_064",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 64,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 3.3
+    },
+    {
+      "id": "SP_E_065",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 65,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 3.7
+    },
+    {
+      "id": "SP_E_066",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 66,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 4.1
+    },
+    {
+      "id": "SP_E_067",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 67,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 4.5
+    },
+    {
+      "id": "SP_E_068",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 68,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 4.9
+    },
+    {
+      "id": "SP_E_069",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 69,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 5.3
+    },
+    {
+      "id": "SP_E_070",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 70,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 5.7
+    },
+    {
+      "id": "SP_E_071",
+      "category": "sheetpile",
+      "side": "East",
+      "index": 71,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 6.1
+    },
+    {
+      "id": "SP_N_072",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 72,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.54,
+      "y": 6.9
+    },
+    {
+      "id": "SP_N_073",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 73,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.47,
+      "y": 7.61
+    },
+    {
+      "id": "SP_N_074",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 74,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 7.3
+    },
+    {
+      "id": "SP_N_075",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 75,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.42,
+      "y": 6.5
+    },
+    {
+      "id": "SP_N_076",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 76,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 27.16,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_077",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 77,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 26.76,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_078",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 78,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 26.36,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_079",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 79,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 25.96,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_080",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 80,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 25.56,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_081",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 81,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 25.16,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_082",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 82,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 24.76,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_083",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 83,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 24.36,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_084",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 84,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 23.96,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_085",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 85,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 23.56,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_086",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 86,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 23.16,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_087",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 87,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 22.76,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_088",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 88,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 22.36,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_089",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 89,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 21.96,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_090",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 90,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 21.56,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_091",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 91,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 21.16,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_092",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 92,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 20.76,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_093",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 93,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 20.36,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_094",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 94,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 19.96,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_095",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 95,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 19.56,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_096",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 96,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 19.16,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_097",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 97,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 18.76,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_098",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 98,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 18.36,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_099",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 99,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 17.96,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_100",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 100,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 17.56,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_101",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 101,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 17.16,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_102",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 102,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 16.76,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_103",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 103,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 16.36,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_104",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 104,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 15.96,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_105",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 105,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 15.56,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_106",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 106,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 15.16,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_107",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 107,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 14.76,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_108",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 108,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 14.36,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_109",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 109,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 13.96,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_110",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 110,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 13.56,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_111",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 111,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 13.16,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_112",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 112,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 12.76,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_113",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 113,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 12.36,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_114",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 114,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 11.96,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_115",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 115,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 11.56,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_116",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 116,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 11.16,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_117",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 117,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 10.76,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_118",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 118,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 10.36,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_119",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 119,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 9.96,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_120",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 120,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 9.56,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_121",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 121,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 9.16,
+      "y": 7.68
+    },
+    {
+      "id": "SP_N_122",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 122,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.76,
+      "y": 7.56
+    },
+    {
+      "id": "SP_N_123",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 123,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 7.3
+    },
+    {
+      "id": "SP_N_124",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 124,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 6.5
+    },
+    {
+      "id": "SP_N_125",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 125,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.46,
+      "y": 7.61
+    },
+    {
+      "id": "SP_N_126",
+      "category": "sheetpile",
+      "side": "North",
+      "index": 126,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 6.9
+    },
+    {
+      "id": "SP_W_127",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 127,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 6.1
+    },
+    {
+      "id": "SP_W_128",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 128,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 5.7
+    },
+    {
+      "id": "SP_W_129",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 129,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 5.3
+    },
+    {
+      "id": "SP_W_130",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 130,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 4.9
+    },
+    {
+      "id": "SP_W_131",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 131,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 4.5
+    },
+    {
+      "id": "SP_W_132",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 132,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 4.1
+    },
+    {
+      "id": "SP_W_133",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 133,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 3.7
+    },
+    {
+      "id": "SP_W_134",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 134,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 3.3
+    },
+    {
+      "id": "SP_W_135",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 135,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 2.9
+    },
+    {
+      "id": "SP_W_136",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 136,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 2.5
+    },
+    {
+      "id": "SP_W_137",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 137,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 2.1
+    },
+    {
+      "id": "SP_W_138",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 138,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 1.7
+    },
+    {
+      "id": "SP_W_139",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 139,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 1.3
+    },
+    {
+      "id": "SP_W_140",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 140,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 0.9
+    },
+    {
+      "id": "SP_W_141",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 141,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.38,
+      "y": 0.5
+    },
+    {
+      "id": "SP_W_142",
+      "category": "sheetpile",
+      "side": "West",
+      "index": 142,
+      "width_m": 0.4,
+      "depth_m": 13.5,
+      "x": 8.5,
+      "y": 0.1
+    },
+    {
+      "id": "WALER_South",
+      "category": "waler",
+      "length_m": 18.62
+    },
+    {
+      "id": "WALER_West",
+      "category": "waler",
+      "length_m": 8.62
+    },
+    {
+      "id": "WALER_North",
+      "category": "waler",
+      "length_m": 18.62
+    },
+    {
+      "id": "WALER_East",
+      "category": "waler",
+      "length_m": 8.62
+    },
+    {
+      "id": "JACK_01_West",
+      "category": "jack",
+      "length_m": 1.0
+    },
+    {
+      "id": "JACK_02_East",
+      "category": "jack",
+      "length_m": 1.0
+    },
+    {
+      "id": "STRUT_01_West",
+      "category": "strut",
+      "length_m": 8.4
+    },
+    {
+      "id": "STRUT_02_East",
+      "category": "strut",
+      "length_m": 8.4
+    },
+    {
+      "id": "CORNER_NW",
+      "category": "strut",
+      "length_m": 5.0
+    },
+    {
+      "id": "CORNER_SW",
+      "category": "strut",
+      "length_m": 5.0
+    },
+    {
+      "id": "CORNER_NE",
+      "category": "strut",
+      "length_m": 5.0
+    },
+    {
+      "id": "CORNER_SE",
+      "category": "strut",
+      "length_m": 5.0
+    },
+    {
+      "id": "BRACKETS_ALL",
+      "category": "bracket",
+      "count": 20
+    },
+    {
+      "id": "PC_S_01",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_02",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_03",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_04",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_05",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_06",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_07",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_08",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_S_09",
+      "category": "packing_concrete",
+      "side": "South",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_01",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_02",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_03",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_04",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_05",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_06",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_07",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_08",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_N_09",
+      "category": "packing_concrete",
+      "side": "North",
+      "length_m": 2.09,
+      "vol_m3": 0.062
+    },
+    {
+      "id": "PC_W_01",
+      "category": "packing_concrete",
+      "side": "West",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_W_02",
+      "category": "packing_concrete",
+      "side": "West",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_W_03",
+      "category": "packing_concrete",
+      "side": "West",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_W_04",
+      "category": "packing_concrete",
+      "side": "West",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_W_05",
+      "category": "packing_concrete",
+      "side": "West",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_E_01",
+      "category": "packing_concrete",
+      "side": "East",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_E_02",
+      "category": "packing_concrete",
+      "side": "East",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_E_03",
+      "category": "packing_concrete",
+      "side": "East",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_E_04",
+      "category": "packing_concrete",
+      "side": "East",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    },
+    {
+      "id": "PC_E_05",
+      "category": "packing_concrete",
+      "side": "East",
+      "length_m": 1.72,
+      "vol_m3": 0.051
+    }
+  ]
+}

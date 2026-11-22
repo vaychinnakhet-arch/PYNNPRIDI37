@@ -1,0 +1,1722 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>PYNN EKKAMAI 12 · 3D Sheet Pile & Excavation Progress</title>
+    <link rel="icon" href="data:," />
+    <meta name="description" content="ระบบรายงาน 3D/4D งาน Sheet Pile, ขุดดิน, ค้ำยัน Waler/Strut และคอนกรีตอุดช่องว่าง (Packing Concrete) โครงการ PYNN EKKAMAI 12" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"IBM Plex Sans Thai"', '"Inter"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800&family=Sarabun:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="manga_theme.css" />
+    <link rel="stylesheet" href="doodle_theme.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="sheetpile_report_studio.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --pynn-canvas: #FFFFFF;
+        --pynn-surface: #FFFFFF;
+        --pynn-viewport-bg: #FFFFFF;
+        --pynn-border: #1D2B45;
+        --pynn-ink: #1D2B45;
+        --pynn-forest: #10B981;
+        --pynn-sienna: #F26B2A;
+        --pynn-shadow-float: 3px 3px 0px #1D2B45;
+      }
+      body {
+        font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #1D2B45;
+      }
+      .font-display { font-family: 'Prompt', sans-serif; }
+      .pynn-tabular { font-variant-numeric: tabular-nums lining-nums; }
+      .pynn-mono-id { font-family: 'Space Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+      .pynn-hud {
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 2px solid #1D2B45;
+        border-radius: 14px;
+        box-shadow: 3px 3px 0px #1D2B45;
+      }
+      .pynn-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        padding: 6px 12px; border-radius: 9999px; font-weight: 800; font-family: 'Prompt', sans-serif;
+        border: 2px solid #1D2B45; background: #FFFFFF; color: #1D2B45;
+        box-shadow: 2px 2px 0px #1D2B45; cursor: pointer; transition: all 140ms ease;
+      }
+      .pynn-btn:hover { background: #FAF5EE; box-shadow: 3px 3px 0px #F26B2A; }
+      .pynn-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+      .pynn-btn-forest { background: #F26B2A; border-color: #1D2B45; color: #FFFFFF; }
+      .pynn-btn-forest:hover { background: #E05615; color: #FFFFFF; box-shadow: 3px 3px 0px #1D2B45; }
+      .pynn-btn-primary { background: #E8F8F5; border-color: #1D2B45; color: #0E5E57; }
+      .pynn-btn-primary:hover { background: #D1FAE5; color: #065F46; box-shadow: 3px 3px 0px #1D2B45; }
+      .pynn-badge {
+        display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px;
+        font-weight: 800; border: 1.5px solid #1D2B45;
+      }
+      .pynn-badge-info { background: #E0F2FE; color: #0369A1; }
+      .pynn-badge-sienna { background: #FFF7ED; color: #C2410C; border-color: #EA580C; }
+      .pynn-badge-warn { background: #FEF3C7; color: #92400E; }
+      .pynn-badge-forest { background: #ECFDF5; color: #065F46; }
+      .pynn-badge-done { background: #D1FAE5; color: #065F46; }
+      .sp-drawer {
+        border: 2px solid #1D2B45 !important;
+        border-radius: 16px !important;
+        box-shadow: 4px 4px 0px #1D2B45 !important;
+        top: 68px !important;
+      }
+      html, body {
+        height: 100dvh;
+        width: 100vw;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+      }
+      #viewport-container {
+        background: #FFFFFF;
+      }
+      @media print {
+        @page { size: A4 portrait; margin: 10mm; }
+        html, body { height: auto !important; width: auto !important; overflow: visible !important; background: #FFFFFF !important; }
+        .sp-app-shell, .no-print { display: none !important; }
+        .sp-print-root { position: static !important; display: block !important; height: auto !important; overflow: visible !important; background: #FFFFFF !important; }
+        .sp-a4-page { max-width: none !important; margin: 0 0 8mm 0 !important; border: none !important; box-shadow: none !important; page-break-after: always; break-after: page; }
+        .sp-a4-page:last-child { page-break-after: auto; break-after: auto; }
+      }
+      /* Full-Viewport App Shell */
+      .sp-app-shell {
+        display: flex;
+        flex-direction: column;
+        height: 100dvh;
+        width: 100vw;
+        overflow: hidden;
+      }
+      .sp-workspace {
+        position: relative;
+        flex: 1 1 0%;
+        min-height: 0;
+        width: 100%;
+        overflow: hidden;
+      }
+      /* Collapsible Right Drawer (Desktop) / Bottom Sheet (Mobile) */
+      .sp-drawer {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: clamp(320px, 26vw, 400px);
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--pynn-border);
+        border-radius: 14px;
+        box-shadow: var(--pynn-shadow-float);
+        transform: translateX(0);
+        transition: transform 180ms ease-out, opacity 180ms ease-out;
+      }
+      .sp-drawer.is-collapsed {
+        transform: translateX(calc(100% + 24px));
+        opacity: 0;
+        pointer-events: none;
+      }
+      @media (max-width: 767px) {
+        .sp-drawer {
+          top: auto;
+          left: 8px;
+          right: 8px;
+          bottom: max(8px, env(safe-area-inset-bottom));
+          width: auto;
+          max-height: 72dvh;
+          transform: translateY(0);
+        }
+        .sp-drawer.is-collapsed {
+          transform: translateY(calc(100% + 24px));
+        }
+      }
+      .sp-kpi-strip {
+        scrollbar-width: none;
+      }
+      .sp-kpi-strip::-webkit-scrollbar {
+        display: none;
+      }
+      .is-fullscreen-3d {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 60 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+      }
+      input[type="range"].pynn-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 6px;
+        border-radius: 9999px;
+        background: var(--pynn-surface-subtle);
+        border: 1px solid var(--pynn-border-ui);
+        outline: none;
+      }
+      input[type="range"].pynn-slider:focus-visible {
+        outline: 2px solid var(--pynn-forest);
+        outline-offset: 4px;
+      }
+      input[type="range"].pynn-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 9999px;
+        background: var(--pynn-sienna);
+        border: 2px solid #FFFFFF;
+        cursor: pointer;
+        box-shadow: 0 1px 4px rgba(24, 26, 31, 0.28);
+      }
+      input[type="range"].pynn-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 9999px;
+        background: var(--pynn-sienna);
+        border: 2px solid #FFFFFF;
+        cursor: pointer;
+        box-shadow: 0 1px 4px rgba(24, 26, 31, 0.28);
+      }
+      .status-pill-active {
+        background-color: var(--pynn-forest) !important;
+        border-color: var(--pynn-forest) !important;
+        color: #FFFFFF !important;
+        box-shadow: var(--pynn-shadow-sm) !important;
+      }
+      .cam-btn:focus-visible,
+      .depth-preset:focus-visible,
+      .quick-toggle:focus-visible,
+      .sel-status-btn:focus-visible,
+      #mode-sketchup:focus-visible,
+      #mode-status:focus-visible,
+      #sel-close:focus-visible,
+      #btn-reset-all:focus-visible,
+      #btn-toggle-drawer:focus-visible {
+        outline: 2px solid var(--pynn-forest);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-[#1D2B45] leading-[1.6]">
+    <div class="sp-app-shell relative">
+      <!-- FLOATING TOP BAR: EXACT PILING.HTML DOODLEWEB EXECUTIVE NAVBAR -->
+      <header class="absolute top-2 left-2 right-2 z-30 pointer-events-none">
+        <div class="px-2 sm:px-3 py-1.5 pointer-events-auto flex items-center justify-between gap-1.5 sm:gap-2 flex-nowrap shadow-[3px_3px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl bg-white/95 backdrop-blur-md max-w-full">
+          <!-- 1. Left: Back to Home + Brand & Badge (Identical to piling.html) -->
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 min-w-0">
+            <a href="index.html" class="px-2.5 py-1 rounded-full bg-white hover:bg-[#FAF5EE] border-2 border-[#1D2B45] text-[#1D2B45] font-bold text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0 font-display" title="กลับหน้าแรกโครงการ">
+              <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+              <span class="hidden lg:inline font-bold">หน้าแรก</span>
+            </a>
+
+            <div class="min-w-0">
+              <h1 class="text-xs font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display truncate">
+                PYNN <span class="text-[#F26B2A] italic">EKKAMAI</span> 12
+              </h1>
+              <p class="text-[9.5px] text-[#3E4B69] font-semibold leading-none mt-0.5 hidden md:block">งานป้องกันดิน Sheet Pile &amp; ขุดดิน 4D</p>
+            </div>
+
+            <span class="hidden 2xl:inline-flex bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#FDE68A] shrink-0">
+              🛡️ 142 แผ่น · EL -3.80m
+            </span>
+          </div>
+
+          <!-- 2. Center: Piling-Style Metric Capsule (Compact & Crisp) -->
+          <div class="hidden xl:flex items-center gap-2 text-xs bg-white px-3 py-1 rounded-full border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] shrink-0 flex-nowrap">
+            <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>
+              <span class="text-[11px] text-[#3E4B69] font-bold">Sheet Pile:</span>
+              <span class="text-xs font-black text-[#1D2B45]">
+                <span id="kpi-sp-pcs" class="text-[#10B981] font-mono font-black text-sm">0</span>/142
+                <span id="kpi-sp-pct" class="text-[10px] text-[#3E4B69] font-mono font-bold">(0%)</span>
+              </span>
+              <span class="hidden" id="kpi-sp-m">0.0</span>
+            </div>
+
+            <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#F26B2A]"></span>
+              <span class="text-[11px] text-[#3E4B69] font-bold">ขุดดิน 4D:</span>
+              <span class="text-xs font-black text-[#1D2B45] font-mono">
+                EL.<span id="kpi-ex-el" class="text-[#F26B2A] font-black">0.00</span>ม.
+                <span class="text-[10px] text-[#3E4B69]">(<span id="kpi-ex-vol">0.0</span>ม³)</span>
+              </span>
+              <span class="hidden" id="kpi-ex-pct">0%</span>
+            </div>
+
+            <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC] text-[11px] font-bold text-[#3E4B69]">
+              <span>Waler:</span>
+              <span class="font-mono font-black text-[#1D2B45]"><span id="kpi-waler-m">0.0</span>/54.5ม.</span>
+              <span class="hidden" id="kpi-strut-cnt">0</span>
+              <span class="hidden" id="kpi-bk-status">รอ</span>
+              <span class="hidden" id="kpi-br-pct">0%</span>
+            </div>
+
+            <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
+              <input id="inp-sp-report-date" type="date" class="text-[11px] bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-full px-2 py-0.5 font-bold text-[#1D2B45] font-mono focus:outline-none focus:ring-1 focus:ring-[#0284C7] cursor-pointer" title="วันที่รายงาน (งานที่เสร็จในวันที่เลือก = สีฟ้า, วันก่อนหน้า = สีเขียว)">
+            </div>
+
+            <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#3E4B69]">
+              <span>Packing:</span>
+              <span class="font-mono font-black text-[#1D2B45]"><span id="kpi-pc-m">0.0</span>/54.8ม.</span>
+              <span class="hidden" id="kpi-pc-vol">0.00</span>
+              <span class="hidden" id="kpi-pc-pct">0%</span>
+              <span class="hidden" id="kpi-jk-cnt">0</span>
+              <span class="hidden" id="kpi-jk-ton">0</span>
+              <span class="hidden" id="kpi-jk-pct">0%</span>
+            </div>
+          </div>
+
+          <!-- 3. Right: DoodleWeb Action Pills (Matching piling.html + Report Dropdown) -->
+          <div id="pynn-nav-actions" class="flex items-center gap-1.5 shrink-0 relative">
+            <a href="piling.html" class="hidden lg:inline-flex px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display">
+              เสาเข็ม 93
+            </a>
+            <a href="footing.html" class="hidden lg:inline-flex px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display">
+              ฐานราก 3D
+            </a>
+            <button
+              id="btn-toggle-drawer"
+              type="button"
+              aria-expanded="false"
+              aria-controls="report-drawer"
+              class="pynn-btn pynn-btn-forest text-xs py-1 sm:py-1.5 px-2.5 sm:px-3"
+            >
+              <i data-lucide="check-square" class="w-3.5 h-3.5 text-white" aria-hidden="true"></i>
+              <span>บันทึกผลงาน</span>
+            </button>
+
+            <!-- Report Center Dropdown (Exact piling.html Style!) -->
+            <div class="relative">
+              <button
+                id="btn-sp-report-menu"
+                type="button"
+                class="pynn-btn text-xs py-1 sm:py-1.5 px-2.5 sm:px-3 bg-[#FEF3C7] text-[#92400E] hover:bg-[#FDE68A]"
+                title="เปิดหน้ารายงาน 3 หมวดงาน & Daily Report PDF"
+              >
+                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#92400E]" aria-hidden="true"></i>
+                <span>รายงาน</span>
+                <i data-lucide="chevron-down" class="w-3 h-3" aria-hidden="true"></i>
+              </button>
+
+              <div id="sp-report-dropdown" class="hidden absolute right-0 top-full mt-2 w-72 bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-2.5 z-50 space-y-1.5">
+                <div class="text-[10px] font-mono font-black text-[#92400E] uppercase tracking-wider px-1 pb-1 border-b border-[#E2D9CC]">
+                  รายงานงานป้องกันดิน &amp; ส่งมอบ (3 หมวดงาน)
+                </div>
+                <button id="btn-open-sp-daily" type="button" class="w-full text-left p-2 rounded-xl bg-white hover:bg-[#FFF7ED] border border-[#1D2B45]/20 hover:border-[#F26B2A] flex items-center justify-between gap-2 cursor-pointer transition-all">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="w-8 h-8 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📄</span>
+                    <div class="min-w-0">
+                      <div class="text-xs font-black text-[#1D2B45] truncate">Daily Report (PDF แสนสิริ)</div>
+                      <div class="text-[10px] text-[#4F5D75] truncate">3 หน้า: ชีตไพล์ · Waler/Packing · ขุดดิน + ภาพถ่าย</div>
+                    </div>
+                  </div>
+                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] shrink-0">PDF 3 หน้า</span>
+                </button>
+                <button id="btn-open-sp-overview" type="button" class="w-full text-left p-2 rounded-xl bg-white hover:bg-[#ECFDF5] border border-[#1D2B45]/20 hover:border-[#10B981] flex items-center justify-between gap-2 cursor-pointer transition-all">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span class="w-8 h-8 rounded-lg bg-[#ECFDF5] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📊</span>
+                    <div class="min-w-0">
+                      <div class="text-xs font-black text-[#1D2B45] truncate">หน้ารายงานสรุป 3 หมวดงาน</div>
+                      <div class="text-[10px] text-[#4F5D75] truncate">ตารางกดชีตไพล์ · Waler/Strut · ปริมาตรขุดดิน</div>
+                    </div>
+                  </div>
+                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#ECFDF5] text-[#065F46] shrink-0">3 หมวด</span>
+                </button>
+              </div>
+            </div>
+
+            <button
+              id="btn-copy-line"
+              type="button"
+              aria-label="คัดลอกสรุปส่ง LINE"
+              class="pynn-btn pynn-btn-primary text-xs py-1 sm:py-1.5 px-2.5 sm:px-3"
+            >
+              <i data-lucide="clipboard-copy" class="w-3.5 h-3.5" aria-hidden="true"></i>
+              <span class="hidden sm:inline">ส่ง LINE</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- 100% EDGE-TO-EDGE FULL-VIEWPORT 3D WORKSPACE (Like piling.html) -->
+      <main id="viewer-card" class="sp-workspace">
+        <!-- 3D Canvas fills 100% width x 100% height -->
+        <div id="viewport-container" class="relative w-full h-full select-none overflow-hidden">
+          <!-- Loading / Error Overlay -->
+          <div id="loading-overlay" class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#F7F6F2]/95 backdrop-blur-sm p-4">
+            <div id="loading-state" class="flex flex-col items-center text-center">
+              <div class="size-9 border-2 border-[#DFDDD6] border-t-[#1F513F] rounded-full animate-spin mb-3"></div>
+              <p class="text-sm font-semibold text-[#181A1F] leading-relaxed">กำลังโหลดโมเดล 3D + Gridline จาก SketchUp...</p>
+              <p id="loading-progress" class="pynn-mono-id text-xs text-[#5F6672] mt-1 leading-relaxed">เตรียมข้อมูลโมเดล...</p>
+            </div>
+            <div id="loading-error" class="hidden max-w-md w-full pynn-card p-5 text-center space-y-2.5">
+              <span class="pynn-badge pynn-badge-alert mx-auto">LOAD ERROR</span>
+              <h2 class="text-sm font-bold text-[#181A1F]">ไม่สามารถโหลดโมเดล 3D ได้</h2>
+              <p id="loading-error-detail" class="text-xs text-[#4B525E] break-words leading-relaxed">กรุณาตรวจสอบการเชื่อมต่อหรือไฟล์ sheetpile.glb แล้วลองใหม่อีกครั้ง</p>
+              <div class="pt-1">
+                <button id="btn-retry-load" type="button" class="pynn-btn pynn-btn-primary text-xs min-h-[40px]">ลองโหลดใหม่อีกครั้ง</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLOATING TOP-LEFT HUD (Below Piling-Style Navbar): Camera + Color Mode + Layers -->
+          <div class="absolute top-[64px] left-3 z-20 flex items-center gap-2 flex-wrap max-w-[calc(100%-24px)]">
+            <div class="pynn-hud px-2 py-1 flex items-center gap-1 flex-wrap">
+              <span class="pynn-badge pynn-badge-forest pynn-mono-id text-[10px]">3D BIM</span>
+              <button type="button" data-cam="iso" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">Iso</button>
+              <button type="button" data-cam="top" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">Top</button>
+              <button type="button" data-cam="pit" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">ในบ่อ</button>
+              <button type="button" data-cam="side" class="cam-btn rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold">ด้านข้าง</button>
+              <div class="inline-flex bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-lg p-0.5 text-[11px] ml-0.5">
+                <button type="button" id="mode-sketchup" class="px-2 py-0.5 rounded-md bg-[#1D2B45] text-white font-bold">สี SketchUp</button>
+                <button type="button" id="mode-status" class="px-2 py-0.5 rounded-md text-[#3E4B69] hover:text-[#1D2B45] font-semibold">สีสถานะ</button>
+              </div>
+              <button id="btn-multi-select" type="button" aria-pressed="false" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold inline-flex items-center gap-1" title="เปิดโหมดเลือกหลายชิ้นพร้อมกัน (หรือกด Ctrl/Shift + คลิก)">
+                <i data-lucide="layers" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                <span>เลือกหลายชิ้น</span>
+              </button>
+              <button id="btn-fullscreen" type="button" aria-pressed="false" aria-label="ขยายเต็มจอ" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] px-2 py-1 min-h-[28px] text-[11px] font-bold inline-flex items-center gap-1">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                <span class="hidden md:inline">เต็มจอ</span>
+              </button>
+            </div>
+
+            <!-- Layer Toggles Pill -->
+            <div class="pynn-hud px-2.5 py-1 hidden sm:flex items-center gap-2 flex-wrap text-[11px] font-bold text-[#1D2B45]">
+              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
+                <input id="tog-grid" type="checkbox" checked class="accent-[#F26B2A]" /><span>Grid</span>
+              </label>
+              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
+                <input id="tog-soil" type="checkbox" checked class="accent-[#F26B2A]" /><span>ชั้นดิน</span>
+              </label>
+              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
+                <input id="tog-piles" type="checkbox" checked class="accent-[#F26B2A]" /><span>เข็ม 93</span>
+              </label>
+              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
+                <input id="tog-bracing" type="checkbox" checked class="accent-[#F26B2A]" /><span>Waler</span>
+              </label>
+              <label class="inline-flex items-center gap-1 px-1 py-0.5 rounded cursor-pointer hover:bg-[#FAF5EE]">
+                <input id="tog-pc" type="checkbox" checked class="accent-[#F26B2A]" /><span>Packing</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Floating Selected Object Inspector (Below Camera Dock) -->
+          <div id="selection-hud" class="hidden absolute top-[118px] left-3 z-20 w-[min(300px,calc(100%-24px))] pynn-hud p-3">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <span id="sel-cat" class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">SHEET PILE</span>
+                <h3 id="sel-name" class="pynn-mono-id text-sm font-bold text-[#181A1F] mt-1 truncate">SP_S_001</h3>
+                <p id="sel-detail" class="text-xs text-[#4B525E] font-medium mt-0.5 leading-relaxed"></p>
+              </div>
+              <button id="sel-close" type="button" aria-label="ปิดหน้าต่างข้อมูลชิ้นงาน" class="text-[#5F6672] hover:text-[#181A1F] p-1 rounded-[6px] size-8 flex items-center justify-center">
+                <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5 mt-2.5">
+              <button type="button" data-set-status="pending" class="sel-status-btn min-h-[38px] px-2 py-1 rounded-[8px] border border-[#DFDDD6] bg-[#F0EEE8] text-[#181A1F] text-[11px] font-semibold">ยังไม่ทำ</button>
+              <button type="button" data-set-status="progress" class="sel-status-btn min-h-[38px] px-2 py-1 rounded-[8px] border border-[#9A5B06]/30 bg-[#FEF7EA] text-[#9A5B06] text-[11px] font-semibold">กำลังทำ</button>
+              <button type="button" data-set-status="done" class="sel-status-btn min-h-[38px] px-2 py-1 rounded-[8px] border border-[#0F6B4B]/30 bg-[#ECF7F2] text-[#0F6B4B] text-[11px] font-semibold">เสร็จแล้ว</button>
+            </div>
+          </div>
+
+          <!-- FLOATING BOTTOM-LEFT LEGEND (Desktop only so mobile stays spacious) -->
+          <div class="hidden xl:flex absolute bottom-3 left-3 z-10 pynn-hud px-3 py-1.5 text-[11px] font-medium text-[#181A1F] items-center gap-2.5">
+            <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#4A4542]"></span>Sheet Pile</span>
+            <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#C64828]"></span>Waler</span>
+            <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#E07022]"></span>Strut</span>
+            <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#9C9A94]"></span>Packing</span>
+            <span class="inline-flex items-center gap-1"><span class="size-2.5 rounded-full bg-[#0F6B4B]"></span>เสร็จแล้ว</span>
+          </div>
+
+          <!-- FLOATING BOTTOM-CENTER 4D EXCAVATION DOCK -->
+          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 w-[min(700px,calc(100%-20px))] pynn-hud px-3.5 py-2.5" style="margin-bottom: env(safe-area-inset-bottom, 0px);">
+            <div class="flex items-center justify-between flex-wrap gap-1.5 mb-1.5">
+              <div class="flex items-center gap-2">
+                <span class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">4D EXCAVATION</span>
+                <span class="text-xs font-semibold text-[#181A1F]">
+                  ระดับขุด: <span id="slider-el-label" class="pynn-mono-id font-bold text-[#AD421E]">EL. 0.00 ม. (ดินเต็ม)</span>
+                </span>
+              </div>
+              <div class="flex items-center gap-1 flex-wrap">
+                <button type="button" data-depth="0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">0.00m</button>
+                <button type="button" data-depth="1.0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-1.00m</button>
+                <button type="button" data-depth="1.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-1.50m</button>
+                <button type="button" data-depth="2.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-2.50m</button>
+                <button type="button" data-depth="3.8" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-3.80m</button>
+              </div>
+            </div>
+            <input id="excavation-slider" type="range" min="0" max="3.8" step="0.05" value="0" aria-label="ปรับระดับการขุดดิน 4D" class="pynn-slider w-full" />
+          </div>
+        </div>
+
+        <!-- COLLAPSIBLE RIGHT SIDE DRAWER (DESKTOP) / BOTTOM SHEET (MOBILE) -->
+        <aside id="report-drawer" class="sp-drawer is-collapsed" aria-label="แผงบันทึกผลงานหน้างาน">
+          <div class="px-4 py-3 border-b border-[#DFDDD6] flex items-center justify-between gap-2 shrink-0">
+            <h2 class="text-sm font-bold text-[#181A1F] flex items-center gap-2">
+              <i data-lucide="clipboard-edit" class="w-4 h-4 text-[#AD421E]" aria-hidden="true"></i>
+              <span>บันทึกผลงานหน้างาน</span>
+            </h2>
+            <div class="flex items-center gap-2">
+              <button id="btn-reset-all" type="button" class="text-[11px] font-semibold text-[#B92B27] hover:underline">รีเซ็ต 0%</button>
+              <button id="btn-close-drawer" type="button" aria-label="ปิดแผงบันทึกผลงาน" class="size-8 rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] flex items-center justify-center text-[#4B525E]">
+                <i data-lucide="x" class="w-4 h-4" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-3.5 overflow-y-auto space-y-3 flex-1">
+            <!-- 1. Sheet Pile -->
+            <div class="p-3 bg-[#F7F6F2] border border-[#DFDDD6] rounded-[10px]">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-semibold text-[#181A1F]">1) กด/ตอก Sheet Pile</span>
+                <span id="form-sp-badge" class="pynn-mono-id text-[11px] font-semibold text-[#175CD3]">0 / 142 แผ่น</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <input id="input-sp-count" type="number" min="0" max="142" value="0" aria-label="จำนวนแผ่น Sheet Pile" class="w-20 min-h-[38px] px-2 py-1 bg-white border border-[#828791] rounded-[8px] pynn-mono-id text-sm font-semibold text-center text-[#181A1F]" />
+                <button type="button" id="btn-sp-add5" class="pynn-btn text-xs min-h-[38px] px-2.5">+5</button>
+                <button type="button" id="btn-sp-add10" class="pynn-btn text-xs min-h-[38px] px-2.5">+10</button>
+                <button type="button" id="btn-sp-apply" class="pynn-btn pynn-btn-primary text-xs min-h-[38px] ml-auto">อัปเดต</button>
+              </div>
+            </div>
+
+            <!-- 2. Bracing Toggles -->
+            <div class="p-3 bg-[#F7F6F2] border border-[#DFDDD6] rounded-[10px]">
+              <span class="text-xs font-semibold text-[#181A1F] block mb-2">2) Bracket, Waler, Strut &amp; Jack (EL -1.00m)</span>
+              <div class="grid grid-cols-2 gap-1.5 text-xs font-semibold">
+                <button type="button" data-toggle-id="BRACKETS_ALL" class="quick-toggle col-span-2 px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Bracket (20 ตัว)</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_South" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler ใต้</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_North" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler เหนือ</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_West" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler ตก</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="WALER_East" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Waler ออก</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="STRUT_01_West" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Strut 1</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="STRUT_02_East" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Strut 2</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="JACK_01_West" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Jack 1</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+                <button type="button" data-toggle-id="JACK_02_East" class="quick-toggle px-2.5 py-2 min-h-[38px] rounded-[8px] border border-[#DFDDD6] bg-white hover:bg-[#F5F1E8] text-[#181A1F] text-left flex items-center justify-between gap-2"><span>Jack 2</span><span class="status-dot size-2.5 rounded-full bg-[#CBD5E1] border border-[#828791]"></span></button>
+              </div>
+            </div>
+
+            <!-- 3. Packing Concrete -->
+            <div class="p-3 bg-[#F7F6F2] border border-[#DFDDD6] rounded-[10px]">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-semibold text-[#181A1F]">3) เท Packing Concrete</span>
+                <span id="form-pc-badge" class="pynn-mono-id text-[11px] font-semibold text-[#1F513F]">0.0 / 54.8 ม.</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <input id="input-pc-meters" type="number" min="0" max="54.82" step="1" value="0" aria-label="ความยาว Packing Concrete (เมตร)" class="w-20 min-h-[38px] px-2 py-1 bg-white border border-[#828791] rounded-[8px] pynn-mono-id text-sm font-semibold text-center text-[#181A1F]" />
+                <span class="text-xs font-semibold text-[#4B525E]">ม.</span>
+                <button type="button" id="btn-pc-add5" class="pynn-btn text-xs min-h-[38px] px-2.5">+5 ม.</button>
+                <button type="button" id="btn-pc-apply" class="pynn-btn pynn-btn-primary text-xs min-h-[38px] ml-auto">อัปเดต</button>
+              </div>
+            </div>
+
+            <!-- 4. Daily Log -->
+            <div class="p-3 bg-[#F7F6F2] border border-[#DFDDD6] rounded-[10px]">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-semibold text-[#181A1F]">4) บันทึกรายงานประจำวัน</span>
+                <span id="log-count-pill" class="pynn-badge pynn-mono-id text-[10px]">0 รายการ</span>
+              </div>
+              <div class="flex flex-col gap-1.5 mb-2">
+                <input id="log-date" type="date" aria-label="วันที่รายงาน" class="w-full min-h-[36px] px-2.5 py-1 bg-white border border-[#828791] rounded-[8px] text-xs pynn-mono-id font-semibold text-[#181A1F]" />
+                <input id="log-note" type="text" placeholder="หมายเหตุหน้างาน..." aria-label="หมายเหตุหน้างาน" class="w-full min-h-[36px] px-2.5 py-1 bg-white border border-[#828791] rounded-[8px] text-xs text-[#181A1F]" />
+              </div>
+              <button id="btn-save-log" type="button" class="w-full pynn-btn pynn-btn-forest min-h-[38px] mb-2">
+                <i data-lucide="plus-circle" class="w-4 h-4" aria-hidden="true"></i>
+                <span>บันทึกความก้าวหน้าวันนี้</span>
+              </button>
+              <div id="daily-log-list" class="space-y-1.5 max-h-[150px] overflow-y-auto text-xs"></div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <div id="toast" role="status" aria-live="polite" class="fixed bottom-20 right-4 z-50 hidden px-4 py-2 bg-[#181A1F] text-white border border-[#DFDDD6]/20 rounded-[10px] shadow-lg text-xs font-semibold"></div>
+
+    <script type="module">
+      import * as THREE from 'three';
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+      lucide.createIcons();
+
+      const STORAGE_KEY = 'pynn_sheetpile_state_v1';
+      const defaultState = { excavationDepth: 0.0, statuses: {}, preloadTons: 0, logs: [] };
+      let state = loadState();
+      let colorMode = 'sketchup'; // 'sketchup' (EXACT SketchUp colors!) | 'status'
+      let metadata = null;
+      const meshMap = new Map();
+      const clickableMeshes = [];
+      const excavationMeshes = [];
+      const outerSoilMeshes = [];
+      let pilesMesh = null;
+      let gridGroup = new THREE.Group();
+      let selectedMeshName = null;
+      let hoveredMeshName = null;
+
+      // Exact SketchUp Material Palette from sheetpile.skp
+      const SKETCHUP_HEX = {
+        sheetpile:        0x4A4542, // SP_FSP3_13.5m_DarkSteel
+        waler:            0xC64828, // TFM_35HA_Waler_Oxide
+        strut:            0xE07022, // TFM_35HA_Strut_Orange
+        jack:             0x0284C7, // TFM_Jack_UJ_N40_Blue
+        bracket:          0xB5892A, // Bracket_H200_Yellow
+        packing_concrete: 0x9C9A94, // Packing_Concrete
+      };
+      const COLOR_PROGRESS = new THREE.Color(0xF26B2A);
+      const COLOR_DONE     = new THREE.Color(0x10B981);
+
+      function isPlainObject(val) {
+        return Boolean(val) && typeof val === 'object' && !Array.isArray(val);
+      }
+
+      function loadState() {
+        const base = structuredClone(defaultState);
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return base;
+          const parsed = JSON.parse(raw);
+          if (!isPlainObject(parsed)) return base;
+
+          const depthNum = Number(parsed.excavationDepth);
+          const excavationDepth = Number.isFinite(depthNum)
+            ? Math.max(0, Math.min(3.8, depthNum))
+            : base.excavationDepth;
+
+          const statuses = isPlainObject(parsed.statuses) ? { ...parsed.statuses } : {};
+          const logs = Array.isArray(parsed.logs)
+            ? parsed.logs.filter((entry) => isPlainObject(entry))
+            : [];
+          const preloadTons =
+            typeof parsed.preloadTons === 'number' && Number.isFinite(parsed.preloadTons)
+              ? parsed.preloadTons
+              : isPlainObject(parsed.preloadTons)
+                ? { ...parsed.preloadTons }
+                : base.preloadTons;
+
+          const statusDates = isPlainObject(parsed.statusDates) ? { ...parsed.statusDates } : {};
+
+          return {
+            ...base,
+            excavationDepth,
+            statuses,
+            statusDates,
+            preloadTons,
+            logs
+          };
+        } catch (e) {}
+        return base;
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, summaryKPI: computeKPIs(), updatedAt: new Date().toISOString() }));
+        } catch (e) {}
+      }
+
+      function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.remove('hidden');
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(() => t.classList.add('hidden'), 2400);
+      }
+
+      function escapeHtml(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function showLoadingState() {
+        const overlay = document.getElementById('loading-overlay');
+        const stateEl = document.getElementById('loading-state');
+        const errEl = document.getElementById('loading-error');
+        const progEl = document.getElementById('loading-progress');
+        if (overlay) overlay.classList.remove('hidden');
+        if (stateEl) stateEl.classList.remove('hidden');
+        if (errEl) errEl.classList.add('hidden');
+        if (progEl) progEl.textContent = 'เตรียมข้อมูลโมเดล...';
+      }
+
+      function showLoadError(message) {
+        const overlay = document.getElementById('loading-overlay');
+        const stateEl = document.getElementById('loading-state');
+        const errEl = document.getElementById('loading-error');
+        const detailEl = document.getElementById('loading-error-detail');
+        if (overlay) overlay.classList.remove('hidden');
+        if (stateEl) stateEl.classList.add('hidden');
+        if (errEl) errEl.classList.remove('hidden');
+        if (detailEl && message) detailEl.textContent = message;
+      }
+
+      // ==========================================
+      // 1. THREE.JS SCENE (EXACT SKETCHUP 2027 LOOK)
+      // ==========================================
+      const container = document.getElementById('viewport-container');
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(35, Math.max(container.clientWidth, 1) / Math.max(container.clientHeight, 1), 0.1, 500);
+      // Match exact SketchUp 2027 viewport angle from user's sheetpile.skp
+      camera.position.set(-2.9, 44.0, 32.0);
+
+      let renderer = null;
+      let controls = null;
+      try {
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.localClippingEnabled = true;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        container.appendChild(renderer.domElement);
+
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.08;
+        controls.target.set(-2.0, -4.5, -5.0);
+        controls.maxPolarAngle = Math.PI * 0.65;
+        controls.minDistance = 4;
+        controls.maxDistance = 160;
+        // SketchUp-style Mouse Navigation:
+        // - Middle Mouse Drag = Orbit (Shift + Middle Drag = Pan)
+        // - Right Mouse Drag = Pan
+        // - Scroll Wheel = Zoom directly toward cursor (just like SketchUp!)
+        // - Left Mouse Drag = Orbit (and Left Click = Select / Ctrl+Click = Multi-Select)
+        controls.zoomToCursor = true;
+        controls.screenSpacePanning = true;
+        controls.mouseButtons = {
+          LEFT: THREE.MOUSE.ROTATE,
+          MIDDLE: THREE.MOUSE.ROTATE,
+          RIGHT: THREE.MOUSE.PAN,
+        };
+        window.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Shift') {
+            controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
+          } else if (ev.key === 'Escape') {
+            closeSelectionHud();
+          }
+        });
+        window.addEventListener('keyup', (ev) => {
+          if (ev.key === 'Shift') {
+            controls.mouseButtons.MIDDLE = THREE.MOUSE.ROTATE;
+          }
+        });
+      } catch (webglErr) {
+        console.warn('WebGL unavailable:', webglErr);
+        showLoadError('เบราว์เซอร์หรืออุปกรณ์นี้ไม่รองรับ WebGL สำหรับแสดงโมเดล 3D (' + (webglErr?.message || 'WebGL Error') + ')');
+      }
+
+      // Bright SketchUp studio lighting
+      scene.add(new THREE.AmbientLight(0xffffff, 1.45));
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.15);
+      keyLight.position.set(18, 52, 28);
+      scene.add(keyLight);
+      const fillLight = new THREE.DirectionalLight(0xf8fafc, 0.65);
+      fillLight.position.set(-25, 30, -20);
+      scene.add(fillLight);
+
+      scene.add(gridGroup);
+
+      // 3D Soil Strata Labels attached cleanly to the right-side STS elevation ticks (x = 19.74, z = 8.6)
+      const soilLabelsGroup = new THREE.Group();
+      soilLabelsGroup.name = 'SoilStrataLabels3D';
+      scene.add(soilLabelsGroup);
+
+      function buildSoilStrataLabels() {
+        soilLabelsGroup.clear();
+        const strata = [
+          { y: -0.75,  code: 'L1',  text: 'ดินถม Fill (0.00 ถึง -1.50 ม.)',              color: '#8C7254' },
+          { y: -2.05,  code: 'L2',  text: 'ดินเหนียวปนซิลท์ (-1.50 ถึง -2.50 ม.)',       color: '#7A6855' },
+          { y: -3.80,  code: 'EL',  text: 'ก้นบ่อขุดดิน -3.80 ม. (Excavation Bot)',      color: '#AD421E', highlight: true },
+          { y: -8.40,  code: 'L3',  text: 'ดินเหนียวอ่อนมาก Very Soft Clay (-2.50 ถึง -13.0 ม.)', color: '#5A666C' },
+          { y: -13.75, code: 'L3c', text: 'ชั้นทรายแทรก Sand Lens (-13.0 ถึง -14.5 ม.)',  color: '#7B7E6F' },
+          { y: -16.75, code: 'L3d', text: 'ดินเหนียวอ่อน Soft Clay (-14.5 ถึง -19.0 ม.)', color: '#5A666C' },
+          { y: -20.50, code: 'L4',  text: 'ดินเหนียวแข็ง Stiff Clay (-19.0 ถึง -22.0 ม.)', color: '#7E6954' },
+          { y: -22.75, code: 'L5',  text: 'ดินเหนียวปนทราย Sandy Clay (-22.0 ถึง -23.5 ม.)', color: '#967B5A' },
+          { y: -25.00, code: 'L6',  text: 'ทรายแน่นปานกลาง Med. Sand (-23.5 ถึง -26.5 ม.)', color: '#B5986A' },
+          { y: -27.25, code: 'L7',  text: 'ทรายแน่น Dense Sand (-26.5 ถึง -28.0 ม.)',     color: '#C4A36B' },
+        ];
+
+        for (const st of strata) {
+          const canvas = document.createElement('canvas');
+          canvas.width = 760;
+          canvas.height = 68;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) continue;
+
+          // Crisp architectural pill badge
+          ctx.fillStyle = st.highlight ? '#FFF7ED' : 'rgba(255,255,255,0.94)';
+          ctx.fillRect(2, 6, 756, 56);
+          ctx.strokeStyle = st.highlight ? '#AD421E' : '#1D2B45';
+          ctx.lineWidth = st.highlight ? 4 : 2.5;
+          ctx.strokeRect(2, 6, 756, 56);
+
+          // Left color swatch
+          ctx.fillStyle = st.color;
+          ctx.fillRect(10, 14, 72, 40);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '700 24px "Space Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(st.code, 46, 35);
+
+          // Label text
+          ctx.fillStyle = st.highlight ? '#AD421E' : '#1D2B45';
+          ctx.font = '700 25px "Sarabun", "Prompt", sans-serif';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(st.text, 96, 35);
+
+          const tex = new THREE.CanvasTexture(canvas);
+          tex.colorSpace = THREE.SRGBColorSpace;
+          const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
+          const sprite = new THREE.Sprite(mat);
+          sprite.center.set(0, 0.5); // Anchor left edge directly to the elevation tick!
+          sprite.position.set(20.1, st.y, 8.6);
+          sprite.scale.set(11.8, 1.06, 1);
+          sprite.renderOrder = 20;
+          soilLabelsGroup.add(sprite);
+        }
+      }
+      buildSoilStrataLabels();
+
+      // Hover Tooltip
+      const hoverTip = document.createElement('div');
+      hoverTip.className = 'hidden pointer-events-none absolute z-30 px-2.5 py-1 bg-[#181A1F] text-white text-[11px] pynn-mono-id font-semibold rounded-[6px] shadow-[0_8px_24px_-4px_rgba(24,26,31,0.18)] whitespace-nowrap';
+      container.appendChild(hoverTip);
+
+      // 4D Excavation Clipping Plane
+      const clipPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0.001);
+
+      // Crisp SketchUp Edge Materials (pure solid black like SketchUp Profiles/Edges)
+      const EDGE_SHEETPILE = new THREE.LineBasicMaterial({ color: 0x000000, transparent: false, opacity: 1.0 });
+      const EDGE_STEEL     = new THREE.LineBasicMaterial({ color: 0x000000, transparent: false, opacity: 1.0 });
+      const EDGE_PILES     = new THREE.LineBasicMaterial({ color: 0x1E293B, transparent: true, opacity: 0.85 });
+      const EDGE_SOIL      = new THREE.LineBasicMaterial({ color: 0x5C4D3C, transparent: true, opacity: 0.38 });
+
+      // Exact SketchUp 2027 Soil Strata RGB/Alpha Map (extracted live from sheetpile.skp)
+      function getExactSoilStyle(name) {
+        const n = String(name || '');
+        if (n.includes('L1') || n.includes('Stage1')) return { hex: 0x8C7254, alpha: 0.55 };
+        if (n.includes('L2') || n.includes('Stage2')) return { hex: 0x7A6855, alpha: 0.52 };
+        if (n.includes('L3c')) return { hex: 0x7B7E6F, alpha: 0.42 };
+        if (n.includes('L3') || n.includes('Stage3')) return { hex: 0x5A666C, alpha: 0.42 };
+        if (n.includes('L4')) return { hex: 0x7E6954, alpha: 0.38 };
+        if (n.includes('L5')) return { hex: 0x967B5A, alpha: 0.38 };
+        if (n.includes('L6')) return { hex: 0xB5986A, alpha: 0.40 };
+        if (n.includes('L7')) return { hex: 0xC4A36B, alpha: 0.45 };
+        if (n.includes('PitFloor')) return { hex: 0x626C70, alpha: 0.92 };
+        return { hex: 0x8C7254, alpha: 0.45 };
+      }
+
+      // ==========================================
+      // 2. LOAD EXACT SKETCHUP 2027 COLORED CAD LINES & 3D TEXT + GLB
+      // ==========================================
+      let isLoadingModel = false;
+      let loadedGltfRoot = null;
+
+      async function loadGridlines() {
+        try {
+          const res = await fetch('./sheetpile_cad_exact.json');
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const cad = await res.json();
+          gridGroup.clear();
+
+          // Render every CAD line group in its exact SketchUp 2027 hex color
+          if (cad.lines_by_hex) {
+            for (const [hexStr, segs] of Object.entries(cad.lines_by_hex)) {
+              if (!Array.isArray(segs) || !segs.length) continue;
+              const verts = new Float32Array(segs.length * 6);
+              for (let i = 0; i < segs.length; i++) {
+                const s = segs[i];
+                const o = i * 6;
+                verts[o] = s[0]; verts[o + 1] = s[1]; verts[o + 2] = s[2];
+                verts[o + 3] = s[3]; verts[o + 4] = s[4]; verts[o + 5] = s[5];
+              }
+              const geo = new THREE.BufferGeometry();
+              geo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
+              const colorNum = parseInt(hexStr.replace('#', ''), 16);
+              const isGrid = hexStr.toUpperCase() === '#B4B4B4';
+              const mat = new THREE.LineBasicMaterial({
+                color: colorNum,
+                transparent: isGrid,
+                opacity: isGrid ? 0.85 : 1.0,
+              });
+              const ls = new THREE.LineSegments(geo, mat);
+              ls.renderOrder = 5;
+              gridGroup.add(ls);
+            }
+          }
+
+          // Render 3D text & grid bubble fills (green dims, red boundary text, white/black bubbles)
+          if (cad.tris_by_hex) {
+            for (const [hexStr, flatVerts] of Object.entries(cad.tris_by_hex)) {
+              if (!Array.isArray(flatVerts) || flatVerts.length < 9) continue;
+              const geo = new THREE.BufferGeometry();
+              geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(flatVerts), 3));
+              const colorNum = parseInt(hexStr.replace('#', ''), 16);
+              const mat = new THREE.MeshBasicMaterial({
+                color: colorNum,
+                side: THREE.DoubleSide,
+                polygonOffset: true,
+                polygonOffsetFactor: hexStr.toUpperCase() === '#FFFFFF' ? 1 : -1,
+                polygonOffsetUnits: 1,
+              });
+              const mesh = new THREE.Mesh(geo, mat);
+              mesh.renderOrder = hexStr.toUpperCase() === '#FFFFFF' ? 4 : 6;
+              gridGroup.add(mesh);
+            }
+          }
+        } catch (e) {
+          console.warn('Exact SketchUp CAD load warning:', e);
+        }
+      }
+
+      async function initModel() {
+        if (!renderer || isLoadingModel) return;
+        isLoadingModel = true;
+        showLoadingState();
+
+        if (loadedGltfRoot) {
+          scene.remove(loadedGltfRoot);
+          loadedGltfRoot = null;
+        }
+        meshMap.clear();
+        clickableMeshes.length = 0;
+        excavationMeshes.length = 0;
+        outerSoilMeshes.length = 0;
+        pilesMesh = null;
+
+        loadGridlines();
+        try {
+          const metaRes = await fetch('./sheetpile_metadata.json');
+          if (!metaRes.ok) throw new Error('HTTP ' + metaRes.status);
+          metadata = await metaRes.json();
+        } catch (e) {
+          console.warn('Metadata load warning:', e);
+        }
+
+        const progEl = document.getElementById('loading-progress');
+        const loader = new GLTFLoader();
+        loader.load(
+          './sheetpile.glb',
+          (gltf) => {
+            isLoadingModel = false;
+            loadedGltfRoot = gltf.scene;
+            gltf.scene.traverse((obj) => {
+              if (!obj.isMesh) return;
+              const name = obj.name;
+              const cat = obj.userData?.category || inferCategory(name);
+              obj.userData.category = cat;
+              obj.material = obj.material.clone();
+              meshMap.set(name, obj);
+
+              if (cat === 'excavation_soil') {
+                const st = getExactSoilStyle(name);
+                obj.material = new THREE.MeshBasicMaterial({
+                  color: st.hex,
+                  transparent: true,
+                  opacity: Math.min(st.alpha, 0.48),
+                  depthWrite: false,
+                  side: THREE.DoubleSide,
+                  clippingPlanes: [clipPlane],
+                });
+                obj.renderOrder = 2;
+                obj.add(new THREE.LineSegments(new THREE.EdgesGeometry(obj.geometry, 20), EDGE_SOIL));
+                excavationMeshes.push(obj);
+              } else if (cat === 'outer_soil') {
+                const st = getExactSoilStyle(name);
+                obj.material = new THREE.MeshBasicMaterial({
+                  color: st.hex,
+                  transparent: true,
+                  opacity: Math.min(st.alpha, 0.36),
+                  depthWrite: false,
+                  side: THREE.DoubleSide,
+                });
+                obj.renderOrder = 1;
+                obj.add(new THREE.LineSegments(new THREE.EdgesGeometry(obj.geometry, 20), EDGE_SOIL));
+                outerSoilMeshes.push(obj);
+              } else if (cat === 'piles') {
+                pilesMesh = obj;
+                obj.material = new THREE.MeshBasicMaterial({
+                  color: 0xB8B5AE,
+                  side: THREE.DoubleSide,
+                  polygonOffset: true,
+                  polygonOffsetFactor: 1,
+                  polygonOffsetUnits: 1,
+                });
+                const pileEdges = new THREE.LineSegments(new THREE.EdgesGeometry(obj.geometry, 15), EDGE_PILES);
+                pileEdges.renderOrder = 3;
+                obj.add(pileEdges);
+              } else {
+                // Crisp SketchUp 2027 exact RGB colors + polygonOffset so black edges NEVER z-fight!
+                obj.material = new THREE.MeshLambertMaterial({
+                  color: SKETCHUP_HEX[cat] || 0x4A4542,
+                  emissive: new THREE.Color(SKETCHUP_HEX[cat] || 0x4A4542),
+                  emissiveIntensity: 0.45,
+                  side: THREE.DoubleSide,
+                  polygonOffset: true,
+                  polygonOffsetFactor: 1,
+                  polygonOffsetUnits: 1,
+                });
+                const edgeAngle = cat === 'sheetpile' ? 8 : 15;
+                const edgeMat = cat === 'sheetpile' ? EDGE_SHEETPILE : EDGE_STEEL;
+                const edges = new THREE.LineSegments(new THREE.EdgesGeometry(obj.geometry, edgeAngle), edgeMat);
+                edges.renderOrder = 3;
+                obj.add(edges);
+                clickableMeshes.push(obj);
+              }
+            });
+
+            scene.add(gltf.scene);
+            document.getElementById('loading-overlay').classList.add('hidden');
+            applyVisualState();
+            updateDashboardUI();
+          },
+          (xhr) => {
+            if (progEl && xhr && xhr.total > 0) {
+              const pct = Math.min(100, Math.round((xhr.loaded / xhr.total) * 100));
+              progEl.textContent = `กำลังโหลดไฟล์ 3D (${pct}%)...`;
+            }
+          },
+          (err) => {
+            isLoadingModel = false;
+            console.warn('GLB load error:', err);
+            showLoadError('ไม่สามารถโหลดไฟล์ sheetpile.glb ได้ (' + (err?.message || 'Network/GLTF Error') + ')');
+          }
+        );
+      }
+
+      document.getElementById('btn-retry-load')?.addEventListener('click', () => {
+        initModel();
+      });
+
+      function inferCategory(name) {
+        if (name.startsWith('SP_')) return 'sheetpile';
+        if (name.startsWith('WALER_')) return 'waler';
+        if (name.startsWith('STRUT_') || name.startsWith('CORNER_')) return 'strut';
+        if (name.startsWith('JACK_')) return 'jack';
+        if (name.startsWith('BRACKETS')) return 'bracket';
+        if (name.startsWith('PC_')) return 'packing_concrete';
+        if (name.startsWith('Excavation_Stage')) return 'excavation_soil';
+        if (name.startsWith('PILES_')) return 'piles';
+        return 'outer_soil';
+      }
+
+      // ==========================================
+      // 3. VISUAL COLORS (SketchUp Exact vs B&W Architectural Status Mode)
+      // ==========================================
+      const COLOR_TODAY_BLUE = new THREE.Color(0x0284C7);
+      const EDGE_MONO_SOIL   = new THREE.LineBasicMaterial({ color: 0x64748B, transparent: true, opacity: 0.45 });
+      const EDGE_MONO_PENDING = new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.85 });
+
+      function getActiveReportDate() {
+        const inp = document.getElementById('inp-sp-report-date');
+        if (inp && inp.value) return inp.value;
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      }
+
+      // Initialize date picker to today & re-apply colors on date change (yesterday -> green, today -> blue!)
+      const spDateInp = document.getElementById('inp-sp-report-date');
+      if (spDateInp) {
+        if (!spDateInp.value) spDateInp.value = getActiveReportDate();
+        spDateInp.addEventListener('change', () => applyVisualState());
+      }
+
+      function applyVisualState(forcedMode) {
+        const mode = forcedMode || colorMode;
+        const activeDate = getActiveReportDate();
+        if (!state.statusDates) state.statusDates = {};
+        const d = Number(state.excavationDepth) || 0;
+        clipPlane.constant = -d + 0.002;
+        const soilOn = document.getElementById('tog-soil').checked;
+        const isStatus = mode === 'status';
+
+        // 1. Excavation & Outer Soil: Monochrome B&W gray in Status Mode, exact SketchUp tan/clay in SketchUp Mode
+        excavationMeshes.forEach((m) => {
+          if (!soilOn) { m.visible = false; return; }
+          if (m.name.includes('Stage1') && d >= 1.5) m.visible = false;
+          else if (m.name.includes('Stage2') && d >= 2.5) m.visible = false;
+          else if (m.name.includes('Stage3') && d >= 3.8) m.visible = false;
+          else m.visible = true;
+
+          const edgeChild = m.children.find((c) => c.isLineSegments);
+          if (isStatus) {
+            m.material.color.setHex(0xE2E8F0);
+            m.material.opacity = 0.28;
+            if (edgeChild) edgeChild.material = EDGE_MONO_SOIL;
+          } else {
+            const st = getExactSoilStyle(m.name);
+            m.material.color.setHex(st.hex);
+            m.material.opacity = Math.min(st.alpha, 0.48);
+            if (edgeChild) edgeChild.material = EDGE_SOIL;
+          }
+          m.material.needsUpdate = true;
+        });
+
+        outerSoilMeshes.forEach((m) => {
+          const edgeChild = m.children.find((c) => c.isLineSegments);
+          if (isStatus) {
+            m.material.color.setHex(0xE2E8F0);
+            m.material.opacity = 0.16;
+            if (edgeChild) edgeChild.material = EDGE_MONO_SOIL;
+          } else {
+            const st = getExactSoilStyle(m.name);
+            m.material.color.setHex(st.hex);
+            m.material.opacity = Math.min(st.alpha, 0.36);
+            if (edgeChild) edgeChild.material = EDGE_SOIL;
+          }
+          m.material.needsUpdate = true;
+        });
+
+        // 2. 93 Piles: Clean light B&W gray in Status Mode
+        if (pilesMesh) {
+          const edgeChild = pilesMesh.children.find((c) => c.isLineSegments);
+          if (isStatus) {
+            pilesMesh.material.color.setHex(0xF1F5F9);
+            pilesMesh.material.opacity = 0.72;
+            pilesMesh.material.transparent = true;
+            if (edgeChild) edgeChild.material = EDGE_MONO_SOIL;
+          } else {
+            pilesMesh.material.color.setHex(0xB8B5AE);
+            pilesMesh.material.opacity = 1.0;
+            pilesMesh.material.transparent = false;
+            if (edgeChild) edgeChild.material = EDGE_PILES;
+          }
+          pilesMesh.material.needsUpdate = true;
+        }
+
+        // 3. Structural Elements: Today = Blue (#0284C7), Previous Done = Green (#10B981), Pending = Crisp White/Gray B&W + Outlines
+        clickableMeshes.forEach((m) => {
+          const st = state.statuses[m.name] || 'pending';
+          const doneDate = state.statusDates[m.name] || '';
+          const cat = m.userData.category;
+          const edgeChild = m.children.find((c) => c.isLineSegments);
+
+          if (st === 'done') {
+            const isToday = doneDate && doneDate === activeDate;
+            const c = isToday ? COLOR_TODAY_BLUE : COLOR_DONE;
+            m.material.color.copy(c);
+            m.material.opacity = 1.0;
+            m.material.transparent = false;
+            m.material.depthWrite = true;
+            if (edgeChild) edgeChild.material = cat === 'sheetpile' ? EDGE_SHEETPILE : EDGE_STEEL;
+          } else if (st === 'progress') {
+            m.material.color.copy(COLOR_PROGRESS);
+            m.material.opacity = 1.0;
+            m.material.transparent = false;
+            m.material.depthWrite = true;
+            if (edgeChild) edgeChild.material = cat === 'sheetpile' ? EDGE_SHEETPILE : EDGE_STEEL;
+          } else if (!isStatus) {
+            // Exact SketchUp colors, 100% solid & crisp!
+            m.material.color.setHex(SKETCHUP_HEX[cat] || 0x4A4542);
+            m.material.opacity = 1.0;
+            m.material.transparent = false;
+            m.material.depthWrite = true;
+            if (edgeChild) edgeChild.material = cat === 'sheetpile' ? EDGE_SHEETPILE : EDGE_STEEL;
+          } else {
+            // B&W Architectural Status Mode: crisp white-gray solid with sharp outlines!
+            m.material.color.setHex(0xF8FAFC);
+            m.material.opacity = 0.92;
+            m.material.transparent = false;
+            m.material.depthWrite = true;
+            if (edgeChild) edgeChild.material = EDGE_MONO_PENDING;
+          }
+
+          if (selectedMeshes.has(m.name) || m.name === selectedMeshName) {
+            m.material.emissive = new THREE.Color(0xF26B2A);
+            m.material.emissiveIntensity = 0.55;
+          } else if (m.name === hoveredMeshName) {
+            m.material.emissive = new THREE.Color(0x38BDF8);
+            m.material.emissiveIntensity = 0.35;
+          } else {
+            // Keep bright flat-lit SketchUp/CAD emissive balance
+            const baseHex = m.material.color.getHex();
+            m.material.emissive = new THREE.Color(baseHex);
+            m.material.emissiveIntensity = isStatus && st === 'pending' ? 0.55 : 0.45;
+          }
+          m.material.needsUpdate = true;
+        });
+      }
+
+      const selectedMeshes = new Set();
+      let multiSelectMode = false;
+
+      const btnMultiSelect = document.getElementById('btn-multi-select');
+      if (btnMultiSelect) {
+        btnMultiSelect.addEventListener('click', () => {
+          multiSelectMode = !multiSelectMode;
+          btnMultiSelect.setAttribute('aria-pressed', multiSelectMode ? 'true' : 'false');
+          btnMultiSelect.classList.toggle('bg-[#F26B2A]', multiSelectMode);
+          btnMultiSelect.classList.toggle('text-white', multiSelectMode);
+          btnMultiSelect.classList.toggle('bg-white', !multiSelectMode);
+          btnMultiSelect.classList.toggle('text-[#1D2B45]', !multiSelectMode);
+          showToast(multiSelectMode ? 'เปิดโหมดเลือกหลายชิ้น (คลิกสะสมได้หลายชิ้น)' : 'กลับสู่โหมดเลือกทีละชิ้น');
+        });
+      }
+
+      // ==========================================
+      // 4. RAYCASTING (HOVER + CLICK + MULTI-SELECT + EMPTY DESELECT)
+      // ==========================================
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      let downPos = { x: 0, y: 0, button: 0 };
+
+      if (renderer) {
+        renderer.domElement.addEventListener('pointermove', (e) => {
+          const rect = renderer.domElement.getBoundingClientRect();
+          pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+          raycaster.setFromCamera(pointer, camera);
+          const hits = raycaster.intersectObjects(clickableMeshes.filter((m) => m.visible), false);
+          if (hits.length > 0) {
+            const hitName = hits[0].object.name;
+            renderer.domElement.style.cursor = 'pointer';
+            hoverTip.textContent = hitName;
+            hoverTip.style.left = `${e.clientX - rect.left + 14}px`;
+            hoverTip.style.top = `${e.clientY - rect.top - 10}px`;
+            hoverTip.classList.remove('hidden');
+            if (hoveredMeshName !== hitName) { hoveredMeshName = hitName; applyVisualState(); }
+          } else {
+            renderer.domElement.style.cursor = 'grab';
+            hoverTip.classList.add('hidden');
+            if (hoveredMeshName !== null) { hoveredMeshName = null; applyVisualState(); }
+          }
+        });
+
+        renderer.domElement.addEventListener('pointerdown', (e) => { downPos = { x: e.clientX, y: e.clientY, button: e.button }; });
+        renderer.domElement.addEventListener('pointerup', (e) => {
+          if (downPos.button !== 0) return; // Only Left-Click selects/deselects (Middle/Right = SketchUp Orbit/Pan)
+          if (Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y) > 6) return;
+          const rect = renderer.domElement.getBoundingClientRect();
+          pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+          raycaster.setFromCamera(pointer, camera);
+          const hits = raycaster.intersectObjects(clickableMeshes.filter((m) => m.visible), false);
+          if (hits.length > 0) {
+            const addMode = multiSelectMode || e.ctrlKey || e.metaKey || e.shiftKey;
+            selectMesh(hits[0].object.name, addMode);
+          } else {
+            // Click empty space -> Deselect all & clear highlight!
+            closeSelectionHud();
+          }
+        });
+      }
+
+      function selectMesh(name, toggleMulti = false) {
+        if (toggleMulti) {
+          if (selectedMeshes.has(name)) selectedMeshes.delete(name);
+          else selectedMeshes.add(name);
+        } else {
+          selectedMeshes.clear();
+          selectedMeshes.add(name);
+        }
+
+        if (selectedMeshes.size === 0) {
+          closeSelectionHud();
+          return;
+        }
+
+        selectedMeshName = name;
+        const labels = { sheetpile: 'SHEET PILE', waler: 'WALER BEAM', strut: 'STRUT / CORNER', jack: 'PRELOAD JACK', bracket: 'BRACKET H200BL', packing_concrete: 'PACKING CONCRETE' };
+        if (selectedMeshes.size === 1) {
+          const single = Array.from(selectedMeshes)[0];
+          const item = metadata?.items?.find((x) => x.id === single);
+          const cat = meshMap.get(single)?.userData?.category || item?.category || 'element';
+          document.getElementById('sel-cat').textContent = labels[cat] || cat.toUpperCase();
+          document.getElementById('sel-name').textContent = single;
+          document.getElementById('sel-detail').textContent =
+            cat === 'sheetpile' ? `ด้าน ${item?.side || '-'} · กว้าง 0.40 ม. · ลึก ${item?.depth_m || 13.5} ม. (กด Ctrl+คลิก เพื่อเลือกเพิ่ม)`
+            : cat === 'packing_concrete' ? `ด้าน ${item?.side || '-'} · ยาว ${item?.length_m || 2.0} ม. · ~${item?.vol_m3 || 0.06} ลบ.ม.`
+            : `ค้ำยันระบบ ERSS · ยาว ${item?.length_m || '-'} ม. (กด Ctrl+คลิก เพื่อเลือกเพิ่ม)`;
+          const cur = state.statuses[single] || 'pending';
+          document.querySelectorAll('.sel-status-btn').forEach((b) => b.classList.toggle('status-pill-active', b.dataset.setStatus === cur));
+        } else {
+          const list = Array.from(selectedMeshes);
+          document.getElementById('sel-cat').textContent = `MULTI-SELECT · ${list.length} ชิ้น`;
+          document.getElementById('sel-name').textContent = `เลือกไว้ ${list.length} รายการ`;
+          document.getElementById('sel-detail').textContent = list.slice(0, 4).join(', ') + (list.length > 4 ? ` และอีก ${list.length - 4} ชิ้น` : '');
+          document.querySelectorAll('.sel-status-btn').forEach((b) => b.classList.remove('status-pill-active'));
+        }
+        document.getElementById('selection-hud').classList.remove('hidden');
+        applyVisualState();
+      }
+
+      function closeSelectionHud() {
+        const hud = document.getElementById('selection-hud');
+        selectedMeshName = null;
+        selectedMeshes.clear();
+        if (hud) hud.classList.add('hidden');
+        applyVisualState();
+        return true;
+      }
+
+      document.getElementById('sel-close').addEventListener('click', () => {
+        closeSelectionHud();
+      });
+
+      document.querySelectorAll('.sel-status-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (selectedMeshes.size === 0 && !selectedMeshName) return;
+          const targets = selectedMeshes.size > 0 ? Array.from(selectedMeshes) : [selectedMeshName];
+          const nextSt = btn.dataset.setStatus;
+          const activeDate = getActiveReportDate();
+          if (!state.statusDates) state.statusDates = {};
+          targets.forEach((id) => {
+            state.statuses[id] = nextSt;
+            if (nextSt === 'done') state.statusDates[id] = activeDate;
+            else delete state.statusDates[id];
+          });
+          saveState();
+          updateDashboardUI();
+          applyVisualState();
+          showToast(
+            targets.length === 1
+              ? `อัปเดต ${targets[0]} → ${btn.textContent}${nextSt === 'done' ? ' (' + activeDate + ')' : ''}`
+              : `อัปเดตพร้อมกัน ${targets.length} ชิ้น → ${btn.textContent}`
+          );
+          if (targets.length > 1) closeSelectionHud();
+        });
+      });
+
+      // ==========================================
+      // 5. KPI & CONTROLS
+      // ==========================================
+      function computeKPIs() {
+        const items = metadata?.items || [];
+        const spDone = items.filter((x) => x.category === 'sheetpile' && state.statuses[x.id] === 'done').length;
+        const spMeters = +(spDone * 0.4).toFixed(1);
+        const spPct = Math.round((spDone / 142) * 100);
+
+        const d = Number(state.excavationDepth) || 0;
+        const exVol = +(18.8 * 8.8 * d).toFixed(1);
+        const exPct = Math.round((d / 3.8) * 100);
+
+        const walerLens = { WALER_South: 18.62, WALER_North: 18.62, WALER_West: 8.62, WALER_East: 8.62 };
+        let walerM = 0;
+        Object.keys(walerLens).forEach((id) => { if (state.statuses[id] === 'done') walerM += walerLens[id]; });
+        const strutDone = ['STRUT_01_West', 'STRUT_02_East', 'CORNER_NW', 'CORNER_NE', 'CORNER_SW', 'CORNER_SE'].filter((id) => state.statuses[id] === 'done').length;
+        const bkDone = state.statuses['BRACKETS_ALL'] === 'done';
+        const brPct = Math.round(((walerM / 54.48) * 0.6 + (strutDone / 6) * 0.3 + (bkDone ? 0.1 : 0)) * 100);
+
+        let pcM = 0, pcVol = 0;
+        items.filter((x) => x.category === 'packing_concrete').forEach((it) => {
+          if (state.statuses[it.id] === 'done') { pcM += it.length_m || 0; pcVol += it.vol_m3 || 0; }
+        });
+        const pcPct = Math.min(100, Math.round((pcM / 54.82) * 100));
+        const jkDone = ['JACK_01_West', 'JACK_02_East'].filter((id) => state.statuses[id] === 'done').length;
+        const jkPct = Math.round((jkDone / 2) * 100);
+        return { spDone, spMeters, spPct, depth: d, exVol, exPct, walerM: +walerM.toFixed(1), strutDone, bkDone, brPct, pcM: +pcM.toFixed(1), pcVol: +pcVol.toFixed(2), pcPct, jkDone, jkPct };
+      }
+
+      function updateDashboardUI() {
+        const k = computeKPIs();
+        document.getElementById('kpi-sp-pcs').textContent = k.spDone;
+        document.getElementById('kpi-sp-m').textContent = k.spMeters.toFixed(1);
+        document.getElementById('kpi-sp-pct').textContent = `${k.spPct}%`;
+        document.getElementById('form-sp-badge').textContent = `${k.spDone} / 142 แผ่น`;
+        document.getElementById('input-sp-count').value = k.spDone;
+
+        document.getElementById('kpi-ex-el').textContent = k.depth === 0 ? '0.00' : `-${k.depth.toFixed(2)}`;
+        document.getElementById('kpi-ex-vol').textContent = k.exVol.toFixed(1);
+        document.getElementById('kpi-ex-pct').textContent = `${k.exPct}%`;
+        document.getElementById('excavation-slider').value = k.depth;
+        document.getElementById('slider-el-label').textContent = k.depth === 0 ? 'EL. 0.00 ม. (ดินเต็ม)' : `EL. -${k.depth.toFixed(2)} ม. (${k.exVol.toFixed(1)} ลบ.ม.)`;
+
+        document.getElementById('kpi-waler-m').textContent = k.walerM.toFixed(1);
+        document.getElementById('kpi-strut-cnt').textContent = k.strutDone;
+        document.getElementById('kpi-bk-status').textContent = k.bkDone ? 'เสร็จ' : 'รอ';
+        document.getElementById('kpi-br-pct').textContent = `${k.brPct}%`;
+
+        document.getElementById('kpi-pc-m').textContent = k.pcM.toFixed(1);
+        document.getElementById('kpi-pc-vol').textContent = k.pcVol.toFixed(2);
+        document.getElementById('kpi-pc-pct').textContent = `${k.pcPct}%`;
+        document.getElementById('form-pc-badge').textContent = `${k.pcM.toFixed(1)} / 54.8 ม.`;
+        document.getElementById('input-pc-meters').value = k.pcM;
+
+        document.getElementById('kpi-jk-cnt').textContent = k.jkDone;
+        document.getElementById('kpi-jk-ton').textContent = k.jkDone * 40;
+        document.getElementById('kpi-jk-pct').textContent = `${k.jkPct}%`;
+
+        document.querySelectorAll('.quick-toggle').forEach((btn) => {
+          const st = state.statuses[btn.dataset.toggleId] || 'pending';
+          btn.querySelector('.status-dot').className = 'status-dot w-2.5 h-2.5 rounded-full border border-[#828791] shrink-0 ' +
+            (st === 'done' ? 'bg-[#0F6B4B]' : st === 'progress' ? 'bg-[#AD421E]' : 'bg-[#CBD5E1]');
+        });
+
+        const list = document.getElementById('daily-log-list');
+        document.getElementById('log-count-pill').textContent = `${state.logs.length} รายการ`;
+        list.innerHTML = state.logs.length
+          ? state.logs.slice().reverse().map((l) => `
+              <div class="p-2.5 bg-[#F7F6F2] border border-[#DFDDD6] rounded-[8px]">
+                <div class="flex justify-between gap-2 pynn-mono-id text-[11px] font-semibold text-[#181A1F]">
+                  <span>${escapeHtml(l.date)}</span><span class="text-[#AD421E]">SP ${l.spDone} · -${Number(l.depth || 0).toFixed(2)}m · PC ${l.pcM}m</span>
+                </div>
+                ${l.note ? `<p class="text-[#4B525E] mt-1 break-words">${escapeHtml(l.note)}</p>` : ''}
+              </div>`).join('')
+          : '<p class="text-[#5F6672] text-center py-4">ยังไม่มีบันทึก</p>';
+        saveState();
+      }
+
+      document.getElementById('log-date').value = new Date().toISOString().slice(0, 10);
+
+      // Color mode buttons
+      const btnSu = document.getElementById('mode-sketchup');
+      const btnSt = document.getElementById('mode-status');
+      btnSu.addEventListener('click', () => {
+        colorMode = 'sketchup';
+        btnSu.className = 'px-2.5 py-1 rounded-[6px] bg-[#1F513F] text-white font-semibold transition-colors';
+        btnSt.className = 'px-2.5 py-1 rounded-[6px] text-[#4B525E] hover:text-[#181A1F] font-medium transition-colors';
+        applyVisualState();
+      });
+      btnSt.addEventListener('click', () => {
+        colorMode = 'status';
+        btnSt.className = 'px-2.5 py-1 rounded-[6px] bg-[#1F513F] text-white font-semibold transition-colors';
+        btnSu.className = 'px-2.5 py-1 rounded-[6px] text-[#4B525E] hover:text-[#181A1F] font-medium transition-colors';
+        applyVisualState();
+      });
+
+      function resizeViewer() {
+        if (!renderer) return;
+        camera.aspect = container.clientWidth / Math.max(container.clientHeight, 1);
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      }
+
+      function setFullscreen3D(active) {
+        const card = document.getElementById('viewer-card');
+        const fsBtn = document.getElementById('btn-fullscreen');
+        if (!card) return;
+        card.classList.toggle('is-fullscreen-3d', active);
+        if (fsBtn) {
+          fsBtn.setAttribute('aria-pressed', active ? 'true' : 'false');
+          fsBtn.innerHTML = active
+            ? '<i data-lucide="minimize-2" class="w-3.5 h-3.5" aria-hidden="true"></i><span>ย่อจอ</span>'
+            : '<i data-lucide="maximize-2" class="w-3.5 h-3.5" aria-hidden="true"></i><span>เต็มจอ</span>';
+          if (window.lucide) lucide.createIcons();
+        }
+        resizeViewer();
+        setTimeout(resizeViewer, 50);
+      }
+
+      // Fullscreen toggle
+      document.getElementById('btn-fullscreen').addEventListener('click', () => {
+        const card = document.getElementById('viewer-card');
+        setFullscreen3D(!card.classList.contains('is-fullscreen-3d'));
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        const card = document.getElementById('viewer-card');
+        if (card && card.classList.contains('is-fullscreen-3d')) {
+          setFullscreen3D(false);
+          return;
+        }
+        closeSelectionHud();
+      });
+
+      document.getElementById('excavation-slider').addEventListener('input', (e) => {
+        state.excavationDepth = parseFloat(e.target.value);
+        applyVisualState(); updateDashboardUI();
+      });
+      document.querySelectorAll('.depth-preset').forEach((btn) => btn.addEventListener('click', () => {
+        state.excavationDepth = parseFloat(btn.dataset.depth);
+        applyVisualState(); updateDashboardUI();
+      }));
+
+      function setSheetPileCount(n) {
+        const spItems = (metadata?.items || []).filter((x) => x.category === 'sheetpile');
+        const clamped = Math.max(0, Math.min(spItems.length, n));
+        spItems.forEach((it, idx) => { state.statuses[it.id] = idx < clamped ? 'done' : 'pending'; });
+        applyVisualState(); updateDashboardUI();
+        showToast(`Sheet Pile สะสม ${clamped} แผ่น (${(clamped * 0.4).toFixed(1)} ม.)`);
+      }
+      document.getElementById('btn-sp-add5').addEventListener('click', () => setSheetPileCount(parseInt(document.getElementById('input-sp-count').value || '0', 10) + 5));
+      document.getElementById('btn-sp-add10').addEventListener('click', () => setSheetPileCount(parseInt(document.getElementById('input-sp-count').value || '0', 10) + 10));
+      document.getElementById('btn-sp-apply').addEventListener('click', () => setSheetPileCount(parseInt(document.getElementById('input-sp-count').value || '0', 10)));
+
+      function setPackingConcreteMeters(meters) {
+        const pcItems = (metadata?.items || []).filter((x) => x.category === 'packing_concrete');
+        let acc = 0;
+        pcItems.forEach((it) => {
+          if (acc < meters - 0.1) { state.statuses[it.id] = 'done'; acc += it.length_m || 2.0; }
+          else { state.statuses[it.id] = 'pending'; }
+        });
+        applyVisualState(); updateDashboardUI();
+        showToast(`Packing Concrete สะสม ${acc.toFixed(1)} ม.`);
+      }
+      document.getElementById('btn-pc-add5').addEventListener('click', () => setPackingConcreteMeters(parseFloat(document.getElementById('input-pc-meters').value || '0') + 5));
+      document.getElementById('btn-pc-apply').addEventListener('click', () => setPackingConcreteMeters(parseFloat(document.getElementById('input-pc-meters').value || '0')));
+
+      document.querySelectorAll('.quick-toggle').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.dataset.toggleId;
+        state.statuses[id] = state.statuses[id] === 'done' ? 'pending' : 'done';
+        applyVisualState(); updateDashboardUI();
+      }));
+
+      document.getElementById('btn-save-log').addEventListener('click', () => {
+        const k = computeKPIs();
+        state.logs.push({ date: document.getElementById('log-date').value, spDone: k.spDone, depth: k.depth, pcM: k.pcM, note: document.getElementById('log-note').value.trim() });
+        document.getElementById('log-note').value = '';
+        updateDashboardUI(); showToast('บันทึกรายงานแล้ว');
+      });
+
+      function copyTextWithFallback(txt) {
+        const fallbackCopy = () => {
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = txt;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast(ok ? 'คัดลอกสรุปส่ง LINE แล้ว!' : 'ไม่สามารถคัดลอกอัตโนมัติได้');
+          } catch (_) {
+            showToast('ไม่สามารถคัดลอกอัตโนมัติได้');
+          }
+        };
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          navigator.clipboard.writeText(txt).then(() => showToast('คัดลอกสรุปส่ง LINE แล้ว!')).catch(fallbackCopy);
+        } else {
+          fallbackCopy();
+        }
+      }
+
+      document.getElementById('btn-copy-line').addEventListener('click', () => {
+        const k = computeKPIs();
+        const today = new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+        const txt = [
+          `📊 รายงานความก้าวหน้า PYNN EKKAMAI 12 (${today})`,
+          `1. กด/ตอก Sheet Pile: ${k.spDone}/142 แผ่น (${k.spMeters.toFixed(1)}/56.8 ม. · ${k.spPct}%)`,
+          `2. ขุดดิน (Excavation): EL. ${k.depth === 0 ? '0.00' : '-' + k.depth.toFixed(2)} ม. (${k.exVol.toFixed(1)}/628.7 ลบ.ม. · ${k.exPct}%)`,
+          `3. Waler & Strut: Waler ${k.walerM.toFixed(1)}/54.5 ม. · Strut ${k.strutDone}/6`,
+          `4. คอนกรีตอุดช่องว่าง (Packing Concrete): ${k.pcM.toFixed(1)}/54.8 ม. (${k.pcVol.toFixed(2)} ลบ.ม. · ${k.pcPct}%)`,
+          `5. Preload Jack: ${k.jkDone}/2 จุด (${k.jkDone * 40} ตัน)`
+        ].join('\n');
+        copyTextWithFallback(txt);
+      });
+
+      document.getElementById('btn-reset-all').addEventListener('click', () => {
+        if (!confirm('รีเซ็ตสถานะกลับเป็นเริ่มต้น (ดินเต็ม 0%)?')) return;
+        state = structuredClone(defaultState); selectedMeshName = null;
+        document.getElementById('selection-hud').classList.add('hidden');
+        applyVisualState(); updateDashboardUI();
+      });
+
+      document.getElementById('tog-grid').addEventListener('change', (e) => { gridGroup.visible = e.target.checked; });
+      document.getElementById('tog-soil').addEventListener('change', (e) => { outerSoilMeshes.forEach((m) => (m.visible = e.target.checked)); soilLabelsGroup.visible = e.target.checked; applyVisualState(); });
+      document.getElementById('tog-piles').addEventListener('change', (e) => { if (pilesMesh) pilesMesh.visible = e.target.checked; });
+      document.getElementById('tog-bracing').addEventListener('change', (e) => { clickableMeshes.forEach((m) => { if (['waler','strut','jack','bracket'].includes(m.userData.category)) m.visible = e.target.checked; }); });
+      document.getElementById('tog-pc').addEventListener('change', (e) => { clickableMeshes.forEach((m) => { if (m.userData.category === 'packing_concrete') m.visible = e.target.checked; }); });
+
+      const camPresets = {
+        iso:  { pos: [-22, 18, 26], target: [0, -3.0, 0] },
+        top:  { pos: [0, 38, 0.1],  target: [0, -1, 0] },
+        pit:  { pos: [-10, 7, 11],  target: [0, -1.5, 0] },
+        side: { pos: [0, -8, 42],   target: [0, -10, 0] }
+      };
+      document.querySelectorAll('.cam-btn').forEach((btn) => btn.addEventListener('click', () => {
+        if (!controls) return;
+        const p = camPresets[btn.dataset.cam];
+        camera.position.set(...p.pos); controls.target.set(...p.target); controls.update();
+      }));
+
+      // Collapsible Side Drawer / Mobile Bottom Sheet toggle
+      const reportDrawer = document.getElementById('report-drawer');
+      const btnToggleDrawer = document.getElementById('btn-toggle-drawer');
+      const btnCloseDrawer = document.getElementById('btn-close-drawer');
+      function setDrawerOpen(open) {
+        if (!reportDrawer) return;
+        reportDrawer.classList.toggle('is-collapsed', !open);
+        if (btnToggleDrawer) btnToggleDrawer.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      if (btnToggleDrawer) btnToggleDrawer.addEventListener('click', () => setDrawerOpen(reportDrawer.classList.contains('is-collapsed')));
+      if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', () => setDrawerOpen(false));
+
+      // ResizeObserver: Auto-fit Three.js canvas to EVERY resolution (390px -> 4K) smoothly!
+      function resizeViewport() {
+        if (!renderer || !container) return;
+        const w = Math.max(container.clientWidth, 1);
+        const h = Math.max(container.clientHeight, 1);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h, false);
+      }
+      if (typeof ResizeObserver !== 'undefined' && container) {
+        new ResizeObserver(resizeViewport).observe(container);
+      }
+      window.addEventListener('resize', resizeViewport);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (!renderer || !controls) return;
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      if (renderer) {
+        initModel();
+        animate();
+      }
+
+      // Bridge for sheetpile_report_studio.js (3 Work Packages + Multi-View 3D Plan + 3-Page Sansiri Daily Report PDF)
+      window.__SP_REPORT_BRIDGE__ = {
+        getState: () => state,
+        getMetadata: () => metadata,
+        showToast: (msg) => showToast(msg),
+        capture3DSnapshot: () => {
+          if (!renderer) return null;
+          renderer.render(scene, camera);
+          return renderer.domElement.toDataURL('image/png');
+        },
+        captureMultiViews: (captureMode = 'status') => {
+          if (!renderer || !controls) return null;
+          const savedPos = camera.position.clone();
+          const savedTarget = controls.target.clone();
+          const savedAspect = camera.aspect;
+          const savedSize = new THREE.Vector2();
+          renderer.getSize(savedSize);
+
+          // Apply exact B&W Status Mode (Today = Blue, Previous Done = Green, Pending & Soil = Crisp B&W Gray) or SketchUp Mode
+          applyVisualState(captureMode);
+
+          // Ensure pure white background in exported PNG plates
+          const prevBg = scene.background;
+          scene.background = new THREE.Color(0xFFFFFF);
+
+          // Render crisp 16:10 architectural report plates
+          const capW = 960;
+          const capH = 600;
+          renderer.setSize(capW, capH, false);
+          camera.aspect = capW / capH;
+          camera.updateProjectionMatrix();
+
+          const views = [
+            { id: 'top',  label: '1. แปลน TOP VIEW โซนชีตไพล์ (ZOOMED PIT PLAN)', pos: [0.0, 23.0, 0.05],   target: [0.0, -1.0, 0.0] },
+            { id: 'iso',  label: '2. มุมมอง 3 มิติภาพรวม (ISOMETRIC 3D)',          pos: [-2.9, 42.0, 31.0],  target: [-2.0, -4.5, -5.0] },
+            { id: 'pit',  label: '3. ระบบค้ำยัน Waler / Strut (INSIDE PIT)',      pos: [-11.5, 11.5, 11.5], target: [-1.5, -1.8, -3.5] },
+            { id: 'side', label: '4. รูปตัดระดับขุดดิน 4D & ชั้นดิน (SECTION CUT)', pos: [4.5, -5.5, 42.0],   target: [4.5, -7.5, 0.0], sectionCut: true },
+          ];
+
+          const out = {};
+          for (const v of views) {
+            // For Plate 4 (Section Cut): hide South front Sheet Pile wall + highlight excavation soil & level line!
+            const hiddenFront = [];
+            let exLevelLine = null;
+            if (v.sectionCut) {
+              clickableMeshes.forEach((m) => {
+                if (m.name.startsWith('SP_S_') || m.name === 'WALER_South' || m.name.startsWith('PC_S_')) {
+                  if (m.visible) { m.visible = false; hiddenFront.push(m); }
+                }
+              });
+              // Tint remaining excavation soil inside the pit clearly so the dug depth stands out!
+              excavationMeshes.forEach((m) => {
+                if (m.visible) {
+                  m.material.color.setHex(0xD97706);
+                  m.material.opacity = 0.55;
+                  m.material.needsUpdate = true;
+                }
+              });
+              // Draw a crisp red-orange horizontal level line at the current excavation depth
+              const curDepth = -(Number(state.excavationDepth) || 0);
+              const lineGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(-11.5, curDepth, 4.7),
+                new THREE.Vector3(19.7, curDepth, 4.7),
+              ]);
+              exLevelLine = new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color: 0xDC2626 }));
+              exLevelLine.renderOrder = 25;
+              scene.add(exLevelLine);
+            }
+
+            camera.position.set(v.pos[0], v.pos[1], v.pos[2]);
+            controls.target.set(v.target[0], v.target[1], v.target[2]);
+            controls.update();
+            renderer.render(scene, camera);
+            out[v.id] = { label: v.label, dataUrl: renderer.domElement.toDataURL('image/png') };
+
+            if (hiddenFront.length) hiddenFront.forEach((m) => (m.visible = true));
+            if (exLevelLine) {
+              scene.remove(exLevelLine);
+              exLevelLine.geometry.dispose();
+              exLevelLine.material.dispose();
+            }
+          }
+
+          // Restore live visual mode, background, and camera seamlessly
+          scene.background = prevBg;
+          applyVisualState();
+
+          renderer.setSize(savedSize.x, savedSize.y, false);
+          camera.aspect = savedAspect;
+          camera.position.copy(savedPos);
+          controls.target.copy(savedTarget);
+          camera.updateProjectionMatrix();
+          controls.update();
+          renderer.render(scene, camera);
+          return out;
+        },
+      };
+
+      const btnReportMenu = document.getElementById('btn-sp-report-menu');
+      const reportDropdown = document.getElementById('sp-report-dropdown');
+      if (btnReportMenu && reportDropdown) {
+        btnReportMenu.addEventListener('click', (e) => {
+          e.stopPropagation();
+          reportDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', (e) => {
+          if (!reportDropdown.contains(e.target) && e.target !== btnReportMenu) {
+            reportDropdown.classList.add('hidden');
+          }
+        });
+      }
+      document.getElementById('btn-open-sp-daily')?.addEventListener('click', () => {
+        reportDropdown?.classList.add('hidden');
+        window.openSheetPileReportStudio?.('daily3page');
+      });
+      document.getElementById('btn-open-sp-overview')?.addEventListener('click', () => {
+        reportDropdown?.classList.add('hidden');
+        window.openSheetPileReportStudio?.('overview');
+      });
+    </script>
+  </body>
+</html>
