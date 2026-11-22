@@ -16,7 +16,7 @@
   const SHARED_PILING_CONFIG_KEY = 'PE12_DAILY_REPORT_CONFIG';
   const SUPABASE_URL = 'https://gyzrsrxzzturoqwhuiul.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5enJzcnh6enR1cm9xd2h1aXVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODYxNDcsImV4cCI6MjA5MTA2MjE0N30.CJAFW3acVnOwb5hvSDO6H0TGPTK__MOTBdgUxUWpM70';
-  const SHARED_SIG_FIELDS = ['toCompany', 'recipient', 'authorCompany', 'author', 'authorRole', 'authorSignatureImg', 'reviewerCompany', 'reviewer', 'reviewerRole', 'reviewerSignatureImg', 'conzolMode', 'conzolTitle', 'conzolTable', 'conzolImageUrl'];
+  const SHARED_SIG_FIELDS = ['toCompany', 'recipient', 'authorCompany', 'author', 'authorRole', 'authorSignatureImg', 'reviewerCompany', 'reviewer', 'reviewerRole', 'reviewerSignatureImg', 'conzolTitle', 'conzolTable', 'conzolImageUrl'];
   const THAI_MONTHS_SHORT = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
   const THAI_MONTHS_FULL = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
@@ -1256,6 +1256,7 @@
     }
 
     function draw() {
+      const prevScrollTop = root.querySelector('.sp-print-scroll')?.scrollTop || 0;
       const s = computeDetailedStats();
 
       // ================================================================
@@ -1483,13 +1484,10 @@
               <button id="sp-cz-mode-table" type="button" class="px-2 py-0.5 cursor-pointer ${cfg.conzolMode !== 'image' ? 'bg-[#1f4e78] text-white' : 'text-slate-800 hover:bg-slate-100'}">📋 ตาราง Conzol</button>
               <button id="sp-cz-mode-image" type="button" class="px-2 py-0.5 border-l border-slate-900 cursor-pointer ${cfg.conzolMode === 'image' ? 'bg-[#1f4e78] text-white' : 'text-slate-800 hover:bg-slate-100'}">🖼️ รูปภาพ</button>
             </div>
-            ${cfg.conzolMode !== 'image' ? `
-              <button id="sp-cz-add-row" type="button" class="px-2 py-0.5 rounded font-bold border border-slate-400 bg-white hover:bg-slate-100 cursor-pointer">+ เพิ่มแถว</button>
-              <button id="sp-cz-add-group" type="button" class="px-2 py-0.5 rounded font-bold border border-slate-400 bg-white hover:bg-slate-100 cursor-pointer">+ เพิ่มหมวด</button>
-              <button id="sp-cz-paste-excel" type="button" class="px-2.5 py-0.5 rounded font-bold border border-emerald-700 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 cursor-pointer">📊 วางจาก Excel</button>
-            ` : `
-              <button id="sp-conzol-rotate-top" type="button" class="px-2 py-0.5 rounded font-bold border border-slate-900 bg-white hover:bg-slate-100 cursor-pointer">🔄 หมุน 90°</button>
-            `}
+            <button id="sp-cz-add-row" type="button" class="px-2 py-0.5 rounded font-bold border border-slate-400 bg-white hover:bg-slate-100 cursor-pointer">+ เพิ่มแถว</button>
+            <button id="sp-cz-add-group" type="button" class="px-2 py-0.5 rounded font-bold border border-slate-400 bg-white hover:bg-slate-100 cursor-pointer">+ เพิ่มหมวด</button>
+            <button id="sp-cz-paste-excel" type="button" class="px-2.5 py-0.5 rounded font-bold border border-emerald-700 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 cursor-pointer">📊 วางจาก Excel</button>
+            ${cfg.conzolMode === 'image' ? `<button id="sp-conzol-rotate-top" type="button" class="px-2 py-0.5 rounded font-bold border border-slate-900 bg-white hover:bg-slate-100 cursor-pointer">🔄 หมุน 90°</button>` : ''}
           </div>
         </div>
 
@@ -1675,6 +1673,7 @@
       const czAddRow = root.querySelector('#sp-cz-add-row');
       if (czAddRow) {
         czAddRow.onclick = () => {
+          cfg.conzolMode = 'table';
           const rows = cfg.conzolTable.rows;
           const nextNum = rows.filter((r) => r && !r.isGroup).length + 1;
           rows.push({ isGroup: false, cells: [String(nextNum), '', '', 'AP', ''] });
@@ -1685,6 +1684,7 @@
       const czAddGrp = root.querySelector('#sp-cz-add-group');
       if (czAddGrp) {
         czAddGrp.onclick = () => {
+          cfg.conzolMode = 'table';
           cfg.conzolTable.rows.push({ isGroup: true, label: 'หมวดใหม่' });
           saveCfg(cfg);
           draw();
@@ -1760,6 +1760,7 @@
       const applyExcel = (append) => {
         const newRows = parseExcelRows(exText?.value || '');
         if (!newRows.length) return;
+        cfg.conzolMode = 'table';
         cfg.conzolTable.rows = append ? [...(cfg.conzolTable.rows || []), ...newRows] : newRows;
         saveCfg(cfg);
         exModal?.classList.add('hidden');
@@ -1770,6 +1771,10 @@
       if (btnExAppend) btnExAppend.onclick = () => applyExcel(true);
       const btnExReplace = root.querySelector('#sp-cz-excel-replace');
       if (btnExReplace) btnExReplace.onclick = () => applyExcel(false);
+
+      // Preserve exact scroll position across re-renders so clicking Page 3/4 buttons never jumps back to Page 1!
+      const scroller = root.querySelector('.sp-print-scroll');
+      if (scroller && prevScrollTop > 0) scroller.scrollTop = prevScrollTop;
     }
 
     draw();
