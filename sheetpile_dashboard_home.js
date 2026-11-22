@@ -477,21 +477,21 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4">
             <figure class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-white shadow-[3px_3px_0px_#1D2B45] m-0">
-              <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-3 py-1.5 text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between">
-                <span>1. แปลน TOP VIEW 3D โซนชีตไพล์ (ZOOMED PIT PLAN)</span>
-                <span class="text-[#065F46]">${s.sp.done}/${s.sp.total} แผ่น (${s.sp.pct}%)</span>
+              <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-2.5 sm:px-3 py-1.5 text-[10.5px] sm:text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between gap-2">
+                <span class="truncate">1. แปลน TOP VIEW 3D โซนชีตไพล์</span>
+                <span class="text-[#065F46] shrink-0">${s.sp.done}/${s.sp.total} (${s.sp.pct}%)</span>
               </div>
-              <div id="home-sp-3d-slot" class="w-full aspect-[16/10] bg-white">
+              <div id="home-sp-3d-slot" class="w-full aspect-[4/3] sm:aspect-[16/10] bg-white">
                 ${existingFrame ? '' : `<iframe id="home-sp-3d-frame" src="sheetpile.html?embed=top" title="แปลน 3D โซนชีตไพล์และค้ำยัน" class="w-full h-full border-0 bg-white block" loading="eager"></iframe>`}
               </div>
             </figure>
 
             <figure class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-white shadow-[3px_3px_0px_#1D2B45] m-0">
-              <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-3 py-1.5 text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between">
-                <span>2. รูปตัดระดับขุดดิน &amp; ชั้นดิน (EL. 0.00 → -3.65 ม.)</span>
-                <span class="text-[#0284C7]">EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.pct}%)</span>
+              <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-2.5 sm:px-3 py-1.5 text-[10.5px] sm:text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between gap-2">
+                <span class="truncate">2. รูปตัดระดับขุดดิน &amp; ชั้นดิน (-3.65 ม.)</span>
+                <span class="text-[#0284C7] shrink-0">EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.pct}%)</span>
               </div>
               ${renderSectionSvg(s)}
             </figure>

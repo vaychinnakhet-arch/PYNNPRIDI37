@@ -98,8 +98,45 @@
         margin: 0;
         padding: 0;
       }
+      /* Responsive polish: Mobile (<640px), Foldable Cover (~344px), Foldable Unfolded & Tablet (640px-1199px) */
+      @media (max-width: 767px) {
+        #left-tool-dock {
+          top: 56px !important;
+          left: 8px !important;
+          width: min(216px, calc(100vw - 16px)) !important;
+          max-height: calc(100dvh - 185px) !important;
+        }
+        #selection-hud {
+          top: 98px !important;
+          left: 8px !important;
+          right: 8px !important;
+          width: auto !important;
+          max-width: 340px !important;
+        }
+        #today-update-banner {
+          top: 56px !important;
+          width: calc(100vw - 16px) !important;
+          padding: 8px 10px !important;
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1199px) {
+        #left-tool-dock {
+          width: 204px !important;
+        }
+        #selection-hud {
+          left: 224px !important;
+        }
+      }
+      .sp-toolbar-scroll {
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      .sp-toolbar-scroll::-webkit-scrollbar {
+        display: none;
+      }
       #viewport-container {
         background: #FFFFFF;
+        touch-action: none;
       }
       body.is-embed-mode header,
       body.is-embed-mode #left-tool-dock,
@@ -133,6 +170,7 @@
           background: #FFFFFF !important;
         }
         .sp-a4-page {
+          zoom: 1 !important;
           width: 200mm !important;
           max-width: 200mm !important;
           height: 285mm !important;
@@ -360,20 +398,22 @@
             <button
               id="btn-today-update-mode"
               type="button"
-              class="pynn-btn text-xs py-1 sm:py-1.5 px-2.5 sm:px-3 bg-[#0284C7] hover:bg-[#0369A1] text-white"
+              class="pynn-btn text-xs py-1 sm:py-1.5 px-2 sm:px-3 bg-[#0284C7] hover:bg-[#0369A1] text-white"
               title="เข้าสู่โหมดคลิกเลือกงานที่ทำเสร็จวันนี้หลายชิ้น แล้วกดยืนยันบันทึก"
             >
-              <i data-lucide="zap" class="w-3.5 h-3.5 text-white" aria-hidden="true"></i>
-              <span>อัปเดตงานวันนี้</span>
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-white shrink-0" aria-hidden="true"></i>
+              <span class="hidden sm:inline">อัปเดตงานวันนี้</span>
+              <span class="sm:hidden">อัปเดต</span>
             </button>
             <button
               id="btn-toggle-drawer"
               type="button"
               aria-expanded="false"
               aria-controls="report-drawer"
-              class="pynn-btn pynn-btn-forest text-xs py-1 sm:py-1.5 px-2.5 sm:px-3"
+              class="pynn-btn pynn-btn-forest text-xs py-1 sm:py-1.5 px-2 sm:px-3"
+              title="เปิดแผงบันทึกผลงานแบบละเอียด"
             >
-              <i data-lucide="check-square" class="w-3.5 h-3.5 text-white" aria-hidden="true"></i>
+              <i data-lucide="check-square" class="w-3.5 h-3.5 text-white shrink-0" aria-hidden="true"></i>
               <span class="hidden 2xl:inline">บันทึกผลงาน</span>
             </button>
 
@@ -642,9 +682,9 @@
             <input id="excavation-slider" type="range" min="0" max="3.65" step="0.05" value="0" aria-label="ปรับระดับงานขุดดิน" class="pynn-slider w-full mt-1" />
             <div class="flex items-center justify-between text-[9.5px] font-mono font-bold text-[#475569] mt-1 px-0.5 select-none">
               <span>0.00m</span>
-              <span>-1.50m (Stage 1)</span>
-              <span>-2.50m (Stage 2)</span>
-              <span class="text-[#B91C1C]">-3.65m (100%)</span>
+              <span>-1.50m <span class="hidden sm:inline">(Stage 1)</span></span>
+              <span>-2.50m <span class="hidden sm:inline">(Stage 2)</span></span>
+              <span class="text-[#B91C1C]">-3.65m <span class="hidden sm:inline">(100%)</span></span>
             </div>
           </div>
         </div>
@@ -956,6 +996,10 @@
           LEFT: THREE.MOUSE.ROTATE,
           MIDDLE: THREE.MOUSE.ROTATE,
           RIGHT: THREE.MOUSE.PAN,
+        };
+        controls.touches = {
+          ONE: THREE.TOUCH.ROTATE,
+          TWO: THREE.TOUCH.DOLLY_PAN,
         };
         window.addEventListener('keydown', (ev) => {
           if (ev.key === 'Shift') {
@@ -2070,6 +2114,19 @@
         reportDropdown?.classList.add('hidden');
         window.openSheetPileReportStudio?.('overview');
       });
+
+      // Auto-collapse Left Vertical Tool Dock on Mobile & Foldable Cover (<768px) for 100% unobstructed 3D viewport
+      if (window.innerWidth < 768) {
+        const dockBody = document.getElementById('left-tool-body');
+        const dockBtn = document.getElementById('btn-toggle-left-dock');
+        const dockChev = document.getElementById('ico-left-dock-chev');
+        if (dockBody && dockBtn) {
+          dockBody.classList.add('hidden');
+          dockBtn.setAttribute('aria-expanded', 'false');
+          if (dockChev) dockChev.setAttribute('data-lucide', 'chevron-down');
+          if (window.lucide) lucide.createIcons();
+        }
+      }
 
       // Pull latest cloud Sheet Pile progress from Supabase on startup
       setTimeout(() => { pullSheetPileFromSupabase(); }, 600);

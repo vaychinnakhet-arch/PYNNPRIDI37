@@ -1428,44 +1428,47 @@
         : `${renderPage1(s)}<div class="h-5 no-print"></div>${renderPage2(s)}<div class="h-5 no-print"></div>${renderPage3()}<div class="h-5 no-print"></div>${renderPage4()}`;
 
       root.innerHTML = `
-        <!-- Top Official Sansiri Studio Toolbar (Hidden on Print) -->
-        <div class="no-print shrink-0 bg-white border-b-2 border-slate-900 px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded bg-amber-100 border border-slate-900 flex items-center justify-center text-sm">📄</div>
-            <div>
-              <div class="flex items-center gap-1.5">
-                <span class="px-1.5 py-0.5 bg-slate-900 text-white text-[9px] font-mono font-bold rounded">SANSIRI STANDARD</span>
-                <span class="text-[11px] font-bold text-slate-600">${esc(cfg.projectName)}</span>
-              </div>
-              <div class="font-display text-xs sm:text-sm font-black text-slate-900 leading-tight">
-                ระบบจัดทำ Daily Report &amp; รายงาน Sheet Pile (PDF 4 หน้า A4)
+        <!-- Top Official Sansiri Studio Toolbar (Hidden on Print, Scrollable on Mobile/Foldable) -->
+        <div class="no-print shrink-0 bg-white border-b-2 border-slate-900 px-2.5 sm:px-4 py-1.5 sm:py-2 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded bg-amber-100 border border-slate-900 flex items-center justify-center text-sm shrink-0">📄</div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 bg-slate-900 text-white text-[9px] font-mono font-bold rounded shrink-0">SANSIRI</span>
+                  <span class="text-[10.5px] font-bold text-slate-600 truncate">${esc(cfg.projectName)}</span>
+                </div>
+                <div class="font-display text-xs sm:text-sm font-black text-slate-900 leading-tight truncate">
+                  Daily Report &amp; รายงาน Sheet Pile (PDF 4 หน้า)
+                </div>
               </div>
             </div>
+            <button id="sp-rep-close-mobile" type="button" class="lg:hidden w-8 h-8 rounded border border-slate-900 bg-white hover:bg-rose-50 text-slate-900 font-black text-sm cursor-pointer shrink-0" title="ปิดหน้ารายงาน">✕</button>
           </div>
 
-          <div class="flex flex-wrap items-center gap-1.5">
-            <div class="inline-flex items-center gap-1 bg-slate-100 p-1 rounded border border-slate-300">
+          <div class="sp-toolbar-scroll flex items-center gap-1.5 overflow-x-auto flex-nowrap pb-0.5 lg:pb-0">
+            <div class="inline-flex items-center gap-1 bg-slate-100 p-1 rounded border border-slate-300 shrink-0">
               ${tabBtn('all', 'ดูทั้งหมด (4 หน้า)')}
               ${tabBtn('p1', '1. ประจำวัน')}
               ${tabBtn('p2', '2. สรุปชีตไพล์')}
-              ${tabBtn('p3', '3. ภาพถ่ายหน้างาน')}
-              ${tabBtn('p4', '4. เอกสาร Consult')}
+              ${tabBtn('p3', '3. ภาพถ่าย')}
+              ${tabBtn('p4', '4. Consult')}
             </div>
 
-            <div class="inline-flex rounded border border-slate-900 overflow-hidden bg-slate-50 text-[11px] font-bold">
-              <button id="sp-rep-mode-status" type="button" class="px-2 py-1 cursor-pointer ${reportViewMode === 'status' ? 'bg-slate-900 text-white' : 'text-slate-900 hover:bg-white'}">สีสถานะ</button>
-              <button id="sp-rep-mode-sketchup" type="button" class="px-2 py-1 cursor-pointer border-l border-slate-900 ${reportViewMode === 'sketchup' ? 'bg-slate-900 text-white' : 'text-slate-900 hover:bg-white'}">สี SketchUp</button>
+            <div class="inline-flex rounded border border-slate-900 overflow-hidden bg-slate-50 text-[11px] font-bold shrink-0">
+              <button id="sp-rep-mode-status" type="button" class="px-2 py-1 cursor-pointer whitespace-nowrap ${reportViewMode === 'status' ? 'bg-slate-900 text-white' : 'text-slate-900 hover:bg-white'}">สีสถานะ</button>
+              <button id="sp-rep-mode-sketchup" type="button" class="px-2 py-1 cursor-pointer border-l border-slate-900 whitespace-nowrap ${reportViewMode === 'sketchup' ? 'bg-slate-900 text-white' : 'text-slate-900 hover:bg-white'}">สี SketchUp</button>
             </div>
 
-            <button id="sp-rep-recapture-views" type="button" class="px-2 py-1 rounded text-[11px] font-bold border border-slate-900 bg-white hover:bg-amber-50 cursor-pointer" title="อัปเดตภาพ 3D ล่าสุด">🔄 อัปเดตภาพ</button>
-            <button id="sp-rep-copy-line" type="button" class="px-2.5 py-1 rounded text-[11px] font-bold border border-slate-900 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 cursor-pointer">📋 LINE</button>
-            <button id="sp-rep-print-pdf" type="button" class="px-3 py-1 rounded text-[11px] font-extrabold border border-slate-900 bg-[#10B981] text-white hover:bg-[#059669] cursor-pointer">🖨️ พิมพ์ / Save PDF</button>
-            <button id="sp-rep-close" type="button" class="w-8 h-8 rounded border border-slate-900 bg-white hover:bg-rose-50 text-slate-900 font-black text-sm cursor-pointer" title="ปิดหน้ารายงาน">✕</button>
+            <button id="sp-rep-recapture-views" type="button" class="px-2 py-1 rounded text-[11px] font-bold border border-slate-900 bg-white hover:bg-amber-50 cursor-pointer shrink-0 whitespace-nowrap" title="อัปเดตภาพ 3D ล่าสุด">🔄 อัปเดต</button>
+            <button id="sp-rep-copy-line" type="button" class="px-2.5 py-1 rounded text-[11px] font-bold border border-slate-900 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 cursor-pointer shrink-0 whitespace-nowrap">📋 LINE</button>
+            <button id="sp-rep-print-pdf" type="button" class="px-3 py-1 rounded text-[11px] font-extrabold border border-slate-900 bg-[#10B981] text-white hover:bg-[#059669] cursor-pointer shrink-0 whitespace-nowrap">🖨️ Save PDF</button>
+            <button id="sp-rep-close" type="button" class="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded border border-slate-900 bg-white hover:bg-rose-50 text-slate-900 font-black text-sm cursor-pointer shrink-0" title="ปิดหน้ารายงาน">✕</button>
           </div>
         </div>
 
-        <!-- Secondary Tool Strip (Outside A4 Paper — Page 3 Photo & Page 4 Conzol Excel Paste Controls) -->
-        <div class="no-print shrink-0 bg-slate-50 border-b border-slate-300 px-3 sm:px-4 py-1.5 flex flex-wrap items-center gap-2 text-[11px]">
+        <!-- Secondary Tool Strip (Outside A4 Paper — Horizontally Scrollable on Mobile/Foldable) -->
+        <div class="no-print sp-toolbar-scroll shrink-0 bg-slate-50 border-b border-slate-300 px-2.5 sm:px-4 py-1.5 flex items-center gap-2 text-[11px] overflow-x-auto flex-nowrap">
           <div class="flex items-center gap-1.5 pr-2 border-r border-slate-300 flex-wrap">
             <span class="px-1.5 py-0.5 rounded bg-slate-900 text-white font-mono text-[9.5px] font-bold">หน้า 3</span>
             <label class="px-2.5 py-0.5 rounded bg-blue-50 border border-blue-700 text-blue-900 font-bold cursor-pointer hover:bg-blue-100 inline-flex items-center gap-1">
@@ -1517,6 +1520,8 @@
 
       // Bind Toolbar
       root.querySelector('#sp-rep-close').onclick = () => root.classList.add('hidden');
+      const closeMob = root.querySelector('#sp-rep-close-mobile');
+      if (closeMob) closeMob.onclick = () => root.classList.add('hidden');
       root.querySelector('#sp-rep-print-pdf').onclick = () => window.print();
       root.querySelectorAll('[data-sp-view]').forEach((b) => {
         b.onclick = () => { activeView = b.dataset.spView; draw(); };
@@ -1772,9 +1777,16 @@
       const btnExReplace = root.querySelector('#sp-cz-excel-replace');
       if (btnExReplace) btnExReplace.onclick = () => applyExcel(false);
 
-      // Preserve exact scroll position across re-renders so clicking Page 3/4 buttons never jumps back to Page 1!
+      // Preserve exact scroll position across re-renders + auto-fit A4 width cleanly on Mobile / Foldable / Tablet
       const scroller = root.querySelector('.sp-print-scroll');
       if (scroller && prevScrollTop > 0) scroller.scrollTop = prevScrollTop;
+      const vw = window.innerWidth;
+      if (vw < 840) {
+        const scale = Math.max(0.42, Math.min(1, (vw - 24) / 794));
+        root.querySelectorAll('.sp-a4-page').forEach((pg) => {
+          pg.style.zoom = String(scale.toFixed(3));
+        });
+      }
     }
 
     draw();
