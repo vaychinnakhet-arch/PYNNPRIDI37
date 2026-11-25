@@ -89,7 +89,7 @@
         border: 2px solid #1D2B45 !important;
         border-radius: 16px !important;
         box-shadow: 4px 4px 0px #1D2B45 !important;
-        top: 68px !important;
+        top: 72px !important;
       }
       html, body {
         height: 100dvh;
@@ -127,98 +127,104 @@
           left: 224px !important;
         }
       }
-      /* Zero-overflow responsive top navbar across all desktop/laptop resolutions (1024px - 2560px) */
-      #sp-top-navbar {
-        width: 100%;
-        box-sizing: border-box;
+      /* Floating 3-Island Top HUD (BIM Studio Style: Balanced 48px Height, Crisp 13-14px Type, Zero Overflow) */
+      .sp-island {
+        height: 48px;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 2px solid #1D2B45;
+        border-radius: 16px;
+        box-shadow: 3px 3px 0px #1D2B45;
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
       }
-      .sp-nav-badge-spec { display: none; }
-      .sp-nav-shortcut { display: none; }
-      .sp-kpi-capsule { display: none; }
-      .sp-kpi-sec { display: none; }
+      .sp-island-action-btn {
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 13px;
+        border-radius: 12px;
+        border: 2px solid #1D2B45;
+        font-family: 'Prompt', sans-serif;
+        font-size: 12.5px;
+        font-weight: 800;
+        white-space: nowrap;
+        box-shadow: 2px 2px 0px #1D2B45;
+        cursor: pointer;
+        transition: all 140ms ease;
+      }
+      .sp-island-action-btn:active {
+        transform: translate(1px, 1px);
+        box-shadow: none;
+      }
+      .sp-kpi-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        line-height: 1.1;
+        white-space: nowrap;
+      }
+      .sp-kpi-k {
+        font-family: 'Space Mono', ui-monospace, monospace;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        color: #475569;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .sp-kpi-v {
+        font-family: 'Space Mono', ui-monospace, monospace;
+        font-size: 13px;
+        font-weight: 800;
+        color: #1D2B45;
+        margin-top: 1px;
+      }
+      .sp-mod-switcher { display: none; }
+      .sp-kpi-island { display: none; }
+      .sp-kpi-waler { display: none; }
+      .sp-kpi-packing { display: none; }
+      .sp-kpi-extra { display: none; }
       .sp-btn-lbl-drawer { display: none; }
       .sp-btn-lbl-today-full { display: none; }
       .sp-btn-lbl-today-short { display: inline; }
-      .sp-btn-lbl-line { display: none; }
-      .sp-kpi-label-short { display: none; }
 
-      @media (min-width: 640px) {
-        .sp-btn-lbl-line { display: inline; }
-      }
       @media (min-width: 1024px) {
-        .sp-kpi-capsule { display: flex; }
+        .sp-kpi-island { display: flex; }
       }
-      @media (min-width: 1280px) {
-        .sp-kpi-sec { display: flex; }
+      @media (min-width: 1200px) {
         .sp-btn-lbl-today-full { display: inline; }
         .sp-btn-lbl-today-short { display: none; }
-      }
-      @media (min-width: 1500px) {
-        .sp-nav-shortcut { display: inline-flex; }
         .sp-btn-lbl-drawer { display: inline; }
       }
-      @media (min-width: 1780px) {
-        .sp-nav-badge-spec { display: inline-flex; }
+      @media (min-width: 1280px) {
+        .sp-kpi-waler { display: flex; }
       }
-      /* Compact density on 1024px - 1779px (covers 1280px, 1366px, 1440px, 1536px @125% DPI, 1600px, 1680px) */
-      @media (min-width: 1024px) and (max-width: 1779px) {
-        #sp-top-navbar {
-          padding-left: 8px !important;
-          padding-right: 8px !important;
-          gap: 6px !important;
-        }
-        #sp-top-navbar .pynn-btn {
-          padding: 4px 9px !important;
-          gap: 4px !important;
-          font-size: 11px !important;
-          white-space: nowrap !important;
-        }
-        #sp-top-navbar .sp-nav-shortcut {
-          padding: 4px 8px !important;
-          font-size: 11px !important;
-          white-space: nowrap !important;
-        }
-        #sp-top-navbar .sp-kpi-capsule {
-          padding: 3px 8px !important;
-          gap: 6px !important;
-          font-size: 11px !important;
-        }
-        #sp-top-navbar .sp-kpi-capsule > div {
-          padding-right: 6px !important;
-          gap: 4px !important;
-        }
-        #sp-top-navbar .sp-kpi-capsule > div:last-child {
-          padding-right: 0 !important;
-        }
-        #sp-top-navbar #inp-sp-report-date {
-          padding: 1px 6px !important;
-          font-size: 10.5px !important;
-          width: 114px;
-        }
-        #sp-top-navbar .sp-kpi-pct-wrap,
-        #sp-top-navbar .sp-kpi-vol-wrap {
-          display: none;
-        }
+      @media (min-width: 1380px) {
+        .sp-mod-switcher { display: inline-flex; }
       }
-      @media (min-width: 1280px) and (max-width: 1639px) {
-        #sp-top-navbar .sp-kpi-label-word {
-          display: none;
-        }
-        #sp-top-navbar .sp-kpi-label-short {
-          display: inline;
-        }
+      @media (min-width: 1520px) {
+        .sp-kpi-packing { display: flex; }
       }
-      @media (min-width: 1280px) and (max-width: 1499px) {
-        #sp-top-navbar .sp-brand-sub {
-          display: none !important;
-        }
+      @media (min-width: 1720px) {
+        .sp-kpi-extra { display: inline; }
       }
-      @media (min-width: 1024px) and (max-width: 1279px) {
-        #sp-top-navbar .sp-brand-sub {
-          display: none !important;
+      @media (max-width: 767px) {
+        .sp-island {
+          height: 44px;
+          border-radius: 14px;
         }
-        #sp-top-navbar .sp-home-lbl {
-          display: none !important;
+        .sp-island-action-btn {
+          height: 32px;
+          padding: 0 9px;
+          font-size: 11.5px;
+          border-radius: 10px;
         }
       }
       .sp-toolbar-scroll {
@@ -414,152 +420,155 @@
   </head>
   <body class="bg-white text-[#1D2B45] leading-[1.6]">
     <div class="sp-app-shell relative">
-      <!-- FLOATING TOP BAR: EXACT PILING.HTML DOODLEWEB EXECUTIVE NAVBAR -->
-      <header class="absolute top-2 left-2 right-2 z-30 pointer-events-none">
-        <div id="sp-top-navbar" class="px-2 sm:px-3 py-1.5 pointer-events-auto flex items-center justify-between gap-1.5 sm:gap-2 flex-nowrap shadow-[3px_3px_0px_#1D2B45] border-2 border-[#1D2B45] rounded-2xl bg-white/95 backdrop-blur-md max-w-full">
-          <!-- 1. Left: Back to Home + Brand & Badge (Identical to piling.html) -->
-          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 min-w-0">
-            <a href="index.html" class="px-2.5 py-1 rounded-full bg-white hover:bg-[#FAF5EE] border-2 border-[#1D2B45] text-[#1D2B45] font-bold text-xs flex items-center gap-1 shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0 font-display whitespace-nowrap" title="กลับหน้าแรกโครงการ">
-              <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-              <span class="sp-home-lbl hidden lg:inline font-bold">หน้าแรก</span>
-            </a>
+      <!-- FLOATING 3-ISLAND TOP HUD (BIM STUDIO STYLE: BRAND/MODULES · TELEMETRY · 3 PRIMARY ACTIONS) -->
+      <header id="sp-top-navbar" class="absolute top-3 left-3 right-3 z-30 pointer-events-none flex items-center justify-between gap-2.5">
+        <!-- ISLAND 1 (LEFT): Back + Project Brand + Module Switcher -->
+        <div class="sp-island px-2.5 gap-2.5 shrink-0 min-w-0">
+          <a href="index.html" class="w-8 h-8 rounded-xl bg-[#FAF5EE] hover:bg-white border-1.5 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          </a>
 
-            <div class="min-w-0">
-              <h1 class="text-xs font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display truncate whitespace-nowrap">
-                PYNN <span class="text-[#F26B2A] italic">EKKAMAI</span> 12
-              </h1>
-              <p class="sp-brand-sub text-[9.5px] text-[#3E4B69] font-semibold leading-none mt-0.5 hidden md:block whitespace-nowrap">งานป้องกันดิน Sheet Pile &amp; งานขุดดิน</p>
-            </div>
+          <div class="min-w-0 pr-0.5">
+            <h1 class="text-[13.5px] font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display whitespace-nowrap">
+              PYNN <span class="text-[#F26B2A] italic">EKKAMAI</span> 12
+            </h1>
+            <p class="text-[10.5px] text-[#475569] font-semibold leading-none mt-1 hidden sm:block whitespace-nowrap">งานป้องกันดิน &amp; ขุดดิน (ERSS)</p>
+          </div>
 
-            <span class="sp-nav-badge-spec bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border border-[#FDE68A] shrink-0 whitespace-nowrap">
-              🛡️ 142 แผ่น · EL -3.65m
+          <nav aria-label="สลับโมดูล 3D" class="sp-mod-switcher items-center gap-0.5 bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-xl p-0.5 text-[11.5px] font-display font-bold shrink-0">
+            <span class="px-2.5 py-1 rounded-[9px] bg-[#1D2B45] text-white whitespace-nowrap">ชีตไพล์</span>
+            <a href="piling.html" class="px-2 py-1 rounded-[9px] text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white transition-colors whitespace-nowrap">เสาเข็ม 93</a>
+            <a href="footing.html" class="px-2 py-1 rounded-[9px] text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white transition-colors whitespace-nowrap">ฐานราก</a>
+          </nav>
+        </div>
+
+        <!-- ISLAND 2 (CENTER): Clean 2-Line Live KPI Telemetry + Report Date -->
+        <div class="sp-island sp-kpi-island px-3.5 gap-3 shrink-0">
+          <div class="sp-kpi-col pr-3 border-r border-[#E2D9CC]">
+            <span class="sp-kpi-k"><span class="w-2 h-2 rounded-full bg-[#10B981]"></span>SHEET PILE</span>
+            <span class="sp-kpi-v">
+              <span id="kpi-sp-pcs" class="text-[#10B981]">0</span><span class="text-[#64748B] font-bold text-[11.5px]">/142</span>
+              <span id="kpi-sp-pct" class="sp-kpi-extra text-[10.5px] text-[#475569] font-bold ml-0.5">(0%)</span>
+              <span class="hidden" id="kpi-sp-m">0.0</span>
             </span>
           </div>
 
-          <!-- 2. Center: Piling-Style Metric Capsule (Compact & Crisp) -->
-          <div class="sp-kpi-capsule items-center gap-2 text-xs bg-white px-3 py-1 rounded-full border-2 border-[#1D2B45] shadow-[2px_2px_0px_#1D2B45] shrink-0 flex-nowrap whitespace-nowrap">
-            <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] shrink-0"></span>
-              <span class="text-[11px] text-[#3E4B69] font-bold"><span class="sp-kpi-label-short">SP</span><span class="sp-kpi-label-word">Sheet Pile</span>:</span>
-              <span class="text-xs font-black text-[#1D2B45]">
-                <span id="kpi-sp-pcs" class="text-[#10B981] font-mono font-black text-sm">0</span>/142
-                <span id="kpi-sp-pct" class="sp-kpi-pct-wrap text-[10px] text-[#3E4B69] font-mono font-bold">(0%)</span>
-              </span>
-              <span class="hidden" id="kpi-sp-m">0.0</span>
-            </div>
-
-            <div class="flex items-center gap-1.5 pr-2 border-r border-[#E2D9CC]">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#F26B2A] shrink-0"></span>
-              <span class="sp-kpi-label-word text-[11px] text-[#3E4B69] font-bold">งานขุดดิน:</span>
-              <span class="text-xs font-black text-[#1D2B45] font-mono">
-                EL.<span id="kpi-ex-el" class="text-[#F26B2A] font-black">0.00</span>ม.
-                <span class="sp-kpi-vol-wrap text-[10px] text-[#3E4B69]">(<span id="kpi-ex-vol">0.0</span>ม³)</span>
-              </span>
+          <div class="sp-kpi-col pr-3 border-r border-[#E2D9CC]">
+            <span class="sp-kpi-k"><span class="w-2 h-2 rounded-full bg-[#F26B2A]"></span>ระดับขุดดิน</span>
+            <span class="sp-kpi-v">
+              <span class="text-[#F26B2A]">EL.<span id="kpi-ex-el">0.00</span>ม.</span>
+              <span class="sp-kpi-extra text-[10.5px] text-[#475569] font-bold ml-0.5">(<span id="kpi-ex-vol">0.0</span>ม³)</span>
               <span class="hidden" id="kpi-ex-pct">0%</span>
-            </div>
+            </span>
+          </div>
 
-            <div class="sp-kpi-sec items-center gap-1.5 pr-2 border-r border-[#E2D9CC] text-[11px] font-bold text-[#3E4B69]">
-              <span>Waler:</span>
-              <span class="font-mono font-black text-[#1D2B45]"><span id="kpi-waler-m">0.0</span>/54.5ม.</span>
+          <div class="sp-kpi-col sp-kpi-waler pr-3 border-r border-[#E2D9CC]">
+            <span class="sp-kpi-k">WALER</span>
+            <span class="sp-kpi-v">
+              <span id="kpi-waler-m">0.0</span><span class="text-[#64748B] font-bold text-[11px]">/54.5ม.</span>
               <span class="hidden" id="kpi-strut-cnt">0</span>
               <span class="hidden" id="kpi-bk-status">รอ</span>
               <span class="hidden" id="kpi-br-pct">0%</span>
-            </div>
+            </span>
+          </div>
 
-            <div class="flex items-center gap-1.5">
-              <input id="inp-sp-report-date" type="date" class="text-[11px] bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-full px-2 py-0.5 font-bold text-[#1D2B45] font-mono focus:outline-none focus:ring-1 focus:ring-[#0284C7] cursor-pointer" title="วันที่รายงาน (งานที่เสร็จในวันที่เลือก = สีฟ้า, วันก่อนหน้า = สีเขียว)">
-            </div>
-
-            <div class="sp-kpi-sec items-center gap-1.5 pl-2 border-l border-[#E2D9CC] text-[11px] font-bold text-[#3E4B69]">
-              <span>Packing:</span>
-              <span class="font-mono font-black text-[#1D2B45]"><span id="kpi-pc-m">0.0</span>/54.8ม.</span>
+          <div class="sp-kpi-col sp-kpi-packing pr-3 border-r border-[#E2D9CC]">
+            <span class="sp-kpi-k">PACKING</span>
+            <span class="sp-kpi-v">
+              <span id="kpi-pc-m">0.0</span><span class="text-[#64748B] font-bold text-[11px]">/54.8ม.</span>
               <span class="hidden" id="kpi-pc-vol">0.00</span>
               <span class="hidden" id="kpi-pc-pct">0%</span>
               <span class="hidden" id="kpi-jk-cnt">0</span>
               <span class="hidden" id="kpi-jk-ton">0</span>
               <span class="hidden" id="kpi-jk-pct">0%</span>
-            </div>
+            </span>
           </div>
 
-          <!-- 3. Right: DoodleWeb Action Pills (Matching piling.html + Report Dropdown) -->
-          <div id="pynn-nav-actions" class="flex items-center gap-1.5 shrink-0 relative">
-            <a href="piling.html" class="sp-nav-shortcut px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display whitespace-nowrap">
-              เสาเข็ม 93
-            </a>
-            <a href="footing.html" class="sp-nav-shortcut px-2.5 py-1.5 rounded-full bg-[#FAF5EE] hover:bg-white border-2 border-[#1D2B45] text-[#1D2B45] text-[11px] font-bold shadow-[1.5px_1.5px_0px_#1D2B45] transition-all font-display whitespace-nowrap">
-              ฐานราก 3D
-            </a>
+          <div class="flex items-center">
+            <input id="inp-sp-report-date" type="date" class="h-8 text-[12px] bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-xl px-2.5 font-bold text-[#1D2B45] font-mono focus:outline-none focus:ring-2 focus:ring-[#0284C7] cursor-pointer" title="วันที่รายงาน (งานที่เสร็จในวันที่เลือก = สีฟ้า, วันก่อนหน้า = สีเขียว)">
+          </div>
+        </div>
+
+        <!-- ISLAND 3 (RIGHT): 3 Proportional Primary Command Buttons -->
+        <div id="pynn-nav-actions" class="sp-island px-2 gap-1.5 shrink-0 relative">
+          <button
+            id="btn-today-update-mode"
+            type="button"
+            class="sp-island-action-btn bg-[#0284C7] hover:bg-[#0369A1] text-white"
+            title="เข้าสู่โหมดคลิกเลือกงานที่ทำเสร็จวันนี้หลายชิ้น แล้วกดยืนยันบันทึก"
+          >
+            <i data-lucide="zap" class="w-4 h-4 text-white shrink-0" aria-hidden="true"></i>
+            <span class="sp-btn-lbl-today-full">อัปเดตงานวันนี้</span>
+            <span class="sp-btn-lbl-today-short">อัปเดต</span>
+          </button>
+
+          <button
+            id="btn-toggle-drawer"
+            type="button"
+            aria-expanded="false"
+            aria-controls="report-drawer"
+            class="sp-island-action-btn bg-[#F26B2A] hover:bg-[#E05615] text-white"
+            title="เปิดแผงบันทึกผลงานแบบละเอียด"
+          >
+            <i data-lucide="check-square" class="w-4 h-4 text-white shrink-0" aria-hidden="true"></i>
+            <span class="sp-btn-lbl-drawer">บันทึกผลงาน</span>
+          </button>
+
+          <!-- Unified Report & LINE Dropdown -->
+          <div class="relative">
             <button
-              id="btn-today-update-mode"
+              id="btn-sp-report-menu"
               type="button"
-              class="pynn-btn text-xs py-1 sm:py-1.5 px-2 sm:px-3 bg-[#0284C7] hover:bg-[#0369A1] text-white whitespace-nowrap"
-              title="เข้าสู่โหมดคลิกเลือกงานที่ทำเสร็จวันนี้หลายชิ้น แล้วกดยืนยันบันทึก"
+              class="sp-island-action-btn bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E]"
+              title="เปิดหน้ารายงาน PDF แสนสิริ · แคปภาพ · คัดลอกสรุปส่ง LINE"
             >
-              <i data-lucide="zap" class="w-3.5 h-3.5 text-white shrink-0" aria-hidden="true"></i>
-              <span class="sp-btn-lbl-today-full">อัปเดตงานวันนี้</span>
-              <span class="sp-btn-lbl-today-short">อัปเดต</span>
-            </button>
-            <button
-              id="btn-toggle-drawer"
-              type="button"
-              aria-expanded="false"
-              aria-controls="report-drawer"
-              class="pynn-btn pynn-btn-forest text-xs py-1 sm:py-1.5 px-2 sm:px-3 whitespace-nowrap"
-              title="เปิดแผงบันทึกผลงานแบบละเอียด"
-            >
-              <i data-lucide="check-square" class="w-3.5 h-3.5 text-white shrink-0" aria-hidden="true"></i>
-              <span class="sp-btn-lbl-drawer">บันทึกผลงาน</span>
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#92400E] shrink-0" aria-hidden="true"></i>
+              <span>รายงาน</span>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
             </button>
 
-            <!-- Report Center Dropdown (Exact piling.html Style!) -->
-            <div class="relative">
-              <button
-                id="btn-sp-report-menu"
-                type="button"
-                class="pynn-btn text-xs py-1 sm:py-1.5 px-2.5 sm:px-3 bg-[#FEF3C7] text-[#92400E] hover:bg-[#FDE68A] whitespace-nowrap"
-                title="เปิดหน้ารายงาน 3 หมวดงาน & Daily Report PDF"
-              >
-                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#92400E]" aria-hidden="true"></i>
-                <span>รายงาน</span>
-                <i data-lucide="chevron-down" class="w-3 h-3" aria-hidden="true"></i>
-              </button>
-
-              <div id="sp-report-dropdown" class="hidden absolute right-0 top-full mt-2 w-72 bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-2.5 z-50 space-y-1.5">
-                <div class="text-[10px] font-mono font-black text-[#92400E] uppercase tracking-wider px-1 pb-1 border-b border-[#E2D9CC]">
-                  รายงานงานป้องกันดิน &amp; ส่งมอบ (3 หมวดงาน)
-                </div>
-                <button id="btn-open-sp-daily" type="button" class="w-full text-left p-2 rounded-xl bg-white hover:bg-[#FFF7ED] border border-[#1D2B45]/20 hover:border-[#F26B2A] flex items-center justify-between gap-2 cursor-pointer transition-all">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span class="w-8 h-8 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📄</span>
-                    <div class="min-w-0">
-                      <div class="text-xs font-black text-[#1D2B45] truncate">Daily Report (PDF แสนสิริ)</div>
-                      <div class="text-[10px] text-[#4F5D75] truncate">4 หน้า: ประจำวัน · สรุปชีตไพล์ · ภาพถ่าย · Consult</div>
-                    </div>
-                  </div>
-                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] shrink-0">PDF 4 หน้า</span>
-                </button>
-                <button id="btn-open-sp-overview" type="button" class="w-full text-left p-2 rounded-xl bg-white hover:bg-[#ECFDF5] border border-[#1D2B45]/20 hover:border-[#10B981] flex items-center justify-between gap-2 cursor-pointer transition-all">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <span class="w-8 h-8 rounded-lg bg-[#ECFDF5] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📊</span>
-                    <div class="min-w-0">
-                      <div class="text-xs font-black text-[#1D2B45] truncate">หน้ารายงานสรุป (แคปภาพ &amp; ส่ง LINE)</div>
-                      <div class="text-[10px] text-[#4F5D75] truncate">แคปภาพ PNG + สร้างข้อความสรุปทางการส่ง LINE</div>
-                    </div>
-                  </div>
-                  <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#ECFDF5] text-[#065F46] shrink-0">แคป / LINE</span>
-                </button>
+            <div id="sp-report-dropdown" class="hidden absolute right-0 top-full mt-2.5 w-80 bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-2.5 z-50 space-y-1.5">
+              <div class="text-[10px] font-mono font-black text-[#92400E] uppercase tracking-wider px-1 pb-1 border-b border-[#E2D9CC]">
+                รายงานงานป้องกันดิน &amp; ส่ง LINE
               </div>
+              <button id="btn-open-sp-daily" type="button" class="w-full text-left p-2 rounded-xl bg-white hover:bg-[#FFF7ED] border border-[#1D2B45]/20 hover:border-[#F26B2A] flex items-center justify-between gap-2 cursor-pointer transition-all">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-8 h-8 rounded-lg bg-[#FEF3C7] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📄</span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-black text-[#1D2B45] truncate">Daily Report (PDF แสนสิริ)</div>
+                    <div class="text-[10px] text-[#4F5D75] truncate">4 หน้า: ประจำวัน · สรุปชีตไพล์ · ภาพถ่าย · Consult</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] shrink-0">PDF 4 หน้า</span>
+              </button>
+              <button id="btn-open-sp-overview" type="button" class="w-full text-left p-2 rounded-xl bg-white hover:bg-[#ECFDF5] border border-[#1D2B45]/20 hover:border-[#10B981] flex items-center justify-between gap-2 cursor-pointer transition-all">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-8 h-8 rounded-lg bg-[#ECFDF5] border-1.5 border-[#1D2B45] flex items-center justify-center text-sm shrink-0">📊</span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-black text-[#1D2B45] truncate">หน้ารายงานสรุป (แคปภาพ PNG)</div>
+                    <div class="text-[10px] text-[#4F5D75] truncate">แคปภาพมุมมอง 3D + สร้างข้อความสรุปทางการ</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-[#ECFDF5] text-[#065F46] shrink-0">แคปภาพ</span>
+              </button>
+              <button
+                id="btn-copy-line"
+                type="button"
+                aria-label="คัดลอกสรุปส่ง LINE"
+                class="w-full text-left p-2 rounded-xl bg-[#E8F8F5] hover:bg-[#D1FAE5] border-1.5 border-[#1D2B45] flex items-center justify-between gap-2 cursor-pointer transition-all"
+              >
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-8 h-8 rounded-lg bg-[#10B981] text-white border-1.5 border-[#1D2B45] flex items-center justify-center shrink-0">
+                    <i data-lucide="clipboard-copy" class="w-4 h-4" aria-hidden="true"></i>
+                  </span>
+                  <div class="min-w-0">
+                    <div class="text-xs font-black text-[#065F46] truncate">คัดลอกข้อความสรุปส่ง LINE</div>
+                    <div class="text-[10px] text-[#0E5E57] truncate">สรุป Sheet Pile · ขุดดิน · Waler · Packing ทันที</div>
+                  </div>
+                </div>
+                <span class="text-[9px] font-mono font-black px-1.5 py-0.5 rounded bg-white text-[#065F46] border border-[#10B981] shrink-0">COPY</span>
+              </button>
             </div>
-
-            <button
-              id="btn-copy-line"
-              type="button"
-              aria-label="คัดลอกสรุปส่ง LINE"
-              class="pynn-btn pynn-btn-primary text-xs py-1 sm:py-1.5 px-2.5 sm:px-3 whitespace-nowrap"
-            >
-              <i data-lucide="clipboard-copy" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
-              <span class="sp-btn-lbl-line">ส่ง LINE</span>
-            </button>
           </div>
         </div>
       </header>
@@ -586,7 +595,7 @@
           </div>
 
           <!-- FLOATING RAPID TODAY-UPDATE BANNER (Tap-Tap-Tap + Backdate Picker -> Confirm Save) -->
-          <div id="today-update-banner" class="sp-embed-hide hidden absolute top-[64px] left-1/2 -translate-x-1/2 z-30 pynn-hud px-3.5 py-2 flex flex-wrap items-center justify-center gap-2 bg-[#F0F9FF] border-[#0284C7]">
+          <div id="today-update-banner" class="sp-embed-hide hidden absolute top-[70px] left-1/2 -translate-x-1/2 z-30 pynn-hud px-3.5 py-2 flex flex-wrap items-center justify-center gap-2 bg-[#F0F9FF] border-[#0284C7]">
             <div class="flex items-center gap-2 text-xs font-extrabold text-[#0C4A6E] flex-wrap justify-center">
               <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#0284C7] text-white font-mono text-[10px]">⚡ โหมดอัปเดตผลงาน</span>
               <label class="inline-flex items-center gap-1 bg-white border-1.5 border-[#0284C7] rounded-full px-2 py-0.5 text-[11px] font-bold text-[#0C4A6E]" title="เลือกวันที่ทำงาน (เลือกย้อนหลังได้)">
@@ -609,7 +618,7 @@
           </div>
 
           <!-- ORGANIZED LEFT VERTICAL TOOL DOCK (UI/UX Pro Max: Views · Style · Layers · Tools) -->
-          <aside id="left-tool-dock" aria-label="แผงควบคุมมุมมอง สไตล์ และเลเยอร์ 3 มิติ" class="absolute top-[64px] left-3 z-20 flex flex-col gap-2 w-[228px] max-h-[calc(100dvh-148px)]">
+          <aside id="left-tool-dock" aria-label="แผงควบคุมมุมมอง สไตล์ และเลเยอร์ 3 มิติ" class="absolute top-[70px] left-3 z-20 flex flex-col gap-2 w-[228px] max-h-[calc(100dvh-154px)]">
             <!-- Collapse / Expand Pill -->
             <button
               id="btn-toggle-left-dock"
@@ -734,7 +743,7 @@
           </aside>
 
           <!-- Floating Selected Object Inspector (Positioned cleanly beside Left Tool Dock) -->
-          <div id="selection-hud" class="hidden absolute top-[64px] left-[252px] max-sm:left-3 max-sm:top-[112px] z-20 w-[min(290px,calc(100%-24px))] pynn-hud p-3">
+          <div id="selection-hud" class="hidden absolute top-[70px] left-[252px] max-sm:left-3 max-sm:top-[112px] z-20 w-[min(290px,calc(100%-24px))] pynn-hud p-3">
             <div class="flex items-start justify-between gap-2">
               <div class="min-w-0">
                 <span id="sel-cat" class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">SHEET PILE</span>
@@ -2272,6 +2281,7 @@
           `5. Preload Jack: ${k.jkDone}/2 จุด (${k.jkDone * 40} ตัน)`
         ].join('\n');
         copyTextWithFallback(txt);
+        document.getElementById('sp-report-dropdown')?.classList.add('hidden');
       });
 
       document.getElementById('btn-reset-all').addEventListener('click', () => {
