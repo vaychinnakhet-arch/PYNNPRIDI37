@@ -322,14 +322,24 @@
     }
     @media (max-width: 767px) {
       .sp-island {
-        height: 44px;
-        border-radius: 14px;
+        height: 42px;
+        border-radius: 13px;
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+        gap: 5px !important;
       }
       .sp-island-action-btn {
-        height: 32px;
-        padding: 0 9px;
-        font-size: 11.5px;
-        border-radius: 10px;
+        height: 30px;
+        padding: 0 7px;
+        font-size: 11px;
+        gap: 4px;
+        border-radius: 9px;
+      }
+      .sp-mode-pill-btn {
+        height: 26px;
+        padding: 0 8px;
+        font-size: 10.5px;
+        gap: 4px;
       }
     }
     .sp-mode-pill-btn {
@@ -386,16 +396,16 @@
   </div>
 
   <!-- TOP 3-ISLAND FLOATING HUD (UNIFIED WITH /sheetpile & /piling) -->
-  <header id="footing-top-navbar" class="absolute top-3 left-3 right-3 z-30 pointer-events-none flex items-center justify-between gap-2.5">
+  <header id="footing-top-navbar" class="absolute top-2 left-2 right-2 sm:top-3 sm:left-3 sm:right-3 z-30 pointer-events-none flex items-center justify-between gap-1.5 sm:gap-2.5">
     <!-- ISLAND 1 (LEFT): Back + Project Brand + Segmented Module Switcher -->
     <div class="sp-island px-2.5 gap-2.5 shrink-0 min-w-0">
-      <a href="index.html" class="w-8 h-8 rounded-xl bg-[#FAF5EE] hover:bg-white border-[1.5px] border-[#1D2B45] text-[#1D2B45] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      <a href="index.html" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#FAF5EE] hover:bg-white border-[1.5px] border-[#1D2B45] text-[#1D2B45] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าภาพรวมโครงการ (Dashboard)">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
       </a>
 
       <div class="min-w-0 pr-0.5">
-        <h1 class="text-[13.5px] font-black tracking-tight text-[#1D2B45] uppercase leading-none font-prompt whitespace-nowrap">
-          PYNN <span class="text-[#F26B2A] italic">EKKAMAI</span> 12
+        <h1 class="text-[12.5px] sm:text-[13.5px] font-black tracking-tight text-[#1D2B45] uppercase leading-none font-prompt whitespace-nowrap">
+          PYNN <span class="hidden sm:inline text-[#F26B2A] italic">EKKAMAI</span> <span class="text-[#F26B2A] sm:text-[#1D2B45]">12</span>
         </h1>
         <p class="text-[10.5px] text-[#475569] font-semibold leading-none mt-1 hidden sm:block whitespace-nowrap">ผังฐานราก ค.ส.ล. 21 ฐาน (Footing)</p>
       </div>
@@ -447,23 +457,23 @@
   </header>
 
   <!-- ORGANIZED LEFT TOOL CLUSTER: Collapsed 3D Tools Pill + Standalone 2D/3D Quick Switcher -->
-  <aside id="footing-left-cluster" aria-label="แผงควบคุมมุมมอง เลเยอร์ และกรองฐานราก" class="absolute top-[72px] left-3 z-20 flex flex-col items-start gap-2 pointer-events-none max-h-[calc(100dvh-150px)]">
+  <aside id="footing-left-cluster" aria-label="แผงควบคุมมุมมอง เลเยอร์ และกรองฐานราก" class="absolute top-[56px] left-2 right-2 sm:top-[72px] sm:left-3 sm:right-auto z-20 flex flex-col items-start gap-2 pointer-events-none max-h-[calc(100dvh-130px)]">
     <!-- Always-Visible Top Control Row -->
-    <div class="flex items-center gap-2 flex-wrap pointer-events-auto">
+    <div class="flex items-center gap-1.5 sm:gap-2 flex-nowrap max-w-full overflow-x-auto pointer-events-auto">
       <button
         id="btn-toggle-footing-dock"
         type="button"
         aria-expanded="false"
-        class="h-[38px] px-3.5 rounded-xl border-2 border-[#1D2B45] bg-white/95 hover:bg-[#FAF5EE] backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] text-[12px] font-extrabold font-prompt text-[#1D2B45] inline-flex items-center gap-2 cursor-pointer transition-all"
+        class="h-[34px] sm:h-[38px] px-2.5 sm:px-3.5 rounded-xl border-2 border-[#1D2B45] bg-white/95 hover:bg-[#FAF5EE] backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] text-[11px] sm:text-[12px] font-extrabold font-prompt text-[#1D2B45] inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-all shrink-0 whitespace-nowrap"
         title="เปิดหรือพับแผงเครื่องมือ 3D (มุมมอง · เลเยอร์ · ความทึบแสง · กรองสถานะ)"
       >
-        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-[#F26B2A] shrink-0" aria-hidden="true"></i>
+        <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F26B2A] shrink-0" aria-hidden="true"></i>
         <span>เครื่องมือ 3D</span>
         <i id="ico-footing-dock-chev" data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#475569] transition-transform duration-150 shrink-0" aria-hidden="true"></i>
       </button>
 
       <!-- Standalone Quick 2D/3D View Pill -->
-      <div role="group" aria-label="สลับมุมมอง 2D/3D" class="h-[38px] p-1 rounded-xl border-2 border-[#1D2B45] bg-white/95 backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] inline-flex items-center gap-1">
+      <div role="group" aria-label="สลับมุมมอง 2D/3D" class="h-[34px] sm:h-[38px] p-1 rounded-xl border-2 border-[#1D2B45] bg-white/95 backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] inline-flex items-center gap-0.5 sm:gap-1 shrink-0">
         <button type="button" id="quick-foot-2d" class="sp-mode-pill-btn is-inactive" title="สลับเป็นมุมมองแปลน 2D (Top Ortho)">
           <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#F26B2A] shrink-0"></i>
           <span>แปลน 2D</span>
@@ -476,7 +486,16 @@
     </div>
 
     <!-- Collapsible Unified Tool Popover (Starts Collapsed by Default -> Clean Open 3D Canvas!) -->
-    <div id="footing-toolbar" class="hidden pointer-events-auto w-[264px] bg-white/96 backdrop-blur-md border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-3 flex flex-col gap-3 overflow-y-auto max-h-[calc(100dvh-165px)]">
+    <div id="footing-toolbar" class="hidden pointer-events-auto w-[min(268px,calc(100vw-16px))] bg-white/96 backdrop-blur-md border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-3 flex flex-col gap-3 overflow-y-auto max-h-[calc(100dvh-145px)]">
+      <!-- 00 · MOBILE/TABLET QUICK MODULE SWITCHER -->
+      <div class="xl:hidden pb-2.5 border-b border-[#E2D9CC]">
+        <div class="text-[10px] font-mono-code font-black tracking-wider text-[#64748B] uppercase mb-1.5 px-0.5">สลับหน้าโมดูล 3D</div>
+        <div class="grid grid-cols-3 gap-1 bg-[#FAF5EE] border-[1.5px] border-[#1D2B45] rounded-xl p-0.5 text-[11px] font-prompt font-extrabold text-center">
+          <a href="sheetpile.html" class="py-1.5 rounded-[9px] text-[#3E4B69] hover:bg-white">ชีตไพล์</a>
+          <a href="piling.html" class="py-1.5 rounded-[9px] text-[#3E4B69] hover:bg-white">เสาเข็ม 93</a>
+          <span class="py-1.5 rounded-[9px] bg-[#1D2B45] text-white">ฐานราก</span>
+        </div>
+      </div>
       <!-- 01 · CAMERA VIEWS -->
       <div>
         <div class="flex items-center justify-between mb-2 px-0.5">

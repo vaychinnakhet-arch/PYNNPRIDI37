@@ -1870,14 +1870,24 @@
     }
     @media (max-width: 767px) {
       .sp-island {
-        height: 44px;
-        border-radius: 14px;
+        height: 42px;
+        border-radius: 13px;
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+        gap: 5px !important;
       }
       .sp-island-action-btn {
-        height: 32px;
-        padding: 0 9px;
-        font-size: 11.5px;
-        border-radius: 10px;
+        height: 30px;
+        padding: 0 7px;
+        font-size: 11px;
+        gap: 4px;
+        border-radius: 9px;
+      }
+      .sp-mode-pill-btn {
+        height: 26px;
+        padding: 0 8px;
+        font-size: 10.5px;
+        gap: 4px;
       }
     }
     /* Match collapsed left HUD pill with /sheetpile (38px crisp floating pill) */
@@ -1959,16 +1969,16 @@
   </div>
 
   <!-- Top Bar: Unified 3-Island Floating HUD (Matching /sheetpile BIM Studio Style) -->
-  <header id="piling-top-navbar" class="absolute top-3 left-3 right-3 z-30 pointer-events-none flex items-center justify-between gap-2.5">
+  <header id="piling-top-navbar" class="absolute top-2 left-2 right-2 sm:top-3 sm:left-3 sm:right-3 z-30 pointer-events-none flex items-center justify-between gap-1.5 sm:gap-2.5">
     <!-- ISLAND 1 (LEFT): Back + Project Brand + Segmented Module Switcher -->
     <div class="sp-island px-2.5 gap-2.5 shrink-0 min-w-0">
-      <a href="index.html" class="w-8 h-8 rounded-xl bg-[#FAF5EE] hover:bg-white border-1.5 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      <a href="index.html" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#FAF5EE] hover:bg-white border-1.5 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
       </a>
 
       <div class="min-w-0 pr-0.5">
-        <h1 class="text-[13.5px] font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display whitespace-nowrap">
-          PYNN <span class="text-[#F26B2A] italic">EKKAMAI</span> 12
+        <h1 class="text-[12.5px] sm:text-[13.5px] font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display whitespace-nowrap">
+          PYNN <span class="hidden sm:inline text-[#F26B2A] italic">EKKAMAI</span> <span class="text-[#F26B2A] sm:text-[#1D2B45]">12</span>
         </h1>
         <p class="text-[10.5px] text-[#475569] font-semibold leading-none mt-1 hidden sm:block whitespace-nowrap">ผังงานเสาเข็ม 93 ต้น (Piling)</p>
       </div>
@@ -1979,8 +1989,8 @@
         <a href="footing.html" class="px-2 py-1 rounded-[9px] text-[#3E4B69] hover:text-[#1D2B45] hover:bg-white transition-colors whitespace-nowrap">ฐานราก</a>
       </nav>
 
-      <!-- Mobile Compact Driven Pill (< 1024px) -->
-      <div class="flex lg:hidden items-center gap-1 px-2 py-0.5 rounded-full bg-[#FAF5EE] border border-[#1D2B45]/40 shrink-0 font-body">
+      <!-- Tablet Compact Driven Pill (640px - 1023px) -->
+      <div class="hidden sm:flex lg:hidden items-center gap-1 px-2 py-0.5 rounded-full bg-[#FAF5EE] border border-[#1D2B45]/40 shrink-0 font-body">
         <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
         <span class="text-[11px] font-mono font-black text-[#1D2B45]"><span class="stat-driven-count-bind text-[#10B981]">0</span>/93</span>
         <span class="text-[9.5px] font-mono font-bold text-[#3E4B69] stat-driven-pct-bind">(0%)</span>
@@ -2033,7 +2043,7 @@
           <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#92400E] transition-transform duration-200 shrink-0" id="arrow-tables-dropdown"></i>
         </button>
           
-          <div id="menu-tables-dropdown" class="hidden absolute right-0 top-full mt-2 w-84 sm:w-92 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[5px_5px_0px_#1D2B45] p-2.5 z-50 flex flex-col gap-2 max-h-[85vh] overflow-y-auto custom-scrollbar font-body">
+          <div id="menu-tables-dropdown" class="hidden absolute right-0 top-full mt-2 w-[min(350px,calc(100vw-16px))] sm:w-92 bg-[#FAF5EE] border-2 border-[#1D2B45] rounded-2xl shadow-[5px_5px_0px_#1D2B45] p-2.5 z-50 flex flex-col gap-2 max-h-[82dvh] overflow-y-auto custom-scrollbar font-body">
             
             <!-- Master Dropdown Header -->
             <div class="px-2.5 py-1.5 bg-white border-2 border-[#1D2B45] rounded-xl flex items-center justify-between shadow-[1.5px_1.5px_0px_#1D2B45]">
@@ -2193,9 +2203,14 @@
               <div class="flex items-center justify-between px-1 pb-1 border-b border-[#1D2B45]/10">
                 <div class="flex items-center gap-1.5 text-[#1D2B45]">
                   <span class="text-xs">🛠️</span>
-                  <span class="text-[10.5px] font-black uppercase tracking-wider">เครื่องมือ & ระบบ</span>
+                  <span class="text-[10.5px] font-black uppercase tracking-wider">สลับโมดูล &amp; ระบบ</span>
                 </div>
-                <span class="text-[9px] font-mono font-bold text-[#64748B]">SYSTEM</span>
+                <span class="text-[9px] font-mono font-bold text-[#64748B]">MOBILE</span>
+              </div>
+              <div class="grid grid-cols-3 gap-1 bg-[#FAF5EE] border border-[#1D2B45]/40 rounded-xl p-0.5 text-[11px] font-display font-extrabold text-center">
+                <a href="sheetpile.html" class="py-1.5 rounded-[9px] text-[#3E4B69] hover:bg-white">ชีตไพล์</a>
+                <span class="py-1.5 rounded-[9px] bg-[#1D2B45] text-white">เสาเข็ม 93</span>
+                <a href="footing.html" class="py-1.5 rounded-[9px] text-[#3E4B69] hover:bg-white">ฐานราก</a>
               </div>
               <div class="grid grid-cols-2 gap-1.5">
                 <button id="btn-menu-sync" type="button" class="p-2 rounded-lg bg-[#E8F8F5] text-[#0E5E57] border border-[#0E5E57]/30 text-xs font-bold flex items-center gap-1.5 justify-center shadow-2xs hover:bg-[#d5f3ec] transition-all cursor-pointer">

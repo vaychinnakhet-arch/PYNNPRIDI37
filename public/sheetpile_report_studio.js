@@ -1286,11 +1286,14 @@
                 <button id="sp-rep-mode-sketchup" type="button" class="px-2.5 py-1 cursor-pointer border-l border-[#1D2B45] ${reportViewMode === 'sketchup' ? 'bg-[#1D2B45] text-white' : 'text-[#1D2B45] hover:bg-white'}">สี SketchUp</button>
               </div>
               <button id="sp-rep-recapture-views" type="button" class="px-2.5 py-1 rounded-full text-[11px] font-bold border-2 border-[#1D2B45] bg-white hover:bg-[#FEF3C7] cursor-pointer">🔄 อัปเดตภาพ</button>
-              <button id="sp-sum-capture-png" type="button" class="px-3.5 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] bg-[#F26B2A] text-white hover:bg-[#E05615] shadow-[2px_2px_0px_#1D2B45] font-display cursor-pointer">
-                📸 แคปภาพรายงาน (PNG)
+              <button id="sp-sum-capture-png" type="button" class="px-3 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] bg-[#F26B2A] text-white hover:bg-[#E05615] shadow-[2px_2px_0px_#1D2B45] font-display cursor-pointer">
+                📸 แคปภาพ (PNG)
               </button>
-              <button id="sp-sum-toggle-line" type="button" class="px-3 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] ${showLinePanel ? 'bg-[#10B981] text-white' : 'bg-[#ECFDF5] text-[#065F46] hover:bg-[#D1FAE5]'} font-display cursor-pointer">
-                💬 ข้อความส่ง LINE (ทางการ)
+              <button id="sp-sum-download-pdf" type="button" class="px-3 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] bg-[#10B981] text-white hover:bg-[#059669] shadow-[2px_2px_0px_#1D2B45] font-display cursor-pointer">
+                ⬇️ โหลด PDF
+              </button>
+              <button id="sp-sum-toggle-line" type="button" class="px-3 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] ${showLinePanel ? 'bg-[#0F766E] text-white' : 'bg-[#ECFDF5] text-[#065F46] hover:bg-[#D1FAE5]'} font-display cursor-pointer">
+                💬 ข้อความ LINE
               </button>
               <button id="sp-switch-to-daily" type="button" class="px-2.5 py-1 rounded-full text-[11px] font-bold border-2 border-[#1D2B45] bg-[#FEF3C7] text-[#92400E] hover:bg-[#FDE68A] cursor-pointer">
                 📄 เปิด Daily Report (4 หน้า)
@@ -1404,9 +1407,13 @@
               console.error(err);
               getBridge()?.showToast?.('เกิดข้อผิดพลาดในการแคปภาพ');
             } finally {
-              capPngBtn.textContent = '📸 แคปภาพรายงาน (PNG)';
+              capPngBtn.textContent = '📸 แคปภาพ (PNG)';
             }
           };
+        }
+        const sumPdfBtn = root.querySelector('#sp-sum-download-pdf');
+        if (sumPdfBtn) {
+          sumPdfBtn.onclick = () => exportExactPDF('summary');
         }
         return;
       }
@@ -1443,7 +1450,10 @@
                 </div>
               </div>
             </div>
-            <button id="sp-rep-close-mobile" type="button" class="lg:hidden w-8 h-8 rounded border border-slate-900 bg-white hover:bg-rose-50 text-slate-900 font-black text-sm cursor-pointer shrink-0" title="ปิดหน้ารายงาน">✕</button>
+            <div class="flex items-center gap-1.5 shrink-0 lg:hidden">
+              <button id="sp-rep-download-pdf-mobile" type="button" class="px-2.5 h-8 rounded border border-slate-900 bg-[#10B981] hover:bg-[#059669] text-white font-extrabold text-[11px] cursor-pointer whitespace-nowrap shadow-[1.5px_1.5px_0px_#0f172a]">⬇️ โหลด PDF</button>
+              <button id="sp-rep-close-mobile" type="button" class="w-8 h-8 rounded border border-slate-900 bg-white hover:bg-rose-50 text-slate-900 font-black text-sm cursor-pointer shrink-0" title="ปิดหน้ารายงาน">✕</button>
+            </div>
           </div>
 
           <div class="sp-toolbar-scroll flex items-center gap-1.5 overflow-x-auto flex-nowrap pb-0.5 lg:pb-0">
@@ -1462,7 +1472,8 @@
 
             <button id="sp-rep-recapture-views" type="button" class="px-2 py-1 rounded text-[11px] font-bold border border-slate-900 bg-white hover:bg-amber-50 cursor-pointer shrink-0 whitespace-nowrap" title="อัปเดตภาพ 3D ล่าสุด">🔄 อัปเดต</button>
             <button id="sp-rep-copy-line" type="button" class="px-2.5 py-1 rounded text-[11px] font-bold border border-slate-900 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 cursor-pointer shrink-0 whitespace-nowrap">📋 LINE</button>
-            <button id="sp-rep-print-pdf" type="button" class="px-3 py-1 rounded text-[11px] font-extrabold border border-slate-900 bg-[#10B981] text-white hover:bg-[#059669] cursor-pointer shrink-0 whitespace-nowrap">🖨️ Save PDF</button>
+            <button id="sp-rep-download-pdf" type="button" class="px-3 py-1 rounded text-[11px] font-extrabold border border-slate-900 bg-[#10B981] text-white hover:bg-[#059669] shadow-[1.5px_1.5px_0px_#0f172a] cursor-pointer shrink-0 whitespace-nowrap" title="ดาวน์โหลดไฟล์ PDF 4 หน้าตรงตามตัวอย่างเป๊ะ">⬇️ ดาวน์โหลด PDF</button>
+            <button id="sp-rep-print-pdf" type="button" class="px-2.5 py-1 rounded text-[11px] font-extrabold border border-slate-900 bg-[#FEF3C7] text-[#92400E] hover:bg-[#FDE68A] cursor-pointer shrink-0 whitespace-nowrap" title="สั่งพิมพ์หรือบันทึก PDF ผ่านเบราว์เซอร์">🖨️ พิมพ์</button>
             <button id="sp-rep-close" type="button" class="hidden lg:inline-flex items-center justify-center w-8 h-8 rounded border border-slate-900 bg-white hover:bg-rose-50 text-slate-900 font-black text-sm cursor-pointer shrink-0" title="ปิดหน้ารายงาน">✕</button>
           </div>
         </div>
@@ -1522,6 +1533,10 @@
       root.querySelector('#sp-rep-close').onclick = () => root.classList.add('hidden');
       const closeMob = root.querySelector('#sp-rep-close-mobile');
       if (closeMob) closeMob.onclick = () => root.classList.add('hidden');
+      const dlPdfBtn = root.querySelector('#sp-rep-download-pdf');
+      if (dlPdfBtn) dlPdfBtn.onclick = () => exportExactPDF('daily');
+      const dlPdfMob = root.querySelector('#sp-rep-download-pdf-mobile');
+      if (dlPdfMob) dlPdfMob.onclick = () => exportExactPDF('daily');
       root.querySelector('#sp-rep-print-pdf').onclick = () => window.print();
       root.querySelectorAll('[data-sp-view]').forEach((b) => {
         b.onclick = () => { activeView = b.dataset.spView; draw(); };
@@ -1786,6 +1801,228 @@
         root.querySelectorAll('.sp-a4-page').forEach((pg) => {
           pg.style.zoom = String(scale.toFixed(3));
         });
+      }
+    }
+
+    // Exact WYSIWYG A4 PDF Exporter (matches on-screen preview pixel-for-pixel on PC & Mobile)
+    let isExportingPdf = false;
+    function ensureJsPdf() {
+      const existing = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+      if (typeof existing === 'function') return Promise.resolve(existing);
+      return new Promise((resolve, reject) => {
+        const sc = document.createElement('script');
+        sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        sc.onload = () => {
+          const cls = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+          if (typeof cls === 'function') resolve(cls);
+          else reject(new Error('jsPDF failed to initialize'));
+        };
+        sc.onerror = () => reject(new Error('Failed to load jsPDF'));
+        document.head.appendChild(sc);
+      });
+    }
+
+    function getSpPdfFilename(kind) {
+      const dateStr = cfg.date || todayIso();
+      let dd = '25', mm = '11', yy = '69';
+      if (typeof dateStr === 'string' && dateStr.includes('-')) {
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+          let y = parseInt(parts[0], 10);
+          mm = parts[1].padStart(2, '0');
+          dd = parts[2].padStart(2, '0');
+          if (y < 2500) y += 543;
+          yy = String(y % 100).padStart(2, '0');
+        }
+      }
+      if (kind === 'summary') {
+        return `SheetPile_Summary_PYNN_EKKAMAI12_${dd}-${mm}-${yy}.pdf`;
+      }
+      return `Daily Report Sheet Pile PYNN EKKAMAI 12 ${dd}-${mm}-${yy}.pdf`;
+    }
+
+    async function exportExactPDF(kind) {
+      if (isExportingPdf) return;
+      isExportingPdf = true;
+
+      const prevView = activeView;
+      if (kind !== 'summary' && activeView !== 'all') {
+        activeView = 'all';
+        draw();
+      }
+
+      const toast = document.createElement('div');
+      toast.className = 'no-print fixed bottom-5 right-5 z-[10000] bg-[#1D2B45] text-white px-4 py-3 rounded-2xl shadow-2xl border-2 border-[#10B981] flex items-center gap-3 text-xs font-bold max-w-[90vw]';
+      toast.innerHTML = `
+        <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0"></div>
+        <span id="sp-pdf-toast-msg">กำลังเตรียมไฟล์ PDF ตรงตามตัวอย่าง A4...</span>
+      `;
+      document.body.appendChild(toast);
+      const setToast = (msg) => {
+        const el = document.getElementById('sp-pdf-toast-msg');
+        if (el) el.textContent = msg;
+      };
+
+      const savedStyles = [];
+      try {
+        const jsPdfClass = await ensureJsPdf();
+        if (document.fonts && document.fonts.ready) {
+          try { await document.fonts.ready; } catch {}
+        }
+        await new Promise((r) => setTimeout(r, 180));
+
+        const targets = kind === 'summary'
+          ? Array.from(root.querySelectorAll('#sp-summary-capture-card'))
+          : Array.from(root.querySelectorAll('.sp-a4-page'));
+
+        if (!targets.length || !window.htmlToImage || typeof window.htmlToImage.toCanvas !== 'function') {
+          throw new Error('PDF capture engine unavailable');
+        }
+
+        const pdf = new jsPdfClass({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+          compress: true,
+        });
+
+        for (let i = 0; i < targets.length; i++) {
+          const sheet = targets[i];
+          setToast(`กำลังสร้าง PDF หน้า ${i + 1} / ${targets.length} (คมชัด A4)...`);
+          if (i > 0) pdf.addPage('a4', 'portrait');
+
+          // Temporarily lock desktop A4 width (794px) and reset mobile zoom so phone exports match PC 100%
+          const prevStyle = {
+            zoom: sheet.style.zoom,
+            width: sheet.style.width,
+            minWidth: sheet.style.minWidth,
+            maxWidth: sheet.style.maxWidth,
+            boxShadow: sheet.style.boxShadow,
+            margin: sheet.style.margin,
+          };
+          savedStyles.push({ sheet, prevStyle });
+          sheet.style.zoom = '1';
+          sheet.style.width = '794px';
+          sheet.style.minWidth = '794px';
+          sheet.style.maxWidth = '794px';
+          sheet.style.boxShadow = 'none';
+          sheet.style.margin = '0';
+
+          // Mirror form inputs/textareas into static spans/divs so browser foreignObject renders exact Thai glyphs & values
+          const swapped = [];
+          sheet.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach((cb) => {
+            if (cb.checked) cb.setAttribute('checked', 'checked');
+            else cb.removeAttribute('checked');
+          });
+          sheet.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea').forEach((inp) => {
+            const cs = window.getComputedStyle(inp);
+            const rect = inp.getBoundingClientRect();
+            const mirror = document.createElement(inp.tagName === 'TEXTAREA' ? 'div' : 'span');
+            mirror.className = inp.className;
+            mirror.style.cssText = inp.style.cssText;
+            mirror.style.display = inp.tagName === 'TEXTAREA' ? 'block' : 'inline-flex';
+            mirror.style.alignItems = 'center';
+            mirror.style.justifyContent = cs.textAlign === 'center' ? 'center' : (cs.textAlign === 'right' ? 'flex-end' : 'flex-start');
+            mirror.style.textAlign = cs.textAlign;
+            mirror.style.fontFamily = cs.fontFamily;
+            mirror.style.fontSize = cs.fontSize;
+            mirror.style.fontWeight = cs.fontWeight;
+            mirror.style.color = cs.color;
+            mirror.style.lineHeight = '1.35';
+            mirror.style.whiteSpace = inp.tagName === 'TEXTAREA' ? 'pre-wrap' : 'nowrap';
+            mirror.style.overflow = 'visible';
+            if (rect.width > 0) mirror.style.width = `${rect.width}px`;
+            if (rect.height > 0) mirror.style.minHeight = `${rect.height}px`;
+            mirror.style.height = 'auto';
+            mirror.style.padding = cs.padding || '0 2px';
+            mirror.style.boxSizing = 'border-box';
+            mirror.textContent = inp.type === 'date' && inp.value ? formatThaiDateShort(inp.value) : (inp.value || '');
+            if (inp.parentNode) {
+              inp.parentNode.insertBefore(mirror, inp);
+              inp.style.display = 'none';
+              swapped.push({ inp, mirror });
+            }
+          });
+
+          await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+          let canvas = null;
+          try {
+            const w = Math.round(sheet.offsetWidth || 794);
+            const h = Math.round(sheet.scrollHeight || sheet.offsetHeight || 1123);
+            const filterFn = (node) => !(node && node.classList && node.classList.contains('no-print'));
+            try {
+              canvas = await window.htmlToImage.toCanvas(sheet, {
+                backgroundColor: '#ffffff',
+                pixelRatio: 2.4,
+                width: w,
+                height: h,
+                cacheBust: true,
+                filter: filterFn,
+              });
+            } catch (fontErr) {
+              console.warn('SheetPile PDF htmlToImage retrying with skipFonts:', fontErr);
+              canvas = await window.htmlToImage.toCanvas(sheet, {
+                backgroundColor: '#ffffff',
+                pixelRatio: 2.4,
+                width: w,
+                height: h,
+                skipFonts: true,
+                filter: filterFn,
+              });
+            }
+          } finally {
+            swapped.forEach(({ inp, mirror }) => {
+              inp.style.display = '';
+              if (mirror && mirror.parentNode) mirror.parentNode.removeChild(mirror);
+            });
+          }
+
+          if (!canvas) throw new Error(`Render failed on page ${i + 1}`);
+
+          // Fit cleanly inside A4 (210x297mm) with 3mm safe margin & zero aspect-ratio distortion
+          const pageW = 210;
+          const pageH = 297;
+          const margin = 3;
+          const maxW = pageW - margin * 2;
+          const maxH = pageH - margin * 2;
+          const aspect = canvas.width / Math.max(1, canvas.height);
+          let drawW = maxW;
+          let drawH = drawW / aspect;
+          if (drawH > maxH) {
+            drawH = maxH;
+            drawW = drawH * aspect;
+          }
+          const offsetX = (pageW - drawW) / 2;
+          const offsetY = margin;
+
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
+          pdf.addImage(imgData, 'JPEG', offsetX, offsetY, drawW, drawH, undefined, 'FAST');
+        }
+
+        const filename = getSpPdfFilename(kind);
+        setToast(`ดาวน์โหลด ${filename} สำเร็จ!`);
+        pdf.save(filename);
+        getBridge()?.showToast?.('ดาวน์โหลดไฟล์ PDF เรียบร้อยแล้ว');
+      } catch (err) {
+        console.error('SheetPile exact PDF export failed:', err);
+        getBridge()?.showToast?.('ไม่สามารถสร้างไฟล์ PDF อัตโนมัติได้ กำลังเปิดหน้าพิมพ์...');
+        window.print();
+      } finally {
+        savedStyles.forEach(({ sheet, prevStyle }) => {
+          sheet.style.zoom = prevStyle.zoom;
+          sheet.style.width = prevStyle.width;
+          sheet.style.minWidth = prevStyle.minWidth;
+          sheet.style.maxWidth = prevStyle.maxWidth;
+          sheet.style.boxShadow = prevStyle.boxShadow;
+          sheet.style.margin = prevStyle.margin;
+        });
+        if (kind !== 'summary' && prevView !== activeView) {
+          activeView = prevView;
+          draw();
+        }
+        isExportingPdf = false;
+        setTimeout(() => toast.remove(), 1200);
       }
     }
 

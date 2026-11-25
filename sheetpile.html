@@ -29,7 +29,8 @@
     <link rel="stylesheet" href="doodle_theme.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="html-to-image.min.js"></script>
-    <script defer src="sheetpile_report_studio.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script defer src="sheetpile_report_studio.js?v=20261125_pdf"></script>
     <script type="importmap">
       {
         "imports": {
@@ -101,11 +102,11 @@
       /* Responsive polish: Mobile (<640px), Foldable Cover (~344px), Foldable Unfolded & Tablet (640px-1199px) */
       @media (max-width: 767px) {
         #left-tool-dock {
-          top: 62px !important;
+          top: 56px !important;
           left: 8px !important;
           right: 8px !important;
           width: auto !important;
-          max-height: calc(100dvh - 185px) !important;
+          max-height: calc(100dvh - 150px) !important;
         }
         #selection-hud {
           top: 110px !important;
@@ -215,14 +216,24 @@
       }
       @media (max-width: 767px) {
         .sp-island {
-          height: 44px;
-          border-radius: 14px;
+          height: 42px;
+          border-radius: 13px;
+          padding-left: 6px !important;
+          padding-right: 6px !important;
+          gap: 5px !important;
         }
         .sp-island-action-btn {
-          height: 32px;
-          padding: 0 9px;
-          font-size: 11.5px;
-          border-radius: 10px;
+          height: 30px;
+          padding: 0 7px;
+          font-size: 11px;
+          gap: 4px;
+          border-radius: 9px;
+        }
+        .sp-mode-pill-btn {
+          height: 26px;
+          padding: 0 8px;
+          font-size: 10.5px;
+          gap: 4px;
         }
       }
       /* Sleek Toggle Switch for 3D Layers */
@@ -480,16 +491,16 @@
   <body class="bg-white text-[#1D2B45] leading-[1.6]">
     <div class="sp-app-shell relative">
       <!-- FLOATING 3-ISLAND TOP HUD (BIM STUDIO STYLE: BRAND/MODULES · TELEMETRY · 3 PRIMARY ACTIONS) -->
-      <header id="sp-top-navbar" class="absolute top-3 left-3 right-3 z-30 pointer-events-none flex items-center justify-between gap-2.5">
+      <header id="sp-top-navbar" class="absolute top-2 left-2 right-2 sm:top-3 sm:left-3 sm:right-3 z-30 pointer-events-none flex items-center justify-between gap-1.5 sm:gap-2.5">
         <!-- ISLAND 1 (LEFT): Back + Project Brand + Module Switcher -->
         <div class="sp-island px-2.5 gap-2.5 shrink-0 min-w-0">
-          <a href="index.html" class="w-8 h-8 rounded-xl bg-[#FAF5EE] hover:bg-white border-1.5 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <a href="index.html" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-[#FAF5EE] hover:bg-white border-1.5 border-[#1D2B45] text-[#1D2B45] flex items-center justify-center shadow-[1.5px_1.5px_0px_#1D2B45] hover:shadow-[2px_2px_0px_#F26B2A] transition-all shrink-0" title="กลับหน้าแรกโครงการ">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           </a>
 
           <div class="min-w-0 pr-0.5">
-            <h1 class="text-[13.5px] font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display whitespace-nowrap">
-              PYNN <span class="text-[#F26B2A] italic">EKKAMAI</span> 12
+            <h1 class="text-[12.5px] sm:text-[13.5px] font-black tracking-tight text-[#1D2B45] uppercase leading-none font-display whitespace-nowrap">
+              PYNN <span class="hidden sm:inline text-[#F26B2A] italic">EKKAMAI</span> <span class="text-[#F26B2A] sm:text-[#1D2B45]">12</span>
             </h1>
             <p class="text-[10.5px] text-[#475569] font-semibold leading-none mt-1 hidden sm:block whitespace-nowrap">งานป้องกันดิน &amp; ขุดดิน (ERSS)</p>
           </div>
@@ -581,12 +592,12 @@
               class="sp-island-action-btn bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E]"
               title="เปิดหน้ารายงาน PDF แสนสิริ · แคปภาพ · คัดลอกสรุปส่ง LINE"
             >
-              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-[#92400E] shrink-0" aria-hidden="true"></i>
+              <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#92400E] shrink-0" aria-hidden="true"></i>
               <span>รายงาน</span>
-              <i data-lucide="chevron-down" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
+              <i data-lucide="chevron-down" class="hidden sm:inline w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
             </button>
 
-            <div id="sp-report-dropdown" class="hidden absolute right-0 top-full mt-2.5 w-80 bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-2.5 z-50 space-y-1.5">
+            <div id="sp-report-dropdown" class="hidden absolute right-0 top-full mt-2 w-[min(320px,calc(100vw-16px))] bg-white border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-2.5 z-50 space-y-1.5">
               <div class="text-[10px] font-mono font-black text-[#92400E] uppercase tracking-wider px-1 pb-1 border-b border-[#E2D9CC]">
                 รายงานงานป้องกันดิน &amp; ส่ง LINE
               </div>
@@ -677,18 +688,18 @@
           </div>
 
           <!-- ORGANIZED LEFT TOOL CLUSTER: Collapsed 3D Tools Pill + Standalone Color-Style Pill -->
-          <aside id="left-tool-dock" aria-label="แผงควบคุมมุมมอง สไตล์ และเลเยอร์ 3 มิติ" class="absolute top-[72px] left-3 z-20 flex flex-col items-start gap-2 pointer-events-none max-h-[calc(100dvh-160px)]">
+          <aside id="left-tool-dock" aria-label="แผงควบคุมมุมมอง สไตล์ และเลเยอร์ 3 มิติ" class="absolute top-[56px] left-2 right-2 sm:top-[72px] sm:left-3 sm:right-auto z-20 flex flex-col items-start gap-2 pointer-events-none max-h-[calc(100dvh-140px)]">
             <!-- Always-Visible Top Control Row (Tools Trigger + Standalone Color Display Switcher) -->
-            <div class="flex items-center gap-2 flex-wrap pointer-events-auto">
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-nowrap max-w-full overflow-x-auto sp-toolbar-scroll pointer-events-auto">
               <!-- 1. Collapsible 3D Tools Trigger (Starts Collapsed by Default) -->
               <button
                 id="btn-toggle-left-dock"
                 type="button"
                 aria-expanded="false"
-                class="h-[38px] px-3.5 rounded-xl border-2 border-[#1D2B45] bg-white/95 hover:bg-[#FAF5EE] backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] text-[12px] font-extrabold font-display text-[#1D2B45] inline-flex items-center gap-2 cursor-pointer transition-all"
+                class="h-[34px] sm:h-[38px] px-2.5 sm:px-3.5 rounded-xl border-2 border-[#1D2B45] bg-white/95 hover:bg-[#FAF5EE] backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] text-[11px] sm:text-[12px] font-extrabold font-display text-[#1D2B45] inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-all shrink-0 whitespace-nowrap"
                 title="เปิดหรือพับแผงเครื่องมือ 3 มิติ (มุมมองกล้อง · เลเยอร์ · ตัดหัวเข็ม)"
               >
-                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-[#F26B2A] shrink-0" aria-hidden="true"></i>
+                <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F26B2A] shrink-0" aria-hidden="true"></i>
                 <span id="lbl-left-dock-toggle">เครื่องมือ 3D</span>
                 <i id="ico-left-dock-chev" data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#475569] transition-transform duration-150 shrink-0" aria-hidden="true"></i>
               </button>
@@ -697,21 +708,30 @@
               <div
                 role="group"
                 aria-label="เลือกการแสดงผลสี 3 มิติ"
-                class="h-[38px] p-1 rounded-xl border-2 border-[#1D2B45] bg-white/95 backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] inline-flex items-center gap-1"
+                class="h-[34px] sm:h-[38px] p-1 rounded-xl border-2 border-[#1D2B45] bg-white/95 backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] inline-flex items-center gap-0.5 sm:gap-1 shrink-0"
               >
                 <button type="button" id="mode-sketchup" class="sp-mode-pill-btn is-active-sketchup" title="แสดงสีวัสดุสมจริงตามโมเดล SketchUp">
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#F26B2A] border border-white/60 shrink-0"></span>
+                  <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#F26B2A] border border-white/60 shrink-0"></span>
                   <span>สี SketchUp</span>
                 </button>
                 <button type="button" id="mode-status" class="sp-mode-pill-btn is-inactive" title="แสดงสีตามสถานะงาน (วันนี้ = ฟ้า, เสร็จแล้ว = เขียว, รอดำเนินการ = ขาวเทา)">
-                  <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] border border-white/60 shrink-0"></span>
+                  <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#10B981] border border-white/60 shrink-0"></span>
                   <span>สีสถานะ</span>
                 </button>
               </div>
             </div>
 
             <!-- Collapsible Redesigned Tool Popover (Hidden by Default -> Clean Open Canvas!) -->
-            <div id="left-tool-body" class="hidden pointer-events-auto w-[258px] bg-white/96 backdrop-blur-md border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-3 flex flex-col gap-3 overflow-y-auto">
+            <div id="left-tool-body" class="hidden pointer-events-auto w-[min(268px,calc(100vw-16px))] bg-white/96 backdrop-blur-md border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-3 flex flex-col gap-3 overflow-y-auto">
+              <!-- 00. MOBILE/TABLET QUICK MODULE SWITCHER -->
+              <div class="xl:hidden pb-2.5 border-b border-[#E2D9CC]">
+                <div class="text-[10px] font-mono font-black tracking-wider text-[#64748B] uppercase mb-1.5 px-0.5">สลับหน้าโมดูล 3D</div>
+                <div class="grid grid-cols-3 gap-1 bg-[#FAF5EE] border-[1.5px] border-[#1D2B45] rounded-xl p-0.5 text-[11px] font-display font-extrabold text-center">
+                  <span class="py-1.5 rounded-[9px] bg-[#1D2B45] text-white">ชีตไพล์</span>
+                  <a href="piling.html" class="py-1.5 rounded-[9px] text-[#3E4B69] hover:bg-white">เสาเข็ม 93</a>
+                  <a href="footing.html" class="py-1.5 rounded-[9px] text-[#3E4B69] hover:bg-white">ฐานราก</a>
+                </div>
+              </div>
               <!-- 1. CAMERA VIEWS -->
               <div>
                 <div class="flex items-center justify-between mb-2 px-0.5">
@@ -903,8 +923,8 @@
             </button>
           </div>
 
-          <!-- FLOATING BOTTOM-CENTER 4D SIMULATOR DOCK (EXCAVATION + PILE CUTTING) -->
-          <div id="bottom-4d-dock" class="sp-embed-hide absolute bottom-3 left-1/2 -translate-x-1/2 z-20 w-[min(740px,calc(100%-20px))] pynn-hud px-3.5 py-2.5" style="margin-bottom: env(safe-area-inset-bottom, 0px);">
+          <!-- FLOATING BOTTOM-CENTER 4D SIMULATOR DOCK (EXCAVATION + PILE CUTTING, COLLAPSIBLE ON MOBILE) -->
+          <div id="bottom-4d-dock" class="sp-embed-hide absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 z-20 w-[min(740px,calc(100%-16px))] pynn-hud px-2.5 py-2 sm:px-3.5 sm:py-2.5 transition-all" style="margin-bottom: env(safe-area-inset-bottom, 0px);">
             <!-- Floating Multi-Pile Picker Popover (P01-P93) -->
             <div id="pile-picker-popover" class="hidden absolute bottom-full left-0 right-0 mb-2 pynn-hud p-3 bg-white/98 max-h-[42dvh] overflow-y-auto z-30">
               <div class="flex items-center justify-between gap-2 pb-2 mb-2 border-b border-[#E2D9CC] flex-wrap">
@@ -918,44 +938,50 @@
                   <button id="btn-close-pile-picker" type="button" class="ml-1 px-2 py-0.5 rounded-lg border border-[#1D2B45] bg-[#FAF5EE] hover:bg-white text-[11px] font-bold text-[#1D2B45] cursor-pointer">ปิด ✕</button>
                 </div>
               </div>
-              <div id="pile-picker-grid" class="grid grid-cols-8 sm:grid-cols-12 gap-1 text-[10.5px] font-mono"></div>
+              <div id="pile-picker-grid" class="grid grid-cols-6 sm:grid-cols-12 gap-1 text-[10.5px] font-mono"></div>
             </div>
 
-            <!-- Mode Switcher Header (Excavation <-> Pile Cut) -->
-            <div class="flex items-center justify-between gap-2 pb-1.5 mb-1.5 border-b border-[#E2D9CC] flex-wrap">
-              <div class="inline-flex items-center gap-1 bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-full p-0.5 text-[11px] font-display font-extrabold">
-                <button id="tab-dock-excavation" type="button" class="px-2.5 py-0.5 rounded-full bg-[#1D2B45] text-white cursor-pointer transition-colors">
-                  🚜 งานขุดดิน (Excavation)
+            <!-- Mode Switcher Header (Excavation <-> Pile Cut + Mobile Collapse Button) -->
+            <div id="bottom-dock-header" class="flex items-center justify-between gap-1.5 pb-1.5 mb-1.5 border-b border-[#E2D9CC]">
+              <div class="inline-flex items-center gap-0.5 sm:gap-1 bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-full p-0.5 text-[10.5px] sm:text-[11px] font-display font-extrabold min-w-0 overflow-x-auto sp-toolbar-scroll">
+                <button id="tab-dock-excavation" type="button" class="px-2 sm:px-2.5 py-0.5 rounded-full bg-[#1D2B45] text-white cursor-pointer transition-colors whitespace-nowrap">
+                  🚜 งานขุดดิน<span class="hidden sm:inline"> (Excavation)</span>
                 </button>
-                <button id="tab-dock-pilecut" type="button" class="px-2.5 py-0.5 rounded-full text-[#3E4B69] hover:text-[#1D2B45] cursor-pointer transition-colors inline-flex items-center gap-1">
-                  <span>✂️ ตัดหัวเข็ม (Pile Cut)</span>
+                <button id="tab-dock-pilecut" type="button" class="px-2 sm:px-2.5 py-0.5 rounded-full text-[#3E4B69] hover:text-[#1D2B45] cursor-pointer transition-colors inline-flex items-center gap-1 whitespace-nowrap">
+                  <span>✂️ ตัดหัวเข็ม<span class="hidden sm:inline"> (Pile Cut)</span></span>
                   <span id="tab-pilecut-count" class="px-1.5 rounded-full bg-[#FFF7ED] border border-[#EA580C]/40 text-[9.5px] font-mono text-[#C2410C]">0/93</span>
                 </button>
               </div>
-              <div id="pilecut-header-stats" class="hidden items-center gap-2 text-[11px] font-bold text-[#1D2B45]">
-                <span>เลือก <strong id="pcut-sel-count" class="font-mono text-[#F26B2A] text-xs">0</strong> ต้น</span>
-                <span class="text-[#CBD5E1]">|</span>
-                <span>ตัดแล้ว <strong id="pcut-done-count" class="font-mono text-[#10B981] text-xs">0</strong>/93</span>
-                <span class="text-[#CBD5E1] hidden sm:inline">|</span>
-                <span class="hidden sm:inline">ตัดออกรวม <strong id="pcut-total-m" class="font-mono text-[#C2410C] text-xs">0.00</strong> ม.</span>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <div id="pilecut-header-stats" class="hidden items-center gap-1.5 sm:gap-2 text-[10.5px] sm:text-[11px] font-bold text-[#1D2B45]">
+                  <span>เลือก <strong id="pcut-sel-count" class="font-mono text-[#F26B2A] text-xs">0</strong></span>
+                  <span class="text-[#CBD5E1]">|</span>
+                  <span>ตัด <strong id="pcut-done-count" class="font-mono text-[#10B981] text-xs">0</strong>/93</span>
+                  <span class="text-[#CBD5E1] hidden sm:inline">|</span>
+                  <span class="hidden sm:inline">ตัดออกรวม <strong id="pcut-total-m" class="font-mono text-[#C2410C] text-xs">0.00</strong> ม.</span>
+                </div>
+                <button id="btn-toggle-bottom-dock" type="button" aria-expanded="true" class="px-2 py-0.5 rounded-full border border-[#1D2B45]/40 bg-[#FAF5EE] hover:bg-white text-[10.5px] font-bold text-[#1D2B45] cursor-pointer whitespace-nowrap" title="ย่อ/ขยายแถบจำลอง 4D เพื่อดูโมเดลเต็มจอ">
+                  <span id="lbl-bottom-dock-toggle">ย่อ ▾</span>
+                </button>
               </div>
             </div>
 
+            <div id="bottom-dock-body">
             <!-- PANEL A: EXCAVATION SLIDER -->
             <div id="dock-panel-excavation">
               <div class="flex items-center justify-between flex-wrap gap-1.5 mb-1.5">
-                <div class="flex items-center gap-2">
-                  <span class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">EXCAVATION</span>
-                  <span class="text-xs font-semibold text-[#181A1F]">
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                  <span class="pynn-badge pynn-badge-sienna pynn-mono-id text-[9.5px] sm:text-[10px]">EXCAVATION</span>
+                  <span class="text-[11.5px] sm:text-xs font-semibold text-[#181A1F]">
                     ระดับขุด: <span id="slider-el-label" class="pynn-mono-id font-bold text-[#AD421E]">EL. 0.00 ม. (ดินเต็ม)</span>
                   </span>
                 </div>
-                <div class="flex items-center gap-1 flex-wrap">
-                  <button type="button" data-depth="0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">0.00m</button>
-                  <button type="button" data-depth="1.0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-1.00m</button>
-                  <button type="button" data-depth="1.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-1.50m</button>
-                  <button type="button" data-depth="2.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-2.50m</button>
-                  <button type="button" data-depth="3.65" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8]">-3.65m</button>
+                <div class="flex items-center gap-1 flex-nowrap overflow-x-auto sp-toolbar-scroll max-w-full">
+                  <button type="button" data-depth="0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">0.00m</button>
+                  <button type="button" data-depth="1.0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-1.00m</button>
+                  <button type="button" data-depth="1.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-1.50m</button>
+                  <button type="button" data-depth="2.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-2.50m</button>
+                  <button type="button" data-depth="3.65" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-3.65m</button>
                 </div>
               </div>
               <input id="excavation-slider" type="range" min="0" max="3.65" step="0.05" value="0" aria-label="ปรับระดับงานขุดดิน" class="pynn-slider w-full mt-1" />
@@ -970,39 +996,39 @@
             <!-- PANEL B: 4D PILE HEAD CUTTING SIMULATOR -->
             <div id="dock-panel-pilecut" class="hidden space-y-2">
               <!-- Quick Footing Group Selection + Individual Picker -->
-              <div class="flex items-center gap-1 flex-wrap text-[10.5px] font-bold">
-                <span class="text-[#475569] font-mono mr-0.5">เลือกเข็ม:</span>
-                <button type="button" data-pcut-group="F18A" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-[#C2410C] cursor-pointer">F18A (18)</button>
-                <button type="button" data-pcut-group="F20A" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer">F20A (20)</button>
-                <button type="button" data-pcut-group="F6" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer">F6 (30)</button>
-                <button type="button" data-pcut-group="F3" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer">F3 (9)</button>
-                <button type="button" data-pcut-group="F2" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer">F2 (6)</button>
-                <button type="button" data-pcut-group="F5" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer">F5 (5)</button>
-                <button type="button" data-pcut-group="F1" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer">F1 (5)</button>
-                <button type="button" data-pcut-group="ALL" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-[#E0F2FE] hover:bg-[#BAE6FD] text-[#0369A1] cursor-pointer">ทั้งหมด 93</button>
-                <button id="btn-open-pile-picker" type="button" class="px-2 py-0.5 rounded-full border-1.5 border-[#1D2B45] bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E] cursor-pointer">📋 เลือกรายต้น</button>
-                <button id="btn-pcut-clear-sel" type="button" class="px-2 py-0.5 rounded-full border border-[#CBD5E1] bg-white hover:bg-[#FEF2F2] text-[#64748B] hover:text-[#B91C1C] cursor-pointer">ล้างเลือก</button>
+              <div class="flex items-center gap-1 flex-nowrap sm:flex-wrap overflow-x-auto sp-toolbar-scroll text-[10.5px] font-bold pb-0.5">
+                <span class="text-[#475569] font-mono mr-0.5 shrink-0">เลือกเข็ม:</span>
+                <button type="button" data-pcut-group="F18A" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-[#C2410C] cursor-pointer shrink-0">F18A (18)</button>
+                <button type="button" data-pcut-group="F20A" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer shrink-0">F20A (20)</button>
+                <button type="button" data-pcut-group="F6" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer shrink-0">F6 (30)</button>
+                <button type="button" data-pcut-group="F3" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer shrink-0">F3 (9)</button>
+                <button type="button" data-pcut-group="F2" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer shrink-0">F2 (6)</button>
+                <button type="button" data-pcut-group="F5" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer shrink-0">F5 (5)</button>
+                <button type="button" data-pcut-group="F1" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] cursor-pointer shrink-0">F1 (5)</button>
+                <button type="button" data-pcut-group="ALL" class="pcut-group-btn px-2 py-0.5 rounded-full border border-[#1D2B45] bg-[#E0F2FE] hover:bg-[#BAE6FD] text-[#0369A1] cursor-pointer shrink-0">ทั้งหมด 93</button>
+                <button id="btn-open-pile-picker" type="button" class="px-2 py-0.5 rounded-full border-1.5 border-[#1D2B45] bg-[#FEF3C7] hover:bg-[#FDE68A] text-[#92400E] cursor-pointer shrink-0">📋 รายต้น</button>
+                <button id="btn-pcut-clear-sel" type="button" class="px-2 py-0.5 rounded-full border border-[#CBD5E1] bg-white hover:bg-[#FEF2F2] text-[#64748B] hover:text-[#B91C1C] cursor-pointer shrink-0">ล้างเลือก</button>
               </div>
 
               <!-- Slider Label + Presets + Animate & Ghost Stub Toggle -->
               <div class="flex items-center justify-between flex-wrap gap-1.5">
                 <div class="flex items-center gap-1.5">
-                  <span class="text-xs font-semibold text-[#181A1F]">
+                  <span class="text-[11.5px] sm:text-xs font-semibold text-[#181A1F]">
                     ระดับตัด: <span id="pilecut-el-label" class="pynn-mono-id font-bold text-[#C2410C]">EL. 0.00 ม. (ยังไม่ตัด)</span>
                   </span>
                 </div>
-                <div class="flex items-center gap-1 flex-wrap">
-                  <button type="button" data-pcut-depth="0" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer">0.00m</button>
-                  <button type="button" data-pcut-depth="1.53" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer">-1.53m</button>
-                  <button type="button" data-pcut-depth="2.63" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer">-2.63m</button>
-                  <button type="button" data-pcut-depth="4.33" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer">-4.33m</button>
-                  <button id="btn-pcut-to-pco" type="button" class="px-2 py-0.5 rounded-[6px] border-1.5 border-[#1D2B45] bg-[#10B981] hover:bg-[#059669] text-white text-[10.5px] font-extrabold cursor-pointer shadow-[1px_1px_0px_#1D2B45]" title="ตัดเข็มที่เลือกทุกต้นลงถึงระดับตัดหัวเข็มตามแบบ (Design PCO Level) ของแต่ละฐานราก">🎯 ตัดตาม PCO จริง</button>
-                  <button id="btn-pcut-animate" type="button" class="px-2 py-0.5 rounded-[6px] border-1.5 border-[#1D2B45] bg-[#0284C7] hover:bg-[#0369A1] text-white text-[10.5px] font-extrabold cursor-pointer shadow-[1px_1px_0px_#1D2B45]" title="จำลองภาพเคลื่อนไหวการตัดหัวเข็มแบบ 4D">▶ จำลอง</button>
-                  <label class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-[6px] border border-[#CBD5E1] bg-[#FAF5EE] text-[10px] font-bold text-[#334155] cursor-pointer select-none" title="แสดงส่วนหัวเข็มที่ถูกตัดทิ้งแบบโปร่งแสงสีแดง">
+                <div class="flex items-center gap-1 flex-nowrap sm:flex-wrap overflow-x-auto sp-toolbar-scroll max-w-full pb-0.5">
+                  <button type="button" data-pcut-depth="0" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer shrink-0">0.00m</button>
+                  <button type="button" data-pcut-depth="1.53" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer shrink-0">-1.53m</button>
+                  <button type="button" data-pcut-depth="2.63" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer shrink-0">-2.63m</button>
+                  <button type="button" data-pcut-depth="4.33" class="pcut-preset px-2 py-0.5 rounded-[6px] border border-[#DFDDD6] bg-white text-[10.5px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] cursor-pointer shrink-0">-4.33m</button>
+                  <button id="btn-pcut-to-pco" type="button" class="px-2 py-0.5 rounded-[6px] border-1.5 border-[#1D2B45] bg-[#10B981] hover:bg-[#059669] text-white text-[10.5px] font-extrabold cursor-pointer shadow-[1px_1px_0px_#1D2B45] shrink-0" title="ตัดเข็มที่เลือกทุกต้นลงถึงระดับตัดหัวเข็มตามแบบ (Design PCO Level) ของแต่ละฐานราก">🎯 ตัดตาม PCO จริง</button>
+                  <button id="btn-pcut-animate" type="button" class="px-2 py-0.5 rounded-[6px] border-1.5 border-[#1D2B45] bg-[#0284C7] hover:bg-[#0369A1] text-white text-[10.5px] font-extrabold cursor-pointer shadow-[1px_1px_0px_#1D2B45] shrink-0" title="จำลองภาพเคลื่อนไหวการตัดหัวเข็มแบบ 4D">▶ จำลอง</button>
+                  <label class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-[6px] border border-[#CBD5E1] bg-[#FAF5EE] text-[10px] font-bold text-[#334155] cursor-pointer select-none shrink-0" title="แสดงส่วนหัวเข็มที่ถูกตัดทิ้งแบบโปร่งแสงสีแดง">
                     <input id="tog-pcut-ghost" type="checkbox" class="w-3 h-3 accent-[#EF4444] cursor-pointer" />
                     <span>เงาหัวตัด</span>
                   </label>
-                  <button id="btn-pcut-reset-all" type="button" class="px-1.5 py-0.5 rounded-[6px] border border-[#FCA5A5] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#B91C1C] text-[10px] font-bold cursor-pointer" title="คืนหัวเข็มทั้งหมดกลับเป็นยังไม่ตัด">คืนทั้งหมด</button>
+                  <button id="btn-pcut-reset-all" type="button" class="px-1.5 py-0.5 rounded-[6px] border border-[#FCA5A5] bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#B91C1C] text-[10px] font-bold cursor-pointer shrink-0" title="คืนหัวเข็มทั้งหมดกลับเป็นยังไม่ตัด">คืนทั้งหมด</button>
                 </div>
               </div>
 
@@ -1010,11 +1036,12 @@
               <input id="pilecut-slider" type="range" min="0" max="4.50" step="0.05" value="0" aria-label="ปรับระดับตัดหัวเข็ม" class="pynn-slider w-full" />
               <div class="flex items-center justify-between text-[9.5px] font-mono font-bold text-[#475569] px-0.5 select-none">
                 <span>0.00m</span>
-                <span>-1.23m (F3)</span>
-                <span>-1.53m (F6)</span>
-                <span>-2.63m (F20A)</span>
-                <span class="text-[#C2410C]">-4.33m (F18A Pit)</span>
+                <span>-1.23m<span class="hidden sm:inline"> (F3)</span></span>
+                <span>-1.53m<span class="hidden sm:inline"> (F6)</span></span>
+                <span>-2.63m<span class="hidden sm:inline"> (F20A)</span></span>
+                <span class="text-[#C2410C]">-4.33m<span class="hidden sm:inline"> (F18A)</span></span>
               </div>
+            </div>
             </div>
           </div>
         </div>
@@ -2963,6 +2990,30 @@
         reportDropdown?.classList.add('hidden');
         window.openSheetPileReportStudio?.('overview');
       });
+
+      // Collapsible Bottom 4D Dock (Tap 'ย่อ/ขยาย' for maximum 3D canvas space on Mobile & Desktop)
+      (function initBottomDockToggle() {
+        const btn = document.getElementById('btn-toggle-bottom-dock');
+        const body = document.getElementById('bottom-dock-body');
+        const hdr = document.getElementById('bottom-dock-header');
+        const lbl = document.getElementById('lbl-bottom-dock-toggle');
+        if (!btn || !body || !hdr) return;
+        let collapsed = false;
+        const applyState = (isCollapsed) => {
+          collapsed = isCollapsed;
+          body.classList.toggle('hidden', collapsed);
+          hdr.classList.toggle('pb-1.5', !collapsed);
+          hdr.classList.toggle('mb-1.5', !collapsed);
+          hdr.classList.toggle('border-b', !collapsed);
+          btn.setAttribute('aria-expanded', String(!collapsed));
+          if (lbl) lbl.textContent = collapsed ? 'ขยาย ▴' : 'ย่อ ▾';
+          if (collapsed) document.getElementById('pile-picker-popover')?.classList.add('hidden');
+        };
+        btn.addEventListener('click', () => applyState(!collapsed));
+        // Auto-expand when user switches between Excavation / Pile Cut tabs while collapsed
+        document.getElementById('tab-dock-excavation')?.addEventListener('click', () => { if (collapsed) applyState(false); });
+        document.getElementById('tab-dock-pilecut')?.addEventListener('click', () => { if (collapsed) applyState(false); });
+      })();
 
       // Auto-collapse Left Vertical Tool Dock on Mobile & Foldable Cover (<768px) for 100% unobstructed 3D viewport
       if (window.innerWidth < 768) {
