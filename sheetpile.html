@@ -101,30 +101,28 @@
       /* Responsive polish: Mobile (<640px), Foldable Cover (~344px), Foldable Unfolded & Tablet (640px-1199px) */
       @media (max-width: 767px) {
         #left-tool-dock {
-          top: 56px !important;
+          top: 62px !important;
           left: 8px !important;
-          width: min(216px, calc(100vw - 16px)) !important;
+          right: 8px !important;
+          width: auto !important;
           max-height: calc(100dvh - 185px) !important;
         }
         #selection-hud {
-          top: 98px !important;
+          top: 110px !important;
           left: 8px !important;
           right: 8px !important;
           width: auto !important;
           max-width: 340px !important;
         }
         #today-update-banner {
-          top: 56px !important;
+          top: 62px !important;
           width: calc(100vw - 16px) !important;
           padding: 8px 10px !important;
         }
       }
       @media (min-width: 768px) and (max-width: 1199px) {
-        #left-tool-dock {
-          width: 204px !important;
-        }
         #selection-hud {
-          left: 224px !important;
+          left: 12px !important;
         }
       }
       /* Floating 3-Island Top HUD (BIM Studio Style: Balanced 48px Height, Crisp 13-14px Type, Zero Overflow) */
@@ -226,6 +224,67 @@
           font-size: 11.5px;
           border-radius: 10px;
         }
+      }
+      /* Sleek Toggle Switch for 3D Layers */
+      .sp-layer-switch {
+        position: relative;
+        width: 32px;
+        height: 18px;
+        border-radius: 9999px;
+        background: #CBD5E1;
+        border: 1.5px solid #1D2B45;
+        transition: background-color 150ms ease;
+        flex-shrink: 0;
+      }
+      .sp-layer-switch::after {
+        content: '';
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 13px;
+        height: 13px;
+        border-radius: 9999px;
+        background: #FFFFFF;
+        border: 1.5px solid #1D2B45;
+        transition: transform 150ms ease;
+      }
+      .peer:checked + .sp-layer-switch {
+        background: #10B981;
+      }
+      .peer:checked + .sp-layer-switch::after {
+        transform: translateX(14px);
+      }
+      .sp-mode-pill-btn {
+        height: 28px;
+        padding: 0 10px;
+        border-radius: 9px;
+        font-family: 'Prompt', sans-serif;
+        font-size: 11.5px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: all 140ms ease;
+        white-space: nowrap;
+      }
+      .sp-mode-pill-btn.is-active-sketchup {
+        background: #1D2B45;
+        color: #FFFFFF;
+        box-shadow: 1.5px 1.5px 0px #F26B2A;
+      }
+      .sp-mode-pill-btn.is-active-status {
+        background: #0F766E;
+        color: #FFFFFF;
+        box-shadow: 1.5px 1.5px 0px #1D2B45;
+      }
+      .sp-mode-pill-btn.is-inactive {
+        background: transparent;
+        color: #475569;
+      }
+      .sp-mode-pill-btn.is-inactive:hover {
+        background: #FAF5EE;
+        color: #1D2B45;
       }
       .sp-toolbar-scroll {
         scrollbar-width: none;
@@ -617,133 +676,145 @@
             </div>
           </div>
 
-          <!-- ORGANIZED LEFT VERTICAL TOOL DOCK (UI/UX Pro Max: Views · Style · Layers · Tools) -->
-          <aside id="left-tool-dock" aria-label="แผงควบคุมมุมมอง สไตล์ และเลเยอร์ 3 มิติ" class="absolute top-[70px] left-3 z-20 flex flex-col gap-2 w-[228px] max-h-[calc(100dvh-154px)]">
-            <!-- Collapse / Expand Pill -->
-            <button
-              id="btn-toggle-left-dock"
-              type="button"
-              aria-expanded="true"
-              class="pynn-hud self-start px-3 py-1.5 text-[11px] font-extrabold font-display text-[#1D2B45] hover:bg-[#FAF5EE] inline-flex items-center gap-1.5 cursor-pointer"
-              title="พับหรือกางแผงเครื่องมือ 3 มิติ"
-            >
-              <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-[#F26B2A]" aria-hidden="true"></i>
-              <span id="lbl-left-dock-toggle">เครื่องมือ 3D</span>
-              <i id="ico-left-dock-chev" data-lucide="chevron-up" class="w-3.5 h-3.5 text-[#3E4B69]" aria-hidden="true"></i>
-            </button>
+          <!-- ORGANIZED LEFT TOOL CLUSTER: Collapsed 3D Tools Pill + Standalone Color-Style Pill -->
+          <aside id="left-tool-dock" aria-label="แผงควบคุมมุมมอง สไตล์ และเลเยอร์ 3 มิติ" class="absolute top-[72px] left-3 z-20 flex flex-col items-start gap-2 pointer-events-none max-h-[calc(100dvh-160px)]">
+            <!-- Always-Visible Top Control Row (Tools Trigger + Standalone Color Display Switcher) -->
+            <div class="flex items-center gap-2 flex-wrap pointer-events-auto">
+              <!-- 1. Collapsible 3D Tools Trigger (Starts Collapsed by Default) -->
+              <button
+                id="btn-toggle-left-dock"
+                type="button"
+                aria-expanded="false"
+                class="h-[38px] px-3.5 rounded-xl border-2 border-[#1D2B45] bg-white/95 hover:bg-[#FAF5EE] backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] text-[12px] font-extrabold font-display text-[#1D2B45] inline-flex items-center gap-2 cursor-pointer transition-all"
+                title="เปิดหรือพับแผงเครื่องมือ 3 มิติ (มุมมองกล้อง · เลเยอร์ · ตัดหัวเข็ม)"
+              >
+                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-[#F26B2A] shrink-0" aria-hidden="true"></i>
+                <span id="lbl-left-dock-toggle">เครื่องมือ 3D</span>
+                <i id="ico-left-dock-chev" data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#475569] transition-transform duration-150 shrink-0" aria-hidden="true"></i>
+              </button>
 
-            <!-- Collapsible Organized Panel Body -->
-            <div id="left-tool-body" class="pynn-hud p-2.5 flex flex-col gap-2.5 overflow-y-auto">
+              <!-- 2. Standalone Visual Color Mode Switcher (Always 1-Click Accessible!) -->
+              <div
+                role="group"
+                aria-label="เลือกการแสดงผลสี 3 มิติ"
+                class="h-[38px] p-1 rounded-xl border-2 border-[#1D2B45] bg-white/95 backdrop-blur-md shadow-[2.5px_2.5px_0px_#1D2B45] inline-flex items-center gap-1"
+              >
+                <button type="button" id="mode-sketchup" class="sp-mode-pill-btn is-active-sketchup" title="แสดงสีวัสดุสมจริงตามโมเดล SketchUp">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#F26B2A] border border-white/60 shrink-0"></span>
+                  <span>สี SketchUp</span>
+                </button>
+                <button type="button" id="mode-status" class="sp-mode-pill-btn is-inactive" title="แสดงสีตามสถานะงาน (วันนี้ = ฟ้า, เสร็จแล้ว = เขียว, รอดำเนินการ = ขาวเทา)">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] border border-white/60 shrink-0"></span>
+                  <span>สีสถานะ</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Collapsible Redesigned Tool Popover (Hidden by Default -> Clean Open Canvas!) -->
+            <div id="left-tool-body" class="hidden pointer-events-auto w-[258px] bg-white/96 backdrop-blur-md border-2 border-[#1D2B45] rounded-2xl shadow-[4px_4px_0px_#1D2B45] p-3 flex flex-col gap-3 overflow-y-auto">
               <!-- 1. CAMERA VIEWS -->
               <div>
-                <div class="flex items-center justify-between mb-1.5 px-0.5">
-                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">01 · มุมมองกล้อง</span>
-                  <span class="text-[9px] font-mono font-bold text-[#64748B]">VIEW</span>
+                <div class="flex items-center justify-between mb-2 px-0.5">
+                  <span class="text-[10.5px] font-mono font-black tracking-wider text-[#1D2B45] uppercase">01 · มุมมองกล้อง</span>
+                  <span class="text-[9.5px] font-mono font-bold text-[#64748B] bg-[#FAF5EE] px-1.5 py-0.5 rounded-md border border-[#E2D9CC]">VIEW</span>
                 </div>
                 <div class="grid grid-cols-2 gap-1.5">
-                  <button type="button" data-cam="iso" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
-                    <i data-lucide="box" class="w-3.5 h-3.5 text-[#F26B2A]" aria-hidden="true"></i><span>Iso 3D</span>
+                  <button type="button" data-cam="iso" class="cam-btn flex items-center gap-2 rounded-xl border-[1.5px] border-[#1D2B45]/25 hover:border-[#1D2B45] bg-[#FAF5EE]/60 hover:bg-white text-[#1D2B45] py-2 px-2.5 text-[11.5px] font-extrabold font-display cursor-pointer transition-all hover:shadow-[2px_2px_0px_#1D2B45]">
+                    <span class="w-6 h-6 rounded-lg bg-[#FFF7ED] border border-[#F26B2A]/40 flex items-center justify-center shrink-0"><i data-lucide="box" class="w-3.5 h-3.5 text-[#F26B2A]" aria-hidden="true"></i></span>
+                    <span>Iso 3D</span>
                   </button>
-                  <button type="button" data-cam="top" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
-                    <i data-lucide="square" class="w-3.5 h-3.5 text-[#0284C7]" aria-hidden="true"></i><span>Top แปลน</span>
+                  <button type="button" data-cam="top" class="cam-btn flex items-center gap-2 rounded-xl border-[1.5px] border-[#1D2B45]/25 hover:border-[#1D2B45] bg-[#FAF5EE]/60 hover:bg-white text-[#1D2B45] py-2 px-2.5 text-[11.5px] font-extrabold font-display cursor-pointer transition-all hover:shadow-[2px_2px_0px_#1D2B45]">
+                    <span class="w-6 h-6 rounded-lg bg-[#E0F2FE] border border-[#0284C7]/40 flex items-center justify-center shrink-0"><i data-lucide="square" class="w-3.5 h-3.5 text-[#0284C7]" aria-hidden="true"></i></span>
+                    <span>Top แปลน</span>
                   </button>
-                  <button type="button" data-cam="pit" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
-                    <i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#10B981]" aria-hidden="true"></i><span>ในบ่อ</span>
+                  <button type="button" data-cam="pit" class="cam-btn flex items-center gap-2 rounded-xl border-[1.5px] border-[#1D2B45]/25 hover:border-[#1D2B45] bg-[#FAF5EE]/60 hover:bg-white text-[#1D2B45] py-2 px-2.5 text-[11.5px] font-extrabold font-display cursor-pointer transition-all hover:shadow-[2px_2px_0px_#1D2B45]">
+                    <span class="w-6 h-6 rounded-lg bg-[#ECFDF5] border border-[#10B981]/40 flex items-center justify-center shrink-0"><i data-lucide="crosshair" class="w-3.5 h-3.5 text-[#10B981]" aria-hidden="true"></i></span>
+                    <span>ในบ่อ</span>
                   </button>
-                  <button type="button" data-cam="side" class="cam-btn flex items-center justify-center gap-1 rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold cursor-pointer transition-colors">
-                    <i data-lucide="panel-left" class="w-3.5 h-3.5 text-[#64748B]" aria-hidden="true"></i><span>ด้านข้าง</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- 2. VISUAL STYLE -->
-              <div class="border-t border-[#E2D9CC] pt-2">
-                <div class="flex items-center justify-between mb-1.5 px-0.5">
-                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">02 · สไตล์แสดงผล</span>
-                  <span class="text-[9px] font-mono font-bold text-[#64748B]">STYLE</span>
-                </div>
-                <div class="grid grid-cols-2 gap-1 bg-[#FAF5EE] border-1.5 border-[#1D2B45] rounded-xl p-1 text-[11px]">
-                  <button type="button" id="mode-sketchup" class="py-1.5 px-1.5 rounded-lg bg-[#1D2B45] text-white font-bold cursor-pointer transition-colors text-center">
-                    สี SketchUp
-                  </button>
-                  <button type="button" id="mode-status" class="py-1.5 px-1.5 rounded-lg text-[#3E4B69] hover:text-[#1D2B45] font-bold cursor-pointer transition-colors text-center">
-                    สีสถานะ
+                  <button type="button" data-cam="side" class="cam-btn flex items-center gap-2 rounded-xl border-[1.5px] border-[#1D2B45]/25 hover:border-[#1D2B45] bg-[#FAF5EE]/60 hover:bg-white text-[#1D2B45] py-2 px-2.5 text-[11.5px] font-extrabold font-display cursor-pointer transition-all hover:shadow-[2px_2px_0px_#1D2B45]">
+                    <span class="w-6 h-6 rounded-lg bg-[#F1F5F9] border border-[#64748B]/40 flex items-center justify-center shrink-0"><i data-lucide="panel-left" class="w-3.5 h-3.5 text-[#475569]" aria-hidden="true"></i></span>
+                    <span>ด้านข้าง</span>
                   </button>
                 </div>
               </div>
 
-              <!-- 3. LAYERS (Clear Toggle Rows with Color Swatch + ON/OFF Switch) -->
-              <div class="border-t border-[#E2D9CC] pt-2">
-                <div class="flex items-center justify-between mb-1.5 px-0.5">
-                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">03 · เปิด/ปิดเลเยอร์</span>
-                  <span class="text-[9px] font-mono font-bold text-[#64748B]">LAYERS</span>
+              <!-- 2. LAYERS (Modern Pill Toggle Switches) -->
+              <div class="border-t border-[#E2D9CC] pt-2.5">
+                <div class="flex items-center justify-between mb-2 px-0.5">
+                  <span class="text-[10.5px] font-mono font-black tracking-wider text-[#1D2B45] uppercase">02 · เปิด/ปิดเลเยอร์</span>
+                  <span class="text-[9.5px] font-mono font-bold text-[#64748B] bg-[#FAF5EE] px-1.5 py-0.5 rounded-md border border-[#E2D9CC]">LAYERS</span>
                 </div>
-                <div class="flex flex-col gap-1 text-[11px] font-bold text-[#1D2B45]">
-                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                <div class="flex flex-col gap-1.5 text-[11.5px] font-bold text-[#1D2B45]">
+                  <label class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl border border-[#E2D9CC] bg-[#FAF5EE]/50 hover:bg-[#FAF5EE] cursor-pointer transition-colors">
                     <span class="flex items-center gap-2 min-w-0">
                       <span class="w-2.5 h-2.5 rounded-full bg-[#DC2626] shrink-0"></span>
                       <span class="truncate">Grid &amp; แนวเขต</span>
                     </span>
-                    <input id="tog-grid" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                    <input id="tog-grid" type="checkbox" checked class="sr-only peer" />
+                    <span class="sp-layer-switch"></span>
                   </label>
-                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                  <label class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl border border-[#E2D9CC] bg-[#FAF5EE]/50 hover:bg-[#FAF5EE] cursor-pointer transition-colors">
                     <span class="flex items-center gap-2 min-w-0">
                       <span class="w-2.5 h-2.5 rounded-full bg-[#8C7254] shrink-0"></span>
                       <span class="truncate">ชั้นดิน &amp; ชื่อชั้นดิน</span>
                     </span>
-                    <input id="tog-soil" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                    <input id="tog-soil" type="checkbox" checked class="sr-only peer" />
+                    <span class="sp-layer-switch"></span>
                   </label>
-                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                  <label class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl border border-[#E2D9CC] bg-[#FAF5EE]/50 hover:bg-[#FAF5EE] cursor-pointer transition-colors">
                     <span class="flex items-center gap-2 min-w-0">
                       <span class="w-2.5 h-2.5 rounded-full bg-[#94A3B8] shrink-0"></span>
                       <span class="truncate">เสาเข็ม 93 ต้น</span>
                     </span>
-                    <input id="tog-piles" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                    <input id="tog-piles" type="checkbox" checked class="sr-only peer" />
+                    <span class="sp-layer-switch"></span>
                   </label>
-                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                  <label class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl border border-[#E2D9CC] bg-[#FAF5EE]/50 hover:bg-[#FAF5EE] cursor-pointer transition-colors">
                     <span class="flex items-center gap-2 min-w-0">
                       <span class="w-2.5 h-2.5 rounded-full bg-[#C64828] shrink-0"></span>
                       <span class="truncate">Waler &amp; Strut</span>
                     </span>
-                    <input id="tog-bracing" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                    <input id="tog-bracing" type="checkbox" checked class="sr-only peer" />
+                    <span class="sp-layer-switch"></span>
                   </label>
-                  <label class="flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg border border-[#E2D9CC] bg-[#FAF5EE]/60 hover:bg-[#FAF5EE] cursor-pointer">
+                  <label class="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl border border-[#E2D9CC] bg-[#FAF5EE]/50 hover:bg-[#FAF5EE] cursor-pointer transition-colors">
                     <span class="flex items-center gap-2 min-w-0">
                       <span class="w-2.5 h-2.5 rounded-full bg-[#9C9A94] shrink-0"></span>
                       <span class="truncate">Packing Concrete</span>
                     </span>
-                    <input id="tog-pc" type="checkbox" checked class="w-4 h-4 accent-[#10B981] cursor-pointer shrink-0" />
+                    <input id="tog-pc" type="checkbox" checked class="sr-only peer" />
+                    <span class="sp-layer-switch"></span>
                   </label>
                 </div>
               </div>
 
-              <!-- 4. INTERACTION TOOLS -->
-              <div class="border-t border-[#E2D9CC] pt-2">
-                <div class="flex items-center justify-between mb-1.5 px-0.5">
-                  <span class="text-[10px] font-mono font-black tracking-wider text-[#3E4B69] uppercase">04 · เครื่องมือ</span>
-                  <span class="text-[9px] font-mono font-bold text-[#64748B]">TOOLS</span>
+              <!-- 3. INTERACTION TOOLS -->
+              <div class="border-t border-[#E2D9CC] pt-2.5">
+                <div class="flex items-center justify-between mb-2 px-0.5">
+                  <span class="text-[10.5px] font-mono font-black tracking-wider text-[#1D2B45] uppercase">03 · เครื่องมือจัดการ</span>
+                  <span class="text-[9.5px] font-mono font-bold text-[#64748B] bg-[#FAF5EE] px-1.5 py-0.5 rounded-md border border-[#E2D9CC]">TOOLS</span>
                 </div>
                 <div class="grid grid-cols-2 gap-1.5">
-                  <button id="btn-multi-select" type="button" aria-pressed="false" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer transition-colors" title="เปิดโหมดเลือกหลายชิ้นพร้อมกัน (หรือกด Ctrl/Shift + คลิก)">
+                  <button id="btn-multi-select" type="button" aria-pressed="false" class="rounded-xl border-[1.5px] border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-2 px-2.5 text-[11.5px] font-extrabold font-display inline-flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-[1.5px_1.5px_0px_#1D2B45]" title="เปิดโหมดเลือกหลายชิ้นพร้อมกัน (หรือกด Ctrl/Shift + คลิก)">
                     <i data-lucide="layers" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
                     <span class="truncate">หลายชิ้น</span>
                   </button>
-                  <button id="btn-fullscreen" type="button" aria-pressed="false" aria-label="ขยายเต็มจอ" class="rounded-lg border-1.5 border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-1.5 px-2 text-[11px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer transition-colors">
+                  <button id="btn-fullscreen" type="button" aria-pressed="false" aria-label="ขยายเต็มจอ" class="rounded-xl border-[1.5px] border-[#1D2B45] bg-white hover:bg-[#FAF5EE] text-[#1D2B45] py-2 px-2.5 text-[11.5px] font-extrabold font-display inline-flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-[1.5px_1.5px_0px_#1D2B45]">
                     <i data-lucide="maximize-2" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
                     <span class="truncate">เต็มจอ</span>
                   </button>
-                  <button id="btn-pile-cut-tool" type="button" aria-pressed="false" class="col-span-2 rounded-lg border-1.5 border-[#1D2B45] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-[#C2410C] py-1.5 px-2 text-[11px] font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer transition-colors shadow-[1.5px_1.5px_0px_#1D2B45]" title="เปิดโหมดเลือกเข็มหลายต้น + สไลเดอร์จำลองตัดหัวเข็ม 3 มิติ">
-                    <i data-lucide="scissors" class="w-3.5 h-3.5 shrink-0" aria-hidden="true"></i>
+                  <button id="btn-pile-cut-tool" type="button" aria-pressed="false" class="col-span-2 rounded-xl border-[1.5px] border-[#1D2B45] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-[#C2410C] py-2 px-3 text-[12px] font-extrabold font-display inline-flex items-center justify-center gap-2 cursor-pointer transition-all shadow-[2px_2px_0px_#1D2B45]" title="เปิดโหมดเลือกเข็มหลายต้น + สไลเดอร์จำลองตัดหัวเข็ม 3 มิติ">
+                    <i data-lucide="scissors" class="w-4 h-4 shrink-0" aria-hidden="true"></i>
                     <span class="truncate">ตัดหัวเข็ม (Pile Cut)</span>
-                    <span id="badge-pile-cut-dock" class="ml-auto px-1.5 py-0.2 rounded-full bg-white border border-[#EA580C]/40 text-[9.5px] font-mono font-black text-[#C2410C]">0/93</span>
+                    <span id="badge-pile-cut-dock" class="ml-auto px-2 py-0.5 rounded-full bg-white border border-[#EA580C]/50 text-[10px] font-mono font-black text-[#C2410C]">0/93</span>
                   </button>
                 </div>
               </div>
             </div>
           </aside>
 
-          <!-- Floating Selected Object Inspector (Positioned cleanly beside Left Tool Dock) -->
-          <div id="selection-hud" class="hidden absolute top-[70px] left-[252px] max-sm:left-3 max-sm:top-[112px] z-20 w-[min(290px,calc(100%-24px))] pynn-hud p-3">
+          <!-- Floating Selected Object Inspector (Positioned cleanly below Top-Left Controls) -->
+          <div id="selection-hud" class="hidden absolute top-[120px] left-3 z-20 w-[min(290px,calc(100%-24px))] pynn-hud p-3">
             <div class="flex items-start justify-between gap-2">
               <div class="min-w-0">
                 <span id="sel-cat" class="pynn-badge pynn-badge-sienna pynn-mono-id text-[10px]">SHEET PILE</span>
@@ -2142,19 +2213,23 @@
 
       document.getElementById('log-date').value = new Date().toISOString().slice(0, 10);
 
-      // Color mode buttons
+      // Color mode buttons (Standalone Floating Segmented Pill)
       const btnSu = document.getElementById('mode-sketchup');
       const btnSt = document.getElementById('mode-status');
+      function syncColorModeButtons() {
+        if (!btnSu || !btnSt) return;
+        const isSu = colorMode === 'sketchup';
+        btnSu.className = 'sp-mode-pill-btn ' + (isSu ? 'is-active-sketchup' : 'is-inactive');
+        btnSt.className = 'sp-mode-pill-btn ' + (!isSu ? 'is-active-status' : 'is-inactive');
+      }
       btnSu.addEventListener('click', () => {
         colorMode = 'sketchup';
-        btnSu.className = 'px-2.5 py-1 rounded-[6px] bg-[#1F513F] text-white font-semibold transition-colors';
-        btnSt.className = 'px-2.5 py-1 rounded-[6px] text-[#4B525E] hover:text-[#181A1F] font-medium transition-colors';
+        syncColorModeButtons();
         applyVisualState();
       });
       btnSt.addEventListener('click', () => {
         colorMode = 'status';
-        btnSt.className = 'px-2.5 py-1 rounded-[6px] bg-[#1F513F] text-white font-semibold transition-colors';
-        btnSu.className = 'px-2.5 py-1 rounded-[6px] text-[#4B525E] hover:text-[#181A1F] font-medium transition-colors';
+        syncColorModeButtons();
         applyVisualState();
       });
 
@@ -2631,7 +2706,7 @@
       if (btnToggleDrawer) btnToggleDrawer.addEventListener('click', () => setDrawerOpen(reportDrawer.classList.contains('is-collapsed')));
       if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', () => setDrawerOpen(false));
 
-      // Collapsible Left Vertical Tool Dock (auto-collapse on small mobile screens < 640px)
+      // Collapsible Left Tool Popover (Starts COLLAPSED by default on all screens for maximum 3D canvas space!)
       const btnLeftDock = document.getElementById('btn-toggle-left-dock');
       const leftToolBody = document.getElementById('left-tool-body');
       const icoLeftChev = document.getElementById('ico-left-dock-chev');
@@ -2639,10 +2714,18 @@
         if (!leftToolBody || !btnLeftDock) return;
         leftToolBody.classList.toggle('hidden', !open);
         btnLeftDock.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (icoLeftChev) icoLeftChev.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+        btnLeftDock.classList.toggle('bg-[#1D2B45]', open);
+        btnLeftDock.classList.toggle('text-white', open);
+        btnLeftDock.classList.toggle('bg-white/95', !open);
+        btnLeftDock.classList.toggle('text-[#1D2B45]', !open);
+        if (icoLeftChev) {
+          icoLeftChev.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+          icoLeftChev.classList.toggle('text-white', open);
+          icoLeftChev.classList.toggle('text-[#475569]', !open);
+        }
       }
       if (btnLeftDock) {
-        if (window.innerWidth < 640) setLeftDockOpen(false);
+        setLeftDockOpen(false);
         btnLeftDock.addEventListener('click', () => setLeftDockOpen(leftToolBody.classList.contains('hidden')));
       }
 
