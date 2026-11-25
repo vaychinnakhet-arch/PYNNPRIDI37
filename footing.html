@@ -835,11 +835,13 @@
     </div>
   </aside>
 
-  <!-- LOADING OVERLAY -->
-  <div id="loading-overlay" class="absolute inset-0 z-50 bg-slate-900/90 flex flex-col items-center justify-center gap-3 text-white">
-    <div class="w-12 h-12 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-    <div class="font-bangers text-2xl tracking-wider text-amber-400">กำลังโหลดแบบจำลอง 3D สไตล์ CAD...</div>
-    <div id="loading-text" class="text-xs text-slate-400 font-mono">กำลังประมวลผล Gridlines, Boundary & Footings 21 ฐาน</div>
+  <!-- LOADING OVERLAY (Unified with /sheetpile BIM Studio Style) -->
+  <div id="loading-overlay" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#F7F6F2]/95 backdrop-blur-sm p-4 transition-opacity duration-300">
+    <div id="loading-state" class="flex flex-col items-center text-center">
+      <div class="w-9 h-9 border-2 border-[#DFDDD6] border-t-[#1F513F] rounded-full animate-spin mb-3"></div>
+      <p class="text-sm font-semibold text-[#181A1F] leading-relaxed">กำลังโหลดโมเดล 3D ผังฐานราก 21 ฐาน + Gridline...</p>
+      <p id="loading-text" class="font-mono-code text-xs text-[#5F6672] mt-1 leading-relaxed">เตรียมข้อมูลโมเดล...</p>
+    </div>
   </div>
 
   <!-- EMBEDDED GLB BASE64 -->
@@ -1188,13 +1190,21 @@
         }
       };
 
+      const onLoadProgress = (xhr) => {
+        if (xhr && xhr.total > 0) {
+          const pct = Math.min(100, Math.round((xhr.loaded / xhr.total) * 100));
+          const lText = document.getElementById('loading-text');
+          if (lText) lText.textContent = `กำลังโหลดไฟล์ 3D (${pct}%)...`;
+        }
+      };
+
       // Check if base64 embedded string exists
       if (window.__EMBEDDED_GLB_BASE64__ && window.__EMBEDDED_GLB_BASE64__.length > 1000) {
         try {
           const arrayBuffer = base64ToArrayBuffer(window.__EMBEDDED_GLB_BASE64__);
           loader.parse(arrayBuffer, '', onModelLoaded, (err) => {
             console.warn('Error parsing embedded GLB, attempting fetch:', err);
-            loader.load('model.glb', onModelLoaded, undefined, onFallbackError);
+            loader.load('model.glb', onModelLoaded, onLoadProgress, onFallbackError);
           });
           return;
         } catch (e) {
@@ -1203,7 +1213,7 @@
       }
 
       // Fallback: Fetch model.glb directly
-      loader.load('model.glb', onModelLoaded, undefined, onFallbackError);
+      loader.load('model.glb', onModelLoaded, onLoadProgress, onFallbackError);
     }
 
     function onFallbackError(err) {
