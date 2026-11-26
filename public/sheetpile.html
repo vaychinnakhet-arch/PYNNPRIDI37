@@ -30,7 +30,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="html-to-image.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script defer src="sheetpile_report_studio.js?v=20261125_pdf"></script>
+    <script defer src="sheetpile_report_studio.js?v=20261126_fsp3"></script>
     <script type="importmap">
       {
         "imports": {
@@ -996,15 +996,17 @@
                   <button type="button" data-depth="1.0" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-1.00m</button>
                   <button type="button" data-depth="1.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-1.50m</button>
                   <button type="button" data-depth="2.5" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-2.50m</button>
-                  <button type="button" data-depth="3.65" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DFDDD6] bg-white text-[11px] font-semibold text-[#181A1F] hover:bg-[#F5F1E8] shrink-0">-3.65m</button>
+                  <button type="button" data-depth="2.9" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#0284C7]/50 bg-[#F0F9FF] text-[11px] font-bold text-[#0369A1] hover:bg-[#E0F2FE] shrink-0" title="ครบระดับก้นบ่อ Case B (F18)">-2.90m (B)</button>
+                  <button type="button" data-depth="3.8" class="depth-preset px-2 py-0.5 min-h-[28px] rounded-[6px] border border-[#DC2626]/50 bg-[#FEF2F2] text-[11px] font-bold text-[#B91C1C] hover:bg-[#FEE2E2] shrink-0" title="ครบระดับก้นบ่อ Case A (F20 / บ่อลิฟต์)">-3.80m (A)</button>
                 </div>
               </div>
-              <input id="excavation-slider" type="range" min="0" max="3.65" step="0.05" value="0" aria-label="ปรับระดับงานขุดดิน" class="pynn-slider w-full mt-1" />
+              <input id="excavation-slider" type="range" min="0" max="3.80" step="0.05" value="0" aria-label="ปรับระดับงานขุดดิน" class="pynn-slider w-full mt-1" />
               <div class="flex items-center justify-between text-[9.5px] font-mono font-bold text-[#475569] mt-1 px-0.5 select-none">
                 <span>0.00m</span>
-                <span>-1.50m <span class="hidden sm:inline">(Stage 1)</span></span>
-                <span>-2.50m <span class="hidden sm:inline">(Stage 2)</span></span>
-                <span class="text-[#B91C1C]">-3.65m <span class="hidden sm:inline">(100%)</span></span>
+                <span>-1.50m <span class="hidden sm:inline">(S1)</span></span>
+                <span>-2.50m <span class="hidden sm:inline">(S2)</span></span>
+                <span class="text-[#0369A1]">-2.90m <span class="hidden sm:inline">(Case B)</span></span>
+                <span class="text-[#B91C1C]">-3.80m <span class="hidden sm:inline">(Case A 100%)</span></span>
               </div>
             </div>
 
@@ -1576,7 +1578,7 @@
 
           const depthNum = Number(parsed.excavationDepth);
           const excavationDepth = Number.isFinite(depthNum)
-            ? Math.max(0, Math.min(3.65, depthNum))
+            ? Math.max(0, Math.min(3.8, depthNum))
             : base.excavationDepth;
 
           const statuses = isPlainObject(parsed.statuses) ? { ...parsed.statuses } : {};
@@ -1652,7 +1654,7 @@
           if (!localParsed || remoteTs > localTs) {
             state = {
               ...state,
-              excavationDepth: Math.max(0, Math.min(3.65, Number(remote.excavationDepth) || 0)),
+              excavationDepth: Math.max(0, Math.min(3.8, Number(remote.excavationDepth) || 0)),
               statuses: isPlainObject(remote.statuses) ? { ...remote.statuses } : {},
               statusDates: isPlainObject(remote.statusDates) ? { ...remote.statusDates } : {},
               pileCuts: isPlainObject(remote.pileCuts) ? { ...remote.pileCuts } : (state.pileCuts || {}),
@@ -1797,16 +1799,17 @@
       function buildSoilStrataLabels() {
         soilLabelsGroup.clear();
         const strata = [
-          { y: -0.75,  code: 'L1',  text: 'ดินถม Fill (0.00 ถึง -1.50 ม.)',              color: '#8C7254' },
-          { y: -2.05,  code: 'L2',  text: 'ดินเหนียวปนซิลท์ (-1.50 ถึง -2.50 ม.)',       color: '#7A6855' },
-          { y: -3.65,  code: 'EL',  text: 'ก้นบ่อขุดดิน -3.65 ม. (Excavation Bot)',      color: '#AD421E', highlight: true },
-          { y: -8.40,  code: 'L3',  text: 'ดินเหนียวอ่อนมาก Very Soft Clay (-2.50 ถึง -13.0 ม.)', color: '#5A666C' },
-          { y: -13.75, code: 'L3c', text: 'ชั้นทรายแทรก Sand Lens (-13.0 ถึง -14.5 ม.)',  color: '#7B7E6F' },
-          { y: -16.75, code: 'L3d', text: 'ดินเหนียวอ่อน Soft Clay (-14.5 ถึง -19.0 ม.)', color: '#5A666C' },
-          { y: -20.50, code: 'L4',  text: 'ดินเหนียวแข็ง Stiff Clay (-19.0 ถึง -22.0 ม.)', color: '#7E6954' },
-          { y: -22.75, code: 'L5',  text: 'ดินเหนียวปนทราย Sandy Clay (-22.0 ถึง -23.5 ม.)', color: '#967B5A' },
-          { y: -25.00, code: 'L6',  text: 'ทรายแน่นปานกลาง Med. Sand (-23.5 ถึง -26.5 ม.)', color: '#B5986A' },
-          { y: -27.25, code: 'L7',  text: 'ทรายแน่น Dense Sand (-26.5 ถึง -28.0 ม.)',     color: '#C4A36B' },
+          { y: -0.75,  code: 'L1',  text: 'ดินถม Fill (0.00 ถึง -1.50 ม.)',                         color: '#8C7254' },
+          { y: -2.00,  code: 'L2',  text: 'ดินเหนียวปนซิลท์ (-1.50 ถึง -2.50 ม.)',                  color: '#7A6855' },
+          { y: -2.90,  code: 'B',   text: 'ก้นบ่อขุด Case B (F18) · EL -2.90 ม.',                   color: '#0369A1', highlight: true },
+          { y: -3.85,  code: 'A',   text: 'ก้นบ่อขุด Case A (F20 / บ่อลิฟต์) · EL -3.80 ม.',       color: '#AD421E', highlight: true },
+          { y: -8.40,  code: 'L3',  text: 'ดินเหนียวอ่อนมาก Very Soft Clay (-2.50 ถึง -13.0 ม.)',   color: '#5A666C' },
+          { y: -13.75, code: 'L3c', text: 'ชั้นทรายแทรก (-13.0 ถึง -14.5 ม. | SP -12.0/-13.5 ม.)', color: '#7B7E6F' },
+          { y: -16.75, code: 'L3d', text: 'ดินเหนียวอ่อน Soft Clay (-14.5 ถึง -19.0 ม.)',           color: '#5A666C' },
+          { y: -20.50, code: 'L4',  text: 'ดินเหนียวแข็ง Stiff Clay (-19.0 ถึง -22.0 ม.)',          color: '#7E6954' },
+          { y: -22.75, code: 'L5',  text: 'ดินเหนียวปนทราย Sandy Clay (-22.0 ถึง -23.5 ม.)',        color: '#967B5A' },
+          { y: -25.00, code: 'L6',  text: 'ทรายแน่นปานกลาง Med. Sand (-23.5 ถึง -26.5 ม.)',         color: '#B5986A' },
+          { y: -27.25, code: 'L7',  text: 'ทรายแน่น Dense Sand (-26.5 ถึง -28.0 ม.)',               color: '#C4A36B' },
         ];
 
         for (const st of strata) {
@@ -2016,7 +2019,7 @@
 
         loadGridlines();
         try {
-          const metaRes = await fetch('./sheetpile_metadata.json');
+          const metaRes = await fetch('./sheetpile_metadata.json?v=20261126_fsp3');
           if (!metaRes.ok) throw new Error('HTTP ' + metaRes.status);
           metadata = await metaRes.json();
         } catch (e) {
@@ -2026,7 +2029,7 @@
         const progEl = document.getElementById('loading-progress');
         const loader = new GLTFLoader();
         loader.load(
-          './sheetpile.glb?v=20261125b',
+          './sheetpile.glb?v=20261126_fsp3',
           (gltf) => {
             isLoadingModel = false;
             loadedGltfRoot = gltf.scene;
@@ -2195,7 +2198,9 @@
           if (!soilOn) { m.visible = false; return; }
           if (m.name.includes('Stage1') && d >= 1.5) m.visible = false;
           else if (m.name.includes('Stage2') && d >= 2.5) m.visible = false;
-          else if (m.name.includes('Stage3') && d >= 3.65) m.visible = false;
+          else if (m.name.includes('Stage3a') && d >= 2.9) m.visible = false;
+          else if (m.name.includes('Stage3b') && d >= 3.8) m.visible = false;
+          else if (m.name.includes('Stage3') && !m.name.includes('Stage3a') && !m.name.includes('Stage3b') && d >= 3.8) m.visible = false;
           else m.visible = true;
 
           const edgeChild = m.children.find((c) => c.isLineSegments);
@@ -2553,11 +2558,14 @@
           const cat = meshMap.get(single)?.userData?.category || item?.category || 'element';
           document.getElementById('sel-cat').textContent = labels[cat] || cat.toUpperCase();
           document.getElementById('sel-name').textContent = single;
-          const sideGridMap = { North: 'แนว Grid A–B', South: 'แนว Grid E', West: 'แนว Grid 3–4', East: 'แนว Grid 7' };
+          const sideGridMap = { North: 'แนว Grid A–B', South: 'แนว Grid E', West: 'แนว Grid 3–4', East: 'แนว Grid 7', Corner: 'แผ่นยันมุม (หน้างาน)' };
           const gridLabel = sideGridMap[item?.side] || item?.side || '-';
+          const spCase = item?.case || (item?.depth_m === 12 ? 'B' : 'A');
+          const spLen = item?.depth_m || 13.5;
+          const spModel = item?.model || 'JIS FSP-III (SP-3)';
           document.getElementById('sel-detail').textContent =
-            cat === 'sheetpile' ? `${gridLabel} · กว้าง 0.40 ม. · ลึก ${item?.depth_m || 13.5} ม. (Ctrl+คลิก เลือกเพิ่ม)`
-            : cat === 'packing_concrete' ? `${gridLabel} · ยาว ${item?.length_m || 2.0} ม. · ~${item?.vol_m3 || 0.06} ลบ.ม.`
+            cat === 'sheetpile' ? `${gridLabel} · ${spModel} (Case ${spCase}) · ยาว ${spLen.toFixed(2)} ม. · หนา 13 มม. (${item?.weight_kg || Math.round(spLen * 60)} กก.)`
+            : cat === 'packing_concrete' ? `${gridLabel} · ยาว ${item?.length_m || 2.0} ม. · ${item?.vol_m3 || 0.13} ลบ.ม. (รวมอุดร่องลอน ${item?.plugs || 0} จุด)`
             : `ค้ำยันระบบ ERSS · ยาว ${item?.length_m || '-'} ม. (Ctrl+คลิก เลือกเพิ่ม)`;
           const cur = state.statuses[single] || 'pending';
           document.querySelectorAll('.sel-status-btn').forEach((b) => b.classList.toggle('status-pill-active', b.dataset.setStatus === cur));
@@ -2612,15 +2620,29 @@
       // ==========================================
       // 5. KPI & CONTROLS
       // ==========================================
+      function calcTwoLevelExVol(depth) {
+        const d = Math.max(0, Math.min(3.8, Number(depth) || 0));
+        const s1 = Math.max(0, Math.min(1.5, d)) * 165.44;
+        const s2 = Math.max(0, Math.min(1.0, d - 1.5)) * 165.44;
+        const s3a = Math.max(0, Math.min(0.4, d - 2.5)) * 165.44;
+        const s3b = Math.max(0, Math.min(0.9, d - 2.9)) * 102.234;
+        return +(s1 + s2 + s3a + s3b).toFixed(2);
+      }
+
       function computeKPIs() {
         const items = metadata?.items || [];
-        const spDone = items.filter((x) => x.category === 'sheetpile' && state.statuses[x.id] === 'done').length;
+        const spItems = items.filter((x) => x.category === 'sheetpile');
+        const spDoneItems = spItems.filter((x) => state.statuses[x.id] === 'done');
+        const spDone = spDoneItems.length;
+        const spDoneA = spDoneItems.filter((x) => x.case === 'A' || x.depth_m === 13.5).length;
+        const spDoneB = spDoneItems.filter((x) => x.case === 'B' || x.depth_m === 12.0).length;
         const spMeters = +(spDone * 0.4).toFixed(1);
         const spPct = Math.round((spDone / 142) * 100);
 
-        const d = Number(state.excavationDepth) || 0;
-        const exVol = +(18.8 * 8.8 * d).toFixed(1);
-        const exPct = Math.min(100, Math.round((d / 3.65) * 100));
+        const d = Math.max(0, Math.min(3.8, Number(state.excavationDepth) || 0));
+        const exVol = calcTwoLevelExVol(d);
+        const exTotalVol = 571.79;
+        const exPct = Math.min(100, Math.round((exVol / exTotalVol) * 100));
 
         const walerLens = { WALER_South: 18.62, WALER_North: 18.62, WALER_West: 8.62, WALER_East: 8.62 };
         let walerM = 0;
@@ -2629,14 +2651,15 @@
         const bkDone = state.statuses['BRACKETS_ALL'] === 'done';
         const brPct = Math.round(((walerM / 54.48) * 0.6 + (strutDone / 6) * 0.3 + (bkDone ? 0.1 : 0)) * 100);
 
-        let pcM = 0, pcVol = 0;
+        let pcM = 0, pcVol = 0, pcTotalVol = 0;
         items.filter((x) => x.category === 'packing_concrete').forEach((it) => {
+          pcTotalVol += it.vol_m3 || 0;
           if (state.statuses[it.id] === 'done') { pcM += it.length_m || 0; pcVol += it.vol_m3 || 0; }
         });
         const pcPct = Math.min(100, Math.round((pcM / 54.82) * 100));
         const jkDone = ['JACK_01_West', 'JACK_02_East'].filter((id) => state.statuses[id] === 'done').length;
         const jkPct = Math.round((jkDone / 2) * 100);
-        return { spDone, spMeters, spPct, depth: d, exVol, exPct, walerM: +walerM.toFixed(1), strutDone, bkDone, brPct, pcM: +pcM.toFixed(1), pcVol: +pcVol.toFixed(2), pcPct, jkDone, jkPct };
+        return { spDone, spDoneA, spDoneB, spMeters, spPct, depth: d, exVol, exTotalVol, exPct, walerM: +walerM.toFixed(1), strutDone, bkDone, brPct, pcM: +pcM.toFixed(1), pcVol: +pcVol.toFixed(2), pcTotalVol: +(pcTotalVol || 3.752).toFixed(2), pcPct, jkDone, jkPct };
       }
 
       function updateDashboardUI() {
@@ -2653,10 +2676,13 @@
         const slider = document.getElementById('excavation-slider');
         if (slider) {
           slider.value = k.depth;
-          const pct = Math.min(100, Math.max(0, (k.depth / 3.65) * 100));
+          const pct = Math.min(100, Math.max(0, (k.depth / 3.8) * 100));
           slider.style.background = `linear-gradient(to right, #F26B2A 0%, #F26B2A ${pct}%, #E2E8F0 ${pct}%, #E2E8F0 100%)`;
         }
-        document.getElementById('slider-el-label').textContent = k.depth === 0 ? 'EL. 0.00 ม. (ดินเต็ม)' : `EL. -${k.depth.toFixed(2)} ม. (${k.exVol.toFixed(1)} ลบ.ม.)`;
+        const elZoneTag = k.depth === 0 ? 'EL. 0.00 ม. (ดินเต็ม)'
+          : k.depth <= 2.9 ? `EL. -${k.depth.toFixed(2)} ม. (${k.exVol.toFixed(1)} / 571.8 ม³)`
+          : `Case B -2.90ม. / Case A -${k.depth.toFixed(2)}ม. (${k.exVol.toFixed(1)} / 571.8 ม³)`;
+        document.getElementById('slider-el-label').textContent = elZoneTag;
 
         document.getElementById('kpi-waler-m').textContent = k.walerM.toFixed(1);
         document.getElementById('kpi-strut-cnt').textContent = k.strutDone;
@@ -2831,11 +2857,12 @@
         const today = new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
         const txt = [
           `📊 รายงานความก้าวหน้า PYNN EKKAMAI 12 (${today})`,
-          `1. กด/ตอก Sheet Pile: ${k.spDone}/142 แผ่น (${k.spMeters.toFixed(1)}/56.8 ม. · ${k.spPct}%)`,
-          `2. ขุดดิน (Excavation): EL. ${k.depth === 0 ? '0.00' : '-' + k.depth.toFixed(2)} ม. (${k.exVol.toFixed(1)}/628.7 ลบ.ม. · ${k.exPct}%)`,
-          `3. Waler & Strut: Waler ${k.walerM.toFixed(1)}/54.5 ม. · Strut ${k.strutDone}/6`,
-          `4. คอนกรีตอุดช่องว่าง (Packing Concrete): ${k.pcM.toFixed(1)}/54.8 ม. (${k.pcVol.toFixed(2)} ลบ.ม. · ${k.pcPct}%)`,
-          `5. Preload Jack: ${k.jkDone}/2 จุด (${k.jkDone * 40} ตัน)`
+          `1. กด/ตอก Sheet Pile (JIS FSP-III / SP-3): ${k.spDone}/142 แผ่น (${k.spPct}%)`,
+          `   • Case A (ยาว 13.50 ม.): ${k.spDoneA}/90 แผ่น | Case B (ยาว 12.00 ม.): ${k.spDoneB}/52 แผ่น`,
+          `2. ขุดดิน 2 ระดับ (Case B -2.90ม. / Case A -3.80ม.): EL. ${k.depth === 0 ? '0.00' : '-' + k.depth.toFixed(2)} ม. (${k.exVol.toFixed(1)}/571.8 ลบ.ม. · ${k.exPct}%)`,
+          `3. Waler & Strut (H-350): Waler ${k.walerM.toFixed(1)}/54.5 ม. · Strut/Corner ${k.strutDone}/6`,
+          `4. คอนกรีตอุดช่องว่าง (Packing Concrete): ${k.pcM.toFixed(1)}/54.8 ม. (${k.pcVol.toFixed(2)}/${k.pcTotalVol} ลบ.ม. · ${k.pcPct}%)`,
+          `5. Preload Jack (UJ-N40): ${k.jkDone}/2 จุด (${k.jkDone * 40} ตัน)`
         ].join('\n');
         copyTextWithFallback(txt);
         document.getElementById('sp-report-dropdown')?.classList.add('hidden');

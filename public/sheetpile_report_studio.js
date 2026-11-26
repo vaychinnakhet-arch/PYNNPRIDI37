@@ -78,8 +78,8 @@
       remarks21: '',
       remarks22: '',
       remarks23: '',
+      remarks24: '',
       extraRows: [
-        { title: '', location: '', qty: '', done: '', pct: '', remarks: '' },
         { title: '', location: '', qty: '', done: '', pct: '', remarks: '' },
       ],
       manpower: {
@@ -109,11 +109,11 @@
       obstacles: '',
       solutions: '',
       materials: [
-        { label: 'แผ่น Sheet Pile ยาว 13.50 ม.', count: 142, unit: 'แผ่น' },
-        { label: 'เหล็ก H-Beam 350×350 (Waler/Strut)', count: 0, unit: 'เส้น' },
+        { label: 'Sheet Pile JIS FSP-III ยาว 13.50 ม. (Case A)', count: 90, unit: 'แผ่น' },
+        { label: 'Sheet Pile JIS FSP-III ยาว 12.00 ม. (Case B)', count: 52, unit: 'แผ่น' },
+        { label: 'เหล็ก H-Beam 350×350 (Waler/Strut)', count: 54.5, unit: 'ม.' },
         { label: 'เหล็ก Bracket H-200BL', count: 20, unit: 'ชุด' },
         { label: 'Hydraulic Jack Preload (UJ-N40)', count: 2, unit: 'ชุด' },
-        { label: '', count: 0, unit: '' },
       ],
       authorCompany: 'บริษัท แสนสิริ จำกัด (มหาชน)',
       author: 'นายนิวัฒน์ เวียงชัย',
@@ -151,6 +151,9 @@
       const raw = localStorage.getItem(CONFIG_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
+        // Auto-migrate legacy 142×13.5m material row to exact JIS FSP-III Case A (90×13.5m) + Case B (52×12.0m)
+        const parsedMats = parsed.materials;
+        const isLegacyMat = Array.isArray(parsedMats) && parsedMats[0]?.label === 'แผ่น Sheet Pile ยาว 13.50 ม.' && Number(parsedMats[0]?.count) === 142;
         merged = {
           ...merged,
           ...parsed,
@@ -160,8 +163,8 @@
             workers: parsed.manpower?.workers || base.manpower.workers,
             machinery: parsed.manpower?.machinery || base.manpower.machinery,
           },
-          materials: parsed.materials || base.materials,
-          extraRows: parsed.extraRows || base.extraRows,
+          materials: isLegacyMat ? base.materials : (parsedMats || base.materials),
+          extraRows: Array.isArray(parsed.extraRows) ? parsed.extraRows.slice(0, 1) : base.extraRows,
         };
       }
     } catch {}
@@ -223,23 +226,36 @@
     const statusDates = state.statusDates || {};
     const reportDate = state.reportDate || todayIso();
 
-    // 1. Sheet Pile by 4 Gridline Walls (Exact design counts: N=55, S=55, W=16, E=16 -> Total 142)
+    // 1. Sheet Pile by 4 Gridline Walls + 4 Corners (Exact Hirose CAD: N=47, S=47, W=22, E=22, C=4 -> Total 142)
+    //    Model: JIS A 5528 FSP-III (SP-3), SY295, 400×125×13mm (60 kg/m)
+    //    Case A = 13.50m (90 pcs: 88 straight + 2 corners) | Case B = 12.00m (52 pcs: 50 straight + 2 corners)
     const sides = {
-      N: { label: 'แนว Grid A–B (ช่วง 3/4–7)', short: 'Grid A–B', total: 55, done: 0, today: 0, progress: 0 },
-      S: { label: 'แนว Grid E (ช่วง 3/4–7)', short: 'Grid E', total: 55, done: 0, today: 0, progress: 0 },
-      W: { label: 'แนว Grid 3–4 (ช่วง B–E)', short: 'Grid 3–4', total: 16, done: 0, today: 0, progress: 0 },
-      E: { label: 'แนว Grid 7 (ช่วง B–E)', short: 'Grid 7', total: 16, done: 0, today: 0, progress: 0 },
+      N: { label: 'แนว Grid A–B (เหนือ)', short: 'Grid A–B', spec: 'FSP-3 · 12ม.(14)+13.5ม.(33)', total: 47, done: 0, today: 0, progress: 0, aTotal: 33, bTotal: 14 },
+      S: { label: 'แนว Grid E (ใต้)', short: 'Grid E', spec: 'FSP-3 · 12ม.(14)+13.5ม.(33)', total: 47, done: 0, today: 0, progress: 0, aTotal: 33, bTotal: 14 },
+      W: { label: 'แนว Grid 3–4 (ตะวันตก)', short: 'Grid 3–4', spec: 'FSP-3 · 12.00 ม. (Case B)', total: 22, done: 0, today: 0, progress: 0, aTotal: 0, bTotal: 22 },
+      E: { label: 'แนว Grid 7 (ตะวันออก)', short: 'Grid 7', spec: 'FSP-3 · 13.50 ม. (Case A)', total: 22, done: 0, today: 0, progress: 0, aTotal: 22, bTotal: 0 },
+      C: { label: 'แผ่นยันมุม 4 มุม (NW/SW/NE/SE)', short: '4 มุม', spec: 'FSP-3 · 12ม.(2)+13.5ม.(2)', total: 4, done: 0, today: 0, progress: 0, aTotal: 2, bTotal: 2 },
     };
+    const caseA = { model: 'JIS FSP-III (SP-3)', lengthM: 13.5, total: 90, straight: 88, corner: 2, done: 0, today: 0, weightTon: 72.9 };
+    const caseB = { model: 'JIS FSP-III (SP-3)', lengthM: 12.0, total: 52, straight: 50, corner: 2, done: 0, today: 0, weightTon: 37.5 };
+
     const spItems = items.filter((x) => x.category === 'sheetpile');
     if (spItems.length > 0) {
-      sides.N.total = sides.S.total = sides.E.total = sides.W.total = 0;
+      Object.values(sides).forEach((b) => { b.total = 0; b.aTotal = 0; b.bTotal = 0; });
+      caseA.total = 0; caseB.total = 0;
       spItems.forEach((it) => {
-        const sKey = (it.id.split('_')[1] || 'S').toUpperCase();
+        const sKey = it.side === 'Corner' ? 'C' : (it.id.split('_')[1] || 'S').toUpperCase();
         const bucket = sides[sKey] || sides.S;
+        const isB = it.case === 'B' || Number(it.depth_m) === 12;
         bucket.total += 1;
+        if (isB) { bucket.bTotal += 1; caseB.total += 1; } else { bucket.aTotal += 1; caseA.total += 1; }
         if (statuses[it.id] === 'done') {
           bucket.done += 1;
-          if (statusDates[it.id] === reportDate) bucket.today += 1;
+          if (isB) caseB.done += 1; else caseA.done += 1;
+          if (statusDates[it.id] === reportDate) {
+            bucket.today += 1;
+            if (isB) caseB.today += 1; else caseA.today += 1;
+          }
         } else if (statuses[it.id] === 'progress') bucket.progress += 1;
       });
     } else {
@@ -253,6 +269,8 @@
         } else if (st === 'progress') bucket.progress += 1;
       });
     }
+    caseA.pct = caseA.total ? Math.round((caseA.done / caseA.total) * 100) : 0;
+    caseB.pct = caseB.total ? Math.round((caseB.done / caseB.total) * 100) : 0;
     const spTotal = Object.values(sides).reduce((a, s) => a + s.total, 0) || 142;
     const spDone = Object.values(sides).reduce((a, s) => a + s.done, 0);
     const spToday = Object.values(sides).reduce((a, s) => a + s.today, 0);
@@ -298,18 +316,19 @@
       }
     });
     if (pcTotalM === 0) pcTotalM = 54.82;
-    if (pcTotalVol === 0) pcTotalVol = 1.626;
+    if (pcTotalVol === 0) pcTotalVol = 3.752;
 
     const bracingPct = Math.round(
       ((walerDoneM / 54.48) * 0.35 + (strutDone / 6) * 0.25 + (bkStatus === 'done' ? 0.1 : 0) + (pcDoneM / pcTotalM) * 0.2 + (jackDone / 2) * 0.1) * 100
     );
 
-    // 3. Excavation (3 Stages · Total Depth 3.65m = 100%)
-    const depth = Math.max(0, Math.min(3.65, Number(state.excavationDepth) || 0));
+    // 3. Excavation (2-Level Design: Case B West = -2.90m, Case A East = -3.80m · Total 571.79 m³)
+    const depth = Math.max(0, Math.min(3.8, Number(state.excavationDepth) || 0));
     const stages = [
-      { name: 'Stage 1 · ชั้นดินถม L1 (0.00 ถึง -1.50 ม.)', top: 0, bot: 1.5, vol: 248.16 },
-      { name: 'Stage 2 · ดินเหนียวปนซิลท์ L2 (-1.50 ถึง -2.50 ม.)', top: 1.5, bot: 2.5, vol: 165.44 },
-      { name: 'Stage 3 · ดินเหนียวอ่อน L3a (-2.50 ถึง -3.65 ม.)', top: 2.5, bot: 3.65, vol: 190.26 },
+      { name: 'Stage 1 · ดินถม L1 (0.00 → -1.50 ม.)', top: 0, bot: 1.5, vol: 248.16 },
+      { name: 'Stage 2 · ดินเหนียวปนซิลท์ L2 (-1.50 → -2.50 ม.)', top: 1.5, bot: 2.5, vol: 165.44 },
+      { name: 'Stage 3a · ดินเหนียวอ่อน (-2.50 → -2.90 ม. · Case B/F18)', top: 2.5, bot: 2.9, vol: 66.18 },
+      { name: 'Stage 3b · โซนขวา F20 (-2.90 → -3.80 ม. · Case A)', top: 2.9, bot: 3.8, vol: 92.01 },
     ].map((st) => {
       const thickness = st.bot - st.top;
       const dug = Math.max(0, Math.min(thickness, depth - st.top));
@@ -317,9 +336,9 @@
       const dugVol = +(st.vol * (dug / thickness)).toFixed(2);
       return { ...st, pct, dugVol };
     });
-    const exTotalVol = 603.86;
+    const exTotalVol = 571.79;
     const exDugVol = +stages.reduce((a, s) => a + s.dugVol, 0).toFixed(2);
-    const exPct = Math.min(100, Math.round((depth / 3.65) * 100));
+    const exPct = Math.min(100, Math.round((exDugVol / exTotalVol) * 100));
 
     const overallSpPct = Math.round((spPct * 0.4 + bracingPct * 0.3 + exPct * 0.3));
 
@@ -329,7 +348,7 @@
 
     return {
       reportDate,
-      sp: { sides, total: spTotal, done: spDone, today: spToday, todayMeters: spTodayMeters, progress: spProg, meters: spMeters, pct: spPct },
+      sp: { sides, caseA, caseB, total: spTotal, done: spDone, today: spToday, todayMeters: spTodayMeters, progress: spProg, meters: spMeters, pct: spPct, totalWeightTon: 110.4 },
       bracing: {
         walerRows, walerDoneM: +walerDoneM.toFixed(2), walerTodayM, walerTotalM: 54.48,
         strutRows, strutDone, strutToday, strutTotal: 6,
@@ -437,20 +456,25 @@
     `;
   }
 
-  // Engineered 2D Architectural Excavation Cross-Section SVG (EL. 0.00 -> -3.65m)
+  // Engineered 2D Architectural 2-Level Excavation Cross-Section SVG (Case B -2.90m / Case A -3.80m · FSP-3 12.0m / 13.5m)
   function renderExcavationSectionSvg(s) {
-    const depth = Math.max(0, Math.min(3.65, Number(s.ex.depth) || 0));
+    const depth = Math.max(0, Math.min(3.8, Number(s.ex.depth) || 0));
     const elToY = (d) => {
-      if (d <= 1.5) return 64 + (d / 1.5) * (136 - 64);
-      if (d <= 2.5) return 136 + ((d - 1.5) / 1.0) * (188 - 136);
-      if (d <= 3.65) return 188 + ((d - 2.5) / 1.15) * (256 - 188);
-      return 256 + ((d - 3.65) / 9.85) * (352 - 256);
+      if (d <= 1.5) return 64 + (d / 1.5) * (132 - 64);
+      if (d <= 2.5) return 132 + ((d - 1.5) / 1.0) * (178 - 132);
+      if (d <= 2.9) return 178 + ((d - 2.5) / 0.4) * (206 - 178);
+      if (d <= 3.8) return 206 + ((d - 2.9) / 0.9) * (258 - 206);
+      return 258 + ((d - 3.8) / 9.7) * (352 - 258);
     };
-    const curY = Math.round(elToY(depth));
+    const splitX = 235; // Exact F18/F20 split (7.18m West Case B / 11.62m East Case A)
+    const yW = Math.round(elToY(Math.min(depth, 2.9)));
+    const yE = Math.round(elToY(depth));
     const hasBracing = (s.bracing.walerDoneM > 0 || s.bracing.strutDone > 0);
     const remVol = Math.max(0, +(s.ex.totalVol - s.ex.dugVol).toFixed(1));
-    const dugHeight = Math.max(0, curY - 64);
-    const remHeight = Math.max(0, 256 - curY);
+    const dugHW = Math.max(0, yW - 64);
+    const remHW = Math.max(0, 206 - yW);
+    const dugHE = Math.max(0, yE - 64);
+    const remHE = Math.max(0, 258 - yE);
 
     return `
       <svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" class="w-full aspect-[16/10] bg-white block" style="font-family:'Prompt','Sarabun',sans-serif;">
@@ -462,11 +486,15 @@
             <line x1="0" y1="0" x2="0" y2="12" stroke="#64748B" stroke-width="1" stroke-opacity="0.22" />
           </pattern>
         </defs>
-        <rect x="20" y="64" width="420" height="72" fill="#E8DCCB" fill-opacity="0.45" />
-        <rect x="20" y="136" width="420" height="52" fill="#DDD0BE" fill-opacity="0.50" />
-        <rect x="20" y="188" width="420" height="68" fill="#CBD5E1" fill-opacity="0.40" />
-        <rect x="20" y="256" width="420" height="118" fill="#E2E8F0" fill-opacity="0.55" />
-        <rect x="20" y="256" width="420" height="118" fill="url(#sp-hatch-clay)" />
+        <rect x="20" y="64" width="420" height="68" fill="#E8DCCB" fill-opacity="0.45" />
+        <rect x="20" y="132" width="420" height="46" fill="#DDD0BE" fill-opacity="0.50" />
+        <rect x="20" y="178" width="420" height="80" fill="#CBD5E1" fill-opacity="0.40" />
+        <rect x="20" y="258" width="420" height="116" fill="#E2E8F0" fill-opacity="0.55" />
+        <rect x="20" y="258" width="420" height="116" fill="url(#sp-hatch-clay)" />
+        <!-- Unexcavated West SoftClay Bench under Case B (-2.90m to -3.80m) -->
+        <rect x="122" y="206" width="${splitX - 122}" height="52" fill="#CBD5E1" fill-opacity="0.80" />
+        <rect x="122" y="206" width="${splitX - 122}" height="52" fill="url(#sp-hatch-clay)" />
+
         <line x1="115" y1="36" x2="115" y2="62" stroke="#1D2B45" stroke-width="1" stroke-dasharray="3,2" />
         <circle cx="115" cy="22" r="14" fill="#FFFFFF" stroke="#1D2B45" stroke-width="2" />
         <text x="115" y="26" text-anchor="middle" font-size="10" font-weight="800" fill="#1D2B45">3–4</text>
@@ -476,65 +504,82 @@
         <line x1="132" y1="22" x2="408" y2="22" stroke="#1D2B45" stroke-width="1.2" />
         <polygon points="132,22 139,18 139,26" fill="#1D2B45" />
         <polygon points="408,22 401,18 401,26" fill="#1D2B45" />
-        <rect x="195" y="11" width="150" height="22" rx="4" fill="#FFFFFF" stroke="#1D2B45" stroke-width="1.2" />
-        <text x="270" y="26" text-anchor="middle" font-size="10.5" font-weight="800" fill="#1D2B45">กว้างบ่อ 18.80 ม. (Grid 3/4–7)</text>
+        <rect x="172" y="11" width="196" height="22" rx="4" fill="#FFFFFF" stroke="#1D2B45" stroke-width="1.2" />
+        <text x="270" y="26" text-anchor="middle" font-size="10" font-weight="800" fill="#1D2B45">บ่อ 18.80 ม. (F18: -2.90 · F20: -3.80)</text>
         <line x1="20" y1="64" x2="444" y2="64" stroke="#1D2B45" stroke-width="2" />
         <text x="24" y="58" font-size="10" font-weight="800" fill="#1D2B45">GL. 0.00 ม.</text>
-        ${dugHeight > 0 ? `<rect x="122" y="64" width="296" height="${dugHeight}" fill="#E0F2FE" />` : ''}
-        ${remHeight > 0 ? `<rect x="122" y="${curY}" width="296" height="${remHeight}" fill="#FDE6C4" /><rect x="122" y="${curY}" width="296" height="${remHeight}" fill="url(#sp-hatch-soil)" />` : ''}
-        <line x1="122" y1="136" x2="418" y2="136" stroke="#64748B" stroke-width="1" stroke-dasharray="4,3" />
-        <line x1="122" y1="188" x2="418" y2="188" stroke="#64748B" stroke-width="1" stroke-dasharray="4,3" />
-        <rect x="122" y="130" width="296" height="10" fill="${hasBracing ? '#10B981' : '#FFFFFF'}" fill-opacity="0.92" stroke="${hasBracing ? '#065F46' : '#475569'}" stroke-width="1.5" ${hasBracing ? '' : 'stroke-dasharray="4,2"'} />
-        <text x="270" y="138" text-anchor="middle" font-size="8.5" font-weight="800" fill="${hasBracing ? '#FFFFFF' : '#334155'}">ค้ำยัน Waler H-350 / Strut (EL -1.50 ม.)</text>
-        <line x1="104" y1="256" x2="444" y2="256" stroke="#DC2626" stroke-width="2" stroke-dasharray="6,3" />
-        <rect x="198" y="261" width="144" height="18" rx="3" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" />
-        <text x="270" y="273" text-anchor="middle" font-size="9.5" font-weight="800" fill="#B91C1C">ก้นบ่อออกแบบ EL -3.65 ม.</text>
+
+        <!-- Excavated & Remaining Soil (2-Level Split at F18 / F20) -->
+        ${dugHW > 0 ? `<rect x="122" y="64" width="${splitX - 122}" height="${dugHW}" fill="#E0F2FE" />` : ''}
+        ${remHW > 0 ? `<rect x="122" y="${yW}" width="${splitX - 122}" height="${remHW}" fill="#FDE6C4" /><rect x="122" y="${yW}" width="${splitX - 122}" height="${remHW}" fill="url(#sp-hatch-soil)" />` : ''}
+        ${dugHE > 0 ? `<rect x="${splitX}" y="64" width="${418 - splitX}" height="${dugHE}" fill="#E0F2FE" />` : ''}
+        ${remHE > 0 ? `<rect x="${splitX}" y="${yE}" width="${418 - splitX}" height="${remHE}" fill="#FDE6C4" /><rect x="${splitX}" y="${yE}" width="${418 - splitX}" height="${remHE}" fill="url(#sp-hatch-soil)" />` : ''}
+
+        <line x1="122" y1="132" x2="418" y2="132" stroke="#64748B" stroke-width="1" stroke-dasharray="4,3" />
+        <line x1="122" y1="178" x2="418" y2="178" stroke="#64748B" stroke-width="1" stroke-dasharray="4,3" />
+        <line x1="${splitX}" y1="64" x2="${splitX}" y2="258" stroke="#64748B" stroke-width="1" stroke-dasharray="3,2" />
+
+        <!-- Bracing Level @ EL -1.00m -->
+        <rect x="122" y="104" width="296" height="11" fill="${hasBracing ? '#10B981' : '#FFFFFF'}" fill-opacity="0.94" stroke="${hasBracing ? '#065F46' : '#475569'}" stroke-width="1.5" ${hasBracing ? '' : 'stroke-dasharray="4,2"'} />
+        <text x="270" y="112.5" text-anchor="middle" font-size="8.5" font-weight="800" fill="${hasBracing ? '#FFFFFF' : '#334155'}">ค้ำยัน Waler H-350 / Strut (EL -1.00 ม.)</text>
+
+        <!-- Stepped Design Excavation Floor: Case B -2.90m (West) + Case A -3.80m (East) -->
+        <polyline points="122,206 ${splitX},206 ${splitX},258 418,258" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-dasharray="5,2.5" />
+        <rect x="126" y="211" width="104" height="16" rx="3" fill="#EFF6FF" stroke="#0369A1" stroke-width="1" />
+        <text x="178" y="222" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0369A1">Case B (F18) -2.90 ม.</text>
+        <rect x="245" y="262" width="154" height="17" rx="3" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" />
+        <text x="322" y="273.5" text-anchor="middle" font-size="8.8" font-weight="800" fill="#B91C1C">Case A (F20) -3.80 ม.</text>
+
         ${depth > 0 ? `
-          <line x1="118" y1="${curY}" x2="422" y2="${curY}" stroke="#0284C7" stroke-width="2.8" />
-          <polygon points="150,${curY} 144,${curY - 8} 156,${curY - 8}" fill="#0284C7" />
-          <rect x="164" y="${Math.max(68, Math.min(curY - 34, 214))}" width="212" height="30" rx="5" fill="#0284C7" stroke="#1D2B45" stroke-width="1.5" />
-          <text x="270" y="${Math.max(80, Math.min(curY - 21, 226))}" text-anchor="middle" font-size="10.5" font-weight="800" fill="#FFFFFF">ขุดแล้วถึง EL -${depth.toFixed(2)} ม. (${s.ex.pct}%)</text>
-          <text x="270" y="${Math.max(93, Math.min(curY - 8, 239))}" text-anchor="middle" font-size="9" font-weight="700" fill="#E0F2FE">${s.ex.dugVol} / ${s.ex.totalVol} ลบ.ม.</text>
+          <polyline points="122,${yW} ${splitX},${yW} ${splitX},${yE} 418,${yE}" fill="none" stroke="#0284C7" stroke-width="2.8" />
+          <rect x="156" y="${Math.max(66, Math.min(Math.min(yW, yE) - 34, 168))}" width="228" height="30" rx="5" fill="#0284C7" stroke="#1D2B45" stroke-width="1.5" />
+          <text x="270" y="${Math.max(78, Math.min(Math.min(yW, yE) - 21, 180))}" text-anchor="middle" font-size="10" font-weight="800" fill="#FFFFFF">ขุดแล้ว EL -${depth.toFixed(2)} ม. (${s.ex.pct}%)</text>
+          <text x="270" y="${Math.max(91, Math.min(Math.min(yW, yE) - 8, 193))}" text-anchor="middle" font-size="9" font-weight="700" fill="#E0F2FE">${s.ex.dugVol} / ${s.ex.totalVol} ลบ.ม. (เหลือ ${remVol})</text>
         ` : `
-          <rect x="160" y="82" width="220" height="36" rx="5" fill="#FFFFFF" stroke="#1D2B45" stroke-width="1.5" />
-          <text x="270" y="98" text-anchor="middle" font-size="11" font-weight="800" fill="#1D2B45">ยังไม่เริ่มขุดดิน (EL 0.00 ม.)</text>
-          <text x="270" y="112" text-anchor="middle" font-size="9.5" font-weight="700" fill="#B45309">ปริมาตรรอขุดทั้งหมด ${s.ex.totalVol} ลบ.ม.</text>
+          <rect x="160" y="72" width="220" height="28" rx="5" fill="#FFFFFF" stroke="#1D2B45" stroke-width="1.5" />
+          <text x="270" y="85" text-anchor="middle" font-size="10" font-weight="800" fill="#1D2B45">ยังไม่เริ่มขุดดิน (EL 0.00 ม.)</text>
+          <text x="270" y="96" text-anchor="middle" font-size="8.8" font-weight="700" fill="#B45309">ปริมาตรรอขุด 2 ระดับ รวม ${s.ex.totalVol} ลบ.ม.</text>
         `}
-        ${remHeight >= 34 && depth > 0 ? `
-          <rect x="180" y="${Math.round(curY + remHeight / 2 - 11)}" width="180" height="22" rx="4" fill="#FFFBEB" fill-opacity="0.95" stroke="#B45309" stroke-width="1" />
-          <text x="270" y="${Math.round(curY + remHeight / 2 + 4)}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#92400E">ดินคงเหลือรอขุด ${remVol} ลบ.ม.</text>
-        ` : ''}
-        <rect x="108" y="60" width="14" height="292" fill="#1D2B45" stroke="#0F172A" stroke-width="1.5" />
-        <rect x="418" y="60" width="14" height="292" fill="#1D2B45" stroke="#0F172A" stroke-width="1.5" />
-        <text x="115" y="368" text-anchor="middle" font-size="9" font-weight="800" fill="#1D2B45">Sheet Pile</text>
-        <text x="425" y="368" text-anchor="middle" font-size="9" font-weight="800" fill="#1D2B45">Sheet Pile</text>
-        <line x1="122" y1="352" x2="444" y2="352" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,3" />
-        <rect x="160" y="341" width="220" height="20" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
-        <text x="270" y="354" text-anchor="middle" font-size="9" font-weight="800" fill="#334155">ปลายชีตไพล์ฝังดิน EL -13.50 ม. (ยาว 13.50 ม.)</text>
-        <text x="102" y="103" text-anchor="end" font-size="9" font-weight="800" fill="#78350F">Stage 1</text>
-        <text x="102" y="114" text-anchor="end" font-size="8" font-weight="700" fill="#92400E">0→-1.5m</text>
-        <text x="102" y="160" text-anchor="end" font-size="9" font-weight="800" fill="#78350F">Stage 2</text>
-        <text x="102" y="171" text-anchor="end" font-size="8" font-weight="700" fill="#92400E">-1.5→-2.5m</text>
-        <text x="102" y="220" text-anchor="end" font-size="9" font-weight="800" fill="#1E3A8A">Stage 3</text>
-        <text x="102" y="231" text-anchor="end" font-size="8" font-weight="700" fill="#1D4ED8">-2.5→-3.65m</text>
-        <g font-size="9.5" font-weight="700">
-          <rect x="448" y="64" width="180" height="72" fill="#F5EFE6" stroke="#1D2B45" stroke-width="1" />
-          <text x="455" y="79" font-size="9" font-weight="800" fill="#78350F">EL 0.00 → -1.50 ม.</text>
-          <text x="455" y="95" font-size="9.5" font-weight="800" fill="#1D2B45">L1 ดินถม (Fill)</text>
-          <text x="455" y="109" font-size="8.5" fill="#475569">ปริมาตรขุด 248.16 ลบ.ม.</text>
-          <rect x="448" y="136" width="180" height="52" fill="#EDE3D5" stroke="#1D2B45" stroke-width="1" />
-          <text x="455" y="150" font-size="9" font-weight="800" fill="#78350F">EL -1.50 → -2.50 ม.</text>
-          <text x="455" y="164" font-size="9.5" font-weight="800" fill="#1D2B45">L2 ดินเหนียวปนซิลท์</text>
-          <text x="455" y="177" font-size="8.5" fill="#475569">ปริมาตรขุด 165.44 ลบ.ม.</text>
-          <rect x="448" y="188" width="180" height="68" fill="#E2E8F0" stroke="#1D2B45" stroke-width="1" />
-          <text x="455" y="203" font-size="9" font-weight="800" fill="#0369A1">EL -2.50 → -3.65 ม.</text>
-          <text x="455" y="218" font-size="9.5" font-weight="800" fill="#1D2B45">L3a ดินเหนียวอ่อน (ก้นบ่อ)</text>
-          <text x="455" y="232" font-size="8.5" fill="#475569">ปริมาตรขุด 190.26 ลบ.ม.</text>
-          <rect x="448" y="256" width="180" height="96" fill="#F1F5F9" stroke="#1D2B45" stroke-width="1" />
-          <text x="455" y="274" font-size="9" font-weight="800" fill="#DC2626">EL -3.65 → -13.50 ม.</text>
-          <text x="455" y="292" font-size="9.5" font-weight="800" fill="#1D2B45">L3 ดินเหนียวอ่อนมาก</text>
-          <text x="455" y="307" font-size="8.5" fill="#475569">Very Soft Clay (ช่วงฝังชีตไพล์)</text>
-          <text x="455" y="340" font-size="9" font-weight="800" fill="#1D2B45">EL -13.50 ม. (ปลายชีตไพล์)</text>
+
+        <!-- Left Sheet Pile (Case B: FSP-3 12.00m) & Right Sheet Pile (Case A: FSP-3 13.50m) -->
+        <rect x="108" y="60" width="14" height="274" fill="#0369A1" stroke="#0F172A" stroke-width="1.5" />
+        <rect x="418" y="60" width="14" height="294" fill="#1D2B45" stroke="#0F172A" stroke-width="1.5" />
+        <text x="115" y="348" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0369A1">FSP-3</text>
+        <text x="115" y="359" text-anchor="middle" font-size="8.5" font-weight="800" fill="#0369A1">12.0ม.(B)</text>
+        <text x="425" y="368" text-anchor="middle" font-size="8.5" font-weight="800" fill="#1D2B45">FSP-3</text>
+        <text x="425" y="379" text-anchor="middle" font-size="8.5" font-weight="800" fill="#1D2B45">13.5ม.(A)</text>
+
+        <line x1="122" y1="334" x2="235" y2="334" stroke="#0369A1" stroke-width="1.2" stroke-dasharray="4,2" />
+        <line x1="235" y1="354" x2="444" y2="354" stroke="#1D2B45" stroke-width="1.2" stroke-dasharray="4,2" />
+        <rect x="132" y="316" width="128" height="16" rx="3" fill="#EFF6FF" stroke="#0369A1" stroke-width="1" />
+        <text x="196" y="327" text-anchor="middle" font-size="8.2" font-weight="800" fill="#0369A1">Case B: 52 แผ่น · 12.0 ม.</text>
+        <rect x="266" y="337" width="144" height="16" rx="3" fill="#FFFFFF" stroke="#1D2B45" stroke-width="1" />
+        <text x="338" y="348" text-anchor="middle" font-size="8.2" font-weight="800" fill="#1D2B45">Case A: 90 แผ่น · 13.5 ม.</text>
+
+        <text x="102" y="99" text-anchor="end" font-size="8.5" font-weight="800" fill="#78350F">S1: 0→-1.5m</text>
+        <text x="102" y="158" text-anchor="end" font-size="8.5" font-weight="800" fill="#78350F">S2: -1.5→-2.5</text>
+        <text x="102" y="196" text-anchor="end" font-size="8.5" font-weight="800" fill="#0369A1">S3a: -2.90m</text>
+        <text x="102" y="236" text-anchor="end" font-size="8.5" font-weight="800" fill="#B91C1C">S3b: -3.80m</text>
+
+        <g font-size="9.2" font-weight="700">
+          <rect x="448" y="64" width="182" height="68" fill="#F5EFE6" stroke="#1D2B45" stroke-width="1" />
+          <text x="455" y="79" font-size="8.8" font-weight="800" fill="#78350F">EL 0.00 → -1.50 ม. (Stage 1)</text>
+          <text x="455" y="94" font-size="9.2" font-weight="800" fill="#1D2B45">L1 ดินถม (Fill)</text>
+          <text x="455" y="108" font-size="8.5" fill="#475569">ปริมาตรขุด 248.16 ลบ.ม.</text>
+          <rect x="448" y="132" width="182" height="46" fill="#EDE3D5" stroke="#1D2B45" stroke-width="1" />
+          <text x="455" y="146" font-size="8.8" font-weight="800" fill="#78350F">EL -1.50 → -2.50 ม. (Stage 2)</text>
+          <text x="455" y="160" font-size="9" font-weight="800" fill="#1D2B45">L2 ดินเหนียวปนซิลท์ (165.44 ม³)</text>
+          <rect x="448" y="178" width="182" height="80" fill="#E2E8F0" stroke="#1D2B45" stroke-width="1" />
+          <text x="455" y="193" font-size="8.5" font-weight="800" fill="#0369A1">S3a: -2.50→-2.90 ม. (66.18 ม³)</text>
+          <text x="455" y="207" font-size="8.5" font-weight="800" fill="#B91C1C">S3b: -2.90→-3.80 ม. (92.01 ม³)</text>
+          <text x="455" y="223" font-size="9" font-weight="800" fill="#1D2B45">L3a ดินเหนียวอ่อน (2 ระดับ)</text>
+          <text x="455" y="238" font-size="8.3" fill="#475569">F18 -2.90 ม. · F20 -3.80 ม.</text>
+          <rect x="448" y="258" width="182" height="96" fill="#F1F5F9" stroke="#1D2B45" stroke-width="1" />
+          <text x="455" y="275" font-size="8.8" font-weight="800" fill="#DC2626">EL -3.80 → -13.50 ม.</text>
+          <text x="455" y="292" font-size="9.2" font-weight="800" fill="#1D2B45">L3 ดินเหนียวอ่อนมาก</text>
+          <text x="455" y="307" font-size="8.3" fill="#475569">JIS FSP-III (400×125×13 มม.)</text>
+          <text x="455" y="328" font-size="8.5" font-weight="800" fill="#0369A1">ปลาย Case B: EL -12.00 ม.</text>
+          <text x="455" y="343" font-size="8.5" font-weight="800" fill="#1D2B45">ปลาย Case A: EL -13.50 ม.</text>
         </g>
       </svg>
     `;
@@ -570,12 +615,13 @@
         `📊 ผลงานสะสมรวม`,
         `✅ 1. งานเสาเข็ม (I-0.40 ม.): 93 / 93 ต้น (100% — แล้วเสร็จ)`,
         `🛡️ 2. งานป้องกันดิน Sheet Pile & งานขุดดิน (รวม ${st.overallSpPct}%)`,
-        `   • 2.1 งานกดชีตไพล์ (ยาว 13.50 ม.): ${st.sp.done} / ${st.sp.total} แผ่น (${st.sp.pct}%) · ${st.sp.meters} / 56.8 ม.`,
-        `     - Grid A–B: ${st.sp.sides.N.done}/${st.sp.sides.N.total} | Grid E: ${st.sp.sides.S.done}/${st.sp.sides.S.total} | Grid 3–4: ${st.sp.sides.W.done}/${st.sp.sides.W.total} | Grid 7: ${st.sp.sides.E.done}/${st.sp.sides.E.total}`,
+        `   • 2.1 งานกดชีตไพล์ รุ่น JIS FSP-III (SP-3 · SY295 · 60 กก./ม.): ${st.sp.done} / ${st.sp.total} แผ่น (${st.sp.pct}%)`,
+        `     - Case A (ยาว 13.50 ม.): ${st.sp.caseA.done}/${st.sp.caseA.total} แผ่น (${st.sp.caseA.pct}%) | Case B (ยาว 12.00 ม.): ${st.sp.caseB.done}/${st.sp.caseB.total} แผ่น (${st.sp.caseB.pct}%)`,
+        `     - Grid A–B: ${st.sp.sides.N.done}/${st.sp.sides.N.total} | Grid E: ${st.sp.sides.S.done}/${st.sp.sides.S.total} | Grid 3–4: ${st.sp.sides.W.done}/${st.sp.sides.W.total} | Grid 7: ${st.sp.sides.E.done}/${st.sp.sides.E.total} | มุม: ${st.sp.sides.C.done}/${st.sp.sides.C.total}`,
         `   • 2.2 งานติดตั้ง Waler / Strut / Preload & เท Packing Concrete: ${st.bracing.pct}%`,
         `     - Waler H-350: ${st.bracing.walerDoneM} / ${st.bracing.walerTotalM} ม. | Strut & Corner: ${st.bracing.strutDone} / 6 ต้น`,
-        `     - Packing Concrete: ${st.bracing.pcDoneM} / ${st.bracing.pcTotalM} ม. | Preload Jack: ${st.bracing.jackDone} / 2 จุด`,
-        `   • 2.3 งานขุดดิน (EL. 0.00 → -3.65 ม.): EL. -${st.ex.depth.toFixed(2)} ม. · ${st.ex.dugVol} / ${st.ex.totalVol} ลบ.ม. (${st.ex.pct}%)`,
+        `     - Packing Concrete: ${st.bracing.pcDoneM} / ${st.bracing.pcTotalM} ม. (${st.bracing.pcDoneVol}/${st.bracing.pcTotalVol} ม³) | Preload Jack: ${st.bracing.jackDone} / 2 จุด`,
+        `   • 2.3 งานขุดดิน 2 ระดับ (Case B -2.90 ม. / Case A -3.80 ม.): EL. -${st.ex.depth.toFixed(2)} ม. · ${st.ex.dugVol} / ${st.ex.totalVol} ลบ.ม. (${st.ex.pct}%)`,
       ].join('\n');
     }
 
@@ -734,45 +780,56 @@
                 <!-- 2. งานป้องกันดิน Sheet Pile (หัวข้อหลัก) -->
                 <tr class="bg-slate-50/90">
                   <td class="border border-slate-900 text-center font-mono font-black py-0.5">2</td>
-                  <td class="border border-slate-900 px-1.5 py-0.5 font-black whitespace-nowrap">งานป้องกันดิน Sheet Pile &amp; งานขุดดิน</td>
+                  <td class="border border-slate-900 px-1.5 py-0.5 font-black whitespace-nowrap">งานป้องกันดิน Sheet Pile (JIS FSP-III / SP-3) &amp; งานขุดดิน</td>
                   <td class="border border-slate-900 text-center py-0.5">บ่อฐานราก</td>
-                  <td class="border border-slate-900 text-center font-mono py-0.5">3 หมวด</td>
+                  <td class="border border-slate-900 text-center font-mono py-0.5">142 แผ่น</td>
                   <td class="border border-slate-900 text-center font-mono font-bold py-0.5">สะสมรวม</td>
                   <td class="border border-slate-900 text-center font-mono font-black py-0.5 ${s.overallSpPct === 100 ? 'text-emerald-700 bg-emerald-50/70' : 'text-slate-900'}">${s.overallSpPct}%</td>
-                  <td class="border border-slate-900 px-1 py-0.5 text-[10px] text-slate-500"></td>
+                  <td class="border border-slate-900 px-1 py-0.5 text-[9.5px] text-slate-600">SY295 · 110.4 ตัน</td>
                 </tr>
 
-                <!-- 2.1 งานกดชีตไพล์ -->
+                <!-- 2.1 งานกดชีตไพล์ Case A (FSP-3 ยาว 13.50 ม.) -->
                 <tr>
                   <td class="border border-slate-900 text-center font-mono font-bold py-0.5">2.1</td>
-                  <td class="border border-slate-900 px-1.5 pl-3 py-0.5 font-semibold whitespace-nowrap">งานกดชีตไพล์ (ยาว 13.50 ม.)</td>
-                  <td class="border border-slate-900 text-center py-0.5 text-[9.5px] whitespace-nowrap">Grid A–B, E, 3–4, 7</td>
-                  <td class="border border-slate-900 text-center font-mono py-0.5">${s.sp.total} แผ่น</td>
-                  <td class="border border-slate-900 text-center font-mono font-bold py-0.5">${s.sp.done} แผ่น</td>
-                  <td class="border border-slate-900 text-center font-mono font-black py-0.5 ${s.sp.pct === 100 ? 'text-emerald-700 bg-emerald-50/70' : 'text-slate-900'}">${s.sp.pct}%</td>
-                  <td class="border border-slate-900 px-1 py-0.5"><input type="text" data-cfg="remarks21" value="${esc(cfg.remarks21)}" class="w-full bg-transparent outline-none text-[10px]" /></td>
+                  <td class="border border-slate-900 px-1.5 pl-3 py-0.5 font-semibold whitespace-nowrap">กดชีตไพล์ JIS FSP-III (SP-3) · Case A ยาว 13.50 ม.</td>
+                  <td class="border border-slate-900 text-center py-0.5 text-[9.5px] whitespace-nowrap">Grid A–B, E, 7 (ขวา)</td>
+                  <td class="border border-slate-900 text-center font-mono py-0.5">${s.sp.caseA.total} แผ่น</td>
+                  <td class="border border-slate-900 text-center font-mono font-bold py-0.5">${s.sp.caseA.done} แผ่น</td>
+                  <td class="border border-slate-900 text-center font-mono font-black py-0.5 ${s.sp.caseA.pct === 100 ? 'text-emerald-700 bg-emerald-50/70' : 'text-slate-900'}">${s.sp.caseA.pct}%</td>
+                  <td class="border border-slate-900 px-1 py-0.5"><input type="text" data-cfg="remarks21" value="${esc(cfg.remarks21)}" placeholder="88ตรง+2มุม" class="w-full bg-transparent outline-none text-[9.5px]" /></td>
                 </tr>
 
-                <!-- 2.2 งานติดตั้ง Waler / Strut & เท Packing Concrete -->
+                <!-- 2.2 งานกดชีตไพล์ Case B (FSP-3 ยาว 12.00 ม.) -->
                 <tr>
                   <td class="border border-slate-900 text-center font-mono font-bold py-0.5">2.2</td>
-                  <td class="border border-slate-900 px-1.5 pl-3 py-0.5 font-semibold whitespace-nowrap">งานติดตั้ง Waler / Strut &amp; Packing Concrete</td>
-                  <td class="border border-slate-900 text-center py-0.5">บ่อฐานราก</td>
-                  <td class="border border-slate-900 text-center font-mono py-0.5 text-[9.5px] whitespace-nowrap">54.48ม.·6ต้น</td>
-                  <td class="border border-slate-900 text-center font-mono font-bold py-0.5 text-[9.5px] whitespace-nowrap">${s.bracing.walerDoneM}ม.·${s.bracing.strutDone}/6</td>
-                  <td class="border border-slate-900 text-center font-mono font-black py-0.5 ${s.bracing.pct === 100 ? 'text-emerald-700 bg-emerald-50/70' : 'text-slate-900'}">${s.bracing.pct}%</td>
-                  <td class="border border-slate-900 px-1 py-0.5"><input type="text" data-cfg="remarks22" value="${esc(cfg.remarks22)}" class="w-full bg-transparent outline-none text-[10px]" /></td>
+                  <td class="border border-slate-900 px-1.5 pl-3 py-0.5 font-semibold whitespace-nowrap">กดชีตไพล์ JIS FSP-III (SP-3) · Case B ยาว 12.00 ม.</td>
+                  <td class="border border-slate-900 text-center py-0.5 text-[9.5px] whitespace-nowrap">Grid A–B, E, 3–4 (ซ้าย)</td>
+                  <td class="border border-slate-900 text-center font-mono py-0.5">${s.sp.caseB.total} แผ่น</td>
+                  <td class="border border-slate-900 text-center font-mono font-bold py-0.5">${s.sp.caseB.done} แผ่น</td>
+                  <td class="border border-slate-900 text-center font-mono font-black py-0.5 ${s.sp.caseB.pct === 100 ? 'text-emerald-700 bg-emerald-50/70' : 'text-slate-900'}">${s.sp.caseB.pct}%</td>
+                  <td class="border border-slate-900 px-1 py-0.5"><input type="text" data-cfg="remarks24" value="${esc(cfg.remarks24 || '')}" placeholder="50ตรง+2มุม" class="w-full bg-transparent outline-none text-[9.5px]" /></td>
                 </tr>
 
-                <!-- 2.3 งานขุดดิน -->
+                <!-- 2.3 งานติดตั้ง Waler / Strut & เท Packing Concrete -->
                 <tr>
                   <td class="border border-slate-900 text-center font-mono font-bold py-0.5">2.3</td>
-                  <td class="border border-slate-900 px-1.5 pl-3 py-0.5 font-semibold whitespace-nowrap">งานขุดดิน (EL. 0.00 → -3.65 ม.)</td>
+                  <td class="border border-slate-900 px-1.5 pl-3 py-0.5 font-semibold whitespace-nowrap">ติดตั้ง Waler / Strut H-350 &amp; Packing Concrete (-1.00 ม.)</td>
                   <td class="border border-slate-900 text-center py-0.5">บ่อฐานราก</td>
-                  <td class="border border-slate-900 text-center font-mono py-0.5 text-[9.5px] whitespace-nowrap">603.86 ม³</td>
+                  <td class="border border-slate-900 text-center font-mono py-0.5 text-[9.5px] whitespace-nowrap">54.48ม.·3.75ม³</td>
+                  <td class="border border-slate-900 text-center font-mono font-bold py-0.5 text-[9.5px] whitespace-nowrap">${s.bracing.walerDoneM}ม.·${s.bracing.strutDone}/6</td>
+                  <td class="border border-slate-900 text-center font-mono font-black py-0.5 ${s.bracing.pct === 100 ? 'text-emerald-700 bg-emerald-50/70' : 'text-slate-900'}">${s.bracing.pct}%</td>
+                  <td class="border border-slate-900 px-1 py-0.5"><input type="text" data-cfg="remarks22" value="${esc(cfg.remarks22)}" class="w-full bg-transparent outline-none text-[9.5px]" /></td>
+                </tr>
+
+                <!-- 2.4 งานขุดดิน 2 ระดับ -->
+                <tr>
+                  <td class="border border-slate-900 text-center font-mono font-bold py-0.5">2.4</td>
+                  <td class="border border-slate-900 px-1.5 pl-3 py-0.5 font-semibold whitespace-nowrap">งานขุดดิน 2 ระดับ (F18: -2.90 ม. / F20: -3.80 ม.)</td>
+                  <td class="border border-slate-900 text-center py-0.5">บ่อ F18 / F20</td>
+                  <td class="border border-slate-900 text-center font-mono py-0.5 text-[9.5px] whitespace-nowrap">${s.ex.totalVol} ม³</td>
                   <td class="border border-slate-900 text-center font-mono font-bold py-0.5 text-[9.5px] whitespace-nowrap">${s.ex.dugVol} ม³ (-${s.ex.depth.toFixed(2)})</td>
                   <td class="border border-slate-900 text-center font-mono font-black py-0.5 ${s.ex.pct === 100 ? 'text-emerald-700 bg-emerald-50/70' : 'text-slate-900'}">${s.ex.pct}%</td>
-                  <td class="border border-slate-900 px-1 py-0.5"><input type="text" data-cfg="remarks23" value="${esc(cfg.remarks23)}" class="w-full bg-transparent outline-none text-[10px]" /></td>
+                  <td class="border border-slate-900 px-1 py-0.5"><input type="text" data-cfg="remarks23" value="${esc(cfg.remarks23)}" class="w-full bg-transparent outline-none text-[9.5px]" /></td>
                 </tr>
 
                 <!-- 2 Extra Editable Blank Rows -->
@@ -984,7 +1041,7 @@
                 }).join('')}
                 <figure class="border border-[#1D2B45] bg-white m-0">
                   <div class="bg-[#FAF5EE] border-b border-[#1D2B45] px-2 py-1 text-[10px] font-mono font-bold text-[#1D2B45] truncate">
-                    4. รูปตัดระดับขุดดิน &amp; ชั้นดิน (EL.-${s.ex.depth.toFixed(2)} / -3.65 ม.)
+                    4. รูปตัดระดับขุดดิน 2 ระดับ &amp; ชีตไพล์ (Case B -2.90 / Case A -3.80 ม.)
                   </div>
                   ${renderExcavationSectionSvg(s)}
                 </figure>
@@ -992,10 +1049,10 @@
             ` : `<div class="border border-[#1D2B45] p-6 text-center text-xs text-[#64748B]">กำลังเตรียมผังความก้าวหน้า...</div>`}
           </div>
 
-          <table class="w-full border-collapse border border-[#1D2B45] text-[11px]">
+          <table class="w-full border-collapse border border-[#1D2B45] text-[10.5px]">
             <thead>
               <tr class="bg-[#1D2B45] text-white text-left">
-                <th class="border border-[#1D2B45] px-2 py-1">หมวดงานหลัก (ERSS 3 Packages)</th>
+                <th class="border border-[#1D2B45] px-2 py-1">หมวดงานหลัก (ERSS · รุ่นและขนาดตามแบบ Hirose)</th>
                 <th class="border border-[#1D2B45] px-2 py-1 text-right">ผลงานสะสม</th>
                 <th class="border border-[#1D2B45] px-2 py-1 text-right">เป้าหมายตามแบบ</th>
                 <th class="border border-[#1D2B45] px-2 py-1 text-right">% ก้าวหน้า</th>
@@ -1003,79 +1060,101 @@
             </thead>
             <tbody>
               <tr>
-                <td class="border border-[#1D2B45] px-2 py-1 font-bold">2.1 งานกดชีตไพล์ (ยาว 13.50 ม.)</td>
-                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-bold text-[#065F46]">${s.sp.done} แผ่น (${s.sp.meters} ม.)</td>
-                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">${s.sp.total} แผ่น (56.8 ม.)</td>
-                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-black">${s.sp.pct}%</td>
+                <td class="border border-[#1D2B45] px-2 py-1 font-bold">2.1 ชีตไพล์ JIS FSP-III (SP-3) · Case A ยาว 13.50 ม.</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-bold text-[#065F46]">${s.sp.caseA.done} แผ่น</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">${s.sp.caseA.total} แผ่น (88ตรง+2มุม · 72.9ตัน)</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-black">${s.sp.caseA.pct}%</td>
+              </tr>
+              <tr class="bg-[#F0F9FF]/60">
+                <td class="border border-[#1D2B45] px-2 py-1 font-bold">2.2 ชีตไพล์ JIS FSP-III (SP-3) · Case B ยาว 12.00 ม.</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-bold text-[#0369A1]">${s.sp.caseB.done} แผ่น</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">${s.sp.caseB.total} แผ่น (50ตรง+2มุม · 37.5ตัน)</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-black">${s.sp.caseB.pct}%</td>
               </tr>
               <tr class="bg-[#FAF5EE]/60">
-                <td class="border border-[#1D2B45] px-2 py-1 font-bold">2.2 งานติดตั้ง Waler / Strut / Preload &amp; เท Packing Concrete</td>
+                <td class="border border-[#1D2B45] px-2 py-1 font-bold">2.3 ค้ำยัน Waler / Strut H-350 &amp; Packing Concrete (-1.00 ม.)</td>
                 <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">Waler ${s.bracing.walerDoneM}ม. · Strut ${s.bracing.strutDone}/6 · PC ${s.bracing.pcDoneM}ม.</td>
-                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">54.48ม. · 6 ต้น · 54.82ม.</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">54.48ม. · 6 ต้น · ${s.bracing.pcTotalVol} ม³</td>
                 <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-black">${s.bracing.pct}%</td>
               </tr>
               <tr>
-                <td class="border border-[#1D2B45] px-2 py-1 font-bold">2.3 งานขุดดิน (EL. 0.00 → -3.65 ม.)</td>
+                <td class="border border-[#1D2B45] px-2 py-1 font-bold">2.4 งานขุดดิน 2 ระดับ (F18: -2.90 ม. / F20: -3.80 ม.)</td>
                 <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-bold text-[#0284C7]">EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.dugVol} ลบ.ม.)</td>
-                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">EL.-3.65 ม. (${s.ex.totalVol} ลบ.ม.)</td>
+                <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono">-2.90/-3.80 ม. (${s.ex.totalVol} ลบ.ม.)</td>
                 <td class="border border-[#1D2B45] px-2 py-1 text-right font-mono font-black">${s.ex.pct}%</td>
               </tr>
             </tbody>
           </table>
 
-          <!-- Gridline Table + Bracing/Excavation Side-by-Side -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <h3 class="font-display text-[11px] font-black text-[#1D2B45] border-b border-[#1D2B45] pb-0.5 mb-1.5">
-                งานกดชีตไพล์ (แยกตามแนว Gridline)
+          <!-- Gridline Table (with Model & Length) + 2-Level Excavation Side-by-Side -->
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+            <div class="sm:col-span-7">
+              <h3 class="font-display text-[10.5px] font-black text-[#1D2B45] border-b border-[#1D2B45] pb-0.5 mb-1">
+                งานกดชีตไพล์ JIS FSP-III (400×125×13 มม.) แยกตามแนว &amp; ความยาว
               </h3>
-              <table class="w-full border-collapse border border-[#1D2B45] text-[10.5px]">
+              <table class="w-full border-collapse border border-[#1D2B45] text-[9.5px]">
                 <thead>
                   <tr class="bg-[#FAF5EE] text-left">
-                    <th class="border border-[#1D2B45] px-2 py-1">แนว Gridline</th>
-                    <th class="border border-[#1D2B45] px-1.5 py-1 text-right">แบบ</th>
-                    <th class="border border-[#1D2B45] px-1.5 py-1 text-right">แล้ว</th>
-                    <th class="border border-[#1D2B45] px-1.5 py-1 text-right">เหลือ</th>
-                    <th class="border border-[#1D2B45] px-1.5 py-1 text-right">%</th>
+                    <th class="border border-[#1D2B45] px-1.5 py-0.5">แนว Gridline</th>
+                    <th class="border border-[#1D2B45] px-1.5 py-0.5">รุ่น / ความยาว</th>
+                    <th class="border border-[#1D2B45] px-1 py-0.5 text-right">แบบ</th>
+                    <th class="border border-[#1D2B45] px-1 py-0.5 text-right">แล้ว</th>
+                    <th class="border border-[#1D2B45] px-1 py-0.5 text-right">เหลือ</th>
+                    <th class="border border-[#1D2B45] px-1 py-0.5 text-right">%</th>
                   </tr>
                 </thead>
                 <tbody>
                   ${Object.values(s.sp.sides).map((side) => {
                     const pct = side.total ? Math.round((side.done / side.total) * 100) : 0;
                     return `<tr>
-                      <td class="border border-[#1D2B45] px-2 py-1 font-bold">${esc(side.label)}</td>
-                      <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${side.total}</td>
-                      <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold text-[#065F46]">${side.done}</td>
-                      <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono text-[#E64C3C]">${side.total - side.done}</td>
-                      <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold">${pct}%</td>
+                      <td class="border border-[#1D2B45] px-1.5 py-0.5 font-bold whitespace-nowrap">${esc(side.label)}</td>
+                      <td class="border border-[#1D2B45] px-1.5 py-0.5 font-mono text-[9px] text-[#334155] whitespace-nowrap">${esc(side.spec)}</td>
+                      <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono">${side.total}</td>
+                      <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono font-bold text-[#065F46]">${side.done}</td>
+                      <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono text-[#E64C3C]">${side.total - side.done}</td>
+                      <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono font-bold">${pct}%</td>
                     </tr>`;
                   }).join('')}
+                  <tr class="bg-slate-100 font-extrabold">
+                    <td class="border border-[#1D2B45] px-1.5 py-0.5">รวมทั้งหมด (SY295)</td>
+                    <td class="border border-[#1D2B45] px-1.5 py-0.5 font-mono text-[9px]">13.5ม.(90) · 12ม.(52)</td>
+                    <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono">${s.sp.total}</td>
+                    <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono text-[#065F46]">${s.sp.done}</td>
+                    <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono text-[#E64C3C]">${s.sp.total - s.sp.done}</td>
+                    <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono">${s.sp.pct}%</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
 
-            <div>
-              <h3 class="font-display text-[11px] font-black text-[#1D2B45] border-b border-[#1D2B45] pb-0.5 mb-1.5">
-                งานขุดดินตามลำดับชั้น (รวม 603.86 ลบ.ม.)
+            <div class="sm:col-span-5">
+              <h3 class="font-display text-[10.5px] font-black text-[#1D2B45] border-b border-[#1D2B45] pb-0.5 mb-1">
+                งานขุดดิน 2 ระดับ (รวม ${s.ex.totalVol} ลบ.ม.)
               </h3>
-              <table class="w-full border-collapse border border-[#1D2B45] text-[10.5px]">
+              <table class="w-full border-collapse border border-[#1D2B45] text-[9.5px]">
                 <thead>
                   <tr class="bg-[#FAF5EE] text-left">
-                    <th class="border border-[#1D2B45] px-2 py-1">ลำดับชั้นขุดดิน</th>
-                    <th class="border border-[#1D2B45] px-1.5 py-1 text-right">แบบ (ม³)</th>
-                    <th class="border border-[#1D2B45] px-1.5 py-1 text-right">ขุดแล้ว</th>
-                    <th class="border border-[#1D2B45] px-1.5 py-1 text-right">%</th>
+                    <th class="border border-[#1D2B45] px-1.5 py-0.5">ลำดับชั้นขุดดิน</th>
+                    <th class="border border-[#1D2B45] px-1 py-0.5 text-right">แบบ (ม³)</th>
+                    <th class="border border-[#1D2B45] px-1 py-0.5 text-right">ขุดแล้ว</th>
+                    <th class="border border-[#1D2B45] px-1 py-0.5 text-right">%</th>
                   </tr>
                 </thead>
                 <tbody>
                   ${s.ex.stages.map((st) => `
                     <tr>
-                      <td class="border border-[#1D2B45] px-2 py-1 font-semibold">${esc(st.name)}</td>
-                      <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${st.vol.toFixed(1)}</td>
-                      <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold text-[#0284C7]">${st.dugVol.toFixed(1)}</td>
-                      <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold">${st.pct}%</td>
+                      <td class="border border-[#1D2B45] px-1.5 py-0.5 font-semibold">${esc(st.name)}</td>
+                      <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono">${st.vol.toFixed(1)}</td>
+                      <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono font-bold text-[#0284C7]">${st.dugVol.toFixed(1)}</td>
+                      <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono font-bold">${st.pct}%</td>
                     </tr>
                   `).join('')}
+                  <tr class="bg-slate-100 font-extrabold">
+                    <td class="border border-[#1D2B45] px-1.5 py-0.5">รวมปริมาตรขุดดิน</td>
+                    <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono">${s.ex.totalVol.toFixed(1)}</td>
+                    <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono text-[#0284C7]">${s.ex.dugVol.toFixed(1)}</td>
+                    <td class="border border-[#1D2B45] px-1 py-0.5 text-right font-mono">${s.ex.pct}%</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
