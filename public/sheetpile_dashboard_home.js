@@ -436,171 +436,193 @@
     `;
   }
 
+  function buildTablesHtml(s) {
+    return `
+      <!-- Left: 3 Packages Summary -->
+      <div class="lg:col-span-6 overflow-x-auto">
+        <h3 class="font-display text-xs font-black text-[#1D2B45] border-b-2 border-[#1D2B45] pb-1 mb-2">
+          สรุปความก้าวหน้าหมวดงาน ERSS (รุ่น JIS FSP-III / SP-3)
+        </h3>
+        <table class="w-full border-collapse border border-[#1D2B45] text-xs">
+          <thead>
+            <tr class="bg-[#1D2B45] text-white text-left">
+              <th class="border border-[#1D2B45] px-2 py-1.5">หมวดงาน (รุ่น &amp; ความยาว)</th>
+              <th class="border border-[#1D2B45] px-2 py-1.5 text-right">ผลงานสะสม</th>
+              <th class="border border-[#1D2B45] px-2 py-1.5 text-right">เป้าหมาย</th>
+              <th class="border border-[#1D2B45] px-2 py-1.5 text-right">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">1. ชีตไพล์ JIS FSP-III · Case A (13.50 ม.)</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-bold text-[#065F46]">${s.sp.caseA.done} แผ่น</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">${s.sp.caseA.total} แผ่น (72.9 ตัน)</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.sp.caseA.pct}%</td>
+            </tr>
+            <tr class="bg-[#F0F9FF]/60">
+              <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">2. ชีตไพล์ JIS FSP-III · Case B (12.00 ม.)</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-bold text-[#0369A1]">${s.sp.caseB.done} แผ่น</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">${s.sp.caseB.total} แผ่น (37.5 ตัน)</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.sp.caseB.pct}%</td>
+            </tr>
+            <tr class="bg-[#FAF5EE]/60">
+              <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">3. ค้ำยัน Waler H-350 / Strut &amp; Packing</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">Waler ${s.bracing.walerDoneM}ม. · Strut ${s.bracing.strutDone}/6</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">54.48ม. · 3.75 ม³</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.bracing.pct}%</td>
+            </tr>
+            <tr>
+              <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">4. ขุดดิน 2 ระดับ (F18 -2.90 / F20 -3.80 ม.)</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-bold text-[#0284C7]">EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.dugVol} ม³)</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">571.79 ม³</td>
+              <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.ex.pct}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right: Gridline Breakdown Table (with Model & Length) -->
+      <div class="lg:col-span-6 overflow-x-auto">
+        <h3 class="font-display text-xs font-black text-[#1D2B45] border-b-2 border-[#1D2B45] pb-1 mb-2">
+          ตารางจำนวน Sheet Pile JIS FSP-III (400×125×13 มม.) แยกตามแนว
+        </h3>
+        <table class="w-full border-collapse border border-[#1D2B45] text-[11px]">
+          <thead>
+            <tr class="bg-[#FAF5EE] text-left">
+              <th class="border border-[#1D2B45] px-2 py-1.5">แนว Gridline</th>
+              <th class="border border-[#1D2B45] px-2 py-1.5">รุ่น / ความยาว</th>
+              <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">แบบ</th>
+              <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">กดแล้ว</th>
+              <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">เหลือ</th>
+              <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${Object.values(s.sp.sides).map((side) => {
+              const pct = side.total ? Math.round((side.done / side.total) * 100) : 0;
+              return `<tr>
+                <td class="border border-[#1D2B45] px-2 py-1 font-bold whitespace-nowrap">${esc(side.label)}</td>
+                <td class="border border-[#1D2B45] px-2 py-1 font-mono text-[10px] text-[#334155] whitespace-nowrap">${esc(side.spec)}</td>
+                <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${side.total}</td>
+                <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold text-[#065F46]">${side.done}</td>
+                <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono text-[#E64C3C]">${side.total - side.done}</td>
+                <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold">${pct}%</td>
+              </tr>`;
+            }).join('')}
+            <tr class="bg-slate-100 font-extrabold">
+              <td class="border border-[#1D2B45] px-2 py-1">รวมทั้งหมด (SY295)</td>
+              <td class="border border-[#1D2B45] px-2 py-1 font-mono text-[10px]">13.5ม.(90) · 12ม.(52) · 110.4ตัน</td>
+              <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${s.sp.total}</td>
+              <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono text-[#065F46]">${s.sp.done}</td>
+              <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono text-[#E64C3C]">${s.sp.total - s.sp.done}</td>
+              <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${s.sp.pct}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function renderDashboard() {
     const host = document.getElementById('portal-sheetpile-panel');
     if (!host) return;
-    const existingFrame = document.getElementById('home-sp-3d-frame');
     const state = readLiveState();
     const s = computeStats(state, cachedMeta);
     const dateFull = formatThaiDate(s.reportDate);
 
-    host.innerHTML = `
-      <div class="doodle-card-hero mb-6 p-4 sm:p-5 md:p-6 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45] space-y-5">
-        <!-- Header & Primary Action Bar -->
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b-2 border-[#1D2B45] pb-3.5">
+    // Mount shell + 3D iframe ONCE so the iframe is NEVER detached or reloaded by subsequent data/focus/storage updates!
+    if (!document.getElementById('home-sp-3d-frame')) {
+      host.innerHTML = `
+        <div class="doodle-card-hero mb-6 p-4 sm:p-5 md:p-6 relative bg-white border-2.5 border-[#1D2B45] rounded-3xl shadow-[6px_6px_0px_#1D2B45] space-y-5">
+          <!-- Header & Primary Action Bar -->
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b-2 border-[#1D2B45] pb-3.5">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <h2 class="font-display text-lg sm:text-xl font-black text-[#1D2B45] tracking-tight">
+                  ผังแสดงความก้าวหน้างานป้องกันดิน Sheet Pile &amp; งานขุดดิน
+                </h2>
+                <span id="home-sp-summary-pill" class="doodle-pill bg-[#ECFDF5] border-[#10B981] text-[#065F46] text-[10.5px] font-mono font-bold"></span>
+              </div>
+              <p id="home-sp-date-sub" class="text-xs text-[#3E4B69] font-semibold mt-1"></p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <a href="sheetpile.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] font-display text-xs sm:text-sm font-bold shadow-[3px_3px_0px_#1D2B45] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all">
+                <span>🛡️ เข้าสู่หน้างาน 3D Sheet Pile &amp; ขุดดิน</span>
+                <span>→</span>
+              </a>
+              <a href="footing.html" class="px-3 py-2 rounded-xl bg-white hover:bg-[#E0F2FE] border-2 border-[#1D2B45] text-[#1D2B45] font-display text-xs font-bold shadow-[2px_2px_0px_#1D2B45] transition-all">
+                ผังฐานราก 3D
+              </a>
+              <button type="button" onclick="enterAppView('residential')" class="px-3 py-2 rounded-xl bg-white hover:bg-[#FFF1F2] border-2 border-[#1D2B45] text-[#1D2B45] font-display text-xs font-bold shadow-[2px_2px_0px_#1D2B45] cursor-pointer transition-all">
+                ตรวจห้อง QC
+              </button>
+            </div>
+          </div>
+
+          <!-- Report-Style Legend + 2 Live Engineering Plates -->
           <div>
-            <div class="flex items-center gap-2 flex-wrap">
-              <h2 class="font-display text-lg sm:text-xl font-black text-[#1D2B45] tracking-tight">
-                ผังแสดงความก้าวหน้างานป้องกันดิน Sheet Pile &amp; งานขุดดิน
-              </h2>
-              <span class="doodle-pill bg-[#ECFDF5] border-[#10B981] text-[#065F46] text-[10.5px] font-mono font-bold">
-                SP ${s.sp.done}/${s.sp.total} (${s.sp.pct}%) · ขุดดิน EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.pct}%)
-              </span>
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5">
+              <h3 class="font-display text-xs sm:text-sm font-black text-[#1D2B45]">
+                ผังแปลนแสดงความก้าวหน้า &amp; รูปตัดระดับขุดดิน
+              </h3>
+              <div id="home-sp-legend" class="flex items-center gap-3 text-[11px] font-bold text-[#1D2B45] flex-wrap"></div>
             </div>
-            <p class="text-xs text-[#3E4B69] font-semibold mt-1">
-              อัปเดต ณ วันที่ ${esc(dateFull)} · แสดงผลเชื่อมตรงกับหน้างาน 3D แบบ Real-time
-            </p>
-          </div>
 
-          <div class="flex flex-wrap items-center gap-2 shrink-0">
-            <a href="sheetpile.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F26B2A] hover:bg-[#E05615] text-white border-2 border-[#1D2B45] font-display text-xs sm:text-sm font-bold shadow-[3px_3px_0px_#1D2B45] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all">
-              <span>🛡️ เข้าสู่หน้างาน 3D Sheet Pile &amp; ขุดดิน</span>
-              <span>→</span>
-            </a>
-            <a href="footing.html" class="px-3 py-2 rounded-xl bg-white hover:bg-[#E0F2FE] border-2 border-[#1D2B45] text-[#1D2B45] font-display text-xs font-bold shadow-[2px_2px_0px_#1D2B45] transition-all">
-              ผังฐานราก 3D
-            </a>
-            <button type="button" onclick="enterAppView('residential')" class="px-3 py-2 rounded-xl bg-white hover:bg-[#FFF1F2] border-2 border-[#1D2B45] text-[#1D2B45] font-display text-xs font-bold shadow-[2px_2px_0px_#1D2B45] cursor-pointer transition-all">
-              ตรวจห้อง QC
-            </button>
-          </div>
-        </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4">
+              <figure class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-white shadow-[3px_3px_0px_#1D2B45] m-0">
+                <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-2.5 sm:px-3 py-1.5 text-[10.5px] sm:text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between gap-2">
+                  <span class="truncate">1. แปลน TOP VIEW 3D โซนชีตไพล์</span>
+                  <span id="home-sp-3d-badge" class="text-[#065F46] shrink-0"></span>
+                </div>
+                <div id="home-sp-3d-slot" class="w-full aspect-[4/3] sm:aspect-[16/10] bg-white">
+                  <iframe id="home-sp-3d-frame" src="${window.location.hostname.includes('vercel.app') ? '/sheetpile?embed=top' : 'sheetpile.html?embed=top'}" title="แปลน 3D โซนชีตไพล์และค้ำยัน" class="w-full h-full border-0 bg-white block" loading="eager"></iframe>
+                </div>
+              </figure>
 
-        <!-- Report-Style Legend + 2 Live Engineering Plates -->
-        <div>
-          <div class="flex items-center justify-between flex-wrap gap-2 mb-2.5">
-            <h3 class="font-display text-xs sm:text-sm font-black text-[#1D2B45]">
-              ผังแปลนแสดงความก้าวหน้า &amp; รูปตัดระดับขุดดิน
-            </h3>
-            <div class="flex items-center gap-3 text-[11px] font-bold text-[#1D2B45] flex-wrap">
-              <span class="inline-flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-[#0284C7] border border-[#1D2B45]"></span>ทำวันนี้ (${s.sp.today})</span>
-              <span class="inline-flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-[#10B981] border border-[#1D2B45]"></span>เสร็จสะสม (${s.sp.done})</span>
-              <span class="inline-flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-[#F8FAFC] border border-[#334155]"></span>ยังไม่ทำ (${s.sp.total - s.sp.done})</span>
+              <figure class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-white shadow-[3px_3px_0px_#1D2B45] m-0">
+                <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-2.5 sm:px-3 py-1.5 text-[10.5px] sm:text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between gap-2">
+                  <span class="truncate">2. รูปตัดระดับขุดดิน 2 ระดับ (-2.90 / -3.80 ม.)</span>
+                  <span id="home-sp-sec-badge" class="text-[#0284C7] shrink-0"></span>
+                </div>
+                <div id="home-sp-sec-slot"></div>
+              </figure>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4">
-            <figure class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-white shadow-[3px_3px_0px_#1D2B45] m-0">
-              <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-2.5 sm:px-3 py-1.5 text-[10.5px] sm:text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between gap-2">
-                <span class="truncate">1. แปลน TOP VIEW 3D โซนชีตไพล์</span>
-                <span class="text-[#065F46] shrink-0">${s.sp.done}/${s.sp.total} (${s.sp.pct}%)</span>
-              </div>
-              <div id="home-sp-3d-slot" class="w-full aspect-[4/3] sm:aspect-[16/10] bg-white">
-                ${existingFrame ? '' : `<iframe id="home-sp-3d-frame" src="sheetpile.html?embed=top" title="แปลน 3D โซนชีตไพล์และค้ำยัน" class="w-full h-full border-0 bg-white block" loading="eager"></iframe>`}
-              </div>
-            </figure>
-
-            <figure class="border-2 border-[#1D2B45] rounded-xl overflow-hidden bg-white shadow-[3px_3px_0px_#1D2B45] m-0">
-              <div class="bg-[#FAF5EE] border-b-2 border-[#1D2B45] px-2.5 sm:px-3 py-1.5 text-[10.5px] sm:text-[11px] font-mono font-bold text-[#1D2B45] flex items-center justify-between gap-2">
-                <span class="truncate">2. รูปตัดระดับขุดดิน 2 ระดับ (-2.90 / -3.80 ม.)</span>
-                <span class="text-[#0284C7] shrink-0">EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.pct}%)</span>
-              </div>
-              ${renderSectionSvg(s)}
-            </figure>
-          </div>
+          <!-- 3-Package Summary + Gridline Breakdown (Report-Style Clean Engineering Tables) -->
+          <div id="home-sp-tables-slot" class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1"></div>
         </div>
-
-        <!-- 3-Package Summary + Gridline Breakdown (Report-Style Clean Engineering Tables) -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
-          <!-- Left: 3 Packages Summary -->
-          <div class="lg:col-span-6 overflow-x-auto">
-            <h3 class="font-display text-xs font-black text-[#1D2B45] border-b-2 border-[#1D2B45] pb-1 mb-2">
-              สรุปความก้าวหน้าหมวดงาน ERSS (รุ่น JIS FSP-III / SP-3)
-            </h3>
-            <table class="w-full border-collapse border border-[#1D2B45] text-xs">
-              <thead>
-                <tr class="bg-[#1D2B45] text-white text-left">
-                  <th class="border border-[#1D2B45] px-2 py-1.5">หมวดงาน (รุ่น &amp; ความยาว)</th>
-                  <th class="border border-[#1D2B45] px-2 py-1.5 text-right">ผลงานสะสม</th>
-                  <th class="border border-[#1D2B45] px-2 py-1.5 text-right">เป้าหมาย</th>
-                  <th class="border border-[#1D2B45] px-2 py-1.5 text-right">%</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">1. ชีตไพล์ JIS FSP-III · Case A (13.50 ม.)</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-bold text-[#065F46]">${s.sp.caseA.done} แผ่น</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">${s.sp.caseA.total} แผ่น (72.9 ตัน)</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.sp.caseA.pct}%</td>
-                </tr>
-                <tr class="bg-[#F0F9FF]/60">
-                  <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">2. ชีตไพล์ JIS FSP-III · Case B (12.00 ม.)</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-bold text-[#0369A1]">${s.sp.caseB.done} แผ่น</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">${s.sp.caseB.total} แผ่น (37.5 ตัน)</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.sp.caseB.pct}%</td>
-                </tr>
-                <tr class="bg-[#FAF5EE]/60">
-                  <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">3. ค้ำยัน Waler H-350 / Strut &amp; Packing</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">Waler ${s.bracing.walerDoneM}ม. · Strut ${s.bracing.strutDone}/6</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">54.48ม. · 3.75 ม³</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.bracing.pct}%</td>
-                </tr>
-                <tr>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 font-bold">4. ขุดดิน 2 ระดับ (F18 -2.90 / F20 -3.80 ม.)</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-bold text-[#0284C7]">EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.dugVol} ม³)</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono">571.79 ม³</td>
-                  <td class="border border-[#1D2B45] px-2 py-1.5 text-right font-mono font-black">${s.ex.pct}%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Right: Gridline Breakdown Table (with Model & Length) -->
-          <div class="lg:col-span-6 overflow-x-auto">
-            <h3 class="font-display text-xs font-black text-[#1D2B45] border-b-2 border-[#1D2B45] pb-1 mb-2">
-              ตารางจำนวน Sheet Pile JIS FSP-III (400×125×13 มม.) แยกตามแนว
-            </h3>
-            <table class="w-full border-collapse border border-[#1D2B45] text-[11px]">
-              <thead>
-                <tr class="bg-[#FAF5EE] text-left">
-                  <th class="border border-[#1D2B45] px-2 py-1.5">แนว Gridline</th>
-                  <th class="border border-[#1D2B45] px-2 py-1.5">รุ่น / ความยาว</th>
-                  <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">แบบ</th>
-                  <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">กดแล้ว</th>
-                  <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">เหลือ</th>
-                  <th class="border border-[#1D2B45] px-1.5 py-1.5 text-right">%</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${Object.values(s.sp.sides).map((side) => {
-                  const pct = side.total ? Math.round((side.done / side.total) * 100) : 0;
-                  return `<tr>
-                    <td class="border border-[#1D2B45] px-2 py-1 font-bold whitespace-nowrap">${esc(side.label)}</td>
-                    <td class="border border-[#1D2B45] px-2 py-1 font-mono text-[10px] text-[#334155] whitespace-nowrap">${esc(side.spec)}</td>
-                    <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${side.total}</td>
-                    <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold text-[#065F46]">${side.done}</td>
-                    <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono text-[#E64C3C]">${side.total - side.done}</td>
-                    <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono font-bold">${pct}%</td>
-                  </tr>`;
-                }).join('')}
-                <tr class="bg-slate-100 font-extrabold">
-                  <td class="border border-[#1D2B45] px-2 py-1">รวมทั้งหมด (SY295)</td>
-                  <td class="border border-[#1D2B45] px-2 py-1 font-mono text-[10px]">13.5ม.(90) · 12ม.(52) · 110.4ตัน</td>
-                  <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${s.sp.total}</td>
-                  <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono text-[#065F46]">${s.sp.done}</td>
-                  <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono text-[#E64C3C]">${s.sp.total - s.sp.done}</td>
-                  <td class="border border-[#1D2B45] px-1.5 py-1 text-right font-mono">${s.sp.pct}%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    `;
-    if (existingFrame) {
-      const slot = document.getElementById('home-sp-3d-slot');
-      if (slot) slot.appendChild(existingFrame);
+      `;
     }
+
+    // Update ONLY live data slots (zero DOM detachment of #home-sp-3d-frame!)
+    const pillEl = document.getElementById('home-sp-summary-pill');
+    if (pillEl) pillEl.textContent = `SP ${s.sp.done}/${s.sp.total} (${s.sp.pct}%) · ขุดดิน EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.pct}%)`;
+
+    const dateEl = document.getElementById('home-sp-date-sub');
+    if (dateEl) dateEl.textContent = `อัปเดต ณ วันที่ ${dateFull} · แสดงผลเชื่อมตรงกับหน้างาน 3D แบบ Real-time`;
+
+    const legEl = document.getElementById('home-sp-legend');
+    if (legEl) {
+      legEl.innerHTML = `
+        <span class="inline-flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-[#0284C7] border border-[#1D2B45]"></span>ทำวันนี้ (${s.sp.today})</span>
+        <span class="inline-flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-[#10B981] border border-[#1D2B45]"></span>เสร็จสะสม (${s.sp.done})</span>
+        <span class="inline-flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-[#F8FAFC] border border-[#334155]"></span>ยังไม่ทำ (${s.sp.total - s.sp.done})</span>
+      `;
+    }
+
+    const b3d = document.getElementById('home-sp-3d-badge');
+    if (b3d) b3d.textContent = `${s.sp.done}/${s.sp.total} (${s.sp.pct}%)`;
+
+    const bSec = document.getElementById('home-sp-sec-badge');
+    if (bSec) bSec.textContent = `EL.-${s.ex.depth.toFixed(2)} ม. (${s.ex.pct}%)`;
+
+    const secSlot = document.getElementById('home-sp-sec-slot');
+    if (secSlot) secSlot.innerHTML = renderSectionSvg(s);
+
+    const tblSlot = document.getElementById('home-sp-tables-slot');
+    if (tblSlot) tblSlot.innerHTML = buildTablesHtml(s);
   }
 
   window.switchHomePhase = function (phase) {
@@ -635,7 +657,6 @@
   };
 
   function init() {
-    renderDashboard();
     const initial = window.location.hash === '#piling' ? 'piling' : 'sheetpile';
     window.switchHomePhase(initial);
 

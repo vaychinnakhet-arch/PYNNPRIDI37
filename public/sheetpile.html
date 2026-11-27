@@ -1529,7 +1529,9 @@
       import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
       import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-      lucide.createIcons();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
 
       const STORAGE_KEY = 'pynn_sheetpile_state_v1';
       const defaultState = { excavationDepth: 0.0, statuses: {}, pileCuts: {}, preloadTons: 0, logs: [] };
@@ -2032,8 +2034,9 @@
           './sheetpile.glb?v=20261126_fsp3',
           (gltf) => {
             isLoadingModel = false;
-            loadedGltfRoot = gltf.scene;
-            gltf.scene.traverse((obj) => {
+            try {
+              loadedGltfRoot = gltf.scene;
+              gltf.scene.traverse((obj) => {
               if (!obj.isMesh) return;
               const name = obj.name;
               const cat = obj.userData?.category || inferCategory(name);
@@ -2132,6 +2135,10 @@
             if (typeof renderPilePickerGrid === 'function') renderPilePickerGrid();
             applyVisualState();
             updateDashboardUI();
+            } catch (renderErr) {
+              console.error('GLB post-load error:', renderErr);
+              showLoadError('เกิดข้อผิดพลาดขณะเตรียมฉาก 3D (' + (renderErr?.message || 'Scene Error') + ')');
+            }
           },
           (xhr) => {
             if (progEl && xhr && xhr.total > 0) {
@@ -3481,8 +3488,10 @@
         }
       }
 
-      // Pull latest cloud Sheet Pile progress from Supabase on startup
-      setTimeout(() => { pullSheetPileFromSupabase(); }, 600);
+      // Pull latest cloud Sheet Pile progress from Supabase on startup (skip redundant write in embedded dashboard mode since parent syncs it!)
+      if (!new URLSearchParams(window.location.search).get('embed')) {
+        setTimeout(() => { pullSheetPileFromSupabase(); }, 600);
+      }
 
       // ==========================================
       // 9. EMBED MODE FOR HOME DASHBOARD (?embed=top)
