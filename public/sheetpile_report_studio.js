@@ -1456,11 +1456,21 @@
 
               const w = Math.round(target.offsetWidth || 860);
               const h = Math.round(target.scrollHeight || target.offsetHeight || 1100);
-              const filterFn = (node) => !(node && node.classList && node.classList.contains('no-print'));
+              const TRANSPARENT_PX = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+              const filterFn = (node) => {
+                if (!node) return true;
+                if (node.classList && node.classList.contains('no-print')) return false;
+                // Skip broken/404 or hidden <img> elements (e.g. missing logo) so html-to-image never aborts!
+                if (node.tagName === 'IMG') {
+                  if (node.style && node.style.display === 'none') return false;
+                  if (!node.complete || node.naturalWidth === 0) return false;
+                }
+                return true;
+              };
 
               let canvas = null;
               if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
-                // Use toCanvas with automatic skipFonts retry (avoids Google Fonts CORS SecurityError & data-URL cacheBust bugs!)
+                // Skip fonts immediately on retry & supply imagePlaceholder so 404 images / Google Fonts CORS never fail!
                 try {
                   canvas = await window.htmlToImage.toCanvas(target, {
                     pixelRatio: 2,
@@ -1468,6 +1478,7 @@
                     width: w,
                     height: h,
                     cacheBust: false,
+                    imagePlaceholder: TRANSPARENT_PX,
                     filter: filterFn,
                   });
                 } catch (fontErr) {
@@ -1479,6 +1490,7 @@
                     height: h,
                     skipFonts: true,
                     cacheBust: false,
+                    imagePlaceholder: TRANSPARENT_PX,
                     filter: filterFn,
                   });
                 }
@@ -2074,7 +2086,16 @@
           try {
             const w = Math.round(sheet.offsetWidth || 794);
             const h = Math.round(sheet.scrollHeight || sheet.offsetHeight || 1123);
-            const filterFn = (node) => !(node && node.classList && node.classList.contains('no-print'));
+            const TRANSPARENT_PX = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            const filterFn = (node) => {
+              if (!node) return true;
+              if (node.classList && node.classList.contains('no-print')) return false;
+              if (node.tagName === 'IMG') {
+                if (node.style && node.style.display === 'none') return false;
+                if (!node.complete || node.naturalWidth === 0) return false;
+              }
+              return true;
+            };
             try {
               canvas = await window.htmlToImage.toCanvas(sheet, {
                 backgroundColor: '#ffffff',
@@ -2082,6 +2103,7 @@
                 width: w,
                 height: h,
                 cacheBust: false,
+                imagePlaceholder: TRANSPARENT_PX,
                 filter: filterFn,
               });
             } catch (fontErr) {
@@ -2093,6 +2115,7 @@
                 height: h,
                 skipFonts: true,
                 cacheBust: false,
+                imagePlaceholder: TRANSPARENT_PX,
                 filter: filterFn,
               });
             }
