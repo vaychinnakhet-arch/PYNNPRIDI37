@@ -1365,9 +1365,28 @@
                 <button id="sp-rep-mode-sketchup" type="button" class="px-2.5 py-1 cursor-pointer border-l border-[#1D2B45] ${reportViewMode === 'sketchup' ? 'bg-[#1D2B45] text-white' : 'text-[#1D2B45] hover:bg-white'}">สี SketchUp</button>
               </div>
               <button id="sp-rep-recapture-views" type="button" class="px-2.5 py-1 rounded-full text-[11px] font-bold border-2 border-[#1D2B45] bg-white hover:bg-[#FEF3C7] cursor-pointer">🔄 อัปเดตภาพ</button>
-              <button id="sp-sum-capture-png" type="button" class="px-3 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] bg-[#F26B2A] text-white hover:bg-[#E05615] shadow-[2px_2px_0px_#1D2B45] font-display cursor-pointer">
-                📸 แคปภาพ (PNG)
-              </button>
+              <div class="relative inline-block" id="sp-sum-capture-wrap">
+                <button id="sp-sum-capture-menu-btn" type="button" class="px-3 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] bg-[#F26B2A] text-white hover:bg-[#E05615] shadow-[2px_2px_0px_#1D2B45] font-display cursor-pointer inline-flex items-center gap-1">
+                  <span>📸 แคปภาพ</span><span class="text-[10px]">▾</span>
+                </button>
+                <div id="sp-sum-capture-menu" class="hidden absolute right-0 mt-1.5 w-64 bg-white border-2 border-[#1D2B45] rounded-xl shadow-[4px_4px_0px_#1D2B45] p-1.5 z-50 text-left">
+                  <button id="sp-sum-capture-line" type="button" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#ECFDF5] transition-colors cursor-pointer flex items-start gap-2">
+                    <span class="text-sm leading-none mt-0.5">💬</span>
+                    <span class="min-w-0">
+                      <span class="block text-[11.5px] font-black text-[#065F46]">ส่ง LINE ไม่โดนบีบ (คมชัดพอดี)</span>
+                      <span class="block text-[10px] text-[#475569] leading-snug">ปรับขนาด ≤1440px · ไฟล์เบา ชัดไม่เบลอใน LINE</span>
+                    </span>
+                  </button>
+                  <div class="my-1 border-t border-slate-200"></div>
+                  <button id="sp-sum-capture-hd" type="button" class="w-full text-left px-2.5 py-2 rounded-lg hover:bg-[#FFF7ED] transition-colors cursor-pointer flex items-start gap-2">
+                    <span class="text-sm leading-none mt-0.5">🖼️</span>
+                    <span class="min-w-0">
+                      <span class="block text-[11.5px] font-black text-[#1D2B45]">ความคมชัดสูงปกติ (HD PNG)</span>
+                      <span class="block text-[10px] text-[#475569] leading-snug">ความละเอียดสูงเต็มพิกัด (2.5×) เก็บไฟล์/พิมพ์</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
               <button id="sp-sum-download-pdf" type="button" class="px-3 py-1.5 rounded-full text-xs font-extrabold border-2 border-[#1D2B45] bg-[#10B981] text-white hover:bg-[#059669] shadow-[2px_2px_0px_#1D2B45] font-display cursor-pointer">
                 ⬇️ โหลด PDF
               </button>
@@ -1444,109 +1463,164 @@
           };
         }
 
-        const capPngBtn = root.querySelector('#sp-sum-capture-png');
-        if (capPngBtn) {
-          capPngBtn.onclick = async () => {
-            const target = root.querySelector('#sp-summary-capture-card');
-            if (!target) return;
-            capPngBtn.textContent = '⏳ กำลังแคปภาพ...';
-            try {
-              if (document.fonts && document.fonts.ready) await document.fonts.ready;
-              await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        const capMenuBtn = root.querySelector('#sp-sum-capture-menu-btn');
+        const capMenu = root.querySelector('#sp-sum-capture-menu');
+        const capLineBtn = root.querySelector('#sp-sum-capture-line');
+        const capHdBtn = root.querySelector('#sp-sum-capture-hd');
 
-              const w = Math.round(target.offsetWidth || 860);
-              const h = Math.round(target.scrollHeight || target.offsetHeight || 1100);
-              const TRANSPARENT_PX = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-              const filterFn = (node) => {
-                if (!node) return true;
-                if (node.classList && node.classList.contains('no-print')) return false;
-                // Skip broken/404 or hidden <img> elements (e.g. missing logo) so html-to-image never aborts!
-                if (node.tagName === 'IMG') {
-                  if (node.style && node.style.display === 'none') return false;
-                  if (!node.complete || node.naturalWidth === 0) return false;
-                }
-                return true;
-              };
+        const runSummaryCapture = async (qualityMode) => {
+          const target = root.querySelector('#sp-summary-capture-card');
+          if (!target) return;
+          if (capMenu) capMenu.classList.add('hidden');
+          const isLineMode = qualityMode === 'line';
+          if (capMenuBtn) {
+            capMenuBtn.disabled = true;
+            capMenuBtn.innerHTML = isLineMode ? '<span>⏳ กำลังแคป (LINE)...</span>' : '<span>⏳ กำลังแคป (HD)...</span>';
+          }
+          try {
+            if (document.fonts && document.fonts.ready) await document.fonts.ready;
+            await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-              let canvas = null;
-              if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
-                // Skip fonts immediately on retry & supply imagePlaceholder so 404 images / Google Fonts CORS never fail!
-                try {
-                  canvas = await window.htmlToImage.toCanvas(target, {
-                    pixelRatio: 2,
-                    backgroundColor: '#FFFFFF',
-                    width: w,
-                    height: h,
-                    cacheBust: false,
-                    imagePlaceholder: TRANSPARENT_PX,
-                    filter: filterFn,
-                  });
-                } catch (fontErr) {
-                  console.warn('Summary PNG htmlToImage retrying with skipFonts:', fontErr);
-                  canvas = await window.htmlToImage.toCanvas(target, {
-                    pixelRatio: 2,
-                    backgroundColor: '#FFFFFF',
-                    width: w,
-                    height: h,
-                    skipFonts: true,
-                    cacheBust: false,
-                    imagePlaceholder: TRANSPARENT_PX,
-                    filter: filterFn,
-                  });
-                }
-              } else if (typeof window.html2canvas === 'function') {
-                canvas = await window.html2canvas(target, { scale: 2, backgroundColor: '#FFFFFF', useCORS: true });
+            const w = Math.round(target.offsetWidth || 860);
+            const h = Math.round(target.scrollHeight || target.offsetHeight || 1100);
+            const TRANSPARENT_PX = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            const filterFn = (node) => {
+              if (!node) return true;
+              if (node.classList && node.classList.contains('no-print')) return false;
+              if (node.tagName === 'IMG') {
+                if (node.style && node.style.display === 'none') return false;
+                if (!node.complete || node.naturalWidth === 0) return false;
               }
+              return true;
+            };
 
-              if (!canvas) throw new Error('Renderer not ready');
+            const renderRatio = isLineMode ? 2 : 2.5;
+            let rawCanvas = null;
+            if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
+              try {
+                rawCanvas = await window.htmlToImage.toCanvas(target, {
+                  pixelRatio: renderRatio,
+                  backgroundColor: '#FFFFFF',
+                  width: w,
+                  height: h,
+                  cacheBust: false,
+                  imagePlaceholder: TRANSPARENT_PX,
+                  filter: filterFn,
+                });
+              } catch (fontErr) {
+                console.warn('Summary PNG htmlToImage retrying with skipFonts:', fontErr);
+                rawCanvas = await window.htmlToImage.toCanvas(target, {
+                  pixelRatio: renderRatio,
+                  backgroundColor: '#FFFFFF',
+                  width: w,
+                  height: h,
+                  skipFonts: true,
+                  cacheBust: false,
+                  imagePlaceholder: TRANSPARENT_PX,
+                  filter: filterFn,
+                });
+              }
+            } else if (typeof window.html2canvas === 'function') {
+              rawCanvas = await window.html2canvas(target, { scale: renderRatio, backgroundColor: '#FFFFFF', useCORS: true });
+            }
 
-              const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 1.0));
-              const fname = `PYNN_EKKAMAI12_SheetPile_Summary_${s.reportDate || cfg.date}.png`;
+            if (!rawCanvas) throw new Error('Renderer not ready');
 
-              if (blob) {
-                const objUrl = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.download = fname;
-                link.href = objUrl;
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                setTimeout(() => {
-                  link.remove();
-                  URL.revokeObjectURL(objUrl);
-                }, 400);
+            // For LINE mode: smoothly scale longest side to <= 1440px (sweet spot so LINE won't crush/blur text!)
+            let outCanvas = rawCanvas;
+            if (isLineMode) {
+              const MAX_LINE_SIDE = 1440;
+              const maxCur = Math.max(rawCanvas.width, rawCanvas.height);
+              if (maxCur > MAX_LINE_SIDE) {
+                const sc = MAX_LINE_SIDE / maxCur;
+                const c = document.createElement('canvas');
+                c.width = Math.round(rawCanvas.width * sc);
+                c.height = Math.round(rawCanvas.height * sc);
+                const ctx2d = c.getContext('2d');
+                ctx2d.fillStyle = '#FFFFFF';
+                ctx2d.fillRect(0, 0, c.width, c.height);
+                ctx2d.imageSmoothingEnabled = true;
+                ctx2d.imageSmoothingQuality = 'high';
+                ctx2d.drawImage(rawCanvas, 0, 0, c.width, c.height);
+                outCanvas = c;
+              }
+            }
 
-                // Also copy crisp PNG directly to clipboard for instant Ctrl+V into LINE
-                let copiedClip = false;
-                try {
-                  if (navigator.clipboard && window.ClipboardItem) {
-                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+            const dateTag = s.reportDate || cfg.date;
+            const mime = isLineMode ? 'image/jpeg' : 'image/png';
+            const quality = isLineMode ? 0.92 : 1.0;
+            const fname = isLineMode
+              ? `PYNN_EKKAMAI12_SheetPile_LINE_${dateTag}.jpg`
+              : `PYNN_EKKAMAI12_SheetPile_HD_${dateTag}.png`;
+
+            const dlBlob = await new Promise((resolve) => outCanvas.toBlob(resolve, mime, quality));
+            const sizeKb = dlBlob ? Math.round(dlBlob.size / 1024) : 0;
+
+            if (dlBlob) {
+              const objUrl = URL.createObjectURL(dlBlob);
+              const link = document.createElement('a');
+              link.download = fname;
+              link.href = objUrl;
+              link.style.display = 'none';
+              document.body.appendChild(link);
+              link.click();
+              setTimeout(() => {
+                link.remove();
+                URL.revokeObjectURL(objUrl);
+              }, 400);
+
+              // Also copy crisp PNG to clipboard (ClipboardItem requires image/png) for instant Ctrl+V into LINE Desktop
+              let copiedClip = false;
+              try {
+                if (navigator.clipboard && window.ClipboardItem) {
+                  const clipBlob = isLineMode
+                    ? await new Promise((resolve) => outCanvas.toBlob(resolve, 'image/png', 1.0))
+                    : dlBlob;
+                  if (clipBlob) {
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': clipBlob })]);
                     copiedClip = true;
                   }
-                } catch {}
-                getBridge()?.showToast?.(
-                  copiedClip
-                    ? '✅ แคปภาพ PNG เรียบร้อย (ดาวน์โหลดไฟล์ + คัดลอกลงคลิปบอร์ด กด Ctrl+V ส่ง LINE ได้เลย)'
-                    : '✅ ดาวน์โหลดภาพ PNG คมชัดเรียบร้อยแล้ว!'
-                );
-              } else {
-                const dataUrl = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = fname;
-                link.href = dataUrl;
-                document.body.appendChild(link);
-                link.click();
-                setTimeout(() => link.remove(), 300);
-                getBridge()?.showToast?.('✅ ดาวน์โหลดภาพ PNG คมชัดเรียบร้อยแล้ว!');
-              }
-            } catch (err) {
-              console.error('PNG capture failed:', err);
-              getBridge()?.showToast?.('⚠️ แคปภาพไม่สำเร็จ (' + (err?.message || 'Error') + ') — ลองกด โหลด PDF แทนได้');
-            } finally {
-              capPngBtn.textContent = '📸 แคปภาพ (PNG)';
+                }
+              } catch {}
+
+              const dimStr = `${outCanvas.width}×${outCanvas.height}px · ${sizeKb} KB`;
+              getBridge()?.showToast?.(
+                isLineMode
+                  ? `✅ แคปภาพสำหรับส่ง LINE แล้ว (${dimStr}${copiedClip ? ' · กด Ctrl+V วางใน LINE ได้เลย' : ''})`
+                  : `✅ แคปภาพความคมชัดสูง HD PNG แล้ว (${dimStr}${copiedClip ? ' · คัดลอกลงคลิปบอร์ดแล้ว' : ''})`
+              );
+            } else {
+              const dataUrl = outCanvas.toDataURL(mime, quality);
+              const link = document.createElement('a');
+              link.download = fname;
+              link.href = dataUrl;
+              document.body.appendChild(link);
+              link.click();
+              setTimeout(() => link.remove(), 300);
+              getBridge()?.showToast?.('✅ ดาวน์โหลดภาพเรียบร้อยแล้ว!');
             }
+          } catch (err) {
+            console.error('Capture failed:', err);
+            getBridge()?.showToast?.('⚠️ แคปภาพไม่สำเร็จ (' + (err?.message || 'Error') + ') — ลองกด โหลด PDF แทนได้');
+          } finally {
+            if (capMenuBtn) {
+              capMenuBtn.disabled = false;
+              capMenuBtn.innerHTML = '<span>📸 แคปภาพ</span><span class="text-[10px]">▾</span>';
+            }
+          }
+        };
+
+        if (capMenuBtn && capMenu) {
+          capMenuBtn.onclick = (e) => {
+            e.stopPropagation();
+            capMenu.classList.toggle('hidden');
           };
+          root.addEventListener('click', (e) => {
+            if (!e.target.closest('#sp-sum-capture-wrap')) capMenu.classList.add('hidden');
+          });
         }
+        if (capLineBtn) capLineBtn.onclick = () => runSummaryCapture('line');
+        if (capHdBtn) capHdBtn.onclick = () => runSummaryCapture('hd');
         const sumPdfBtn = root.querySelector('#sp-sum-download-pdf');
         if (sumPdfBtn) {
           sumPdfBtn.onclick = () => exportExactPDF('summary');
