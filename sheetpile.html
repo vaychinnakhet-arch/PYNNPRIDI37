@@ -2252,9 +2252,11 @@
       const EDGE_MONO_SOIL   = new THREE.LineBasicMaterial({ color: 0x64748B, transparent: true, opacity: 0.45 });
       const EDGE_MONO_PENDING = new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.85 });
 
-      // High-visibility electric-blue top-crest ribbon for Sheet Piles completed TODAY (makes Top Plan & Iso 3D crystal clear in reports!)
+      // High-visibility top-crest ribbons (Electric Blue = Today, Emerald Green = Previous Done)
+      // Shown ONLY during Report Plate capture so the live 3D viewer stays 100% clean realistic geometry!
       const todayHighlightGroup = new THREE.Group();
-      todayHighlightGroup.name = 'TodayHighlightCaps';
+      todayHighlightGroup.name = 'ReportStatusHighlightCaps';
+      todayHighlightGroup.visible = false;
       scene.add(todayHighlightGroup);
       const TODAY_CAP_MAT = new THREE.MeshBasicMaterial({
         color: 0x0066FF,
@@ -2263,6 +2265,13 @@
         polygonOffsetUnits: -2,
       });
       const TODAY_CAP_EDGE = new THREE.LineBasicMaterial({ color: 0x002B80 });
+      const DONE_CAP_MAT = new THREE.MeshBasicMaterial({
+        color: 0x10B981,
+        polygonOffset: true,
+        polygonOffsetFactor: -2,
+        polygonOffsetUnits: -2,
+      });
+      const DONE_CAP_EDGE = new THREE.LineBasicMaterial({ color: 0x065F46 });
       const todayCapPool = new Map(); // mesh.name -> capMesh
 
       function getOrCreateTodayCap(m) {
@@ -2305,7 +2314,7 @@
         spDateInp.addEventListener('change', () => applyVisualState());
       }
 
-      function applyVisualState(forcedMode) {
+      function applyVisualState(forcedMode, isReportCapture = false) {
         const mode = forcedMode || colorMode;
         const activeDate = getActiveReportDate();
         if (!state.statusDates) state.statusDates = {};
@@ -2313,6 +2322,7 @@
         clipPlane.constant = -d + 0.002;
         const soilOn = document.getElementById('tog-soil').checked;
         const isStatus = mode === 'status';
+        todayHighlightGroup.visible = Boolean(isReportCapture);
 
         // 1. Excavation & Outer Soil: Monochrome B&W gray in Status Mode, exact SketchUp tan/clay in SketchUp Mode
         excavationMeshes.forEach((m) => {
@@ -2450,12 +2460,16 @@
             if (edgeChild) edgeChild.material = EDGE_MONO_PENDING;
           }
 
-          // Toggle vivid top-crest highlight cap on Sheet Piles done TODAY (or drafted today) so Top Plan & Iso 3D pop!
+          // Toggle bold top-crest highlight caps ONLY during Report Plate capture (Blue = Today, Green = Previous Done)
           if (cat === 'sheetpile') {
-            const showCap = (isTodayDone || isDraftToday) && m.visible;
-            if (showCap) {
+            if (isReportCapture && st === 'done' && m.visible) {
               const cap = getOrCreateTodayCap(m);
-              if (cap) cap.visible = true;
+              if (cap) {
+                cap.material = isTodayDone ? TODAY_CAP_MAT : DONE_CAP_MAT;
+                const capEdge = cap.children.find((c) => c.isLineSegments);
+                if (capEdge) capEdge.material = isTodayDone ? TODAY_CAP_EDGE : DONE_CAP_EDGE;
+                cap.visible = true;
+              }
             } else if (todayCapPool.has(m.name)) {
               todayCapPool.get(m.name).visible = false;
             }
@@ -3463,8 +3477,8 @@
           const prevSoilLabels = soilLabelsGroup.visible;
           soilLabelsGroup.visible = false;
 
-          // Apply exact B&W Status Mode (Today = Blue, Previous Done = Green, Pending & Soil = Crisp B&W Gray) or SketchUp Mode
-          applyVisualState(captureMode);
+          // Apply exact B&W Status Mode (Today = Electric Blue + Cap, Previous Done = Emerald Green + Cap) or SketchUp Mode for Report Plates
+          applyVisualState(captureMode, true);
 
           // Ensure pure white background in exported PNG plates
           const prevBg = scene.background;
