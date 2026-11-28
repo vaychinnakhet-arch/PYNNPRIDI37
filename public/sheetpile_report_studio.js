@@ -373,15 +373,11 @@
     return '<span style="background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;padding:1px 6px;border-radius:99px;font-weight:600;font-size:10px;">รอเริ่ม</span>';
   }
 
-  // Formal official Sheet Pile default captions for Page 3 (6 slots, editable inline)
-  const FORMAL_SHEETPILE_CAPTIONS = [
-    'ภาพที่ 1 : งานกดแผ่นชีตไพล์เหล็ก (JIS FSP-III) ด้วยเครื่อง Silent Piler',
-    'ภาพที่ 2 : การตรวจสอบแนวและระดับการติดตั้งแผ่นชีตไพล์ (Sheet Pile)',
-    'ภาพที่ 3 : การยกประกอบและลำเลียงแผ่นชีตไพล์เข้าแนวติดตั้ง',
-    'ภาพที่ 4 : ความก้าวหน้าแนวผนังป้องกันดิน Sheet Pile รอบบ่อฐานราก',
-    'ภาพที่ 5 : การควบคุมงานและตรวจสอบความปลอดภัยขณะปฏิบัติงานชีตไพล์',
-    'ภาพที่ 6 : ภาพรวมพื้นที่งานป้องกันดิน (Sheet Pile) และเครื่องจักรหน้างาน',
-  ];
+  // Formal broad Sheet Pile default captions for Page 3 (fits any site photo cleanly, editable inline)
+  const FORMAL_SHEETPILE_CAPTIONS = Array.from(
+    { length: 6 },
+    (_, i) => `ภาพที่ ${i + 1} : งานกดแผ่นชีตไพล์ป้องกันดิน (Sheet Pile)`
+  );
 
   // Persistent in-memory 6 photos for Page 3
   const photos = Array.from({ length: 6 }, (_, i) => ({
@@ -1220,8 +1216,8 @@
                     </label>
                   `}
                 </div>
-                <div class="px-2 py-1.5 bg-[#FAF8F5] shrink-0 flex items-center justify-center" style="min-height:42px;">
-                  <textarea id="sp-photo-cap-${slot.id}" rows="2" class="w-full text-center text-[11px] leading-snug font-bold text-slate-900 bg-transparent focus:outline-none resize-none overflow-hidden">${esc(slot.caption)}</textarea>
+                <div class="px-2 py-1.5 bg-[#FAF8F5] shrink-0 flex items-center justify-center" style="min-height:34px;">
+                  <textarea id="sp-photo-cap-${slot.id}" rows="1" class="w-full text-center text-[11.5px] leading-snug font-bold text-slate-900 bg-transparent focus:outline-none resize-none overflow-hidden">${esc(slot.caption)}</textarea>
                 </div>
               </div>
             `).join('')}
