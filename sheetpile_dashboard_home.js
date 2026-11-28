@@ -673,6 +673,7 @@
     // Sync latest cloud Sheet Pile progress from Supabase so every device shows up-to-date progress
     fetch(SUPABASE_URL + '/rest/v1/project_data?id=eq.1&select=data', {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+      cache: 'no-store',
     })
       .then((r) => (r.ok ? r.json() : null))
       .then((rows) => {
@@ -682,7 +683,16 @@
         const localParsed = localRaw ? JSON.parse(localRaw) : null;
         const localTs = localParsed?.updatedAt ? Date.parse(localParsed.updatedAt) : 0;
         const remoteTs = remote.updatedAt ? Date.parse(remote.updatedAt) : 0;
-        if (!localParsed || remoteTs > localTs) {
+        const hasRemoteWork = (Number(remote.excavationDepth) || 0) > 0
+          || Object.values(remote.statuses || {}).some((v) => v === 'done' || v === 'progress')
+          || Object.keys(remote.pileCuts || {}).length > 0
+          || (Array.isArray(remote.logs) && remote.logs.length > 0);
+        const localEmpty = !localParsed || (
+          (Number(localParsed.excavationDepth) || 0) <= 0
+          && !Object.values(localParsed.statuses || {}).some((v) => v === 'done' || v === 'progress')
+          && Object.keys(localParsed.pileCuts || {}).length === 0
+        );
+        if (!localParsed || (localEmpty && hasRemoteWork) || remoteTs > localTs) {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(remote));
           renderDashboard();
         }

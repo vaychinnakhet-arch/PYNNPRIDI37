@@ -1612,16 +1612,40 @@
 
       const SUPABASE_URL = 'https://gyzrsrxzzturoqwhuiul.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5enJzcnh6enR1cm9xd2h1aXVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODYxNDcsImV4cCI6MjA5MTA2MjE0N30.CJAFW3acVnOwb5hvSDO6H0TGPTK__MOTBdgUxUWpM70';
+      const IS_EMBED_MODE = Boolean(new URLSearchParams(window.location.search).get('embed'));
       let spCloudSaveTimer = null;
+      let spCloudPushInFlight = false;
+      let spPendingCloudPayload = null;
+      let spPendingCloudOpts = null;
 
-      async function pushSheetPileToSupabase(payload) {
+      function isStateEmpty(st) {
+        if (!st || typeof st !== 'object') return true;
+        const depth = Number(st.excavationDepth) || 0;
+        const hasStatus = isPlainObject(st.statuses) && Object.values(st.statuses).some((v) => v === 'done' || v === 'progress');
+        const hasPileCuts = isPlainObject(st.pileCuts) && Object.keys(st.pileCuts).length > 0;
+        const hasLogs = Array.isArray(st.logs) && st.logs.length > 0;
+        return depth <= 0 && !hasStatus && !hasPileCuts && !hasLogs;
+      }
+
+      async function pushSheetPileToSupabase(payload, opts = {}) {
+        if (IS_EMBED_MODE) return false;
+        spCloudPushInFlight = true;
         try {
           const getRes = await fetch(SUPABASE_URL + '/rest/v1/project_data?id=eq.1&select=data', {
             headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+            cache: 'no-store',
           });
+          if (!getRes.ok) throw new Error('GET HTTP ' + getRes.status);
           const rows = await getRes.json();
           if (!rows || !rows[0] || !rows[0].data) return false;
           const data = rows[0].data;
+
+          // Safety guard: NEVER wipe real cloud progress with an empty initial state unless explicitly reset!
+          if (!opts.allowEmptyOverwrite && isStateEmpty(payload) && !isStateEmpty(data.sheetpileProgress)) {
+            console.warn('Blocked empty overwrite of non-empty cloud sheetpileProgress');
+            return false;
+          }
+
           data.sheetpileProgress = payload;
           data.sheetpileProgressLastUpdated = payload.updatedAt;
           const patchRes = await fetch(SUPABASE_URL + '/rest/v1/project_data?id=eq.1', {
@@ -1633,19 +1657,35 @@
               Prefer: 'return=minimal',
             },
             body: JSON.stringify({ data }),
+            keepalive: Boolean(opts.keepalive),
           });
-          return patchRes.ok;
+          if (!patchRes.ok) {
+            const errTxt = await patchRes.text().catch(() => '');
+            throw new Error('PATCH HTTP ' + patchRes.status + (errTxt ? ': ' + errTxt.slice(0, 80) : ''));
+          }
+          if (opts.showSyncToast) {
+            showToast('☁️ ซิงค์ข้อมูลขึ้น Supabase ออนไลน์เรียบร้อยแล้ว');
+          }
+          return true;
         } catch (e) {
           console.warn('Supabase sheetpile sync error:', e);
+          if (opts.showSyncToast) {
+            showToast('⚠️ บันทึกในเครื่องแล้ว แต่ซิงค์ Supabase ไม่สำเร็จ (' + (e?.message || 'Network') + ')');
+          }
           return false;
+        } finally {
+          spCloudPushInFlight = false;
         }
       }
 
-      async function pullSheetPileFromSupabase() {
+      async function pullSheetPileFromSupabase(forceApply = false) {
+        if (spCloudPushInFlight || spCloudSaveTimer) return;
         try {
           const res = await fetch(SUPABASE_URL + '/rest/v1/project_data?id=eq.1&select=data', {
             headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY },
+            cache: 'no-store',
           });
+          if (!res.ok) return;
           const rows = await res.json();
           const remote = rows?.[0]?.data?.sheetpileProgress;
           if (!remote || typeof remote !== 'object') return;
@@ -1653,7 +1693,10 @@
           const localParsed = localRaw ? JSON.parse(localRaw) : null;
           const localTs = localParsed?.updatedAt ? Date.parse(localParsed.updatedAt) : 0;
           const remoteTs = remote.updatedAt ? Date.parse(remote.updatedAt) : 0;
-          if (!localParsed || remoteTs > localTs) {
+          const localIsEmpty = isStateEmpty(localParsed);
+          const remoteHasData = !isStateEmpty(remote);
+
+          if (forceApply || !localParsed || (localIsEmpty && remoteHasData) || remoteTs > localTs) {
             state = {
               ...state,
               excavationDepth: Math.max(0, Math.min(3.8, Number(remote.excavationDepth) || 0)),
@@ -1663,8 +1706,11 @@
               preloadTons: remote.preloadTons ?? state.preloadTons,
               logs: Array.isArray(remote.logs) ? remote.logs : state.logs,
             };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, summaryKPI: computeKPIs(), updatedAt: remote.updatedAt || new Date().toISOString() }));
-            applyVisualState();
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, summaryKPI: computeKPIs(), updatedAt: remote.updatedAt || new Date().toISOString() }));
+            } catch (_) {}
+            if (typeof renderPilePickerGrid === 'function') renderPilePickerGrid();
+            applyVisualState(IS_EMBED_MODE ? 'status' : undefined);
             updateDashboardUI();
           }
         } catch (e) {
@@ -1672,16 +1718,43 @@
         }
       }
 
-      function saveState() {
+      function saveState(opts = {}) {
+        if (IS_EMBED_MODE) return;
         const payload = { ...state, summaryKPI: computeKPIs(), updatedAt: new Date().toISOString() };
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
         } catch (e) {}
         clearTimeout(spCloudSaveTimer);
-        spCloudSaveTimer = setTimeout(() => {
-          pushSheetPileToSupabase(payload);
-        }, 450);
+        spCloudSaveTimer = null;
+        spPendingCloudPayload = payload;
+        spPendingCloudOpts = opts;
+        if (opts.immediate) {
+          spPendingCloudPayload = null;
+          spPendingCloudOpts = null;
+          pushSheetPileToSupabase(payload, opts);
+        } else {
+          spCloudSaveTimer = setTimeout(() => {
+            spCloudSaveTimer = null;
+            const p = spPendingCloudPayload;
+            const o = spPendingCloudOpts || {};
+            spPendingCloudPayload = null;
+            spPendingCloudOpts = null;
+            if (p) pushSheetPileToSupabase(p, o);
+          }, 350);
+        }
       }
+
+      window.addEventListener('pagehide', () => {
+        if (spCloudSaveTimer && spPendingCloudPayload && !IS_EMBED_MODE) {
+          clearTimeout(spCloudSaveTimer);
+          spCloudSaveTimer = null;
+          const p = spPendingCloudPayload;
+          const o = { ...(spPendingCloudOpts || {}), keepalive: true };
+          spPendingCloudPayload = null;
+          spPendingCloudOpts = null;
+          pushSheetPileToSupabase(p, o);
+        }
+      });
 
       function showToast(msg) {
         const t = document.getElementById('toast');
@@ -2408,11 +2481,11 @@
           state.statuses[id] = 'done';
           state.statusDates[id] = chosenDate;
         });
-        saveState();
         setTodayUpdateMode(false);
         updateDashboardUI();
         applyVisualState();
-        showToast(`✅ บันทึกผลงานวันที่ ${chosenDate} เรียบร้อย (${count} ชิ้น · ☁️ ซิงค์ Supabase)`);
+        showToast(`✅ บันทึกผลงานวันที่ ${chosenDate} (${count} ชิ้น) กำลังซิงค์ Supabase...`);
+        saveState({ immediate: true, showSyncToast: true });
       });
 
       document.getElementById('btn-today-unmark')?.addEventListener('click', () => {
@@ -2425,11 +2498,11 @@
           state.statuses[id] = 'pending';
           if (state.statusDates) delete state.statusDates[id];
         });
-        saveState();
         setTodayUpdateMode(false);
         updateDashboardUI();
         applyVisualState();
-        showToast(`↩️ ล้างสถานะเป็นยังไม่ทำแล้ว (${count} ชิ้น)`);
+        showToast(`↩️ ล้างสถานะเป็นยังไม่ทำแล้ว (${count} ชิ้น) กำลังซิงค์...`);
+        saveState({ immediate: true, allowEmptyOverwrite: true, showSyncToast: true });
       });
 
       const btnMultiSelect = document.getElementById('btn-multi-select');
@@ -2612,9 +2685,9 @@
             if (nextSt === 'done') state.statusDates[id] = activeDate;
             else delete state.statusDates[id];
           });
-          saveState();
           updateDashboardUI();
           applyVisualState();
+          saveState({ immediate: true, allowEmptyOverwrite: nextSt !== 'done', showSyncToast: true });
           showToast(
             targets.length === 1
               ? `อัปเดต ${targets[0]} → ${btn.textContent}${nextSt === 'done' ? ' (' + activeDate + ')' : ''}`
@@ -2723,7 +2796,6 @@
                 ${l.note ? `<p class="text-[#4B525E] mt-1 break-words">${escapeHtml(l.note)}</p>` : ''}
               </div>`).join('')
           : '<p class="text-[#5F6672] text-center py-4">ยังไม่มีบันทึก</p>';
-        saveState();
       }
 
       document.getElementById('log-date').value = new Date().toISOString().slice(0, 10);
@@ -2790,11 +2862,16 @@
 
       document.getElementById('excavation-slider').addEventListener('input', (e) => {
         state.excavationDepth = parseFloat(e.target.value);
-        applyVisualState(); updateDashboardUI();
+        applyVisualState(); updateDashboardUI(); saveState({ allowEmptyOverwrite: state.excavationDepth === 0 });
+      });
+      document.getElementById('excavation-slider').addEventListener('change', (e) => {
+        state.excavationDepth = parseFloat(e.target.value);
+        saveState({ immediate: true, allowEmptyOverwrite: state.excavationDepth === 0, showSyncToast: true });
       });
       document.querySelectorAll('.depth-preset').forEach((btn) => btn.addEventListener('click', () => {
         state.excavationDepth = parseFloat(btn.dataset.depth);
         applyVisualState(); updateDashboardUI();
+        saveState({ immediate: true, allowEmptyOverwrite: state.excavationDepth === 0, showSyncToast: true });
       }));
 
       function setSheetPileCount(n) {
@@ -2802,6 +2879,7 @@
         const clamped = Math.max(0, Math.min(spItems.length, n));
         spItems.forEach((it, idx) => { state.statuses[it.id] = idx < clamped ? 'done' : 'pending'; });
         applyVisualState(); updateDashboardUI();
+        saveState({ immediate: true, allowEmptyOverwrite: clamped === 0, showSyncToast: true });
         showToast(`Sheet Pile สะสม ${clamped} แผ่น (${(clamped * 0.4).toFixed(1)} ม.)`);
       }
       document.getElementById('btn-sp-add5').addEventListener('click', () => setSheetPileCount(parseInt(document.getElementById('input-sp-count').value || '0', 10) + 5));
@@ -2816,6 +2894,7 @@
           else { state.statuses[it.id] = 'pending'; }
         });
         applyVisualState(); updateDashboardUI();
+        saveState({ immediate: true, allowEmptyOverwrite: acc === 0, showSyncToast: true });
         showToast(`Packing Concrete สะสม ${acc.toFixed(1)} ม.`);
       }
       document.getElementById('btn-pc-add5').addEventListener('click', () => setPackingConcreteMeters(parseFloat(document.getElementById('input-pc-meters').value || '0') + 5));
@@ -2825,13 +2904,16 @@
         const id = btn.dataset.toggleId;
         state.statuses[id] = state.statuses[id] === 'done' ? 'pending' : 'done';
         applyVisualState(); updateDashboardUI();
+        saveState({ immediate: true, allowEmptyOverwrite: state.statuses[id] !== 'done', showSyncToast: true });
       }));
 
       document.getElementById('btn-save-log').addEventListener('click', () => {
         const k = computeKPIs();
         state.logs.push({ date: document.getElementById('log-date').value, spDone: k.spDone, depth: k.depth, pcM: k.pcM, note: document.getElementById('log-note').value.trim() });
         document.getElementById('log-note').value = '';
-        updateDashboardUI(); showToast('บันทึกรายงานแล้ว');
+        updateDashboardUI();
+        saveState({ immediate: true, showSyncToast: true });
+        showToast('บันทึกรายงานแล้ว กำลังซิงค์ Supabase...');
       });
 
       function copyTextWithFallback(txt) {
@@ -2880,6 +2962,7 @@
         state = structuredClone(defaultState); selectedMeshName = null;
         document.getElementById('selection-hud').classList.add('hidden');
         applyVisualState(); updateDashboardUI();
+        saveState({ immediate: true, allowEmptyOverwrite: true, showSyncToast: true });
       });
 
       document.getElementById('tog-grid').addEventListener('change', (e) => { gridGroup.visible = e.target.checked; });
@@ -3125,7 +3208,7 @@
         paintPileCutSlider(cnt > 0 ? sumAbs / cnt : 0);
         applyVisualState();
         renderPilePickerGrid();
-        saveState();
+        saveState({ immediate: true, showSyncToast: true });
         showToast(`🎯 ตัดหัวเข็ม ${cnt} ต้น ลงถึงระดับ Design PCO จริงเรียบร้อย!`);
       });
 
@@ -3194,7 +3277,7 @@
         paintPileCutSlider(0);
         renderPilePickerGrid();
         applyVisualState();
-        saveState();
+        saveState({ immediate: true, allowEmptyOverwrite: true, showSyncToast: true });
         showToast('↩️ คืนหัวเข็มทั้งหมด 93 ต้น กลับเป็นยังไม่ตัดแล้ว');
       });
 
@@ -3488,9 +3571,16 @@
         }
       }
 
-      // Pull latest cloud Sheet Pile progress from Supabase on startup (skip redundant write in embedded dashboard mode since parent syncs it!)
-      if (!new URLSearchParams(window.location.search).get('embed')) {
-        setTimeout(() => { pullSheetPileFromSupabase(); }, 600);
+      // Pull latest cloud Sheet Pile progress from Supabase IMMEDIATELY on startup (read-only in embed mode too!)
+      pullSheetPileFromSupabase();
+      window.addEventListener('focus', () => pullSheetPileFromSupabase());
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') pullSheetPileFromSupabase();
+      });
+      if (!IS_EMBED_MODE) {
+        setInterval(() => {
+          if (document.visibilityState === 'visible') pullSheetPileFromSupabase();
+        }, 30000);
       }
 
       // ==========================================
