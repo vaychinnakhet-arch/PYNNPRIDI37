@@ -178,6 +178,9 @@
         });
       }
     } catch {}
+    // Always sync report date to the main page's active date picker (or today) — never stay stuck on a stale cached date from days ago!
+    const liveDate = getBridge()?.getState?.()?.reportDate || todayIso();
+    merged.date = liveDate;
     return merged;
   }
 
@@ -1771,7 +1774,19 @@
       root.querySelectorAll('[data-cfg]').forEach((el) => {
         const k = el.dataset.cfg;
         el.oninput = (e) => { cfg[k] = e.target.value; saveCfg(cfg); };
-        if (k === 'date') el.onchange = (e) => { cfg[k] = e.target.value; saveCfg(cfg); draw(); };
+        if (k === 'date') {
+          el.onchange = (e) => {
+            cfg[k] = e.target.value || todayIso();
+            const mainDateInp = document.getElementById('inp-sp-report-date');
+            if (mainDateInp && mainDateInp.value !== cfg[k]) {
+              mainDateInp.value = cfg[k];
+              mainDateInp.dispatchEvent(new Event('change'));
+            }
+            saveCfg(cfg);
+            captureNow();
+            draw();
+          };
+        }
       });
       root.querySelectorAll('[data-permit]').forEach((cb) => {
         cb.onchange = () => { cfg.workPermit = cb.dataset.permit; saveCfg(cfg); draw(); };
