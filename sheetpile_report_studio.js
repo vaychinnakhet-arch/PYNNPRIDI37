@@ -373,11 +373,21 @@
     return '<span style="background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;padding:1px 6px;border-radius:99px;font-weight:600;font-size:10px;">รอเริ่ม</span>';
   }
 
+  // Formal official Sheet Pile default captions for Page 3 (6 slots, editable inline)
+  const FORMAL_SHEETPILE_CAPTIONS = [
+    'ภาพที่ 1 : งานกดแผ่นชีตไพล์เหล็ก (JIS FSP-III) ด้วยเครื่อง Silent Piler',
+    'ภาพที่ 2 : การตรวจสอบแนวและระดับการติดตั้งแผ่นชีตไพล์ (Sheet Pile)',
+    'ภาพที่ 3 : การยกประกอบและลำเลียงแผ่นชีตไพล์เข้าแนวติดตั้ง',
+    'ภาพที่ 4 : ความก้าวหน้าแนวผนังป้องกันดิน Sheet Pile รอบบ่อฐานราก',
+    'ภาพที่ 5 : การควบคุมงานและตรวจสอบความปลอดภัยขณะปฏิบัติงานชีตไพล์',
+    'ภาพที่ 6 : ภาพรวมพื้นที่งานป้องกันดิน (Sheet Pile) และเครื่องจักรหน้างาน',
+  ];
+
   // Persistent in-memory 6 photos for Page 3
   const photos = Array.from({ length: 6 }, (_, i) => ({
     id: i + 1,
     dataUrl: '',
-    caption: i === 0 ? 'ภาพจำลองความคืบหน้างานป้องกันดิน Sheet Pile & งานขุดดิน' : `ภาพถ่ายหน้างานที่ ${i + 1}`,
+    caption: FORMAL_SHEETPILE_CAPTIONS[i],
   }));
 
   let cachedMultiViews = null;
@@ -643,7 +653,8 @@
       ];
 
       return `
-        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-5 sm:p-6 text-[#0F172A]" style="font-family:'Sarabun','Prompt',sans-serif;">
+        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-5 sm:p-6 text-[#0F172A] flex flex-col justify-between" style="font-family:'Sarabun','Prompt',sans-serif;min-height:291mm;box-sizing:border-box;">
+          <div>
           <!-- SANSIRI Logo & Header -->
           <div class="flex flex-col items-center justify-center mb-1.5">
             <img src="Logo/png/Sansiri-logo-en-black.png" alt="SANSIRI" style="height:22px;width:auto;display:block;margin-bottom:4px;" onerror="this.style.display='none'" />
@@ -996,6 +1007,11 @@
               <div><span class="font-bold">วันที่ :</span> ${esc(thaiDateFull)}</div>
             </div>
           </div>
+          </div>
+          <div class="mt-2 pt-1.5 border-t border-slate-300 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+            <span>รายงานการทำงานประจำวัน · งานป้องกันดิน Sheet Pile &amp; งานขุดดิน · โครงการ ${esc(cfg.projectName)}</span>
+            <span>หน้า 1 / 4</span>
+          </div>
         </article>
       `;
     }
@@ -1007,7 +1023,8 @@
       const hasViews = ['top', 'iso', 'pit'].some((k) => mv[k]?.dataUrl);
 
       return `
-        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-6 sm:p-7 space-y-3.5 text-[#1D2B45]">
+        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-6 sm:p-7 text-[#1D2B45] flex flex-col justify-between" style="min-height:291mm;box-sizing:border-box;">
+          <div class="space-y-3.5">
           <div class="flex items-start justify-between gap-4 border-b-2 border-[#1D2B45] pb-2">
             <div class="min-w-0">
               <img src="Logo/png/Sansiri-logo-en-black.png" alt="Sansiri" style="height:18px;width:auto;display:block;margin-bottom:5px;" onerror="this.style.display='none'" />
@@ -1162,43 +1179,57 @@
               </table>
             </div>
           </div>
+          </div>
+          <div class="mt-3 pt-1.5 border-t border-slate-300 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+            <span>รายงานผังความก้าวหน้างานป้องกันดิน Sheet Pile &amp; งานขุดดิน (ERSS) · โครงการ ${esc(cfg.projectName)}</span>
+            <span>หน้า 2 / 4</span>
+          </div>
         </article>
       `;
     }
 
-    // PAGE 3: SITE PHOTO SHEET (6 Photos + 1-Click 3D Capture)
+    // PAGE 3: SITE PHOTO SHEET (Full-A4 Balanced 2×3 Grid + Official Sheet Pile Captions)
     function renderPage3() {
       const dateFull = formatThaiDateFull(cfg.date);
       return `
-        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-6 sm:p-7 text-[#0F172A]">
-          <div class="flex items-start justify-between border-b-2 border-slate-900 pb-2">
+        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-5 sm:p-6 text-[#0F172A] flex flex-col" style="font-family:'Sarabun','Prompt',sans-serif;min-height:291mm;box-sizing:border-box;">
+          <div class="flex items-start justify-between border-b-2 border-slate-900 pb-2 shrink-0">
             <div>
               <img src="Logo/png/Sansiri-logo-en-black.png" alt="SANSIRI" style="height:18px;width:auto;display:block;margin-bottom:4px;" onerror="this.style.display='none'" />
-              <h2 class="font-display text-sm font-black">SITE PHOTO SHEET · แผ่นภาพถ่ายหน้างาน Sheet Pile &amp; งานขุดดิน (6 ภาพ)</h2>
-              <p class="text-xs text-slate-600">โครงการ ${esc(cfg.projectName)} · วันที่ ${esc(dateFull)}</p>
+              <h2 class="font-display text-sm font-black text-slate-900">รายงานภาพถ่ายความก้าวหน้างานป้องกันดิน (Sheet Pile &amp; งานขุดดิน)</h2>
+              <p class="text-[11.5px] text-slate-700 font-semibold">โครงการ ${esc(cfg.projectName)} · ประจำวันที่ ${esc(dateFull)}</p>
             </div>
-            <div class="flex flex-col items-end gap-1">
-              <span class="text-[10px] text-slate-500 font-mono">หน้า 3 / 4</span>
+            <div class="text-right shrink-0">
+              <div class="text-[11px] font-mono font-black text-slate-900">SITE PHOTO SHEET</div>
+              <div class="text-[10px] text-slate-500 font-mono">หน้า 3 / 4</div>
             </div>
           </div>
 
-          <div class="mt-4 grid grid-cols-2 gap-3.5">
+          <div class="mt-3 flex-1 grid grid-cols-2 grid-rows-3 gap-3" style="min-height:0;">
             ${photos.map((slot) => `
-              <div class="border border-slate-900 p-2 bg-white">
-                <div class="relative h-44 bg-[#FAF5EE] flex items-center justify-center overflow-hidden">
+              <div class="border border-slate-900 bg-white flex flex-col overflow-hidden" style="min-height:270px;">
+                <div class="relative flex-1 bg-[#F8FAFC] flex items-center justify-center overflow-hidden border-b border-slate-300" style="min-height:218px;">
                   ${slot.dataUrl ? `
-                    <img src="${slot.dataUrl}" alt="${esc(slot.caption)}" class="w-full h-full object-cover" />
-                    <button id="sp-photo-del-${slot.id}" type="button" class="no-print absolute top-1.5 right-1.5 bg-white border border-slate-900 rounded px-1.5 py-0.5 text-[10px] font-bold text-rose-600 cursor-pointer">ลบ</button>
+                    <img src="${slot.dataUrl}" alt="${esc(slot.caption)}" class="w-full h-full object-cover block" />
+                    <button id="sp-photo-del-${slot.id}" type="button" class="no-print absolute top-1.5 right-1.5 bg-white/95 border border-slate-900 rounded px-1.5 py-0.5 text-[10px] font-bold text-rose-600 cursor-pointer shadow-sm">ลบ</button>
                   ` : `
-                    <label class="no-print cursor-pointer flex flex-col items-center gap-1 text-xs font-bold text-slate-600 hover:text-[#F26B2A]">
-                      <span>📷 คลิกอัปโหลดภาพที่ ${slot.id}</span>
+                    <label class="no-print cursor-pointer flex flex-col items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#F26B2A] p-4 text-center">
+                      <span class="text-lg">📷</span>
+                      <span>คลิกอัปโหลดภาพถ่ายงาน Sheet Pile ที่ ${slot.id}</span>
                       <input id="sp-photo-file-${slot.id}" type="file" accept="image/*" multiple class="hidden" />
                     </label>
                   `}
                 </div>
-                <input id="sp-photo-cap-${slot.id}" type="text" value="${esc(slot.caption)}" class="mt-1.5 w-full border-b border-slate-300 text-center text-[11px] font-semibold text-slate-900 bg-transparent focus:outline-none" />
+                <div class="px-2 py-1.5 bg-[#FAF8F5] shrink-0 flex items-center justify-center" style="min-height:42px;">
+                  <textarea id="sp-photo-cap-${slot.id}" rows="2" class="w-full text-center text-[11px] leading-snug font-bold text-slate-900 bg-transparent focus:outline-none resize-none overflow-hidden">${esc(slot.caption)}</textarea>
+                </div>
               </div>
             `).join('')}
+          </div>
+
+          <div class="mt-2.5 pt-1.5 border-t border-slate-300 flex items-center justify-between text-[10px] text-slate-500 font-mono shrink-0">
+            <span>ภาพถ่ายประกอบรายงานประจำวัน · งานป้องกันดิน Sheet Pile (JIS FSP-III) · โครงการ ${esc(cfg.projectName)}</span>
+            <span>หน้า 3 / 4</span>
           </div>
         </article>
       `;
@@ -1315,8 +1346,8 @@
           `);
 
       return `
-        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-5 sm:p-6 text-[#0F172A]">
-          <div class="border border-slate-800 p-4 flex flex-col justify-between" style="min-height:262mm;box-sizing:border-box;">
+        <article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-5 sm:p-6 text-[#0F172A] flex flex-col" style="font-family:'Sarabun','Prompt',sans-serif;min-height:291mm;box-sizing:border-box;">
+          <div class="border border-slate-800 p-4 flex-1 flex flex-col justify-between" style="min-height:0;box-sizing:border-box;">
             <div class="flex flex-col items-center justify-center mb-2 shrink-0">
               <img src="Logo/png/Sansiri-logo-en-black.png" alt="SANSIRI" style="height:20px;width:auto;display:block;margin-bottom:4px;" onerror="this.style.display='none'" />
               <div class="text-xs font-bold text-slate-900">โครงการ ${esc(cfg.projectName)}</div>
@@ -1411,7 +1442,7 @@
                 <div id="sp-summary-capture-card" class="bg-white border-2 border-[#1D2B45] shadow-lg">
                   ${renderPage2(s)
                     .replace('ERSS PROGRESS PLAN · หน้า 2 / 4', `วันนี้ +${s.sp.today} แผ่น · สะสม ${s.sp.done}/${s.sp.total}`)
-                    .replace('<article class="sp-a4-page max-w-[210mm] mx-auto bg-white border border-slate-900 shadow-lg p-6 sm:p-7 space-y-3.5 text-[#1D2B45]">', '<div class="p-5 sm:p-6 space-y-3.5 text-[#1D2B45]">')
+                    .replace(/<article class="sp-a4-page[^>]*>/, '<div class="p-5 sm:p-6 text-[#1D2B45]">')
                     .replace(/<\/article>\s*$/, '</div>')}
                 </div>
               </div>
@@ -2116,12 +2147,13 @@
           setToast(`กำลังสร้าง PDF หน้า ${i + 1} / ${targets.length} (คมชัด A4)...`);
           if (i > 0) pdf.addPage('a4', 'portrait');
 
-          // Temporarily lock desktop A4 width (794px) and reset mobile zoom so phone exports match PC 100%
+          // Temporarily lock exact desktop A4 canvas (794x1122px) so all 4 pages match 210x297mm proportion uniformly!
           const prevStyle = {
             zoom: sheet.style.zoom,
             width: sheet.style.width,
             minWidth: sheet.style.minWidth,
             maxWidth: sheet.style.maxWidth,
+            minHeight: sheet.style.minHeight,
             boxShadow: sheet.style.boxShadow,
             margin: sheet.style.margin,
           };
@@ -2130,6 +2162,7 @@
           sheet.style.width = '794px';
           sheet.style.minWidth = '794px';
           sheet.style.maxWidth = '794px';
+          if (kind !== 'summary') sheet.style.minHeight = '1122px';
           sheet.style.boxShadow = 'none';
           sheet.style.margin = '0';
 
@@ -2143,7 +2176,8 @@
             const cs = window.getComputedStyle(inp);
             const rect = inp.getBoundingClientRect();
             const mirror = document.createElement(inp.tagName === 'TEXTAREA' ? 'div' : 'span');
-            mirror.className = inp.className;
+            // CRITICAL: Strip 'no-print' from cloned input mirrors (e.g. Page 1 date input!) so value always prints in PDF!
+            mirror.className = (inp.className || '').replace(/\bno-print\b/g, '').trim();
             mirror.style.cssText = inp.style.cssText;
             mirror.style.display = inp.tagName === 'TEXTAREA' ? 'block' : 'inline-flex';
             mirror.style.alignItems = 'center';
@@ -2156,12 +2190,12 @@
             mirror.style.lineHeight = '1.35';
             mirror.style.whiteSpace = inp.tagName === 'TEXTAREA' ? 'pre-wrap' : 'nowrap';
             mirror.style.overflow = 'visible';
-            if (rect.width > 0) mirror.style.width = `${rect.width}px`;
+            if (rect.width > 0 && inp.type !== 'date') mirror.style.width = `${rect.width}px`;
             if (rect.height > 0) mirror.style.minHeight = `${rect.height}px`;
             mirror.style.height = 'auto';
             mirror.style.padding = cs.padding || '0 2px';
             mirror.style.boxSizing = 'border-box';
-            mirror.textContent = inp.type === 'date' && inp.value ? formatThaiDateShort(inp.value) : (inp.value || '');
+            mirror.textContent = inp.type === 'date' && inp.value ? formatThaiDateFull(inp.value) : (inp.value || '');
             if (inp.parentNode) {
               inp.parentNode.insertBefore(mirror, inp);
               inp.style.display = 'none';
@@ -2251,6 +2285,7 @@
           sheet.style.width = prevStyle.width;
           sheet.style.minWidth = prevStyle.minWidth;
           sheet.style.maxWidth = prevStyle.maxWidth;
+          sheet.style.minHeight = prevStyle.minHeight;
           sheet.style.boxShadow = prevStyle.boxShadow;
           sheet.style.margin = prevStyle.margin;
         });
