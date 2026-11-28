@@ -2246,9 +2246,50 @@
       // ==========================================
       // 3. VISUAL COLORS (SketchUp Exact vs B&W Architectural Status Mode)
       // ==========================================
-      const COLOR_TODAY_BLUE = new THREE.Color(0x0284C7);
+      const COLOR_TODAY_BLUE = new THREE.Color(0x0066FF);
+      const EDGE_TODAY_BLUE  = new THREE.LineBasicMaterial({ color: 0x003DB8, transparent: false, opacity: 1.0 });
+      const EDGE_DONE_GREEN  = new THREE.LineBasicMaterial({ color: 0x047857, transparent: false, opacity: 1.0 });
       const EDGE_MONO_SOIL   = new THREE.LineBasicMaterial({ color: 0x64748B, transparent: true, opacity: 0.45 });
       const EDGE_MONO_PENDING = new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.85 });
+
+      // High-visibility electric-blue top-crest ribbon for Sheet Piles completed TODAY (makes Top Plan & Iso 3D crystal clear in reports!)
+      const todayHighlightGroup = new THREE.Group();
+      todayHighlightGroup.name = 'TodayHighlightCaps';
+      scene.add(todayHighlightGroup);
+      const TODAY_CAP_MAT = new THREE.MeshBasicMaterial({
+        color: 0x0066FF,
+        polygonOffset: true,
+        polygonOffsetFactor: -2,
+        polygonOffsetUnits: -2,
+      });
+      const TODAY_CAP_EDGE = new THREE.LineBasicMaterial({ color: 0x002B80 });
+      const todayCapPool = new Map(); // mesh.name -> capMesh
+
+      function getOrCreateTodayCap(m) {
+        if (todayCapPool.has(m.name)) return todayCapPool.get(m.name);
+        m.updateWorldMatrix(true, false);
+        const box = new THREE.Box3().setFromObject(m);
+        if (box.isEmpty()) return null;
+        const sz = new THREE.Vector3();
+        const ctr = new THREE.Vector3();
+        box.getSize(sz);
+        box.getCenter(ctr);
+        // Slightly widened crisp architectural marker cap sitting flush atop the thin 13mm U-section crest
+        const capW = Math.max(sz.x + 0.16, 0.36);
+        const capD = Math.max(sz.z + 0.16, 0.36);
+        const capH = 0.28;
+        const geo = new THREE.BoxGeometry(capW, capH, capD);
+        const cap = new THREE.Mesh(geo, TODAY_CAP_MAT);
+        cap.position.set(ctr.x, box.max.y + capH * 0.32, ctr.z);
+        cap.renderOrder = 14;
+        const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), TODAY_CAP_EDGE);
+        edges.renderOrder = 15;
+        cap.add(edges);
+        cap.visible = false;
+        todayHighlightGroup.add(cap);
+        todayCapPool.set(m.name, cap);
+        return cap;
+      }
 
       function getActiveReportDate() {
         const inp = document.getElementById('inp-sp-report-date');
@@ -2367,21 +2408,26 @@
         });
         if (typeof updatePileCutStatsUI === 'function') updatePileCutStatsUI();
 
-        // 3. Structural Elements: Today = Blue (#0284C7), Previous Done = Green (#10B981), Pending = Crisp White/Gray B&W + Outlines
+        // 3. Structural Elements: Today = Vivid Electric Blue (#0066FF + top crest highlight), Previous Done = Green (#10B981), Pending = Crisp White/Gray B&W + Outlines
         clickableMeshes.forEach((m) => {
           const st = state.statuses[m.name] || 'pending';
           const doneDate = state.statusDates[m.name] || '';
           const cat = m.userData.category;
           const edgeChild = m.children.find((c) => c.isLineSegments);
+          const isTodayDone = st === 'done' && Boolean(doneDate) && doneDate === activeDate;
+          const isDraftToday = todayDraftSet.has(m.name);
 
           if (st === 'done') {
-            const isToday = doneDate && doneDate === activeDate;
-            const c = isToday ? COLOR_TODAY_BLUE : COLOR_DONE;
+            const c = isTodayDone ? COLOR_TODAY_BLUE : COLOR_DONE;
             m.material.color.copy(c);
             m.material.opacity = 1.0;
             m.material.transparent = false;
             m.material.depthWrite = true;
-            if (edgeChild) edgeChild.material = cat === 'sheetpile' ? EDGE_SHEETPILE : EDGE_STEEL;
+            if (edgeChild) {
+              edgeChild.material = isTodayDone
+                ? EDGE_TODAY_BLUE
+                : (cat === 'sheetpile' ? EDGE_DONE_GREEN : EDGE_STEEL);
+            }
           } else if (st === 'progress') {
             m.material.color.copy(COLOR_PROGRESS);
             m.material.opacity = 1.0;
@@ -2404,16 +2450,35 @@
             if (edgeChild) edgeChild.material = EDGE_MONO_PENDING;
           }
 
-          if (todayDraftSet.has(m.name)) {
-            m.material.color.setHex(0x0284C7);
-            m.material.emissive = new THREE.Color(0x0284C7);
-            m.material.emissiveIntensity = 0.65;
+          // Toggle vivid top-crest highlight cap on Sheet Piles done TODAY (or drafted today) so Top Plan & Iso 3D pop!
+          if (cat === 'sheetpile') {
+            const showCap = (isTodayDone || isDraftToday) && m.visible;
+            if (showCap) {
+              const cap = getOrCreateTodayCap(m);
+              if (cap) cap.visible = true;
+            } else if (todayCapPool.has(m.name)) {
+              todayCapPool.get(m.name).visible = false;
+            }
+          }
+
+          if (isDraftToday) {
+            m.material.color.setHex(0x0066FF);
+            m.material.emissive = new THREE.Color(0x0066FF);
+            m.material.emissiveIntensity = 0.88;
+            if (edgeChild) edgeChild.material = EDGE_TODAY_BLUE;
           } else if (selectedMeshes.has(m.name) || m.name === selectedMeshName) {
             m.material.emissive = new THREE.Color(0xF26B2A);
             m.material.emissiveIntensity = 0.55;
           } else if (m.name === hoveredMeshName) {
             m.material.emissive = new THREE.Color(0x38BDF8);
             m.material.emissiveIntensity = 0.35;
+          } else if (isTodayDone) {
+            // High-luminance self-lit electric blue so thin 13mm vertical sheet piles never look muted/gray in reports
+            m.material.emissive = new THREE.Color(0x0066FF);
+            m.material.emissiveIntensity = 0.85;
+          } else if (st === 'done') {
+            m.material.emissive = new THREE.Color(COLOR_DONE.getHex());
+            m.material.emissiveIntensity = 0.62;
           } else {
             // Keep bright flat-lit SketchUp/CAD emissive balance
             const baseHex = m.material.color.getHex();
@@ -3428,6 +3493,8 @@
               clickableMeshes.forEach((m) => {
                 if (m.name.startsWith('SP_S_') || m.name === 'WALER_South' || m.name.startsWith('PC_S_')) {
                   if (m.visible) { m.visible = false; hiddenFront.push(m); }
+                  const cap = todayCapPool.get(m.name);
+                  if (cap && cap.visible) { cap.visible = false; hiddenFront.push(cap); }
                 }
               });
               // Tint remaining excavation soil inside the pit clearly so the dug depth stands out!

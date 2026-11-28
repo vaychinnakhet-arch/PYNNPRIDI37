@@ -1021,7 +1021,7 @@
             <div class="flex items-center justify-between flex-wrap gap-2 border-b border-[#1D2B45] pb-1 mb-2">
               <h3 class="font-display text-xs font-black text-[#1D2B45] tracking-wide">ผังแปลนแสดงความก้าวหน้า</h3>
               <div class="flex items-center gap-3 text-[10px] font-bold text-[#1D2B45] whitespace-nowrap">
-                <span class="inline-flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 bg-[#0284C7] border border-[#1D2B45]"></span>ทำวันนี้</span>
+                <span class="inline-flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 bg-[#0066FF] border border-[#002B80]"></span>ทำวันนี้</span>
                 <span class="inline-flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 bg-[#10B981] border border-[#1D2B45]"></span>เสร็จสะสม</span>
                 <span class="inline-flex items-center gap-1"><span class="inline-block w-2.5 h-2.5 bg-[#F8FAFC] border border-[#334155]"></span>ยังไม่ทำ</span>
               </div>
@@ -1452,39 +1452,84 @@
             capPngBtn.textContent = '⏳ กำลังแคปภาพ...';
             try {
               if (document.fonts && document.fonts.ready) await document.fonts.ready;
-              let dataUrl = '';
-              if (window.htmlToImage && typeof window.htmlToImage.toPng === 'function') {
-                // Native browser SVG foreignObject renderer -> 100% pixel-perfect Thai text baseline & alignment!
-                dataUrl = await window.htmlToImage.toPng(target, {
-                  pixelRatio: 2,
-                  backgroundColor: '#FFFFFF',
-                  cacheBust: true,
-                });
+              await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+              const w = Math.round(target.offsetWidth || 860);
+              const h = Math.round(target.scrollHeight || target.offsetHeight || 1100);
+              const filterFn = (node) => !(node && node.classList && node.classList.contains('no-print'));
+
+              let canvas = null;
+              if (window.htmlToImage && typeof window.htmlToImage.toCanvas === 'function') {
+                // Use toCanvas with automatic skipFonts retry (avoids Google Fonts CORS SecurityError & data-URL cacheBust bugs!)
+                try {
+                  canvas = await window.htmlToImage.toCanvas(target, {
+                    pixelRatio: 2,
+                    backgroundColor: '#FFFFFF',
+                    width: w,
+                    height: h,
+                    cacheBust: false,
+                    filter: filterFn,
+                  });
+                } catch (fontErr) {
+                  console.warn('Summary PNG htmlToImage retrying with skipFonts:', fontErr);
+                  canvas = await window.htmlToImage.toCanvas(target, {
+                    pixelRatio: 2,
+                    backgroundColor: '#FFFFFF',
+                    width: w,
+                    height: h,
+                    skipFonts: true,
+                    cacheBust: false,
+                    filter: filterFn,
+                  });
+                }
               } else if (typeof window.html2canvas === 'function') {
-                const canvas = await window.html2canvas(target, { scale: 2, backgroundColor: '#FFFFFF', useCORS: true });
-                dataUrl = canvas.toDataURL('image/png');
+                canvas = await window.html2canvas(target, { scale: 2, backgroundColor: '#FFFFFF', useCORS: true });
               }
 
-              if (dataUrl) {
+              if (!canvas) throw new Error('Renderer not ready');
+
+              const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 1.0));
+              const fname = `PYNN_EKKAMAI12_SheetPile_Summary_${s.reportDate || cfg.date}.png`;
+
+              if (blob) {
+                const objUrl = URL.createObjectURL(blob);
                 const link = document.createElement('a');
-                link.download = `PYNN_EKKAMAI12_SheetPile_Summary_${s.reportDate || cfg.date}.png`;
-                link.href = dataUrl;
+                link.download = fname;
+                link.href = objUrl;
+                link.style.display = 'none';
+                document.body.appendChild(link);
                 link.click();
+                setTimeout(() => {
+                  link.remove();
+                  URL.revokeObjectURL(objUrl);
+                }, 400);
+
                 // Also copy crisp PNG directly to clipboard for instant Ctrl+V into LINE
+                let copiedClip = false;
                 try {
-                  const res = await fetch(dataUrl);
-                  const blob = await res.blob();
-                  if (blob && navigator.clipboard && window.ClipboardItem) {
+                  if (navigator.clipboard && window.ClipboardItem) {
                     await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                    copiedClip = true;
                   }
                 } catch {}
-                getBridge()?.showToast?.('แคปภาพ PNG คมชัดตรงต้นฉบับแล้ว (ดาวน์โหลด + คัดลอกลงคลิปบอร์ด กด Ctrl+V ส่ง LINE ได้เลย)');
+                getBridge()?.showToast?.(
+                  copiedClip
+                    ? '✅ แคปภาพ PNG เรียบร้อย (ดาวน์โหลดไฟล์ + คัดลอกลงคลิปบอร์ด กด Ctrl+V ส่ง LINE ได้เลย)'
+                    : '✅ ดาวน์โหลดภาพ PNG คมชัดเรียบร้อยแล้ว!'
+                );
               } else {
-                window.print();
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = fname;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => link.remove(), 300);
+                getBridge()?.showToast?.('✅ ดาวน์โหลดภาพ PNG คมชัดเรียบร้อยแล้ว!');
               }
             } catch (err) {
-              console.error(err);
-              getBridge()?.showToast?.('เกิดข้อผิดพลาดในการแคปภาพ');
+              console.error('PNG capture failed:', err);
+              getBridge()?.showToast?.('⚠️ แคปภาพไม่สำเร็จ (' + (err?.message || 'Error') + ') — ลองกด โหลด PDF แทนได้');
             } finally {
               capPngBtn.textContent = '📸 แคปภาพ (PNG)';
             }
@@ -2036,7 +2081,7 @@
                 pixelRatio: 2.4,
                 width: w,
                 height: h,
-                cacheBust: true,
+                cacheBust: false,
                 filter: filterFn,
               });
             } catch (fontErr) {
@@ -2047,6 +2092,7 @@
                 width: w,
                 height: h,
                 skipFonts: true,
+                cacheBust: false,
                 filter: filterFn,
               });
             }
